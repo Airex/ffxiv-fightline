@@ -8,7 +8,7 @@ import { DataGroup, DataSetDataItem, DataItem, DataSetDataGroup,DataSet } from "
 import { FightTimeLineController } from "../core/FightTimeLineController"
 import * as M from "../core/Models";
 import * as FF from "../core/FFLogs";
-import { NgProgress } from "ngx-progressbar"
+import { NgProgress, NgProgressComponent } from "ngx-progressbar"
 import { Utils } from "../core/Utils"
 
 import * as S from "../services/index"
@@ -45,6 +45,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   sidepanel: SidepanelComponent;
   @ViewChild("toolbar", { static: true })
   toolbar: ToolbarComponent;
+  @ViewChild("progressBar", {static: true}) progressBar: NgProgressComponent;
 
   items: DataSetDataItem = new DataSet<DataItem>();
   groups = new DataSet<DataGroup>();
@@ -455,8 +456,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   loadFFLogsData(code: string, enc: number) {
     this.dialogService.executeWithLoading(ref => {
-      this.progressService.start();
-      this.gameService.dataService.getEvents(code, enc, percentage => this.progressService.set(percentage))
+      this.progressBar.start();
+      this.gameService.dataService.getEvents(code, enc, percentage => this.progressBar.set(percentage))
         .then((parser) => {
           this.fightService.newFight("")
             .subscribe(value => {
@@ -481,7 +482,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
           this.notification.showUnableToImport();
         })
         .finally(() => {
-          this.progressService.done();
+          this.progressBar.complete();
           this.setInitialWindow(this.fightLineController.getLatestAbilityUsageTime(), 2);
           this.refresh();
           ref.close();
