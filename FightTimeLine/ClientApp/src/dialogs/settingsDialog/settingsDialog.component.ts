@@ -67,12 +67,12 @@ export class SettingsDialog {
     ]
   }
 
-  @ViewChild("filter")
+  @ViewChild("filter", { static: true })
   filter: SettingsFilterComponent;
-  @ViewChild("view")
+  @ViewChild("view", { static: true })
   view: SettingsViewComponent;
 
-  @ViewChild("buttonsTemplate") buttonsTemplate: TemplateRef<any>;
+  @ViewChild("buttonsTemplate", { static: true }) buttonsTemplate: TemplateRef<any>;
 
   colors: any[];
 

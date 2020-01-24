@@ -14,7 +14,7 @@ export class BossSaveDialog implements OnInit {
   }
 
   fightNameControl = new FormControl();
-  @ViewChild("buttonsTemplate") buttons: TemplateRef<any>;
+  @ViewChild("buttonsTemplate", { static: true }) buttons: TemplateRef<any>;
   @Input("data") data: string;
   submitted = false;  
 

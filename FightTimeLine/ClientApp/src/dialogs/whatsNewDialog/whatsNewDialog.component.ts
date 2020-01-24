@@ -11,8 +11,8 @@ import { NzModalRef } from "ng-zorro-antd";
 export class WhatsNewDialog implements OnInit, AfterViewInit {
   
   @Input("data") data: any;
-  @ViewChild("buttonsTemplate") buttonsTemplate: TemplateRef<any>;
-  @ViewChild("timeline") timeline: ElementRef;
+  @ViewChild("buttonsTemplate", { static: true }) buttonsTemplate: TemplateRef<any>;
+  @ViewChild("timeline", { static: true }) timeline: ElementRef;
   constructor(
     private dialogRef: NzModalRef) {
     this.dialogRef.afterOpen.subscribe(() => {

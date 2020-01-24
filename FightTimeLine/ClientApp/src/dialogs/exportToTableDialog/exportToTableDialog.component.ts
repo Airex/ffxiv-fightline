@@ -19,7 +19,7 @@ import { NzModalRef } from "ng-zorro-antd";
 export class ExportToTableDialog implements OnInit {
 
   @Input("data") data: ExportData;
-  @ViewChild("headerTemplate") headerTemplate: TemplateRef<any>;
+  @ViewChild("headerTemplate", { static: true }) headerTemplate: TemplateRef<any>;
 
   constructor(
     private authService: AuthService,

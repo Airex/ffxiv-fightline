@@ -11,7 +11,7 @@ import * as Sentry from "@sentry/browser";
 })
 export class FightLineContextMenuComponent {
 
-  @ViewChild("contextMenu")
+  @ViewChild("contextMenu", { static: true })
   contextMenu: ContextMenuComponent;
   @ViewChildren(ContextMenuComponent)
   downtimeMenus: QueryList<ContextMenuComponent>;

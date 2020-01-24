@@ -29,7 +29,7 @@ export class FFLogsImportDialog implements OnInit {
   reportValue: string;
 
   container: any = { zones: [], parses: [] };
-  @ViewChild("buttonsTemplate") buttonsTemplate: TemplateRef<any>;
+  @ViewChild("buttonsTemplate", { static: true }) buttonsTemplate: TemplateRef<any>;
   @Input() code: string;
   searchAreaDisplay = "none";
   listAreaDisplay = "none";

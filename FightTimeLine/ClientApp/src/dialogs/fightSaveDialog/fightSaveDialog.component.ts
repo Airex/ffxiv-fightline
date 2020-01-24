@@ -19,7 +19,7 @@ export class FightSaveDialog implements OnInit {
   }
 
   fightNameControl = new FormControl();
-  @ViewChild("buttonsTemplate") buttons: TemplateRef<any>;
+  @ViewChild("buttonsTemplate", { static: true }) buttons: TemplateRef<any>;
   @Input("data") data: IFight;
   submitted = false;
 

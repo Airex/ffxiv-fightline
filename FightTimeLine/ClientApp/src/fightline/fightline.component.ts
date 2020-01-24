@@ -39,11 +39,11 @@ export class FightLineComponent implements OnInit, OnDestroy {
   fightId: string;
   private fflogsCode: string = null;
 
-  @ViewChild("contextMenu")
+  @ViewChild("contextMenu", { static: true })
   contextMenu: FightLineContextMenuComponent;
-  @ViewChild("sidepanel")
+  @ViewChild("sidepanel", { static: true })
   sidepanel: SidepanelComponent;
-  @ViewChild("toolbar")
+  @ViewChild("toolbar", { static: true })
   toolbar: ToolbarComponent;
 
   items: DataSetDataItem = new DataSet<DataItem>();

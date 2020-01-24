@@ -16,7 +16,7 @@ import { Holders } from "../core/DataHolders";
 })
 export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild("portalOutlet")
+  @ViewChild("portalOutlet", { static: true })
   portalOutletRef: ElementRef;
   op: PortalOutlet;
 

@@ -12,7 +12,7 @@ import { NzTreeNodeOptions, NzTreeComponent, NzFormatEmitEvent, NzFormatBeforeDr
 export class SyncSettingsComponent implements OnInit {
 
   @Input("data") data: M.IBossAbility;
-  @ViewChild("tree") tree: NzTreeComponent;
+  @ViewChild("tree", { static: true }) tree: NzTreeComponent;
   settings: NzTreeNodeOptions[];
   offset: string;
   uniqueIndex: number = 0;

@@ -28,9 +28,9 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
   visGroups: DataSetDataGroup = new DataSet<DataGroup>();
   visTimelineBoss: string = "visTimelinebooooosss";
   startDate = new Date(946677600000);
-  @ViewChild("timeline") timeline: ElementRef;
-  @ViewChild("listContainer") listContainer: ElementRef;
-  @ViewChild("buttonsTemplate") buttonsTemplate: TemplateRef<any>;
+  @ViewChild("timeline", { static: true }) timeline: ElementRef;
+  @ViewChild("listContainer", { static: true }) listContainer: ElementRef;
+  @ViewChild("buttonsTemplate", { static: true }) buttonsTemplate: TemplateRef<any>;
   @Input("data") data: { needSave: boolean, boss?: M.IBoss };
 
   optionsBoss = <TimelineOptions>{

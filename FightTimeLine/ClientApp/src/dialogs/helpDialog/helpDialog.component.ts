@@ -12,7 +12,7 @@ export class HelpDialog implements  OnInit {
     this.dialogRef.getInstance().nzFooter = this.buttonsTemplate;
   }
 
-  @ViewChild("buttonsTemplate") buttonsTemplate : TemplateRef<any>;
+  @ViewChild("buttonsTemplate", { static: true }) buttonsTemplate : TemplateRef<any>;
   constructor(
     private dialogRef: NzModalRef
     ) { }
