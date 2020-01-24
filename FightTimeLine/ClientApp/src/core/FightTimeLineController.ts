@@ -1,5 +1,5 @@
 import { EventEmitter } from "@angular/core"
-import { VisTimelineItem } from "ngx-vis";
+import { DataGroup, DataSetDataItem, DataItem, DataSetDataGroup } from "vis-timeline"
 import * as M from "./Models"
 import { UndoRedoController, IUpdateOptions, ICommandData, Command } from "./UndoRedo"
 import * as C from "./Commands"
@@ -8,7 +8,6 @@ import { IdGenerator } from "./Generators"
 import { CommandBag } from "./CommandBag"
 import { Utils } from "./Utils"
 import { CommandFactory } from "./CommandFactory"
-import * as FF from "./FFLogs"
 import { SettingsService, IColorsSettings } from "../services/SettingsService"
 import * as _ from "lodash";
 import * as Shared from "./Jobs/FFXIV/shared";
@@ -16,6 +15,7 @@ import * as Gameserviceinterface from "../services/game.service-interface";
 import * as ImportController from "./ImportController";
 import * as SerializeController from "./SerializeController";
 import * as Parser from "./Parser";
+import { AvailabilityController } from "./AvailabilityController"
 
 export class FightTimeLineController {
   data: M.IFightData = {};
@@ -26,12 +26,13 @@ export class FightTimeLineController {
   private loading: boolean = false;
   private commandFactory = new CommandFactory(this.startDate);
   private copyContainer: any;
+  private availabilityController: AvailabilityController;
   hasChanges = false;
-  public fraction:M.IFraction;
-  private filter: M.IFilter = M.defaultFilter;
-  private view: M.IView = M.defaultView;
+  public fraction: M.IFraction;
+  filter: M.IFilter = M.defaultFilter;
+  view: M.IView = M.defaultView;
   private tools: M.ITools = { downtime: false, stickyAttacks: false };
-  public colorSettings:IColorsSettings;
+  public colorSettings: IColorsSettings;
 
   downtimeChanged = new EventEmitter<void>();
   commandExecuted = new EventEmitter<ICommandData>();
@@ -67,6 +68,12 @@ export class FightTimeLineController {
       this.commandExecuted.emit(data);
     });
     this.commandBag = new CommandBag(this.commandStorage);
+    this.availabilityController = new AvailabilityController(
+      this.view,
+      this.holders,
+      this.startDate,
+      this.idgen
+      )
 
     this.colorSettings = this.settingsService.load().colors;
 
@@ -273,7 +280,7 @@ export class FightTimeLineController {
     this.commandBag.evaluate(this.holders.selectionRegistry.length, () => this.holders.selectionRegistry.clear());
   }
 
-  notifyMove(item: VisTimelineItem): void {
+  notifyMove(item: DataItem): void {
     const found = this.holders.selectionRegistry.get(item.id.toString());
     if (found) {
       if (this.idgen.isAbilityUsage(item.id)) {
@@ -368,7 +375,7 @@ export class FightTimeLineController {
     }
   }
 
-  canMove(item: VisTimelineItem): boolean {
+  canMove(item: DataItem): boolean {
     const type = this.idgen.getEntryType(item.id);
 
     switch (type) {
@@ -422,7 +429,7 @@ export class FightTimeLineController {
     if (options.abilityChanged) {
       this.updateAffectedAbilities(options.abilityChanged.ability);
       this.updateBuffHeatmap(this.view.buffmap, options.abilityChanged.ability);
-      this.updateAvailability(options.abilityChanged.ability);
+      this.availabilityController.updateAvailability(options.abilityChanged.ability);
     }
 
     if (options.updateBossTargets ||
@@ -590,7 +597,7 @@ export class FightTimeLineController {
             items.push({
               text: "Fill",
               item: event.group,
-              handler: () => {this.combineAndExecute(this.fillAbility(event.group));}
+              handler: () => { this.combineAndExecute(this.fillAbility(event.group)); }
             });
           }
           items.push({ text: "Hide", item: event.group, handler: () => this.hideAbility(event.group) });
@@ -818,7 +825,7 @@ export class FightTimeLineController {
     this.applyFilter();
   }
 
-  visibleFrameTemplate(item: VisTimelineItem): string {
+  visibleFrameTemplate(item: DataItem): string {
     if (item == null) return "";
     if (!this.idgen.isAbilityUsage(item.id)) return "";
     const map = this.holders.abilities.get(item.group);
@@ -834,15 +841,15 @@ export class FightTimeLineController {
       .filter(it => (ability.abilityType & M.AbilityType[it]) === M.AbilityType[it])
       .map(it => it);
     const color = this.colorSettings[arr[0]];
-    return this.createItemUsageFrame(offsetPercentage, percentage, this.view.colorfulDurations && color? color :"");
+    return this.createItemUsageFrame(offsetPercentage, percentage, this.view.colorfulDurations && color ? color : "");
   }
 
-  createItemUsageFrame(offsetPercentage: number, percentage: number, color:string): string {
+  createItemUsageFrame(offsetPercentage: number, percentage: number, color: string): string {
     return `<div class="progress-wrapper-fl"><div class="progress-fl-offset" style = "width:${offsetPercentage}%"> </div><div class="progress-fl" style="width:${percentage}%;background-color:${color}"> </div></div >`;
   }
 
 
-  tooltipOnItemUpdateTime(item: VisTimelineItem): any {
+  tooltipOnItemUpdateTime(item: DataItem): any {
     if (this.idgen.isStanceUsage(item.id))
       return Utils.formatTime(item.start as Date) + " - " + Utils.formatTime(item.end as Date);
     if (!this.idgen.isAbilityUsage(item.id) && !this.idgen.isBossAttack(item.id)) return undefined;
@@ -989,7 +996,7 @@ export class FightTimeLineController {
       }
     }
 
-    this.setAbilityAvailabilityView(this.view.showAbilityAvailablity);
+    this.availabilityController.setAbilityAvailabilityView(this.view.showAbilityAvailablity);
     this.commandStorage.turnOnFireExecuted();
     this.hasChanges = false;
   }
@@ -1144,7 +1151,7 @@ export class FightTimeLineController {
     }
 
     if (this.view.showAbilityAvailablity !== view.showAbilityAvailablity || force) {
-      this.setAbilityAvailabilityView(view.showAbilityAvailablity);
+      this.availabilityController.setAbilityAvailabilityView(view.showAbilityAvailablity);
     }
 
     this.view = view;
@@ -1154,7 +1161,7 @@ export class FightTimeLineController {
     return !!this.holders.jobs.get(group);
   }
 
-  moveBossAttack(item: VisTimelineItem): void {
+  moveBossAttack(item: DataItem): void {
     this.holders.bossAttacks.sync(item.id.toString(), new Date(item.start));
   }
 
@@ -1212,97 +1219,6 @@ export class FightTimeLineController {
 
   setHighLightLoadedView(highlightLoaded: boolean): void {
     this.holders.setHighLightLoadedView(highlightLoaded);
-  }
-
-  setAbilityAvailabilityView(showAbilityAvailablity: boolean): void {
-    if (showAbilityAvailablity) {
-      this.holders.abilities
-        .getAll()
-        .forEach(it => {
-          if (it.isStance) return;
-          const deps = it.ability.overlapStrategy.getDependencies();
-          let depUsages = null;
-          if (deps) {
-            depUsages =
-              _.flatten(deps.map(
-                ab => this.holders.itemUsages.getByAbility(this.holders.abilities.getByParentAndAbility(it.job.id, ab)
-                  .id)));
-          }
-          const usages =
-            [...(depUsages || []), ...this.holders.itemUsages.getByAbility(it.id)].sort(
-              (a, b) => (a.startAsNumber) - (b.startAsNumber));
-          let prev: H.AbilityUsageMap = null;
-          for (let index = 0; index < usages.length; index++) {
-            const c = usages[index];
-            const start = prev
-              ? (prev.end)
-              : (it.ability.requiresBossTarget
-                ? this.startDate
-                : new Date(this.startDate.valueOf() as number - 30 * 1000));
-            const diff = ((c.startAsNumber) - (start.valueOf() as number)) / 1000;
-            const av = diff > it.ability.cooldown;
-            if (av) {
-              const id = this.idgen.getNextId(M.EntryType.AbilityAvailability);
-              this.holders.abilityAvailability.add(new H.AbilityAvailabilityMap(id,
-                it,
-                {
-                  start: start,
-                  end: new Date((c.startAsNumber) - it.ability.cooldown * 1000),
-                  available: true
-                }));
-            }
-            prev = c;
-          }
-        });
-    } else {
-      this.holders.abilityAvailability.clear();
-    }
-  }
-
-  updateAvailability(abilityChanged: M.IAbility): void {
-    if (this.view.showAbilityAvailablity) {
-      this.holders.abilities
-        .getAll()
-        .forEach(it => {
-          const deps = it.ability.overlapStrategy.getDependencies();
-          if (it.ability && it.ability.name === abilityChanged.name ||
-            deps && deps.some((d => d === abilityChanged.name) as any)) {
-            let depUsages = null;
-            if (deps) {
-              depUsages =
-                _.flatten(deps.map(
-                  ab => this.holders.itemUsages.getByAbility(this.holders.abilities.getByParentAndAbility(it.job.id, ab).id)));
-            }
-            const usages =
-              [...(depUsages || []), ...this.holders.itemUsages.getByAbility(it.id)].sort(
-                (a, b) => (a.startAsNumber) - (b.startAsNumber));
-            this.holders.abilityAvailability.removeForAbility(it.id);
-            let prev: H.AbilityUsageMap = null;
-            const maps = usages.map(c => {
-              const start = prev
-                ? (prev.end)
-                : (it.ability.requiresBossTarget
-                  ? this.startDate
-                  : new Date(this.startDate.valueOf() as number - 30 * 1000));
-              const diff = ((c.startAsNumber) - (start.valueOf() as number)) / 1000;
-              const av = diff > it.ability.cooldown;
-              prev = c;
-              if (av) {
-                const id = this.idgen.getNextId(M.EntryType.AbilityAvailability);
-                return new H.AbilityAvailabilityMap(id,
-                  it,
-                  {
-                    start: start,
-                    end: new Date((c.startAsNumber) - it.ability.cooldown * 1000),
-                    available: true
-                  });
-              }
-              return null;
-            }).filter(it => it != null);
-            this.holders.abilityAvailability.addRange(maps);
-          }
-        });
-    }
   }
 
   toggleJobCollapsed(group) {

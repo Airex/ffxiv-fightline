@@ -3,7 +3,8 @@ import { Location } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as _ from "lodash";
 
-import { VisTimelineService, VisTimelineItems, VisTimelineGroups, VisTimelineOptions } from "ngx-vis";
+import { VisTimelineService, TimelineOptions } from "ngx-vis";
+import { DataGroup, DataSetDataItem, DataItem, DataSetDataGroup,DataSet } from "vis-timeline"
 import { FightTimeLineController } from "../core/FightTimeLineController"
 import * as M from "../core/Models";
 import * as FF from "../core/FFLogs";
@@ -45,10 +46,10 @@ export class FightLineComponent implements OnInit, OnDestroy {
   @ViewChild("toolbar")
   toolbar: ToolbarComponent;
 
-  visTimelineItems = new VisTimelineItems();
-  visTimelineGroups = new VisTimelineGroups();
-  visTimelineItemsBoss = new VisTimelineItems();
-  visTimelineGroupsBoss = new VisTimelineGroups();
+  items: DataSetDataItem = new DataSet<DataItem>();
+  groups = new DataSet<DataGroup>();
+  itemsBoss = new DataSet<DataItem>();
+  groupsBoss = new DataSet<DataGroup>();
 
   private idgen = new IdGenerator();
   private downTimesController: DownTimesController;
@@ -56,8 +57,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
   fightLineController = new FightTimeLineController(
     this.startDate,
     this.idgen,
-    { items: this.visTimelineItems, groups: this.visTimelineGroups },
-    { items: this.visTimelineItemsBoss, groups: this.visTimelineGroupsBoss },
+    { items: this.items, groups: this.groups },
+    { items: this.itemsBoss, groups: this.groupsBoss },
     {
       openBossAttackAddDialog: this.openBossAttackAddDialog.bind(this),
       openAbilityEditDialog: this.openAbilityEditDialog.bind(this),
@@ -72,7 +73,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   public tool: string;
 
-  options = <VisTimelineOptions>{
+  options = <TimelineOptions>{
     width: "100%",
     height: "100%",
     minHeight: "300px",
@@ -134,7 +135,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     snap: (date: Date) => date,
     groupEditable: { order: false }
   };
-  optionsBoss = <VisTimelineOptions>{
+  optionsBoss = <TimelineOptions>{
     width: "100%",
     height: "100%",
     minHeight: "50px",
@@ -371,7 +372,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   private setSelectionOfBossAttacks(ids: string[]): void {
     const toUpdate: any[] = [];
 
-    const items = this.visTimelineItems.getAll();
+    const items = this.items.get();
     items.forEach((it) => {
       const b = new ClassNameBuilder(it.className);
       const have = !!ids && ids.some((e => "bossAttack_" + e === it.id) as any);
@@ -381,7 +382,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
         toUpdate.push(it);
       }
     });
-    this.visTimelineItems.update(toUpdate);
+    this.items.update(toUpdate);
   }
 
   onCommand(command: { name: string, data?: any }) {
@@ -589,7 +590,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.showHelpForFirstTimers().then(() => {
       this.showWhatsNew().then(() => {
         const id = r["fightId"];
-        if (id === "new") {
+        if (id === "new" || id === "dummy") {
           let fraction = null;
           if (this.gameService.fractions) {
             fraction = this.gameService.fractions.find(it => it.name === r["fraction"]);

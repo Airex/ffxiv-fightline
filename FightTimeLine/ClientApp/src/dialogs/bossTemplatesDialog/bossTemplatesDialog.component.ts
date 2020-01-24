@@ -11,7 +11,8 @@ import { fightServiceToken } from "../../services/fight.service-provider"
 import { IFightService } from "../../services/fight.service-interface"
 import { IAuthenticationService } from "../../services/authentication.service-interface"
 import { authenticationServiceToken } from "../../services/authentication.service-provider"
-import { VisTimelineService, VisTimelineItems, VisTimelineGroups, VisTimelineItem, VisTimelineOptions } from "ngx-vis";
+import { VisTimelineService, TimelineOptions } from "ngx-vis";
+import { DataGroup, DataSetDataItem, DataItem, DataSetDataGroup, DataSet } from "vis-timeline"
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
 
@@ -23,8 +24,8 @@ import * as Gameserviceinterface from "../../services/game.service-interface";
 
 export class BossTemplatesDialog implements OnInit, OnDestroy {
 
-  visItems: VisTimelineItems = new VisTimelineItems();
-  visGroups: VisTimelineGroups = new VisTimelineGroups();
+  visItems: DataSetDataItem = new DataSet<DataItem>();
+  visGroups: DataSetDataGroup = new DataSet<DataGroup>();
   visTimelineBoss: string = "visTimelinebooooosss";
   startDate = new Date(946677600000);
   @ViewChild("timeline") timeline: ElementRef;
@@ -32,7 +33,7 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
   @ViewChild("buttonsTemplate") buttonsTemplate: TemplateRef<any>;
   @Input("data") data: { needSave: boolean, boss?: M.IBoss };
 
-  optionsBoss = <VisTimelineOptions>{
+  optionsBoss = <TimelineOptions>{
     width: "100%",
     height: "100%",
     minHeight: "50px",
@@ -238,7 +239,7 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
       });
   }
 
-  createDownTime(id: string, start: Date, end: Date, color: string): VisTimelineItem {
+  createDownTime(id: string, start: Date, end: Date, color: string): DataItem {
     return {
       start: start,
       end: end,
@@ -249,7 +250,7 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
     }
   }
 
-  createBossAttack(id: string, attack: M.IBossAbility, vertical: boolean): VisTimelineItem {
+  createBossAttack(id: string, attack: M.IBossAbility, vertical: boolean): DataItem {
     const data = {
       id: id,
       content: this.createBossAttackElement(attack),

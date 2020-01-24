@@ -304,8 +304,10 @@ export interface IAbility {
 }
 
 export interface IAbilityCharges {
+  initialCount?: number;
   count: number;
   cooldown: number;
+  sharesWith?: string[];
 }
 
 export interface IAbilitySetting {

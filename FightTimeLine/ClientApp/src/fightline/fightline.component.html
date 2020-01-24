@@ -37,16 +37,16 @@
     <as-split-area size="8" minSize="10" maxSize="50" >
       <div style="width: 100%; height: 100%">
         <div class="boss-timeline" [visTimeline]="visTimelineBoss" style="width: 100%; height: 100%"
-             [visTimelineItems]="visTimelineItemsBoss"
-             [visTimelineGroups]="visTimelineGroupsBoss"
+             [visTimelineItems]="itemsBoss"
+             [visTimelineGroups]="groupsBoss"
              (initialized)="timelineBossInitialized()"></div>
       </div>
     </as-split-area>
     <as-split-area size="92" minSize="50" >
       <div style="width: 100%; height: 100%">
         <div class="timeline" [visTimeline]="visTimeline" style="width: 100%; height: 100%"
-             [visTimelineItems]="visTimelineItems"
-             [visTimelineGroups]="visTimelineGroups"
+             [visTimelineItems]="items"
+             [visTimelineGroups]="groups"
              (initialized)="timelineInitialized()">
 
         </div>

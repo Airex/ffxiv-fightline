@@ -1,5 +1,5 @@
-@import 'vis/dist/vis.css';
-@import 'vis/dist/vis-timeline-graph2d.min.css';
+/* @import 'vis/dist/vis.css'; */
+/* @import 'vis/dist/vis-timeline-graph2d.min.css'; */
 
 .ant-drawer-left.ant-drawer-open, .ant-drawer-right.ant-drawer-open {
   width: 0px !important;
