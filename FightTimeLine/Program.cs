@@ -16,13 +16,14 @@ namespace FightTimeLine
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseSentry(options =>
-                {
-                    options.BeforeSend = ev =>
-                    {
-                        ev.ServerName = null;
-                        return ev;
-                    };
-                });
+                // .UseSentry(options =>
+                // {
+                //     options.BeforeSend = ev =>
+                //     {
+                //         ev.ServerName = null;
+                //         return ev;
+                //     };
+                // })
+        ;
     }
 }

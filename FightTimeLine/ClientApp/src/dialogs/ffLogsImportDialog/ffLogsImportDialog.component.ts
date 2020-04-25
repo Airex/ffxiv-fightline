@@ -28,13 +28,15 @@ export class FFLogsImportDialog implements OnInit {
 
   reportValue: string;
 
-  container: any = { zones: [], parses: [] };
+  zones = [];
+  parsesList = [];
   @ViewChild("buttonsTemplate", { static: true }) buttonsTemplate: TemplateRef<any>;
   @Input() code: string;
   searchAreaDisplay = "none";
   listAreaDisplay = "none";
   dialogContentHeight = "60px";
   recent: any;
+  prevSearch: string = null;
 
 
   constructor(
@@ -47,6 +49,8 @@ export class FFLogsImportDialog implements OnInit {
   }
 
   onSearch(data: string): void {
+    if (this.prevSearch === data) return;
+    this.prevSearch = data;
     const r = /reports\/([a-zA-Z0-9]{16})\/?(?:(?:#.*fight=([^&]*))|$)/igm;
     const res = r.exec(data) as any;
     if (res && res.length > 1) {
@@ -70,9 +74,7 @@ export class FFLogsImportDialog implements OnInit {
         } else {
           this.service.dataService.getFight(res[1])
             .then((it: ReportFightsResponse) => {
-              this.dialogContentHeight = "360px";
-              this.searchAreaDisplay = "block";
-              this.listAreaDisplay = "none";
+             
               const groupBy = key => array =>
                 array.reduce((objectsByKeyValue, obj) => {
                   const value = obj[key];
@@ -83,32 +85,41 @@ export class FFLogsImportDialog implements OnInit {
 
               var gr = groupBy('zoneName');
 
-              this.container.zones = gr(it.fights);
+              var zones = gr(it.fights);
+
+              this.zones = Object.keys(zones).map((value, index, array) => <any>{ key: value, value: zones[value] });
+              this.dialogContentHeight = "360px";
+              this.searchAreaDisplay = "block";
+              this.listAreaDisplay = "none";
             });
         }
       }
     }
     else {
-      const settings = this.settingsService.load();
-      if (settings.fflogsImport.characterName &&
-        settings.fflogsImport.characterRegion &&
-        settings.fflogsImport.characterServer)
-      {
-        this.service.dataService
-          .getParses(settings.fflogsImport.characterName, settings.fflogsImport.characterServer, settings.fflogsImport.characterRegion)
-          .subscribe(parses => {
-            if (parses) {
-              this.container.parses = parses.sort((a,b)=>b.startTime - a.startTime);
-              this.dialogContentHeight = "360px";
-              this.searchAreaDisplay = "none";
-              this.listAreaDisplay = "block";
-            }
-          }, error => {
-              this.hideExtraAreas();
-          })
+      if (!data) {
+        const settings = this.settingsService.load();
+        if (settings.fflogsImport.characterName &&
+          settings.fflogsImport.characterRegion &&
+          settings.fflogsImport.characterServer) {
+          this.service.dataService
+            .getParses(settings.fflogsImport.characterName,
+              settings.fflogsImport.characterServer,
+              settings.fflogsImport.characterRegion)
+            .subscribe(parses => {
+                if (parses) {
+                  this.parsesList = parses.sort((a, b) => b.startTime - a.startTime);
+                  this.dialogContentHeight = "360px";
+                  this.searchAreaDisplay = "none";
+                  this.listAreaDisplay = "block";
+                }
+              },
+              error => {
+                this.hideExtraAreas();
+              })
+        }
+      } else {
+        this.hideExtraAreas();
       }
-      
-      this.hideExtraAreas();
     }
   }
 

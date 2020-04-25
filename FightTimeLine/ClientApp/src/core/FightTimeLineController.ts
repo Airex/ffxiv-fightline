@@ -1,25 +1,25 @@
 import { EventEmitter } from "@angular/core"
-import { DataGroup, DataSetDataItem, DataItem, DataSetDataGroup } from "vis-timeline"
-import * as M from "./Models"
-import { UndoRedoController, IUpdateOptions, ICommandData, Command } from "./UndoRedo"
+import * as _ from "lodash"
+import { DataItem } from "vis-timeline"
+import * as Gameserviceinterface from "../services/game.service-interface"
+import { IColorsSettings, SettingsService } from "../services/SettingsService"
+import { AvailabilityController } from "./AvailabilityController"
+import { CommandBag } from "./CommandBag"
+import { CommandFactory } from "./CommandFactory"
 import * as C from "./Commands"
 import * as H from "./DataHolders"
 import { IdGenerator } from "./Generators"
-import { CommandBag } from "./CommandBag"
+import * as ImportController from "./ImportController"
+import * as Shared from "./Jobs/FFXIV/shared"
+import * as M from "./Models"
+import * as Parser from "./Parser"
+import * as SerializeController from "./SerializeController"
+import { Command, ICommandData, IUpdateOptions, UndoRedoController } from "./UndoRedo"
 import { Utils } from "./Utils"
-import { CommandFactory } from "./CommandFactory"
-import { SettingsService, IColorsSettings } from "../services/SettingsService"
-import * as _ from "lodash";
-import * as Shared from "./Jobs/FFXIV/shared";
-import * as Gameserviceinterface from "../services/game.service-interface";
-import * as ImportController from "./ImportController";
-import * as SerializeController from "./SerializeController";
-import * as Parser from "./Parser";
-import { AvailabilityController } from "./AvailabilityController"
 
 export class FightTimeLineController {
   data: M.IFightData = {};
-  private holders: H.Holders;
+  private readonly holders: H.Holders;
   private bossGroup: string = "boss";
   private commandStorage: UndoRedoController;
   private commandBag: CommandBag;
@@ -28,11 +28,11 @@ export class FightTimeLineController {
   private copyContainer: any;
   private availabilityController: AvailabilityController;
   hasChanges = false;
-  public fraction: M.IFraction;
-  filter: M.IFilter = M.defaultFilter;
-  view: M.IView = M.defaultView;
+  fraction: M.IFraction;
+  filter = M.defaultFilter;
+  view = M.defaultView;
   private tools: M.ITools = { downtime: false, stickyAttacks: false };
-  public colorSettings: IColorsSettings;
+  colorSettings: IColorsSettings;
 
   downtimeChanged = new EventEmitter<void>();
   commandExecuted = new EventEmitter<ICommandData>();
@@ -73,7 +73,7 @@ export class FightTimeLineController {
       this.holders,
       this.startDate,
       this.idgen
-      )
+    );
 
     this.colorSettings = this.settingsService.load().colors;
 
@@ -95,7 +95,9 @@ export class FightTimeLineController {
       commands.push(new C.RemoveDownTimeCommand(it.id));
     });
 
-    commands.push(new C.AddBatchAttacksCommand(loadData.attacks.map(it => new C.AddBossAttackCommand(this.idgen.getNextId(M.EntryType.BossAttack), it.ability))));
+    commands.push(new C.AddBatchAttacksCommand(
+      loadData.attacks.map(it => new C.AddBossAttackCommand(this.idgen.getNextId(M.EntryType.BossAttack),
+        it.ability))));
 
     let index = 1;
     for (let d of loadData.downTimes) {
@@ -190,7 +192,8 @@ export class FightTimeLineController {
 
   addBossAttack(id: string, time: Date, bossAbility: M.IBossAbility): void {
     bossAbility.offset = Utils.formatTime(time);
-    this.commandStorage.execute(new C.AddBossAttackCommand(id || this.idgen.getNextId(M.EntryType.BossAttack), bossAbility));
+    this.commandStorage.execute(new C.AddBossAttackCommand(id || this.idgen.getNextId(M.EntryType.BossAttack),
+      bossAbility));
   }
 
   getLatestBossAttackTime(): Date | null {
@@ -251,7 +254,9 @@ export class FightTimeLineController {
         this.dialogCallBacks.openBossAttackAddDialog({ offset: Utils.formatTime(time) },
           (result: { updateAllWithSameName: boolean, data: M.IBossAbility }) => {
             if (result != null) {
-              this.addBossAttack(this.idgen.getNextId(M.EntryType.BossAttack), Utils.getDateFromOffset(result.data.offset, this.startDate), result.data);
+              this.addBossAttack(this.idgen.getNextId(M.EntryType.BossAttack),
+                Utils.getDateFromOffset(result.data.offset, this.startDate),
+                result.data);
             }
           });
       }
@@ -612,8 +617,7 @@ export class FightTimeLineController {
           }
         }
       }
-    }
-    else if (event.what === "background") {
+    } else if (event.what === "background") {
       const downTimes = this.holders.bossDownTime.filter((it) => it.start <= event.time && it.end >= event.time);
       if (downTimes && downTimes.length > 0) {
         items.push(...downTimes.map((it) => <M.IContextMenuData>{
@@ -664,16 +668,14 @@ export class FightTimeLineController {
           handler: () => this.paste(event.time)
         });
       }
-    }
-    else if (event.what === "item") {
+    } else if (event.what === "item") {
       if (event.group === "boss") {
         items.push({
           text: "Copy",
           item: event.item,
           handler: () => this.copy(event.item)
         });
-      }
-      else {
+      } else {
         const stance = this.holders.stances.get(event.item);
         if (stance) {
           items.push({
@@ -699,7 +701,6 @@ export class FightTimeLineController {
     }
     return items;
   }
-
 
 
   combineAndExecute(commands: Command[]): void {
@@ -845,7 +846,8 @@ export class FightTimeLineController {
   }
 
   createItemUsageFrame(offsetPercentage: number, percentage: number, color: string): string {
-    return `<div class="progress-wrapper-fl"><div class="progress-fl-offset" style = "width:${offsetPercentage}%"> </div><div class="progress-fl" style="width:${percentage}%;background-color:${color}"> </div></div >`;
+    return `<div class="progress-wrapper-fl"><div class="progress-fl-offset" style = "width:${offsetPercentage
+      }%"> </div><div class="progress-fl" style="width:${percentage}%;background-color:${color}"> </div></div >`;
   }
 
 
@@ -1235,7 +1237,12 @@ export class FightTimeLineController {
   }
 
   createSerializer(): SerializeController.SerializeController {
-    const ctr = new SerializeController.SerializeController(this.holders, this.gameService.name, this.fraction, this.data, this.filter, this.view);
+    const ctr = new SerializeController.SerializeController(this.holders,
+      this.gameService.name,
+      this.fraction,
+      this.data,
+      this.filter,
+      this.view);
     return ctr;
   }
 }

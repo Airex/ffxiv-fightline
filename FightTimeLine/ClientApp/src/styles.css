@@ -1,5 +1,5 @@
 /* @import 'vis/dist/vis.css'; */
-/* @import 'vis/dist/vis-timeline-graph2d.min.css'; */
+@import 'vis-timeline/dist/vis-timeline-graph2d.min.css';
 
 .ant-drawer-left.ant-drawer-open, .ant-drawer-right.ant-drawer-open {
   width: 0px !important;
@@ -117,6 +117,10 @@ html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-con
 
 .vis-item.stance .vis-item-content {
   padding: 0;
+}
+
+.vis-group-level-unknown-but-gte1 {
+  border: none;
 }
 
 .vis-item.availability .vis-item-content {

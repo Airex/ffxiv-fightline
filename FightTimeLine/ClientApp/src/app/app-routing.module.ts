@@ -4,7 +4,6 @@ import { FightLineComponent } from "../fightline/fightline.component";
 import { TableViewComponent } from "../tableview/tableview.component";
 //import { BossTemplateComponent } from "../bosstemplate/bosstemplate.component";
 import { HomeComponent } from "../home/home.component";
-import { CanDeactivateUnsaved } from "../heplers/CanDeactivateUnsaved";
 
 const routes: Routes = [
   

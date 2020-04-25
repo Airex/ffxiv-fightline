@@ -80,31 +80,34 @@ namespace FightTimeLine.Hubs
      public class InMemoryHubUsersStorage : IHubUsersStorage
      {
           readonly List<UserContainer> _list = new List<UserContainer>();
-          public async Task AddUserAsync(UserContainer user)
+          public  Task AddUserAsync(UserContainer user)
           {
                lock (_list)
                {
                     _list.Add(user);
                }
+
+               return Task.CompletedTask;
           }
 
-          public async Task RemoveUserAsync(Guid fight, string id)
+          public Task RemoveUserAsync(Guid fight, string id)
           {
                lock (_list)
                {
                     _list.RemoveAll(container => container.Fight == fight && container.Id == id);
                }
+               return Task.CompletedTask;
           }
 
-          public async Task<IEnumerable<UserContainer>> GetUsersForFightAsync(Guid fight)
+          public Task<IEnumerable<UserContainer>> GetUsersForFightAsync(Guid fight)
           {
                lock (_list)
                {
-                    return _list.Where(container => container.Fight == fight).ToArray();
+                    return Task.FromResult(_list.Where(container => container.Fight == fight).ToArray().AsEnumerable());
                }
           }
 
-          public async Task TouchAsync(Guid fight, string usedId)
+          public Task TouchAsync(Guid fight, string usedId)
           {
                lock (_list)
                {
@@ -114,6 +117,7 @@ namespace FightTimeLine.Hubs
                          u.LastTouched = DateTimeOffset.UtcNow;
                     }
                }
+               return Task.CompletedTask;
           }
      }
 }

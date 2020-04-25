@@ -23,12 +23,12 @@
     <div [style.display]="searchAreaDisplay">
       <hr style="margin-top: 5px; margin-bottom: 5px;" />
       <div class="importDialogList" customScroll>
-        <nz-list #fights [nzDataSource]="container.zones | keyvalue" [nzRenderItem]="item" nzSize="small">
-          <ng-template #item let-item>
+        <nz-list #fights [nzDataSource]="zones" [nzRenderItem]="zoneItem" nzSize="small">
+          <ng-template #zoneItem let-zoneItem>
             <nz-list-item>
-              <b>{{item.key}}</b>
+              <b>{{zoneItem.key}}</b>
             </nz-list-item>
-            <nz-list-item *ngFor="let fight of item.value | killsonly:showKills && showKills.checked" (click)="onClick(fight.id)" [ngClass]="{fflogsitem:true}">
+            <nz-list-item *ngFor="let fight of zoneItem.value | killsonly:showKills && showKills.checked" (click)="onClick(fight.id)" [ngClass]="{fflogsitem:true}">
               {{fight.name}} <span class="example-spacer"></span> {{fight.kill ? 'Kill' : 'Wipe'}} - {{formatTime(fight.start_time, fight.end_time)}}
             </nz-list-item>
           </ng-template>
@@ -36,9 +36,10 @@
       </div>
     </div>
     <div [style.display]="listAreaDisplay">
+      <h4>Your latest parses</h4>
       <hr style="margin-top: 5px; margin-bottom: 5px;" />
       <div class="importDialogList" customScroll>
-        <nz-list #parses [nzDataSource]="container.parses" [nzRenderItem]="item" nzSize="small">
+        <nz-list #parses [nzDataSource]="parsesList" [nzRenderItem]="item" nzSize="small">
           <ng-template #item let-item>
             <nz-list-item (click)="onParseClick(item)" [ngClass]="{fflogsitem:true}" [nzContent]="item.percentile">
               <nz-list-item-meta [nzTitle]="nzTitle"
@@ -50,7 +51,6 @@
                   {{item.startTime | date:'short'}}
                 </ng-template>
               </nz-list-item-meta>
-              
             </nz-list-item>
           </ng-template>
         </nz-list>

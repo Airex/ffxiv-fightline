@@ -24,7 +24,6 @@ import { JwtInterceptor } from "../interceptors/jwtInterceptor"
 import { ClipboardModule } from "ngx-clipboard";
 import { NgProgressModule } from "ngx-progressbar";
 import { RecaptchaModule, RECAPTCHA_SETTINGS, RecaptchaSettings } from "ng-recaptcha";
-import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 import { DialogsModuleComponents } from "../dialogs/index";
 import { SingleAbilityComponent } from "../sidepanel/components/singleAbility/singleAbility.component";
 import { SingleAttackComponent } from "../sidepanel/components/singleAttack/singleAttack.component";
@@ -133,7 +132,6 @@ export function getBaseUrl() {
     ContextMenuModule,
     XivapiClientModule.forRoot(),
     RecaptchaModule,
-    RecaptchaFormsModule,
     ClipboardModule,
     SocialLoginModule,
     AngularSplitModule,

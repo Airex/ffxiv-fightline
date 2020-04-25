@@ -5,11 +5,11 @@ using FightTimeLine.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FightTimeLine
@@ -27,7 +27,7 @@ namespace FightTimeLine
           public void ConfigureServices(IServiceCollection services)
           {
                services.AddOptions();
-               services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+               services.AddRazorPages();
 
                services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                    .AddJwtBearer(options =>
@@ -45,21 +45,17 @@ namespace FightTimeLine
                services.AddScoped<IHubUsersStorage, SqlServerHubUsersStorage>();
 
                services.AddMemoryCache();
+               services.AddHealthChecks();
 
-               services.AddEntityFrameworkSqlServer();
+               services.AddSignalR().AddJsonProtocol();
 
-               services.AddSignalR();
-
-               services.AddCors(options =>
-               {
-                    options.AddPolicy("CorsPolicy", cb =>
-                 {
-                      cb
-                       .AllowAnyMethod()
-                       .AllowAnyHeader()
-                       .AllowAnyOrigin();
-                 });
-               });
+               services.AddCors(options => options
+                    .AddPolicy("CorsPolicy", cb => cb
+                         .AllowAnyMethod()
+                         .AllowAnyHeader()
+                         .AllowAnyOrigin()
+                    )
+               );
 
                
                services.AddDbContext<FightTimelineDataContext>(builder =>
@@ -73,7 +69,7 @@ namespace FightTimeLine
           }
 
           // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-          public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+          public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
           {
                app.SeedData();
 
@@ -87,29 +83,22 @@ namespace FightTimeLine
                     app.UseHsts();
                     app.UseHttpsRedirection();
                }
-
-               app.UseCors("CorsPolicy");
-
-               app.UseAuthentication();
-
-               app.UseSignalR(builder =>
-               {
-                    builder.MapHub<FightHub>("/fightHub",
-                         options => { options.ApplicationMaxBufferSize = 4 * 1024 * 1024; });
-               });
-
-               
                app.UseStaticFiles();
                app.UseSpaStaticFiles();
 
-               app.UseMvc(routes =>
+               app.UseRouting();
+
+               app.UseAuthentication();
+               app.UseAuthorization();
+               app.UseCors("CorsPolicy");
+
+               app.UseEndpoints(builder =>
                {
-                    routes.MapRoute(
-                     name: "default",
-                     template: "{controller}/{action=Index}/{id?}");
-                    routes.MapRoute(
-                     name: "fightsApi",
-                     template: "api/{controller=Fights}/{action=Search}");
+                    builder.MapControllers();
+                    builder.MapHealthChecks("/health");
+                    builder.MapControllerRoute("fightsApi", "api/{controller=Fights}/{action=Search}");
+                    builder.MapHub<FightHub>("/fighthub",
+                         options => options.ApplicationMaxBufferSize = 4 * 1024 * 1024);
                });
 
                app.UseSpa(spa =>
@@ -131,14 +120,10 @@ namespace FightTimeLine
      {
           public static void SeedData(this IApplicationBuilder app)
           {
-               using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-               {
-                    using (var context = scope.ServiceProvider.GetService<FightTimelineDataContext>())
-                         if (!context.Database.EnsureCreated())
-                              context.Database.Migrate();
-               }
-
-
+               using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+               using var context = scope.ServiceProvider.GetService<FightTimelineDataContext>();
+               if (!context.Database.EnsureCreated())
+                    context.Database.Migrate();
           }
      }
 }
