@@ -1,7 +1,8 @@
-import { Injectable, EventEmitter, Output } from '@angular/core';
+import { Injectable, EventEmitter, Output, Directive } from '@angular/core';
 import { Observable } from 'rxjs';
 import { IAuthenticationService } from "./authentication.service-interface";
 
+@Directive()
 @Injectable()
 export class AuthenticationMockService implements IAuthenticationService {
 

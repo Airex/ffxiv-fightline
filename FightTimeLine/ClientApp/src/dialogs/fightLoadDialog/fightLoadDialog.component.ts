@@ -39,7 +39,7 @@ export class FightLoadDialog {
   @Input("data") data: any;
   @ViewChild("buttonsTemplate", { static: true }) public buttonsTemplate: TemplateRef<any>;
   @ViewChild("headerTemplate", { static: true }) public headerTemplate: TemplateRef<any>;
-  @ViewChild("showDrafts", { static: false }) public fg: NzSwitchComponent;
+  @ViewChild("showDrafts") public fg: NzSwitchComponent;
   container: { fights : M.IFight[] } = { fights: [] };
   loading = true;
   selectedRowsChecked = [];

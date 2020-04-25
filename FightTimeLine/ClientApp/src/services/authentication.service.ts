@@ -1,10 +1,11 @@
-import { Injectable, EventEmitter, Output } from '@angular/core';
+import { Injectable, EventEmitter, Output, Directive } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { LocalStorageService } from "./LocalStorageService";
 import { IAuthenticationService } from "./authentication.service-interface";
 
+@Directive()
 @Injectable()
 export class AuthenticationService implements IAuthenticationService {
 

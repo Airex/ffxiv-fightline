@@ -1,8 +1,9 @@
-import { Injectable, Output, EventEmitter } from "@angular/core";
+import { Injectable, Output, EventEmitter, Directive } from "@angular/core";
 import { HubConnection, HubConnectionBuilder, LogLevel, HubConnectionState } from "@aspnet/signalr"
 import * as M from "../core/Models"
 
 
+@Directive()
 @Injectable()
 export class FightHubService {
 

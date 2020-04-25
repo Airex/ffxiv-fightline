@@ -16,7 +16,7 @@ import * as Gameserviceinterface from "../../services/game.service-interface";
 export class BossAttackDialog implements OnInit {
 
   @Input("data") data: M.IBossAbility;
-  @ViewChild("syncSettings", { static: false }) syncSettings: SyncSettingsComponent;
+  @ViewChild("syncSettings") syncSettings: SyncSettingsComponent;
   editForm: FormGroup;
   submitted = false;
   newAttack = true;

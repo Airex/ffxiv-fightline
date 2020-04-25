@@ -74,9 +74,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
 
 
-  @ViewChild("filter", { static: false })
+  @ViewChild("filter")
   public filter: FilterComponent;
-  @ViewChild("view", { static: false })
+  @ViewChild("view")
   public view: ViewComponent;
   @ViewChildren(PingComponent)
   pings: QueryList<PingComponent>;
