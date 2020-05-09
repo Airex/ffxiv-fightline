@@ -62,7 +62,7 @@ export const AST: IJob = {
     },
     {
       name: "Earthly Star",
-      duration: 30,
+      duration: 21,
       cooldown: 60,
       xivDbId: "7439",
       icon: ("23_Astrologian/7439_Earthly Star"),
