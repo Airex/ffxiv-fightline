@@ -5,14 +5,14 @@
   </nz-sider>
   <nz-sider nzTheme="light" [nzWidth]="45" [ngStyle]="{'text-align':'center'}">
     <div class="plus-button">
-      <nz-dropdown [nzTrigger]="'click'">
-        <button nz-button nz-dropdown nzSize="small" [disabled]="tree.getSelectedNodeList().length==0 || tree.getSelectedNodeList()[0].isLeaf"><i nz-icon nzType="plus" nzTheme="outline"></i></button>
+      <button nz-button nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nzSize="small" [disabled]="tree.getSelectedNodeList().length==0 || tree.getSelectedNodeList()[0].isLeaf"><i nz-icon nzType="plus" nzTheme="outline"></i></button>
+      <nz-dropdown-menu #menu="nzDropdownMenu">
         <ul nz-menu>
           <li nz-menu-item (click)="addAnd()">AND</li>
           <li nz-menu-item (click)="addOr()">OR</li>
           <li nz-menu-item (click)="addCondition()">Condition</li>
         </ul>
-      </nz-dropdown>
+      </nz-dropdown-menu>
     </div>
     <div class="minus-button">
       <button nz-button nzSize="small" [disabled]="tree.getSelectedNodeList().length==0 || !tree.getSelectedNodeList()[0].getParentNode()" (click)="remove()"><i nz-icon nzType="minus" nzTheme="outline"></i></button>

@@ -5,7 +5,6 @@ import { IFightService } from "../../services/fight.service-interface"
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService"
 import { fightServiceToken } from "../../services/fight.service-provider"
 import { NzModalRef } from "ng-zorro-antd"
-import "rxjs/add/observable/merge";
 
 @Component({
   selector: "fightSaveDialog",
@@ -15,7 +14,7 @@ import "rxjs/add/observable/merge";
 
 export class FightSaveDialog implements OnInit {
   ngOnInit(): void {
-    this.dialogRef.getInstance().nzFooter = this.buttons;
+    this.dialogRef.getConfig().nzFooter = this.buttons;
   }
 
   fightNameControl = new FormControl();

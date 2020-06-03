@@ -32,21 +32,6 @@ export class BossAttackDialog implements OnInit {
 
   ngOnInit() {
     this.newAttack = !this.data.name;
-    this.dialogRef.getInstance().nzFooter = [
-      {
-        label: "Cancel",
-        type: "primary",
-        onClick: () => this.dialogRef.destroy()
-      },
-      {
-        label: "Ok",
-        onClick: () => this.onSaveClick()
-      },
-      {
-        label: "Ok for All with same name",
-        onClick: () => this.onSaveAllClick(),
-        show: () => !this.newAttack
-      }];
 
     this.editForm = this.formBuilder.group({
       bossAttackName: new FormControl(this.data.name, Validators.required),

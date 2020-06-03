@@ -65,11 +65,13 @@ export class SyncSettingsComponent implements OnInit {
   formatExpression(input: NzTreeNodeOptions): string {
     let result: string = "";
     if (input) {
+      
       if (!input.isLeaf) {
-        if (!input.children || input.children.length === 0)
+        const nodes = input.children as NzTreeNodeOptions[];
+        if (!nodes || nodes.length === 0)
           result = "";
         else {
-          result = input.children.map(c => this.formatExpression(c)).filter(a => !!a).join(" " + input.title + " ");
+          result = nodes.map(c => this.formatExpression(c)).filter(a => !!a).join(" " + input.title + " ");
           if (input.children.length > 1) {
             result = "(" + result + ")";
           }

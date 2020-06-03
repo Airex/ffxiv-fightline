@@ -1,10 +1,8 @@
 import { HttpClient } from "@angular/common/http"
 import { tap, debounceTime, flatMap, map, merge, concatMap } from "rxjs/operators";
-import { Observable, of } from "rxjs"
+import { Observable, of, from } from "rxjs"
 import { SettingsService } from "./SettingsService"
 import { LocalStorageService } from "./LocalStorageService"
-import "rxjs/add/observable/from";
-import "rxjs/add/observable/of";
 import { Event, ReportEventsResponse, ReportFightsResponse, Events, Zone } from "../core/FFLogs"
 import * as _ from "lodash"
 import * as Dataserviceinterface from "./data.service-interface";
@@ -81,7 +79,7 @@ export class FFLogsService implements Dataserviceinterface.IDataService {
       const percentage = ((a.nextPageTimestamp || foundFight.end_time) - foundFight.start_time) / (foundFight.end_time - foundFight.start_time);
       events.push(...a.events);
       callBack(percentage);
-    } while (a && a.nextPageTimestamp);
+    } while (a && a.nextPageTimestamp && a.events.length > 0);
 
     parser.setEvents(events);
 
@@ -101,7 +99,7 @@ export class FFLogsService implements Dataserviceinterface.IDataService {
     const cache = this.storage.getObject<ICacheItem<Zone[]>>("zones_cache");
     if (cache) {
       if ((new Date().valueOf() - cache.timestamp.valueOf()) < 1000 * 60 * 60 * 24) {
-        return Observable.of(cache.data);
+        return of(cache.data);
       }
     }
     const observable = this.httpClient.get<Zone[]>(`${this.fflogsUrl}v1/zones?api_key=${this.apiKey}`).pipe(tap(x => {

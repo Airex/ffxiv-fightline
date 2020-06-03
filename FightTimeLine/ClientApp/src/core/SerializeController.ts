@@ -1,13 +1,14 @@
 import * as Models from "./Models";
 import { Utils } from "./Utils";
 import * as BaseExportTemplate from "./BaseExportTemplate";
-import * as DataHolders from "./DataHolders";
+import * as Holders from "./Holders";
+import {JobMap,  BossAttackMap} from "./Maps/index";
 
 export class SerializeController {
 
 
 
-  constructor(private holders: DataHolders.Holders, private gameName: string, private fraction, private data: Models.IFightData, private filter: Models.IFilter, private view: Models.IView) {
+  constructor(private holders: Holders.Holders, private gameName: string, private fraction, private data: Models.IFightData, private filter: Models.IFilter, private view: Models.IView) {
 
   }
 
@@ -118,7 +119,7 @@ export class SerializeController {
       data: {
         boss: {
           attacks: this.holders.bossAttacks.getAll()
-            .map((ab: DataHolders.BossAttackMap) => {
+            .map((ab: BossAttackMap) => {
               return {
                 name: ab.attack.name,
                 type: ab.attack.type,
@@ -142,7 +143,7 @@ export class SerializeController {
             };
           }),
         initialTarget: this.holders.bossTargets.initialBossTarget,
-        jobs: this.holders.jobs.getAll().map((value: DataHolders.JobMap, index: number) => <any>{
+        jobs: this.holders.jobs.getAll().map((value: JobMap, index: number) => <any>{
           id: value.id,
           name: value.job.name,
           role: value.job.role,
@@ -169,7 +170,7 @@ export class SerializeController {
   }
 
   serializeJobs(): IJobSerializeData[] {
-    const map = this.holders.jobs.getAll().map((value: DataHolders.JobMap) => <any>{
+    const map = this.holders.jobs.getAll().map((value: JobMap) => <any>{
       id: value.id,
       name: value.job.name,
       order: value.order,

@@ -1,5 +1,6 @@
-<nz-dropdown [nzTrigger]="'click'" [nzClickHide]="false">
-  <button nz-button nz-dropdown><i nz-icon type="eye" theme="fill"></i>View</button>
+
+<button nz-button [nzDropdownMenu]="menu" nz-dropdown [nzTrigger]="'click'" [nzClickHide]="false"><i nz-icon nzType="eye" theme="fill"></i>View</button>
+<nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu>
     <li nz-menu-item>
       <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="showDowntimesInPartyArea">Downtimes in party area</label>
@@ -26,5 +27,5 @@
       <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="colorfulDurations">Colorful Durations</label>
     </li>
   </ul>
-</nz-dropdown>
+</nz-dropdown-menu>
 

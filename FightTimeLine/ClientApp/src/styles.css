@@ -121,6 +121,8 @@ html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-con
 
 .vis-group-level-unknown-but-gte1 {
   border: none;
+  background: #ffffff !important;
+  padding-left: 0px !important;
 }
 
 .vis-item.availability .vis-item-content {
@@ -193,6 +195,10 @@ html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-con
   flex: 1 1 auto;
 }
 
+.expand-sign {
+  margin-right: 4px;
+}
+
 .vis-label.vis-nesting-group .vis-inner {
   height: 23px !important;
   font-size: 12px !important;
@@ -204,7 +210,14 @@ html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-con
   height: 23px !important;
   font-size: 12px !important;
   padding: 1px !important;
-  padding-left: 20px !important;
+  padding-left: 15px !important;
+}
+
+.vis-label.job .vis-inner {
+  height: 23px !important;
+  font-size: 12px !important;
+  padding: 1px !important;
+  padding-left: 5px !important;
 }
 
 .vis-label.compact .vis-inner {
@@ -215,11 +228,23 @@ html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-con
   display: none;
 }
 
-fightline .vis-label.vis-nesting-group {
+.vis-panel.vis-left {
+  min-width: 173px !important;
+}
+
+fightline .vis-label.vis-group-level-0 {
   height: 23px;
-  padding-left: 5px !important;
+  padding-left: 0px !important;
   min-width: 168px !important;
 }
+
+fightline .vis-label.vis-group-level-0 .vis-inner {
+  width: 100%
+}
+
+  fightline .vis-label.vis-group-level-0.selected {
+    background-color: #fff785;
+  }
 
 .vis-label.vis-nesting-group .abilityIcon {
   margin-right: 2px;

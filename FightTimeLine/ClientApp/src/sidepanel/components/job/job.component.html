@@ -1,0 +1,24 @@
+<nz-space nzDirection="vertical" nzSize="middle">
+  <nz-space-item>
+    <img [src]="it.job.icon" class="icon" />
+    <span class="abilityName">{{it.job.name}}</span>
+  </nz-space-item>
+  <nz-space-item>
+    <span class="abilityDescription">{{it.actorName}}</span>
+  </nz-space-item>
+  <nz-space-item *ngIf="hiddenAbilities.length>0">
+    <sidepanel-area header="Hidden abilities">
+      <div>
+        <nz-tag *ngFor="let ab of hiddenAbilities" (nzOnClose)="restore(ab)" nzMode="closeable">
+          <span>
+            <img class='abilityIcon' [src]="ab.ability.icon" />
+            <span class='abilityName'>{{ab.ability.name}}</span>
+          </span>
+        </nz-tag>
+      </div>
+    </sidepanel-area>
+  </nz-space-item>
+  <nz-space-item>
+    <button nz-button nzType="primary" (click)="remove(it)" nzDanger>Remove</button>
+  </nz-space-item>
+</nz-space>

@@ -51,8 +51,13 @@
         </nz-form-item>
       </form>
     </nz-tab>
-    <nz-tab nzTitle="FFLogs Sync" *ngIf="gameService.showImport" >
+    <nz-tab nzTitle="FFLogs Sync" *ngIf="gameService.showImport">
       <syncSettings #syncSettings [data]="data"></syncSettings>
     </nz-tab>
   </nz-tabset>
+  <ng-template [nzModalFooter]>
+    <button nz-button nzType="primary" (click)="dialogRef.destroy()">Cancel</button>
+    <button nz-button (click)="onSaveClick()">Ok</button>
+    <button nz-button *ngIf="!newAttack" (click)="onSaveAllClick()">Ok for All with same name</button>
+  </ng-template>
 </div>

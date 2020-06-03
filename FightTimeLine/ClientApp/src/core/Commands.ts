@@ -1,11 +1,11 @@
 import { Command, ICommandExecutionContext, ICommandData } from "./UndoRedo"
-import { IAbility, IBossAbility, IJob, IFilter, IAbilitySettingData, IAbilityFilter, Role, EntryType } from "./Models"
-import * as H from "./DataHolders"
+import { IAbility, IBossAbility, IAbilitySettingData, IAbilityFilter, Role, EntryType } from "./Models"
 import { Utils } from "./Utils"
 import { Guid } from "guid-typescript"
+import {AbilityMap, AbilityUsageMap, JobMap, BossAttackMap, BossDownTimeMap, JobStanceMap} from "./Maps/index";
 
 
-interface IAbilityWithUsages { map: H.AbilityMap, usages: H.AbilityUsageMap[] }
+interface IAbilityWithUsages { map: AbilityMap, usages: AbilityUsageMap[] }
 
 export class CombinedCommand implements Command {
   serialize(): ICommandData {
@@ -32,8 +32,6 @@ export class CombinedCommand implements Command {
 }
 
 export class AddJobCommand implements Command {
-
-
   private filter: IAbilityFilter;
 
   constructor(private id: string, private jobName: string, private actorName: string, private prevBossTarget: string, private doUpdates: boolean, private pet: string, private collapsed: boolean) {
@@ -74,7 +72,7 @@ export class AddJobCommand implements Command {
       this.id = context.idGen.getNextId(EntryType.Job);
     }
     const job = context.jobRegistry.getJobs().find(it => it.name === this.jobName);
-    const abilityIds = new Array<string>();
+    const abilityIds = new Array<AbilityMap>();
     let index = 0;
 
     const map = {
@@ -84,12 +82,12 @@ export class AddJobCommand implements Command {
       isCompactView: context.isCompactView(),
       collapsed: this.collapsed
     };
-    const jobMap = new H.JobMap(map.id, map.job, { actorName: map.actorName, collapsed: map.collapsed }, this.filter, this.pet);
+    const jobMap = new JobMap(map.id, map.job, { actorName: map.actorName, collapsed: map.collapsed }, this.filter, this.pet);
+    
 
     if (job.stances && job.stances.length) {
       const nextId = this.id + "_" + index;
-      abilityIds.push(nextId);
-      context.holders.abilities.add(new H.AbilityMap(
+      abilityIds.push(new AbilityMap(
         nextId,
         jobMap,
         null,
@@ -101,13 +99,14 @@ export class AddJobCommand implements Command {
 
     for (let a of job.abilities) {
       const nextId = this.id + "_" + index;
-      abilityIds.push(nextId);
-      context.holders.abilities.add(new H.AbilityMap(nextId, jobMap, a, false, { hidden: false }));
+      abilityIds.push(new AbilityMap(nextId, jobMap, a, false, { hidden: false }));
       index++;
     }
 
-    jobMap.useAbilities(abilityIds);
     context.holders.jobs.add(jobMap);
+    jobMap.useAbilities(abilityIds);
+    context.holders.abilities.addRange(abilityIds);
+    
 
     if ((context.holders.bossTargets.initialBossTarget == undefined || context.holders.bossTargets.initialBossTarget === "boss") && map.job.role === Role.Tank)
       context.holders.bossTargets.initialBossTarget = this.id;
@@ -135,22 +134,24 @@ export class RemoveJobCommand implements Command {
   reverse(context: ICommandExecutionContext): void {
 
     const abilityMaps = this.storedData.abilityMaps as IAbilityWithUsages[];
-    const jobMap = this.storedData.jobMap as H.JobMap;
+    const jobMap = this.storedData.jobMap as JobMap;
     jobMap.isCompact = context.isCompactView();
+    jobMap.applyData({selected: false});
     context.holders.jobs.add(jobMap);
 
     abilityMaps.forEach((it: IAbilityWithUsages) => {
       it.map.applyData({
-        isCompact: context.isCompactView()
+        isCompact: context.isCompactView(),
+        selected: false
       });
       context.holders.abilities.add(it.map);
       it.usages.forEach((x) => {
-        context.holders.itemUsages.add(new H.AbilityUsageMap(x.id, it.map, x.settings,
+        context.holders.itemUsages.add(new AbilityUsageMap(x.id, it.map, x.settings,
           {
             start: x.start,
             loaded: x.loaded,
             showLoaded: context.highlightLoaded(),
-            ogcdAsPoints: context.ogcdAttacksAsPoints(it.map.ability)
+            ogcdAsPoints: context.ogcdAttacksAsPoints(it.map.ability),
           }));
       });
     });
@@ -214,7 +215,7 @@ export class AddBossAttackCommand implements Command {
   }
 
   execute(context: ICommandExecutionContext): void {
-    context.holders.bossAttacks.add(new H.BossAttackMap(this.id,
+    context.holders.bossAttacks.add(new BossAttackMap(this.id,
       {
         attack: this.bossAbility,
         vertical: context.verticalBossAttacks()
@@ -241,7 +242,7 @@ export class RemoveBossAttackCommand implements Command {
   }
 
   reverse(context: ICommandExecutionContext): void {
-    context.holders.bossAttacks.add(new H.BossAttackMap(this.id,
+    context.holders.bossAttacks.add(new BossAttackMap(this.id,
       {
         attack: this.bossAbility,
         vertical: context.verticalBossAttacks()
@@ -413,7 +414,7 @@ export class AddBatchAttacksCommand implements Command {
   execute(context: ICommandExecutionContext): void {
     const items = this.commands.map(it => {
       const params = it.serialize().params as IAddBossAttackParams;
-      return new H.BossAttackMap(params.id,
+      return new BossAttackMap(params.id,
         {
           attack: params.attack,
           vertical: context.verticalBossAttacks()
@@ -452,7 +453,7 @@ export class AddBatchUsagesCommand implements Command {
   execute(context: ICommandExecutionContext): void {
     const items = this.commands.map(it => {
       const params = it.serialize().params as IAddAbilityParams;
-      let jobMap: H.JobMap;
+      let jobMap: JobMap;
       if (params.jobActor)
         jobMap = context.holders.jobs.getByActor(params.jobActor);
       else
@@ -460,7 +461,7 @@ export class AddBatchUsagesCommand implements Command {
 
       const abilityMap = context.holders.abilities.getByParentAndAbility(jobMap.id, params.abilityName);
 
-      const item = new H.AbilityUsageMap(params.id,
+      const item = new AbilityUsageMap(params.id,
         abilityMap,
         params.settings,
         {
@@ -519,7 +520,7 @@ export class AddAbilityCommand implements Command {
     if (!this.id) {
       this.id = context.idGen.getNextId(EntryType.AbilityUsage);
     }
-    let jobMap: H.JobMap;
+    let jobMap: JobMap;
     if (this.jobActor)
       jobMap = context.holders.jobs.getByActor(this.jobActor);
     else
@@ -527,7 +528,7 @@ export class AddAbilityCommand implements Command {
 
     const abilityMap = context.holders.abilities.getByParentAndAbility(jobMap.id, this.abilityName);
 
-    const item = new H.AbilityUsageMap(this.id,
+    const item = new AbilityUsageMap(this.id,
       abilityMap,
       this.settings,
       {
@@ -581,7 +582,7 @@ export class RemoveAbilityCommand implements Command {
   reverse(context: ICommandExecutionContext): void {
     const amap = context.holders.abilities.get(this.abilityMapId);
 
-    context.holders.itemUsages.add(new H.AbilityUsageMap(this.id, amap, this.settings,
+    context.holders.itemUsages.add(new AbilityUsageMap(this.id, amap, this.settings,
       {
         start: this.time,
         loaded: this.loaded,
@@ -693,7 +694,7 @@ export class AddDowntimeCommand implements Command {
 
   execute(context: ICommandExecutionContext): void {
 
-    context.holders.bossDownTime.add(new H.BossDownTimeMap(this.id,
+    context.holders.bossDownTime.add(new BossDownTimeMap(this.id,
       this.data.startId || Guid.create().toString(),
       this.data.endId || Guid.create().toString(),
       {
@@ -811,7 +812,7 @@ export class RemoveDownTimeCommand implements Command {
   }
 
   reverse(context: ICommandExecutionContext): void {
-    context.holders.bossDownTime.add(new H.BossDownTimeMap(this.id, this.data.startId, this.data.endId,
+    context.holders.bossDownTime.add(new BossDownTimeMap(this.id, this.data.startId, this.data.endId,
       {
         start: this.data.start,
         end: this.data.end,
@@ -881,7 +882,7 @@ export class AddStanceCommand implements Command {
     const stancesAbility = context.holders.abilities.getStancesAbility(this.jobGroup);
     const ability = jobmap.job.stances.find((it) => it.ability.name === this.abilityName).ability;
 
-    context.holders.stances.add(new H.JobStanceMap(this.id, stancesAbility, ability,
+    context.holders.stances.add(new JobStanceMap(this.id, stancesAbility, ability,
       {
         start: this.start,
         end: this.end,
@@ -928,7 +929,7 @@ export class RemoveStanceCommand implements Command {
 
   reverse(context: ICommandExecutionContext): void {
     const abMap = context.holders.abilities.get(this.abilityMapId);
-    context.holders.stances.add(new H.JobStanceMap(this.id, abMap, this.ability,
+    context.holders.stances.add(new JobStanceMap(this.id, abMap, this.ability,
       {
         start: this.start,
         end: this.end,

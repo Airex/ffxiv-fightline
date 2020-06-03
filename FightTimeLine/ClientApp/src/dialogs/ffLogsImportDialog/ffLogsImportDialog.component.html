@@ -7,7 +7,7 @@
             <input nz-input name="reportSearch" [(ngModel)]="reportValue" placeholder="https://www.fflogs.com/reports/..." (ngModelChange)="onSearch($event)" fflogs [matcher]="'reports\/([a-zA-Z0-9]{16})\/?(?:(?:#.*fight=([^&]*))|$)'" (onMatch)="onMatch($event)" [nzAutocomplete]="auto" />
           </nz-input-group>
           <ng-template #suffixIcon>
-            <i nz-icon type="search"></i>
+            <i nz-icon nzType="search"></i>
           </ng-template>
           <nz-autocomplete #auto>
             <nz-auto-option *ngFor="let r of recent" [nzValue]="r.url">

@@ -1,12 +1,12 @@
 import { Injectable, Inject } from "@angular/core"
-import { Observable } from "rxjs"
+import { Observable, of, empty } from "rxjs"
 import { expand, take, concatMap, concat, toArray, map, delay } from "rxjs/operators"
 import { IBoss, IFight, IBossSearchEntry,ISyncData, SyncOperation,ICommandEntry } from "../core/Models"
 import { IFightService } from "./fight.service-interface"
 
 @Injectable()
 export class FightsMockService implements IFightService {
-  newFight(fraction: string = ""): Observable<IFight> { return Observable.of({
+  newFight(fraction: string = ""): Observable<IFight> { return of({
       id: 'dummy',
       name: 'dummy',
       userName: 'dummy',
@@ -17,17 +17,17 @@ export class FightsMockService implements IFightService {
       game: 'ffxiv'
   }); }
 
-  addCommand(fight: string, data): Observable<any> { return Observable.empty(); }
+  addCommand(fight: string, data): Observable<any> { return empty(); }
 
-  getCommands(fight: string, timestamp: number): Observable<ICommandEntry[]> { return Observable.empty() }
+  getCommands(fight: string, timestamp: number): Observable<ICommandEntry[]> { return empty() }
 
   getBosses(reference: number, searchString: string, privateOnly: boolean): Observable<IBossSearchEntry[]> {
 
-    const source = Observable.of(1);
+    const source = of(1);
     const example = source.pipe(
       //recursively call supplied function
       expand(val => {
-        return Observable.of(val + 1);
+        return of(val + 1);
       }),
       //call 5 times
       take(50),
@@ -44,7 +44,7 @@ export class FightsMockService implements IFightService {
   }
 
   getBoss(id: string): Observable<IBoss> {
-    return Observable.of(<IBoss>{
+    return of(<IBoss>{
       id: id,
       name: "test boss",
       ref: 1,
@@ -74,7 +74,7 @@ export class FightsMockService implements IFightService {
   }
 
   saveBoss(boss: IBoss): Observable<IBoss> {
-    return Observable.of(boss);
+    return of(boss);
   }
 
   getFight(id: string): Observable<IFight> {
@@ -83,15 +83,15 @@ export class FightsMockService implements IFightService {
   }
 
   removeBosses(map: any[]): Observable<any> {
-    return Observable.of(null);
+    return of(null);
   }
 
   saveFight(fight: IFight): Observable<IFight> {
-    return Observable.of(fight);
+    return of(fight);
   }
 
   getFightsForUser(): Observable<IFight[]> {
-    return Observable.of([
+    return of([
       <IFight>{
         id: "1",
         name: "dummy fight 1",
@@ -185,6 +185,6 @@ export class FightsMockService implements IFightService {
   }
 
   removeFights(map: any[]): Observable<any> {
-    return Observable.of(null);
+    return of(null);
   }
 }

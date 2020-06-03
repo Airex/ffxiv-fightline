@@ -50,7 +50,7 @@ export const settings: {
 
 export const tankSharedAbilities: IAbilities = {
   Rampart: { name: "Rampart", duration: 20, cooldown: 90, xivDbId: "7531", icon: "10_TankRole/7531_Rampart", abilityType: AbilityType.SelfDefense },
-  Reprisal: { name: "Reprisal", duration: 10, cooldown: 60, xivDbId: "7535", icon: "10_TankRole/7535_Reprisal", abilityType: AbilityType.PartyDefense, requiresBossTarget: true, },
+  Reprisal: { name: "Reprisal", duration: 10, cooldown: 60, xivDbId: "7535", icon: "10_TankRole/7535_Reprisal", abilityType: AbilityType.PartyDefense, requiresBossTarget: false, },
   Provoke: { name: "Provoke", duration: 0, cooldown: 30, xivDbId: "7533", icon: "10_TankRole/7533_Provoke", abilityType: AbilityType.Enmity, settings: [settings.changesTarget], requiresBossTarget: true, },
   Shirk: { name: "Shirk", duration: 0, cooldown: 120, xivDbId: "7537", icon: "10_TankRole/7537_Shirk", abilityType: AbilityType.Enmity }
 };

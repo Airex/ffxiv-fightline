@@ -1,4 +1,7 @@
-import {Holders} from "../../core/DataHolders"
+import * as BaseHolder from "../../core/Holders/BaseHolder";
+import {Holders} from "../../core/Holders";
+
+
 export interface ISidePanelComponent {
-  setItems(items: any[], holders: Holders):void;
+  setItems(items: BaseHolder.IForSidePanel[], holders: Holders):void;
 }

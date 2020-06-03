@@ -4,9 +4,6 @@ import { RecentActivityService } from "../../services/RecentActivitiesService"
 import { SettingsService } from "../../services/SettingsService"
 import { Utils } from "../../core/Utils"
 import { ReportFightsResponse } from "../../core/FFLogs"
-
-import "rxjs/add/observable/merge";
-import "rxjs/add/observable/empty";
 import { NzModalRef } from "ng-zorro-antd";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
@@ -22,7 +19,7 @@ export class FFLogsImportDialog implements OnInit {
   ngOnInit(): void {
     if (this.code)
       this.reportValue = "https://www.fflogs.com/reports/" + this.code;
-    this.dialogRef.getInstance().nzFooter = this.buttonsTemplate;
+    this.dialogRef.getConfig().nzFooter = this.buttonsTemplate;
     this.onSearch(this.reportValue);
   }
 

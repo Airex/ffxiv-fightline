@@ -1,5 +1,5 @@
-<nz-dropdown [nzTrigger]="'click'" [nzClickHide]="false">
-  <button nz-button nz-dropdown><i nz-icon type="filter" theme="fill"></i>Filter</button>
+<button nz-button nzTrigger="click" [nzDropdownMenu]="menu" [nzClickHide]="false" nz-dropdown><i nz-icon nzType="filter" theme="fill"></i>Filter</button>
+<nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu>
     <li nz-menu-item>
       Ability types:
@@ -62,4 +62,4 @@
       <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="isUnaspected">Unaspected damage</label>
     </li>
   </ul>
-</nz-dropdown>
+</nz-dropdown-menu>

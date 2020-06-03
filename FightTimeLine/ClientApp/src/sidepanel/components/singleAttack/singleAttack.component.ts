@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ISidePanelComponent } from "../ISidePanelComponent"
 import * as M from "../../../core/Models"
-import * as H from "../../../core/DataHolders"
 import * as S from "../../../services/index"
 import { Utils } from "../../../core/Utils"
+import {Holders} from "../../../core/Holders";
+import {BossAttackMap} from "../../../core/Maps/index";
+
 
 @Component({
   selector: "singleAttack",
@@ -16,13 +18,13 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   similar: any[] = null;
 
   items: any[];
-  holders: H.Holders;
+  holders: Holders;
 
   constructor(private dispatcher: S.DispatcherService) {
 
   }
 
-  get it(): H.BossAttackMap {
+  get it(): BossAttackMap {
     return this.items[0];
   }
 
@@ -30,7 +32,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
     return M.DamageType[id];
   }
 
-  setItems(items: any[], holders: H.Holders): void {
+  setItems(items: any[], holders: Holders): void {
     this.items = items;
     this.holders = holders;
     this.defs = this.calculateDefs();
@@ -68,7 +70,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
 
   }
 
-  similarClick(attack: H.BossAttackMap) {
+  similarClick(attack: BossAttackMap) {
     this.dispatcher.dispatch({
       name: "SidePanel Similar Click",
       payload: attack.id

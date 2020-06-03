@@ -23,7 +23,7 @@ export class LoginDialog implements OnInit {
     private notification: ScreenNotificationsService,
     public dialogRef: NzModalRef) {
 
-    this.dialogRef.getInstance().nzFooter = [
+    this.dialogRef.getConfig().nzFooter = [
       {
         label: "Cancel",
         type: "primary",

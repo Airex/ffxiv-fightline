@@ -5,8 +5,10 @@ import { SingleAttackComponent } from "./components/singleAttack/singleAttack.co
 import { MultipleAbilityComponent } from "./components/multipleAbility/multipleAbility.component";
 import { MultipleAttackComponent } from "./components/multipleAttack/multipleAttack.component";
 import { ISidePanelComponent } from "./components/ISidePanelComponent";
-import { Holders } from "../core/DataHolders";
-
+import * as Jobcomponent from "./components/job/job.component";
+import * as JobAbilitycomponent from "./components/jobAbility/jobAbility.component";
+import * as BaseHolder from "../core/Holders/BaseHolder";
+import {Holders} from "../core/Holders";
 
 
 @Component({
@@ -28,23 +30,33 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
-  items: any[];
+  items: BaseHolder.IForSidePanel[];
 
-  setItems(items: any[], holders: Holders): void {
+  setItems(items: BaseHolder.IForSidePanel[], holders: Holders): void {
     this.items = items;
-
     let component = null;
-    if (items.length === 1) {
-      if (items[0].ability) {
-        component = new ComponentPortal(SingleAbilityComponent);
-      } else {
-        component = new ComponentPortal(SingleAttackComponent);
-      }
-    } else if (items.length > 1) {
-      if (items[0].ability) {
-        component = new ComponentPortal(MultipleAbilityComponent);
-      } else {
-        component = new ComponentPortal(MultipleAttackComponent);
+    if (this.items.length > 0) {
+      switch (this.items[0].sidePanelComponentName) {
+        case "ability":
+          if (items.length === 1) {
+            component = new ComponentPortal(SingleAbilityComponent);
+          } else if (items.length > 1) {
+            component = new ComponentPortal(MultipleAbilityComponent);
+          }
+          break;
+        case "bossAbility":
+          if (items.length === 1) {
+            component = new ComponentPortal(SingleAttackComponent);
+          } else if (items.length > 1) {
+            component = new ComponentPortal(MultipleAttackComponent);
+          }
+          break;
+        case "job":
+          component = new ComponentPortal(Jobcomponent.JobComponent);
+          break;
+        case "jobAbility":
+          component = new ComponentPortal(JobAbilitycomponent.JobAbilityComponent);
+          break;
       }
     }
 

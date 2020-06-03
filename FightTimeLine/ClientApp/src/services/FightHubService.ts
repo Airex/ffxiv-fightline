@@ -1,7 +1,7 @@
 import { Injectable, Output, EventEmitter, Directive } from "@angular/core";
 import { HubConnection, HubConnectionBuilder, LogLevel, HubConnectionState } from "@aspnet/signalr"
 import * as M from "../core/Models"
-
+import * as Environment from "../environments/environment";
 
 @Directive()
 @Injectable()
@@ -48,6 +48,7 @@ export class FightHubService {
   }
 
   startSession(fight: string, username: string, handlers: IStartSessionHandlers): Promise<string> {
+    if (!Environment.environment.production) return Promise.resolve("");
     const connection = this.createConnection();
     this.attachHandlers(connection, handlers);
 

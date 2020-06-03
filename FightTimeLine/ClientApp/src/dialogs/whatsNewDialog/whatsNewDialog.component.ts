@@ -21,7 +21,7 @@ export class WhatsNewDialog implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.dialogRef.getInstance().nzFooter = this.buttonsTemplate;
+    this.dialogRef.getConfig().nzFooter = this.buttonsTemplate;
     
   }
 

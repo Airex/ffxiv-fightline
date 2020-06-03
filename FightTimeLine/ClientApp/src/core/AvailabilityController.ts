@@ -1,16 +1,18 @@
 import * as M from "./Models"
-import * as H from "./DataHolders"
 import * as _ from "lodash"
 import { IdGenerator } from "./Generators"
+import * as Holders from "./Holders";
+import { JobMap, AbilityMap, AbilityAvailabilityMap, AbilityUsageMap,IAbilityAvailabilityMapData } from "./Maps/index";
 
-type Range = {start: Date, end: Date};
+
+type Range = { start: Date, end: Date };
 
 export class AvailabilityController {
-  constructor(private view: M.IView, private holders: H.Holders, private startDate: Date, private idgen: IdGenerator) {
+  constructor(private view: M.IView, private holders: Holders.Holders, private startDate: Date, private idgen: IdGenerator) {
 
   }
 
-  private getDependencies(deps: string[], job: H.JobMap): any[] {
+  private getDependencies(deps: string[], job: JobMap): any[] {
     let depUsages = [];
     if (deps) {
       depUsages =
@@ -53,11 +55,11 @@ export class AvailabilityController {
     }
   }
 
-  private splitRange(ranges: Range[], atIndex: number, splitter: Range):Range[] {
+  private splitRange(ranges: Range[], atIndex: number, splitter: Range): Range[] {
     return ranges;
   }
 
-  processChargesAbility(it: H.AbilityMap) {
+  processChargesAbility(it: AbilityMap) {
     const usages = [
       //...this.getDependencies(deps, it.job),
       ...this.holders.itemUsages.getByAbility(it.id)
@@ -72,7 +74,7 @@ export class AvailabilityController {
 
     let ranges: Range[] = [];
     ranges.push({ start: this.startDate, end: new Date(this.startDate.valueOf() + 30 * 60 * 1000) })
-   
+
 
     usages.forEach((u) => {
       if (chargesCount === 0) {
@@ -80,53 +82,52 @@ export class AvailabilityController {
         ranges = this.splitRange(ranges, ranges.length - 1, { start: currentDate, end: nextIncreaseDate });
       }
       chargesCount--;
-      
+
     });
 
-//    const maps = usages.map(c => {
-//      chargesCount--;
-//
-//      const start = prev
-//        ? (prev.end)
-//        : (it.ability.requiresBossTarget
-//          ? this.startDate
-//          : new Date(this.startDate.valueOf() as number - 30 * 1000));
-//      const diff = ((c.startAsNumber) - (start.valueOf() as number)) / 1000;
-//      const av = diff > it.ability.cooldown;
-//      prev = c;
-//      if (av) {
+    //    const maps = usages.map(c => {
+    //      chargesCount--;
+    //
+    //      const start = prev
+    //        ? (prev.end)
+    //        : (it.ability.requiresBossTarget
+    //          ? this.startDate
+    //          : new Date(this.startDate.valueOf() as number - 30 * 1000));
+    //      const diff = ((c.startAsNumber) - (start.valueOf() as number)) / 1000;
+    //      const av = diff > it.ability.cooldown;
+    //      prev = c;
+    //      if (av) {
 
-//        return new H.AbilityAvailabilityMap(id,
-//          it,
-//          {
-//            start: start,
-//            end: new Date(c.startAsNumber - it.ability.cooldown * 1000),
-//            available: true
-//          });
-//      }
-//      return null;
-//    }).filter(it => it != null);
-    this.holders.abilityAvailability.addRange(ranges.map((value, index, array) => {
+    //        return new H.AbilityAvailabilityMap(id,
+    //          it,
+    //          {
+    //            start: start,
+    //            end: new Date(c.startAsNumber - it.ability.cooldown * 1000),
+    //            available: true
+    //          });
+    //      }
+    //      return null;
+    //    }).filter(it => it != null);
+    this.holders.abilityAvailability.addRange(ranges.map((value) => {
       const id = this.idgen.getNextId(M.EntryType.AbilityAvailability);
-      return new H.AbilityAvailabilityMap(id,
-          it,
-          {
-            start: value.start,
-            end: value.end,
-            available: true
-          });
+      const iAbilityAvailabilityMapData = <IAbilityAvailabilityMapData>(({
+        start: value.start,
+        end: value.end,
+        available: true
+      }) as any);
+      return new AbilityAvailabilityMap(id, it, iAbilityAvailabilityMapData);
     }));
 
   }
 
-  private processStandardAbility(it: H.AbilityMap, deps: string[]) {
+  private processStandardAbility(it: AbilityMap, deps: string[]) {
     const usages = [
       ...this.getDependencies(deps, it.job),
       ...this.holders.itemUsages.getByAbility(it.id)
     ].sort((a, b) => (a.startAsNumber) - (b.startAsNumber));
 
     this.holders.abilityAvailability.removeForAbility(it.id);
-    let prev: H.AbilityUsageMap = null;
+    let prev: AbilityUsageMap = null;
     const maps = usages.map(c => {
       const start = prev
         ? (prev.end)
@@ -138,7 +139,7 @@ export class AvailabilityController {
       prev = c;
       if (av) {
         const id = this.idgen.getNextId(M.EntryType.AbilityAvailability);
-        return new H.AbilityAvailabilityMap(id,
+        return new AbilityAvailabilityMap(id,
           it,
           {
             start: start,

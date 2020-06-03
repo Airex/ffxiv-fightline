@@ -1,7 +1,7 @@
 import { Injectable, EventEmitter, Output, Directive } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of, } from 'rxjs';
 import { LocalStorageService } from "./LocalStorageService";
 import { IAuthenticationService } from "./authentication.service-interface";
 
@@ -38,7 +38,7 @@ export class AuthenticationService implements IAuthenticationService {
     this.storage.removeItem('currentUser');
     this.authenticatedChanged.emit();
     this.usernameChanged.emit();
-    return Observable.of(null);
+    return of(null);
   }
 
   get authenticated(): boolean {

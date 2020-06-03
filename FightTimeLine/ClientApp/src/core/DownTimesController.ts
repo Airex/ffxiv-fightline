@@ -1,4 +1,3 @@
-﻿import {IdGenerator} from "./Generators"
 import {VisTimelineService,} from "ngx-vis"
 import {FightTimeLineController} from "./FightTimeLineController"
 import {Guid} from "guid-typescript"
@@ -6,8 +5,9 @@ import {Guid} from "guid-typescript"
 export class DownTimesController {
     private downTimeData = { start: <Date>null, startId: <string>null };
     private downtimeMarkers = new Array<string>();
+    public isInBossDownTimeMode = false;
 
-    constructor(private idGen: IdGenerator,
+  constructor(
         private visTimelineService: VisTimelineService,
         private visTimeline: string,
         private fightLineController: FightTimeLineController) {

@@ -1,7 +1,5 @@
 import { Component, Inject, Input, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms"
-import "rxjs/add/observable/merge";
-import "rxjs/add/observable/empty";
 import { SpreadSheetsService } from "../../services/SpreadSheetsService"
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService"
 import { ExportTemplate, ExportData } from "../../core/BaseExportTemplate"
@@ -40,7 +38,7 @@ export class ExportToTableDialog implements OnInit {
   ].join(" ");
 
   ngOnInit(): void {
-    this.dialogRef.getInstance().nzTitle = this.headerTemplate;
+    this.dialogRef.getConfig().nzTitle = this.headerTemplate;
 
     this.authService.authState.subscribe((user) => {
       this.user = user;

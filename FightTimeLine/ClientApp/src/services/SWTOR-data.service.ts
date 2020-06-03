@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core"
 import { HttpClient } from "@angular/common/http"
-import { Observable } from "rxjs"
-import "rxjs/add/observable/from";
-import "rxjs/add/observable/of";
+import { Observable, of} from "rxjs"
 import { Zone, ReportFightsResponse, } from "../core/FFLogs"
 import * as Parser from "../core/Parser";
 
@@ -27,7 +25,7 @@ export class SWTORDataService {
   }
 
   getParses(cn:string, a: string, b: string): Observable<any[]> {
-    return Observable.of(null);
+    return of(null);
   }
 
 }

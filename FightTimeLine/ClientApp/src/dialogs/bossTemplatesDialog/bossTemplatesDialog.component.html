@@ -7,8 +7,8 @@
             <nz-input-group [nzPrefix]="prefixTemplate1" [nzSuffix]="suffixTemplate1">
               <input nz-input placeholder="Search boss" [(ngModel)]="searchString" (ngModelChange)="onSearchChange($event)" />
             </nz-input-group>
-            <ng-template #prefixTemplate1><i nz-icon type="search"></i></ng-template>
-            <ng-template #suffixTemplate1><i nz-icon type="close-circle" (click)="clear()" *ngIf="searchString"></i></ng-template>
+            <ng-template #prefixTemplate1><i nz-icon nzType="search"></i></ng-template>
+            <ng-template #suffixTemplate1><i nz-icon nzType="close-circle" (click)="clear()" *ngIf="searchString"></i></ng-template>
           </nz-header>
           <nz-content customScroll style="overflow: auto">
             <ul nz-menu [nzMode]="'inline'" style="min-height: 100%">
@@ -27,8 +27,8 @@
         <nz-input-group nzSpan="8" [nzPrefix]="prefixTemplate2" [nzSuffix]="suffixTemplate2">
           <input nz-input placeholder="Search template" [(ngModel)]="searchFightString" (ngModelChange)="onSearchFightChange($event)" />
         </nz-input-group>
-        <ng-template #prefixTemplate2><i nz-icon type="search"></i></ng-template>
-        <ng-template #suffixTemplate2><i nz-icon type="close-circle" (click)="clearTemplates()" *ngIf="searchFightString"></i></ng-template>
+        <ng-template #prefixTemplate2><i nz-icon nzType="search"></i></ng-template>
+        <ng-template #suffixTemplate2><i nz-icon nzType="close-circle" (click)="clearTemplates()" *ngIf="searchFightString"></i></ng-template>
       </nz-header>
       <nz-content style="margin: 4px 2px 2px 4px; overflow: auto; min-height: 524px;height: 524px" customScroll>
         <as-split direction="vertical" unit="percent" gutterSize="5" restrictMove="true" style="min-height: 524px;height: 524px">

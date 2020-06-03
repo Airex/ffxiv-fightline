@@ -9,7 +9,7 @@ import {NzModalRef} from "ng-zorro-antd";
 
 export class HelpDialog implements  OnInit {
   ngOnInit(): void {
-    this.dialogRef.getInstance().nzFooter = this.buttonsTemplate;
+    this.dialogRef.getConfig().nzFooter = this.buttonsTemplate;
   }
 
   @ViewChild("buttonsTemplate", { static: true }) buttonsTemplate : TemplateRef<any>;

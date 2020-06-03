@@ -1,5 +1,7 @@
 import * as FF from "./FFLogs"
-import * as H from "./DataHolders"
+import {Holders} from "./Holders";
+import {AbilitySelectionHolder} from "./Holders/AbilitySelectionHolder";
+import {AbilityUsageMap} from "./Maps/index";
 
 export enum Role {
   Tank,
@@ -145,13 +147,13 @@ export interface IDetectionStrategy {
 }
 
 export interface IOverlapCheckContext {
-  holders: H.Holders;
+  holders: Holders;
   id: string;
   ability: IAbility;
   group: string;
   start: Date;
   end: Date;
-  selectionRegistry: H.AbilitySelectionHolder;
+  selectionRegistry: AbilitySelectionHolder;
 }
 
 export interface IOverlapStrategy {
@@ -189,7 +191,7 @@ export class BaseOverlapStrategy implements IOverlapStrategy {
 
   check(context: IOverlapCheckContext): boolean {
 
-    const result = context.holders.itemUsages.getByAbility(context.group).some((x: H.AbilityUsageMap) => {
+    const result = context.holders.itemUsages.getByAbility(context.group).some((x: AbilityUsageMap) => {
       const chargesBased = !!x.ability.ability.charges;
       if (chargesBased) return false;
 
@@ -218,7 +220,7 @@ export class SharedOverlapStrategy implements IOverlapStrategy {
     const sharedItems = context.holders.itemUsages.getByAbility(sharedAbility.id);
     
 
-    const result = [...items,...sharedItems].some((x: H.AbilityUsageMap) => {
+    const result = [...items,...sharedItems].some((x: AbilityUsageMap) => {
       const chargesBased = !!x.ability.ability.charges;
       if (chargesBased) return false;
 

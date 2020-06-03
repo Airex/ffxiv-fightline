@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit, ViewChild, ElementRef, OnDestroy, TemplateRef, Input } from "@angular/core";
-import { map } from "rxjs/operators/"
-import 'rxjs/add/operator/first';
+import { map, first } from "rxjs/operators/"
 import { NzModalRef } from "ng-zorro-antd"
 import { Zone, Encounter } from "../../core/FFLogs"
 import * as M from "../../core/Models"
@@ -11,8 +10,7 @@ import { fightServiceToken } from "../../services/fight.service-provider"
 import { IFightService } from "../../services/fight.service-interface"
 import { IAuthenticationService } from "../../services/authentication.service-interface"
 import { authenticationServiceToken } from "../../services/authentication.service-provider"
-import { VisTimelineService, TimelineOptions } from "ngx-vis";
-import { DataGroup, DataSetDataItem, DataItem, DataSetDataGroup, DataSet } from "vis-timeline"
+import { VisTimelineService, TimelineOptions, DataGroup, DataItem, DataSet } from "ngx-vis";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
 
@@ -24,8 +22,8 @@ import * as Gameserviceinterface from "../../services/game.service-interface";
 
 export class BossTemplatesDialog implements OnInit, OnDestroy {
 
-  visItems: DataSetDataItem = new DataSet<DataItem>();
-  visGroups: DataSetDataGroup = new DataSet<DataGroup>();
+  visItems: DataSet<DataItem,'id'>;
+  visGroups: DataSet<DataGroup, 'id'>;
   visTimelineBoss: string = "visTimelinebooooosss";
   startDate = new Date(946677600000);
   @ViewChild("timeline", { static: true }) timeline: ElementRef;
@@ -123,13 +121,14 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.dialogRef.getInstance().nzFooter = this.buttonsTemplate;
+    this.dialogRef.getConfig().nzFooter = this.buttonsTemplate;
     this.gameService.dataService.getZones()
       .pipe(
         map((v) => {
           return v.filter(x => x.brackets && x.brackets.min >= 4 && x.name.indexOf("Dungeons") !== 0 && x.name.indexOf("(Story)") < 0);
-        }))
-      .first()
+        }),
+        first()
+        )
       .subscribe(val => {
         this.zones = (val as any);
         this.filteredZones = val as any;

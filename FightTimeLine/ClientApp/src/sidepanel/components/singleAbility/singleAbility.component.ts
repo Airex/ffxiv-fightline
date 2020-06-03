@@ -1,12 +1,14 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ISidePanelComponent } from "../ISidePanelComponent"
-import * as H from "../../../core/DataHolders"
 import * as M from "../../../core/Models"
 import * as X from "@xivapi/angular-client"
 import { Utils } from "../../../core/Utils"
 import { DomSanitizer } from "@angular/platform-browser";
 import * as S from "../../../services/index"
 import * as Shared from "../../../core/Jobs/FFXIV/shared";
+import {AbilityUsageMap, JobStanceMap} from "../../../core/Maps/index";
+import { Holders } from "../../../core/Holders";
+
 
 @Component({
   selector: "singleAbility",
@@ -23,18 +25,18 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
 
   items: any[];
 
-  get it(): H.AbilityUsageMap {
-    return this.items[0] as H.AbilityUsageMap;
+  get it(): AbilityUsageMap {
+    return this.items[0] as AbilityUsageMap;
   }
 
   get ability(): M.IAbility {
     const ability = this.it.ability.isStance
-      ? (this.it as any as H.JobStanceMap).stanceAbility
+      ? (this.it as any as JobStanceMap).stanceAbility
       : this.it.ability.ability;
     return ability;
   }
 
-  setItems(items: any[], holders: H.Holders): void {
+  setItems(items: any[], holders: Holders): void {
     this.items = items;
 
 

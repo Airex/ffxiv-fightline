@@ -19,7 +19,7 @@ export class FractionSelectionDialog implements OnInit {
     public dialogRef: NzModalRef,
     private router: Router,
   ) {
-    this.dialogRef.getInstance().nzFooter = [
+    this.dialogRef.getConfig().nzFooter = [
       {
         label: "Cancel",
         type: "primary",

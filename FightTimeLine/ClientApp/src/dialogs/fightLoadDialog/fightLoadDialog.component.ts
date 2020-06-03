@@ -3,8 +3,6 @@ import { Router } from "@angular/router";
 import { IFightService } from "../../services/fight.service-interface"
 import { fightServiceToken } from "../../services/fight.service-provider"
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService"
-import "rxjs/add/observable/merge";
-import "rxjs/add/observable/empty";
 import { NzModalRef, NzListComponent, NzSwitchComponent } from "ng-zorro-antd"
 import * as M from "../../core/Models"
 
@@ -18,8 +16,8 @@ import * as M from "../../core/Models"
 export class FightLoadDialog {
 
   ngOnInit(): void {
-    this.dialogRef.getInstance().nzFooter = this.buttonsTemplate;
-    this.dialogRef.getInstance().nzTitle = this.headerTemplate;
+    this.dialogRef.getConfig().nzFooter = this.buttonsTemplate;
+    this.dialogRef.getConfig().nzTitle = this.headerTemplate;
     this.load();
   }
 

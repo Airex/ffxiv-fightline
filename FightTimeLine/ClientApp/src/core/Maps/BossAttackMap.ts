@@ -1,0 +1,61 @@
+import { DataItem } from "vis-timeline"
+import { BaseMap } from "./BaseMap";
+import { Utils } from "../Utils";
+import * as Models from "../Models";
+import { IForSidePanel, IMoveable } from "../Holders/BaseHolder";
+
+export interface IBossAttackMapData {
+  vertical?: boolean;
+  attack?: Models.IBossAbility;
+}
+
+export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData> implements IMoveable, IForSidePanel {
+  sidePanelComponentName: string = "bossAbility";
+
+  onDataUpdate(data: IBossAttackMapData): void {
+    this.setItem(this.createBossAttack(this.id, data.attack, data.vertical));
+  }
+
+  constructor(id: string, data: IBossAttackMapData) {
+    super(id);
+    this.applyData(data);
+  }
+
+  get start(): Date {
+    return this.item.start as Date;
+  }
+
+  get startAsNumber(): number {
+    return this.start.valueOf() as number;
+  }
+
+  get attack(): Models.IBossAbility {
+    return this.data.attack;
+  }
+
+  createBossAttack(id: string, attack: Models.IBossAbility, vertical: boolean): DataItem {
+    const cls = { bossAttack: true, vertical: vertical };
+    cls[Models.DamageType[attack.type]] = true;
+    return <DataItem>{
+      id: id,
+      content: this.createBossAttackElement(attack),
+      start: Utils.getDateFromOffset(attack.offset),
+      group: "boss",
+      type: "box",
+      className: this.buildClass(cls),
+      title: attack.offset
+    }
+  }
+
+  private createBossAttackElement(ability: Models.IBossAbility): string {
+    return "<div><div class='marker'></div><div class='name'>" +
+      Utils.escapeHtml(ability.name) +
+      "</div></div>";
+  }
+
+  move(delta: number): boolean {
+    const newDate = new Date(this.startAsNumber + delta * 1000);
+    this.applyData({ attack: { offset: Utils.formatTime(newDate) } });
+    return true;
+  }
+}

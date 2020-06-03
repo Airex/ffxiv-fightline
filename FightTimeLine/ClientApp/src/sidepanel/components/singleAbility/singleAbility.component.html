@@ -8,7 +8,7 @@
 <div>
   <sidepanel-area header="Used on" *ngIf="!!ptyMemUsages">
     <div *ngFor="let it of ptyMemUsages">
-      <i nz-icon type="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="usedTime">{{it.offset}}</span></a><img class="abilityIcon" [src]="it.icon" /> <span class="usedTarget">{{it.target}}</span>
+      <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="usedTime">{{it.offset}}</span></a><img class="abilityIcon" [src]="it.icon" /> <span class="usedTarget">{{it.target}}</span>
     </div>
     </sidepanel-area>
 </div>

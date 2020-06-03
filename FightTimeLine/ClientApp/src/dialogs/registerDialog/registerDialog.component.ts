@@ -15,7 +15,7 @@ export class RegisterDialog {
     private fb: FormBuilder,
     public dialogRef: NzModalRef,
     private userService: UserService) {
-    this.dialogRef.getInstance().nzFooter = [
+    this.dialogRef.getConfig().nzFooter = [
       {
         label: "Cancel",
         type: "primary",

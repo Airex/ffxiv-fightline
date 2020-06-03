@@ -5,7 +5,7 @@
   <span class="type">{{getType(it.attack.type)}}</span>
 </div>
 <div>
-  <i nz-icon type="clock-circle" theme="outline"></i><span class="time">{{it.attack.offset}}</span>
+  <i nz-icon nzType="clock-circle" theme="outline"></i><span class="time">{{it.attack.offset}}</span>
 </div>
 <div>
   <span class="description">{{it.attack.description}}</span>
@@ -32,7 +32,7 @@
         <ul style="padding-left: 10px; display: block">
           <li style="list-style-type: none; display: contents" *ngFor="let it of similar" class="similar-item">
             <div>
-              <i nz-icon type="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="">{{it.attack.offset}}</span></a>
+              <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="">{{it.attack.offset}}</span></a>
             </div>
           </li>
         </ul>

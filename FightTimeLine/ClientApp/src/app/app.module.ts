@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler, Injectable } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import {CommonModule} from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { VisModule } from "ngx-vis"
@@ -29,6 +30,8 @@ import { SingleAbilityComponent } from "../sidepanel/components/singleAbility/si
 import { SingleAttackComponent } from "../sidepanel/components/singleAttack/singleAttack.component";
 import { MultipleAbilityComponent } from "../sidepanel/components/multipleAbility/multipleAbility.component";
 import { MultipleAttackComponent } from "../sidepanel/components/multipleAttack/multipleAttack.component";
+import { JobComponent } from "../sidepanel/components/job/job.component";
+import { JobAbilityComponent } from "../sidepanel/components/jobAbility/jobAbility.component";
 import { AreaComponent } from "../sidepanel/components/area/area.component";
 import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
 import * as SocialLogins from "angularx-social-login";
@@ -115,10 +118,13 @@ export function getBaseUrl() {
     SingleAttackComponent,
     MultipleAbilityComponent,
     MultipleAttackComponent,
+    JobComponent,
+    JobAbilityComponent,
     SyncSettingsComponent,
     ...DialogsModuleComponents
   ],
   imports: [
+    CommonModule,
     NgZorroAntdModule,
     HttpClientModule,
     BrowserModule,
@@ -158,7 +164,9 @@ export function getBaseUrl() {
 
   ],
   entryComponents: [
-    ViewComponent, FilterComponent, SettingsFilterComponent, SettingsViewComponent, PingComponent, SingleAbilityComponent, SingleAttackComponent, MultipleAbilityComponent, MultipleAttackComponent, SyncSettingsComponent, ...DialogsModuleComponents
+    ViewComponent, FilterComponent, SettingsFilterComponent, AreaComponent, SettingsViewComponent, PingComponent, SingleAbilityComponent,
+    SingleAttackComponent, MultipleAbilityComponent, MultipleAttackComponent, SyncSettingsComponent, JobComponent, JobAbilityComponent,
+    ...DialogsModuleComponents
   ],
   bootstrap: [AppComponent]
 })

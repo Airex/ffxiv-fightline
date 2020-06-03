@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter, Output, Directive } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { IAuthenticationService } from "./authentication.service-interface";
 
 @Directive()
@@ -15,7 +15,7 @@ export class AuthenticationMockService implements IAuthenticationService {
     this.userName = username;
     this.authenticatedChanged.emit();
     this.usernameChanged.emit();
-    return Observable.of(null);
+    return of(null);
   }
 
   logout():Observable<any> {
@@ -23,7 +23,7 @@ export class AuthenticationMockService implements IAuthenticationService {
     this.userName = null;
     this.authenticatedChanged.emit();
     this.usernameChanged.emit();
-    return Observable.of(null);
+    return of(null);
   }
 
   get authenticated(): boolean {

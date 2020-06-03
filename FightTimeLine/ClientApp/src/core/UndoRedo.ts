@@ -1,12 +1,13 @@
 import { EventEmitter } from "@angular/core"
-import { Holders, AbilityMap } from "./DataHolders"
 import { IdGenerator } from "./Generators"
 import { IAbility } from "./Models"
 import * as Jobregistryserviceinterface from "../services/jobregistry.service-interface";
+import * as Holders from "./Holders";
+import * as Index from "./Maps/index";
 
 export interface ICommandExecutionContext {
   idGen: IdGenerator;
-  holders: Holders,
+  holders: Holders.Holders,
   jobRegistry: Jobregistryserviceinterface.IJobRegistryService;
   update: (options: IUpdateOptions) => void;
   ogcdAttacksAsPoints: (ability: IAbility) => boolean;
@@ -16,7 +17,7 @@ export interface ICommandExecutionContext {
 }
 
 export interface IUpdateOptions {
-  abilityChanged?: AbilityMap;
+  abilityChanged?: Index.AbilityMap;
   updateIntersectedWithBossAttackAtDate?: Date | null;
   updateBossAttacks?: string[] | boolean;
   updateBossTargets?: boolean;

@@ -1,19 +1,19 @@
 import * as UndoRedo from "./UndoRedo";
 import * as SettingsService from "../services/SettingsService";
 import * as FFLogsCollectors from "./FflogsCollectors/FFLogsCollectors";
-import * as FFLogs from "./FFLogs";
 import * as Generators from "./Generators";
 import * as Commands from "./Commands";
 import * as Models from "./Models";
-import * as DataHolders from "./DataHolders";
+
 import * as Jobregistryserviceinterface from "../services/jobregistry.service-interface";
 import * as Parser from "./Parser";
+import {Holders} from "./Holders";
 
 export class ImportController {
 
   constructor(
     private idgen: Generators.IdGenerator,
-    private holders: DataHolders.Holders,
+    private holders: Holders,
     private jobRegistry: Jobregistryserviceinterface.IJobRegistryService) {
 
   }

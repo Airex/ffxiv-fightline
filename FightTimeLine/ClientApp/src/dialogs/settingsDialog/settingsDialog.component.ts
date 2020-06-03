@@ -4,7 +4,7 @@ import { SettingsFilterComponent } from "./filter/settingsFilter.component"
 import { SettingsViewComponent } from "./view/settingsView.component"
 import { SettingsService, ISettings } from "../../services/SettingsService";
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService";
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { NzModalRef } from "ng-zorro-antd";
 import * as Gameserviceinterface from "../../services/game.service-interface";
 import * as Gameserviceprovider from "../../services/game.service-provider";
@@ -97,7 +97,7 @@ export class SettingsDialog {
 
   ngOnInit() {
 
-    this.dialogRef.getInstance().nzFooter = this.buttonsTemplate;
+    this.dialogRef.getConfig().nzFooter = this.buttonsTemplate;
 
     const settings = this.settingsService.load();
     const sortOrder = settings.fflogsImport.sortOrderAfterImport;

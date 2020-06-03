@@ -1,0 +1,42 @@
+import * as BaseHolder from "./Holders/BaseHolder";
+import * as AbilityUsageHolder from "./Holders/AbilityUsageHolder";
+import * as AbilitiesMapHolder from "./Holders/AbilitiesMapHolder";
+import * as AbilitySelectionHolder from "./Holders/AbilitySelectionHolder";
+import * as JobsMapHolder from "./Holders/JobsMapHolder";
+import * as BossAttacksHolder from "./Holders/BossAttacksHolder";
+import * as BossDownTimeHolder from "./Holders/BossDownTimeHolder";
+import * as BuffHeatmapHolder from "./Holders/BuffHeatmapHolder";
+import * as BossTargetHolder from "./Holders/BossTargetHolder";
+import * as StancesHolder from "./Holders/StancesHolder";
+import * as AbilityAvailablityHolder from "./Holders/AbilityAvailablityHolder";
+
+export class Holders {
+  itemUsages: AbilityUsageHolder.AbilityUsageHolder;
+  abilities: AbilitiesMapHolder.AbilitiesMapHolder;
+  selectionRegistry: AbilitySelectionHolder.AbilitySelectionHolder;
+  jobs: JobsMapHolder.JobsMapHolder;
+  bossAttacks: BossAttacksHolder.BossAttacksHolder;
+  bossDownTime: BossDownTimeHolder.BossDownTimeHolder;
+  heatMaps: BuffHeatmapHolder.BuffHeatmapHolder;
+  bossTargets: BossTargetHolder.BossTargetHolder;
+  stances: StancesHolder.StancesHolder;
+  abilityAvailability: AbilityAvailablityHolder.AbilityAvailablityHolder;
+
+  constructor(mainTimeLine: BaseHolder.ITimelineContainer, bossTimeLine: BaseHolder.ITimelineContainer) {
+    this.itemUsages = new AbilityUsageHolder.AbilityUsageHolder(mainTimeLine.items);
+    this.abilities = new AbilitiesMapHolder.AbilitiesMapHolder(mainTimeLine.groups);
+    this.selectionRegistry = new AbilitySelectionHolder.AbilitySelectionHolder();
+    this.jobs = new JobsMapHolder.JobsMapHolder(mainTimeLine.groups);
+    this.bossAttacks = new BossAttacksHolder.BossAttacksHolder(bossTimeLine.items, mainTimeLine.items);
+    this.bossDownTime = new BossDownTimeHolder.BossDownTimeHolder(bossTimeLine.items, mainTimeLine.items);
+    this.heatMaps = new BuffHeatmapHolder.BuffHeatmapHolder(mainTimeLine.items);
+    this.bossTargets = new BossTargetHolder.BossTargetHolder(mainTimeLine.items, "boss");
+    this.stances = new StancesHolder.StancesHolder(mainTimeLine.items);
+    this.abilityAvailability = new AbilityAvailablityHolder.AbilityAvailablityHolder(mainTimeLine.items);
+  }
+
+  setHighLightLoadedView(highlightLoaded: boolean): void {
+    this.itemUsages.setHighlightLoaded(highlightLoaded);
+    this.stances.setHighlightLoaded(highlightLoaded);
+  }
+}
