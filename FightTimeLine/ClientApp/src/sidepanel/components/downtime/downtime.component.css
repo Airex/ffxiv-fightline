@@ -1,0 +1,35 @@
+.header.abilityName {
+  font-weight: bold;
+  font-size: 20px;
+  vertical-align: bottom;
+  margin-left: 3px;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 5px;
+}
+
+.abilityDescription {
+}
+
+.abilityDescriptionContainer {
+  background-color: #403d3d;
+  border-radius: 8px;
+  margin-top: 3px;
+  padding: 3px;
+  color: white;
+}
+
+.usedTime {
+  margin-right: 2px;
+}
+
+.usedTarget {
+  margin-left: 3px;
+}
+
+.similarLink {
+  margin-left: 2px;
+}

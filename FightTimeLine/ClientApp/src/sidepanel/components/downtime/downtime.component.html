@@ -1,0 +1,16 @@
+<nz-space nzDirection="vertical">
+  <nz-space-item>
+    <textarea nz-input
+              placeholder="Leave comment here"
+              [(ngModel)]="comment"
+              [nzAutosize]="{ minRows: 2, maxRows: 6 }" (blur)="setComment()"></textarea>
+
+  </nz-space-item>
+  <nz-space-item>
+    <div style="height: 24px; width: 90%; cursor: pointer; border: 1px black solid; text-align: center;" [(colorPicker)]="color" [cpOKButton]="true" cpDialogDisplay="inline" (colorPickerSelect)="setColor($event);" [style.background]="color"> Choose Color</div>
+  </nz-space-item>
+  <nz-space-item>
+    <button nz-button nzType="primary" (click)="remove(it)" nzDanger>Remove</button>
+  </nz-space-item>
+</nz-space>
+
