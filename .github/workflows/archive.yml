@@ -30,7 +30,7 @@ jobs:
         rm -r assets
     - name: send to ftp
       uses: SamKirkland/FTP-Deploy-Action@master
-      env:
+      with:
         ftp-server: ftp://ftp-eu.site4now.net/fft/ClientApp/
         ftp-username: ${{ secrets.FTP_USER }}
         ftp-password: ${{ secrets.FTP_PASSWORD }}
