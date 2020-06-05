@@ -108,7 +108,8 @@
       </nz-content>
     </nz-layout>
   </nz-layout>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">Ok</button>
+  </div>
 </div>
-<ng-template #buttonsTemplate>
-  <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">Ok</button>
-</ng-template>
+

@@ -16,7 +16,7 @@
     <nz-form-item>
       <button nz-button [disabled]="!loggedIn || !this.exportTemplatesControl.value" (click)="export()">Export</button>
     </nz-form-item>
-    <nz-form-item *ngIf="!!url">
+    <nz-form-item >
       <nz-form-control>
         <nz-input-group [nzSuffix]="suffixTemplate">
           <input name="sheetUrl" readonly="readonly" nz-input placeholder="URL" #inputTarget [(ngModel)]="url" />

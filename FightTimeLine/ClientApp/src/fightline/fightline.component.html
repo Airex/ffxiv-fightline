@@ -14,7 +14,7 @@
          [canRedo]="fightLineController.canRedo"
          [connectedUsers]="fightHubService.users"
          [connected]="fightHubService.connected"
-         [availableTools]="['Downtime','Sticky Attacks']"
+         [availableTools]="['Downtime','Sticky Attacks','Copy & Paste']"
          [fraction]="fightLineController.fraction"
          (addJob)="addJob($event)"
          (undo)="undo()"
@@ -39,6 +39,7 @@
         <div class="boss-timeline" [visTimeline]="visTimelineBoss" style="width: 100%; height: 100%"
              [visTimelineItems]="itemsBoss"
              [visTimelineGroups]="groupsBoss"
+             [visTimelineOptions]="optionsBoss"
              (initialized)="timelineBossInitialized()"></div>
       </div>
     </as-split-area>
@@ -47,6 +48,7 @@
         <div class="timeline" [visTimeline]="visTimeline" style="width: 100%; height: 100%"
              [visTimelineItems]="items"
              [visTimelineGroups]="groups"
+             [visTimelineOptions]="options"
              (initialized)="timelineInitialized()">
 
         </div>
@@ -71,6 +73,5 @@
     </div>
   </div>
 </nz-drawer>
-<fightLineContextMenu #contextMenu (filterUpdated)="updateFilter()"></fightLineContextMenu>
 <ng-progress #progressBar [speed]="500" [trickleSpeed]="30000" [spinner]="false"></ng-progress>
 

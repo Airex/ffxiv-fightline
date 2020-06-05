@@ -26,17 +26,7 @@ export class AbilityEditDialog implements OnInit {
   constructor(
     public dialogRef: NzModalRef,
   ) {
-    this.dialogRef.getConfig().nzFooter = [
-      {
-        label: "Cancel",
-        type: "primary",
-        onClick: () => this.onNoClick()
-      },
-      {
-        label: "Ok",
-        onClick: () => this.onYesClick()
-      }
-    ];
+    
   }
 
   onNoClick(): void {

@@ -16,10 +16,8 @@ import * as X from "@xivapi/angular-client"
 })
 export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelComponent {
 
-  defs: any[] = null;
-  similar: any[] = null;
   description:any = "";
-
+  compactView:boolean;
   items: any[];
   holders: Holders;
 
@@ -53,6 +51,8 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     this.items = items;
     this.holders = holders;
 
+    this.compactView = this.it.isCompact;
+
     if (this.ability.xivDbId) {
       this.xivapi.get(this.getEndpoint(this.ability.xivDbType), Number(this.ability.xivDbId)).subscribe(a => {
         if (a && a.Description) {
@@ -65,11 +65,28 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     }
   }
 
+  compact(value) {
+    setTimeout(() => {
+        this.dispatcher.dispatch({
+          name: "SidePanel Toggle Job Ability Compact View",
+          payload: this.it.id
+        });
+      },
+      1);
+  }
+
   hide(ab: AbilityMap) {
     this.dispatcher.dispatch({
       name: "SidePanel Hide Job Ability",
       payload: ab.id
   });
+  }
+
+  fill(ab: AbilityMap) {
+    this.dispatcher.dispatch({
+      name: "SidePanel Fill Job Ability",
+      payload: ab.id
+    });
   }
 
 

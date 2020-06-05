@@ -1,7 +1,7 @@
 import { Injectable, Inject } from "@angular/core"
 import { IBossAbility, IAbilitySetting, IAbilitySettingData, IFight, IAbility, IBoss, IFraction } from "../core/Models";
 import { LocalStorageService } from "./LocalStorageService";
-import { NzModalRef, NzModalService } from 'ng-zorro-antd';
+import { NzModalRef, NzModalService, NzModalState } from 'ng-zorro-antd';
 import { Observable } from "rxjs";
 import * as D from "../dialogs/index"
 
@@ -16,7 +16,7 @@ export class DialogService {
   }
 
   public get isAnyDialogOpened(): boolean {
-    return this.dialogs.openModals.length > 0;
+    return this.dialogs.openModals.some(m=>m.getState() === NzModalState.OPEN);
   }
 
   dialog: any;
@@ -72,7 +72,6 @@ export class DialogService {
       nzKeyboard: false,
       nzOkDisabled: true,
       nzCancelDisabled: true,
-      nzFooter: null,
       nzMaskClosable: false
     });
     return this.toPromise(dialogRef.afterClose);

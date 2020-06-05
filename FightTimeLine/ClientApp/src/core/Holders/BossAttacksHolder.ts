@@ -17,7 +17,7 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
 
   addRange(i: BossAttackMap[]): void {
     super.addRange(i);
-    this.addRangeToBoard(i);
+//    this.addRangeToBoard(i);
   }
 
   private addToBoard(i: BossAttackMap) {

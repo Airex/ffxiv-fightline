@@ -32,6 +32,13 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
     return M.DamageType[id];
   }
 
+  copy(value: BossAttackMap) {
+    this.dispatcher.dispatch({
+      name: "SidePanel Attack Copy",
+      payload: value.id
+    });
+  }
+
   setItems(items: any[], holders: Holders): void {
     this.items = items;
     this.holders = holders;

@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { Component, Inject, Input, OnInit, TemplateRef, ViewChild, AfterViewInit } from "@angular/core";
 import { FormControl } from "@angular/forms"
 import { SpreadSheetsService } from "../../services/SpreadSheetsService"
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService"
@@ -14,7 +14,7 @@ import { NzModalRef } from "ng-zorro-antd";
   templateUrl: "./exportToTableDialog.component.html",
   styleUrls: ["./exportToTableDialog.component.css"]
 })
-export class ExportToTableDialog implements OnInit {
+export class ExportToTableDialog implements OnInit, AfterViewInit  {
 
   @Input("data") data: ExportData;
   @ViewChild("headerTemplate", { static: true }) headerTemplate: TemplateRef<any>;
@@ -38,12 +38,21 @@ export class ExportToTableDialog implements OnInit {
   ].join(" ");
 
   ngOnInit(): void {
-    this.dialogRef.getConfig().nzTitle = this.headerTemplate;
+    
 
     this.authService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
+    }, err => {
+      console.log(err);
     });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.dialogRef.getConfig().nzTitle = this.headerTemplate;
+    },0);
+
   }
 
   signinWithGoogle(): void {

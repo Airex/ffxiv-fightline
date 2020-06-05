@@ -38,11 +38,11 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     return this.ability.settings && this.ability.settings.find(it => it.type === type);
   }
 
-  private hasValue(toCheck: Models.AbilityType): boolean {
+  public hasValue(toCheck: Models.AbilityType): boolean {
     return (this.ability.abilityType & toCheck) === toCheck;
   }
 
-  private hasAnyValue(...toCheck: Models.AbilityType[]): boolean {
+  public hasAnyValue(...toCheck: Models.AbilityType[]): boolean {
     return toCheck.some(it => this.hasValue(it));
   }
 

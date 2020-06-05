@@ -14,11 +14,9 @@ import { NzModalRef } from "ng-zorro-antd"
 
 export class FightSaveDialog implements OnInit {
   ngOnInit(): void {
-    this.dialogRef.getConfig().nzFooter = this.buttons;
   }
 
   fightNameControl = new FormControl();
-  @ViewChild("buttonsTemplate", { static: true }) buttons: TemplateRef<any>;
   @Input("data") data: IFight;
   submitted = false;
 

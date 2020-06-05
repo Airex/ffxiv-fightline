@@ -19,7 +19,6 @@ export class FFLogsImportDialog implements OnInit {
   ngOnInit(): void {
     if (this.code)
       this.reportValue = "https://www.fflogs.com/reports/" + this.code;
-    this.dialogRef.getConfig().nzFooter = this.buttonsTemplate;
     this.onSearch(this.reportValue);
   }
 
@@ -27,7 +26,6 @@ export class FFLogsImportDialog implements OnInit {
 
   zones = [];
   parsesList = [];
-  @ViewChild("buttonsTemplate", { static: true }) buttonsTemplate: TemplateRef<any>;
   @Input() code: string;
   searchAreaDisplay = "none";
   listAreaDisplay = "none";

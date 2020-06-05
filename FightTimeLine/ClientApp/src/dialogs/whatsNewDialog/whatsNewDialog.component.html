@@ -5,8 +5,9 @@
       <div *ngFor="let item of change.items" innerHtml="{{item}}"></div>
     </nz-timeline-item>
   </nz-timeline>
+  <div *nzModalFooter>
+    <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">Ok</button>
+  </div>
 </div>
-<ng-template #buttonsTemplate>
-  <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">Ok</button>
-</ng-template>
+
 

@@ -14,7 +14,7 @@ export class AbilityAvailablityHolder extends BaseHolder<string, DataItem, Abili
 
   addRange(i: AbilityAvailabilityMap[]): void {
     super.addRange(i);
-    this.visItems.add(this.itemsOf(i));
+//    this.visItems.add(this.itemsOf(i));
   }
 
   clear(): void {

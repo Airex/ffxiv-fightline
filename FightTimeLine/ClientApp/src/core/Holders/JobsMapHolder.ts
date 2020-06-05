@@ -16,7 +16,7 @@ export class JobsMapHolder extends BaseHolder.BaseHolder<string, DataGroup, JobM
 
   addRange(i: JobMap[]): void {
     super.addRange(i);
-    this.visItems.add(this.itemsOf(i));
+//    this.visItems.add(this.itemsOf(i));
     this.removeEmpty();
   }
 

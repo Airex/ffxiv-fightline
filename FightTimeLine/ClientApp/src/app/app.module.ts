@@ -4,15 +4,14 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import {CommonModule} from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DragDropModule } from "@angular/cdk/drag-drop";
+import { PortalModule } from "@angular/cdk/portal";
 import { VisModule } from "ngx-vis"
-import { ContextMenuModule, ContextMenuService } from "ngx-contextmenu"
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FightLineComponent } from "../fightline/fightline.component";
 import { TableViewComponent } from "../tableview/tableview.component";
 //import { BossTemplateComponent } from "../bosstemplate/bosstemplate.component";
 import { HomeComponent } from "../home/home.component";
-import { FightLineContextMenuComponent } from "../fightline/contextmenu/contextmenu.component";
 import { SidepanelComponent } from "../sidepanel/sidepanel.component";
 import { FilterComponent } from "../fightline/filter/filter.component";
 import { ViewComponent } from "../fightline/view/view.component";
@@ -24,7 +23,7 @@ import * as Services from "../services/index"
 import { JwtInterceptor } from "../interceptors/jwtInterceptor"
 import { ClipboardModule } from "ngx-clipboard";
 import { NgProgressModule } from "ngx-progressbar";
-import { RecaptchaModule, RECAPTCHA_SETTINGS, RecaptchaSettings } from "ng-recaptcha";
+import { NgxCaptchaModule } from "ngx-captcha";
 import { DialogsModuleComponents } from "../dialogs/index";
 import { SingleAbilityComponent } from "../sidepanel/components/singleAbility/singleAbility.component";
 import { SingleAttackComponent } from "../sidepanel/components/singleAttack/singleAttack.component";
@@ -32,6 +31,7 @@ import { MultipleAbilityComponent } from "../sidepanel/components/multipleAbilit
 import { MultipleAttackComponent } from "../sidepanel/components/multipleAttack/multipleAttack.component";
 import { JobComponent } from "../sidepanel/components/job/job.component";
 import { JobAbilityComponent } from "../sidepanel/components/jobAbility/jobAbility.component";
+import { DownTimeComponent } from "../sidepanel/components/downtime/downtime.component";
 import { AreaComponent } from "../sidepanel/components/area/area.component";
 import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
 import * as SocialLogins from "angularx-social-login";
@@ -47,11 +47,138 @@ import * as Sentry from "@sentry/browser";
 import { AngularSplitModule } from 'angular-split';
 import { environment } from "../environments/environment"
 import { XivapiClientModule } from "@xivapi/angular-client";
-import { en_US, NgZorroAntdModule, NZ_I18N } from 'ng-zorro-antd';
+
 import { registerLocaleData } from '@angular/common';
 import { DisqusModule, DISQUS_SHORTNAME } from "ngx-disqus"
 import { ColorPickerModule } from 'ngx-color-picker';
 import en from '@angular/common/locales/en'
+
+import { en_US, NZ_I18N } from 'ng-zorro-antd';
+import { NzAffixModule } from 'ng-zorro-antd/affix';
+import { NzAlertModule } from 'ng-zorro-antd/alert';
+import { NzAnchorModule } from 'ng-zorro-antd/anchor';
+import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzBackTopModule } from 'ng-zorro-antd/back-top';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCalendarModule } from 'ng-zorro-antd/calendar';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzCarouselModule } from 'ng-zorro-antd/carousel';
+import { NzCascaderModule } from 'ng-zorro-antd/cascader';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+import { NzCollapseModule } from 'ng-zorro-antd/collapse';
+import { NzCommentModule } from 'ng-zorro-antd/comment';
+import { NzNoAnimationModule } from 'ng-zorro-antd/core/no-animation';
+import { NzTransButtonModule } from 'ng-zorro-antd/core/trans-button';
+import { NzWaveModule } from 'ng-zorro-antd/core/wave';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzEmptyModule } from 'ng-zorro-antd/empty';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzI18nModule } from 'ng-zorro-antd/i18n';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzListModule } from 'ng-zorro-antd/list';
+import { NzMentionModule } from 'ng-zorro-antd/mention';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { NzPaginationModule } from 'ng-zorro-antd/pagination';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { NzRadioModule } from 'ng-zorro-antd/radio';
+import { NzRateModule } from 'ng-zorro-antd/rate';
+import { NzResultModule } from 'ng-zorro-antd/result';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
+import { NzSpaceModule } from "ng-zorro-antd/space";
+import { NzSliderModule } from 'ng-zorro-antd/slider';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
+import { NzTimelineModule } from 'ng-zorro-antd/timeline';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzTransferModule } from 'ng-zorro-antd/transfer';
+import { NzTreeModule } from 'ng-zorro-antd/tree';
+import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
+import { NzResizableModule } from 'ng-zorro-antd/resizable';
+
+
+const zorroModules = [
+  NzAlertModule,
+  NzAutocompleteModule,
+  NzAvatarModule,
+  NzBadgeModule,
+  NzButtonModule,
+  NzCardModule,
+  NzCarouselModule,
+  NzCascaderModule,
+  NzCheckboxModule,
+  NzCollapseModule,
+  NzDatePickerModule,
+  NzDividerModule,
+  NzDrawerModule,
+  NzDropDownModule,
+  NzEmptyModule,
+  NzFormModule,
+  NzGridModule,
+  NzI18nModule,
+  NzIconModule,
+  NzInputModule,
+  NzInputNumberModule,
+  NzLayoutModule,
+  NzListModule,
+  NzMenuModule,
+  NzMessageModule,
+  NzModalModule,
+  NzNoAnimationModule,
+  NzNotificationModule,
+  NzPageHeaderModule,
+  NzPaginationModule,
+  NzPopconfirmModule,
+  NzPopoverModule,
+  NzProgressModule,
+  NzRadioModule,
+  NzResultModule,
+  NzSelectModule,
+  NzSkeletonModule,
+  NzSliderModule,
+  NzSpaceModule,
+  NzSpinModule,
+  NzSwitchModule,
+  NzTableModule,
+  NzTabsModule,
+  NzTagModule,
+  NzTimePickerModule,
+  NzTimelineModule,
+  NzToolTipModule,
+  NzTransButtonModule,
+  NzTransferModule,
+  NzTreeModule,
+  NzTreeSelectModule,
+  NzWaveModule,
+  NzResizableModule
+  
+];
+
 
 registerLocaleData(en);
 
@@ -98,7 +225,6 @@ export function getBaseUrl() {
     FightLineComponent,
     ToolbarComponent,
 //    BossTemplateComponent,
-    FightLineContextMenuComponent,
     TableViewComponent,
     PingComponent,
     HomeComponent,
@@ -120,32 +246,32 @@ export function getBaseUrl() {
     MultipleAttackComponent,
     JobComponent,
     JobAbilityComponent,
+    DownTimeComponent,
     SyncSettingsComponent,
     ...DialogsModuleComponents
   ],
   imports: [
     CommonModule,
-    NgZorroAntdModule,
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
     DragDropModule,
+    PortalModule,
     ReactiveFormsModule,
     NgProgressModule,
     VisModule,
-    ContextMenuModule,
     XivapiClientModule.forRoot(),
-    RecaptchaModule,
+    NgxCaptchaModule,
     ClipboardModule,
     SocialLoginModule,
     AngularSplitModule,
     DisqusModule,
-    ColorPickerModule
+    ColorPickerModule,
+    ...zorroModules
   ],
   providers: [
-    ContextMenuService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: "BASE_URL", useFactory: getBaseUrl },
     { provide: "FFLogs_URL", useValue: "https://www.fflogs.com:443/" },
@@ -154,10 +280,6 @@ export function getBaseUrl() {
     { provide: "GOOGLE_API_SPREADSHEETS_URL", useValue: "https://sheets.googleapis.com/v4/spreadsheets" },
     { provide: ErrorHandler, useClass: SentryErrorHandler },
     { provide: AuthServiceConfig, useFactory: provideConfig },
-    {
-      provide: RECAPTCHA_SETTINGS,
-      useValue: { siteKey: '6LfToGAUAAAAAKcp3joBgzcqJ3sK_s_WCltAL7Tn' } as RecaptchaSettings,
-    },
     { provide: NZ_I18N, useValue: en_US },
     { provide: DISQUS_SHORTNAME, useFactory: () => location.hostname.toLowerCase().indexOf("swtor") >= 0 ? "swtor-fightline" : "ffxiv-fightline" },
     ...Services.ServicesModuleComponents
@@ -165,7 +287,8 @@ export function getBaseUrl() {
   ],
   entryComponents: [
     ViewComponent, FilterComponent, SettingsFilterComponent, AreaComponent, SettingsViewComponent, PingComponent, SingleAbilityComponent,
-    SingleAttackComponent, MultipleAbilityComponent, MultipleAttackComponent, SyncSettingsComponent, JobComponent, JobAbilityComponent,
+    SingleAttackComponent, MultipleAbilityComponent, MultipleAttackComponent, SyncSettingsComponent, JobComponent, JobAbilityComponent, SidepanelComponent,
+    DownTimeComponent,
     ...DialogsModuleComponents
   ],
   bootstrap: [AppComponent]

@@ -39,7 +39,6 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
   setItems(items: any[], holders: Holders): void {
     this.items = items;
 
-
     if (this.ability.xivDbId) {
       this.xivapi.get(this.getEndpoint(this.ability.xivDbType), Number(this.ability.xivDbId)).subscribe(a => {
         if (a && a.Description) {
@@ -71,6 +70,15 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     this.dispatcher.dispatch({
       name: "SidePanel Ability Click",
       payload: val.id
+    });
+  }
+
+  settings() {
+    this.dispatcher.dispatch({
+      name: "SidePanel Ability Settings",
+      payload: {
+        id: this.it.id
+      }
     });
   }
 

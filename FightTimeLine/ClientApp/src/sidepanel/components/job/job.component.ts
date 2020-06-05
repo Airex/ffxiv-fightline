@@ -17,6 +17,8 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
   items: any[];
   holders: Holders;
   hiddenAbilities: any[] = null;
+  compactView: boolean;
+  jobFilter: M.IAbilityFilter;
 
 
   constructor(private dispatcher: S.DispatcherService) {
@@ -34,8 +36,25 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
   setItems(items: any[], holders: Holders): void {
     this.items = items;
     this.holders = holders;
+    this.compactView = this.it.isCompact;
 
+    this.jobFilter = this.it.filter;
     this.hiddenAbilities = this.holders.abilities.getByParentId(this.it.id).filter(t => t.hidden);
+  }
+
+  compact(value) {
+    this.dispatcher.dispatch({
+          name: "SidePanel Toggle Job Compact View",
+          payload: this.it.id
+        });
+  }
+
+
+  fill(ab: JobMap) {
+    this.dispatcher.dispatch({
+      name: "SidePanel Fill Job",
+      payload: ab.id
+    });
   }
 
 
@@ -54,6 +73,32 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
     });
   }
 
+  resetJobFilter() {
+    console.log("reset job filter requested");
+    Object.assign(this.jobFilter,
+      {
+        unused: undefined,
+        utility: undefined,
+        damage: undefined,
+        selfDefence: undefined,
+        partyDefence: undefined,
+        healing: undefined,
+        healingBuff: undefined,
+        partyDamageBuff: undefined,
+        selfDamageBuff: undefined,
+        enmity: undefined,
+      });
+    this.dispatcher.dispatch({
+      name: "Update Filter"
+    });
+  }
+
+  updateFilter(data: M.IAbilityFilter, prop: string): void {
+    this.jobFilter[prop] = data;
+    this.dispatcher.dispatch({
+      name: "Update Filter"
+    });
+  }
 
   ngOnInit(): void {
 

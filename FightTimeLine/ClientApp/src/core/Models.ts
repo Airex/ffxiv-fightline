@@ -483,6 +483,7 @@ export const defaultView: IView = {
 export interface ITools {
   downtime: boolean;
   stickyAttacks: boolean;
+  copypaste: boolean;
 }
 
 export interface IBossTemplate {

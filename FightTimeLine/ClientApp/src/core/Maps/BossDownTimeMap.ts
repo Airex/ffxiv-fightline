@@ -1,13 +1,17 @@
 import { DataItem } from "vis-timeline"
 import { BaseMap } from "./BaseMap";
+import * as BaseHolder from "../Holders/BaseHolder";
 
 export interface IBossDownTimeMapData {
   start?: Date;
   end?: Date;
   color?: string;
+  comment?: string;
 }
 
-export class BossDownTimeMap extends BaseMap<string, DataItem, IBossDownTimeMapData> {
+export class BossDownTimeMap extends BaseMap<string, DataItem, IBossDownTimeMapData> implements BaseHolder.IForSidePanel {
+  sidePanelComponentName: string = "downtime";
+
   onDataUpdate(data: IBossDownTimeMapData): void {
     this.setItem(this.createDownTime(this.id, data.start, data.end, data.color));
   }
@@ -45,11 +49,16 @@ export class BossDownTimeMap extends BaseMap<string, DataItem, IBossDownTimeMapD
       id: id,
       content: "",
       type: "background",
-      className: "downtime " + color
+      style: "background-color:" + color,
+      className: "downtime"
     }
   }
 
   get color(): string {
     return this.data.color;
+  }
+
+  get comment() {
+    return this.data.comment;
   }
 }

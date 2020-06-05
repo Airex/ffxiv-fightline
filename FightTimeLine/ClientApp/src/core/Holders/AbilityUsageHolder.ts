@@ -26,7 +26,7 @@ export class AbilityUsageHolder extends BaseHolder.BaseHolder<string, DataItem, 
 
   addRange(i: AbilityUsageMap[]): void {
     super.addRange(i);
-    this.visItems.add(this.itemsOf(i));
+//    this.visItems.add(this.itemsOf(i));
   }
 
   clear(): void {

@@ -46,13 +46,13 @@ export class OffsetWheelDirective {
       (this.el.nativeElement as HTMLInputElement).value = this.handleOperation(
         nativeValue,
         WheelOperator.INCREASE,
-        event.ctrlKey ? 60 : 1
+        event.ctrlKey ? 60 : (event.shiftKey? 10 : 1)
       );
     } else {
       (this.el.nativeElement as HTMLInputElement).value = this.handleOperation(
         nativeValue,
         WheelOperator.DECREASE,
-        event.ctrlKey ? 60 : 1
+        event.ctrlKey ? 60 : (event.shiftKey ? 10 : 1)
       );
     }
     

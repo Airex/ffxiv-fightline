@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild, TemplateRef, Input } from "@angular/core";
+import { Component, Inject, ViewChild, TemplateRef, Input, AfterViewInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { IFightService } from "../../services/fight.service-interface"
 import { fightServiceToken } from "../../services/fight.service-provider"
@@ -13,11 +13,16 @@ import * as M from "../../core/Models"
   styleUrls: ["./fightLoadDialog.component.css"]
 })
 
-export class FightLoadDialog {
+export class FightLoadDialog implements AfterViewInit {
+  ngAfterViewInit(): void {
+//    setTimeout(() => {
+//        this.dialogRef.getConfig().nzTitle = this.headerTemplate;
+//      },
+//      0);
+  }
 
   ngOnInit(): void {
-    this.dialogRef.getConfig().nzFooter = this.buttonsTemplate;
-    this.dialogRef.getConfig().nzTitle = this.headerTemplate;
+    
     this.load();
   }
 
@@ -35,7 +40,6 @@ export class FightLoadDialog {
 
 
   @Input("data") data: any;
-  @ViewChild("buttonsTemplate", { static: true }) public buttonsTemplate: TemplateRef<any>;
   @ViewChild("headerTemplate", { static: true }) public headerTemplate: TemplateRef<any>;
   @ViewChild("showDrafts") public fg: NzSwitchComponent;
   container: { fights : M.IFight[] } = { fights: [] };

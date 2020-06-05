@@ -10,7 +10,7 @@ export interface IAbilityAvailabilityMapData {
 
 export class AbilityAvailabilityMap extends BaseMap<string, DataItem, IAbilityAvailabilityMapData> {
   onDataUpdate(data: IAbilityAvailabilityMapData): void {
-    this.setItem(this.createAbilityAvailability(this.id, this.ability.id, data.start, data.end, data.available));
+    this.setItem(this.createAbilityAvailability(this.id, this.ability.id, data));
   }
 
   constructor(id: string, ability: AbilityMap, data?: IAbilityAvailabilityMapData) {
@@ -21,16 +21,16 @@ export class AbilityAvailabilityMap extends BaseMap<string, DataItem, IAbilityAv
 
   ability: AbilityMap;
 
-  createAbilityAvailability(id: string, abilityId: string, start: Date, end: Date, available: boolean): DataItem {
+  createAbilityAvailability(id: string, abilityId: string, data: IAbilityAvailabilityMapData): DataItem {
     return {
-      start: start,
-      end: end,
+      start: data.start,
+      end: data.end,
       id: id,
       content: "",
       group: abilityId,
       editable: false,
       type: "background",
-      className: "availability " + (available ? "available" : "not-available")
+      className: "availability " + (data.available ? "available" : "not-available")
     }
   }
 }

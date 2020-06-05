@@ -1,45 +1,53 @@
-<div>
-  <span class="abilityName">{{it.attack.name}}</span>
-</div>
-<div>
-  <span class="type">{{getType(it.attack.type)}}</span>
-</div>
-<div>
-  <i nz-icon nzType="clock-circle" theme="outline"></i><span class="time">{{it.attack.offset}}</span>
-</div>
-<div>
-  <span class="description">{{it.attack.description}}</span>
-</div>
-<div cdkDropList>
-  <sidepanel-area header="Defensives" *ngIf="defs.length>0">
+<nz-space nzDirection="vertical">
+  <nz-space-item>
     <div>
-      <div class="job" *ngFor="let d of defs">
-        <div class="jobHead">
-          <img class="jobIcon" [src]="d.job.icon" /><span class="jobName">{{d.job.name}}</span>
-        </div>
-        <ul style="padding-left: 10px">
-          <li style="list-style-type: none;" *ngFor="let it of d.abilities">
-            <img class="abilityIcon" [src]="it.ability.icon" /><a class="defenseLink" (click)="defenseClick(it)"> <span class="abilityNameDef">{{it.ability.name}}</span></a>
-          </li>
-        </ul>
-      </div>
+      <span class="abilityName">{{it.attack.name}}</span>
     </div>
-  </sidepanel-area>
-
-  <sidepanel-area header="Similar" *ngIf="similar.length > 0">
-    <div *ngIf="similar.length">
-      <div class="similar">
-        <ul style="padding-left: 10px; display: block">
-          <li style="list-style-type: none; display: contents" *ngFor="let it of similar" class="similar-item">
-            <div>
-              <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="">{{it.attack.offset}}</span></a>
-            </div>
-          </li>
-        </ul>
-      </div>
+    <div>
+      <span class="type">{{getType(it.attack.type)}}</span>
+    </div>
+    <div>
+      <i nz-icon nzType="clock-circle" theme="outline"></i><span class="time">{{it.attack.offset}}</span>
+    </div>
+  </nz-space-item>
+  <nz-space-item>
+    <span class="description">{{it.attack.description}}</span>
+  </nz-space-item>
+  <nz-space-item>
+    <button nz-button nzType="primary" #copyButton (click)="copy(it);copyButton.nzType='';">Copy</button>
+  </nz-space-item>
+  <nz-space-item>
+    <sidepanel-area header="Defensives" *ngIf="defs.length>0">
       <div>
-        <a class="similarLink" (click)="similarAllClick(it)"><span class="">Select all</span></a>
+        <div class="job" *ngFor="let d of defs">
+          <div class="jobHead">
+            <img class="jobIcon" [src]="d.job.icon" /><span class="jobName">{{d.job.name}}</span>
+          </div>
+          <ul style="padding-left: 10px">
+            <li style="list-style-type: none;" *ngFor="let it of d.abilities">
+              <img class="abilityIcon" [src]="it.ability.icon" /><a class="defenseLink" (click)="defenseClick(it)"> <span class="abilityNameDef">{{it.ability.name}}</span></a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </sidepanel-area>
-</div>
+    </sidepanel-area>
+  </nz-space-item>
+  <nz-space-item>
+    <sidepanel-area header="Similar" *ngIf="similar.length > 0">
+      <div *ngIf="similar.length">
+        <div class="similar">
+          <ul style="padding-left: 10px; display: block">
+            <li style="list-style-type: none; display: contents" *ngFor="let it of similar" class="similar-item">
+              <div>
+                <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="">{{it.attack.offset}}</span></a>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <a class="similarLink" (click)="similarAllClick(it)"><span class="">Select all</span></a>
+        </div>
+      </div>
+    </sidepanel-area>
+  </nz-space-item>
+</nz-space>

@@ -22,13 +22,12 @@ import * as Gameserviceinterface from "../../services/game.service-interface";
 
 export class BossTemplatesDialog implements OnInit, OnDestroy {
 
-  visItems: DataSet<DataItem,'id'>;
-  visGroups: DataSet<DataGroup, 'id'>;
+  visItems: DataSet<DataItem,'id'> = new DataSet<DataItem>([], {});
+  visGroups: DataSet<DataGroup, 'id'> = new DataSet<DataGroup>([], {});
   visTimelineBoss: string = "visTimelinebooooosss";
   startDate = new Date(946677600000);
   @ViewChild("timeline", { static: true }) timeline: ElementRef;
   @ViewChild("listContainer", { static: true }) listContainer: ElementRef;
-  @ViewChild("buttonsTemplate", { static: true }) buttonsTemplate: TemplateRef<any>;
   @Input("data") data: { needSave: boolean, boss?: M.IBoss };
 
   optionsBoss = <TimelineOptions>{
@@ -121,7 +120,6 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.dialogRef.getConfig().nzFooter = this.buttonsTemplate;
     this.gameService.dataService.getZones()
       .pipe(
         map((v) => {

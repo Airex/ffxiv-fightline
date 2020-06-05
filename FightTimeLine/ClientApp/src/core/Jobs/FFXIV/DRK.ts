@@ -17,7 +17,7 @@ export const DRK: IJob = {
     {
       name: "Flood of Shadow",
       duration: 0,
-      cooldown: 2,
+      cooldown: 0,
       xivDbId: "16469",
       requiresBossTarget: true,
       icon: ("13_DarkKnight/icon_22"),
@@ -26,11 +26,12 @@ export const DRK: IJob = {
     {
       name: "Edge of Shadow",
       duration: 0,
-      cooldown: 2,
+      cooldown: 0,
       xivDbId: "16470",
       requiresBossTarget: true,
       icon: ("13_DarkKnight/icon_23"),
       abilityType: AbilityType.Damage,
+      
     },
     {
       name: "Salted Earth",

@@ -69,8 +69,8 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
     const jobFilter = jobMap.filter;
     const filterUnit = (aType: Models.AbilityType | Models.AbilityType[], globalFilter: boolean, jobFilter: boolean) => {
       let visible = false;
-      const valueArray: Models.AbilityType[] = Array.isArray(aType) ? aType : [aType];
-      if (valueArray.some(it => (value.ability.abilityType & it) === it)) {
+      const valueArray = Array.isArray(aType) ? aType : [aType];
+      if (valueArray.some(it => value.hasValue(it))) {
         visible = globalFilter;
         if (jobFilter !== undefined)
           visible = jobFilter;

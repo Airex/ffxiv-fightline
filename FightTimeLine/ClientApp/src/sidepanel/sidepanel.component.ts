@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, ComponentFactoryResolver, Injector, ApplicationRef, ComponentRef } from "@angular/core";
-import { ComponentPortal, Portal, TemplatePortal, CdkPortalOutlet, DomPortalOutlet, PortalOutlet } from "@angular/cdk/portal";
+import { ComponentPortal, Portal, TemplatePortal, CdkPortalOutlet, DomPortalOutlet, PortalOutlet, DomPortalHost } from "@angular/cdk/portal";
 import { SingleAbilityComponent } from "./components/singleAbility/singleAbility.component";
 import { SingleAttackComponent } from "./components/singleAttack/singleAttack.component";
 import { MultipleAbilityComponent } from "./components/multipleAbility/multipleAbility.component";
@@ -7,8 +7,9 @@ import { MultipleAttackComponent } from "./components/multipleAttack/multipleAtt
 import { ISidePanelComponent } from "./components/ISidePanelComponent";
 import * as Jobcomponent from "./components/job/job.component";
 import * as JobAbilitycomponent from "./components/jobAbility/jobAbility.component";
+import { DownTimeComponent } from "./components/downtime/downtime.component";
 import * as BaseHolder from "../core/Holders/BaseHolder";
-import {Holders} from "../core/Holders";
+import { Holders } from "../core/Holders";
 
 
 @Component({
@@ -18,7 +19,7 @@ import {Holders} from "../core/Holders";
 })
 export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild("portalOutlet", { static: true })
+  @ViewChild("portalOutlet", { static: false })
   portalOutletRef: ElementRef;
   op: PortalOutlet;
 
@@ -35,7 +36,7 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
   setItems(items: BaseHolder.IForSidePanel[], holders: Holders): void {
     this.items = items;
     let component = null;
-    if (this.items.length > 0) {
+    if (this.items && this.items.length > 0) {
       switch (this.items[0].sidePanelComponentName) {
         case "ability":
           if (items.length === 1) {
@@ -56,6 +57,9 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
           break;
         case "jobAbility":
           component = new ComponentPortal(JobAbilitycomponent.JobAbilityComponent);
+          break;
+        case "downtime":
+          component = new ComponentPortal(DownTimeComponent);
           break;
       }
     }
@@ -79,7 +83,7 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-
+    this.op.dispose();
   }
 
 }

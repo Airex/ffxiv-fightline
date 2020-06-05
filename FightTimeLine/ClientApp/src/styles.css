@@ -161,6 +161,16 @@ html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-con
 }
 
 
+sidepanel nz-space {
+  width: 98%;
+}
+
+  sidepanel nz-space .ant-collapse-content-box {
+    padding: 6px !important;
+  }
+
+
+
 
 /* .mat-raised-button { */
 /*   line-height: 30px !important; */

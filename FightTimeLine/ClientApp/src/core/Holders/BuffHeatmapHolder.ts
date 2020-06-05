@@ -15,7 +15,7 @@ export class BuffHeatmapHolder extends BaseHolder<string, DataItem, HeatmapMap> 
 
   addRange(i: HeatmapMap[]): void {
     super.addRange(i);
-    this.visItems.add(this.itemsOf(i));
+//    this.visItems.add(this.itemsOf(i));
   }
 
   clear(): void {

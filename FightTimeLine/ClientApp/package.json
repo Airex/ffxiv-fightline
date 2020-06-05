@@ -8,8 +8,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "postinstall": "ngcc"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -37,11 +36,10 @@
     "keycharm": "^0.3.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "ng-recaptcha": "5.0.0",
-    "ng-zorro-antd": "^9.0.2",
+    "ng-zorro-antd": "^9.1.2",
+    "ngx-captcha": "^8.0.1",
     "ngx-clipboard": "13.0.0",
     "ngx-color-picker": "9.1.0",
-    "ngx-contextmenu": "^5.4.0",
     "ngx-disqus": "2.4.3",
     "ngx-progressbar": "6.0.2",
     "ngx-vis": "3.1.0-build1590696393",
@@ -54,7 +52,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.901.3",
+    "@angular-devkit/build-angular": "^0.901.7",
     "@angular-devkit/build-optimizer": "0.803.23",
     "@angular/cli": "^9.1.3",
     "@angular/compiler-cli": "^9.1.3",

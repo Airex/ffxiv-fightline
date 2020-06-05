@@ -15,17 +15,6 @@ export class RegisterDialog {
     private fb: FormBuilder,
     public dialogRef: NzModalRef,
     private userService: UserService) {
-    this.dialogRef.getConfig().nzFooter = [
-      {
-        label: "Cancel",
-        type: "primary",
-        onClick: () => this.onNoClick()
-      },
-      {
-        label: "Register",
-        onClick: () => this.onRegisterClick()
-      }
-    ];
     this.buildForm();
   }
 
@@ -51,7 +40,7 @@ export class RegisterDialog {
         "",
         [Validators.required, this.matchOtherValidator("password")]
       ],
-      recaptcha: ['', Validators.required]
+      "recaptcha": ['', Validators.required]
     });
   }
 

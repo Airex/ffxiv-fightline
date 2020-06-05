@@ -1,8 +1,8 @@
 <div mat-dialog-content style="height: 600px; min-height: 600px;overflow: hidden">
   <nz-layout>
-    <nz-spin nzTip='Loading...' [nzSpinning]="isSpinning" [nzDelay]="500">
-      <nz-sider nzTheme="light" style="overflow: auto; height: 600px;background: #fff;" [nzWidth]="350">
-        <nz-layout style="height: 600px;min-width:350px">
+    <nz-sider nzTheme="light" style="overflow: auto; height: 600px; background: #fff;" [nzWidth]="350">
+      <nz-spin nzTip='Loading...' [nzSpinning]="isSpinning" [nzDelay]="500">
+        <nz-layout style="height: 600px; min-width: 350px">
           <nz-header style="background: #fff; padding: 3px;">
             <nz-input-group [nzPrefix]="prefixTemplate1" [nzSuffix]="suffixTemplate1">
               <input nz-input placeholder="Search boss" [(ngModel)]="searchString" (ngModelChange)="onSearchChange($event)" />
@@ -20,8 +20,9 @@
             </ul>
           </nz-content>
         </nz-layout>
-      </nz-sider>
-    </nz-spin>
+      </nz-spin>
+    </nz-sider>
+
     <nz-layout style="min-height: 600px">
       <nz-header style="background: #fff; padding: 3px;">
         <nz-input-group nzSpan="8" [nzPrefix]="prefixTemplate2" [nzSuffix]="suffixTemplate2">
@@ -49,7 +50,7 @@
                         </ng-template>
                       </nz-list-item-meta>
                       <ng-template #removeAction>
-                        <a *ngIf="item.canRemove" nz-popconfirm nzTitle="Are you sure delete this template?" (nzOnConfirm)="remove(item,$event)">
+                        <a *ngIf="item.canRemove" nz-popconfirm nzTooltipTitle="Are you sure delete this template?" (nzOnConfirm)="remove(item,$event)">
                           <i nz-icon nzType="delete" nzTheme="twotone"></i>
                         </a>
                       </ng-template>
@@ -70,11 +71,11 @@
       </nz-content>
     </nz-layout>
   </nz-layout>
+  <div *nzModalFooter>
+    <button nz-button *ngIf="!!selectedTemplate" (click)="load()">Load</button>
+    <button nz-button *ngIf="data && data.needSave && selectedEncounter && (data.boss && data.boss.userName === authService.username || !data.boss)" [nzType]="authService.authenticated?'':'danger'" (click)="save()">Save</button>
+    <button nz-button *ngIf="data && data.needSave && data.boss" [nzType]="authService.authenticated?'':'danger'" (click)="saveAsNew()">Save as new</button>
+    <button nz-button (click)="dialogRef.destroy()">Cancel</button>
+  </div>
 </div>
-<ng-template #buttonsTemplate>
-  <button nz-button *ngIf="!!selectedTemplate" (click)="load()">Load</button>
-  <button nz-button *ngIf="data && data.needSave && selectedEncounter && (data.boss && data.boss.userName === authService.username || !data.boss)" [nzType]="authService.authenticated?'':'danger'" (click)="save()">Save</button>
-  <button nz-button *ngIf="data && data.needSave && data.boss" [nzType]="authService.authenticated?'':'danger'" (click)="saveAsNew()">Save as new</button>
-  <button nz-button (click)="dialogRef.destroy()">Cancel</button>
 
-</ng-template>

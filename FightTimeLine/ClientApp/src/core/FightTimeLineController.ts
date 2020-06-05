@@ -34,7 +34,7 @@ export class FightTimeLineController {
   fraction: M.IFraction;
   filter = M.defaultFilter;
   view = M.defaultView;
-  private tools: M.ITools = { downtime: false, stickyAttacks: false };
+  private tools: M.ITools = { downtime: false, stickyAttacks: false, copypaste: false };
   colorSettings: IColorsSettings;
 
   downtimeChanged = new EventEmitter<void>();
@@ -244,7 +244,7 @@ export class FightTimeLineController {
         this.updateBossAttack(itemid);
       }
       if (this.idgen.isAbilityUsage(itemid)) {
-        this.editAbility(itemid, group);
+        this.editAbility(itemid);
       }
       return;
     }
@@ -252,7 +252,7 @@ export class FightTimeLineController {
     if (!time) return;
     time.setMilliseconds(0);
 
-    if (group === this.bossGroup || group === undefined) {
+    if (group === this.bossGroup || !group) {
       if (time >= this.startDate) {
         this.dialogCallBacks.openBossAttackAddDialog({ offset: Utils.formatTime(time) },
           (result: { updateAllWithSameName: boolean, data: M.IBossAbility }) => {
@@ -346,17 +346,16 @@ export class FightTimeLineController {
           this.holders.selectionRegistry.add(new AbilitySelectionMap(it.id, it.start));
         });
         break;
-      case "enemy":
+      case "boss":
         this.holders.bossAttacks.getByIds(ids).forEach((it: BossAttackMap) => {
           this.holders.selectionRegistry.add(new AbilitySelectionMap(it.id, it.start));
         });
         break;
+      case "downtime":
+        break;
       default:
         break;
     }
-
-    
-
   }
 
   updateAffectedAbilities(ability: M.IAbility): void {
@@ -554,6 +553,13 @@ export class FightTimeLineController {
   setDownTimeColor(id: string, color: string): void {
     this.commandStorage.execute(new C.ChangeDowntimeColorCommand(id, color));
   }
+  setDownTimeComment(id: string, comment: string): void {
+    const b = this.holders.bossDownTime.get(id);
+    if (b) {
+      b.applyData({comment:comment});
+    }
+  }
+
 
   setPet(jobMap: JobMap, pet: string) {
     this.commandStorage.execute(new C.SetJobPetCommand(jobMap.id, pet));
@@ -563,86 +569,13 @@ export class FightTimeLineController {
 
   }
 
+  getDowntimesAtTime(time: Date): BossDownTimeMap[] {
+    return this.holders.bossDownTime.filter((it) => it.start <= time && it.end >= time);
+  }
+
   getContextMenuItems(event: any): M.IContextMenuData[] {
     const items: Array<M.IContextMenuData> = [];
-    if (event.what === "group-label") {
-      const jobMap = this.holders.jobs.get(event.group);
-      if (!!jobMap) {
-        //        items.push({ text: "Move up", item: event.group, handler: () => this.moveUp(event.group) });
-        items.push({ text: "Remove", item: event.group, handler: () => this.removeJob(event.group) });
-        if (jobMap.job.pets && jobMap.job.pets.length > 0) {
-          items.push({
-            text: "Select pet",
-            item: event.group,
-            pets: jobMap.job.pets.map((it: M.IPet) => <any>{
-              name: it.name,
-              icon: it.icon,
-              selected: it.name === jobMap.pet,
-              action: () => this.setPet(jobMap, it.name)
-            }),
-            handler: () => { }
-          });
-        }
-
-        var hidden = this.holders.abilities.filter(it => it.hidden && it.job.id === event.group);
-        if (hidden && hidden.length > 0) {
-          const hid = hidden.map(it => <any>{
-            name: it.isStance ? "Stance" : it.ability.name,
-            icon: it.isStance ? null : it.ability.icon,
-            action: () => this.showAbility(it.id)
-          });
-          items.push({
-            text: "Restore hidden",
-            item: event.group,
-            hidden: hid.length >= 5
-              ? [
-                <any>{
-                  name: "Restore All",
-                  action: () => this.restoreHidden(event.group)
-                }, ...hid
-              ]
-              : hid,
-            handler: () => { }
-          });
-        }
-
-
-        items.push({ text: "Filter", item: event.group, handler: () => { }, filter: jobMap.filter });
-        items.push({
-          text: "Fill",
-          item: event.group,
-          handler: () => { this.combineAndExecute(this.fillJob(event.group)); }
-        });
-        items.push({
-          text: "Compact view",
-          isCheckBox: true,
-          checked: jobMap.isCompact,
-          item: event.group,
-          handler: () => this.toggleCompactView(event.group)
-        });
-      } else {
-        const map = this.holders.abilities.get(event.group);
-        if (map) {
-          if (map.ability.cooldown > 10) {
-            items.push({
-              text: "Fill",
-              item: event.group,
-              handler: () => { this.combineAndExecute(this.fillAbility(event.group)); }
-            });
-          }
-          items.push({ text: "Hide", item: event.group, handler: () => this.hideAbility(event.group) });
-          if (!map.isStance) {
-            items.push({
-              text: "Compact view",
-              isCheckBox: true,
-              checked: map.isCompact,
-              item: event.group,
-              handler: () => this.toggleCompactViewAbility(event.group)
-            });
-          }
-        }
-      }
-    } else if (event.what === "background") {
+    if (event.what === "background") {
       const downTimes = this.holders.bossDownTime.filter((it) => it.start <= event.time && it.end >= event.time);
       if (downTimes && downTimes.length > 0) {
         items.push(...downTimes.map((it) => <M.IContextMenuData>{
@@ -663,7 +596,7 @@ export class FightTimeLineController {
           items.push(...heatMaps.map((it) => {
             const id = it.id.toString().match("_(.+)")[1];
             const item = this.holders.itemUsages.get(id).ability;
-            if ((item.ability.abilityType & M.AbilityType.PartyDamageBuff) === M.AbilityType.PartyDamageBuff)
+            if (item.hasValue(M.AbilityType.PartyDamageBuff))
               return <M.IContextMenuData>{
                 text: item.ability.name,
                 item: it,
@@ -674,18 +607,7 @@ export class FightTimeLineController {
           }).filter((it) => !!it));
         }
       }
-      const map = this.holders.abilities.get(event.group);
-      if (map) {
-        items.push({ text: "Hide", item: event.group, handler: () => this.hideAbility(event.group) });
-        if (!map.isStance)
-          items.push({
-            text: "Compact view",
-            isCheckBox: true,
-            checked: map.isCompact,
-            item: event.group,
-            handler: () => this.toggleCompactViewAbility(event.group)
-          });
-      }
+
       if ((event.group === "boss" || event.group === null) && this.copyContainer) {
         items.push({
           text: "Paste",
@@ -789,10 +711,11 @@ export class FightTimeLineController {
   }
 
   paste(time: any) {
-    const copy = Utils.clone(this.copyContainer as M.IBossAbility);
-    copy.offset = Utils.formatTime(time);
-
-    this.addBossAttack(null, time, copy);
+    if (this.copyContainer) {
+      const copy = Utils.clone(this.copyContainer as M.IBossAbility);
+      copy.offset = Utils.formatTime(time);
+      this.addBossAttack(null, time, copy);
+    }
   }
 
   toggleCompactView(group: string, value?: boolean): void {
@@ -1046,18 +969,25 @@ export class FightTimeLineController {
       color));
   }
 
-  editAbility(itemid: string, group: string): void {
-    const ab = this.holders.abilities.get(group).ability;
-    if (ab.settings !== undefined && ab.settings && ab.settings.length > 0) {
-      const item = this.holders.itemUsages.get(itemid);
-      this.dialogCallBacks.openAbilityEditDialog(
-        { ability: ab, settings: ab.settings, values: item.settings, jobs: this.holders.jobs.getAll() },
-        (b: any) => {
-          if (b) {
-            this.commandStorage.execute(new C.ChangeAbilitySettingsCommand(itemid, b));
-          }
-        });
-    }
+  editAbility(itemid: string): void {
+    const item = this.holders.itemUsages.get(itemid);
+      const settings = item.ability.ability.settings;
+      if (settings && settings.length > 0) {
+
+        this.dialogCallBacks.openAbilityEditDialog(
+          {
+            ability: item.ability.ability,
+            settings: settings,
+            values: item.settings,
+            jobs: this.holders.jobs.getAll()
+          },
+          (b: any) => {
+            if (b) {
+              this.commandStorage.execute(new C.ChangeAbilitySettingsCommand(itemid, b));
+            }
+          });
+      }
+
   }
 
   notifyTimeChanged(id: string, date: Date): void {
@@ -1086,8 +1016,6 @@ export class FightTimeLineController {
     if (this.loading) return;
 
     console.log("filter requested");
-    console.log(input);
-
     if (input)
       this.filter = input;
 
@@ -1129,7 +1057,7 @@ export class FightTimeLineController {
       const items = this.holders.itemUsages.getAll();
       items.forEach(x => {
         const map = x.ability;
-        if (map.ability.duration === 0 && ((map.ability.abilityType & M.AbilityType.Damage) === M.AbilityType.Damage) || !!map.ability.charges)
+        if (map.ability.duration === 0 && (map.hasValue(M.AbilityType.Damage) || !!map.ability.charges))
           x.applyData({ ogcdAsPoints: view.ogcdAsPoints });
       });
       this.holders.itemUsages.update(items);
@@ -1159,7 +1087,7 @@ export class FightTimeLineController {
       this.availabilityController.setAbilityAvailabilityView(view.showAbilityAvailablity);
     }
 
-    this.view = view;
+    Object.assign(this.view, view);
   }
 
   isJobGroup(group: string): boolean {
@@ -1231,7 +1159,7 @@ export class FightTimeLineController {
     j.applyData({ collapsed: !j.collapsed });
 
     const abs = this.holders.abilities.getByParentId(j.id);
-    abs.forEach((value, index, array) => value.applyData({ collapsed: j.collapsed }));
+    abs.forEach(value => value.applyData({ collapsed: j.collapsed }));
 
     this.holders.jobs.update([j]);
     this.holders.abilities.update(abs);
@@ -1243,7 +1171,8 @@ export class FightTimeLineController {
       ...this.holders.itemUsages.getByIds(items),
       ...this.holders.stances.getByIds(items),
       ...this.holders.jobs.getByIds(items),
-      ...this.holders.abilities.getByIds(items)
+      ...this.holders.abilities.getByIds(items),
+      ...this.holders.bossDownTime.getByIds(items)
     ];
   }
 
