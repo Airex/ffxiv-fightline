@@ -1,6 +1,4 @@
 import { Component, Inject, EventEmitter, ViewChild, Output } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
-import { ContextMenuService, ContextMenuComponent } from "ngx-contextmenu"
 import { IFilter } from "../../core/Models"
 
 
