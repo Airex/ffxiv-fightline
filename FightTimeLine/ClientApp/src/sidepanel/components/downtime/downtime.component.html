@@ -1,13 +1,25 @@
 <nz-space nzDirection="vertical">
   <nz-space-item>
+    <span class="header">Downtime</span>
+  </nz-space-item>
+  <nz-space-item>
+    <i nz-icon nzType="clock-circle" theme="outline"></i><span class="time">{{from}}-{{to}}</span>
+  </nz-space-item>
+  <nz-space-item>
     <textarea nz-input
               placeholder="Leave comment here"
               [(ngModel)]="comment"
-              [nzAutosize]="{ minRows: 2, maxRows: 6 }" (blur)="setComment()"></textarea>
+              [nzAutosize]="{ minRows: 2, maxRows: 6 }" (ngModelChange)="commentButton.nzType='primary'"></textarea>
 
   </nz-space-item>
   <nz-space-item>
-    <div style="height: 24px; width: 90%; cursor: pointer; border: 1px black solid; text-align: center;" [(colorPicker)]="color" [cpOKButton]="true" cpDialogDisplay="inline" (colorPickerSelect)="setColor($event);" [style.background]="color"> Choose Color</div>
+    <button #commentButton nz-button (click)="setComment();commentButton.nzType=''">Set Comment</button>
+  </nz-space-item>
+  <nz-space-item>
+    Click below to change color
+  </nz-space-item>
+  <nz-space-item>
+    <div class="color-pikcer" style="" [(colorPicker)]="color" [cpOKButton]="true" cpDialogDisplay="inline" (colorPickerSelect)="setColor($event);" [style.background]="color"></div>
   </nz-space-item>
   <nz-space-item>
     <button nz-button nzType="primary" (click)="remove(it)" nzDanger>Remove</button>

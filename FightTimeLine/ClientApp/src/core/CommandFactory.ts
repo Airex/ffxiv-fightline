@@ -4,7 +4,8 @@ import {
   SwitchTargetCommand, ChangeBossAttackCommand, RemoveJobCommand, AddDowntimeCommand, RemoveDownTimeCommand, ChangeDowntimeCommand, ChangeDowntimeColorCommand, SetJobPetCommand,
   AddStanceCommand, RemoveStanceCommand, MoveStanceCommand,
   AddBatchUsagesCommand,
-  AddBatchAttacksCommand
+  AddBatchAttacksCommand,
+  ChangeDowntimeCommentCommand
 } from "./Commands"
 import { IView, IBossAbility } from "./Models"
 import { Utils } from "./Utils"
@@ -92,7 +93,7 @@ export class CommandFactory {
             startId: null,
             end: Utils.getDateFromOffset(data.params.end, this.startDate),
             endId: null
-          }, data.params.color);
+          }, data.params.color, data.params.comment);
       case "removeDowntime":
         return new RemoveDownTimeCommand(
           data.params.id);
@@ -105,6 +106,10 @@ export class CommandFactory {
         return new ChangeDowntimeColorCommand(
           data.params.id,
           data.params.newColor);
+      case "changeDowntimeComment":
+        return new ChangeDowntimeCommentCommand(
+          data.params.id,
+          data.params.newComment);
       case "setJobPet":
         return new SetJobPetCommand(
           data.params.id,

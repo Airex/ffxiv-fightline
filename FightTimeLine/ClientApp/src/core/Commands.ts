@@ -679,12 +679,13 @@ export class AddDowntimeCommand implements Command {
         id: this.id,
         start: Utils.formatTime(this.data.start),
         end: Utils.formatTime(this.data.end),
-        color: this.color
+        color: this.color,
+        comment: this.comment
       }
     };
   }
 
-  constructor(private id: string, private data: { start: Date; startId: string; end: Date; endId: string }, private color: string) {
+  constructor(private id: string, private data: { start: Date; startId: string; end: Date; endId: string }, private color: string, private comment: string) {
   }
 
   reverse(context: ICommandExecutionContext): void {
@@ -700,7 +701,8 @@ export class AddDowntimeCommand implements Command {
       {
         start: this.data.start,
         end: this.data.end,
-        color: this.color || ""
+        color: this.color || "",
+        comment: this.comment || ""
       }));
 
     context.update({ updateDowntimeMarkers: true });
@@ -789,6 +791,52 @@ export class ChangeDowntimeColorCommand implements Command {
     this.prevColor = value.color;
     value.applyData({
       color: this.newColor
+    });
+
+    context.holders.bossDownTime.update([value]);
+
+    context.update({ updateDowntimeMarkers: true });
+  }
+}
+
+export class ChangeDowntimeCommentCommand implements Command {
+
+  private comment: string;
+
+
+  constructor(private id: string, private newComment: string) {
+  }
+
+  serialize(): ICommandData {
+
+    return {
+      name: "changeDowntimeComment",
+      params: {
+        id: this.id,
+        newComment: this.newComment
+      }
+    };
+  }
+
+  reverse(context: ICommandExecutionContext): void {
+    const value = context.holders.bossDownTime.get(this.id);
+
+    value.applyData({
+      comment: this.comment
+    });
+
+    context.holders.bossDownTime.update([value]);
+
+
+    context.update({ updateDowntimeMarkers: true });
+  }
+
+  execute(context: ICommandExecutionContext): void {
+    const value = context.holders.bossDownTime.get(this.id);
+
+    this.comment = value.comment;
+    value.applyData({
+      comment: this.newComment
     });
 
     context.holders.bossDownTime.update([value]);

@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { ISidePanelComponent } from "../ISidePanelComponent"
 import * as M from "../../../core/Models"
-import * as S from "../../../services/index"
+import * as S from "../../../services"
 import { Holders } from "../../../core/Holders";
-import { BossDownTimeMap } from "../../../core/Maps/index";
+import { Utils } from "../../../core/Utils";
+import { BossDownTimeMap } from "../../../core/Maps";
 
 
 
@@ -19,7 +20,8 @@ export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent
   color: string;
   comment: string;
   initialComment: string;
-
+  from: string;
+  to:string;
 
   constructor(private dispatcher: S.DispatcherService) {
 
@@ -37,6 +39,8 @@ export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent
     this.items = items;
     this.holders = holders;
     this.color = this.it.color;
+    this.from = Utils.formatTime(this.it.start);
+    this.to = Utils.formatTime(this.it.end);
     this.initialComment = this.comment = this.it.comment;
   }
 
@@ -76,7 +80,7 @@ export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent
 
   ngOnDestroy(): void {
     if (this.initialComment !== this.comment) {
-      this.setComment();
+//      this.setComment();
     }
   }
 

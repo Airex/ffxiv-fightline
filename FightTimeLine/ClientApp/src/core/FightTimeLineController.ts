@@ -104,14 +104,15 @@ export class FightTimeLineController {
 
     let index = 1;
     for (let d of loadData.downTimes) {
-      commands.push(new C.AddDowntimeCommand(this.idgen.getNextId(M.EntryType.BossDownTime),
+      let nextId = this.idgen.getNextId(M.EntryType.BossDownTime);
+      commands.push(new C.AddDowntimeCommand(nextId,
         {
           start: Utils.getDateFromOffset(d.start, this.startDate),
           end: Utils.getDateFromOffset(d.end, this.startDate),
           startId: (index++).toString(),
           endId: (index++).toString(),
         },
-        d.color));
+        d.color, d.comment));
     }
 
     this.combineAndExecute(commands);
@@ -554,10 +555,7 @@ export class FightTimeLineController {
     this.commandStorage.execute(new C.ChangeDowntimeColorCommand(id, color));
   }
   setDownTimeComment(id: string, comment: string): void {
-    const b = this.holders.bossDownTime.get(id);
-    if (b) {
-      b.applyData({comment:comment});
-    }
+    this.commandStorage.execute(new C.ChangeDowntimeCommentCommand(id, comment));
   }
 
 
@@ -963,10 +961,10 @@ export class FightTimeLineController {
 
   canRedoChanged = new EventEmitter<void>();
 
-  addDownTime(window: { start: Date; startId: string, end: Date, endId: string }, color: string): void {
+  addDownTime(window: { start: Date; startId: string, end: Date, endId: string }, color: string, comment: string = ""): void {
     this.commandStorage.execute(new C.AddDowntimeCommand(this.idgen.getNextId(M.EntryType.BossDownTime),
       window,
-      color));
+      color, comment));
   }
 
   editAbility(itemid: string): void {

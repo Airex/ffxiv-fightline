@@ -18,6 +18,10 @@ import { Holders } from "../core/Holders";
   styleUrls: ["./sidepanel.component.css"],
 })
 export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
+  refresh() {
+    if (this.ref)
+      this.ref.instance.setItems(this.items, this.holders);
+  }
 
   @ViewChild("portalOutlet", { static: false })
   portalOutletRef: ElementRef;
@@ -32,9 +36,12 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   items: BaseHolder.IForSidePanel[];
+  holders: Holders;
+  ref: ComponentRef<ISidePanelComponent>;
 
   setItems(items: BaseHolder.IForSidePanel[], holders: Holders): void {
     this.items = items;
+    this.holders = holders;
     let component = null;
     if (this.items && this.items.length > 0) {
       switch (this.items[0].sidePanelComponentName) {
@@ -66,11 +73,13 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (this.op.hasAttached()) {
       this.op.detach();
+      this.ref.destroy();
+      this.ref = null;
     }
 
     if (component) {
-      const ref = this.op.attach(component) as ComponentRef<ISidePanelComponent>;
-      ref.instance.setItems(this.items, holders);
+      this.ref = this.op.attach(component) as ComponentRef<ISidePanelComponent>;
+      this.ref.instance.setItems(this.items, this.holders);
     }
   }
 

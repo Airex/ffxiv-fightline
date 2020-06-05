@@ -235,6 +235,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     });
     this.fightLineController.commandExecuted.subscribe((data: ICommandData) => {
       this.fightHubService.sendCommand(this.fightId, "", data);
+      this.sidepanel.refresh();
     });
     this.fightHubService.usersChanged.subscribe(() => {
       console.log(this.fightHubService.users);
@@ -250,7 +251,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     //    this.contextMenu.openStanceSelector(data);
   }
 
-  subs:any[] = [];
+  subs: any[] = [];
 
   timelineInitialized(): void {
     console.log("timeline initialized");
@@ -317,7 +318,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
           this.fightLineController.notifySelect("downtime", eventData[1].items);
           this.visTimelineService.setSelectionToIds(this.visTimeline, []);
           this.visTimelineService.setSelectionToIds(this.visTimelineBoss, []);
-          
+
           this.setSidePanel(eventData);
         }
         else
@@ -629,6 +630,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     this.fightLineController.undo();
     this.fightHubService.sendCommand(this.fightId, "", { name: "undo" });
+    this.sidepanel.refresh();
     this.refresh();
 
   }
@@ -636,6 +638,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   redo(): void {
     this.fightLineController.redo();
     this.fightHubService.sendCommand(this.fightId, "", { name: "redo" });
+    this.sidepanel.refresh();
     this.refresh();
   }
 
@@ -903,7 +906,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     this.visTimelineService.destroy(this.visTimeline);
     this.visTimelineService.destroy(this.visTimelineBoss);
-    this.subs.forEach(s=>s.unsubscribe());
+    this.subs.forEach(s => s.unsubscribe());
     this.stopSession();
     this.dispatcher.destroy();
   }

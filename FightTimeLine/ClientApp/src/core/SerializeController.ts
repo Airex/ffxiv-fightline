@@ -105,7 +105,8 @@ export class SerializeController {
           id: it.id,
           start: Utils.formatTime(it.start),
           end: Utils.formatTime(it.end),
-          color: it.color
+          color: it.color,
+          comment: it.comment
         })
       })
     };
@@ -206,6 +207,7 @@ export interface IDowntimeSerializeData {
   start: string;
   end: string;
   color: string;
+  comment: string;
 }
 
 export interface IJobSerializeData {
