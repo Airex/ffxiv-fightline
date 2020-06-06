@@ -35,6 +35,13 @@ export class Holders {
     this.abilityAvailability = new AbilityAvailablityHolder.AbilityAvailablityHolder(mainTimeLine.items);
   }
 
+  isIn(ids: string[]) {
+    return [
+        ...this.itemUsages.getByIds(ids), ...this.abilities.getByIds(ids), ...this.jobs.getByIds(ids),
+        ...this.bossAttacks.getByIds(ids), ...this.bossDownTime.getByIds(ids)
+      ].length > 0;
+  }
+
   setHighLightLoadedView(highlightLoaded: boolean): void {
     this.itemUsages.setHighlightLoaded(highlightLoaded);
     this.stances.setHighlightLoaded(highlightLoaded);

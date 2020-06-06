@@ -51,6 +51,8 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   calculateDefs() {
     const bossAttackItems = this.holders.bossAttacks.get(this.it.id);
 
+    if (!bossAttackItems) return [];
+
     const defAbilities = this.holders.itemUsages.filter((it) => {
       const ab = it.ability;
       return ab.isDef;

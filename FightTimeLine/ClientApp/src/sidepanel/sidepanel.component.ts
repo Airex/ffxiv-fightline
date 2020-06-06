@@ -19,8 +19,12 @@ import { Holders } from "../core/Holders";
 })
 export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
   refresh() {
-    if (this.ref)
+    if (this.ref) {
       this.ref.instance.setItems(this.items, this.holders);
+      return this.holders.isIn(this.items.map(t=>(t as any).id))
+    }
+
+    return false;
   }
 
   @ViewChild("portalOutlet", { static: false })

@@ -235,12 +235,19 @@ export class FightLineComponent implements OnInit, OnDestroy {
     });
     this.fightLineController.commandExecuted.subscribe((data: ICommandData) => {
       this.fightHubService.sendCommand(this.fightId, "", data);
-      this.sidepanel.refresh();
+      this.refreshSidePanel();;
     });
     this.fightHubService.usersChanged.subscribe(() => {
       console.log(this.fightHubService.users);
     });
     this.subscribeToDispatcher(this.dispatcher);
+  }
+
+  refreshSidePanel() {
+    if (!this.sidepanel.refresh()) {
+      if (this.sideNavOpened)
+        this.sideNavOpened = false;
+    }
   }
 
   timelineBossInitialized(): void {
@@ -390,7 +397,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     }
     if (eventData[0] === this.visTimelineBoss) {
       this.visTimelineService.setSelectionToId(this.visTimeline, "");
-      this.setSelectionOfBossAttacks(eventData[1].items);
+      this.setSelectionOfBossAttacks(this.visTimelineService.getSelection(this.visTimelineBoss));
       this.fightLineController.notifySelect("boss", eventData[1].items);
     }
 
@@ -435,22 +442,24 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onCommand(command: { name: string, data?: any }) {
-    if (command.name === "delete") {
-      const selected = [
-        ...this.visTimelineService.getSelection(this.visTimeline),
-        ...this.visTimelineService.getSelection(this.visTimelineBoss)
-      ];
-      this.fightLineController.handleDelete(selected);
-    } else
-      if (command.name === "undo") {
+    switch (command.name) {
+      case "delete":
+        const selected = [
+          ...this.visTimelineService.getSelection(this.visTimeline),
+          ...this.visTimelineService.getSelection(this.visTimelineBoss)
+        ];
+        this.fightLineController.handleDelete(selected);
+        break;
+      case "undo":
         this.undo();
-      } else
-        if (command.name === "redo") {
-          this.redo();
-        } else
-          if (command.name === "move") {
-            this.fightLineController.moveSelection(command.data.delta);
-          }
+        break;
+      case "redo":
+        this.redo();
+        break;
+      case "move":
+        this.fightLineController.moveSelection(command.data.delta);
+        break;
+    }
   }
 
   updateFilter($data?: M.IFilter): void {
@@ -630,7 +639,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     this.fightLineController.undo();
     this.fightHubService.sendCommand(this.fightId, "", { name: "undo" });
-    this.sidepanel.refresh();
+    this.refreshSidePanel();
     this.refresh();
 
   }
@@ -639,6 +648,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.fightLineController.redo();
     this.fightHubService.sendCommand(this.fightId, "", { name: "redo" });
     this.sidepanel.refresh();
+    this.refreshSidePanel();
     this.refresh();
   }
 
