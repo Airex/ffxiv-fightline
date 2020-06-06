@@ -397,7 +397,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     }
     if (eventData[0] === this.visTimelineBoss) {
       this.visTimelineService.setSelectionToId(this.visTimeline, "");
-      this.setSelectionOfBossAttacks(this.visTimelineService.getSelection(this.visTimelineBoss));
+      this.setSelectionOfBossAttacks(this.visTimelineService.getSelection(this.visTimelineBoss) as string[]);
       this.fightLineController.notifySelect("boss", eventData[1].items);
     }
 
