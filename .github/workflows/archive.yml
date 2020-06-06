@@ -31,7 +31,7 @@ jobs:
     - name: send to ftp
       uses: SamKirkland/FTP-Deploy-Action@master
       with:
-        ftp-server: ftp://ftp-eu.site4now.net/fft/ClientApp/
+        ftp-server: ftp://ftp-eu.site4now.net/fft/ClientApp/dist
         ftp-username: ${{ secrets.FTP_USER }}
         ftp-password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./FightTimeLine/ClientApp/dist
