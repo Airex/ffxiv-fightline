@@ -72,8 +72,6 @@ export class SettingsDialog {
   @ViewChild("view", { static: true })
   view: SettingsViewComponent;
 
-  @ViewChild("buttonsTemplate", { static: true }) buttonsTemplate: TemplateRef<any>;
-
   colors: any[];
 
   constructor(
@@ -96,9 +94,6 @@ export class SettingsDialog {
   }
 
   ngOnInit() {
-
-    this.dialogRef.getConfig().nzFooter = this.buttonsTemplate;
-
     const settings = this.settingsService.load();
     const sortOrder = settings.fflogsImport.sortOrderAfterImport;
 

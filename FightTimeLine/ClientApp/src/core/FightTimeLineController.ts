@@ -468,8 +468,6 @@ export class FightTimeLineController {
         options.abilityChanged.ability.settings.some((s => s.name === "changesTarget") as any)))
       this.recalculateBossTargets();
 
-    if (options.updateBossAttacks)
-      this.updateBossAttacks(options.updateBossAttacks);
     if (options.updateFilters)
       this.applyFilter();
 
@@ -812,11 +810,6 @@ export class FightTimeLineController {
     for (let r of toRemove.filter(it => !!it)) {
       this.notifyRemove(r, false);
     }
-    this.updateBossAttacks();
-  }
-
-  updateBossAttacks(data?: string[] | boolean): void {
-
   }
 
 
@@ -922,7 +915,6 @@ export class FightTimeLineController {
     if (jobMap)
       this.switchInitialBossTarget(jobMap, false);
     this.recalculateBossTargets();
-    this.updateBossAttacks();
 
     this.applyFilter();
     this.applyView(data.view, true);
@@ -1040,7 +1032,6 @@ export class FightTimeLineController {
     } finally {
       this.holders.bossTargets.initialBossTarget = "boss";
       this.recalculateBossTargets();
-      this.updateBossAttacks();
 
       this.applyView(this.view, true);
       this.applyFilter();
