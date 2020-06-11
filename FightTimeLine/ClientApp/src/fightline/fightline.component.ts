@@ -136,9 +136,11 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onMove(source: EventSource, event) {
-    if (source === "player") {
-      this.fightLineController.notifyMove(event);
-    }
+    this.fightLineController.notifyMove(event);
+  }
+
+  onKeyMove(source: EventSource, event) {
+    this.fightLineController.moveSelection(event.delta);
   }
 
   onVisibleFrameTemplate(source: EventSource, event) {
@@ -681,6 +683,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.fightLineController.notifySelect("enemy", [value]);
       this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());
     });
+
     dispatcher.on("SidePanel Similar All Click").subscribe(value => {
       this.planArea.selectBossAttaks(value);
       this.fightLineController.notifySelect("enemy", value);
@@ -688,9 +691,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
     });
 
     dispatcher.on("SidePanel Ability Click").subscribe(value => {
-
-
-
       this.planArea.selectAbilities([value]);
       this.fightLineController.notifySelect("friend", [value]);
       this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());

@@ -428,6 +428,7 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
 
 .vis-custom-time {
   z-index: 100 !important;
+  cursor: w-resize;
 }
 
 .vis-item.bossAttack.vertical .name {

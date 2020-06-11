@@ -23,20 +23,20 @@ export interface ICustomTimeActions {
 })
 export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions {
   selectBossAttaks(value: any[]) {
-    this.visTimelineService.setSelectionToId(this.visTimelineBoss, value);
+    this.visTimelineService.setSelectionToIds(this.visTimelineBoss, value);
     this.setSelectionOfBossAttacks(value);
 
-    this.visTimelineService.focusOnId(this.visTimelineBoss, value, { animation: false });
+    this.visTimelineService.focusOnIds(this.visTimelineBoss, value, { animation: false });
     const w = this.visTimelineService.getWindow(this.visTimelineBoss);
     this.visTimelineService.setWindow(this.visTimeline, w.start, w.end, { animation: false });
   }
 
   selectAbilities(value: any[]) {
-    this.visTimelineService.setSelectionToId(this.visTimeline, value);
-    this.visTimelineService.setSelectionToId(this.visTimelineBoss, value);
+    this.visTimelineService.setSelectionToIds(this.visTimeline, value);
+    this.visTimelineService.setSelectionToIds(this.visTimelineBoss, value);
     this.setSelectionOfBossAttacks([]);
 
-    this.visTimelineService.focusOnId(this.visTimeline, value, { animation: false });
+    this.visTimelineService.focusOnIds(this.visTimeline, value, { animation: false });
     const w = this.visTimelineService.getWindow(this.visTimeline);
     this.visTimelineService.setWindow(this.visTimelineBoss, w.start, w.end, { animation: false });
   }

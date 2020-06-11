@@ -1099,8 +1099,8 @@ export class FightTimeLineController {
       ]).filter(it => !!it)) as any;
 
       for (let r of toMove) {
-        const newDate = new Date(r.start.valueOf() as number + delta * 1000);
-        const newDateEnd = r.end && new Date(r.end.valueOf() as number + delta * 1000);
+        const newDate = new Date(new Date(r.start).valueOf() as number + delta * 1000);
+        const newDateEnd = r.end && new Date(new Date(r.end).valueOf() as number + delta * 1000);
         const item = { id: r.id, start: newDate, end: newDateEnd, group: r.ability && r.ability.id, content: null };
         if (this.canMove(item)) {
           r.move(delta); //todo: set to exact date

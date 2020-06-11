@@ -39,10 +39,10 @@ export class KeyHandlerDirective {
         } else
 
           if (event.code === "ArrowLeft") {
-            this.onCommand.next({ name: "move", data: { delta: -1 * (event.ctrlKey ? 10 : 1) } });
+            this.onCommand.next({ name: "keyMove", data: { delta: -1 * (event.ctrlKey ? 10 : 1) } });
           } else
             if (event.code === "ArrowRight") {
-              this.onCommand.next({ name: "move", data: { delta: 1 * (event.ctrlKey ? 10 : 1) } });
+              this.onCommand.next({ name: "keyMove", data: { delta: 1 * (event.ctrlKey ? 10 : 1) } });
             }
     setTimeout(() => this.handleKey(event), 500);
   }
