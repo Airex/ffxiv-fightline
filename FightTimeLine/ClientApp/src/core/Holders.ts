@@ -1,4 +1,3 @@
-import * as BaseHolder from "./Holders/BaseHolder";
 import * as AbilityUsageHolder from "./Holders/AbilityUsageHolder";
 import * as AbilitiesMapHolder from "./Holders/AbilitiesMapHolder";
 import * as AbilitySelectionHolder from "./Holders/AbilitySelectionHolder";
@@ -9,6 +8,7 @@ import * as BuffHeatmapHolder from "./Holders/BuffHeatmapHolder";
 import * as BossTargetHolder from "./Holders/BossTargetHolder";
 import * as StancesHolder from "./Holders/StancesHolder";
 import * as AbilityAvailablityHolder from "./Holders/AbilityAvailablityHolder";
+import {ITimelineContainer} from "../services";
 
 export class Holders {
   itemUsages: AbilityUsageHolder.AbilityUsageHolder;
@@ -22,7 +22,7 @@ export class Holders {
   stances: StancesHolder.StancesHolder;
   abilityAvailability: AbilityAvailablityHolder.AbilityAvailablityHolder;
 
-  constructor(mainTimeLine: BaseHolder.ITimelineContainer, bossTimeLine: BaseHolder.ITimelineContainer) {
+  constructor(mainTimeLine: ITimelineContainer, bossTimeLine: ITimelineContainer) {
     this.itemUsages = new AbilityUsageHolder.AbilityUsageHolder(mainTimeLine.items);
     this.abilities = new AbilitiesMapHolder.AbilitiesMapHolder(mainTimeLine.groups);
     this.selectionRegistry = new AbilitySelectionHolder.AbilitySelectionHolder();
@@ -37,8 +37,11 @@ export class Holders {
 
   isIn(ids: string[]) {
     return [
-        ...this.itemUsages.getByIds(ids), ...this.abilities.getByIds(ids), ...this.jobs.getByIds(ids),
-        ...this.bossAttacks.getByIds(ids), ...this.bossDownTime.getByIds(ids)
+      ...this.itemUsages.getByIds(ids),
+      ...this.abilities.getByIds(ids),
+      ...this.jobs.getByIds(ids),
+      ...this.bossAttacks.getByIds(ids),
+      ...this.bossDownTime.getByIds(ids)
       ].length > 0;
   }
 

@@ -30,8 +30,15 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\dist\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\dist\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="ClientApp\dist\**" />
+    <None Remove="ClientApp\dist\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,7 +49,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\dist\" />
     <Folder Include="ClientApp\src\assets\swtor\images\roles\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
@@ -79,5 +85,7 @@
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
+
+  <ProjectExtensions><VisualStudio><UserProperties clientapp_4angular_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

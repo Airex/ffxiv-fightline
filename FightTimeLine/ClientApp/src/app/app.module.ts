@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler, Injectable } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
-import {CommonModule} from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { PortalModule } from "@angular/cdk/portal";
@@ -13,6 +13,7 @@ import { TableViewComponent } from "../tableview/tableview.component";
 //import { BossTemplateComponent } from "../bosstemplate/bosstemplate.component";
 import { HomeComponent } from "../home/home.component";
 import { SidepanelComponent } from "../sidepanel/sidepanel.component";
+import { PlanAreaComponent } from "../fightline/planArea/planArea.component";
 import { FilterComponent } from "../fightline/filter/filter.component";
 import { ViewComponent } from "../fightline/view/view.component";
 import { SettingsFilterComponent } from "../dialogs/settingsDialog/filter/settingsFilter.component";
@@ -168,15 +169,15 @@ const zorroModules = [
   NzTreeSelectModule,
   NzWaveModule,
   NzResizableModule
-  
+
 ];
 
 
 registerLocaleData(en);
 
 Sentry.init(<Object>{
-  dsn : "https://aa772d49f3bb4a33851f765d5d5f2d86@sentry.io/1407389",
-  enabled : environment.production
+  dsn: "https://aa772d49f3bb4a33851f765d5d5f2d86@sentry.io/1407389",
+  enabled: environment.production
 });
 
 @Injectable()
@@ -216,8 +217,9 @@ export function getBaseUrl() {
     AppComponent,
     FightLineComponent,
     ToolbarComponent,
-//    BossTemplateComponent,
+    //    BossTemplateComponent,
     TableViewComponent,
+    PlanAreaComponent,
     PingComponent,
     HomeComponent,
     FilterComponent,
@@ -280,7 +282,7 @@ export function getBaseUrl() {
   entryComponents: [
     ViewComponent, FilterComponent, SettingsFilterComponent, AreaComponent, SettingsViewComponent, PingComponent, SingleAbilityComponent,
     SingleAttackComponent, MultipleAbilityComponent, MultipleAttackComponent, SyncSettingsComponent, JobComponent, JobAbilityComponent, SidepanelComponent,
-    DownTimeComponent,
+    DownTimeComponent, PlanAreaComponent,
     ...DialogsModuleComponents
   ],
   bootstrap: [AppComponent]

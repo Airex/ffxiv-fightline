@@ -670,6 +670,8 @@ export class ChangeAbilitySettingsCommand implements Command {
   }
 }
 
+export type DowntimeData = {start: Date; startId: string; end: Date; endId: string};
+
 export class AddDowntimeCommand implements Command {
 
   serialize(): ICommandData {
@@ -685,7 +687,7 @@ export class AddDowntimeCommand implements Command {
     };
   }
 
-  constructor(private id: string, private data: { start: Date; startId: string; end: Date; endId: string }, private color: string, private comment: string) {
+  constructor(private id: string, private data: DowntimeData, private color: string, private comment: string) {
   }
 
   reverse(context: ICommandExecutionContext): void {
@@ -694,6 +696,7 @@ export class AddDowntimeCommand implements Command {
   }
 
   execute(context: ICommandExecutionContext): void {
+
 
     context.holders.bossDownTime.add(new BossDownTimeMap(this.id,
       this.data.startId || Guid.create().toString(),

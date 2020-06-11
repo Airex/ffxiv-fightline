@@ -2,7 +2,7 @@ import * as Models from "./Models";
 import { Utils } from "./Utils";
 import * as BaseExportTemplate from "./BaseExportTemplate";
 import * as Holders from "./Holders";
-import {JobMap,  BossAttackMap} from "./Maps/index";
+import {JobMap,  BossAttackMap} from "./Maps";
 
 export class SerializeController {
 

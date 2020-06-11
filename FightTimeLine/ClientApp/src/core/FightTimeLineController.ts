@@ -3,6 +3,7 @@ import * as _ from "lodash"
 import { DataItem } from "vis-timeline"
 import * as Gameserviceinterface from "../services/game.service-interface"
 import { IColorsSettings, SettingsService } from "../services/SettingsService"
+import { ITimelineContainer } from "../services"
 import { AvailabilityController } from "./AvailabilityController"
 import { CommandBag } from "./CommandBag"
 import { CommandFactory } from "./CommandFactory"
@@ -17,7 +18,7 @@ import { Command, ICommandData, IUpdateOptions, UndoRedoController } from "./Und
 import { Utils } from "./Utils"
 import { Holders } from "./Holders";
 import { AbilityMap, AbilitySelectionMap, BossAttackMap, HeatmapMap, JobMap, AbilityUsageMap, BossTargetMap, BossDownTimeMap } from "./Maps/index";
-import { ITimelineContainer, IMoveable } from "./Holders/BaseHolder";
+import { IMoveable } from "./Holders/BaseHolder";
 
 
 export class FightTimeLineController {
@@ -104,7 +105,7 @@ export class FightTimeLineController {
 
     let index = 1;
     for (let d of loadData.downTimes) {
-      let nextId = this.idgen.getNextId(M.EntryType.BossDownTime);
+      const nextId = this.idgen.getNextId(M.EntryType.BossDownTime);
       commands.push(new C.AddDowntimeCommand(nextId,
         {
           start: Utils.getDateFromOffset(d.start, this.startDate),
@@ -566,7 +567,7 @@ export class FightTimeLineController {
   }
 
   getDowntimesAtTime(time: Date): BossDownTimeMap[] {
-    return this.holders.bossDownTime.filter((it) => it.start <= time && it.end >= time);
+    return this.holders.bossDownTime.filter((it) => it.checkTime(time));
   }
 
   getContextMenuItems(event: any): M.IContextMenuData[] {
@@ -961,22 +962,22 @@ export class FightTimeLineController {
 
   editAbility(itemid: string): void {
     const item = this.holders.itemUsages.get(itemid);
-      const settings = item.ability.ability.settings;
-      if (settings && settings.length > 0) {
+    const settings = item.ability.ability.settings;
+    if (settings && settings.length > 0) {
 
-        this.dialogCallBacks.openAbilityEditDialog(
-          {
-            ability: item.ability.ability,
-            settings: settings,
-            values: item.settings,
-            jobs: this.holders.jobs.getAll()
-          },
-          (b: any) => {
-            if (b) {
-              this.commandStorage.execute(new C.ChangeAbilitySettingsCommand(itemid, b));
-            }
-          });
-      }
+      this.dialogCallBacks.openAbilityEditDialog(
+        {
+          ability: item.ability.ability,
+          settings: settings,
+          values: item.settings,
+          jobs: this.holders.jobs.getAll()
+        },
+        (b: any) => {
+          if (b) {
+            this.commandStorage.execute(new C.ChangeAbilitySettingsCommand(itemid, b));
+          }
+        });
+    }
 
   }
 

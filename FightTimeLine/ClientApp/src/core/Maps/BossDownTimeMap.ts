@@ -44,8 +44,8 @@ export class BossDownTimeMap extends BaseMap<string, DataItem, IBossDownTimeMapD
 
   createDownTime(id: string, start: Date, end: Date, color: string): DataItem {
     return {
-      start: start,
-      end: end,
+      start: start < end ? start : end,
+      end: end < start ? start : end,
       id: id,
       content: "",
       type: "background",
@@ -60,5 +60,9 @@ export class BossDownTimeMap extends BaseMap<string, DataItem, IBossDownTimeMapD
 
   get comment() {
     return this.data.comment;
+  }
+
+  checkTime(time: Date): boolean {
+    return time >= (this.start < this.end ? this.start : this.end) && time <= (this.start > this.end ? this.start : this.end)
   }
 }

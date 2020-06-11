@@ -10,7 +10,8 @@ import { fightServiceToken } from "../../services/fight.service-provider"
 import { IFightService } from "../../services/fight.service-interface"
 import { IAuthenticationService } from "../../services/authentication.service-interface"
 import { authenticationServiceToken } from "../../services/authentication.service-provider"
-import { VisTimelineService, TimelineOptions, DataGroup, DataItem, DataSet } from "ngx-vis";
+import { VisTimelineService, DataSet } from "ngx-vis";
+import { TimelineOptions, DataGroup, DataItem } from "vis-timeline";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
 

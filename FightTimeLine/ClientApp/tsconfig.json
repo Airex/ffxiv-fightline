@@ -15,7 +15,7 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es5",
+    "target": "ES5",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -24,6 +24,10 @@
       "dom"
     ]
   },
-  "include": ["node_modules/@angular/cdk/**/typings/index.d.ts", "src/**/*.ts"],
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  },
+  "include": [ "node_modules/@angular/cdk/**/typings/index.d.ts", "src/**/*.ts" ],
   "exclude": [ "**/*.spec.ts" ]
 }

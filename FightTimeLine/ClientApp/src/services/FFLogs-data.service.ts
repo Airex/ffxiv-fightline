@@ -81,6 +81,8 @@ export class FFLogsService implements Dataserviceinterface.IDataService {
       callBack(percentage);
     } while (a && a.nextPageTimestamp && a.events.length > 0);
 
+    callBack(1);
+
     parser.setEvents(events);
 
     const result = { events: events, jobs: parser.players, start_time: foundFight.start_time, name: foundFight.zoneName + " " + foundFight.name };

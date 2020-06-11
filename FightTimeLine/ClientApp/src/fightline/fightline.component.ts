@@ -2,25 +2,26 @@ import { Component, OnInit, OnDestroy, ViewChild, HostListener, Inject, NgZone }
 import { Location } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as _ from "lodash";
-import { VisTimelineService, TimelineOptions, DataItem, DataGroup, DataSet } from "ngx-vis";
 
 import { FightTimeLineController } from "../core/FightTimeLineController"
 import * as M from "../core/Models";
 import * as FF from "../core/FFLogs";
-import { NgProgress, NgProgressComponent } from "ngx-progressbar"
-import { Utils } from "../core/Utils"
+import { NgProgressComponent } from "ngx-progressbar"
 import * as S from "../services/index"
 import { process } from "../core/BossAttackProcessors"
 import { ToolbarComponent } from "../toolbar/toolbar.component"
 import { SidepanelComponent } from "../sidepanel/sidepanel.component"
-import { ClassNameBuilder } from "../core/ClassNameBuilder"
+import { PlanAreaComponent, Action, EventSource } from "./planArea/planArea.component"
+import { ToolsManager, CopyPasteTool, DowntimeTool, StickyAttacksTool } from "../core/ToolsManager"
+
 import { IdGenerator } from "../core/Generators"
-import { DownTimesController } from "../core/DownTimesController"
 import { ICommandData } from "../core/UndoRedo"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
+import { VisStorageService } from "../services";
 import * as SerializeController from "../core/SerializeController";
 import * as Environment from "../environments/environment";
+
 
 @Component({
   selector: "fightline",
@@ -29,8 +30,7 @@ import * as Environment from "../environments/environment";
 })
 export class FightLineComponent implements OnInit, OnDestroy {
   startDate = new Date(946677600000);
-  visTimeline: string = "timeLineMain";
-  visTimelineBoss: string = "timeLineBoss";
+
   fightId: string;
   private fflogsCode: string = null;
 
@@ -40,161 +40,28 @@ export class FightLineComponent implements OnInit, OnDestroy {
   toolbar: ToolbarComponent;
   @ViewChild("progressBar", { static: true })
   progressBar: NgProgressComponent;
+  @ViewChild("planArea", { static: true })
+  planArea: PlanAreaComponent;
 
   fightLineController: FightTimeLineController;
-
-  items: DataSet<DataItem>;
-  groups: DataSet<DataGroup>;
-  itemsBoss: DataSet<DataItem>;
-  groupsBoss: DataSet<DataGroup>;
+  subs: any[] = [];
 
   private idgen = new IdGenerator();
-  private downTimesController: DownTimesController;
+  toolsManager = new ToolsManager();
 
   jobs = this.gameService.jobRegistry.getJobs();
   sideNavOpened: boolean = false;
 
-  tool: string;
-  options: TimelineOptions = {
-    width: "100%",
-    height: "100%",
-    minHeight: "300px",
-    autoResize: true,
-    start: this.startDate,
-    end: new Date(new Date(this.startDate).setMinutes(30)),
-    max: new Date(new Date(this.startDate).setMinutes(30)),
-    min: new Date(new Date(this.startDate.valueOf() as number - 30 * 1000)),
-    zoomable: true,
-    zoomMin: 3 * 60 * 1000,
-    zoomMax: 30 * 60 * 1000,
-    zoomKey: "ctrlKey",
-    moveable: true,
-    type: "range",
-    multiselect: true,
-    multiselectPerGroup: true,
-    format: Utils.format(this.startDate),
-    stack: true,
-    showCurrentTime: false,
-    stackSubgroups: true,
-    groupOrder: (a: any, b: any) => {
-      return -(a.value || a.sValue) + (b.value || b.sValue);
-    },
-    editable: { remove: true, updateTime: true, add: false },
-    horizontalScroll: true,
-    margin: { item: { horizontal: 0, vertical: 5 } },
-    onRemove: (item: any, callback: any) => {
-      callback(null);
-      this.fightLineController.handleDelete(this.visTimelineService.getSelection(this.visTimeline));
-    },
-    onMoving: (item: any, callback: any) => {
-      if (this.fightLineController.canMove(item)) {
-        callback(item);
-      } else {
-        callback(null);
-      }
-    },
-    onMove: (item: any, callback: any) => {
-      console.log("moved")
-      callback(item);
-      this.fightLineController.notifyMove(item);
-    },
-    onAdd: (item: any, callback: any) => {
-      callback(null);
-      console.log("add");
-      //      if (this.dialogService.isAnyDialogOpened) return;
-      //
-      //      if (this.downTimesController.isInBossDownTimeMode) {
-      //        this.downTimesController.registerPoint(item.start);
-      //      } else {
-      //        this.fightLineController.notifyDoubleClick(null, item.group, item.start);
-      //      }
-    },
-    onUpdate: (item: any, callback: any) => {
-      callback(null);
-      //      this.fightLineController.notifyDoubleClick(item.id, item.group, item.start);
-    },
-    visibleFrameTemplate: (item: any) => this.fightLineController.visibleFrameTemplate(item),
-    tooltipOnItemUpdateTime: {
-      template: (item: any) => this.fightLineController.tooltipOnItemUpdateTime(item)
-    },
-    snap: (date: Date) => date,
-    groupEditable: { order: false }
-  };
-  optionsBoss: TimelineOptions = {
-    width: "100%",
-    height: "100%",
-    minHeight: "50px",
-    autoResize: true,
-    start: this.startDate,
-    end: new Date(new Date(this.startDate).setMinutes(30)),
-    max: new Date(new Date(this.startDate).setMinutes(30)),
-    min: new Date(new Date(this.startDate.valueOf() as number - 30 * 1000)),
-    zoomable: true,
-    zoomMin: 3 * 60 * 1000,
-    zoomMax: 30 * 60 * 1000,
-    zoomKey: "ctrlKey",
-    moveable: true,
-    tooltip: {
-      followMouse: false,
-      overflowMethod: "flip"
-    },
-    type: "box",
-    multiselect: true,
-    showCurrentTime: false,
-    stack: true,
-    orientation: "none",
-    stackSubgroups: true,
-    groupOrder: "id",
-    editable: { remove: true, updateTime: true, add: false },
-    horizontalScroll: true,
-    margin: { item: { horizontal: 0, vertical: 5 } },
-    onRemove: (item: any, callback: any) => {
-      callback(null);
-      this.fightLineController.handleDelete(this.visTimelineService.getSelection(this.visTimelineBoss));
-    },
-    onMoving: (item: any, callback: any) => {
-      if (this.fightLineController.canMove(item)) {
-        callback(item);
-        this.fightLineController.moveBossAttack(item);
-      } else {
-        callback(null);
-      }
-    },
-    onMove: (item: any, callback: any) => {
-      callback(item);
-      this.fightLineController.notifyMove(item);
-    },
-    onAdd: (item: any, callback: any) => {
-      callback(null);
-      //      if (this.dialogService.isAnyDialogOpened) return;
-      console.log("boss add");
-
-      //      if (this.downTimesController.isInBossDownTimeMode) {
-      //        this.downTimesController.registerPoint(item.start);
-      //      } else {
-      //        this.fightLineController.notifyDoubleClick(null, item.group, item.start);
-      //      }
-    },
-    tooltipOnItemUpdateTime: {
-      template: (item: any) => this.fightLineController.tooltipOnItemUpdateTime(item)
-    },
-    onUpdate: (item: any, callback: any) => {
-      console.log("update")
-      callback(null);
-      //      this.fightLineController.notifyDoubleClick(item.id, item.group, item.start);
-    },
-    snap: (date: Date) => date
-  };
-
   public constructor(
     private recent: S.RecentActivityService,
-    private visTimelineService: VisTimelineService,
+
     @Inject(S.fightServiceToken) private fightService: S.IFightService,
     @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
     private notification: S.ScreenNotificationsService,
-    private progressService: NgProgress,
+    private visStorage: VisStorageService,
     private route: ActivatedRoute,
     private location: Location,
+    private ngZone: NgZone,
     private router: Router,
     private dialogService: S.DialogService,
     private changeNotesService: S.ChangeNotesService,
@@ -202,45 +69,93 @@ export class FightLineComponent implements OnInit, OnDestroy {
     private settingsService: S.SettingsService,
     private storage: S.LocalStorageService,
     public fightHubService: S.FightHubService,
-    private ngZone: NgZone,
     private dispatcher: S.DispatcherService) {
+  }
 
-    this.items = new DataSet<DataItem>([], {});
-    this.groups = new DataSet<DataGroup>([], {});
-    this.itemsBoss = new DataSet<DataItem>([], {});
-    this.groupsBoss = new DataSet<DataGroup>([], {});
+  onAction(event: Action) {
+    if (this.toolsManager.handleAction(event)) return;
 
+    const actionName = "on" + event.name[0].toUpperCase() + event.name.slice(1);
+    if (this[actionName])
+      this[actionName](event.source, event.payload);
+  }
 
-    this.fightLineController = new FightTimeLineController(
-      this.startDate,
-      this.idgen,
-      { items: this.items, groups: this.groups },
-      { items: this.itemsBoss, groups: this.groupsBoss },
-      {
-        openBossAttackAddDialog: this.openBossAttackAddDialog.bind(this),
-        openAbilityEditDialog: this.openAbilityEditDialog.bind(this),
-        openStanceSelector: this.openStanceSelector.bind(this)
-      },
-      this.gameService,
-      this.settingsService);
+  onSelected(source: EventSource, event) {
+    this.fightLineController.notifySelect(event.target, event.data.items);
+    this.setSidePanel(event.data);
+  }
 
-    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    this.router.onSameUrlNavigation = "reload";
-    this.downTimesController = new DownTimesController(
-      this.visTimelineService,
-      this.visTimelineBoss,
-      this.fightLineController);
-    this.fightLineController.downtimeChanged.subscribe(() => {
-      this.downTimesController.modeChanged(this.downTimesController.isInBossDownTimeMode);
-    });
-    this.fightLineController.commandExecuted.subscribe((data: ICommandData) => {
-      this.fightHubService.sendCommand(this.fightId, "", data);
-      this.refreshSidePanel();;
-    });
-    this.fightHubService.usersChanged.subscribe(() => {
-      console.log(this.fightHubService.users);
-    });
-    this.subscribeToDispatcher(this.dispatcher);
+  onClickGroup(source: EventSource, event) {
+    if (source === "player") {
+      this.planArea.clearSelection();
+      this.fightLineController.notifySelect("group", [event.group]);
+      this.setSidePanel(event);
+    }
+  }
+
+  onClickEmpty(source: EventSource, event) {
+    const downtimesAtTime = this.fightLineController.getDowntimesAtTime(event.time);
+    if (downtimesAtTime.length > 0 && (source === "boss" || (source === "player" && this.fightLineController.view.showDowntimesInPartyArea))) {
+      event.items = downtimesAtTime.map(d => d.id);
+      this.fightLineController.notifySelect("downtime", event.items);
+      this.planArea.clearSelection();
+
+      this.setSidePanel(event);
+    }
+    else
+      this.planArea.updateSelection(source, event);
+  }
+
+  onDoubleClickEmpty(source: EventSource, event) {
+    this.fightLineController.notifyDoubleClick(event.item, event.group, new Date(event.time));
+  }
+
+  onDoubleClickItem(source: EventSource, event) {
+    this.fightLineController.notifyDoubleClick(event.item, event.group, new Date(event.time));
+  }
+
+  onDoubleClickGroup(source: EventSource, event) {
+    if (source === "player") {
+      if (!this.fightLineController.isJobGroup(event.group)) {
+        this.fightLineController.toggleCompactViewAbility(event.group);
+        this.fightLineController.applyFilter();
+      } else {
+        this.fightLineController.toggleJobCollapsed(event.group);
+        this.fightLineController.applyFilter();
+      }
+      setTimeout(() => this.planArea.refresh());
+    }
+  }
+
+  onTimeChanged(source: EventSource, event) {
+    this.fightLineController.notifyTimeChanged(event.id, event.date);
+  }
+
+  onDelete(source: EventSource, event) {
+    this.fightLineController.handleDelete(event);
+  }
+
+  onMove(source: EventSource, event) {
+    if (source === "player") {
+      this.fightLineController.notifyMove(event);
+    }
+  }
+
+  onVisibleFrameTemplate(source: EventSource, event) {
+    if (source === "player") {
+      event.handler(this.fightLineController.visibleFrameTemplate(event.item))
+    }
+  }
+
+  onCanMove(source: EventSource, event) {
+    const canMove = this.fightLineController.canMove(event.item);
+    if (canMove && source === "boss")
+      this.fightLineController.moveBossAttack(event.item);
+    event.handler(canMove);
+  }
+
+  onItemTooltip(source: EventSource, event) {
+    event.handler(this.fightLineController.tooltipOnItemUpdateTime(event.item))
   }
 
   refreshSidePanel() {
@@ -250,166 +165,24 @@ export class FightLineComponent implements OnInit, OnDestroy {
     }
   }
 
-  timelineBossInitialized(): void {
-
-  }
-
   private openStanceSelector(data: M.IContextMenuData[]): void {
     //    this.contextMenu.openStanceSelector(data);
   }
 
-  subs: any[] = [];
-
-  timelineInitialized(): void {
-    console.log("timeline initialized");
-
-
-    this.visTimelineService.on(this.visTimeline, "click");
-    this.visTimelineService.on(this.visTimeline, "doubleClick");
-    this.visTimelineService.on(this.visTimelineBoss, "click");
-    this.visTimelineService.on(this.visTimelineBoss, "doubleClick");
-    this.visTimelineService.on(this.visTimeline, "contextmenu");
-    this.visTimelineService.on(this.visTimelineBoss, "contextmenu");
-    this.visTimelineService.on(this.visTimeline, "select");
-    this.visTimelineService.on(this.visTimelineBoss, "select");
-    this.visTimelineService.on(this.visTimeline, "timechanged");
-    this.visTimelineService.on(this.visTimelineBoss, "timechanged");
-    this.visTimelineService.on(this.visTimeline, "timechange");
-    this.visTimelineService.on(this.visTimeline, "rangechange");
-    this.visTimelineService.on(this.visTimelineBoss, "rangechange");
-
-    this.visTimelineService.rangechange
-      .subscribe((eventData: any[]) => {
-        const event: any = eventData[1];
-        if (event.byUser) {
-          this.visTimelineService.setWindow(eventData[0] === this.visTimeline ? this.visTimelineBoss : this.visTimeline,
-            event.start,
-            event.end,
-            {
-              animation: false
-            });
-        }
-      });
-
-    this.visTimelineService.contextmenu.subscribe((eventData: any[]) => {
-      const event: any = eventData[1];
-      //      this.contextMenu.openMenu(eventData, this.fightLineController.getContextMenuItems(eventData[1]));
-
-      event.event.preventDefault();
-      event.event.stopPropagation();
-
-    });
-
-    this.visTimelineService.select.subscribe((eventData: any[]) => {
-      this.updateSelection(eventData);
-    });
-
-    this.visTimelineService.timechanged.subscribe((eventData: any[]) => {
-      this.fightLineController.notifyTimeChanged(eventData[1].id, eventData[1].time as Date);
-    });
-
-    this.subs.push(this.visTimelineService.click.subscribe((eventData: any[]) => {
-      console.log("click")
-      if (eventData[0] === this.visTimeline) {
-        if (eventData[1].what === "group-label") {
-          this.fightLineController.notifySelect("group", [eventData[1].group]);
-          this.visTimelineService.setSelectionToIds(this.visTimeline, []);
-          this.visTimelineService.setSelectionToIds(this.visTimelineBoss, []);
-          this.setSidePanel(eventData);
-        }
-      }
-      if (eventData[1].what === "background" || eventData[1].what === null) {
-        const downtimesAtTime = this.fightLineController.getDowntimesAtTime(eventData[1].time);
-        if (downtimesAtTime.length > 0) {
-          eventData[1].items = downtimesAtTime.map(d => d.id);
-          this.fightLineController.notifySelect("downtime", eventData[1].items);
-          this.visTimelineService.setSelectionToIds(this.visTimeline, []);
-          this.visTimelineService.setSelectionToIds(this.visTimelineBoss, []);
-
-          this.setSidePanel(eventData);
-        }
-        else
-          this.updateSelection(eventData);
-      }
-    }));
-
-    this.subs.push(this.visTimelineService.doubleClick.subscribe((eventData: any[]) => {
-      this.onDoubleClick(eventData);
-    }));
-  }
-
-  onDoubleClick(eventData: any[]) {
-    if (eventData[1].event.type !== "dblclick") return;
-    console.log("double click");
-    this.ngZone.run(() => {
-      if (eventData[1].what === "background" || eventData[1].what == null || eventData[1].what === "item") {
-        if (this.downTimesController.isInBossDownTimeMode) {
-          this.downTimesController.registerPoint(new Date(eventData[1].time));
-        } else if (this.isInCopyPaste) {
-          if (eventData[0] === this.visTimelineBoss && eventData[1].what !== "item") {
-            this.fightLineController.paste(new Date(eventData[1].time));
-          }
-        } else {
-          this.fightLineController.notifyDoubleClick(
-            eventData[1].item,
-            eventData[1].group,
-            new Date(eventData[1].time));
-        }
-      } else if (eventData[1].what === "group-label") {
-        if (eventData[0] === this.visTimeline) {
-          if (!this.fightLineController.isJobGroup(eventData[1].group)) {
-            this.fightLineController.toggleCompactViewAbility(eventData[1].group);
-            this.fightLineController.applyFilter();
-            setTimeout(() => this.refresh());
-          } else {
-            this.fightLineController.toggleJobCollapsed(eventData[1].group);
-            this.fightLineController.applyFilter();
-            setTimeout(() => this.refresh());
-          }
-        }
-      }
-    });
-  }
-
   useTool(tool: string) {
-    this.tool = tool;
-    const tools: M.ITools = {
-      downtime: tool === "Downtime",
-      stickyAttacks: tool === "Sticky Attacks",
-      copypaste: tool === "Copy & Paste"
-    };
-
-    this.onBossDownTimeChanged(tools.downtime);
-    this.fightLineController.updateTools(tools);
-    this.onCopyPasteToolChanged(tools.copypaste);
+    this.toolsManager.setActive(tool);
   }
 
   exportToTable() {
     this.dialogService.openExportToTable(() => this.fightLineController.createSerializer().serializeForExport());
   }
 
-  private updateSelection(eventData: any[]): void {
-    if (eventData[0] === this.visTimeline) {
-      this.visTimelineService.setSelectionToId(this.visTimelineBoss, "");
-      this.setSelectionOfBossAttacks([]);
-      this.fightLineController.notifySelect("friend", eventData[1].items);
-
-    }
-    if (eventData[0] === this.visTimelineBoss) {
-      this.visTimelineService.setSelectionToId(this.visTimeline, "");
-      this.setSelectionOfBossAttacks(this.visTimelineService.getSelection(this.visTimelineBoss) as string[]);
-      this.fightLineController.notifySelect("boss", eventData[1].items);
-    }
-
-    this.setSidePanel(eventData);
-  }
-
   private setSidePanel(eventData) {
     this.ngZone.run(() => {
       if (eventData &&
-        (eventData[1].items && eventData[1].items.length > 0 ||
-          (eventData[1].group && eventData[1].what === "group-label"))) {
-        const items = this.fightLineController.getItems(eventData[1].items || [eventData[1].group]);
+        (eventData.items && eventData.items.length > 0 ||
+          (eventData.group && eventData.what === "group-label"))) {
+        const items = this.fightLineController.getItems(eventData.items || [eventData.group]);
         if (items && items.length > 0) {
 
           this.sidepanel.setItems(items, this.fightLineController.getHolders());
@@ -425,71 +198,18 @@ export class FightLineComponent implements OnInit, OnDestroy {
     });
   }
 
-  private setSelectionOfBossAttacks(ids: string[]): void {
-    const toUpdate: any[] = [];
-
-    const items = this.items.get();
-    items.forEach((it: DataItem) => {
-      const b = new ClassNameBuilder(it.className);
-      const have = !!ids && ids.some((e => "bossAttack_" + e === it.id) as any);
-      b.set({ "selected": have });
-      if (b.isChanged()) {
-        it.className = b.build();
-        toUpdate.push(it);
-      }
-    });
-    this.items.update(toUpdate);
-  }
-
-  onCommand(command: { name: string, data?: any }) {
-    switch (command.name) {
-      case "delete":
-        const selected = [
-          ...this.visTimelineService.getSelection(this.visTimeline),
-          ...this.visTimelineService.getSelection(this.visTimelineBoss)
-        ];
-        this.fightLineController.handleDelete(selected);
-        break;
-      case "undo":
-        this.undo();
-        break;
-      case "redo":
-        this.redo();
-        break;
-      case "move":
-        this.fightLineController.moveSelection(command.data.delta);
-        break;
-    }
-  }
-
   updateFilter($data?: M.IFilter): void {
     this.fightLineController.applyFilter($data);
-    setTimeout(() => this.refresh());
   }
 
   updateView($data?: M.IView): void {
     this.fightLineController.applyView($data);
-    setTimeout(() => this.refresh());
+    setTimeout(() => this.planArea.refresh());
   }
 
   openBossAttackAddDialog(bossAbility: M.IBossAbility, callBack: (b: any) => void): void {
     console.log("boss attack edit")
     this.dialogService.openBossAttackAddDialog(bossAbility, callBack);
-  }
-
-  onBossDownTimeChanged(value: boolean) {
-    if (value !== this.downTimesController.isInBossDownTimeMode) {
-      this.downTimesController.isInBossDownTimeMode = value;
-      this.downTimesController.toggle(this.downTimesController.isInBossDownTimeMode);
-    }
-  }
-
-  isInCopyPaste: boolean = false;
-
-  onCopyPasteToolChanged(value: boolean) {
-    if (value !== this.isInCopyPaste) {
-      this.isInCopyPaste = value;
-    }
   }
 
   openAbilityEditDialog(data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[] },
@@ -507,11 +227,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.dialogService.openLoad();
   }
 
-  refresh(): void {
-    this.visTimelineService.redraw(this.visTimeline);
-    this.visTimelineService.redraw(this.visTimelineBoss);
-  }
-
   importFromFFLogs(code: string = null): void {
     this.dialogService
       .openImportFromFFLogs(code || this.fflogsCode)
@@ -524,7 +239,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   loadFFLogsData(code: string, enc: number) {
     this.dialogService.executeWithLoading(ref => {
       this.progressBar.start();
-      this.gameService.dataService.getEvents(code, enc, percentage => this.progressBar.set(percentage))
+      this.gameService.dataService.getEvents(code, enc, percentage => this.progressBar.set(percentage*100))
         .then((parser) => {
           this.fightService.newFight("")
             .subscribe(value => {
@@ -551,8 +266,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
         })
         .finally(() => {
           this.progressBar.complete();
-          this.setInitialWindow(this.fightLineController.getLatestAbilityUsageTime(), 2);
-          this.refresh();
+          this.planArea.setInitialWindow(this.fightLineController.getLatestAbilityUsageTime(), 2);
+          this.planArea.refresh();
           ref.close();
         });
     });
@@ -568,17 +283,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigateByUrl("/new");
     }
-  }
-
-  private setInitialWindow(date: Date, mins: number): void {
-
-    const eDate = (date || this.startDate).getMinutes() + mins;
-
-    setTimeout(() => {
-      const endDate = new Date(this.startDate.valueOf() as number + Math.max(eDate, 3) * 60 * 1000);
-      this.visTimelineService.setWindow(this.visTimeline, this.startDate, endDate, { animation: false });
-      this.visTimelineService.setWindow(this.visTimelineBoss, this.startDate, endDate, { animation: false });
-    });
   }
 
   saveBoss(): void {
@@ -635,21 +339,97 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.dialogService.openSettings();
   }
 
-  undo(): void {
+  onUndo(): void {
 
     this.fightLineController.undo();
     this.fightHubService.sendCommand(this.fightId, "", { name: "undo" });
     this.refreshSidePanel();
-    this.refresh();
+    this.planArea.refresh();
 
   }
 
-  redo(): void {
+  onRedo(): void {
     this.fightLineController.redo();
     this.fightHubService.sendCommand(this.fightId, "", { name: "redo" });
     this.sidepanel.refresh();
     this.refreshSidePanel();
-    this.refresh();
+    this.planArea.refresh();
+  }
+
+
+  private startNew(fractionParam) {
+    let fraction = null;
+    if (this.gameService.fractions) {
+      fraction = this.gameService.fractions.find(it => it.name === fractionParam);
+    }
+    this.fightLineController.fraction = fraction;
+    this.toolbar.fraction = fraction;
+    const settings = this.settingsService.load();
+    this.toolbar.setSettings(settings);
+    if (settings && settings.main && settings.main.defaultView)
+      this.fightLineController.applyView(settings.main.defaultView);
+    if (settings && settings.main && settings.main.defaultFilter)
+      this.fightLineController.applyFilter(settings.main.defaultFilter);
+
+    this.fightService.newFight(this.fightLineController.fraction ? this.fightLineController.fraction.name : "")
+      .subscribe(value => {
+        this.fightId = value.id;
+        this.location.replaceState("/" + value.id);
+        this.startSession();
+      },
+        error => {
+          console.log((error));
+          this.notification.error("Unable to start");
+        });
+  }
+
+  private loadFight(id) {
+    this.fightId = id;
+    this.dialogService.executeWithLoading(ref => {
+      this.fightService
+        .getFight(id)
+        .subscribe((fight: M.IFight) => {
+          if (fight) {
+            this.recent.register(fight.name, "/" + id.toLowerCase());
+
+            if (fight.data) {
+              const data = JSON.parse(fight.data) as SerializeController.IFightSerializeData;
+              if (data.view)
+                this.toolbar.view.set(data.view);
+              if (data.filter)
+                this.toolbar.filter.set(data.filter);
+            }
+
+            const fraction = this.gameService.extractFraction(fight.game);
+
+            this.fightLineController.fraction = fraction;
+            this.toolbar.fraction = fraction;
+            this.fightLineController.loadFight(fight);
+            this.fightService.getCommands(this.fightId, new Date(fight.dateModified).valueOf())
+              .subscribe(value => {
+                for (var cmd of value) {
+                  this.handleRemoteCommand(JSON.parse(cmd.data), "");
+                }
+                this.planArea.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
+                this.connectToSession().then(() => {
+                  this.planArea.refresh();
+                  ref.close();
+                });
+              },
+                error => {
+                  console.log(error);
+                  this.notification.error("Unable to load data");
+                  ref.close();
+                });
+          } else {
+            ref.close();
+          }
+        },
+          () => {
+            this.notification.showUnableToLoadFight(() => {});
+            ref.close();
+          });
+    });
   }
 
   private onStart(r: any): void {
@@ -657,102 +437,31 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.showHelpForFirstTimers().then(() => {
       this.showWhatsNew().then(() => {
         const id = r["fightId"];
-        if (id === "new" || id === "dummy") {
-          let fraction = null;
-          if (this.gameService.fractions) {
-            fraction = this.gameService.fractions.find(it => it.name === r["fraction"]);
-          }
-          this.fightLineController.fraction = fraction;
-          this.toolbar.fraction = fraction;
-          const settings = this.settingsService.load();
-          this.onBossDownTimeChanged(false);
-
-          this.toolbar.setSettings(settings);
-          if (settings && settings.main && settings.main.defaultView)
-            this.fightLineController.applyView(settings.main.defaultView);
-          if (settings && settings.main && settings.main.defaultFilter)
-            this.fightLineController.applyFilter(settings.main.defaultFilter);
-
-          this.fightService.newFight(this.fightLineController.fraction ? this.fightLineController.fraction.name : "")
-            .subscribe(value => {
-              this.fightId = value.id;
-              this.location.replaceState("/" + value.id);
-              this.startSession();
-            },
-              error => {
-                console.log((error));
-                this.notification.error("Unable to start");
-              });
-          return;
-        }
         if (id) {
-          this.fightId = id;
-          this.dialogService.executeWithLoading(ref => {
-            this.fightService
-              .getFight(id)
-              .subscribe((fight: M.IFight) => {
-                if (fight) {
-                  this.recent.register(fight.name, "/" + id.toLowerCase());
-                  if (fight.data) {
-                    const data = JSON.parse(fight.data) as SerializeController.IFightSerializeData;
-                    if (data.view)
-                      this.toolbar.view.set(data.view);
-                    if (data.filter)
-                      this.toolbar.filter.set(data.filter);
-                  }
-
-                  const fraction = this.gameService.extractFraction(fight.game);
-
-                  this.fightLineController.fraction = fraction;
-                  this.toolbar.fraction = fraction;
-                  this.fightLineController.loadFight(fight);
-                  this.fightService.getCommands(this.fightId, new Date(fight.dateModified).valueOf())
-                    .subscribe(value => {
-                      for (var cmd of value) {
-                        this.handleRemoteCommand(JSON.parse(cmd.data), "");
-                      }
-                      this.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
-                      this.connectToSession().then(() => {
-                        this.refresh();
-                        ref.close();
-                      });
-                    },
-                      error => {
-                        console.log(error);
-                        this.notification.error("Unable to load data");
-                        ref.close();
-                      });
-                } else {
-                  ref.close();
-                }
-              },
-                () => {
-                  this.notification.showUnableToLoadFight(() => this.router.navigateByUrl("/"));
-                  ref.close();
-                });
-          });
-
+          if (id === "new" || id === "dummy") {
+            this.startNew(r["fraction"]);
+          } else {
+            this.loadFight(id);
+          }
         } else {
           const boss = r["boss"];
           if (boss) {
             this.loadBoss(boss);
-            return;
-          }
-
-          const code = r["code"];
-          if (code) {
-            this.fflogsCode = code;
-            const enc = r["fight"];
-            if (enc) {
-              this.loadFFLogsData(code, Number.parseInt(enc));
-            } else {
-              this.importFromFFLogs(code);
+          } else {
+            const code = r["code"];
+            if (code) {
+              this.fflogsCode = code;
+              const enc = r["fight"];
+              if (enc) {
+                this.loadFFLogsData(code, Number.parseInt(enc));
+              } else {
+                this.importFromFFLogs(code);
+              }
             }
           }
         }
       });
     });
-
   }
 
   loadBoss(bossId: string) {
@@ -774,8 +483,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
               this.fightLineController.applyFilter(settings.main.defaultFilter);
 
               this.fightLineController.loadBoss(bossData);
-              this.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
-              this.refresh();
+              this.planArea.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
+              this.planArea.refresh();
               ref.close();
             });
           },
@@ -805,9 +514,42 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.visStorage.clear();
+    this.fightLineController = new FightTimeLineController(
+      this.startDate,
+      this.idgen,
+      this.visStorage.playerContainer,
+      this.visStorage.bossContainer,
+      {
+        openBossAttackAddDialog: this.openBossAttackAddDialog.bind(this),
+        openAbilityEditDialog: this.openAbilityEditDialog.bind(this),
+        openStanceSelector: this.openStanceSelector.bind(this)
+      },
+      this.gameService,
+      this.settingsService
+    );
+
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = "reload";
+    this.fightLineController.downtimeChanged.subscribe(() => {
+      this.toolsManager.refresh();
+    });
+    this.fightLineController.commandExecuted.subscribe((data: ICommandData) => {
+      this.fightHubService.sendCommand(this.fightId, "", data);
+      this.refreshSidePanel();;
+    });
+    this.fightHubService.usersChanged.subscribe(() => {
+      console.log(this.fightHubService.users);
+    });
+    this.subscribeToDispatcher(this.dispatcher);
+
     this.route.params.subscribe(r => {
       setTimeout(() => { this.onStart(r); });
     });
+
+    this.toolsManager.register(new DowntimeTool(this.planArea, this.fightLineController));
+    this.toolsManager.register(new CopyPasteTool(this.fightLineController));
+    //    this.toolsManager.register(new StickyAttacksTool(this.fightLineController));
   }
 
   startSession(): Promise<void> {
@@ -849,10 +591,10 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     if (data.name === "undo") {
       this.fightLineController.undo();
-      this.refresh();
+      this.planArea.refresh();
     } else if (data.name === "redo") {
       this.fightLineController.redo();
-      this.refresh();
+      this.planArea.refresh();
     } else {
       this.fightLineController.execute(data);
     }
@@ -902,20 +644,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.visTimelineService.off(this.visTimeline, "click");
-    this.visTimelineService.off(this.visTimeline, "doubleClick");
-    this.visTimelineService.off(this.visTimelineBoss, "click");
-    this.visTimelineService.off(this.visTimelineBoss, "doubleClick");
-    this.visTimelineService.off(this.visTimeline, "contextmenu");
-    this.visTimelineService.off(this.visTimeline, "select");
-    this.visTimelineService.off(this.visTimelineBoss, "select");
-    this.visTimelineService.off(this.visTimeline, "timechanged");
-    this.visTimelineService.off(this.visTimeline, "timechange");
-    this.visTimelineService.off(this.visTimeline, "rangechange");
-    this.visTimelineService.off(this.visTimelineBoss, "rangechange");
-
-    this.visTimelineService.destroy(this.visTimeline);
-    this.visTimelineService.destroy(this.visTimelineBoss);
     this.subs.forEach(s => s.unsubscribe());
     this.stopSession();
     this.dispatcher.destroy();
@@ -949,32 +677,22 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   private subscribeToDispatcher(dispatcher: S.DispatcherService) {
     dispatcher.on("SidePanel Similar Click").subscribe(value => {
-      this.visTimelineService.setSelectionToId(this.visTimelineBoss, value);
-      this.setSelectionOfBossAttacks([value]);
+      this.planArea.selectBossAttaks([value]);
       this.fightLineController.notifySelect("enemy", [value]);
-      this.visTimelineService.focusOnId(this.visTimelineBoss, value, { animation: false });
-      const w = this.visTimelineService.getWindow(this.visTimelineBoss);
-      this.visTimelineService.setWindow(this.visTimeline, w.start, w.end, { animation: false });
       this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());
     });
     dispatcher.on("SidePanel Similar All Click").subscribe(value => {
-      this.visTimelineService.setSelectionToIds(this.visTimelineBoss, value);
-      this.setSelectionOfBossAttacks(value);
+      this.planArea.selectBossAttaks(value);
       this.fightLineController.notifySelect("enemy", value);
-      this.visTimelineService.focusOnIds(this.visTimelineBoss, value, { animation: false });
-      const w = this.visTimelineService.getWindow(this.visTimelineBoss);
-      this.visTimelineService.setWindow(this.visTimeline, w.start, w.end, { animation: false });
       this.sidepanel.setItems(this.fightLineController.getItems(value), this.fightLineController.getHolders());
     });
 
     dispatcher.on("SidePanel Ability Click").subscribe(value => {
-      this.visTimelineService.setSelectionToId(this.visTimeline, value);
-      this.visTimelineService.setSelectionToId(this.visTimelineBoss, value);
-      this.setSelectionOfBossAttacks([]);
+
+
+
+      this.planArea.selectAbilities([value]);
       this.fightLineController.notifySelect("friend", [value]);
-      this.visTimelineService.focusOnId(this.visTimeline, value, { animation: false });
-      const w = this.visTimelineService.getWindow(this.visTimeline);
-      this.visTimelineService.setWindow(this.visTimelineBoss, w.start, w.end, { animation: false });
       this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());
     });
 
@@ -1048,7 +766,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     dispatcher.on("SettingsUpdate").subscribe(value => {
       this.fightLineController.colorSettings = this.settingsService.load().colors;
-      this.refresh();
+      this.planArea.refresh();
     });
 
     dispatcher.on("SidePanel Remove Job").subscribe(value => {

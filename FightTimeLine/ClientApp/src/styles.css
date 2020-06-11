@@ -242,17 +242,17 @@ sidepanel nz-space {
   min-width: 173px !important;
 }
 
-fightline .vis-label.vis-group-level-0 {
+planArea .vis-label.vis-group-level-0 {
   height: 23px;
   padding-left: 0px !important;
   min-width: 168px !important;
 }
 
-fightline .vis-label.vis-group-level-0 .vis-inner {
-  width: 100%
-}
+planarea .vis-label.vis-group-level-0 .vis-inner {
+    width: 100%
+  }
 
-  fightline .vis-label.vis-group-level-0.selected {
+planarea .vis-label.vis-group-level-0.selected {
     background-color: #fff785;
   }
 
@@ -265,7 +265,7 @@ fightline .vis-label.vis-group-level-0 .vis-inner {
 }
 
 
-fightline .vis-label.boss .vis-inner {
+planarea .vis-label.boss .vis-inner {
   font-size: 35px !important;
   padding: 1px !important;
   padding-left: 2px !important;
@@ -326,11 +326,11 @@ fightline .vis-label.boss .vis-inner {
     z-index: 2;
   }
 
-fightline .vis-item.vis-dot.bossAttack {
+planarea .vis-item.vis-dot.bossAttack {
   visibility: hidden !important;
 }
 
-fightline .vis-labelset .vis-label .vis-inner.vis-hidden {
+planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
   padding: 0;
   min-width: 168px !important;
 }

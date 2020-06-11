@@ -12,6 +12,7 @@ import { ScreenNotificationsService } from "./ScreenNotificationsService"
 import { LocalStorageService } from "./LocalStorageService"
 import { DispatcherService } from "./dispatcher.service"
 import { ChangeNotesService, IChahgeNote } from "./changeNotes.service"
+import { VisStorageService, ITimelineContainer } from "./VisStorageService"
 import { FightHubService, IConnectToSessionHandlers, IStartSessionHandlers } from "./FightHubService"
 import * as Gameserviceprovider from "./game.service-provider";
 
@@ -35,7 +36,10 @@ export {
   fightServiceToken,
   FightHubService,
   IChahgeNote,
-  ChangeNotesService
+  ChangeNotesService,
+  VisStorageService,
+  ITimelineContainer
+
 }
 
 export const ServicesModuleComponents =
@@ -53,6 +57,7 @@ export const ServicesModuleComponents =
     ChangeNotesService,
     authenticationServiceProvider,
     fightServiceProvider,
-    Gameserviceprovider.gameServiceProvider
+    Gameserviceprovider.gameServiceProvider,
+    VisStorageService
   ];
 
