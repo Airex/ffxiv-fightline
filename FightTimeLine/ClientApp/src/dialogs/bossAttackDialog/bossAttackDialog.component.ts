@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild, Inject } from "@angular/core";
 import { SyncSettingsComponent } from "./syncSettings/syncSettings.component"
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms"
 import * as M from "../../core/Models";
-import { Time } from "../../heplers/TimeValidator";
+import { time } from "../../heplers/TimeValidator";
 import { NzModalRef } from "ng-zorro-antd";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
@@ -42,7 +42,7 @@ export class BossAttackDialog implements OnInit {
       share: new FormControl(this.data.isShareDamage),
       description: new FormControl(this.data.description)
     }, {
-        validator: Time('bossAttackTime')
+        validator: time('bossAttackTime')
       });
   }
 

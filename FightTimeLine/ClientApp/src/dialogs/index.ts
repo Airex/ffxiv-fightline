@@ -9,7 +9,6 @@ import { HelpDialog } from "./helpDialog/helpDialog.component"
 import { LoadingDialog } from "./loadingDialog/loadingDialog.component"
 import { LoginDialog } from "./loginDialog/loginDialog.component"
 import { RegisterDialog } from "./registerDialog/registerDialog.component"
-import { SessionCreateResultDialog } from "./sessionCreateResultDialog/sessionCreateResultDialog.component"
 import { SettingsDialog } from "./settingsDialog/settingsDialog.component"
 import { TableViewDialog } from "./tableViewDialog/tableViewDialog.component"
 import { WhatsNewDialog } from "./whatsNewDialog/whatsNewDialog.component"
@@ -28,7 +27,7 @@ export {
   LoadingDialog,
   LoginDialog,
   RegisterDialog,
-  SessionCreateResultDialog,
+  
   SettingsDialog,
   TableViewDialog,
   WhatsNewDialog,
@@ -49,7 +48,6 @@ export const DialogsModuleComponents =
     LoadingDialog,
     LoginDialog,
     RegisterDialog,
-    SessionCreateResultDialog,
     ExportToTableDialog,
     TableViewDialog,
     BossTemplatesDialog,

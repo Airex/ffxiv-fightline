@@ -11,26 +11,28 @@
           Main
         </nz-badge>
       </ng-template>
-      <form nz-form [formGroup]="editForm">
-        <nz-form-item [nzGutter]="24">
-          <nz-form-control nzSpan="10" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.bossAttackName.errors?'error':'success'">
+      <form nz-form [formGroup]="editForm" [nzGutter]="24">
+        <nz-form-item >
+          <nz-form-control nzSpan="12" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.bossAttackName.errors?'error':'success'" nzErrorTip="You must enter a value">
             <input nz-input formControlName="bossAttackName" placeholder="Attack name">
-            <!-- <nz-form-explain *ngIf="submitted && f.bossAttackName.errors && f.bossAttackName.errors.required">You must enter a value</nz-form-explain> -->
           </nz-form-control>
-          <nz-form-control nzSpan="10" [nzValidateStatus]="submitted && f.damageType.errors?'error':'success'">
+        </nz-form-item>
+        <nz-form-item >
+          <nz-form-control nzSpan="12" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.damageType.errors?'error':'success'" nzErrorTip="You must select a value">
             <nz-radio-group formControlName="damageType" nzPlaceHolder="Damage type" [nzButtonStyle]="'solid'">
               <label nz-radio-button [nzValue]="0" nzLabel="None">None</label>
               <label nz-radio-button [nzValue]="1" nzLabel="Physical">Physical</label>
               <label nz-radio-button [nzValue]="2" nzLabel="Magical">Magical</label>
             </nz-radio-group>
-            <!-- <nz-form-explain *ngIf="submitted && f.damageType.errors && f.damageType.errors.required">You must select a value</nz-form-explain> -->
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-control nzSpan="10" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.bossAttackTime.errors?'error':'success'">
+          <nz-form-control nzSpan="6" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.bossAttackTime.errors?'error':'success'" [nzErrorTip]="combineTpl">
             <input nz-input wheelOn formControlName="bossAttackTime" placeholder="Time" [ngClass]="{ 'is-invalid': submitted && f.bossAttackTime.errors}">
-            <!-- <nz-form-explain *ngIf="submitted && f.bossAttackTime.errors && f.bossAttackTime.errors.required">You must enter a value</nz-form-explain> -->
-            <!-- <nz-form-explain *ngIf="submitted && f.bossAttackTime.errors && f.bossAttackTime.errors.time">You must enter a value in format mm:ss</nz-form-explain> -->
+            <ng-template #combineTpl let-control>
+              <ng-container *ngIf="submitted && f.bossAttackTime.errors && f.bossAttackTime.errors.time">You must enter a value in format mm:ss</ng-container>
+              <ng-container *ngIf="submitted && f.bossAttackTime.errors && f.bossAttackTime.errors.required">Input is required</ng-container>
+            </ng-template>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>

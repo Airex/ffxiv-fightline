@@ -1,9 +1,8 @@
 <div mat-dialog-content style="height: 70px;">
   <form nz-form>
     <nz-form-item>
-      <nz-form-control nzHasFeedback [nzValidateStatus]="submitted && fightNameControl.errors && fightNameControl.errors.required?'error':''">
+      <nz-form-control nzHasFeedback [nzValidateStatus]="submitted && fightNameControl.errors && fightNameControl.errors.required?'error':''" nzErrorTip="You must enter a value">
         <input name="fightName" required nz-input placeholder="Fight name" [formControl]="fightNameControl" [(ngModel)]="data.name" />
-        <!-- <nz-form-explain *ngIf="submitted && fightNameControl.errors && fightNameControl.errors.required">You must enter a value</nz-form-explain> -->
       </nz-form-control>
     </nz-form-item>
   </form>

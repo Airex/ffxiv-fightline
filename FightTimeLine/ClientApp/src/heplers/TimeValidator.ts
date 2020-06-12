@@ -2,7 +2,7 @@
 import { FormGroup } from '@angular/forms';
 
 // custom validator to check that two fields match
-export function Time(controlName: string) {
+export function time(controlName: string) {
   return (formGroup: FormGroup) => {
     const control = formGroup.controls[controlName];
 

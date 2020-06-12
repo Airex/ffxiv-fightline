@@ -1,15 +1,13 @@
 <div style="height: 215px">
   <form nz-form [formGroup]="loginForm">
     <nz-form-item>
-      <nz-form-control>
-        <input nz-input type="text" formControlName="username" placeholder="Username" />
-        <!-- <nz-form-explain *ngIf="submitted && f.username.errors && f.username.errors.required">Username is required</nz-form-explain> -->
+      <nz-form-control nzErrorTip="Username is required">
+        <input nz-input type="text" formControlName="username" placeholder="Username"  />
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-control>
+      <nz-form-control nzErrorTip="Password is required">
         <input nz-input type="password" formControlName="password" placeholder="Password" />
-        <!-- <nz-form-explain *ngIf="submitted && f.password.errors && f.password.errors.required">Password is required</nz-form-explain> -->
       </nz-form-control>
     </nz-form-item>
     <div>

@@ -1,9 +1,9 @@
-import { Injectable, Inject } from "@angular/core"
+import { Injectable} from "@angular/core"
 import { IBossAbility, IAbilitySetting, IAbilitySettingData, IFight, IAbility, IBoss, IFraction } from "../core/Models";
 import { LocalStorageService } from "./LocalStorageService";
-import { NzModalRef, NzModalService, NzModalState } from 'ng-zorro-antd';
+import {NzModalService, NzModalState } from 'ng-zorro-antd';
 import { Observable } from "rxjs";
-import * as D from "../dialogs/index"
+import * as D from "../dialogs"
 
 @Injectable({
   providedIn: 'root'
@@ -246,22 +246,6 @@ export class DialogService {
       loadingDialogRef.afterOpen.subscribe(() => {
         action({ close: () => loadingDialogRef.destroy() });
       });
-    });
-  }
-
-  openSessionUrl(key: string) {
-    this.dialogs.create({
-      nzWrapClassName: "vertical-center-modal",
-      nzContent: D.SessionCreateResultDialog,
-      nzTitle: null,
-      nzWidth: 700,
-      nzClosable: false,
-      nzKeyboard: false,
-      nzOkDisabled: true,
-      nzMaskClosable: false,
-      nzComponentParams: {
-        data: document.getElementsByTagName("base")[0].href + "session/" + key
-      }
     });
   }
 
