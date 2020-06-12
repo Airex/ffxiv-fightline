@@ -29,6 +29,10 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
     this.isSameName = this.items.map((value) => value.attack.name).filter(distinct).length <= 1;
   }
 
+  refresh() {
+
+  }
+
   ngOnInit(): void {
      
   }

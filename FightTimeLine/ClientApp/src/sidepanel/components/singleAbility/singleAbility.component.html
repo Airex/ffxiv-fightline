@@ -15,7 +15,35 @@
       </div>
     </sidepanel-area>
   </nz-space-item>
-  <nz-space-item *ngIf=" it.ability.ability.settings && it.ability.ability.settings.length > 0">
-    <button nz-button nzType="primary" (click)="settings(it)">Settings</button>
+  <nz-space-item *ngIf="it.ability.ability.settings && it.ability.ability.settings.length > 0">
+    <sidepanel-area header="Settings">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+        <nz-form-item *ngFor="let setting of it.ability.ability.settings">
+          <nz-form-label [nzFor]="setting.name">{{setting.displayName}}<i nz-icon nzType="info-circle" theme="twotone" style="margin-left: 8px" nz-tooltip [nzTooltipTitle]="setting.description"></i></nz-form-label>
+          <nz-form-control>
+            <div [ngSwitch]="setting.type">
+              <div *ngSwitchCase="'boolean'">
+                <nz-switch [formControlName]="setting.name" style="margin-left: 15px" [id]="setting.name" (ngModelChange)="modified=true"></nz-switch>
+              </div>
+              <div *ngSwitchCase="'partyMember'">
+                <nz-select [formControlName]="setting.name" [id]="setting.name" [nzPlaceHolder]="setting.displayName" (ngModelChange)="modified=true">
+                  <nz-option nzValue="" nzLabel="None"></nz-option>
+                  <nz-option *ngFor="let j of jobs" [nzValue]="j.id" [nzLabel]="j.job.name+' '+(j.actorName || '')"></nz-option>
+                </nz-select>
+              </div>
+            </div>
+            
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item *ngIf="modified">
+          <nz-form-control>
+            <button nz-button nzType="" (click)="saveSettings(it);modified=false;">Save</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </sidepanel-area>
+  </nz-space-item>
+  <nz-space-item *ngIf="it.ability.ability.settings && it.ability.ability.settings.length > 0">
+    
   </nz-space-item>
 </nz-space>

@@ -29,6 +29,10 @@ export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelCo
     this.isSameGroup = this.items.map((value) => value.item.group).filter(distinct).length <= 1;
   }
 
+  refresh() {
+
+  }
+
   ngOnInit(): void {
 
   }

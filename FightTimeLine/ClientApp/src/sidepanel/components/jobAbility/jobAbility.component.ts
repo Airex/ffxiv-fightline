@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ISidePanelComponent } from "../ISidePanelComponent"
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { ISidePanelComponent,SidepanelParams, SIDEPANEL_DATA } from "../ISidePanelComponent"
 import * as M from "../../../core/Models"
 import * as S from "../../../services/index"
-import { Utils } from "../../../core/Utils"
 import { Holders } from "../../../core/Holders";
 import { AbilityMap } from "../../../core/Maps/index";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -21,8 +20,16 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
   items: any[];
   holders: Holders;
 
-  constructor(private xivapi: X.XivapiService, private sanitizer: DomSanitizer, private dispatcher: S.DispatcherService) {
-
+  constructor(
+    private xivapi: X.XivapiService,
+    private sanitizer: DomSanitizer,
+    private dispatcher: S.DispatcherService,
+    @Inject(SIDEPANEL_DATA) private data: SidepanelParams
+    ) {
+    this.items = this.data.items;
+    this.holders = this.data.holders;
+    this.refresh();
+   
   }
 
   get it(): AbilityMap {
@@ -47,23 +54,7 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     return X.XivapiEndpoint.Action;
   }
 
-  setItems(items: any[], holders: Holders): void {
-    this.items = items;
-    this.holders = holders;
-
-    this.compactView = this.it.isCompact;
-
-    if (this.ability.xivDbId) {
-      this.xivapi.get(this.getEndpoint(this.ability.xivDbType), Number(this.ability.xivDbId)).subscribe(a => {
-        if (a && a.Description) {
-          this.description =
-            this.sanitizer.bypassSecurityTrustHtml(a.Description.replace(new RegExp("\\n+", "g"), "<br/>"));
-        } else {
-          this.description = "";
-        }
-      });
-    }
-  }
+  
 
   compact(value) {
     setTimeout(() => {
@@ -89,7 +80,20 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     });
   }
 
+  refresh() {
+    this.compactView = this.it.isCompact;
 
+    if (this.ability.xivDbId) {
+      this.xivapi.get(this.getEndpoint(this.ability.xivDbType), Number(this.ability.xivDbId)).subscribe(a => {
+        if (a && a.Description) {
+          this.description =
+            this.sanitizer.bypassSecurityTrustHtml(a.Description.replace(new RegExp("\\n+", "g"), "<br/>"));
+        } else {
+          this.description = "";
+        }
+      });
+    }
+  }
 
 
   ngOnInit(): void {

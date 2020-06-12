@@ -1176,6 +1176,10 @@ export class FightTimeLineController {
       this.view);
     return ctr;
   }
+
+  updateAbilitySettings(id, settings) {
+    this.commandStorage.execute(new C.ChangeAbilitySettingsCommand(id, settings));
+  }
 }
 
 

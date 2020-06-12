@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ISidePanelComponent } from "../ISidePanelComponent"
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { ISidePanelComponent, SidepanelParams, SIDEPANEL_DATA } from "../ISidePanelComponent"
 import * as M from "../../../core/Models"
 import * as S from "../../../services/index"
 import { Holders } from "../../../core/Holders";
@@ -21,8 +21,14 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
   jobFilter: M.IAbilityFilter;
 
 
-  constructor(private dispatcher: S.DispatcherService) {
-
+  constructor(
+    private dispatcher: S.DispatcherService,
+    @Inject(SIDEPANEL_DATA) private data: SidepanelParams
+  ) {
+    this.items = this.data.items;
+    this.holders = this.data.holders;
+    this.refresh();
+   
   }
 
   get it(): JobMap {
@@ -31,15 +37,6 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
 
   getType(id: number): string {
     return M.DamageType[id];
-  }
-
-  setItems(items: any[], holders: Holders): void {
-    this.items = items;
-    this.holders = holders;
-    this.compactView = this.it.isCompact;
-
-    this.jobFilter = this.it.filter;
-    this.hiddenAbilities = this.holders.abilities.getByParentId(this.it.id).filter(t => t.hidden);
   }
 
   compact(value) {
@@ -57,6 +54,12 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
     });
   }
 
+  refresh() {
+    this.compactView = this.it.isCompact;
+
+    this.jobFilter = this.it.filter;
+    this.hiddenAbilities = this.holders.abilities.getByParentId(this.it.id).filter(t => t.hidden);
+  }
 
 
   remove(job: JobMap) {

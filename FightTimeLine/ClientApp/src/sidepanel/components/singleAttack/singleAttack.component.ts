@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ISidePanelComponent } from "../ISidePanelComponent"
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { ISidePanelComponent,SidepanelParams,SIDEPANEL_DATA } from "../ISidePanelComponent"
 import * as M from "../../../core/Models"
 import * as S from "../../../services/index"
 import { Utils } from "../../../core/Utils"
@@ -20,8 +20,13 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   items: any[];
   holders: Holders;
 
-  constructor(private dispatcher: S.DispatcherService) {
-
+  constructor(
+    private dispatcher: S.DispatcherService,
+    @Inject(SIDEPANEL_DATA) private data: SidepanelParams
+  ) {
+    this.items = this.data.items;
+    this.holders = this.data.holders;
+   this.refresh();
   }
 
   get it(): BossAttackMap {
@@ -37,15 +42,6 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
       name: "SidePanel Attack Copy",
       payload: value.id
     });
-  }
-
-  setItems(items: any[], holders: Holders): void {
-    this.items = items;
-    this.holders = holders;
-    this.defs = this.calculateDefs();
-    this.similar = this.holders.bossAttacks.filter(it => it.attack.name === this.it.attack.name && it.id !== this.it.id);
-    
-    
   }
 
   calculateDefs() {
@@ -98,6 +94,11 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
       name: "SidePanel Ability Click",
       payload: val.id
     });
+  }
+
+  refresh() {
+    this.defs = this.calculateDefs();
+    this.similar = this.holders.bossAttacks.filter(it => it.attack.name === this.it.attack.name && it.id !== this.it.id);
   }
 
   ngOnInit(): void {

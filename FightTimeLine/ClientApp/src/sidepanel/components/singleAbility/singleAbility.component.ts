@@ -1,5 +1,6 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { ISidePanelComponent } from "../ISidePanelComponent"
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
+import { ISidePanelComponent, SidepanelParams, SIDEPANEL_DATA } from "../ISidePanelComponent"
 import * as M from "../../../core/Models"
 import * as X from "@xivapi/angular-client"
 import { Utils } from "../../../core/Utils"
@@ -7,7 +8,6 @@ import { DomSanitizer } from "@angular/platform-browser";
 import * as S from "../../../services/index"
 import * as Shared from "../../../core/Jobs/FFXIV/shared";
 import {AbilityUsageMap, JobStanceMap} from "../../../core/Maps/index";
-import { Holders } from "../../../core/Holders";
 
 
 @Component({
@@ -17,10 +17,45 @@ import { Holders } from "../../../core/Holders";
 })
 export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComponent {
 
+  form: FormGroup;
   description: any;
   ptyMemUsages: any[];
-  constructor(private xivapi: X.XivapiService, private sanitizer: DomSanitizer, private dispatcher: S.DispatcherService) {
+  jobs;
+  modified = false;
+  constructor(
+    private xivapi: X.XivapiService,
+    private sanitizer: DomSanitizer,
+    private dispatcher: S.DispatcherService,
+    @Inject(SIDEPANEL_DATA) private data: SidepanelParams
+  ) {
 
+    this.items = this.data.items;
+
+    const groups = {};
+
+    if (this.ability.xivDbId) {
+      this.xivapi.get(this.getEndpoint(this.ability.xivDbType), Number(this.ability.xivDbId)).subscribe(a => {
+        if (a && a.Description) {
+          this.description =
+            this.sanitizer.bypassSecurityTrustHtml(a.Description.replace(new RegExp("\\n+", "g"), "<br/>"));
+        } else {
+          this.description = "";
+        }
+      });
+    }
+
+   
+    if (this.it.ability.ability.settings) {
+      for (let d of this.it.ability.ability.settings) {
+        const value = this.it.settings && this.it.settings.find((it) => it.name === d.name);
+        groups[d.name] = new FormControl(value ? value.value : d.default)
+      }
+      this.jobs = this.data.holders.jobs.getAll();
+    }
+
+    this.form = new FormGroup(groups);
+
+    this.refresh();
   }
 
   items: any[];
@@ -36,36 +71,6 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     return ability;
   }
 
-  setItems(items: any[], holders: Holders): void {
-    this.items = items;
-
-    if (this.ability.xivDbId) {
-      this.xivapi.get(this.getEndpoint(this.ability.xivDbType), Number(this.ability.xivDbId)).subscribe(a => {
-        if (a && a.Description) {
-          this.description =
-            this.sanitizer.bypassSecurityTrustHtml(a.Description.replace(new RegExp("\\n+", "g"), "<br/>"));
-        } else {
-          this.description = "";
-        }
-      });
-    }
-
-    const setting = !this.it.ability.isStance && this.it.getSetting(Shared.settings.target.name);
-    if (setting) {
-      this.ptyMemUsages = holders.itemUsages.getByAbility(this.it.ability.id).map(it => {
-        const data = it.getSettingData(setting.name);
-        const job = data && data.value && holders.jobs.get(data.value);
-        const string = job && job.actorName;
-        return {
-          id: it.id,
-          offset: Utils.formatTime(it.start),
-          icon: job && job.job && job.job.icon,
-          target: string
-        };
-      });
-    }
-  }
-
   similarClick(val: any) {
     this.dispatcher.dispatch({
       name: "SidePanel Ability Click",
@@ -73,11 +78,23 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     });
   }
 
-  settings() {
+  saveSettings() {
+
+    const settings = new Array<M.IAbilitySettingData>();
+
+    const controls = this.form.controls;
+    for (let d in controls) {
+      if (controls.hasOwnProperty(d)) {
+        const control = controls[d];
+        settings.push({ name: d, value: control.value });
+      }
+    }
+
     this.dispatcher.dispatch({
-      name: "SidePanel Ability Settings",
+      name: "SidePanel Ability Save Settings",
       payload: {
-        id: this.it.id
+        id: this.it.id,
+        settings: settings
       }
     });
   }
@@ -89,6 +106,32 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
       default:
     }
     return X.XivapiEndpoint.Action;
+  }
+
+  refresh() {
+    const setting = !this.it.ability.isStance && this.it.getSetting(Shared.settings.target.name);
+    if (setting) {
+      this.ptyMemUsages = this.data.holders.itemUsages.getByAbility(this.it.ability.id).map(it => {
+        const s = it.getSettingData(setting.name);
+        const job = s && s.value && this.data.holders.jobs.get(s.value);
+        const string = job && job.actorName;
+        return {
+          id: it.id,
+          offset: Utils.formatTime(it.start),
+          icon: job && job.job && job.job.icon,
+          target: string
+        };
+      }); 
+    }
+
+    if (this.it.ability.ability.settings) {
+      for (let d of this.it.ability.ability.settings) {
+        const value = this.it.settings && this.it.settings.find((it) => it.name === d.name);
+        this.form.controls[d.name].setValue(value ? value.value : d.default);
+      }
+      this.jobs = this.data.holders.jobs.getAll();
+      this.modified = false;
+    }
   }
 
   ngOnInit(): void {

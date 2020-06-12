@@ -790,6 +790,10 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.fightLineController.editAbility(value.id);
     });
 
+    dispatcher.on("SidePanel Ability Save Settings").subscribe(value => {
+      this.fightLineController.updateAbilitySettings(value.id, value.settings);
+    });
+
     dispatcher.on("SidePanel Hide Job Ability").subscribe(value => {
       this.fightLineController.hideAbility(value);
       this.setSidePanel(null);
