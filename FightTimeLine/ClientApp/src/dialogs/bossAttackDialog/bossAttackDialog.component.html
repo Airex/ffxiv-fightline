@@ -34,6 +34,9 @@
               <ng-container *ngIf="submitted && f.bossAttackTime.errors && f.bossAttackTime.errors.required">Input is required</ng-container>
             </ng-template>
           </nz-form-control>
+          <nz-form-control>
+            <i nz-icon nzType="info-circle" theme="twotone" style="margin-left: 8px" nz-tooltip nzTooltipTitle="Use mouse wheel to add/sub seconds, hold Ctrl for minutes, hold Shift for 10 seconds"></i>
+          </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-control>
