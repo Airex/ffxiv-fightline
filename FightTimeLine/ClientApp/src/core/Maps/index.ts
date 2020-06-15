@@ -1,6 +1,6 @@
 export {IAbilityMapData, AbilityMap} from "./AbilityMap"
 export {IAbilityAvailabilityMapData, AbilityAvailabilityMap} from "./AbilityAvailabilityMap"
-export {AbilitySelectionMap} from "./AbilitySelectionMap"
+//export {AbilitySelectionMap} from "./AbilitySelectionMap"
 export {IAbilityUsageMapData, AbilityUsageMap} from "./AbilityUsageMap"
 export {IBossAttackMapData, BossAttackMap} from "./BossAttackMap"
 export {BaseMap} from "./BaseMap"

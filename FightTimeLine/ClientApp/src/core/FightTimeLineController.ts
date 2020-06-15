@@ -1,6 +1,6 @@
 import { EventEmitter } from "@angular/core"
 import * as _ from "lodash"
-import { DataItem } from "vis-timeline"
+import { DataItem, IdType } from "vis-timeline"
 import * as Gameserviceinterface from "../services/game.service-interface"
 import { IColorsSettings, SettingsService } from "../services/SettingsService"
 import { ITimelineContainer } from "../services"
@@ -17,7 +17,7 @@ import * as SerializeController from "./SerializeController"
 import { Command, ICommandData, IUpdateOptions, UndoRedoController } from "./UndoRedo"
 import { Utils } from "./Utils"
 import { Holders } from "./Holders";
-import { AbilityMap, AbilitySelectionMap, BossAttackMap, HeatmapMap, JobMap, AbilityUsageMap, BossTargetMap, BossDownTimeMap } from "./Maps/index";
+import { AbilityMap, BossAttackMap, HeatmapMap, JobMap, AbilityUsageMap, BossTargetMap, BossDownTimeMap } from "./Maps";
 import { IMoveable } from "./Holders/BaseHolder";
 
 
@@ -182,7 +182,7 @@ export class FightTimeLineController {
           id: id,
           start: time,
           end: new Date(time.valueOf() as number + map.ability.cooldown * 1000),
-          selectionRegistry: this.holders.selectionRegistry
+          selectionRegistry: null
         }))
           this.commandStorage.execute(new C.AddAbilityCommand(id || this.idgen.getNextId(M.EntryType.AbilityUsage),
             null,
@@ -286,78 +286,35 @@ export class FightTimeLineController {
     } else if (this.idgen.isBossAttack(id)) {
       this.commandBag.push(new C.RemoveBossAttackCommand(id, updateAttacks));
     }
-
-    this.commandBag.evaluate(this.holders.selectionRegistry.length, () => this.holders.selectionRegistry.clear());
   }
 
-  notifyMove(item: DataItem): void {
-    const found = this.holders.selectionRegistry.get(item.id.toString());
-    if (found) {
+  notifyMove(items: DataItem[]): void {
+    items.forEach(item => {
       if (this.idgen.isAbilityUsage(item.id)) {
         this.commandBag.push(new C.MoveCommand(item.id.toString(), item.start as Date));
       } else if (this.idgen.isStanceUsage(item.id)) {
         this.commandBag.push(new C.MoveStanceCommand(item.id.toString(), item.start as Date, item.end as Date));
       } else if (this.idgen.isBossAttack(item.id)) {
-        this.commandBag.push(new C.ChangeBossAttackCommand(item.id.toString(),
-          { offset: Utils.formatTime(new Date(item.start)) },
-          false));
-        if (this.tools.stickyAttacks) {
-          const afterMe = this.holders.bossAttacks.filter(it => it.start >= found.time && it.id !== item.id);
-          this.commandBag.push(new C.CombinedCommand(afterMe.map(it => {
-            return new C.ChangeBossAttackCommand(it.id,
-              {
-                offset: Utils.formatTime(new Date((it.start.valueOf() as number) +
-                  ((item.start.valueOf() as number) - (found.time.valueOf() as number))))
-              },
-              false);
-          })));
-        }
+        this.commandBag.push(new C.ChangeBossAttackCommand(item.id.toString(), { offset: Utils.formatTime(new Date(item.start)) }, false));
+        //        if (this.tools.stickyAttacks) {
+        //          const afterMe = this.holders.bossAttacks.filter(it => it.start >= found.time && it.id !== item.id);
+        //          this.commandBag.push(new C.CombinedCommand(afterMe.map(it => {
+        //            return new C.ChangeBossAttackCommand(it.id,
+        //              {
+        //                offset: Utils.formatTime(new Date((it.start.valueOf() as number) +
+        //                  ((item.start.valueOf() as number) - (found.time.valueOf() as number))))
+        //              },
+        //              false);
+        //          })));
+        //        }
       }
-    }
+    });
 
-    this.commandBag.evaluate(this.holders.selectionRegistry.length);
+    this.commandBag.evaluate();
   }
 
   updateTools(tools: M.ITools): void {
     this.tools = tools;
-  }
-
-  notifySelect(target: string, ids: string[]): void {
-    this.holders.selectionRegistry.clear();
-
-    setTimeout(() => {
-      const all = this.holders.jobs.getAll();
-      all.forEach((it) => {
-        it.applyData({ selected: ids && ids.indexOf(it.id) >= 0 });
-      });
-      this.holders.jobs.update(all);
-      const allt = this.holders.abilities.getAll();
-      allt.forEach((it) => {
-        it.applyData({ selected: ids && ids.indexOf(it.id) >= 0 });
-      });
-      this.holders.abilities.update(allt);
-    }, 1);
-
-    if (!ids) return;
-    switch (target) {
-      case "friend":
-        this.holders.itemUsages.getByIds(ids).forEach((it) => {
-          this.holders.selectionRegistry.add(new AbilitySelectionMap(it.id, it.start));
-        });
-        this.holders.stances.getByIds(ids).forEach((it) => {
-          this.holders.selectionRegistry.add(new AbilitySelectionMap(it.id, it.start));
-        });
-        break;
-      case "boss":
-        this.holders.bossAttacks.getByIds(ids).forEach((it: BossAttackMap) => {
-          this.holders.selectionRegistry.add(new AbilitySelectionMap(it.id, it.start));
-        });
-        break;
-      case "downtime":
-        break;
-      default:
-        break;
-    }
   }
 
   updateAffectedAbilities(ability: M.IAbility): void {
@@ -406,7 +363,7 @@ export class FightTimeLineController {
     }
   }
 
-  canMove(item: DataItem): boolean {
+  canMove(item: DataItem, selection: string[]): boolean {
     const type = this.idgen.getEntryType(item.id);
 
     switch (type) {
@@ -422,7 +379,7 @@ export class FightTimeLineController {
             group: item.group,
             start: new Date(item.start),
             end: new Date(item.end),
-            selectionRegistry: this.holders.selectionRegistry
+            selectionRegistry: selection
           });
       case M.EntryType.StanceUsage:
         const sability = this.holders.abilities.get(item.group).ability;
@@ -435,7 +392,7 @@ export class FightTimeLineController {
             group: item.group,
             start: new Date(item.start),
             end: new Date(item.end),
-            selectionRegistry: this.holders.selectionRegistry
+            selectionRegistry: selection
           });
       case M.EntryType.BossAttack:
         return new Date(item.start) >= this.startDate;
@@ -569,83 +526,6 @@ export class FightTimeLineController {
   getDowntimesAtTime(time: Date): BossDownTimeMap[] {
     return this.holders.bossDownTime.filter((it) => it.checkTime(time));
   }
-
-  getContextMenuItems(event: any): M.IContextMenuData[] {
-    const items: Array<M.IContextMenuData> = [];
-    if (event.what === "background") {
-      const downTimes = this.holders.bossDownTime.filter((it) => it.start <= event.time && it.end >= event.time);
-      if (downTimes && downTimes.length > 0) {
-        items.push(...downTimes.map((it) => <M.IContextMenuData>{
-          text: `Downtime (${Utils.formatTime(it.start as Date)} - ${Utils.formatTime(it.end as Date)})`,
-          item: it,
-          handler: () => {
-            return {
-              remove: (() => this.removeDownTime(it.id)).bind(this),
-              color: ((color) => this.setDownTimeColor(it.id, color)).bind(this)
-            };
-          },
-          isDowntime: true
-        }));
-      }
-      if (this.view.buffmap) {
-        const heatMaps = this.holders.heatMaps.filter((it) => it.start <= event.time && it.end >= event.time);
-        if (heatMaps && heatMaps.length > 0) {
-          items.push(...heatMaps.map((it) => {
-            const id = it.id.toString().match("_(.+)")[1];
-            const item = this.holders.itemUsages.get(id).ability;
-            if (item.hasValue(M.AbilityType.PartyDamageBuff))
-              return <M.IContextMenuData>{
-                text: item.ability.name,
-                item: it,
-                icon: item.ability.icon,
-                handler: () => { }
-              };
-            return null;
-          }).filter((it) => !!it));
-        }
-      }
-
-      if ((event.group === "boss" || event.group === null) && this.copyContainer) {
-        items.push({
-          text: "Paste",
-          item: event.item,
-          handler: () => this.paste(event.time)
-        });
-      }
-    } else if (event.what === "item") {
-      if (event.group === "boss") {
-        items.push({
-          text: "Copy",
-          item: event.item,
-          handler: () => this.copy(event.item)
-        });
-      } else {
-        const stance = this.holders.stances.get(event.item);
-        if (stance) {
-          items.push({
-            text: "Split here",
-            item: event.item,
-            handler: () => this.splitStance(event.item, event.time)
-          });
-          items.push({
-            text: "Fill",
-            item: event.item,
-            handler: () => this.fillStance(event.item)
-          });
-        }
-      }
-    } else if (!event.what) {
-      if (!event.group && this.copyContainer) {
-        items.push({
-          text: "Paste",
-          item: event.item,
-          handler: () => this.paste(event.time)
-        });
-      }
-    }
-    return items;
-  }
-
 
   combineAndExecute(commands: Command[]): void {
     const combined = new C.CombinedCommand(commands);
@@ -794,7 +674,6 @@ export class FightTimeLineController {
     return `<div class="progress-wrapper-fl"><div class="progress-fl-offset" style = "width:${offsetPercentage}%"></div><div class="progress-fl" style="width:${percentage}%;background-color:${color}"> </div></div >`;
   }
 
-
   tooltipOnItemUpdateTime(item: DataItem): any {
     if (this.idgen.isStanceUsage(item.id))
       return Utils.formatTime(item.start as Date) + " - " + Utils.formatTime(item.end as Date);
@@ -802,15 +681,16 @@ export class FightTimeLineController {
     return Utils.formatTime(item.start as Date);
   }
 
-  handleDelete(selected: (string | number)[]): any {
+  handleDelete(selected: (IdType)[]): any {
     const toRemove = [
       ...this.holders.itemUsages.getByIds(selected).map(x => x.id),
       ...this.holders.stances.getByIds(selected).map(x => x.id),
       ...this.holders.bossAttacks.getByIds(selected).map(x => x.id)
     ];
-    for (let r of toRemove.filter(it => !!it)) {
+    for (let r of toRemove) {
       this.notifyRemove(r, false);
     }
+    this.commandBag.evaluate();
   }
 
 
@@ -840,9 +720,9 @@ export class FightTimeLineController {
       this.holders.itemUsages.clear();
       this.holders.heatMaps.clear();
       this.holders.bossTargets.clear();
-      this.holders.selectionRegistry.clear();
+      //      this.holders.selectionRegistry.clear();
       this.commandStorage.clear();
-      this.commandBag.clear();
+      //      this.commandBag.clear();
 
 
       if (data.boss) {
@@ -1088,25 +968,28 @@ export class FightTimeLineController {
     this.holders.bossAttacks.sync(item.id.toString(), new Date(item.start));
   }
 
-  moveSelection(delta: number): void {
-    const items = this.holders.selectionRegistry.getAll();
+  moveSelection(delta: number, selection: string[]): void {
+    const items = selection;
     if (items && items.length) {
-      const ids = items.map(it => it.id);
-      const toMove: (IMoveable & { id: string, start: Date, ability?: AbilityMap, end?: Date })[] = (_.flatten([
-        this.holders.itemUsages.getByIds(ids),
-        this.holders.stances.getByIds(ids),
-        this.holders.bossAttacks.getByIds(ids)
-      ]).filter(it => !!it)) as any;
+      const ids = items;
+      const toMove: (IMoveable & { id: string, start: Date, ability?: AbilityMap, end?: Date })[] = [
+        ...this.holders.itemUsages.getByIds(ids),
+        ...this.holders.stances.getByIds(ids),
+        ...this.holders.bossAttacks.getByIds(ids)
+      ];
 
+      const itom:any[] = [];
       for (let r of toMove) {
         const newDate = new Date(new Date(r.start).valueOf() as number + delta * 1000);
         const newDateEnd = r.end && new Date(new Date(r.end).valueOf() as number + delta * 1000);
-        const item = { id: r.id, start: newDate, end: newDateEnd, group: r.ability && r.ability.id, content: null };
-        if (this.canMove(item)) {
-          r.move(delta); //todo: set to exact date
-          this.notifyMove(item);
+        const item = <DataItem>{ id: r.id, start: newDate, end: newDateEnd, group: r.ability && r.ability.id, content: null };
+        if (this.canMove(item, selection)) {
+          r.move(delta);
+          itom.push(item);
         }
       }
+      if (itom.length)
+        this.notifyMove(itom);
     }
   }
 
@@ -1131,9 +1014,7 @@ export class FightTimeLineController {
       it.applyData({ isCompact: compact != undefined ? compact : !it.isCompact });
 
       const items = this.holders.itemUsages.getByAbility(it.id);
-      items.forEach(a => {
-        a.applyData();
-      });
+      items.forEach(a => { a.applyData();});
       this.holders.itemUsages.update(items);
 
       this.holders.abilities.update([it]);
@@ -1184,20 +1065,7 @@ export class FightTimeLineController {
 
 
 export interface IDialogs {
-  openBossAttackAddDialog: (
-    bossAbility: M.IBossAbility | {},
-    callBack: (b: any) => void)
-    => void;
-  openAbilityEditDialog: (
-    data: {
-      ability: M.IAbility,
-      settings: M.IAbilitySetting[],
-      values: M.IAbilitySettingData[],
-      jobs: JobMap[],
-    },
-    callBack: (b: any) => void)
-    => void;
-  openStanceSelector: (
-    data: M.IContextMenuData[])
-    => void;
+  openBossAttackAddDialog: (bossAbility: M.IBossAbility | {}, callBack: (b: any) => void) => void;
+  openAbilityEditDialog: (data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[], jobs: JobMap[] }, callBack: (b: any) => void) => void;
+  openStanceSelector: (data: M.IContextMenuData[]) => void;
 }

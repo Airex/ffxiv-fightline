@@ -74,6 +74,7 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
       name: "SidePanel Restore Job Ability",
       payload: ab.id
     });
+    this.refresh();
   }
 
   resetJobFilter() {

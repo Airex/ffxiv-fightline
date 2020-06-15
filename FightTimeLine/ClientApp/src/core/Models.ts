@@ -1,6 +1,6 @@
 import * as FF from "./FFLogs"
 import {Holders} from "./Holders";
-import {AbilitySelectionHolder} from "./Holders/AbilitySelectionHolder";
+//import {AbilitySelectionHolder} from "./Holders/AbilitySelectionHolder";
 import {AbilityUsageMap} from "./Maps/index";
 
 export enum Role {
@@ -153,7 +153,7 @@ export interface IOverlapCheckContext {
   group: string;
   start: Date;
   end: Date;
-  selectionRegistry: AbilitySelectionHolder;
+  selectionRegistry: string[];
 }
 
 export interface IOverlapStrategy {
@@ -197,7 +197,7 @@ export class BaseOverlapStrategy implements IOverlapStrategy {
 
       const idCheck = (context.id === undefined || x.id !== context.id);
       const timeCheck = x.start < context.end && x.end > context.start;
-      const selectionCheck = (!context.selectionRegistry || !context.selectionRegistry.get(x.id));
+      const selectionCheck = (!context.selectionRegistry || !(x.id in context.selectionRegistry));
       const result = idCheck && timeCheck && selectionCheck;
       return result as any;
     });
@@ -226,7 +226,7 @@ export class SharedOverlapStrategy implements IOverlapStrategy {
 
       const idCheck = (context.id === undefined || x.id !== context.id);
       const timeCheck = x.start < context.end && x.end > context.start;
-      const selectionCheck = (!context.selectionRegistry || !context.selectionRegistry.get(x.id));
+      const selectionCheck = (!context.selectionRegistry || x.id in context.selectionRegistry);
       const result = idCheck && timeCheck && selectionCheck;
       return result as any;
     });

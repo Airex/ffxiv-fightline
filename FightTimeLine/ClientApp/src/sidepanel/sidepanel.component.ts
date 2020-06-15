@@ -42,9 +42,20 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
   items: BaseHolder.IForSidePanel[];
   holders: Holders;
   ref: ComponentRef<ISidePanelComponent>;
+  key: string;
+
+  private calculateKey(its: BaseHolder.IForSidePanel[]) {
+    return its.sort().reduce((p, c) => p + c.id, "");
+  }
 
   setItems(items: BaseHolder.IForSidePanel[], holders: Holders): void {
     this.items = items;
+    const newKey = this.calculateKey(this.items);
+    if (newKey === this.key && this.ref) {
+      this.ref.instance.refresh();
+      return;
+    }
+    this.key = newKey;
     this.holders = holders;
     const injector = this.createInjector({
       items: items,

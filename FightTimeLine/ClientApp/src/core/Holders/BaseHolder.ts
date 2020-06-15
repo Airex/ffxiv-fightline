@@ -10,6 +10,7 @@ export interface IItemHolder<TI> {
 
 export interface IForSidePanel {
   sidePanelComponentName: string;
+  id: string;
 }
 
 export interface IMoveable {

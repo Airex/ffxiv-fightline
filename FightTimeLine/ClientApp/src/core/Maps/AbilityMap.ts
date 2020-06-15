@@ -8,7 +8,6 @@ export interface IAbilityMapData {
   hidden?: boolean;
   isCompact?: boolean;
   filtered?: boolean;
-  selected?: boolean;
   collapsed?: boolean;
 }
 
@@ -105,7 +104,7 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     return <DataGroup>{
       id: id,
       //      subgroupStack: key,
-      className: this.buildClass({compact: data.isCompact, selected: data.selected}),
+      className: this.buildClass({compact: data.isCompact}),
       visible: !(data.hidden || data.filtered || data.collapsed),
       content: el,
       value: this.index

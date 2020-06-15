@@ -7,7 +7,6 @@ import * as AbilityMap from "./AbilityMap";
 export interface IJobMapData {
   actorName?: string;
   collapsed?: boolean;
-  selected?: boolean
 }
 
 export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> implements BaseHolder.IForSidePanel {
@@ -71,10 +70,6 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
     });
   }
 
-  select(e): void {
-    this.applyData({ selected: !this.data.selected });
-  }
-
   createJob(job: Models.IJob, id: string, data: IJobMapData): DataGroup {
 
     const el = this.createElementFromHtml(
@@ -89,7 +84,7 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
       //      nestedGroups: abilityIds,
       content: el,
       //      showNested: !collapsed,
-      className: this.buildClass({ selected: data.selected, job: true }),
+      className: this.buildClass({ job: true }),
       value: this.index ,
       title: data.actorName,
     }

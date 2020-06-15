@@ -81,14 +81,12 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onSelected(source: EventSource, event) {
-    this.fightLineController.notifySelect(event.target, event.data.items);
     this.setSidePanel(event.data);
   }
 
   onClickGroup(source: EventSource, event) {
     if (source === "player") {
       this.planArea.clearSelection();
-      this.fightLineController.notifySelect("group", [event.group]);
       this.setSidePanel(event);
     }
   }
@@ -97,7 +95,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
     const downtimesAtTime = this.fightLineController.getDowntimesAtTime(event.time);
     if (downtimesAtTime.length > 0 && (source === "boss" || (source === "player" && this.fightLineController.view.showDowntimesInPartyArea))) {
       event.items = downtimesAtTime.map(d => d.id);
-      this.fightLineController.notifySelect("downtime", event.items);
       this.planArea.clearSelection();
 
       this.setSidePanel(event);
@@ -140,7 +137,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onKeyMove(source: EventSource, event) {
-    this.fightLineController.moveSelection(event.delta);
+    this.fightLineController.moveSelection(event.delta, event.selection);
   }
 
   onVisibleFrameTemplate(source: EventSource, event) {
@@ -150,7 +147,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onCanMove(source: EventSource, event) {
-    const canMove = this.fightLineController.canMove(event.item);
+    const canMove = this.fightLineController.canMove(event.item, event.selection);
     if (canMove && source === "boss")
       this.fightLineController.moveBossAttack(event.item);
     event.handler(canMove);
@@ -241,27 +238,26 @@ export class FightLineComponent implements OnInit, OnDestroy {
   loadFFLogsData(code: string, enc: number) {
     this.dialogService.executeWithLoading(ref => {
       this.progressBar.start();
-      this.gameService.dataService.getEvents(code, enc, percentage => this.progressBar.set(percentage*100))
+      this.gameService.dataService.getEvents(code, enc, percentage => this.progressBar.set(percentage * 100))
         .then((parser) => {
-          this.fightService.newFight("")
-            .subscribe(value => {
-              this.fightId = value.id;
-              this.location.replaceState("/" + value.id);
-              this.startSession().then(() => {
-                this.recent.register("FFLogs " + parser.fight.name, "/fflogs/" + code + "/" + enc);
-                const settings = this.settingsService.load();
+          this.fightService.newFight("").subscribe(value => {
+            this.fightId = value.id;
+            this.location.replaceState("/" + value.id);
+            this.startSession().then(() => {
+              this.recent.register("FFLogs " + parser.fight.name, "/fflogs/" + code + "/" + enc);
+              const settings = this.settingsService.load();
 
-                this.toolbar.setSettings(settings);
-                this.fightLineController.applyView(settings.main.defaultView);
-                this.fightLineController.applyFilter(settings.main.defaultFilter);
+              this.toolbar.setSettings(settings);
+              this.fightLineController.applyView(settings.main.defaultView);
+              this.fightLineController.applyFilter(settings.main.defaultFilter);
 
-                this.fightLineController.importFromFFLogs(code + ":" + enc, parser);
-              });
-            },
-              error => {
-                console.log(error);
-                this.notification.error("Unable to start");
-              });
+              this.fightLineController.importFromFFLogs(code + ":" + enc, parser);
+            });
+          },
+            error => {
+              console.log(error);
+              this.notification.error("Unable to start");
+            });
         })
         .catch(() => {
           this.notification.showUnableToImport();
@@ -277,11 +273,10 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   onNew() {
     if (this.gameService.fractions) {
-      this.dialogService.showFractionSelection(this.gameService.fractions)
-        .subscribe(fraction => {
-          if (fraction)
-            this.router.navigateByUrl("/new/" + fraction.name);
-        });
+      this.dialogService.showFractionSelection(this.gameService.fractions).subscribe(fraction => {
+        if (fraction)
+          this.router.navigateByUrl("/new/" + fraction.name);
+      });
     } else {
       this.router.navigateByUrl("/new");
     }
@@ -428,7 +423,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
           }
         },
           () => {
-            this.notification.showUnableToLoadFight(() => {});
+            this.notification.showUnableToLoadFight(() => { });
             ref.close();
           });
     });
@@ -680,19 +675,16 @@ export class FightLineComponent implements OnInit, OnDestroy {
   private subscribeToDispatcher(dispatcher: S.DispatcherService) {
     dispatcher.on("SidePanel Similar Click").subscribe(value => {
       this.planArea.selectBossAttaks([value]);
-      this.fightLineController.notifySelect("enemy", [value]);
       this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());
     });
 
     dispatcher.on("SidePanel Similar All Click").subscribe(value => {
       this.planArea.selectBossAttaks(value);
-      this.fightLineController.notifySelect("enemy", value);
       this.sidepanel.setItems(this.fightLineController.getItems(value), this.fightLineController.getHolders());
     });
 
     dispatcher.on("SidePanel Ability Click").subscribe(value => {
       this.planArea.selectAbilities([value]);
-      this.fightLineController.notifySelect("friend", [value]);
       this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());
     });
 

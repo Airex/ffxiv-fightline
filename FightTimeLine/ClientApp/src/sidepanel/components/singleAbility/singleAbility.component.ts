@@ -113,12 +113,12 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     if (setting) {
       this.ptyMemUsages = this.data.holders.itemUsages.getByAbility(this.it.ability.id).map(it => {
         const s = it.getSettingData(setting.name);
-        const job = s && s.value && this.data.holders.jobs.get(s.value);
-        const string = job && job.actorName;
+        const jobMap = s && s.value && this.data.holders.jobs.get(s.value);
+        const string = jobMap && jobMap.actorName;
         return {
           id: it.id,
           offset: Utils.formatTime(it.start),
-          icon: job && job.job && job.job.icon,
+          icon: jobMap && jobMap.job && jobMap.job.icon,
           target: string
         };
       }); 

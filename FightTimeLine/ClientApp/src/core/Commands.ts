@@ -117,7 +117,7 @@ export class AddJobCommand implements Command {
 }
 
 export class RemoveJobCommand implements Command {
-  private storedData: { abilityMaps: any, jobMap: any, wasBossTarget: boolean } = <any>{};
+  private storedData: { abilityMaps?: any, jobMap?: any, wasBossTarget?: boolean } = {};
 
   constructor(private id: string) {
   }
@@ -136,13 +136,11 @@ export class RemoveJobCommand implements Command {
     const abilityMaps = this.storedData.abilityMaps as IAbilityWithUsages[];
     const jobMap = this.storedData.jobMap as JobMap;
     jobMap.isCompact = context.isCompactView();
-    jobMap.applyData({selected: false});
     context.holders.jobs.add(jobMap);
 
     abilityMaps.forEach((it: IAbilityWithUsages) => {
       it.map.applyData({
-        isCompact: context.isCompactView(),
-        selected: false
+        isCompact: context.isCompactView()
       });
       context.holders.abilities.add(it.map);
       it.usages.forEach((x) => {
@@ -288,8 +286,6 @@ export class ChangeBossAttackCommand implements Command {
     });
 
     context.holders.bossAttacks.update(bossAttackMaps);
-    context.holders.selectionRegistry.updateDate(this.id, Utils.getDateFromOffset(this.bossAbility.offset));
-
     context.update({ updateBossAttacks: [this.id], updateBossTargets: true });
   }
 
@@ -308,8 +304,6 @@ export class ChangeBossAttackCommand implements Command {
     });
 
     context.holders.bossAttacks.update(bossAttackMaps);
-    context.holders.selectionRegistry.updateDate(this.id, Utils.getDateFromOffset(this.bossAbility.offset));
-
     context.update({ updateBossAttacks: [this.id], updateBossTargets: true });
   }
 }
@@ -373,7 +367,6 @@ export class MoveCommand implements Command {
       });
       context.holders.itemUsages.update([item]);
     }
-    context.holders.selectionRegistry.updateDate(this.id, this.moveTo);
 
     context.update({
       abilityChanged: item.ability,
@@ -545,7 +538,7 @@ export class AddAbilityCommand implements Command {
       group: abilityMap.id,
       start: item.start,
       end: item.end,
-      selectionRegistry: context.holders.selectionRegistry
+      selectionRegistry: null
     }))
       return;
 
@@ -924,8 +917,6 @@ export class AddStanceCommand implements Command {
 
   reverse(context: ICommandExecutionContext): void {
     context.holders.stances.remove([this.id]);
-    //const abilityMap = context.holders.abilitiesMapHolder.getStancesAbility(this.jobGroup);
-    // context.update({ abilityChanged: abilityMap.ability, updateBossAttacks: true });
   }
 
   execute(context: ICommandExecutionContext): void {
@@ -987,7 +978,6 @@ export class RemoveStanceCommand implements Command {
         loaded: this.loaded,
         showLoaded: context.highlightLoaded()
       }));
-    //   context.update({ abilityChanged: this.ability, updateBossAttacks: true });
   }
 
   execute(context: ICommandExecutionContext): void {
@@ -1000,7 +990,6 @@ export class RemoveStanceCommand implements Command {
     this.loaded = itemMap.loaded;
 
     context.holders.stances.remove([this.id]);
-    //   context.update({ abilityChanged: this.ability, updateBossAttacks: this.updateBossAttack });
   }
 }
 
@@ -1035,8 +1024,6 @@ export class MoveStanceCommand implements Command {
 
       context.holders.stances.update([item]);
     }
-
-    //context.update({ updateBossAttacks: true });
   }
 
   execute(context: ICommandExecutionContext): void {
@@ -1054,9 +1041,6 @@ export class MoveStanceCommand implements Command {
 
       context.holders.stances.update([item]);
     }
-    context.holders.selectionRegistry.updateDate(this.id, this.moveStartTo);
-
-    //  context.update({  updateBossAttacks: true });
   }
 }
 

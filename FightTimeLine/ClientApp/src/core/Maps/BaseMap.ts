@@ -1,27 +1,27 @@
-import * as lod from "lodash";
+import _ from "lodash";
 import * as BaseHolder from "../Holders/BaseHolder";
-import * as ClassNameBuilder from "../ClassNameBuilder";
+import { ClassNameBuilder } from "../ClassNameBuilder";
 
 export abstract class BaseMap<TKey, TItem extends { className?: string }, TData> implements BaseHolder.IBaseHolderItem<TKey> {
   id: TKey;
   protected item: TItem;
   protected data = <TData>({});
-//  private holder: BaseHolder.BaseHolder<string, TItem, any>;
 
-  constructor(id: TKey, item?: TItem) {
+  protected constructor(id: TKey, item?: TItem) {
     this.id = id;
     this.item = item;
   }
 
   protected buildClass(cls: { [value: string]: boolean }): string {
-    const b = new ClassNameBuilder.ClassNameBuilder("");
+    console.log(this.item && this.item.className);
+    const b = new ClassNameBuilder(this.item && this.item.className || "");
     b.set(cls);
     return b.build() || "dummy";
   }
 
   applyData(data?: TData): void {
     if (data)
-      this.data = lod.merge(this.data, data);
+      this.data = _.merge(this.data, data);
     this.onDataUpdate(this.data);
   }
 
@@ -34,8 +34,4 @@ export abstract class BaseMap<TKey, TItem extends { className?: string }, TData>
       Object.assign(this.item, item);
     }
   }
-
-//  update() {
-//    this.holder.update([this]);
-//  }
 }

@@ -292,6 +292,7 @@ planarea .vis-label.boss .vis-inner {
 .vis-item.vis-point .vis-item.vis-dot.ability {
   top: -13px !important;
   border-color: #63ed63;
+  margin-left: -8px !important;
 }
 
 .vis-item.vis-point.compact .vis-item.vis-dot.ability {
@@ -309,6 +310,7 @@ planarea .vis-label.boss .vis-inner {
 .vis-item.vis-point.vis-selected .vis-item.vis-dot.ability {
   top: -13px !important;
   border-color: #ffc200;
+  
 }
 
 .vis-item.vis-point.compact-view-ability .vis-item-content {
@@ -401,10 +403,10 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
 .availability.available {
   background: repeating-linear-gradient(
                                        45deg,
-                                       #90EE9060 0px,
-                                       #90EE9060 5px,
-                                       #90EE90ff 5px,
-                                       #90EE90ff 10px
+                                       #90EE9030 0px,
+                                       #90EE9030 5px,
+                                       #90EE9080 5px,
+                                       #90EE9080 10px
   );
     margin-top: 3px !important;
     height: 18px !important;
