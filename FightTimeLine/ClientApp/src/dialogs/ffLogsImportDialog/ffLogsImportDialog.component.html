@@ -1,25 +1,23 @@
 <div [style.height]="dialogContentHeight">
   <form nz-form>
-    <div>
-      <nz-form-item [nzFlex]="true">
-        <nz-form-control [nzSpan]="code?20:24">
-          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon">
-            <input nz-input name="reportSearch" [(ngModel)]="reportValue" placeholder="https://www.fflogs.com/reports/..." (ngModelChange)="onSearch($event)" fflogs [matcher]="'reports\/([a-zA-Z0-9]{16})\/?(?:(?:#.*fight=([^&]*))|$)'" (onMatch)="onMatch($event)" [nzAutocomplete]="auto" />
-          </nz-input-group>
-          <ng-template #suffixIcon>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
-          <nz-autocomplete #auto>
-            <nz-auto-option *ngFor="let r of recent" [nzValue]="r.url">
-              {{r.name}} {{r.timestamp | date:'short'}}
-            </nz-auto-option>
-          </nz-autocomplete>
-        </nz-form-control>
-        <nz-form-control>
-          <nz-switch name="asdf" nzCheckedChildren="Kills Only" nzUnCheckedChildren="All" [ngStyle]="{'visibility': code ? '' : 'hidden', 'margin-left':'5px'}" [ngModel]="true" #showKills></nz-switch>
-        </nz-form-control>
-      </nz-form-item>
-    </div>
+    <nz-form-item>
+      <nz-form-control nzSpan="code?24:20">
+        <nz-input-group nzSize="large" [nzSuffix]="suffixIcon">
+          <input nz-input name="reportSearch" [(ngModel)]="reportValue" placeholder="https://www.fflogs.com/reports/..." (ngModelChange)="onSearch($event)" fflogs [matcher]="'reports\/([a-zA-Z0-9]{16})\/?(?:(?:#.*fight=([^&]*))|$)'" (onMatch)="onMatch($event)" [nzAutocomplete]="auto" />
+        </nz-input-group>
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template> 
+        <nz-autocomplete #auto>
+          <nz-auto-option *ngFor="let r of recent" [nzValue]="r.url">
+            {{r.name}} {{r.timestamp | date:'short'}}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-control>
+      <nz-form-control nzSpan="4">
+        <nz-switch name="asdf" nzCheckedChildren="Kills Only" nzUnCheckedChildren="All" [ngStyle]="{'visibility': code ? '' : 'hidden', 'margin-left':'5px'}" [ngModel]="true" #showKills></nz-switch>
+      </nz-form-control>
+    </nz-form-item>
     <div [style.display]="searchAreaDisplay">
       <hr style="margin-top: 5px; margin-bottom: 5px;" />
       <div class="importDialogList" customScroll>
@@ -41,11 +39,15 @@
       <div class="importDialogList" customScroll>
         <nz-list #parses [nzDataSource]="parsesList" [nzRenderItem]="item" nzSize="small">
           <ng-template #item let-item>
-            <nz-list-item (click)="onParseClick(item)" [ngClass]="{fflogsitem:true}" [nzContent]="item.percentile">
+            <nz-list-item (click)="onParseClick(item)" [ngClass]="{fflogsitem:true}" [nzContent]="round(item.percentile)">
               <nz-list-item-meta [nzTitle]="nzTitle"
-                                 [nzDescription]="nzDescription">
+                                 [nzDescription]="nzDescription"
+                                 [nzAvatar]="nzAvatar">
+                <ng-template #nzAvatar>
+                  <<img class="job-icon" style="margin-left: 5px" [src]="getIcon(item.spec)" />
+                </ng-template>
                 <ng-template #nzTitle>
-                  <strong style="font-size: large">{{item.encounterName}}</strong><small style="margin-left: 5px">{{item.spec}}</small><span class="example-spacer"></span>
+                  <strong style="font-size: large">{{item.encounterName}}</strong><span class="example-spacer"></span>
                 </ng-template>
                 <ng-template #nzDescription>
                   {{item.startTime | date:'short'}}

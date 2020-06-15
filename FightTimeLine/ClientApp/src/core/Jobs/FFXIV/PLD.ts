@@ -3,6 +3,7 @@ import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, tankSharedAbilit
 
 export const PLD: IJob = {
   name: "PLD",
+  fullName:"Paladin",
   role: Role.Tank,
   icon: ("JobIcons/Paladin_Icon_10"),
   abilities: [

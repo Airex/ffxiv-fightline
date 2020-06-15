@@ -3,6 +3,7 @@ import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, casterSharedAbil
 
 export const BLM: IJob = {
   name: "BLM",
+  fullName: "Black Mage",
   role: Role.Caster,
   icon: ("JobIcons/Black_Mage_Icon_10"),
   abilities: [
@@ -22,7 +23,7 @@ export const BLM: IJob = {
       icon: ("51_BlackMage/0157_Manaward"),
       abilityType: AbilityType.SelfShield,
     },
-    
+
     {
       name: "Manafont",
       duration: 0,

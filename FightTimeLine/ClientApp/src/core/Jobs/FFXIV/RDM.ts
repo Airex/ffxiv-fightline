@@ -3,6 +3,7 @@ import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, casterSharedAbil
 
 export const RDM: IJob = {
   name: "RDM",
+  fullName:"Red Mage",
   role: Role.Caster,
   icon: ("JobIcons/Red_Mage_Icon_10"),
   abilities: [

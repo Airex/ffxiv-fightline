@@ -43,6 +43,10 @@ export class FFLogsImportDialog implements OnInit {
 
   }
 
+  round(v) {
+    return Math.round(v);
+  }
+
   onSearch(data: string): void {
     if (this.prevSearch === data) return;
     this.prevSearch = data;
@@ -133,6 +137,10 @@ export class FFLogsImportDialog implements OnInit {
 
   onMatch(data: string) {
     this.onSearch(data);
+  }
+
+  getIcon(spec) {
+    return this.service.jobRegistry.getJobs().find(j => j.fullName === spec).icon;
   }
 
 

@@ -3,6 +3,7 @@ import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, rangeSharedAbili
 
 export const MCH: IJob = {
   name: "MCH",
+  fullName:"Machinist",
   role: Role.Range,
   icon: ("JobIcons/Machinist_Icon_10"),
   abilities: [

@@ -16,6 +16,7 @@ export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJob
       name: job.name,
       icon: this.getIcon(job.icon),
       defaultPet: job.defaultPet,
+      fullName: job.fullName,
       pets: job.pets && job.pets.map((p) => {
         return { name: p.name, icon: this.getIcon(p.icon) }
       }),

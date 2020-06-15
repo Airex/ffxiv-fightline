@@ -3,6 +3,7 @@ import { settings, getAbilitiesFrom, healerSharedAbilities, medicine } from "./s
 
 export const AST: IJob = {
   name: "AST",
+  fullName: "Astronolian",
   role: Role.Healer,
   icon: ("JobIcons/Astrologian_Icon_10"),
   abilities: [
@@ -100,7 +101,7 @@ export const AST: IJob = {
       icon: ("23_Astrologian/icon_30"),
       abilityType: AbilityType.HealingBuff,
     },
-  
+
     ...getAbilitiesFrom(healerSharedAbilities),
     medicine["Mind"]
   ]

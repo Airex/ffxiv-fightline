@@ -3,6 +3,7 @@ import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, medicine, meleeS
 
 export const DRG: IJob = {
   name: "DRG",
+  fullName:"Dragoon",
   role: Role.Healer,
   icon: ("JobIcons/Dragoon_Icon_10"),
   abilities: [

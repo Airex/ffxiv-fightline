@@ -3,6 +3,7 @@ import { settings, abilitySortFn, getAbilitiesFrom, healerSharedAbilities, medic
 
 export const SCH: IJob = {
   name: "SCH",
+  fullName:"Scholar",
   role: Role.Healer,
   icon: ("JobIcons/Scholar_Icon_10"),
   abilities: [

@@ -12,6 +12,7 @@ export enum Role {
 }
 export interface IJob {
   name: string;
+  fullName: string;
   icon?: string;
   abilities: IAbility[];
   role: Role;

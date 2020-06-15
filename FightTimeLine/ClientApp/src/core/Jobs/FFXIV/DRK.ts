@@ -3,6 +3,7 @@ import { settings, abilitySortFn, getAbilitiesFrom, tankSharedAbilities, medicin
 
 export const DRK: IJob = {
   name: "DRK",
+  fullName:"Dark Knight",
   role: Role.Tank,
   icon: ("JobIcons/Dark_Knight_Icon_10"),
   abilities: <IAbility[]>[

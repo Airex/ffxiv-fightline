@@ -1,8 +1,9 @@
 import { IJob, DamageType, IAbility, IAbilitySetting, Role, AbilityType, IStance, byName, byBuffApply, byBuffRemove } from "../../Models"
-import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, rangeSharedAbilities,medicine } from "./shared"
+import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, rangeSharedAbilities, medicine } from "./shared"
 
 export const BRD: IJob = {
   name: "BRD",
+  fullName: "Bard",
   role: Role.Range,
   icon: ("JobIcons/Bard_Icon_10"),
   abilities: [
@@ -74,7 +75,7 @@ export const BRD: IJob = {
         affectedBy: ["Mage's Ballad", "Army's Paeon"],
         parentOnly: true
       },
-      detectStrategy: byName(["3559"], ["The Wanderer's Minuet","the Wanderer's Minuet"])
+      detectStrategy: byName(["3559"], ["The Wanderer's Minuet", "the Wanderer's Minuet"])
     },
     {
       name: "Sidewinder",

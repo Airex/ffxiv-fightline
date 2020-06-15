@@ -3,6 +3,7 @@ import { abilitySortFn, getAbilitiesFrom, settings, tankSharedAbilities, medicin
 
 export const WAR: IJob = {
   name: "WAR",
+  fullName:"Warrior",
   role: Role.Tank,
   icon: ("JobIcons/Warrior_Icon_10"),
   abilities: [

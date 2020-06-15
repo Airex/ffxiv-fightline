@@ -3,6 +3,7 @@ import { settings, IAbilities, getAbilitiesFrom, meleeSharedAbilities, medicine 
 
 export const NIN: IJob = {
   name: "NIN",
+  fullName:"Ninja",
   role: Role.Melee,
   icon: ("JobIcons/Ninja_Icon_10"),
   abilities: [

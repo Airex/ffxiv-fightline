@@ -3,6 +3,7 @@ import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, healerSharedAbil
 
 export const WHM: IJob = {
   name: "WHM",
+  fullName:"White Mage",
   role: Role.Healer,
   icon: ("JobIcons/White_Mage_Icon_10"),
   abilities: [

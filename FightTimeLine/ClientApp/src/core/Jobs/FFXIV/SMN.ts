@@ -3,6 +3,7 @@ import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, casterSharedAbil
 
 export const SMN: IJob = {
   name: "SMN",
+  fullName:"Summoner",
   role: Role.Caster,
   icon: ("JobIcons/Summoner_Icon_10"),
   abilities: [

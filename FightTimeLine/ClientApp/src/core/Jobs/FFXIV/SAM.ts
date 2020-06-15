@@ -3,6 +3,7 @@ import { settings, IAbilities, getAbilitiesFrom, meleeSharedAbilities, medicine 
 
 export const SAM: IJob = {
   name: "SAM",
+  fullName:"Samurai",
   role: Role.Melee,
   icon: ("JobIcons/Samurai_Icon_10"),
   abilities: [

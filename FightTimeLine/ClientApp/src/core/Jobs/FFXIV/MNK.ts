@@ -3,6 +3,7 @@ import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, medicine, meleeS
 
 export const MNK: IJob = {
   name: "MNK",
+  fullName:"Monk",
   role: Role.Melee,
   icon: ("JobIcons/Monk_Icon_10"),
   abilities: [
