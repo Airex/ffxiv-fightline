@@ -1,2 +1,21 @@
-Test MultipleAttack {{isSameName?'true':'false'}}
-<!-- <p>{{ability.ability.name}}</p> -->
+<nz-space nzDirection="vertical">
+  <nz-space-item>
+    Multiple attacks
+  </nz-space-item>
+  <nz-space-item>
+    <sidepanel-area header="Selection">
+      <div>
+        <nz-tag *ngFor="let ab of items" (nzOnClose)="restore(ab)" nzMode="default">
+          <span>
+            <span class='abilityName'>{{ab.attack.name}}</span>
+            <i nz-icon nzType="clock-circle" theme="outline"></i>
+            <span class='abilityTime'>{{formatDate(ab.start)}}</span>
+          </span>
+        </nz-tag>
+      </div>
+    </sidepanel-area>
+  </nz-space-item>
+  <nz-space-item>
+    <button nz-button nzType="primary" (click)="remove()" nzDanger>Remove</button>
+  </nz-space-item>
+</nz-space>

@@ -818,6 +818,16 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.fightLineController.setDownTimeComment(value.id, value.comment);
     });
 
+    dispatcher.on("SidePanel Multiple Abilities Remove").subscribe(value => {
+      this.fightLineController.handleDelete(value);
+    });
+
+    dispatcher.on("SidePanel Multiple Attacks Remove").subscribe(value => {
+      this.fightLineController.handleDelete(value);
+    });
+
+    
+
     dispatcher.on("SidePanel Remove Downtime").subscribe(value => {
       this.fightLineController.removeDownTime(value);
       this.setSidePanel(null);
