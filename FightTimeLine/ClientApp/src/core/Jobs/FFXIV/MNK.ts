@@ -18,7 +18,7 @@ export const MNK: IJob = {
     {
       name: "Perfect Balance",
       duration: 10,
-      cooldown: 120,
+      cooldown: 90,
       xivDbId: "69",
       icon: ("31_Monk/0069_Perfect Balance"),
       abilityType: AbilityType.SelfDamageBuff,
