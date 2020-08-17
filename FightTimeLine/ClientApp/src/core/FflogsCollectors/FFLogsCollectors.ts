@@ -65,7 +65,7 @@ export class AbilityUsagesCollector extends BaseCollector {
 
     if (ability.settings) {
       ability.settings.forEach((setting) => {
-        const value = setting.process(this.context, data);
+        const value = setting.process && setting.process(this.context, data);
         if (value) {
           settingsData.push({
             name: setting.name,
