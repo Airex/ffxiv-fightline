@@ -2,7 +2,7 @@ import * as M from "./Models"
 import * as _ from "lodash"
 import { IdGenerator } from "./Generators"
 import * as Holders from "./Holders";
-import { JobMap, AbilityMap, AbilityAvailabilityMap, AbilityUsageMap,IAbilityAvailabilityMapData } from "./Maps/index";
+import { JobMap, AbilityMap, AbilityAvailabilityMap, AbilityUsageMap, IAbilityAvailabilityMapData } from "./Maps/index";
 
 
 type Range = { start: Date, end: Date };
@@ -28,8 +28,8 @@ export class AvailabilityController {
     if (showAbilityAvailablity) {
       this.holders.abilities.getAll().forEach(it => {
         if (it.isStance) return;
-        const deps = it.ability.overlapStrategy.getDependencies();
         if (!it.ability.charges) {
+          const deps = it.ability.overlapStrategy.getDependencies();
           this.processStandardAbility(it, deps);
         } else {
           this.processChargesAbility(it);
@@ -56,58 +56,48 @@ export class AvailabilityController {
   }
 
   private splitRange(ranges: Range[], atIndex: number, splitter: Range): Range[] {
+    const newItem = <Range>{ start: splitter.end, end: ranges[atIndex].end }
+    ranges[atIndex].end = splitter.start;
+    ranges.push(newItem);
     return ranges;
   }
 
-  processChargesAbility(it: AbilityMap) {
+  private processChargesAbility(it: AbilityMap) {
     const usages = [
       //...this.getDependencies(deps, it.job),
       ...this.holders.itemUsages.getByAbility(it.id)
     ].sort((a, b) => (a.startAsNumber) - (b.startAsNumber));
 
     this.holders.abilityAvailability.removeForAbility(it.id);
-    let chargesCount = it.ability.charges.initialCount;
     const maxCharges = it.ability.charges.count;
+    let chargesCount = it.ability.charges.initialCount || maxCharges;
+
     const cooldown = it.ability.charges.cooldown;
     let nextIncreaseDate: Date = null;
-    let currentDate: Date = this.startDate;
+    const endDate = new Date(this.startDate.valueOf() + 30 * 60 * 1000);
 
     let ranges: Range[] = [];
-    ranges.push({ start: this.startDate, end: new Date(this.startDate.valueOf() + 30 * 60 * 1000) })
+    let restorePoints: { date: Date }[] = [];
 
+    ranges.push({ start: this.startDate, end: endDate })
 
     usages.forEach((u) => {
-      if (chargesCount === 0) {
-        nextIncreaseDate = new Date(currentDate.valueOf() + cooldown * 1000);
-        ranges = this.splitRange(ranges, ranges.length - 1, { start: currentDate, end: nextIncreaseDate });
-      }
       chargesCount--;
+      nextIncreaseDate = new Date(u.start.valueOf() + cooldown * 1000);
+      restorePoints.push({ date: nextIncreaseDate });
+      if (chargesCount === 0) {
+        while (restorePoints.length > 0) {
+          const rst = restorePoints.splice(0, 1);
+          if (chargesCount === 0) {
+            ranges = this.splitRange(ranges, ranges.length - 1, { start: u.start, end: rst[0].date });
+          }
+          chargesCount++;
+          if (chargesCount > maxCharges) chargesCount = maxCharges;
+        }
 
+      }
     });
 
-    //    const maps = usages.map(c => {
-    //      chargesCount--;
-    //
-    //      const start = prev
-    //        ? (prev.end)
-    //        : (it.ability.requiresBossTarget
-    //          ? this.startDate
-    //          : new Date(this.startDate.valueOf() as number - 30 * 1000));
-    //      const diff = ((c.startAsNumber) - (start.valueOf() as number)) / 1000;
-    //      const av = diff > it.ability.cooldown;
-    //      prev = c;
-    //      if (av) {
-
-    //        return new H.AbilityAvailabilityMap(id,
-    //          it,
-    //          {
-    //            start: start,
-    //            end: new Date(c.startAsNumber - it.ability.cooldown * 1000),
-    //            available: true
-    //          });
-    //      }
-    //      return null;
-    //    }).filter(it => it != null);
     this.holders.abilityAvailability.addRange(ranges.map((value) => {
       const id = this.idgen.getNextId(M.EntryType.AbilityAvailability);
       const iAbilityAvailabilityMapData = <IAbilityAvailabilityMapData>(({
@@ -148,7 +138,7 @@ export class AvailabilityController {
           });
       }
       return null;
-    }).filter(it => it != null);
+    }).filter(i => i != null);
     this.holders.abilityAvailability.addRange(maps);
   }
 }

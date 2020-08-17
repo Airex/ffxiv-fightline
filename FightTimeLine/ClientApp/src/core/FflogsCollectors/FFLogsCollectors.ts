@@ -62,16 +62,17 @@ export class AbilityUsagesCollector extends BaseCollector {
     if (!ability) return;
 
     const settingsData: M.IAbilitySettingData[] = [];
-    const pty = this.getSettingOfType(ability, 'partyMember');
-    if (pty) {
-      const target = this.context.parser.players.find(it1 => it1.id === data.targetID);
-      if (target) {
+
+    ability.settings.forEach((setting) => {
+      const value = setting.process(this.context, data);
+      if (value) {
         settingsData.push({
-          name: pty.name,
-          value: target.rid
-        });
+          name: setting.name,
+          value: value
+        })
       }
-    }
+    });
+
     this.commands.push(new AddAbilityCommand(
       this.context.idgen.getNextId(M.EntryType.AbilityUsage),
       foundJob.actorName,

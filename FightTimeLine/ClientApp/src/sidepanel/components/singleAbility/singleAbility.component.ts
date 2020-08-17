@@ -22,6 +22,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
   ptyMemUsages: any[];
   jobs;
   modified = false;
+  covered: any[];
   constructor(
     private xivapi: X.XivapiService,
     private sanitizer: DomSanitizer,
@@ -132,6 +133,13 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
       this.jobs = this.data.holders.jobs.getAll();
       this.modified = false;
     }
+
+    if (this.it.ability.isDef) {
+      this.covered = this.data.holders.bossAttacks.getAll().filter((it) => {
+        return it.start >= this.it.start && it.start <= new Date(this.it.startAsNumber + this.it.calculatedDuration*1000)
+      }).sort((a,b)=>a.startAsNumber - b.startAsNumber);
+    }
+    
   }
 
   ngOnInit(): void {

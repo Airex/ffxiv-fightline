@@ -15,6 +15,13 @@
       </div>
     </sidepanel-area>
   </nz-space-item>
+  <nz-space-item>
+    <sidepanel-area header="Covered" *ngIf="!!covered">
+      <div *ngFor="let it of covered">
+        <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="usedTime">{{it.offset}}</span></a> <span class="usedTarget">{{it.attack.name}}</span>
+      </div>
+    </sidepanel-area>
+  </nz-space-item>
   <nz-space-item *ngIf="it.ability.ability.settings && it.ability.ability.settings.length > 0">
     <sidepanel-area header="Settings">
       <form nz-form [formGroup]="form" nzLayout="vertical">
@@ -32,7 +39,7 @@
                 </nz-select>
               </div>
             </div>
-            
+
           </nz-form-control>
         </nz-form-item>
         <nz-form-item *ngIf="modified">
@@ -43,7 +50,5 @@
       </form>
     </sidepanel-area>
   </nz-space-item>
-  <nz-space-item *ngIf="it.ability.ability.settings && it.ability.ability.settings.length > 0">
-    
-  </nz-space-item>
+
 </nz-space>

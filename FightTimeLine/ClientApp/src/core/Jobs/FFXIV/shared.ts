@@ -28,16 +28,25 @@ export const getAbilitiesFrom = (arr: IAbilities): IAbility[] => {
   return Object.keys(arr).map((it: string) => arr[it]);
 }
 
-export const settings: {
-  target: IAbilitySetting,
-  changesTarget: IAbilitySetting
-} = {
-  target: <IAbilitySetting>{
+export enum SettingsEnum {
+  Target = "target",
+  ChangesTarger = "changesTarget"
+}
+
+export type SettingsType = {[T in SettingsEnum]:IAbilitySetting}
+
+
+export const settings: SettingsType = {
+  target: {
     name: "target",
     displayName: "Target",
     description: "Determines target of ability",
     type: "partyMember",
-    default: ""
+    default: "",
+    process: (context, data) => {
+      const target = context.parser.players.find(it1 => it1.id === data.targetID);
+      return target && target.rid || null;
+    }
   },
   changesTarget: <IAbilitySetting>{
     name: "changesTarget",

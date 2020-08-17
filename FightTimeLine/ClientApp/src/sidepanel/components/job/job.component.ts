@@ -7,6 +7,7 @@ import { JobMap, AbilityMap } from "../../../core/Maps/index";
 
 
 
+
 @Component({
   selector: "job-area",
   templateUrl: "./job.component.html",
@@ -28,7 +29,7 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
     this.items = this.data.items;
     this.holders = this.data.holders;
     this.refresh();
-   
+
   }
 
   get it(): JobMap {
@@ -41,9 +42,9 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
 
   compact(value) {
     this.dispatcher.dispatch({
-          name: "SidePanel Toggle Job Compact View",
-          payload: this.it.id
-        });
+      name: "SidePanel Toggle Job Compact View",
+      payload: this.it.id
+    });
   }
 
 

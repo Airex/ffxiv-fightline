@@ -21,7 +21,6 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
     this.items = this.data.items;
     this.holders = this.data.holders;
     this.refresh();
-
   }
 
   isSameName: boolean;

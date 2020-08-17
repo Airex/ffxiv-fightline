@@ -2,6 +2,7 @@ import * as FF from "./FFLogs"
 import {Holders} from "./Holders";
 //import {AbilitySelectionHolder} from "./Holders/AbilitySelectionHolder";
 import {AbilityUsageMap} from "./Maps/index";
+import * as FFLogsCollectors from "./FflogsCollectors/FFLogsCollectors";
 
 export enum Role {
   Tank,
@@ -319,6 +320,7 @@ export interface IAbilitySetting {
   description: string;
   type: string;
   default: any;
+  process?: (context: FFLogsCollectors.ICollectorContext, data: FF.AbilityEvent) => string;
 }
 
 export interface IAbilitySettingData {

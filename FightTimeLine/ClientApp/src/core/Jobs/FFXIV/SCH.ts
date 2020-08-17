@@ -70,7 +70,7 @@ export const SCH: IJob = {
       cooldown: 120,
       xivDbId: "3585",
       icon: ("62_PetsFairy/3585_Deployment Tactics"),
-      abilityType: AbilityType.Utility,
+      abilityType: AbilityType.Healing,
     },
     {
       name: "Dissipation",
@@ -113,7 +113,7 @@ export const SCH: IJob = {
       cooldown: 90,
       xivDbId: "16542",
       icon: ("Scholar/icon_27"),
-      abilityType: AbilityType.Utility,
+      abilityType: AbilityType.Healing,
     },
     {
       name: "Fey Blessing",
@@ -129,7 +129,7 @@ export const SCH: IJob = {
       cooldown: 120,
       xivDbId: "16545",
       icon: ("Scholar/icon_29"),
-      abilityType: AbilityType.Utility,
+      abilityType: AbilityType.Healing,
     },
     {
       name: "Consolation",

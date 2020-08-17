@@ -30,7 +30,7 @@ export const WHM: IJob = {
       cooldown: 30,
       xivDbId: "7432",
       icon: ("21_WhiteMage/9621_Divine Benison"),
-      abilityType: AbilityType.Healing,
+      abilityType: AbilityType.SelfShield,
       settings: [settings.target],
     },
     {

@@ -132,7 +132,7 @@ export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.I
     return buildSettings(s, c.offset);
   });
 
-  const windows: window[] = [];
+  const windows: Window[] = [];
 
   //build windowsB
   data.forEach(d => {
@@ -162,7 +162,7 @@ export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.I
   return result;
 }
 
-interface window {
+interface Window {
   start: number;
   end: number;
 }
