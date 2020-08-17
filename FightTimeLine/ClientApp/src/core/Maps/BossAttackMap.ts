@@ -25,7 +25,7 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
     return this.item.start as Date;
   }
 
-  get offset(): Date {
+  get offset(): string {
     return Utils.formatTime(this.start);
   }
 
