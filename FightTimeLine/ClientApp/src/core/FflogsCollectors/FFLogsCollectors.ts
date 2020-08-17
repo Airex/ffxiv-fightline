@@ -63,15 +63,17 @@ export class AbilityUsagesCollector extends BaseCollector {
 
     const settingsData: M.IAbilitySettingData[] = [];
 
-    ability.settings.forEach((setting) => {
-      const value = setting.process(this.context, data);
-      if (value) {
-        settingsData.push({
-          name: setting.name,
-          value: value
-        })
-      }
-    });
+    if (ability.settings) {
+      ability.settings.forEach((setting) => {
+        const value = setting.process(this.context, data);
+        if (value) {
+          settingsData.push({
+            name: setting.name,
+            value: value
+          })
+        }
+      });
+    }
 
     this.commands.push(new AddAbilityCommand(
       this.context.idgen.getNextId(M.EntryType.AbilityUsage),
