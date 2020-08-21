@@ -19,7 +19,7 @@ export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelCo
     private dispatcher: S.DispatcherService,
     @Inject(SIDEPANEL_DATA) private data: SidepanelParams
   ) {
-    this.items = this.data.items;
+    this.items = this.data.items.sort((a:any, b:any) => a.start - b.start);
     this.holders = this.data.holders;
     this.refresh();
 
@@ -28,11 +28,6 @@ export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelCo
   isSameGroup: boolean;
   holders: Holders;
   items: any[];
-
-  setItems(items: any[]): void {
-    this.items = items;
-    
-  }
 
   refresh() {
     const distinct = (value, index, self) => {
@@ -45,7 +40,7 @@ export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelCo
     this.dispatcher.dispatch({
       name: "SidePanel Multiple Abilities Remove",
       payload: this.items.map(p => p.id)
-  });
+    });
   }
 
   formatDate(date: Date): string {

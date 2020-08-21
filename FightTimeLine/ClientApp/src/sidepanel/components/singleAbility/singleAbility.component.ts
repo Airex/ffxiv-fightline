@@ -7,7 +7,7 @@ import { Utils } from "../../../core/Utils"
 import { DomSanitizer } from "@angular/platform-browser";
 import * as S from "../../../services/index"
 import * as Shared from "../../../core/Jobs/FFXIV/shared";
-import {AbilityUsageMap, JobStanceMap} from "../../../core/Maps/index";
+import { AbilityUsageMap, JobStanceMap } from "../../../core/Maps/index";
 
 
 @Component({
@@ -45,7 +45,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
       });
     }
 
-   
+
     if (this.it.ability.ability.settings) {
       for (let d of this.it.ability.ability.settings) {
         const value = this.it.settings && this.it.settings.find((it) => it.name === d.name);
@@ -112,17 +112,20 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
   refresh() {
     const setting = !this.it.ability.isStance && this.it.getSetting(Shared.settings.target.name);
     if (setting) {
-      this.ptyMemUsages = this.data.holders.itemUsages.getByAbility(this.it.ability.id).map(it => {
-        const s = it.getSettingData(setting.name);
-        const jobMap = s && s.value && this.data.holders.jobs.get(s.value);
-        const string = jobMap && jobMap.actorName;
-        return {
-          id: it.id,
-          offset: Utils.formatTime(it.start),
-          icon: jobMap && jobMap.job && jobMap.job.icon,
-          target: string
-        };
-      }); 
+      this.ptyMemUsages = this.data.holders.itemUsages
+        .getByAbility(this.it.ability.id)
+        .sort((a, b) => a.startAsNumber - b.startAsNumber)
+        .map(it => {
+          const s = it.getSettingData(setting.name);
+          const jobMap = s && s.value && this.data.holders.jobs.get(s.value);
+          const string = jobMap && jobMap.actorName;
+          return {
+            id: it.id,
+            offset: Utils.formatTime(it.start),
+            icon: jobMap && jobMap.job && jobMap.job.icon,
+            target: string
+          };
+        });
     }
 
     if (this.it.ability.ability.settings) {
@@ -136,10 +139,10 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
 
     if (this.it.ability.isDef) {
       this.covered = this.data.holders.bossAttacks.getAll().filter((it) => {
-        return it.start >= this.it.start && it.start <= new Date(this.it.startAsNumber + this.it.calculatedDuration*1000)
-      }).sort((a,b)=>a.startAsNumber - b.startAsNumber);
+        return it.start >= this.it.start && it.start <= new Date(this.it.startAsNumber + this.it.calculatedDuration * 1000)
+      }).sort((a, b) => a.startAsNumber - b.startAsNumber);
     }
-    
+
   }
 
   ngOnInit(): void {

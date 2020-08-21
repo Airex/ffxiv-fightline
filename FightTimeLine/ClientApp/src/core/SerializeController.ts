@@ -160,7 +160,7 @@ export class SerializeController {
               job: a.job.id,
               ability: a.ability.name,
               type: a.ability.abilityType,
-              duration: 0, // this.calculateDuration(value.start, a),
+              duration: value.calculatedDuration,
               start: Utils.formatTime(value.start),
               settings: value.settings,
               icon: value.ability.ability.icon

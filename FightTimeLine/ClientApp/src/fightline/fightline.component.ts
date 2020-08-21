@@ -768,6 +768,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     dispatcher.on("SidePanel Attack Copy").subscribe(value => {
       this.fightLineController.copy(value);
+      this.useTool("Copy & Paste");
     });
 
     dispatcher.on("Update Filter").subscribe(value => {

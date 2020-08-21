@@ -16,7 +16,7 @@
     </sidepanel-area>
   </nz-space-item>
   <nz-space-item>
-    <sidepanel-area header="Covered" *ngIf="!!covered">
+    <sidepanel-area header="Covered" *ngIf="covered && covered.length > 0">
       <div *ngFor="let it of covered">
         <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="usedTime">{{it.offset}}</span></a> <span class="usedTarget">{{it.attack.name}}</span>
       </div>
@@ -35,7 +35,7 @@
               <div *ngSwitchCase="'partyMember'">
                 <nz-select [formControlName]="setting.name" [id]="setting.name" [nzPlaceHolder]="setting.displayName" (ngModelChange)="modified=true">
                   <nz-option nzValue="" nzLabel="None"></nz-option>
-                  <nz-option *ngFor="let j of jobs" [nzValue]="j.id" [nzLabel]="j.job.name+' '+(j.actorName || '')"></nz-option>
+                  <nz-option nzCustomContent *ngFor="let j of jobs" [nzValue]="j.id" [nzLabel]="j.job.name+' '+(j.actorName || '')"><img class="abilityIcon" [src]="j.job.icon" /> <span class="usedTarget">{{j.actorName}}</span></nz-option>
                 </nz-select>
               </div>
             </div>

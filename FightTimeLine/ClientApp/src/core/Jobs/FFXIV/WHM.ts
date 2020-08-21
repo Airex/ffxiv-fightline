@@ -26,7 +26,7 @@ export const WHM: IJob = {
     },
     {
       name: "Divine Benison",
-      duration: 0,
+      duration: 15,
       cooldown: 30,
       xivDbId: "7432",
       icon: ("21_WhiteMage/9621_Divine Benison"),

@@ -1,4 +1,5 @@
-﻿import { Utils } from "./Utils"
+import { Utils } from "./Utils"
+import * as Models from "./Models";
 
 export abstract class ExportTemplate {
     public startDate = new Date(946677600000);
@@ -70,7 +71,7 @@ export class ExportData {
         abilities: {
             job: string;
             ability: string;
-            type: number;
+            type: Models.AbilityType;
             duration: number;
             start: string;
             icon: string;

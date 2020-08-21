@@ -23,7 +23,7 @@ export class TableViewDialog implements OnInit {
 
   public exportTemplatesControl = new FormControl();
   public set: IExportResultSet;
-  templates: ExportTemplate[] = [new FirstTemplate(), new EachRowOneSecondTemplate(), new BossAttackDefensiveTemplate()];
+  templates: ExportTemplate[] = [new FirstTemplate(), new EachRowOneSecondTemplate(), new BossAttackDefensiveTemplate(), new BossAttackDefensiveTemplate(true)];
 
   constructor(
     public dialogRef: NzModalRef
@@ -37,17 +37,19 @@ export class TableViewDialog implements OnInit {
 
   getWidth(text: string, hasIcon) {
     if (hasIcon)
-      return "170px";
+      return "auto";
     switch (text) {
       case "time":
-        return "48px";
+        return "50px";
+      case "boss":
+        return "120px";
       case "target":
-        return "90px";
+        return "50px";
     }
     return "";
   }
 
-  onNoClick(): void {
+  onClose(): void {
     this.dialogRef.destroy();
   }
 }

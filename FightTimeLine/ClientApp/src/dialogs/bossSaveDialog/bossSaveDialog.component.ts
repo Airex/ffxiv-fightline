@@ -10,11 +10,10 @@ import { NzModalRef } from "ng-zorro-antd"
 
 export class BossSaveDialog implements OnInit {
   ngOnInit(): void {
-    this.dialogRef.getConfig().nzFooter = this.buttons;
+    
   }
 
   fightNameControl = new FormControl();
-  @ViewChild("buttonsTemplate", { static: true }) buttons: TemplateRef<any>;
   @Input("data") data: string;
   submitted = false;  
 

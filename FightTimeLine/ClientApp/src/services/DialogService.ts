@@ -254,7 +254,7 @@ export class DialogService {
       nzWrapClassName: "vertical-center-modal",
       nzContent: D.TableViewDialog,
       nzTitle: null,
-      nzWidth: "90%",
+      nzWidth: "99%",
       nzClosable: false,
       nzKeyboard: false,
       nzOkDisabled: true,
