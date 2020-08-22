@@ -30,7 +30,7 @@ jobs:
         if: github.ref == 'refs/heads/master'                
         uses: SamKirkland/FTP-Deploy-Action@master
         with:
-          ftp-server: ftp://ftp-eu.site4now.net/shb/ClientApp/dist
+          ftp-server: ftp://ftp-eu.site4now.net/${{ secrets.FTP_FOLDER }}/ClientApp/dist
           ftp-username: ${{ secrets.FTP_USER }}
           ftp-password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./FightTimeLine/ClientApp/dist
