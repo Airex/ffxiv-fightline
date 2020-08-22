@@ -39,7 +39,9 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
 
   createBossAttack(id: string, attack: Models.IBossAbility, vertical: boolean): DataItem {
     const cls = { bossAttack: true, vertical: vertical };
-    cls[Models.DamageType[attack.type]] = true;
+    Object.keys(Models.DamageType).forEach((value, index, array) => {
+      cls[value] = attack.type === Models.DamageType[value];
+    });
     return <DataItem>{
       id: id,
       content: this.createBossAttackElement(attack),
@@ -63,3 +65,4 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
     return true;
   }
 }
+
