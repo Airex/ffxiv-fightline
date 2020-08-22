@@ -50,7 +50,7 @@
                         </ng-template>
                       </nz-list-item-meta>
                       <ng-template #removeAction>
-                        <a *ngIf="item.canRemove" nz-popconfirm nzTooltipTitle="Are you sure delete this template?" (nzOnConfirm)="remove(item,$event)">
+                        <a *ngIf="item.canRemove" nz-popconfirm nzPopconfirmTitle="Are you sure delete this template?"  nzPopconfirmPlacement="left" (nzOnConfirm)="remove(item,$event)">
                           <i nz-icon nzType="delete" nzTheme="twotone"></i>
                         </a>
                       </ng-template>

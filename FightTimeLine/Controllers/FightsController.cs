@@ -103,7 +103,7 @@ namespace FightTimeLine.Controllers
                          CreateDate = DateTimeOffset.UtcNow,
                          Game = request.Game
                     };
-                    _dataContext.Bosses.Add(boss);
+                    await _dataContext.Bosses.AddAsync(boss);
                }
                boss.ModifiedDate = DateTimeOffset.UtcNow;
 

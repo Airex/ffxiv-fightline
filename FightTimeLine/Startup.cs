@@ -28,6 +28,9 @@ namespace FightTimeLine
           {
                services.AddOptions();
                services.AddRazorPages();
+               services.AddMemoryCache();
+               services.AddControllers().AddNewtonsoftJson();
+               services.AddHealthChecks();
 
                services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                    .AddJwtBearer(options =>
@@ -44,8 +47,6 @@ namespace FightTimeLine
 
                services.AddScoped<IHubUsersStorage, SqlServerHubUsersStorage>();
 
-               services.AddMemoryCache();
-               services.AddHealthChecks();
 
                services.AddSignalR().AddJsonProtocol();
 
@@ -57,7 +58,6 @@ namespace FightTimeLine
                     )
                );
 
-               
                services.AddDbContext<FightTimelineDataContext>(builder =>
                    builder.UseSqlServer(Configuration.GetConnectionString("Default")));
 
