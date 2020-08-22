@@ -45,7 +45,7 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
     zoomMax: 30 * 60 * 1000,
     zoomKey: "ctrlKey",
     moveable: true,
-    format: this.format(),
+    format: Utils.format(this.startDate),
     type: "box",
     multiselect: false,
     showCurrentTime: false,
@@ -69,45 +69,6 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
   filteredTemplates: M.IBossSearchEntry[] = [];
   isTimelineLoading: boolean = false;
 
-  format() {
-    return {
-      minorLabels: (date: Date, scale: string, step: Number) => {
-        const diff = (date.valueOf() as number) - (this.startDate.valueOf() as number);
-        var cd = new Date(Math.abs(diff) +
-          (this.startDate.valueOf() as number));
-        var result;
-        switch (scale) {
-          case 'second':
-            result = (diff < 0 ? -1 : 1) * cd.getSeconds();
-            break;
-          case 'minute':
-            result = (diff < 0 ? -1 : 1) * cd.getMinutes();
-            break;
-          default:
-            return new Date(date);
-        }
-        return result;
-      },
-      majorLabels: (date: Date, scale: string, step: Number) => {
-        const diff = (date.valueOf() as number) - (this.startDate.valueOf() as number);
-        var cd = new Date(Math.abs(diff) + (this.startDate.valueOf() as number));
-        var result;
-        switch (scale) {
-          case 'second':
-            result = (diff < 0 ? -1 : 1) * cd.getMinutes();
-            break;
-          case 'minute':
-            result = 0;
-            break;
-          default:
-            return new Date(date);
-        }
-        return result;
-      }
-    };
-  }
-
-
   constructor(
     private dialogRef: NzModalRef,
     @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
@@ -129,8 +90,8 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
         first()
         )
       .subscribe(val => {
-        this.zones = (val as any);
-        this.filteredZones = val as any;
+        this.zones = (val as any as Zone[]).sort((a:Zone, b: Zone) => a.name.localeCompare(b.name));
+        this.filteredZones = this.zones;
         if (this.data && this.data.boss && this.zones) {
           const zone = this.zones.find((z) => z.encounters.some((y => y.id === this.data.boss.ref) as any));
           if (zone) {

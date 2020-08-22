@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   pure: false
 })
 export class KillsOnlyPipe implements PipeTransform {
-  transform(items: any[], filter: boolean): any {
+  transform(items: any[], filter: any): any {
     if (!items || !filter) {
       return items;
     }

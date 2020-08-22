@@ -39,7 +39,8 @@
     </nz-form-item>
   </form>
   <div *nzModalFooter>
-    <button nz-button (click)="onNoClick()">No Thanks</button>
+
     <button nz-button (click)="onRegisterClick()" [nzLoading]="loading" [disabled]="loading" cdkFocusInitial>Register</button>
+    <button nz-button nzType="primary" (click)="onNoClick()">No Thanks</button>
   </div>
 </div>

@@ -32,6 +32,7 @@ export class FFLogsImportDialog implements OnInit {
   dialogContentHeight = "60px";
   recent: any;
   prevSearch: string = null;
+  killsOnly: boolean = true;
 
 
   constructor(
@@ -49,6 +50,10 @@ export class FFLogsImportDialog implements OnInit {
 
   onSearch(data: string): void {
     if (this.prevSearch === data) return;
+    if (data === "") {
+      this.code = "";
+      this.hideExtraAreas();
+    }
     this.prevSearch = data;
     const r = /reports\/([a-zA-Z0-9]{16})\/?(?:(?:#.*fight=([^&]*))|$)/igm;
     const res = r.exec(data) as any;
@@ -73,7 +78,8 @@ export class FFLogsImportDialog implements OnInit {
         } else {
           this.service.dataService.getFight(res[1])
             .then((it: ReportFightsResponse) => {
-             
+              if (it.fights.length == 0) return;
+
               const groupBy = key => array =>
                 array.reduce((objectsByKeyValue, obj) => {
                   const value = obj[key];
@@ -105,7 +111,7 @@ export class FFLogsImportDialog implements OnInit {
               settings.fflogsImport.characterServer,
               settings.fflogsImport.characterRegion)
             .subscribe(parses => {
-                if (parses) {
+                if (parses && parses.length>0) {
                   this.parsesList = parses.sort((a, b) => b.startTime - a.startTime);
                   this.dialogContentHeight = "360px";
                   this.searchAreaDisplay = "none";

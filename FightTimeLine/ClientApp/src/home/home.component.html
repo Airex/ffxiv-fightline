@@ -46,10 +46,10 @@
                 Get started
               </div>
               <div>
-                <button nz-button class="action-button" (click)="showHelp()">Open help</button>
+                <button nz-button class="action-button" (click)="showHelp()">Open Help</button>
               </div>
               <div *ngIf="gameService.showImport">
-                <button nz-button color="primary" class="action-button" (click)="importFromFFLogs()">Import from FFLogs</button>
+                <button nz-button color="primary" class="action-button" (click)="importFromFFLogs()">Import From FFLogs</button>
                 <div style="text-align: right;margin-top: 3px;margin-right: 23px;">
                   <a target="_blank" [href]="'https://www.fflogs.com/'+ fflogsExtraPath" style="border-bottom-style: dotted;border-bottom-width: thin;">Open FFLogs</a>
                 </div>
@@ -58,10 +58,10 @@
                 <button nz-button [nzType]="authenticationService.authenticated?'primary':'danger'" class="action-button" (click)="load()">Load</button>
               </div>
               <div>
-                <button nz-button class="action-button" (click)="bossTemplates()">Boss templates</button>
+                <button nz-button class="action-button" (click)="bossTemplates()">Boss Templates</button>
               </div>
               <div>
-                <button nz-button color="primary" class="action-button" (click)="new()">Start new</button>
+                <button nz-button color="primary" class="action-button" (click)="new()">Start New</button>
               </div>
             </div>
           </div>

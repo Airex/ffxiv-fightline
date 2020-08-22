@@ -15,8 +15,8 @@
     </div>
   </form>
   <div *nzModalFooter>
-    <button nz-button (click)="onNoClick()">No Thanks</button>
     <button nz-button (click)="onLoginClick()" [nzLoading]="loading" [disabled]="loading" cdkFocusInitial>Login</button>
+    <button nz-button (click)="onNoClick()" nzType="primary">No Thanks</button>
   </div>
 </div>
 
