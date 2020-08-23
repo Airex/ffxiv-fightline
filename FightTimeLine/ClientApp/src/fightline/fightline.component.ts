@@ -827,7 +827,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.fightLineController.handleDelete(value);
     });
 
-    
+
 
     dispatcher.on("SidePanel Remove Downtime").subscribe(value => {
       this.fightLineController.removeDownTime(value);
@@ -845,7 +845,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
             it.ability.name.trim() !== "" &&
             it.ability.name.indexOf("Unknown_") < 0);
           const g = _.groupBy(enemyAttacks, d => d.ability.name + "_" + Math.trunc(d.timestamp / 1000));
-          const attacks = Object.keys(g).map((k: string) => {
+          const attacks : FF.AbilityEvent[] = Object.keys(g).map((k: string) => {
             return g[k][0];
           });
 

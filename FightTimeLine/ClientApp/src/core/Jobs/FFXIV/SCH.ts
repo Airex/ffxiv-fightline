@@ -9,7 +9,7 @@ export const SCH: IJob = {
   abilities: [
     {
       name: "Whispering Dawn",
-      duration: 0,
+      duration: 21,
       cooldown: 60,
       xivDbId: "803",
       icon: ("62_PetsFairy/0803_Whispering Dawn"),
@@ -82,7 +82,7 @@ export const SCH: IJob = {
     },
     {
       name: "Excogitation",
-      duration: 0,
+      duration: 45,
       cooldown: 45,
       xivDbId: "7434",
       requiresBossTarget: false,
@@ -103,13 +103,13 @@ export const SCH: IJob = {
       name: "Aetherpact",
       duration: 0,
       cooldown: 1,
-      xivDbId: "7423",
+      xivDbId: "7437",
       icon: ("62_PetsFairy/7437_Aetherpact"),
       abilityType: AbilityType.Healing,
     },
     {
       name: "Recitation",
-      duration: 0,
+      duration: 15,
       cooldown: 90,
       xivDbId: "16542",
       icon: ("Scholar/icon_27"),
@@ -146,7 +146,7 @@ export const SCH: IJob = {
     },
    
     ...getAbilitiesFrom(healerSharedAbilities),
-    medicine["Mind"]
+    medicine.Mind
   ].sort(abilitySortFn)
 };
 

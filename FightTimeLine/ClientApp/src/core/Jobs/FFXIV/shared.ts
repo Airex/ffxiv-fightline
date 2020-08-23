@@ -30,10 +30,10 @@ export const getAbilitiesFrom = (arr: IAbilities): IAbility[] => {
 
 export enum SettingsEnum {
   Target = "target",
-  ChangesTarger = "changesTarget"
+  ChangesTarget = "changesTarget"
 }
 
-export type SettingsType = {[T in SettingsEnum]:IAbilitySetting}
+export type SettingsType = { [T in SettingsEnum]: IAbilitySetting }
 
 
 export const settings: SettingsType = {
@@ -83,7 +83,14 @@ export const healerSharedAbilities: IAbilities = {
   ...magicSharedAbilities
 };
 
-export const medicine: IAbilities  = {
+enum MedicineEnum {
+  Mind = "Mind",
+  Intelligence = "Intelligence",
+  Dexterity = "Dexterity",
+  Strength = "Strength"
+}
+
+export const medicine: {[TName in MedicineEnum]:IAbility} = {
   Mind: { name: "Medicine", duration: 30, cooldown: 270, xivDbId: "27999", icon: ("Medicine/22451_Mind"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
   Intelligence: { name: "Medicine", duration: 30, cooldown: 270, xivDbId: "27998", icon: ("Medicine/22450_Intelligence"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
   Dexterity: { name: "Medicine", duration: 30, cooldown: 270, xivDbId: "27996", icon: ("Medicine/22448_Dexterity"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
