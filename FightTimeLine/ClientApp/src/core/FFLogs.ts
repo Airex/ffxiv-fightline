@@ -140,6 +140,7 @@ export interface Events {
 
 export interface AbilityEvent extends Event {
   ability: Ability;
+  bossHp?: number;
 }
 
 interface EffectEvent extends AbilityEvent {

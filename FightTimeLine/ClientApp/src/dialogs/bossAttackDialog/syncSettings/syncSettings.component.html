@@ -134,26 +134,7 @@
                         <nz-option nzValue="ne" nzLabel="<>"></nz-option>
                       </nz-select>
                     </ng-template>
-                    <nz-input-number name="hp" [nzMin]="1" [nzMax]="100" [nzStep]="1" [nzFormatter]="formatterPercent" [nzParser]="parserPercent" [(ngModel)]="selected.origin.data.payload.hp"></nz-input-number>
-                  </nz-input-group>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
-            <div *ngSwitchCase="'hpPercent'">
-              <nz-form-item>
-                <nz-form-control nzSpan="12">
-                  <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate">
-                    <ng-template #addOnBeforeTemplate>
-                      <nz-select name="hpComparer" #typeControl style="width: 100px;" [(ngModel)]="selected.origin.data.payload.hpComparer" nzPlaceHolder="Choose">
-                        <nz-option nzValue="l" nzLabel="<"></nz-option>
-                        <nz-option nzValue="le" nzLabel="<="></nz-option>
-                        <nz-option nzValue="g" nzLabel=">"></nz-option>
-                        <nz-option nzValue="ge" nzLabel=">="></nz-option>
-                        <nz-option nzValue="e" nzLabel="=="></nz-option>
-                        <nz-option nzValue="ne" nzLabel="<>"></nz-option>
-                      </nz-select>
-                    </ng-template>
-                    <nz-input-number name="hp" [nzMin]="1" [nzMax]="100" [nzStep]="1" [nzFormatter]="formatterPercent" [nzParser]="parserPercent" [(ngModel)]="selected.origin.data.payload.hp"></nz-input-number>
+                    <nz-input-number name="hp" [nzMin]="0" [nzMax]="100" [nzStep]="1" [nzFormatter]="formatterPercent" [nzParser]="parserPercent" [(ngModel)]="selected.origin.data.payload.hp"></nz-input-number>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>

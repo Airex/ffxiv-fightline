@@ -834,31 +834,42 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.setSidePanel(null);
     });
 
-    dispatcher.on("BossTemplates Load").subscribe(value => {
+    dispatcher.on("BossTemplates Load").subscribe(async value => {
       const source = this.fightLineController.data.importedFrom;
       if (source) {
         const parts = source.split(":");
-        this.gameService.dataService.getEvents(parts[0], Number(parts[1]), null).then(data => {
-          const enemyAttacks = data.events.map(it => it as FF.AbilityEvent).filter(it => !it.sourceIsFriendly &&
-            it.ability &&
-            it.ability.name.toLowerCase() !== "attack" &&
-            it.ability.name.trim() !== "" &&
-            it.ability.name.indexOf("Unknown_") < 0);
-          const g = _.groupBy(enemyAttacks, d => d.ability.name + "_" + Math.trunc(d.timestamp / 1000));
-          const attacks : FF.AbilityEvent[] = Object.keys(g).map((k: string) => {
-            return g[k][0];
-          });
+        let bossHp = 0;
 
-          const bossData = JSON.parse(value.boss.data) as SerializeController.IBossSerializeData;
-          const result = process(attacks, data.fight.start_time, bossData.attacks.map(it => it.ability));
-          bossData.attacks = result.map(it => <SerializeController.IBossAbilityUsageData>{
-            ability: it,
-            id: this.idgen.getNextId(M.EntryType.BossAttack)
-          });
-          value.boss.data = JSON.stringify(bossData);
-          this.fightLineController.loadBoss(value.boss);
-          value.close();
+        const data = await this.gameService.dataService.getEvents(parts[0], Number(parts[1]), null);
+
+        const enemyAttacks = data.events.filter((it: FF.AbilityEvent) => {
+            if (it.sourceIsFriendly && FF.isDamageEvent(it)) {
+              bossHp = it.targetResources.hitPoints / it.targetResources.maxHitPoints * 100;
+          }
+
+            it.bossHp = bossHp;
+            return !it.sourceIsFriendly &&
+              it.ability &&
+              it.ability.name.toLowerCase() !== "attack" &&
+              it.ability.name.trim() !== "" &&
+              it.ability.name.indexOf("Unknown_") < 0
+          }
+        );
+        const g = _.groupBy(enemyAttacks, d => d.ability.name + "_" + Math.trunc(d.timestamp / 1000));
+        const attacks: FF.AbilityEvent[] = Object.keys(g).map((k: string) => {
+          return g[k][0];
         });
+
+        const bossData = JSON.parse(value.boss.data) as SerializeController.IBossSerializeData;
+        const result = process(attacks, data.fight.start_time, bossData.attacks.map(it => it.ability));
+        bossData.attacks = result.map(it => <SerializeController.IBossAbilityUsageData>{
+          ability: it,
+          id: this.idgen.getNextId(M.EntryType.BossAttack)
+        });
+        value.boss.data = JSON.stringify(bossData);
+        this.fightLineController.loadBoss(value.boss);
+        value.close();
+
       } else {
         this.fightLineController.loadBoss(value.boss);
         value.close();

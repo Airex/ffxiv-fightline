@@ -3,7 +3,23 @@ import * as M from "./Models"
 import { Utils } from "./Utils"
 
 export interface IProcessingContext {
+  count(name: string): number;
+  startTime: number
+}
 
+
+class ProcessingContext implements IProcessingContext {
+  constructor(public startTime: number) {return;}
+
+  counter: { [name: string]: number } = {};
+
+  count(name: string): number {
+    return this.counter[name];
+  }
+
+  countMe(name: string) {
+    this.counter[name] = (this.counter[name] || 0) + 1;
+  }
 }
 
 abstract class Base {
@@ -36,16 +52,13 @@ const compare = (name: string, a1: number, a2: number): boolean => {
 }
 
 class Count extends Base {
-
   count: number;
   countComparer: string;
-  counter: number = 0;
   name: string;
 
-  process(event: FF.AbilityEvent, context: IProcessingContext):boolean {
-    if (event.ability.name === this.name)
-      ++this.counter;
-    return compare(this.countComparer, this.count, this.counter);
+  process(event: FF.AbilityEvent, context: IProcessingContext): boolean {
+    const counter = context.count(this.name)
+    return compare(this.countComparer, this.count, counter);
   }
 
   constructor(val: any) {
@@ -54,8 +67,11 @@ class Count extends Base {
 }
 
 class Time extends Base {
+  offset: number;
+  offsetComparer: string;
+
   process(event: FF.AbilityEvent, context: IProcessingContext) {
-    return false;
+    return compare(this.offsetComparer, Utils.getDateFromOffset(this.offset).valueOf() - context.startTime, event.timestamp - context.startTime )
   }
 
   constructor(val: any) {
@@ -64,18 +80,11 @@ class Time extends Base {
 }
 
 class Hp extends Base {
-  process(event: FF.AbilityEvent, context: IProcessingContext) {
-    return false;
-  }
+  count: number;
+  countComparer: string;
 
-  constructor(val: any) {
-    super(val);
-  }
-}
-
-class HpPercent extends Base {
   process(event: FF.AbilityEvent, context: IProcessingContext) {
-    return false;
+    return compare(this.countComparer, this.count, event.bossHp);
   }
 
   constructor(val: any) {
@@ -140,18 +149,21 @@ export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.I
     };
   };
 
+  const context = new ProcessingContext(startTime);
+
   //find attacks with settings
-  const withSettings = attacks.filter(c => !!c.syncSettings).map(c => {
-    const s = JSON.parse(c.syncSettings) as M.ISyncData;
-    return buildSettings(s, c.offset);
+  const withSettings = attacks
+    .filter(c => !!c.syncSettings)
+    .map(c => {
+      const s = JSON.parse(c.syncSettings) as M.ISyncData;
+      return buildSettings(s, c.offset);
   });
 
   const windows: Window[] = [];
 
-  const context = {}
-
   //build windowsB
   data.forEach(d => {
+    context.countMe(d.ability.name);
     withSettings.forEach(ws => {
       const value = ws.tree.root.value(d, context);
       if (value) {
@@ -206,7 +218,7 @@ class AndNode implements IExpressionNode<FF.AbilityEvent> {
     this.nodes = nodes;
   }
   value(data: FF.AbilityEvent, context: IProcessingContext): boolean {
-    return this.nodes && this.nodes.every((n => n.value(data)) as any);
+    return this.nodes && this.nodes.every(((n: IExpressionNode<FF.AbilityEvent>) => n.value(data, context)));
   }
 
   nodes: IExpressionNode<FF.AbilityEvent>[];
@@ -219,7 +231,7 @@ class OrNode implements IExpressionNode<FF.AbilityEvent> {
   }
 
   value(data: FF.AbilityEvent, context: IProcessingContext): boolean {
-    return this.nodes && this.nodes.some((n => n.value(data)) as any);
+    return this.nodes && this.nodes.some(((n: IExpressionNode<FF.AbilityEvent>) => n.value(data, context)));
   }
 
   nodes: IExpressionNode<FF.AbilityEvent>[];
@@ -241,7 +253,6 @@ export function factory(name: string, foo: any): Base {
     "count": () => new Count(foo),
     "type": () => new Type(foo),
     "hp": () => new Hp(foo),
-    "hpPercent": () => new HpPercent(foo),
     "time": () => new Time(foo),
     "name": () => new Name(foo)
   };
