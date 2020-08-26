@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter, Output, Directive } from '@angular/core';
+import { Injectable, EventEmitter, Output, Directive,Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable, of, } from 'rxjs';
@@ -14,10 +14,11 @@ export class AuthenticationService implements IAuthenticationService {
   private user:any;
   constructor(
     private readonly http: HttpClient,
+    @Inject("BASE_URL") private basePath: string,
     private readonly storage: LocalStorageService) { }
 
   login(username: string, password: string):Observable<any> {
-    return this.http.post<any>('/api/token/createtoken', { username: username, password: password })
+    return this.http.post<any>(this.basePath+ 'api/token/createtoken', { username: username, password: password })
       .pipe(map((res: any) => {
         // login successful if there's a jwt token in the response
         if (res && res.token) {

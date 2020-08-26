@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   forceSWTOR: false,
-  showDialogOnUnload: false
+  showDialogOnUnload: false,
+  skipHub: true
 };
 
 /*

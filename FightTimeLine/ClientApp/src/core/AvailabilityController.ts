@@ -63,6 +63,7 @@ export class AvailabilityController {
   }
 
   private processChargesAbility(it: AbilityMap) {
+    return;
     const usages = [
       //...this.getDependencies(deps, it.job),
       ...this.holders.itemUsages.getByAbility(it.id)
@@ -113,7 +114,10 @@ export class AvailabilityController {
   private processStandardAbility(it: AbilityMap, deps: string[]) {
     const usages = [
       ...this.getDependencies(deps, it.job),
-      ...this.holders.itemUsages.getByAbility(it.id)
+      ...this.holders.itemUsages.getByAbility(it.id),
+      {
+        startAsNumber : this.startDate.valueOf()+30*60*1000+it.ability.cooldown*1000 + it.ability.duration*1000
+      }
     ].sort((a, b) => (a.startAsNumber) - (b.startAsNumber));
 
     this.holders.abilityAvailability.removeForAbility(it.id);
@@ -128,8 +132,8 @@ export class AvailabilityController {
       const av = diff > it.ability.cooldown;
       prev = c;
       if (av) {
-        const id = this.idgen.getNextId(M.EntryType.AbilityAvailability);
-        return new AbilityAvailabilityMap(id,
+        return new AbilityAvailabilityMap(
+          this.idgen.getNextId(M.EntryType.AbilityAvailability),
           it,
           {
             start: start,

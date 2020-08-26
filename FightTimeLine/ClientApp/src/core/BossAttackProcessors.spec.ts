@@ -68,7 +68,7 @@ describe('BossAttackProcessors', () => {
                 type: 'count',
                 payload: {
                   name: "a5",
-                  countComparer: "==",
+                  countComparer: "e",
                   count: 1
                 }
               }]
@@ -103,7 +103,7 @@ describe('BossAttackProcessors', () => {
                 type: 'count',
                 payload: {
                   name: "a8",
-                  countComparer: "==",
+                  countComparer: "e",
                   count: 1
                 }
               }]

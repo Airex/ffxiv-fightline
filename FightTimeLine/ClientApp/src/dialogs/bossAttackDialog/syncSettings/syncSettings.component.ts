@@ -14,7 +14,7 @@ export class SyncSettingsComponent implements OnInit {
   @Input("data") data: M.IBossAbility;
   @ViewChild("tree", { static: true }) tree: NzTreeComponent;
   settings: NzTreeNodeOptions[];
-  offset: string;
+  offset: string = "00:00";
   uniqueIndex: number = 0;
   expression: string;
 
@@ -90,7 +90,7 @@ export class SyncSettingsComponent implements OnInit {
   ngOnInit() {
     const syncData: M.ISyncData = this.data.syncSettings && JSON.parse(this.data.syncSettings);
     this.settings = [this.convertToNodes(syncData && syncData.condition)];
-    this.offset = syncData && syncData.offset;
+    this.offset = syncData && syncData.offset || "00:00";
     setTimeout(() => this.updateExpression());
   }
 

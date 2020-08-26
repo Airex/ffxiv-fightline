@@ -47,16 +47,23 @@ namespace FightTimeLine
 
                services.AddScoped<IHubUsersStorage, SqlServerHubUsersStorage>();
 
+               services.AddCors(options =>
+                    {
+                         options.AddDefaultPolicy(cb => cb
+                              .AllowAnyMethod()
+                              .AllowAnyHeader()
+                              .AllowAnyOrigin());
+                         options.AddPolicy("CorsPolicy", cb => cb
+                              .AllowAnyMethod()
+                              .AllowAnyHeader()
+                              .AllowAnyOrigin()
+                         );
+                    }
+               );
 
                services.AddSignalR().AddJsonProtocol();
 
-               services.AddCors(options => options
-                    .AddPolicy("CorsPolicy", cb => cb
-                         .AllowAnyMethod()
-                         .AllowAnyHeader()
-                         .AllowAnyOrigin()
-                    )
-               );
+               
 
                services.AddDbContext<FightTimelineDataContext>(builder =>
                    builder.UseSqlServer(Configuration.GetConnectionString("Default")));
@@ -84,13 +91,15 @@ namespace FightTimeLine
                     app.UseHttpsRedirection();
                }
                app.UseStaticFiles();
-               app.UseSpaStaticFiles();
+               // app.UseSpaStaticFiles();
+
+               app.UseCors();
 
                app.UseRouting();
 
                app.UseAuthentication();
                app.UseAuthorization();
-               app.UseCors("CorsPolicy");
+               
 
                app.UseEndpoints(builder =>
                {
@@ -105,9 +114,9 @@ namespace FightTimeLine
                {
                     // To learn more about options for serving an Angular SPA from ASP.NET Core,
                     // see https://go.microsoft.com/fwlink/?linkid=864501
-
+               
                     spa.Options.SourcePath = "ClientApp";
-
+               
                     if (env.IsDevelopment())
                     {
                          spa.UseAngularCliServer(npmScript: "start");

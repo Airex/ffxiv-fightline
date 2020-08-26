@@ -1,4 +1,4 @@
-import { Injectable, Output, EventEmitter, Directive } from "@angular/core";
+import { Injectable, Output, EventEmitter, Directive, Inject } from "@angular/core";
 import { HubConnection, HubConnectionBuilder, LogLevel, HubConnectionState } from "@aspnet/signalr"
 import * as M from "../core/Models"
 import * as Environment from "../environments/environment";
@@ -7,6 +7,9 @@ import * as Environment from "../environments/environment";
 @Injectable()
 export class FightHubService {
 
+  constructor(@Inject("BASE_URL") private basePath: string) {
+
+  }
   private hubConnection: HubConnection;
   private connectedUsers: M.IHubUser[] = [];
 
@@ -30,7 +33,7 @@ export class FightHubService {
   private createConnection(): HubConnection {
     this.hubConnection = new HubConnectionBuilder()
       .configureLogging(LogLevel.Information)
-      .withUrl("/fighthub")
+      .withUrl(this.basePath + "fighthub")
       .build();
     return this.hubConnection;
   }
@@ -48,7 +51,7 @@ export class FightHubService {
   }
 
   startSession(fight: string, username: string, handlers: IStartSessionHandlers): Promise<string> {
-    if (!Environment.environment.production) return Promise.resolve("");
+    if (!Environment.environment.production || Environment.environment.skipHub ) return Promise.resolve("");
     const connection = this.createConnection();
     this.attachHandlers(connection, handlers);
 
@@ -72,7 +75,7 @@ export class FightHubService {
   }
 
   connect(fight: string, username: string, handlers: IConnectToSessionHandlers): Promise<any> {
-    if (fight) {
+    if (fight && this.connected) {
       const connection = this.createConnection();
       this.attachHandlers(connection, handlers);
 

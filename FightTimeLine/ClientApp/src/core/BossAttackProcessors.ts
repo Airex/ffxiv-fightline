@@ -41,12 +41,12 @@ type Builders = {
 
 const compare = (name: string, a1: number, a2: number): boolean => {
   const cmps = {
-    "<": (a1: number, a2: number) => a1 < a2,
-    "<=": (a1: number, a2: number) => a1 <= a2,
-    ">": (a1: number, a2: number) => a1 > a2,
-    ">=": (a1: number, a2: number) => a1 >= a2,
-    "==": (a1: number, a2: number) => a1 === a2,
-    "<>": (a1: number, a2: number) => a1 !== a2,
+    "l": (a1: number, a2: number) => a1 < a2,
+    "le": (a1: number, a2: number) => a1 <= a2,
+    "g": (a1: number, a2: number) => a1 > a2,
+    "ge": (a1: number, a2: number) => a1 >= a2,
+    "e": (a1: number, a2: number) => a1 === a2,
+    "ne": (a1: number, a2: number) => a1 !== a2,
   }
   return cmps[name](a1, a2);
 }
@@ -58,7 +58,7 @@ class Count extends Base {
 
   process(event: FF.AbilityEvent, context: IProcessingContext): boolean {
     const counter = context.count(this.name)
-    return compare(this.countComparer, this.count, counter);
+    return compare(this.countComparer,  counter, this.count);
   }
 
   constructor(val: any) {
@@ -84,7 +84,7 @@ class Hp extends Base {
   countComparer: string;
 
   process(event: FF.AbilityEvent, context: IProcessingContext) {
-    return compare(this.countComparer, this.count, event.bossHp);
+    return compare(this.countComparer, event.bossHp, this.count);
   }
 
   constructor(val: any) {
@@ -143,7 +143,7 @@ export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.I
   const buildSettings = (root: M.ISyncData, time: string) => {
     return <IUnit<FF.AbilityEvent>>{
       name: "",
-      offset: Utils.getDateFromOffset(root.offset).valueOf() as number,
+      offset: Utils.getDateFromOffset(root.offset || "0:0").valueOf() as number,
       time: Utils.getDateFromOffset(time).valueOf() as number,
       tree: buildTree(root)
     };
