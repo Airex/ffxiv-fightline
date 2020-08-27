@@ -15,7 +15,7 @@ describe('BossAttackProcessors', () => {
         type: FF.AbilityType.PHYSICAL_DIRECT,
         abilityIcon: ""
       },
-      timestamp: at*1000,
+      timestamp: at * 1000 * 10,
       type: 'cast',
       sourceIsFriendly: false,
       targetIsFriendly: true,
@@ -33,23 +33,23 @@ describe('BossAttackProcessors', () => {
     ];
     const attacks: M.IBossAbility[] = [
       {
-        offset: "00:01",
+        offset: "00:10",
         name: "a1"
       },
       {
-        offset: "00:02",
+        offset: "00:20",
         name: "a2"
       },
       {
-        offset: "00:03",
+        offset: "00:30",
         name: "a3"
       },
       {
-        offset: "00:04",
+        offset: "00:40",
         name: "a4"
       },
       {
-        offset: "00:05",
+        offset: "00:50",
         name: "a5",
         syncSettings: JSON.stringify(<M.ISyncData>{
           offset: "00:00",
@@ -76,16 +76,17 @@ describe('BossAttackProcessors', () => {
         })
       },
       {
-        offset: "00:06",
+        offset: "01:00",
         name: "a6"
       },
       {
-        offset: "00:07",
+        offset: "01:10",
         name: "a7"
       },
       {
-        offset: "00:08",
+        offset: "01:20",
         name: "a8",
+        syncDowntime: "d1",
         syncSettings: JSON.stringify(<M.ISyncData>{
           offset: "00:00",
           condition: <M.ISyncSettingGroup>{
@@ -111,15 +112,17 @@ describe('BossAttackProcessors', () => {
         })
       },
       {
-        offset: "00:09",
+        offset: "01:30",
         name: "a9"
       }
     ];
-
-    const actual = process(data, 0, attacks);
+    const downtime = {start: "01:10", end: "01:20", id: "d1", color: "", comment: ""};
+    const actual = process(data, 0, attacks, [downtime]);
     expect(actual).not.toBeNull();
+    expect(downtime.start).toEqual("00:40");
+    expect(downtime.end).toEqual("00:50");
     expect(actual && actual.map(t => t.name)).toEqual(["a1", "a2", "a5", "a6", "a8", "a9"]);
-    expect(actual && actual.map(t => t.offset)).toEqual(["00:01", "00:02", "00:03", "00:04", "00:05", "00:06"]);
+    expect(actual && actual.map(t => t.offset)).toEqual(["00:10", "00:20", "00:30", "00:40", "00:50", "01:00"]);
   });
 });
 

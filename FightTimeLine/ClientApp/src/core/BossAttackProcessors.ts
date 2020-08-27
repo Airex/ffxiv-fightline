@@ -187,7 +187,7 @@ export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.I
     const total = windows.filter(w => w.end <= offset).map(v => v.end - v.start).reduce((acc, val) => acc + val, 0);
     it.offset = Utils.formatTime(new Date(offset - total));
     if (it.syncDowntime) {
-      const found = downtimes.find(d => d.id);
+      const found = downtimes.find(d => d.id === it.syncDowntime);
       if (found) {
         found.start = Utils.formatTime(new Date(Utils.getDateFromOffset(found.start).valueOf() - total));
         found.end = Utils.formatTime(new Date(Utils.getDateFromOffset(found.end).valueOf() - total));

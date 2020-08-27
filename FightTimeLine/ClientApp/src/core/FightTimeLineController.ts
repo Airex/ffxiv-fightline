@@ -100,12 +100,12 @@ export class FightTimeLineController {
     });
 
     commands.push(new C.AddBatchAttacksCommand(
-      loadData.attacks.map(it => new C.AddBossAttackCommand(this.idgen.getNextId(M.EntryType.BossAttack),
+      loadData.attacks.map(it => new C.AddBossAttackCommand(it.id || this.idgen.getNextId(M.EntryType.BossAttack),
         it.ability))));
 
     let index = 1;
     for (let d of loadData.downTimes) {
-      const nextId = this.idgen.getNextId(M.EntryType.BossDownTime);
+      const nextId = d.id || this.idgen.getNextId(M.EntryType.BossDownTime);
       commands.push(new C.AddDowntimeCommand(nextId,
         {
           start: Utils.getDateFromOffset(d.start, this.startDate),

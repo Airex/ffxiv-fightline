@@ -207,7 +207,7 @@ export function provideConfig() {
 }
 
 export function getBaseUrl() {
-  return document.getElementsByTagName("base")[0].href;
+  return environment.baseUrl;;
 }
 
 

@@ -205,7 +205,8 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
       id: id,
       content: "",
       type: "background",
-      className: "downtime " + color
+      style: "background-color:" + color,
+      className: "downtime"
     }
   }
 

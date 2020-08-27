@@ -211,7 +211,8 @@ export class BossAttacksCollector extends BaseCollector {
             type: this.getAbilityType(ability),
             offset: Utils.formatTime(date),
             isAoe: arr.length > 4,
-            isTankBuster: tbs.indexOf(ability.ability.name) >= 0
+            isTankBuster: tbs.indexOf(ability.ability.name) >= 0,
+            source : ability.source && ability.source.name
           }));
       }
     });
