@@ -364,6 +364,7 @@ export interface IBossAbility {
   isShareDamage?: boolean;
   syncSettings?: string;
   syncDowntime?: string;
+  syncPreDowntime?: string;
   description?: string;
   source?:string;
 }

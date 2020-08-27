@@ -99,6 +99,7 @@ export class SerializeController {
                 syncSettings: ab.attack.syncSettings,
                 source: ab.attack.source,
                 syncDowntime: ab.attack.syncDowntime,
+                syncPreDowntime: ab.attack.syncPreDowntime,
                 description: ab.attack.description
               }
             };

@@ -193,6 +193,12 @@ export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.I
         found.end = Utils.formatTime(new Date(Utils.getDateFromOffset(found.end).valueOf() - total));
       }
     }
+    if (it.syncPreDowntime) {
+      const found = downtimes.find(d => d.id === it.syncPreDowntime);
+      if (found) {
+        found.end = Utils.formatTime(new Date(Utils.getDateFromOffset(found.end).valueOf() - total));
+      }
+    }
   });
 
   

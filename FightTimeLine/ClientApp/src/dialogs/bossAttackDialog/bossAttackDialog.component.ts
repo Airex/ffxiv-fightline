@@ -72,6 +72,8 @@ export class BossAttackDialog implements OnInit {
       this.data.syncSettings = this.syncSettings.buildSyncSettings();
     if (this.syncDowntime)
       this.data.syncDowntime = this.syncDowntime.selected;
+    if (this.syncDowntime)
+      this.data.syncPreDowntime = this.syncDowntime.selectedPre;
   }
 
   onSaveClick(): void {

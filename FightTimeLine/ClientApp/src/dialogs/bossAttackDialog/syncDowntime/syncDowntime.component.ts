@@ -18,10 +18,12 @@ export class SyncDowntimeComponent implements OnInit {
   @Input("holders") holders: H.Holders;
   downtimes: any[];
   selected: any;
+  selectedPre: any;
 
   ngOnInit() {
     this.downtimes = this.holders.bossDownTime.getAll();
     this.selected = this.data.syncDowntime;
+    this.selectedPre = this.data.syncPreDowntime;
   }
 }
 
