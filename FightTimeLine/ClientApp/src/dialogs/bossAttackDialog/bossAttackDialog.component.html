@@ -12,12 +12,12 @@
         </nz-badge>
       </ng-template>
       <form nz-form [formGroup]="editForm" [nzGutter]="24">
-        <nz-form-item >
+        <nz-form-item>
           <nz-form-control nzSpan="12" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.bossAttackName.errors?'error':'success'" nzErrorTip="You must enter a value">
             <input nz-input formControlName="bossAttackName" placeholder="Attack name">
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item >
+        <nz-form-item>
           <nz-form-control nzSpan="12" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.damageType.errors?'error':'success'" nzErrorTip="You must select a value">
             <nz-radio-group formControlName="damageType" nzPlaceHolder="Damage type" [nzButtonStyle]="'solid'">
               <label nz-radio-button [nzValue]="0" nzLabel="None">None</label>
@@ -58,6 +58,9 @@
     </nz-tab>
     <nz-tab nzTitle="FFLogs Sync" *ngIf="gameService.showImport">
       <syncSettings #syncSettings [data]="data"></syncSettings>
+    </nz-tab>
+    <nz-tab nzTitle="Downtime Sync" *ngIf="gameService.showImport">
+      <syncDowntime #syncDowntime [data]="data" [holders]="holders"></syncDowntime>
     </nz-tab>
   </nz-tabset>
   <div *nzModalFooter>

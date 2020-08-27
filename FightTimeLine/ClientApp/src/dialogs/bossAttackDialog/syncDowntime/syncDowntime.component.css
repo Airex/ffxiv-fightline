@@ -1,0 +1,18 @@
+.plus-button button {
+  color: #30a51c;
+  margin-bottom: 4px;
+}
+
+  .plus-button button:disabled {
+    color: lightgray;
+  }
+
+.minus-button button {
+  color: red;
+  margin-bottom: 4px;
+}
+
+.minus-button button:disabled {
+  color: lightgray;
+    
+}

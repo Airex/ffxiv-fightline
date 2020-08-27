@@ -1,5 +1,6 @@
 import { DataItem } from "vis-timeline"
 import { BaseMap } from "./BaseMap";
+import { Utils } from "../Utils";
 import * as BaseHolder from "../Holders/BaseHolder";
 
 export interface IBossDownTimeMapData {
@@ -33,6 +34,10 @@ export class BossDownTimeMap extends BaseMap<string, DataItem, IBossDownTimeMapD
 
   set end(v: Date) {
     this.data.end = v;
+  }
+
+  get dispayName(): string {
+    return Utils.formatTime(this.start) + "-" + Utils.formatTime(this.end);
   }
 
   constructor(id: string, startId: string, endId: string, data: IBossDownTimeMapData) {

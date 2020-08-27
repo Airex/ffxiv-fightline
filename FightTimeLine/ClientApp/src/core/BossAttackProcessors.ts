@@ -1,6 +1,7 @@
 import * as FF from "./FFLogs"
 import * as M from "./Models"
 import { Utils } from "./Utils"
+import { IDowntimeSerializeData } from "./SerializeController"
 
 export interface IProcessingContext {
   count(name: string): number;
@@ -139,7 +140,7 @@ const buildTree = (data: M.ISyncData): IExpressionTree<FF.AbilityEvent> => {
 }
 
 
-export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.IBossAbility[]): M.IBossAbility[] => {
+export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.IBossAbility[], downtimes: IDowntimeSerializeData[]): M.IBossAbility[] => {
   const buildSettings = (root: M.ISyncData, time: string) => {
     return <IUnit<FF.AbilityEvent>>{
       name: "",
@@ -185,7 +186,17 @@ export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.I
     const offset = Utils.getDateFromOffset(it.offset).valueOf();
     const total = windows.filter(w => w.end <= offset).map(v => v.end - v.start).reduce((acc, val) => acc + val, 0);
     it.offset = Utils.formatTime(new Date(offset - total));
+    if (it.syncDowntime) {
+      const found = downtimes.find(d => d.id);
+      if (found) {
+        found.start = Utils.formatTime(new Date(Utils.getDateFromOffset(found.start).valueOf() - total));
+        found.end = Utils.formatTime(new Date(Utils.getDateFromOffset(found.end).valueOf() - total));
+      }
+    }
   });
+
+  
+    
 
   return result;
 }

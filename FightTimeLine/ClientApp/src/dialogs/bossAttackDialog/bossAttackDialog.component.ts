@@ -1,7 +1,9 @@
 import { Component, Input, OnInit, ViewChild, Inject } from "@angular/core";
 import { SyncSettingsComponent } from "./syncSettings/syncSettings.component"
+import { SyncDowntimeComponent } from "./syncDowntime/syncDowntime.component"
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms"
 import * as M from "../../core/Models";
+import * as H from "../../core/Holders";
 import { time } from "../../heplers/TimeValidator";
 import { NzModalRef } from "ng-zorro-antd";
 import * as Gameserviceprovider from "../../services/game.service-provider";
@@ -16,7 +18,9 @@ import * as Gameserviceinterface from "../../services/game.service-interface";
 export class BossAttackDialog implements OnInit {
 
   @Input("data") data: M.IBossAbility;
+  @Input("holders") holders: H.Holders;
   @ViewChild("syncSettings") syncSettings: SyncSettingsComponent;
+  @ViewChild("syncDowntime") syncDowntime: SyncDowntimeComponent;
   editForm: FormGroup;
   submitted = false;
   newAttack = true;
@@ -64,6 +68,8 @@ export class BossAttackDialog implements OnInit {
 
     if (this.syncSettings)
       this.data.syncSettings = this.syncSettings.buildSyncSettings();
+    if (this.syncDowntime)
+      this.data.syncDowntime = this.syncDowntime.selected;
   }
 
   onSaveClick(): void {

@@ -363,7 +363,9 @@ export interface IBossAbility {
   isAoe?: boolean;
   isShareDamage?: boolean;
   syncSettings?: string;
+  syncDowntime?: string;
   description?: string;
+  source?:string;
 }
 
 export interface ISyncData {

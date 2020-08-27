@@ -20,6 +20,7 @@ import { SettingsFilterComponent } from "../dialogs/settingsDialog/filter/settin
 import { SettingsViewComponent } from "../dialogs/settingsDialog/view/settingsView.component";
 import { ToolbarComponent } from "../toolbar/toolbar.component";
 import { SyncSettingsComponent } from "../dialogs/bossAttackDialog/syncSettings/syncSettings.component";
+import { SyncDowntimeComponent } from "../dialogs/bossAttackDialog/syncDowntime/syncDowntime.component";
 import * as Services from "../services/index"
 import { JwtInterceptor } from "../interceptors/jwtInterceptor"
 import { ClipboardModule } from "ngx-clipboard";
@@ -242,6 +243,7 @@ export function getBaseUrl() {
     JobAbilityComponent,
     DownTimeComponent,
     SyncSettingsComponent,
+    SyncDowntimeComponent,
     ...DialogsModuleComponents
   ],
   imports: [
@@ -282,7 +284,7 @@ export function getBaseUrl() {
   entryComponents: [
     ViewComponent, FilterComponent, SettingsFilterComponent, AreaComponent, SettingsViewComponent, PingComponent, SingleAbilityComponent,
     SingleAttackComponent, MultipleAbilityComponent, MultipleAttackComponent, SyncSettingsComponent, JobComponent, JobAbilityComponent, SidepanelComponent,
-    DownTimeComponent, PlanAreaComponent,
+    DownTimeComponent, PlanAreaComponent, SyncDowntimeComponent,
     ...DialogsModuleComponents
   ],
   bootstrap: [AppComponent]

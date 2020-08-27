@@ -1,5 +1,6 @@
 import { Injectable} from "@angular/core"
 import { IBossAbility, IAbilitySetting, IAbilitySettingData, IFight, IAbility, IBoss, IFraction } from "../core/Models";
+import * as H from "../core/Holders";
 import { LocalStorageService } from "./LocalStorageService";
 import {NzModalService, NzModalState } from 'ng-zorro-antd';
 import { Observable } from "rxjs";
@@ -77,7 +78,7 @@ export class DialogService {
     return this.toPromise(dialogRef.afterClose);
   }
 
-  openBossAttackAddDialog(bossAbility: IBossAbility, callBack: (b: any) => void): void {
+  openBossAttackAddDialog(bossAbility: IBossAbility, holders: H.Holders, callBack: (b: any) => void): void {
     const dialogRef = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzTitle: null,
@@ -86,7 +87,8 @@ export class DialogService {
       nzMaskClosable: false,
       nzContent: D.BossAttackDialog,
       nzComponentParams: {
-        data: bossAbility
+        data: bossAbility,
+        holders: holders
       }
     });
 

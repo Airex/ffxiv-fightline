@@ -208,7 +208,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   openBossAttackAddDialog(bossAbility: M.IBossAbility, callBack: (b: any) => void): void {
     console.log("boss attack edit")
-    this.dialogService.openBossAttackAddDialog(bossAbility, callBack);
+    this.dialogService.openBossAttackAddDialog(bossAbility, this.fightLineController.getHolders(),  callBack);
   }
 
   openAbilityEditDialog(data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[] },
@@ -861,7 +861,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
         });
 
         const bossData = JSON.parse(value.boss.data) as SerializeController.IBossSerializeData;
-        const result = process(attacks, data.fight.start_time, bossData.attacks.map(it => it.ability));
+        const result = process(attacks, data.fight.start_time, bossData.attacks.map(it => it.ability), bossData.downTimes);
         bossData.attacks = result.map(it => <SerializeController.IBossAbilityUsageData>{
           ability: it,
           id: this.idgen.getNextId(M.EntryType.BossAttack)
