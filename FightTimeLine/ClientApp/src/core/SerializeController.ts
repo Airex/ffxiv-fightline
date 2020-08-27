@@ -97,6 +97,7 @@ export class SerializeController {
                 isTankBuster: ab.attack.isTankBuster,
                 offset: Utils.formatTime(ab.start),
                 syncSettings: ab.attack.syncSettings,
+                syncDowntime: ab.attack.syncDowntime,
                 description: ab.attack.description
               }
             };
