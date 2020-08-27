@@ -9,11 +9,11 @@
     <textarea nz-input
               placeholder="Leave comment here"
               [(ngModel)]="comment"
-              [nzAutosize]="{ minRows: 2, maxRows: 6 }" (ngModelChange)="commentButton.nzType='primary'"></textarea>
+              [nzAutosize]="{ minRows: 2, maxRows: 6 }" (ngModelChange)="showCommentButton = true;"></textarea>
 
   </nz-space-item>
-  <nz-space-item>
-    <button #commentButton nz-button (click)="setComment();commentButton.nzType=''">Set Comment</button>
+  <nz-space-item *ngIf="showCommentButton">
+    <button #commentButton nzType="primary" nz-button (click)="setComment();showCommentButton = false;">Set Comment</button>
   </nz-space-item>
   <nz-space-item>
     Click below to change color

@@ -137,7 +137,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
       this.modified = false;
     }
 
-    if (this.it.ability.isDef) {
+    if (this.it.ability.isDef || this.it.ability.isHeal) {
       this.covered = this.data.holders.bossAttacks.getAll().filter((it) => {
         return it.start >= this.it.start && it.start <= new Date(this.it.startAsNumber + this.it.calculatedDuration * 1000)
       }).sort((a, b) => a.startAsNumber - b.startAsNumber);

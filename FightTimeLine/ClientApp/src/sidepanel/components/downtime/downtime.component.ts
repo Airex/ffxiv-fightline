@@ -22,6 +22,7 @@ export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent
   initialComment: string;
   from: string;
   to: string;
+  showCommentButton = false;
 
   constructor(private dispatcher: S.DispatcherService, @Inject(SIDEPANEL_DATA) private data: SidepanelParams ) {
     this.items = this.data.items;

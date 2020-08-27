@@ -57,6 +57,10 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     return this.hasValue(Models.AbilityType.PartyDefense) || this.hasValue(Models.AbilityType.PartyShield);
   }
 
+  public get isHeal(): boolean {
+    return this.hasValue(Models.AbilityType.Healing) || this.hasValue(Models.AbilityType.HealingBuff);
+  }
+
   public get isDamage(): boolean {
     return this.isSelfDamage || this.isPartyDamage;
   }
@@ -123,4 +127,6 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
   get isCompact(): boolean {
     return this.data.isCompact;
   }
+
+  
 }

@@ -56,7 +56,7 @@ export class FightTimeLineController {
       holders: this.holders,
       jobRegistry: this.gameService.jobRegistry,
       update: this.update.bind(this),
-      ogcdAttacksAsPoints: (ability: M.IAbility) => (ability.duration === 0 && ability.cooldown === 1) ||
+      ogcdAttacksAsPoints: (ability: M.IAbility) => (ability.duration === 0 && (ability.cooldown === 1 || ability.cooldown === 0)) ||
         ((ability.abilityType & M.AbilityType.Damage) === M.AbilityType.Damage &&
           (ability.duration === 0 ? this.view.ogcdAsPoints : false)),
       verticalBossAttacks: () => this.view.verticalBossAttacks,
