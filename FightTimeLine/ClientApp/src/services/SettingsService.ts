@@ -27,10 +27,7 @@ export class SettingsService {
           utility: true
         },
         attacks: {
-          isAoe: true,
-          isOther: true,
-          isShareDamage: true,
-          isTankBuster: true,
+          tags:[],
           isPhysical: true,
           isMagical: true,
           isUnaspected: true,

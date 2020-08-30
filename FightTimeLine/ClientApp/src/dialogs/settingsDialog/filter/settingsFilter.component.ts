@@ -1,5 +1,5 @@
 import { Component, Inject, EventEmitter, ViewChild, Output } from "@angular/core";
-import { IFilter } from "../../../core/Models"
+import { IFilter, DefaultTags } from "../../../core/Models"
 
 @Component({
   selector: "settingsFilter",
@@ -19,10 +19,6 @@ export class SettingsFilterComponent {
   enmity = true;
   pet = true;
   unused = true;
-  isTankBuster = true;
-  isAoe = true;
-  isShare = true;
-  isOther = true;
   isMagical = true;
   isPhysical = true;
   isUnaspected = true;
@@ -39,10 +35,6 @@ export class SettingsFilterComponent {
     this.enmity = filter.abilities.enmity;
     this.pet = filter.abilities.pet;
     this.unused = filter.abilities.unused;
-    this.isTankBuster = filter.attacks.isTankBuster;
-    this.isAoe = filter.attacks.isAoe;
-    this.isShare = filter.attacks.isShareDamage;
-    this.isOther = filter.attacks.isOther;
     this.isMagical = filter.attacks.isMagical;
     this.isPhysical = filter.attacks.isPhysical;
     this.isUnaspected = filter.attacks.isUnaspected;
@@ -67,10 +59,7 @@ export class SettingsFilterComponent {
         unused: this.unused
       },
       attacks: {
-        isTankBuster: this.isTankBuster,
-        isAoe: this.isAoe,
-        isShareDamage: this.isShare,
-        isOther: this.isOther,
+        tags: DefaultTags.concat(["Other"]),
         isPhysical: this.isPhysical,
         isMagical: this.isMagical,
         isUnaspected: this.isUnaspected,

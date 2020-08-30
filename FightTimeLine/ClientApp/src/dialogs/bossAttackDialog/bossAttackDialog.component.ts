@@ -27,6 +27,7 @@ export class BossAttackDialog implements OnInit {
   settings: any;
   uniqueIndex: number = 0;
   expression: string;
+  defaultTags = M.DefaultTags;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -37,15 +38,14 @@ export class BossAttackDialog implements OnInit {
   ngOnInit() {
     this.newAttack = !this.data.name;
 
+    
     this.editForm = this.formBuilder.group({
       bossAttackName: new FormControl(this.data.name, Validators.required),
       damageType: new FormControl(this.data.type, Validators.required),
       bossAttackTime: new FormControl(this.data.offset, Validators.required),
-      tankBuster: new FormControl(this.data.isTankBuster),
-      aoe: new FormControl(this.data.isAoe),
-      share: new FormControl(this.data.isShareDamage),
       bossAttackSource: new FormControl(this.data.source),
-      description: new FormControl(this.data.description)
+      description: new FormControl(this.data.description),
+      tags: new FormControl(this.data.tags)
     }, {
         validator: time('bossAttackTime')
       });
@@ -62,11 +62,11 @@ export class BossAttackDialog implements OnInit {
     this.f.bossAttackTime.updateValueAndValidity({ onlySelf: true });
     this.data.offset = this.f.bossAttackTime.value;
     this.data.type = this.f.damageType.value;
-    this.data.isTankBuster = this.f.tankBuster.value;
-    this.data.isAoe = this.f.aoe.value;
-    this.data.isShareDamage = this.f.share.value;
     this.data.source = this.f.bossAttackSource.value;
     this.data.description = this.f.description.value;
+    this.data.tags = this.f.tags.value;
+    if (this.data.tags && this.data.tags.length == 0)
+      this.data.tags = null;
 
     if (this.syncSettings)
       this.data.syncSettings = this.syncSettings.buildSyncSettings();

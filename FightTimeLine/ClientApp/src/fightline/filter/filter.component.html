@@ -1,65 +1,76 @@
-<button nz-button nzTrigger="click" [nzDropdownMenu]="menu" [nzClickHide]="false" nz-dropdown><i nz-icon nzType="filter" theme="fill"></i>Filter</button>
-<nz-dropdown-menu #menu="nzDropdownMenu">
-  <ul nz-menu>
-    <li nz-menu-item>
-      Ability types:
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="selfDefensive">Self Defense</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="partyDefensive">Party Defense</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="selfDamageBuff">Self Damage Buff</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="partyDamageBuff">Party Damage Buff</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="damage">OGCD Damage</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="healing">Healing</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="healingBuff">Healing Buff</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="utility">Utility</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="enmity">Enmity</label>
-    </li>
-    <!-- <li nz-menu-item> -->
-    <!--   <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="pet">Pets</label> -->
-    <!-- </li> -->
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="unused">Show unused</label>
-    </li>
-    <li nz-menu-item>
-      Boss attack types:
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="isTankBuster">Tank buster</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="isAoe">AOE</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="isShare">Share damage</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="isOther">Other</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="isMagical">Magical damage</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="isPhysical">Physical damage</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="isUnaspected">Unaspected damage</label>
-    </li>
-  </ul>
-</nz-dropdown-menu>
+<button nz-button
+        nzTrigger="click"
+        nz-popover
+        (click)="change()"
+        [(nzPopoverVisible)]="visible"
+        (nzPopoverVisibleChange)="change($event)"
+        nzPopoverTrigger="click"
+        nzPopoverPlacement="bottomLeft"
+        [nzPopoverContent]="contentTemplate">
+  <span>
+    <i nz-icon nzType="filter" theme="fill"></i>
+    Filter
+  </span>
+</button>
+
+<ng-template #contentTemplate>
+  <div nz-row style="width: 560px;" class="noselect">
+    <div nz-col nzSpan="12">
+      <div>
+        <strong>Ability types</strong>
+      </div>
+      <ul nz-menu>
+        <li nz-menu-item>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="selfDefensive">Self Defense</label>
+        </li>
+        <li nz-menu-item>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="partyDefensive">Party Defense</label>
+        </li>
+        <li nz-menu-item>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="selfDamageBuff">Self Damage Buff</label>
+        </li>
+        <li nz-menu-item>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="partyDamageBuff">Party Damage Buff</label>
+        </li>
+        <li nz-menu-item>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="damage">OGCD Damage</label>
+        </li>
+        <li nz-menu-item>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="healing">Healing</label>
+        </li>
+        <li nz-menu-item>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="healingBuff">Healing Buff</label>
+        </li>
+        <li nz-menu-item>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="utility">Utility</label>
+        </li>
+        <li nz-menu-item>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="enmity">Enmity</label>
+        </li>
+        <!-- <li nz-menu-item> -->
+        <!--   <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="pet">Pets</label> -->
+        <!-- </li> -->
+        <li nz-menu-item>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="unused">Show unused</label>
+        </li>
+        <li nz-menu-item>
+      </ul>
+    </div>
+    <div nz-col nzSpan="12" style="padding: 5px;">
+      <div>
+        <div>
+          <strong>Boss Attacks Tags</strong>
+        </div>
+        <nz-tag *ngFor="let tag of tags" nzMode="checkable" [(nzChecked)]="tag.checked" (nzCheckedChange)="updateFilter()">{{tag.text}}</nz-tag>
+      </div>
+      <div style="margin-top: 8px;">
+        <div>
+          <strong>Boss Attacks Damage Type</strong>
+        </div>
+        <nz-tag nzMode="checkable" [(nzChecked)]="isMagical" (nzCheckedChange)="updateFilter()">Magical</nz-tag>
+        <nz-tag nzMode="checkable" [(nzChecked)]="isPhysical" (nzCheckedChange)="updateFilter()">Physical</nz-tag>
+        <nz-tag nzMode="checkable" [(nzChecked)]="isUnaspected" (nzCheckedChange)="updateFilter()">Unaspected</nz-tag>
+      </div>
+    </div>
+  </div>
+</ng-template>

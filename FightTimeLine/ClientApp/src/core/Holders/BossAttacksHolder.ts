@@ -1,23 +1,47 @@
 import { DataItem, DataSetDataItem } from "vis-timeline"
 import { BaseHolder } from "./BaseHolder";
-import { BossAttackMap }from "../Maps/BossAttackMap";
+import { BossAttackMap } from "../Maps/BossAttackMap";
 import * as Models from "../Models";
+import * as _ from "lodash";
 
 export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMap> {
   private prefix = "bossAttack_";
+// ReSharper disable once InconsistentNaming
+  private _uniqueTags = Models.DefaultTags.reduce((acc, v) => {
+    acc[v] = "";
+    return acc;
+
+  }, {});
 
   constructor(private visBossItems: DataSetDataItem, private visMainItems: DataSetDataItem) {
     super();
   }
 
+
+  public get uniqueTags() : string[] {
+    return Object.keys(this._uniqueTags);
+  }
+
+  private tryAddToTags(tags: string[]) {
+    if (tags) {
+      tags.forEach(t => {
+        this._uniqueTags[t] = null;
+      });
+    }
+  }
+
   add(i: BossAttackMap): void {
     super.add(i);
     this.addToBoard(i);
+    this.tryAddToTags(i.attack.tags);
   }
 
   addRange(i: BossAttackMap[]): void {
     super.addRange(i);
-//    this.addRangeToBoard(i);
+    i.forEach(t => {
+      this.tryAddToTags(t.attack.tags);
+    });
+    //    this.addRangeToBoard(i);
   }
 
   private addToBoard(i: BossAttackMap) {
@@ -72,6 +96,11 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
   }
 
   update(itemsToUpdate: BossAttackMap[]): void {
+
+    itemsToUpdate.forEach(t => {
+      this.tryAddToTags(t.attack.tags);
+    });
+
     this.visBossItems.update(this.itemsOf(itemsToUpdate.filter(x => !!this.visBossItems.get(x.id))));
     this.visMainItems.update(itemsToUpdate.map(it => {
       const item = this.visMainItems.get(this.prefix + it.id);
@@ -85,16 +114,8 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
   applyFilter(filter: Models.IBossAttackFilter): void {
     if (!filter) return;
     this.values.forEach(it => {
-      let visible = (filter.isTankBuster && it.attack.isTankBuster);
-      visible = visible || (filter.isAoe && it.attack.isAoe);
-      visible = visible || (filter.isShareDamage && it.attack.isShareDamage);
-
-      if (!visible) {
-        visible = filter.isOther && !(it.attack.isTankBuster || it.attack.isAoe || it.attack.isShareDamage);
-      }
-
+      let visible = filter.tags.some(value => ( !it.attack.tags && value === "Other") || it.attack.tags && it.attack.tags.includes(value));
       visible = visible && (filter.isMagical && it.attack.type === Models.DamageType.Magical || filter.isPhysical && it.attack.type === Models.DamageType.Physical || filter.isUnaspected && it.attack.type === Models.DamageType.None);
-
 
       const item = this.visBossItems.get(it.id);
 

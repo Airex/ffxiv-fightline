@@ -318,7 +318,7 @@ namespace FightTimeLine.Controllers
 
                var userName = CurrentUserName;
 
-               await _dataContext.Commands.AddAsync(new CommandEntity()
+               var entityEntry = await _dataContext.Commands.AddAsync(new CommandEntity()
                {
                     UserName = userName ?? "anonymous",
                     Body = data.Data,
@@ -326,7 +326,19 @@ namespace FightTimeLine.Controllers
                     Fight = id
                }).ConfigureAwait(false);
                await _dataContext.SaveChangesAsync().ConfigureAwait(false);
-               return Ok();
+               return Json(new{ id = entityEntry.Entity.Id});
+          }
+
+          [HttpGet("[action]/{id}")]
+          [AllowAnonymous]
+          public async Task<IActionResult> GetCommand([FromRoute] string id)
+          {
+               if (!long.TryParse(id, out var intid))
+                    return BadRequest("Fight is not provided");
+
+               var entityEntry = await _dataContext.Commands.SingleOrDefaultAsync(entity => entity.Id == intid ).ConfigureAwait(false);
+               await _dataContext.SaveChangesAsync().ConfigureAwait(false);
+               return Ok(entityEntry.Body);
           }
 
           [HttpGet("[action]/{fight}/{timestamp?}")]

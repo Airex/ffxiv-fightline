@@ -204,14 +204,17 @@ export class BossAttacksCollector extends BaseCollector {
         it.ability.name.indexOf("Unknown_") < 0);
       if (ability) {
         const date = Utils.getDateFromOffset((ability.timestamp - this.context.parser.fight.start_time) / 1000);
+        const tags:string[] = [];
+        if (arr.length > 0) tags.push(M.DefaultTags[1])
+        if (tbs.indexOf(ability.ability.name) >= 0) tags.push(M.DefaultTags[0])
+
         commands.push(new AddBossAttackCommand(
           this.context.idgen.getNextId(M.EntryType.BossAttack),
           {
             name: ability.ability.name,
             type: this.getAbilityType(ability),
             offset: Utils.formatTime(date),
-            isAoe: arr.length > 4,
-            isTankBuster: tbs.indexOf(ability.ability.name) >= 0,
+            tags: tags,
             source : ability.source && ability.source.name
           }));
       }

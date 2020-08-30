@@ -13,4 +13,5 @@ export interface IFightService {
   newFight(fraction: string): Observable<IFight>;
   addCommand(fight: string, data: any): Observable<any>;
   getCommands(fight: string, timestamp: number): Observable<ICommandEntry[]>;
+  getCommand(id: number): Observable<any>;
 }

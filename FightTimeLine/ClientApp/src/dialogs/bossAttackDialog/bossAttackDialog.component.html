@@ -40,13 +40,9 @@
         </nz-form-item>
         <nz-form-item>
           <nz-form-control>
-            <label nz-checkbox formControlName="tankBuster" style="margin-right: 10px">Tank Buster</label>
-          </nz-form-control>
-          <nz-form-control>
-            <label nz-checkbox formControlName="aoe" style="margin-right: 10px">AoE</label>
-          </nz-form-control>
-          <nz-form-control>
-            <label nz-checkbox formControlName="share" style="margin-right: 10px">Share Damage</label>
+            <nz-select formControlName="tags" nzMode="tags" [nzTokenSeparators]="[',']" nzPlaceHolder="Tags">
+              <nz-option *ngFor="let option of defaultTags" [nzLabel]="option" [nzValue]="option"></nz-option>
+            </nz-select>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>

@@ -42,25 +42,16 @@ namespace FightTimeLine.Hubs
                await Groups.AddToGroupAsync(Context.ConnectionId, fight);
           }
 
-          public async Task Command(string fight, string userName, string command)
+          public async Task Command(string fight, string userName, string commandId)
           {
                if (!Guid.TryParseExact(fight, "N", out var fightGuid) && !Guid.TryParse(fight, out fightGuid))
                     return;
 
                await _usersStorage.TouchAsync(fightGuid, Context.ConnectionId);
-               await _dataContext.Commands.AddAsync(new CommandEntity()
-               {
-                    UserName = userName,
-                    DateCreated = DateTimeOffset.UtcNow,
-                    Fight = fightGuid,
-                    Body = command
-               });
-
-               await _dataContext.SaveChangesAsync();
 
                await Clients.OthersInGroup(fight).SendAsync("command", new CommandData()
                {
-                    Body = command,
+                    Id = commandId,
                     UserId = Context.ConnectionId
                });
           }
@@ -117,7 +108,7 @@ namespace FightTimeLine.Hubs
 
      public class CommandData
      {
-          public string Body { get; set; }
+          public string Id { get; set; }
           public string UserId { get; set; }
      }
 }

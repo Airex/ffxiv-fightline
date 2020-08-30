@@ -48,7 +48,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   private idgen = new IdGenerator();
   toolsManager = new ToolsManager();
-
   jobs = this.gameService.jobRegistry.getJobs();
   sideNavOpened: boolean = false;
 
@@ -208,7 +207,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   openBossAttackAddDialog(bossAbility: M.IBossAbility, callBack: (b: any) => void): void {
     console.log("boss attack edit")
-    this.dialogService.openBossAttackAddDialog(bossAbility, this.fightLineController.getHolders(),  callBack);
+    this.dialogService.openBossAttackAddDialog(bossAbility, this.fightLineController.getHolders(), callBack);
   }
 
   openAbilityEditDialog(data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[] },
@@ -236,6 +235,11 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   loadFFLogsData(code: string, enc: number) {
+    const stop = (ref: { close: () => void; }) => {
+      this.progressBar.complete();
+      ref.close();
+    };
+
     this.dialogService.executeWithLoading(ref => {
       this.progressBar.start();
       this.gameService.dataService.getEvents(code, enc, percentage => this.progressBar.set(percentage * 100))
@@ -243,31 +247,36 @@ export class FightLineComponent implements OnInit, OnDestroy {
           this.fightService.newFight("").subscribe(value => {
             this.fightId = value.id;
             this.location.replaceState("/" + value.id);
-            this.startSession().then(() => {
-              this.recent.register("FFLogs " + parser.fight.name, "/fflogs/" + code + "/" + enc);
-              const settings = this.settingsService.load();
+            this.startSession()
+              .then(() => {
+                this.recent.register("FFLogs " + parser.fight.name, "/fflogs/" + code + "/" + enc);
+                const settings = this.settingsService.load();
+                this.toolbar.setSettings(settings, this.fightLineController.getHolders());
 
-              this.toolbar.setSettings(settings);
-              this.fightLineController.applyView(settings.main.defaultView);
-              this.fightLineController.applyFilter(settings.main.defaultFilter);
+                this.fightLineController.importFromFFLogs(code + ":" + enc, parser);
 
-              this.fightLineController.importFromFFLogs(code + ":" + enc, parser);
-            });
+                this.fightLineController.applyView(settings.main.defaultView);
+                this.fightLineController.applyFilter(settings.main.defaultFilter);
+
+                this.planArea.setInitialWindow(this.fightLineController.getLatestAbilityUsageTime(), 2);
+                this.planArea.refresh();
+
+                stop(ref);
+              })
+              .catch(() => {
+                stop(ref);
+              });
           },
             error => {
               console.log(error);
+              stop(ref);
               this.notification.error("Unable to start");
             });
         })
         .catch(() => {
           this.notification.showUnableToImport();
+          stop(ref);
         })
-        .finally(() => {
-          this.progressBar.complete();
-          this.planArea.setInitialWindow(this.fightLineController.getLatestAbilityUsageTime(), 2);
-          this.planArea.refresh();
-          ref.close();
-        });
     });
   }
 
@@ -337,20 +346,15 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onUndo(): void {
-
     this.fightLineController.undo();
-    this.fightHubService.sendCommand(this.fightId, "", { name: "undo" });
-    this.refreshSidePanel();
     this.planArea.refresh();
-
+    this.onCommand({ name: "undo" });
   }
 
   onRedo(): void {
     this.fightLineController.redo();
-    this.fightHubService.sendCommand(this.fightId, "", { name: "redo" });
-    this.sidepanel.refresh();
-    this.refreshSidePanel();
     this.planArea.refresh();
+    this.onCommand({ name: "redo" });
   }
 
 
@@ -362,7 +366,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.fightLineController.fraction = fraction;
     this.toolbar.fraction = fraction;
     const settings = this.settingsService.load();
-    this.toolbar.setSettings(settings);
+    this.toolbar.setSettings(settings, this.fightLineController.getHolders());
     if (settings && settings.main && settings.main.defaultView)
       this.fightLineController.applyView(settings.main.defaultView);
     if (settings && settings.main && settings.main.defaultFilter)
@@ -394,7 +398,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
               if (data.view)
                 this.toolbar.view.set(data.view);
               if (data.filter)
-                this.toolbar.filter.set(data.filter);
+                this.toolbar.filter.set(data.filter, this.fightLineController.getHolders());
             }
 
             const fraction = this.gameService.extractFraction(fight.game);
@@ -405,7 +409,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
             this.fightService.getCommands(this.fightId, new Date(fight.dateModified).valueOf())
               .subscribe(value => {
                 for (var cmd of value) {
-                  this.handleRemoteCommand(JSON.parse(cmd.data), "");
+                  this.handleRemoteCommandData(JSON.parse(cmd.data));
                 }
                 this.planArea.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
                 this.connectToSession().then(() => {
@@ -472,7 +476,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
             this.startSession().then(() => {
               const settings = this.settingsService.load();
 
-              this.toolbar.setSettings(settings);
+              this.toolbar.setSettings(settings, this.fightLineController.getHolders());
 
               this.fightLineController.fraction = fraction;
               this.toolbar.fraction = fraction;
@@ -510,6 +514,13 @@ export class FightLineComponent implements OnInit, OnDestroy {
     });
   }
 
+  onCommand(data: ICommandData) {
+    this.fightService.addCommand(this.fightId, JSON.stringify(data)).subscribe((result) => {
+      this.fightHubService.sendCommand(this.fightId, "", result.id);
+    });
+    this.refreshSidePanel();
+  }
+
   ngOnInit(): void {
     this.visStorage.clear();
     this.fightLineController = new FightTimeLineController(
@@ -532,8 +543,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.toolsManager.refresh();
     });
     this.fightLineController.commandExecuted.subscribe((data: ICommandData) => {
-      this.fightHubService.sendCommand(this.fightId, "", data);
-      this.refreshSidePanel();;
+      this.onCommand(data);
     });
     this.fightHubService.usersChanged.subscribe(() => {
       console.log(this.fightHubService.users);
@@ -556,7 +566,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     const promise = new Promise<void>((resolve, reject) => {
       const handlers: S.IStartSessionHandlers = {
-        onCommand: ((data: M.IHubCommand) => this.handleRemoteCommand(JSON.parse(data.body), data.userId)).bind(this),
+        onCommand: ((data: M.IHubCommand) => this.handleRemoteCommand(data.id, data.userId)).bind(this),
         onConnected: ((data: M.IHubUser) => this.notification.showUserConnected(data)).bind(this),
         onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisonnected(data)).bind(this)
       };
@@ -583,9 +593,18 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.fightHubService.disconnect(this.fightId);
   }
 
-  handleRemoteCommand(data: ICommandData, userId: string) {
+  handleRemoteCommand(id: string, userId: string) {
     this.toolbar.ping(userId, false);
 
+    this.fightService.getCommand(+id).subscribe((data:ICommandData) => {
+        this.handleRemoteCommandData(data);
+      },
+      error => {
+        console.log(error);
+      });
+  }
+
+  handleRemoteCommandData(data: ICommandData) {
     if (data.name === "undo") {
       this.fightLineController.undo();
       this.planArea.refresh();
@@ -599,7 +618,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   connectToSession() {
     const handlers: S.IConnectToSessionHandlers = {
-      onCommand: ((data: M.IHubCommand) => this.handleRemoteCommand(JSON.parse(data.body), data.userId)).bind(this),
+      onCommand: ((data: M.IHubCommand) => this.handleRemoteCommand(data.id, data.userId)).bind(this),
       onConnected: ((data: M.IHubUser) => this.notification.showUserConnected(data)).bind(this),
       onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisonnected(data)).bind(this)
     };
@@ -768,7 +787,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     dispatcher.on("SidePanel Attack Copy").subscribe(value => {
       this.fightLineController.copy(value);
-      this.useTool("Copy & Paste");
     });
 
     dispatcher.on("Update Filter").subscribe(value => {
@@ -789,6 +807,11 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     dispatcher.on("SidePanel Hide Job Ability").subscribe(value => {
       this.fightLineController.hideAbility(value);
+      this.setSidePanel(null);
+    });
+
+    dispatcher.on("SidePanel Clear Job Ability").subscribe(value => {
+      this.fightLineController.clearAbility(value);
       this.setSidePanel(null);
     });
 
@@ -843,17 +866,17 @@ export class FightLineComponent implements OnInit, OnDestroy {
         const data = await this.gameService.dataService.getEvents(parts[0], Number(parts[1]), null);
 
         const enemyAttacks = data.events.filter((it: FF.AbilityEvent) => {
-            if (it.sourceIsFriendly && FF.isDamageEvent(it)) {
-              bossHp = it.targetResources.hitPoints / it.targetResources.maxHitPoints * 100;
+          if (it.sourceIsFriendly && FF.isDamageEvent(it)) {
+            bossHp = it.targetResources.hitPoints / it.targetResources.maxHitPoints * 100;
           }
 
-            it.bossHp = bossHp;
-            return !it.sourceIsFriendly &&
-              it.ability &&
-              it.ability.name.toLowerCase() !== "attack" &&
-              it.ability.name.trim() !== "" &&
-              it.ability.name.indexOf("Unknown_") < 0
-          }
+          it.bossHp = bossHp;
+          return !it.sourceIsFriendly &&
+            it.ability &&
+            it.ability.name.toLowerCase() !== "attack" &&
+            it.ability.name.trim() !== "" &&
+            it.ability.name.indexOf("Unknown_") < 0
+        }
         );
         const g = _.groupBy(enemyAttacks, d => d.ability.name + "_" + Math.trunc(d.timestamp / 1000));
         const attacks: FF.AbilityEvent[] = Object.keys(g).map((k: string) => {

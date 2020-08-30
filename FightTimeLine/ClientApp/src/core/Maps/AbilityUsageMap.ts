@@ -50,7 +50,7 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
   }
 
   getSettingData(name: string): Models.IAbilitySettingData {
-    return this.settings && this.settings.find(it => it.name === name);
+    return this.settings && this.settings.find && this.settings.find(it => it.name === name);
   }
 
   getSetting(name: string): Models.IAbilitySetting {

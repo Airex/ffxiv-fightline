@@ -21,6 +21,10 @@ export class FightsMockService implements IFightService {
 
   getCommands(fight: string, timestamp: number): Observable<ICommandEntry[]> { return empty() }
 
+  getCommand(id: number): Observable<string> {
+    return empty();
+  }
+
   getBosses(reference: number, searchString: string, privateOnly: boolean): Observable<IBossSearchEntry[]> {
 
     const source = of(1);

@@ -72,9 +72,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
           attacks: bossAttacks.map((it) => <any>{
             name: it.ability.name,
             type: it.ability.type,
-            isAoe: it.ability.isAoe,
-            isShareDamage: it.ability.isShareDamage,
-            isTankBuster: it.ability.isTankBuster,
+            tags: it.ability.tags,
             offset: it.ability.offset
           }),
           downTimes: bossData.downTimes.map(it => <any>{

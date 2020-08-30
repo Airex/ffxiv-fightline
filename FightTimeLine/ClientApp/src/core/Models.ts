@@ -91,7 +91,7 @@ export interface ICommandEntry {
 }
 
 export interface IHubCommand {
-  body: string;
+  id: string;
   userId: string;
 }
 
@@ -301,7 +301,8 @@ export interface IAbility {
   settings?: IAbilitySetting[] | null;
   abilityType: AbilityType;
   pet?: string;
-  activationOffset?:number;
+  activationOffset?: number;
+  resetsPrevious?:boolean;
   detectStrategy?: IDetectionStrategy;
   overlapStrategy?: IOverlapStrategy;
   charges?: IAbilityCharges;
@@ -349,6 +350,8 @@ export enum EntryType {
   AbilityAvailability = 'v'
 }
 
+export const DefaultTags = ["Tank Buster", "AoE", "Share Damage"];
+
 export interface IFightData {
   fight?: IFight;
   boss?: IBoss;
@@ -359,9 +362,7 @@ export interface IBossAbility {
   name?: string;
   type?: DamageType;
   offset?: string;
-  isTankBuster?: boolean;
-  isAoe?: boolean;
-  isShareDamage?: boolean;
+  tags?:string[];
   syncSettings?: string;
   syncDowntime?: string;
   syncPreDowntime?: string;
@@ -424,13 +425,12 @@ export interface IAbilityFilter {
 };
 
 export interface IBossAttackFilter {
-  isTankBuster: boolean;
-  isAoe: boolean;
-  isShareDamage: boolean;
-  isOther: boolean;
+  tags: string[];
+
   isMagical: boolean;
   isPhysical: boolean;
   isUnaspected: boolean;
+
   keywords: string[];
 }
 
@@ -453,10 +453,7 @@ export const defaultFilter: IFilter = {
     utility: true,
   },
   attacks: {
-    isAoe: true,
-    isShareDamage: true,
-    isTankBuster: true,
-    isOther: true,
+    tags:[],
     isMagical: true,
     isPhysical: true,
     isUnaspected: true,

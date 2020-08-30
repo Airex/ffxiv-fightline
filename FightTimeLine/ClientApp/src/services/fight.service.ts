@@ -1,7 +1,7 @@
 import { Injectable, Inject } from "@angular/core"
 import { HttpClient } from "@angular/common/http"
 import { Observable } from "rxjs"
-import { IBoss, IFight, IBossSearchEntry } from "../core/Models"
+import { IBoss, IFight, IBossSearchEntry,ICommandEntry } from "../core/Models"
 import { IFightService } from "./fight.service-interface"
 import * as Gameserviceprovider from "./game.service-provider";
 import * as Gameserviceinterface from "./game.service-interface";
@@ -84,7 +84,7 @@ export class FightsService implements IFightService {
       });
   }
 
-  addCommand(fight: string, data: any): Observable<any> {
+  addCommand(fight: string, data: any): Observable<{id: string}> {
     return this.httpClient.post<any>(this.basePath + "api/data/addCommand",
       {
         fight: fight,
@@ -95,8 +95,15 @@ export class FightsService implements IFightService {
       });
   }
 
-  getCommands(fight: string, timestamp: number): Observable<any[]> {
-    return this.httpClient.get<any[]>(this.basePath + `api/data/loadCommands/${fight}/${timestamp}`,
+  getCommands(fight: string, timestamp: number): Observable<ICommandEntry[]> {
+    return this.httpClient.get<ICommandEntry[]>(this.basePath + `api/data/loadCommands/${fight}/${timestamp}`,
+      {
+        headers: this.headers
+      });
+  }
+
+  getCommand(id: number): Observable<string> {
+    return this.httpClient.get<string>(this.basePath + `api/data/getCommand/${id}`,
       {
         headers: this.headers
       });

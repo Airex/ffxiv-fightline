@@ -91,7 +91,7 @@ namespace FightTimeLine
                     app.UseHttpsRedirection();
                }
                app.UseStaticFiles();
-               // app.UseSpaStaticFiles();
+               app.UseSpaStaticFiles();
 
                app.UseCors();
 
@@ -107,7 +107,11 @@ namespace FightTimeLine
                     builder.MapHealthChecks("/health");
                     builder.MapControllerRoute("fightsApi", "api/{controller=Fights}/{action=Search}");
                     builder.MapHub<FightHub>("/fighthub",
-                         options => options.ApplicationMaxBufferSize = 4 * 1024 * 1024);
+                         options =>
+                         {
+                              options.ApplicationMaxBufferSize = 4 * 1024 * 1024;
+                              options.TransportMaxBufferSize = 4 * 1024 * 1024;
+                         });
                });
 
                app.UseSpa(spa =>

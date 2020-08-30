@@ -9,6 +9,7 @@ import { ScreenNotificationsService } from "../services/ScreenNotificationsServi
 import { LocalStorageService } from "../services/LocalStorageService"
 import { IAuthenticationService, authenticationServiceToken, ChangeNotesService } from "../services/index"
 import * as M from "../core/Models"
+import * as H from "../core/Holders"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
 import * as _ from "lodash";
@@ -110,12 +111,12 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  setSettings(settings: SettingsService.ISettings) {
+  setSettings(settings: SettingsService.ISettings, holders: H.Holders) {
     if (settings) {
       if (settings.main && settings.main.defaultView)
         this.view.set(settings.main.defaultView);
       if (settings.main && settings.main.defaultFilter)
-        this.filter.set(settings.main.defaultFilter);
+        this.filter.set(settings.main.defaultFilter, holders);
     }
   }
 

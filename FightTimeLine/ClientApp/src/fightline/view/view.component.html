@@ -1,12 +1,12 @@
 
 <button nz-button [nzDropdownMenu]="menu" nz-dropdown [nzTrigger]="'click'" [nzClickHide]="false"><i nz-icon nzType="eye" theme="fill"></i>View</button>
 <nz-dropdown-menu #menu="nzDropdownMenu">
-  <ul nz-menu>
+  <ul nz-menu class="noselect">
     <li nz-menu-item>
       <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="showDowntimesInPartyArea">Downtimes in party area</label>
     </li>
     <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="buffmap">Buffs Heatmap</label>
+      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="buffmap">Damage Buffs Heatmap</label>
     </li>
     <li nz-menu-item>
       <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="ogcdAsPoints">OGCD attacks as points</label>

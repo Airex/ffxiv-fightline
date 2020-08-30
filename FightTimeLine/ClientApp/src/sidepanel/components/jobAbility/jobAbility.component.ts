@@ -73,6 +73,13 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
   });
   }
 
+  clear(ab: AbilityMap) {
+    this.dispatcher.dispatch({
+      name: "SidePanel Clear Job Ability",
+      payload: ab.id
+    });
+  }
+
   fill(ab: AbilityMap) {
     this.dispatcher.dispatch({
       name: "SidePanel Fill Job Ability",

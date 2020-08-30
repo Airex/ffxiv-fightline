@@ -234,7 +234,6 @@ export class FightTimeLineController {
             }));
           }
           this.commandStorage.execute(new C.CombinedCommand(commands));
-
           this.holders.bossAttacks.applyFilter(this.filter.attacks);
         }
       });
@@ -489,7 +488,7 @@ export class FightTimeLineController {
 
     if (ability.extendDurationOnNextAbility !== undefined) {
       const items = this.holders.bossAttacks
-        .filter((x: BossAttackMap) => x.attack.isTankBuster && x.start >= start)
+        .filter((x: BossAttackMap) => x.isTankBuster && x.start >= start)
         .sort((a, b) => (a.startAsNumber) - (b.startAsNumber));
       if (items.length > 0) {
         const found = items[0];
@@ -625,6 +624,15 @@ export class FightTimeLineController {
       hidden: true
     });
     this.holders.abilities.update([map]);
+    this.updateBuffHeatmap(this.view.buffmap, map.ability);
+
+  }
+
+  clearAbility(group: string) {
+    const map = this.holders.abilities.get(group);
+    const abs = this.holders.itemUsages.getByAbility(group);
+    this.handleDelete(abs.map(a => a.id));
+    
     this.updateBuffHeatmap(this.view.buffmap, map.ability);
 
   }

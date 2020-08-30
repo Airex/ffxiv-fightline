@@ -64,5 +64,17 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
     this.applyData({ attack: { offset: Utils.formatTime(newDate) } });
     return true;
   }
+
+  public get isTankBuster():boolean {
+    return this.attack.tags && this.attack.tags.indexOf(Models.DefaultTags[0])>=0;
+  }
+
+  public get isAoe(): boolean {
+    return this.attack.tags && this.attack.tags.indexOf(Models.DefaultTags[1]) >= 0;
+  }
+
+  public get isShareDamage(): boolean {
+    return this.attack.tags && this.attack.tags.indexOf(Models.DefaultTags[2]) >= 0;
+  }
 }
 

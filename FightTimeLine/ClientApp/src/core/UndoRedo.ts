@@ -101,7 +101,7 @@ export class UndoRedoController {
 
 export interface ICommandData {
   name: string;
-  params: {
+  params?: {
     [name: string]: any;
   }
 }

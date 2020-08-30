@@ -92,9 +92,7 @@ export class SerializeController {
               ability: <Models.IBossAbility>{
                 name: ab.attack.name,
                 type: ab.attack.type,
-                isAoe: ab.attack.isAoe,
-                isShareDamage: ab.attack.isShareDamage,
-                isTankBuster: ab.attack.isTankBuster,
+                tags: ab.attack.tags,
                 offset: Utils.formatTime(ab.start),
                 syncSettings: ab.attack.syncSettings,
                 source: ab.attack.source,
@@ -127,9 +125,10 @@ export class SerializeController {
               return {
                 name: ab.attack.name,
                 type: ab.attack.type,
-                isAoe: ab.attack.isAoe,
-                isShareDamage: ab.attack.isShareDamage,
-                isTankBuster: ab.attack.isTankBuster,
+                tags: ab.attack.tags,
+                isAoe: ab.isAoe,
+                isShareDamage: ab.isShareDamage,
+                isTankBuster: ab.isTankBuster,
                 offset: Utils.formatTime(ab.start)
               };
             }),

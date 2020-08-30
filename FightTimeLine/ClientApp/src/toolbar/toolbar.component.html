@@ -1,4 +1,4 @@
-<div class="toolbar">
+<div class="toolbar noselect">
   <span style="margin-right: 10px" *ngIf="showHome">
     <button nz-button (click)="onHome()" nz-tooltip nzTooltipTitle="Home">
       <i nz-icon nzType="home"></i>
@@ -10,7 +10,7 @@
     <span *ngIf="gameService.name == 'ffxiv'">
       <button nz-dropdown nzTrigger="click" [nzDropdownMenu]="jobMenu" nz-button nzType="primary">Add Job</button>
       <nz-dropdown-menu #jobMenu="nzDropdownMenu">
-        <ul nz-menu>
+        <ul nz-menu class="noselect">
           <li nz-menu-item *ngFor="let c of menu" (click)="onAddJob(c.name)">
             <img [src]="c.icon" style="height: 30px; margin-right: 6px; width: 30px;"/>
             <span style="font-weight: bold">{{c.name}}</span>
@@ -39,11 +39,11 @@
     </span>
   </span>
   <span *ngIf="showMenu">
-    <button nz-dropdown [nzDropdownMenu]="mainMenu" nzTooltipTrigger="click" nz-button nz-tooltip nzTooltipTitle="Menu">
+    <button nz-dropdown [nzDropdownMenu]="mainMenu" nzTrigger="click" nz-button nz-tooltip nzTooltipTitle="Menu">
       <i nz-icon nzType="menu"></i>
     </button>
     <nz-dropdown-menu #mainMenu="nzDropdownMenu">
-      <ul nz-menu>
+      <ul nz-menu class="noselect">
         <li nz-menu-item (click)="onNew()">New</li>
         <li nz-menu-item (click)="onLoad()">Load</li>
         <li nz-menu-item (click)="onSave()">Save</li>
@@ -69,7 +69,7 @@
   <span style="margin-left: 10px" *ngIf="!toolToUse && showTools">
     <button nz-dropdown [nzDropdownMenu]="toolMenu" [nzTrigger]="'click'" nz-button><i nz-icon nzType="tool" theme="fill"></i>Tools</button>
     <nz-dropdown-menu #toolMenu="nzDropdownMenu">
-      <ul nz-menu>
+      <ul nz-menu class="noselect">
         <li nz-menu-item (click)="useTool(t)" *ngFor="let t of availableTools">{{t}}</li>
       </ul>
     </nz-dropdown-menu>
@@ -89,7 +89,7 @@
       <i nz-icon nzType="user" aria-label="Account"></i>
     </button>
     <nz-dropdown-menu #accountMenu="nzDropdownMenu">
-      <ul nz-menu>
+      <ul nz-menu class="noselect">
         <li nz-menu-item (click)="login()" *ngIf="!authenticated">
           Sign in
         </li>
@@ -133,7 +133,7 @@
       <i nz-icon nzType="question" aria-label="Help"></i>
     </button>
     <nz-dropdown-menu #helpMenu="nzDropdownMenu">
-      <ul nz-menu>
+      <ul nz-menu class="noselect">
         <li nz-menu-item (click)="showWhatsNewInt()">What's new</li>
         <li nz-menu-item (click)="showHelp()">Help</li>
       </ul>
