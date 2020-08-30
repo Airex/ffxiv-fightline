@@ -27,7 +27,7 @@ export class SettingsService {
           utility: true
         },
         attacks: {
-          tags:[],
+          tags:null,
           isPhysical: true,
           isMagical: true,
           isUnaspected: true,

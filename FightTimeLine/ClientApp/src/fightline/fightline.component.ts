@@ -473,25 +473,31 @@ export class FightLineComponent implements OnInit, OnDestroy {
           .subscribe(value => {
             this.fightId = value.id;
             this.location.replaceState("/" + value.id);
-            this.startSession().then(() => {
-              const settings = this.settingsService.load();
+            this.startSession()
+              .then(() => {
+                const settings = this.settingsService.load();
 
-              this.toolbar.setSettings(settings, this.fightLineController.getHolders());
+                this.toolbar.setSettings(settings, this.fightLineController.getHolders());
 
-              this.fightLineController.fraction = fraction;
-              this.toolbar.fraction = fraction;
-              this.fightLineController.applyView(settings.main.defaultView);
-              this.fightLineController.applyFilter(settings.main.defaultFilter);
+                this.fightLineController.fraction = fraction;
+                this.toolbar.fraction = fraction;
+                this.fightLineController.applyView(settings.main.defaultView);
+                this.fightLineController.applyFilter(settings.main.defaultFilter);
 
-              this.fightLineController.loadBoss(bossData);
-              this.planArea.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
-              this.planArea.refresh();
-              ref.close();
-            });
+                this.fightLineController.loadBoss(bossData);
+                this.planArea.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
+                this.planArea.refresh();
+                ref.close();
+              })
+              .catch(error => {
+                console.log((error));
+                this.notification.error("Unable to start");
+                ref.close();
+              });
           },
             error => {
               console.log((error));
-              this.notification.error("Unable to start");
+              this.notification.error("Unable to start fight");
               ref.close();
             });
       };
@@ -510,7 +516,12 @@ export class FightLineComponent implements OnInit, OnDestroy {
         } else {
           func(null, data);
         }
-      });
+      },
+        error => {
+          console.log((error));
+          this.notification.error("Unable to start");
+          ref.close();
+        });
     });
   }
 
@@ -596,9 +607,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
   handleRemoteCommand(id: string, userId: string) {
     this.toolbar.ping(userId, false);
 
-    this.fightService.getCommand(+id).subscribe((data:ICommandData) => {
-        this.handleRemoteCommandData(data);
-      },
+    this.fightService.getCommand(+id).subscribe((data: ICommandData) => {
+      this.handleRemoteCommandData(data);
+    },
       error => {
         console.log(error);
       });
