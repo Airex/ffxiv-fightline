@@ -27,7 +27,7 @@ export class BossAttackDialog implements OnInit {
   settings: any;
   uniqueIndex: number = 0;
   expression: string;
-  defaultTags = M.DefaultTags;
+  defaultTags:string[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -38,6 +38,7 @@ export class BossAttackDialog implements OnInit {
   ngOnInit() {
     this.newAttack = !this.data.name;
 
+    this.defaultTags = this.holders.bossAttacks.uniqueTags;
     
     this.editForm = this.formBuilder.group({
       bossAttackName: new FormControl(this.data.name, Validators.required),
