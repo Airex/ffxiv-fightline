@@ -12,6 +12,7 @@
          [username]="authenticationService.username"
          [canUndo]="fightLineController.canUndo"
          [canRedo]="fightLineController.canRedo"
+         [holders]="fightLineController.getHolders()"
          [connectedUsers]="fightHubService.users"
          [connected]="fightHubService.connected"
          [availableTools]="toolsManager.toolNames"

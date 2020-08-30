@@ -41,6 +41,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Input("connectedUsers") connectedUsers: M.IHubUser[];
   @Input("connected") connected: boolean;
   @Input("availableTools") availableTools: string[];
+  @Input("holders") holders: H.Holders;
 
   private _fraction:M.IFraction;
 
@@ -111,12 +112,12 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  setSettings(settings: SettingsService.ISettings, holders: H.Holders) {
+  setSettings(settings: SettingsService.ISettings) {
     if (settings) {
       if (settings.main && settings.main.defaultView)
         this.view.set(settings.main.defaultView);
       if (settings.main && settings.main.defaultFilter)
-        this.filter.set(settings.main.defaultFilter, holders);
+        this.filter.set(settings.main.defaultFilter);
     }
   }
 

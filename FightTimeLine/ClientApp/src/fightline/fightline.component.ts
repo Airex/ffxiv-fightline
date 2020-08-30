@@ -251,7 +251,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
               .then(() => {
                 this.recent.register("FFLogs " + parser.fight.name, "/fflogs/" + code + "/" + enc);
                 const settings = this.settingsService.load();
-                this.toolbar.setSettings(settings, this.fightLineController.getHolders());
+                this.toolbar.setSettings(settings);
 
                 this.fightLineController.importFromFFLogs(code + ":" + enc, parser);
 
@@ -366,7 +366,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.fightLineController.fraction = fraction;
     this.toolbar.fraction = fraction;
     const settings = this.settingsService.load();
-    this.toolbar.setSettings(settings, this.fightLineController.getHolders());
+    this.toolbar.setSettings(settings);
     if (settings && settings.main && settings.main.defaultView)
       this.fightLineController.applyView(settings.main.defaultView);
     if (settings && settings.main && settings.main.defaultFilter)
@@ -398,7 +398,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
               if (data.view)
                 this.toolbar.view.set(data.view);
               if (data.filter)
-                this.toolbar.filter.set(data.filter, this.fightLineController.getHolders());
+                this.toolbar.filter.set(data.filter);
             }
 
             const fraction = this.gameService.extractFraction(fight.game);
@@ -477,7 +477,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
               .then(() => {
                 const settings = this.settingsService.load();
 
-                this.toolbar.setSettings(settings, this.fightLineController.getHolders());
+                this.toolbar.setSettings(settings);
 
                 this.fightLineController.fraction = fraction;
                 this.toolbar.fraction = fraction;
@@ -564,6 +564,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(r => {
       setTimeout(() => { this.onStart(r); });
     });
+
+    this.toolbar.holders = this.fightLineController.getHolders();
 
     this.toolsManager.register(new DowntimeTool(this.planArea, this.fightLineController));
     this.toolsManager.register(new CopyPasteTool(this.fightLineController));

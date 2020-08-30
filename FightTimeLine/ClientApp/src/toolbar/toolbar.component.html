@@ -61,7 +61,7 @@
     </nz-button-group>
   </span>
   <span style="margin-left: 10px" *ngIf="showfilter">
-    <abilityFilter #filter (changed)="updateFilter($event)"></abilityFilter>
+    <abilityFilter #filter [holders]="holders" (changed)="updateFilter($event)"></abilityFilter>
   </span>
   <span style="margin-left: 10px" *ngIf="showView">
     <viewMenu #view (changed)="updateView($event)"></viewMenu>

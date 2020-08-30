@@ -10,6 +10,8 @@ import * as H from "../../core/Holders"
 })
 export class FilterComponent {
 
+  @Input("holders") holders: H.Holders;
+
   visible = false;
 
   selfDefensive = true;
@@ -30,8 +32,6 @@ export class FilterComponent {
   tags: { text: string, checked: boolean }[];
 
   filter: IFilter;
-  holders: H.Holders
-
 
   @Output() public changed: EventEmitter<IFilter> = new EventEmitter();
 
@@ -39,9 +39,8 @@ export class FilterComponent {
     this.visible = false;
   }
 
-  public set(filter: IFilter, holders: H.Holders): void {
+  public set(filter: IFilter): void {
     this.filter = filter;
-    this.holders = holders;
     this.selfDefensive = filter.abilities.selfDefence;
     this.partyDefensive = filter.abilities.partyDefence;
     this.selfDamageBuff = filter.abilities.selfDamageBuff;
@@ -62,7 +61,7 @@ export class FilterComponent {
   change(value: boolean) {
     const newTags = this.holders.bossAttacks.uniqueTags.filter(t => !this.tags || !this.tags.some(t1=>t1.text === t));
 
-    this.tags = this.holders.bossAttacks.uniqueTags.concat("Other").map(t => ({
+    this.tags = this.holders && this.holders.bossAttacks.uniqueTags.concat("Other").map(t => ({
       text: t,
       checked: !this.filter.attacks.tags || newTags.includes(t) || this.filter.attacks.tags.includes(t)
     }));
