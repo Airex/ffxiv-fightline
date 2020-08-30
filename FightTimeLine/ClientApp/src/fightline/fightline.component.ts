@@ -393,6 +393,14 @@ export class FightLineComponent implements OnInit, OnDestroy {
           if (fight) {
             this.recent.register(fight.name, "/" + id.toLowerCase());
 
+            const settings = this.settingsService.load();
+            this.toolbar.setSettings(settings);
+            if (settings && settings.main && settings.main.defaultView)
+              this.fightLineController.applyView(settings.main.defaultView);
+            if (settings && settings.main && settings.main.defaultFilter)
+              this.fightLineController.applyFilter(settings.main.defaultFilter);
+
+
             if (fight.data) {
               const data = JSON.parse(fight.data) as SerializeController.IFightSerializeData;
               if (data.view)
@@ -564,8 +572,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(r => {
       setTimeout(() => { this.onStart(r); });
     });
-
-    this.toolbar.holders = this.fightLineController.getHolders();
 
     this.toolsManager.register(new DowntimeTool(this.planArea, this.fightLineController));
     this.toolsManager.register(new CopyPasteTool(this.fightLineController));

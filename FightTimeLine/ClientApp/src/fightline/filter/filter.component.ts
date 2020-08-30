@@ -59,11 +59,11 @@ export class FilterComponent {
   }
 
   change(value: boolean) {
-    const newTags = this.holders.bossAttacks.uniqueTags.filter(t => !this.tags || !this.tags.some(t1=>t1.text === t));
+    const newTags = this.holders.bossAttacks.uniqueTags.filter(t => !this.tags || !this.tags.some(t1 => t1.text === t));
 
     this.tags = this.holders && this.holders.bossAttacks.uniqueTags.concat("Other").map(t => ({
       text: t,
-      checked: !this.filter.attacks.tags || newTags.includes(t) || this.filter.attacks.tags.includes(t)
+      checked: !this.filter.attacks || !this.filter.attacks.tags || newTags.includes(t) || this.filter.attacks.tags.includes(t)
     }));
     this.filter.attacks.tags = this.tags.filter(t => t.checked).map(t => t.text)
   }
