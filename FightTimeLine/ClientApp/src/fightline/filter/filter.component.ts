@@ -25,9 +25,53 @@ export class FilterComponent {
   enmity = true;
   pet = true;
   unused = true;
+
   isMagical = true;
   isPhysical = true;
   isUnaspected = true;
+
+  filters = [
+    {
+      key:"selfDefence",
+      name: "Self Defense"
+    },
+    {
+      key: "partyDefence",
+      name: "Self Defense"
+    },
+    {
+      key: "selfDamageBuff",
+      name: "Self Defense"
+    },
+    {
+      key: "partyDamageBuff",
+      name: "Self Defense"
+    },
+    {
+      key: "damage",
+      name: "Self Defense"
+    },
+    {
+      key: "healing",
+      name: "Self Defense"
+    },
+    {
+      key: "healingBuff",
+      name: "Self Defense"
+    },
+    {
+      key: "utility",
+      name: "Self Defense"
+    },
+    {
+      key: "enmity",
+      name: "Self Defense"
+    },
+    {
+      key: "unused",
+      name: "Self Defense"
+    }
+  ];
 
   tags: { text: string, checked: boolean }[];
 
@@ -47,7 +91,7 @@ export class FilterComponent {
     this.partyDamageBuff = filter.abilities.partyDamageBuff;
     this.damage = filter.abilities.damage;
     this.healing = filter.abilities.healing;
-    this.healingBuff = filter.abilities.healing;
+    this.healingBuff = filter.abilities.healingBuff;
     this.utility = filter.abilities.utility;
     this.enmity = filter.abilities.enmity;
     this.pet = filter.abilities.pet;
@@ -69,31 +113,33 @@ export class FilterComponent {
   }
 
   updateFilter(): void {
-    this.filter = <IFilter>{
-      abilities: {
-        selfDefence: this.selfDefensive,
-        partyDefence: this.partyDefensive,
-        defensive: this.selfDefensive,
-        selfDamageBuff: this.selfDamageBuff,
-        partyDamageBuff: this.partyDamageBuff,
-        damage: this.damage,
-        healing: this.healing,
-        healingBuff: this.healingBuff,
-        utility: this.utility,
-        enmity: this.enmity,
-        pet: this.pet,
-        unused: this.unused
-      },
-      attacks: {
-        tags: this.tags.filter(t => t.checked).map(t => t.text),
-        isPhysical: this.isPhysical,
-        isMagical: this.isMagical,
-        isUnaspected: this.isUnaspected,
-        keywords: []
-      }
-    };
+
+   
 
     setTimeout(() => {
+      this.filter = <IFilter>{
+        abilities: {
+          selfDefence: this.selfDefensive,
+          partyDefence: this.partyDefensive,
+          defensive: this.selfDefensive,
+          selfDamageBuff: this.selfDamageBuff,
+          partyDamageBuff: this.partyDamageBuff,
+          damage: this.damage,
+          healing: this.healing,
+          healingBuff: this.healingBuff,
+          utility: this.utility,
+          enmity: this.enmity,
+          pet: this.pet,
+          unused: this.unused
+        },
+        attacks: {
+          tags: this.tags.filter(t => t.checked).map(t => t.text),
+          isPhysical: this.isPhysical,
+          isMagical: this.isMagical,
+          isUnaspected: this.isUnaspected,
+          keywords: []
+        }
+      };
       this.changed.emit(this.filter);
     });
     ;
