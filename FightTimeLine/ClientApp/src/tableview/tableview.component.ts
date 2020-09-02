@@ -50,6 +50,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   templates: { [name: string] : ExportTemplate} ={
     "defence": new BossAttackDefensiveTemplate(),
     "defencecover": new BossAttackDefensiveTemplate(true),
+    "onesecond": new EachRowOneSecondTemplate()
     };
     
 
@@ -59,13 +60,13 @@ export class TableViewComponent implements OnInit, OnDestroy {
     private notification: S.ScreenNotificationsService,
     private route: ActivatedRoute,
     private dialogService: S.DialogService,
+    @Inject(S.authenticationServiceToken) public authenticationService: S.IAuthenticationService,
     private router: Router,
     private storage: LocalStorageService,
     @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
     private settingsService: SettingsService) {
   }
-  
-  private commandFactory = new CommandFactory.CommandFactory(this.startDate);
+
   fightLineController: FightTimeLineController.FightTimeLineController;
   private idgen = new Generators.IdGenerator();
 

@@ -1,4 +1,11 @@
-<toolbar #toolbar></toolbar>
+<toolbar #toolbar
+         showHome="true"
+         showTitle="true"
+         [authenticated]="authenticationService.authenticated"
+         [username]="authenticationService.username"
+         [holders]="fightLineController.getHolders()"
+         [fraction]="fightLineController.fraction"
+         ></toolbar>
 <div class="content">
   <nz-table nsAutoHeightTable #table [nzData]="set.rows" [nzBordered]="true" [nzShowPagination]="false" nzSize="small">
       <thead>
