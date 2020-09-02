@@ -1,10 +1,14 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { Component, OnInit, OnDestroy, Inject, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { IFight } from "../core/Models";
 
-import { IFightService, fightServiceToken } from "../services/index"
 import { SettingsService } from "../services/SettingsService"
 import { LocalStorageService } from "../services/LocalStorageService"
+import * as S from "../services/index"
+import * as M from "../core/Models";
+
+import { ToolbarComponent } from "../toolbar/toolbar.component"
+import { SidepanelComponent } from "../sidepanel/sidepanel.component"
+import { NgProgressComponent } from "ngx-progressbar"
 
 import { FirstTemplate } from "../core/ExportTemplates/FirstTemplate"
 import { EachRowOneSecondTemplate } from "../core/ExportTemplates/EachRowOneSecondTemplate"
@@ -15,6 +19,12 @@ import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
 import * as SerializeController from "../core/SerializeController";
 
+import { VisStorageService } from "../services";
+import * as CommandFactory from "../core/CommandFactory";
+import * as UndoRedo from "../core/UndoRedo";
+import * as FightTimeLineController from "../core/FightTimeLineController";
+import * as Generators from "../core/Generators";
+
 
 @Component({
   selector: "tableview",
@@ -24,43 +34,131 @@ import * as SerializeController from "../core/SerializeController";
 export class TableViewComponent implements OnInit, OnDestroy {
   startDate = new Date(946677600000);
 
-  set: IExportResultSet;
+  @ViewChild("sidepanel", { static: true })
+  sidepanel: SidepanelComponent;
+  @ViewChild("toolbar", { static: true })
+  toolbar: ToolbarComponent;
+  @ViewChild("progressBar", { static: true })
+  progressBar: NgProgressComponent;
+
+  set: IExportResultSet = {
+    columns: [],
+    rows: [],
+    title : ""
+  };
   columnNames: string[];
-  templates: ExportTemplate[] =
-    [new FirstTemplate(), new EachRowOneSecondTemplate(), new BossAttackDefensiveTemplate()];
+  templates: { [name: string] : ExportTemplate} ={
+    "defence": new BossAttackDefensiveTemplate(),
+    "defencecover": new BossAttackDefensiveTemplate(true),
+    };
+    
 
   public constructor(
-    @Inject(fightServiceToken) private fightService: IFightService,
+    @Inject(S.fightServiceToken) private fightService: S.IFightService,
+    private visStorage: VisStorageService,
+    private notification: S.ScreenNotificationsService,
     private route: ActivatedRoute,
+    private dialogService: S.DialogService,
     private router: Router,
     private storage: LocalStorageService,
     @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
     private settingsService: SettingsService) {
   }
+  
+  private commandFactory = new CommandFactory.CommandFactory(this.startDate);
+  fightLineController: FightTimeLineController.FightTimeLineController;
+  private idgen = new Generators.IdGenerator();
 
   home() {
     this.router.navigateByUrl("/");
   }
 
   ngOnInit(): void {
+    this.visStorage.clear();
+    this.fightLineController = new FightTimeLineController.FightTimeLineController(
+      this.startDate,
+      this.idgen,
+      this.visStorage.playerContainer,
+      this.visStorage.bossContainer,
+      {
+        openBossAttackAddDialog: () => {},
+        openAbilityEditDialog: () => {},
+        openStanceSelector: () => {}
+      },
+      this.gameService,
+      this.settingsService
+    );
+
+
     this.route.params.subscribe(r => {
       const id = r["fightId"] as string;
       const template = r["template"] as string;
       if (id && template) {
 //        const settings = this.settingsService.load();
-        this.fightService
-          .getFight(id)
-          .subscribe(fight => {
-            const exportData = this.getExportData(fight);
-            const d = this.templates.find(it => it.name.toLowerCase() === template.toLowerCase()).build(exportData);
-            this.columnNames = d.columns.map(it => it.text);
-            this.set = d;
-          });
+        this.load(id, template);
       }
     });
   }
 
-  getExportData(fight: IFight): ExportData {
+  initTable() {
+
+  }
+
+  load(id, template) {
+    this.dialogService.executeWithLoading(ref => {
+      this.fightService
+        .getFight(id)
+        .subscribe((fight: M.IFight) => {
+          if (fight) {
+            //this.recent.register(fight.name, "/" + id.toLowerCase());
+
+//            const settings = this.settingsService.load();
+//            this.toolbar.setSettings(settings);
+
+            this.fightService.getCommands(id, new Date(fight.dateModified).valueOf())
+              .subscribe(value => {
+                for (var cmd of value) {
+                  const parsed = JSON.parse(cmd.data) as UndoRedo.ICommandData;
+                  this.fightLineController.execute(parsed);
+                  const sr = this.fightLineController.createSerializer()
+                  const exported = sr.serializeForExport();
+                  const d = this.templates[template.toLowerCase()].build(exported);
+                  this.columnNames = d.columns.map(it => it.text);
+                  this.set = d;
+                  ref.close();
+                }
+              },
+                error => {
+                  console.log(error);
+                  this.notification.error("Unable to load data");
+                  ref.close();
+                });
+          } else {
+            ref.close();
+          }
+        },
+          () => {
+            this.notification.showUnableToLoadFight(() => { });
+            ref.close();
+          });
+    });
+  }
+
+  getWidth(text: string, hasIcon) {
+    if (hasIcon)
+      return "auto";
+    switch (text) {
+    case "time":
+      return "50px";
+    case "boss":
+      return "120px";
+    case "target":
+      return "50px";
+    }
+    return "";
+  }
+
+  getExportData(fight: M.IFight): ExportData {
     const data = JSON.parse(fight.data) as SerializeController.IFightSerializeData;
     const bossData = JSON.parse(data.boss.data);
     const bossAttacks = bossData.attacks as SerializeController.IBossAbilityUsageData[];

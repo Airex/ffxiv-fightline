@@ -70,6 +70,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Output("viewUpdate") viewUpdate: EventEmitter<IView> = new EventEmitter<IView>();
 
   @Output("refresh") refresh: EventEmitter<void> = new EventEmitter<void>();
+  @Output("table") table: EventEmitter<string> = new EventEmitter<string>();
 
   @Output("tool") tool: EventEmitter<string> = new EventEmitter<string>();
   @Output("addJob") addJob: EventEmitter<string> = new EventEmitter<string>();
@@ -176,6 +177,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
+  }
+
+  onTable(template: string) {
+    this.table.emit(template);
   }
 
   showWhatsNew() {

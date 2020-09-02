@@ -1,28 +1,40 @@
-<div class="wrapper">
-  <div class="header">
-    <toolbar #toolbar></toolbar>
-  </div>
-  <div class="content">
-    <div class="main-content">
-      <!-- <mat-table [dataSource]="set.rows" class="mat-elevation-z8" *ngIf="set"> -->
-      <!--   <ng-container [matColumnDef]="column.text" *ngFor="let column of set.columns"> -->
-      <!--     <mat-header-cell *matHeaderCellDef> <img class="abilityIcon" *ngIf="column.icon" [src]="column.icon" style="margin-right: 4px;"/>{{column.text}} </mat-header-cell> -->
-      <!--     <mat-cell *matCellDef="let element" [ngStyle]="{'flex-wrap': 'wrap'}"> -->
-      <!--       <div *ngFor="let d of element[columnNames.indexOf(column.text)]" style="margin-right: 2px;"> -->
-      <!--         <div *ngIf="d.lineColor" [ngStyle]="{'background-color': d.lineColor}" class='marker'></div> -->
-      <!--         <p> -->
-      <!--           <img class="abilityIcon" *ngIf="d.icon" [src]="d.icon"/> -->
-      <!--           {{d.text}} -->
-      <!--         </p> -->
-      <!--       </div> -->
-      <!--     </mat-cell> -->
-      <!--   </ng-container> -->
-      <!--   <mat-header-row *matHeaderRowDef="columnNames;sticky: true"></mat-header-row> -->
-      <!--   <mat-row *matRowDef="let row; columns: columnNames;"></mat-row> -->
-      <!-- </mat-table> -->
+<toolbar #toolbar></toolbar>
+<div class="content">
+  <nz-table nsAutoHeightTable #table [nzData]="set.rows" [nzBordered]="true" [nzShowPagination]="false" nzSize="small">
+      <thead>
+        <tr>
+          <th *ngFor="let column of set.columns" [nzWidth]="getWidth(column.text, !!column.icon)"><img class="abilityIcon" *ngIf="column.icon" [src]="column.icon" />{{column.text}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of set.rows">
+          <td *ngFor="let cell of row">
+            <div *ngFor="let d of cell">
+              <div *ngIf="d.lineColor" [ngStyle]="{'background-color':d.lineColor}" class='marker'></div>
+              <div>
+                <img class="abilityIcon" *ngIf="d.icon" [src]="d.icon" />
+                {{d.text}}
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+</div>
+<nz-drawer #sidenav
+           [nzVisible]="sideNavOpened"
+           nzPlacement="right"
+           [nzClosable]="false"
+           [nzMask]="false"
+           nzWidth="305px"
+           [nzMaskClosable]="true"
+           [nzBodyStyle]="{padding: '2px'}"
+           [nzMaskStyle]="{width:'0px !important'}">
+  <div style="width: 300px;">
+    <div style="background-color: white">
+      <sidepanel #sidepanel></sidepanel>
     </div>
   </div>
-</div>
-
-
+</nz-drawer>
+<ng-progress #progressBar [speed]="500" [trickleSpeed]="30000" [spinner]="false"></ng-progress>
 

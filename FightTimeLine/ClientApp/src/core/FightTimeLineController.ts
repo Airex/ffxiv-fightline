@@ -1001,7 +1001,7 @@ export class FightTimeLineController {
     }
   }
 
-  execute(data: any): void {
+  execute(data: ICommandData): void {
     const command = this.commandFactory.createFromData(data, this.view);
     if (command) {
       this.commandStorage.execute(command, false);

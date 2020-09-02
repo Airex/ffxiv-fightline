@@ -50,8 +50,11 @@ mat-footer-row, mat-row {
 }
 
 .content {
-  flex: 1 1 auto;
-  overflow-y: auto;
+  min-width: 100% !important;
+  width: 100% !important;
+  height: -moz-calc(100% - (55px)) !important;
+  height: -webkit-calc(100% - (55px)) !important;
+  height: calc(100% - (55px)) !important;
 }
 
 .footer {

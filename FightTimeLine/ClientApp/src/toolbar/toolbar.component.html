@@ -43,14 +43,20 @@
       <i nz-icon nzType="menu"></i>
     </button>
     <nz-dropdown-menu #mainMenu="nzDropdownMenu">
-      <ul nz-menu class="noselect">
+      <ul nz-menu>
         <li nz-menu-item (click)="onNew()">New</li>
         <li nz-menu-item (click)="onLoad()">Load</li>
         <li nz-menu-item (click)="onSave()">Save</li>
         <li nz-menu-item (click)="onOpenBossTemplates()">Boss templates</li>
         <li nz-menu-item (click)="onShowAsTable()">Table view</li>
+        <li nz-submenu nzTitle="Open as Table">
+          <ul>
+            <li nz-menu-item (click)="onTable('defence')">Defence</li>
+            <li nz-menu-item (click)="onTable('defencecover')">Defence with cover</li>
+          </ul>
+        </li>
         <li nz-menu-item (click)="onImport()" *ngIf="gameService.showImport">Import from FFLogs</li>
-        <li nz-menu-item (click)="onExportToTable()">Export to Google Sheets (BETA)</li>
+        <!-- <li nz-menu-item (click)="onExportToTable()">Export to Google Sheets (BETA)</li> -->
       </ul>
     </nz-dropdown-menu>
   </span>

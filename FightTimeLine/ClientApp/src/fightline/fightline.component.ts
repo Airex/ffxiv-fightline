@@ -12,7 +12,7 @@ import { process } from "../core/BossAttackProcessors"
 import { ToolbarComponent } from "../toolbar/toolbar.component"
 import { SidepanelComponent } from "../sidepanel/sidepanel.component"
 import { PlanAreaComponent, Action, EventSource } from "./planArea/planArea.component"
-import { ToolsManager, CopyPasteTool, DowntimeTool, StickyAttacksTool } from "../core/ToolsManager"
+import { ToolsManager, CopyPasteTool, DowntimeTool } from "../core/ToolsManager"
 
 import { IdGenerator } from "../core/Generators"
 import { ICommandData } from "../core/UndoRedo"
@@ -161,6 +161,10 @@ export class FightLineComponent implements OnInit, OnDestroy {
       if (this.sideNavOpened)
         this.sideNavOpened = false;
     }
+  }
+
+  onTable(temlate: string) {
+    window.open(this.router.serializeUrl(this.router.createUrlTree(["/table", this.fightId, temlate])), "_blank")
   }
 
   private openStanceSelector(data: M.IContextMenuData[]): void {
