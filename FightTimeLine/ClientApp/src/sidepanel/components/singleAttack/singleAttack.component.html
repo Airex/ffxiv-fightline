@@ -1,14 +1,19 @@
 <nz-space nzDirection="vertical">
   <nz-space-item>
     <div>
-      <span class="abilityName">{{it.attack.name}}</span>
+      <span class="abilityName">{{it.attack.name}}</span><a class="edit" (click)="edit(it)"> <i  nz-icon nzType="edit" nzTheme="twotone"></i></a>
     </div>
     <div>
-      <span class="type">{{getType(it.attack.type)}}</span>
+      <i nz-icon nzType="clock-circle" theme="twotone"></i><span class="time">{{it.attack.offset}}</span>
     </div>
     <div>
-      <i nz-icon nzType="clock-circle" theme="outline"></i><span class="time">{{it.attack.offset}}</span>
+      <nz-tag *ngIf="!!it.attack.source" [nzColor]="warning">{{it.attack.source}}</nz-tag>
+      <nz-tag [nzColor]="getTypeColor(it.attack.type)">{{getType(it.attack.type)}}</nz-tag>
     </div>
+    
+  </nz-space-item>
+  <nz-space-item>
+    <nz-tag *ngFor="let t of it.attack.tags" nzColor="green">{{t}}</nz-tag>
   </nz-space-item>
   <nz-space-item>
     <span class="description">{{it.attack.description}}</span>
@@ -34,7 +39,7 @@
   </nz-space-item>
   <nz-space-item>
     <sidepanel-area header="Similar" *ngIf="similar.length > 0">
-      <div *ngIf="similar.length">
+      
         <div class="similar">
           <ul style="padding-left: 10px; display: block">
             <li style="list-style-type: none; display: contents" *ngFor="let it of similar" class="similar-item">
@@ -47,7 +52,7 @@
         <div>
           <a class="similarLink" (click)="similarAllClick(it)"><span class="">Select all</span></a>
         </div>
-      </div>
+      
     </sidepanel-area>
   </nz-space-item>
 </nz-space>

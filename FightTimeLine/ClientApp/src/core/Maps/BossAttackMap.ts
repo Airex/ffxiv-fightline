@@ -3,6 +3,7 @@ import { BaseMap } from "./BaseMap";
 import { Utils } from "../Utils";
 import * as Models from "../Models";
 import { IForSidePanel, IMoveable } from "../Holders/BaseHolder";
+import * as _ from "lodash";
 
 export interface IBossAttackMapData {
   vertical?: boolean;
@@ -12,7 +13,8 @@ export interface IBossAttackMapData {
 export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData> implements IMoveable, IForSidePanel {
   sidePanelComponentName: string = "bossAbility";
 
-  onDataUpdate(data: IBossAttackMapData): void {
+  onDataUpdate(data: IBossAttackMapData, originalData: IBossAttackMapData): void {
+    this.attack.tags = originalData.attack.tags;
     this.setItem(this.createBossAttack(this.id, data.attack, data.vertical));
   }
 

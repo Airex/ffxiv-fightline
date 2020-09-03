@@ -1,6 +1,6 @@
 .abilityName {
   font-size: 20px;
-  font-weight: bold
+  font-weight: bold;
 }
 
 .jobIcon {
@@ -10,6 +10,14 @@
 
 .area {
   margin-top: 3px;
+}
+
+.edit {
+  margin-left: 3px;
+}
+
+.time {
+  margin-left: 3px;
 }
 
 .similarLink {

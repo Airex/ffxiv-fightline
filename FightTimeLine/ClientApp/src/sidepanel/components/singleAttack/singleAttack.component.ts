@@ -37,6 +37,17 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
     return M.DamageType[id];
   }
 
+  getTypeColor(id: number): string {
+    const type = id as M.DamageType;
+    switch (type) {
+      case M.DamageType.Physical:
+        return "red";
+      case M.DamageType.Magical:
+        return "blue";
+    }
+    return "default";
+  }
+
   copy(value: BossAttackMap) {
     this.dispatcher.dispatch({
       name: "SidePanel Attack Copy",
@@ -73,6 +84,13 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
       };
     }).sort((a, b) => a.job.role - b.job.role);
 
+  }
+
+  edit(it) {
+    this.dispatcher.dispatch({
+      name: "SidePanel Attack Edit Click",
+      payload: it.id
+    });
   }
 
   similarClick(attack: BossAttackMap) {

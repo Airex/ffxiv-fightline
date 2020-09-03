@@ -812,6 +812,12 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.fightLineController.copy(value);
     });
 
+    dispatcher.on("SidePanel Attack Edit Click").subscribe(value => {
+      this.fightLineController.updateBossAttack(value);
+    });
+
+    
+
     dispatcher.on("Update Filter").subscribe(value => {
       this.updateFilter();
     });

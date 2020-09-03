@@ -22,10 +22,10 @@ export abstract class BaseMap<TKey, TItem extends { className?: string }, TData>
   applyData(data?: TData): void {
     if (data)
       this.data = _.merge(this.data, data);
-    this.onDataUpdate(this.data);
+    this.onDataUpdate(this.data, data);
   }
 
-  abstract onDataUpdate(data: TData): void;
+  abstract onDataUpdate(data: TData, originalData?: TData): void;
 
   setItem(item: TItem): void {
     if (!this.item)

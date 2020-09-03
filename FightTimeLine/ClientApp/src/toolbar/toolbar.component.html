@@ -1,7 +1,7 @@
 <div class="toolbar noselect">
   <span style="margin-right: 10px" *ngIf="showHome">
     <button nz-button (click)="onHome()" nz-tooltip nzTooltipTitle="Home">
-      <i nz-icon nzType="home"></i>
+      <i nz-icon theme="twotone" nzType="home"></i>
     </button>
   </span>
   <span *ngIf="showTitle" class="toolbar-title">Fight Time Line</span>
@@ -40,7 +40,7 @@
   </span>
   <span *ngIf="showMenu">
     <button nz-dropdown [nzDropdownMenu]="mainMenu" nzTrigger="click" nz-button nz-tooltip nzTooltipTitle="Menu">
-      <i nz-icon nzType="menu"></i>
+      <i nz-icon nzType="menu" ></i>
     </button>
     <nz-dropdown-menu #mainMenu="nzDropdownMenu">
       <ul nz-menu>
@@ -73,7 +73,7 @@
     <viewMenu #view (changed)="updateView($event)"></viewMenu>
   </span>
   <span style="margin-left: 10px" *ngIf="!toolToUse && showTools">
-    <button nz-dropdown [nzDropdownMenu]="toolMenu" [nzTrigger]="'click'" nz-button><i nz-icon nzType="tool" theme="fill"></i>Tools</button>
+    <button nz-dropdown [nzDropdownMenu]="toolMenu" [nzTrigger]="'click'" nz-button><i nz-icon nzType="tool" theme="twotone"></i>Tools</button>
     <nz-dropdown-menu #toolMenu="nzDropdownMenu">
       <ul nz-menu class="noselect">
         <li nz-menu-item (click)="useTool(t)" *ngFor="let t of availableTools">{{t}}</li>
