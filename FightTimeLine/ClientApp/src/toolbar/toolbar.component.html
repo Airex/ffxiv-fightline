@@ -72,16 +72,16 @@
   <span style="margin-left: 10px" *ngIf="showView">
     <viewMenu #view (changed)="updateView($event)"></viewMenu>
   </span>
-  <span style="margin-left: 10px" *ngIf="!toolToUse && showTools">
+  <span style="margin-left: 10px" *ngIf="showTools && !toolsManager.active">
     <button nz-dropdown [nzDropdownMenu]="toolMenu" [nzTrigger]="'click'" nz-button><i nz-icon nzType="tool" theme="twotone"></i>Tools</button>
     <nz-dropdown-menu #toolMenu="nzDropdownMenu">
       <ul nz-menu class="noselect">
-        <li nz-menu-item (click)="useTool(t)" *ngFor="let t of availableTools">{{t}}</li>
+        <li nz-menu-item (click)="useTool(t)" *ngFor="let t of toolsManager.toolNames">{{t}}</li>
       </ul>
     </nz-dropdown-menu>
   </span>
-  <span style="margin-left: 10px" *ngIf="!!toolToUse && showTools">
-    <button nz-button nzType="danger" (click)="useTool(null)">{{toolToUse}}</button>
+  <span style="margin-left: 10px" *ngIf="showTools && toolsManager.active">
+    <button nz-button nzType="danger" (click)="useTool(null)">{{toolsManager.active}}</button>
   </span>
   <span style="display: flex; margin-left: 10px;" *ngIf="showTeamwork">
     <avatarWithPing *ngFor="let user of connectedUsers" [owner]="false" textSizeRatio="3" [name]="user.name" [id]="user.id" [ngStyle]="{'margin-right':'2px'}"></avatarWithPing>

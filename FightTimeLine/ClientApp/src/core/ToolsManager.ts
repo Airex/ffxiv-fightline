@@ -178,6 +178,10 @@ export class ToolsManager {
     }
   }
 
+  get active(): string {
+    return this.activeTool && this.activeTool.name || null;
+  }
+
   get toolNames(): string[] {
     return this.tools.map(t => t.name);
   }

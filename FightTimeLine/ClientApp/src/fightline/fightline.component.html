@@ -15,12 +15,11 @@
          [holders]="fightLineController.getHolders()"
          [connectedUsers]="fightHubService.users"
          [connected]="fightHubService.connected"
-         [availableTools]="toolsManager.toolNames"
+         [toolsManager]="toolsManager"
          [fraction]="fightLineController.fraction"
          (addJob)="addJob($event)"
          (undo)="onUndo()"
          (redo)="onRedo()"
-         (tool)="useTool($event)"
          (exportToTable)="exportToTable()"
          (showTable)="showAsTable()"
          (refresh)="planArea.refresh()"
@@ -43,7 +42,7 @@
            [nzMaskClosable]="true"
            [nzBodyStyle]="{padding: '2px'}"
            [nzMaskStyle]="{width:'0px !important'}">
-  <div style="width: 300px;">
+  <div style="width: 300px;" class="noselect" customScroll>
     <div style="background-color: white">
       <sidepanel #sidepanel></sidepanel>
     </div>

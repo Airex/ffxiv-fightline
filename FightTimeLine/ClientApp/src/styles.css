@@ -488,4 +488,5 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
 
 .ant-drawer-content-wrapper {
   margin-top: 54px;
+  height: calc(100% - 55px) !important;
 }

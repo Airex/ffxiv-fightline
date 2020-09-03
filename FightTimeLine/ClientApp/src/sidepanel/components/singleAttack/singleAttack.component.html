@@ -1,7 +1,7 @@
 <nz-space nzDirection="vertical">
   <nz-space-item>
     <div>
-      <span class="abilityName">{{it.attack.name}}</span><a class="edit" (click)="edit(it)"> <i  nz-icon nzType="edit" nzTheme="twotone"></i></a>
+      <span class="abilityName">{{it.attack.name}}</span><a class="edit" (click)="edit(it)"> <i nz-icon nzType="edit" nzTheme="twotone"></i></a>
     </div>
     <div>
       <i nz-icon nzType="clock-circle" theme="twotone"></i><span class="time">{{it.attack.offset}}</span>
@@ -10,7 +10,7 @@
       <nz-tag *ngIf="!!it.attack.source" [nzColor]="warning">{{it.attack.source}}</nz-tag>
       <nz-tag [nzColor]="getTypeColor(it.attack.type)">{{getType(it.attack.type)}}</nz-tag>
     </div>
-    
+
   </nz-space-item>
   <nz-space-item>
     <nz-tag *ngFor="let t of it.attack.tags" nzColor="green">{{t}}</nz-tag>
@@ -38,21 +38,37 @@
     </sidepanel-area>
   </nz-space-item>
   <nz-space-item>
-    <sidepanel-area header="Similar" *ngIf="similar.length > 0">
-      
-        <div class="similar">
-          <ul style="padding-left: 10px; display: block">
-            <li style="list-style-type: none; display: contents" *ngFor="let it of similar" class="similar-item">
-              <div>
-                <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="">{{it.attack.offset}}</span></a>
-              </div>
+    <sidepanel-area header="Available Defensives" *ngIf="availDefs.length>0">
+      <div>
+        <div class="job" *ngFor="let d of availDefs">
+          <div class="jobHead">
+            <img class="jobIcon" [src]="d.job.icon" /><span class="jobName">{{d.job.name}}</span>
+          </div>
+          <ul style="padding-left: 10px">
+            <li style="list-style-type: none;" *ngFor="let it of d.abilities">
+              <img class="abilityIcon" [src]="it.ability.icon" /><a class="defenseLink" (click)="defenseClick(it)"> <span class="abilityNameDef">{{it.ability.name}}</span></a>
             </li>
           </ul>
         </div>
-        <div>
-          <a class="similarLink" (click)="similarAllClick(it)"><span class="">Select all</span></a>
-        </div>
-      
+      </div>
+    </sidepanel-area>
+  </nz-space-item>
+  <nz-space-item>
+    <sidepanel-area header="Similar" *ngIf="similar.length > 0">
+
+      <div class="similar">
+        <ul style="padding-left: 10px; display: block">
+          <li style="list-style-type: none; display: contents" *ngFor="let it of similar" class="similar-item">
+            <div>
+              <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="">{{it.attack.offset}}</span></a>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <a class="similarLink" (click)="similarAllClick(it)"><span class="">Select all</span></a>
+      </div>
+
     </sidepanel-area>
   </nz-space-item>
 </nz-space>

@@ -199,6 +199,7 @@ export class FightTimeLineController {
     bossAbility.offset = Utils.formatTime(time);
     this.commandStorage.execute(new C.AddBossAttackCommand(id || this.idgen.getNextId(M.EntryType.BossAttack),
       bossAbility));
+    this.filter.attacks.tags = _.union(this.filter.attacks.tags, bossAbility.tags);
   }
 
   getLatestBossAttackTime(): Date | null {
@@ -234,6 +235,7 @@ export class FightTimeLineController {
             }));
           }
           this.commandStorage.execute(new C.CombinedCommand(commands));
+          this.filter.attacks.tags = _.union(this.filter.attacks.tags, result.data.tags);
           this.holders.bossAttacks.applyFilter(this.filter.attacks);
         }
       });

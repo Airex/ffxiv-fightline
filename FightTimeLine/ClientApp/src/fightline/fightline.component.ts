@@ -171,10 +171,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
     //    this.contextMenu.openStanceSelector(data);
   }
 
-  useTool(tool: string) {
-    this.toolsManager.setActive(tool);
-  }
-
   exportToTable() {
     this.dialogService.openExportToTable(() => this.fightLineController.createSerializer().serializeForExport());
   }
@@ -810,6 +806,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     dispatcher.on("SidePanel Attack Copy").subscribe(value => {
       this.fightLineController.copy(value);
+      this.toolsManager.setActive("Copy & Paste");
     });
 
     dispatcher.on("SidePanel Attack Edit Click").subscribe(value => {

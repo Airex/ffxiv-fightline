@@ -14,6 +14,7 @@ import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
 import * as _ from "lodash";
 import * as SettingsService from "../services/SettingsService";
+import { ToolsManager } from "../core/ToolsManager";
 
 @Component({
   selector: "toolbar",
@@ -40,10 +41,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Input("canRedo") canRedo: boolean;
   @Input("connectedUsers") connectedUsers: M.IHubUser[];
   @Input("connected") connected: boolean;
-  @Input("availableTools") availableTools: string[];
   @Input("holders") holders: H.Holders;
 
-  private _fraction:M.IFraction;
+  @Input("toolsManager") toolsManager: ToolsManager;
+
+  private _fraction: M.IFraction;
 
   @Input("fraction")
   set fraction(value: M.IFraction) {
@@ -72,7 +74,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Output("refresh") refresh: EventEmitter<void> = new EventEmitter<void>();
   @Output("table") table: EventEmitter<string> = new EventEmitter<string>();
 
-  @Output("tool") tool: EventEmitter<string> = new EventEmitter<string>();
   @Output("addJob") addJob: EventEmitter<string> = new EventEmitter<string>();
 
 
@@ -86,8 +87,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
 
   container = { data: [] };
-
-  toolToUse: string = null;
 
   menu: any;
 
@@ -150,10 +149,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.redo.emit();
   }
 
-  onTool() {
-    this.tool.emit();
-  }
-
   onAddJob(name: string) {
     this.addJob.emit(name);
   }
@@ -163,8 +158,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   useTool(tool: string) {
-    this.toolToUse = tool;
-    this.tool.emit(tool);
+    this.toolsManager.setActive(tool);
   }
 
   onOpenBossTemplates() {
@@ -261,10 +255,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this.dialogService.openRegister()
       .then(result => {
         if (result)
-        this.authenticationService
-          .login(result.username, result.password)
-          .subscribe((): void => {
-          });
+          this.authenticationService
+            .login(result.username, result.password)
+            .subscribe((): void => {
+            });
       });
   }
 
