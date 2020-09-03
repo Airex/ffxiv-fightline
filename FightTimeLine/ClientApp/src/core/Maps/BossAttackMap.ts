@@ -14,7 +14,8 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
   sidePanelComponentName: string = "bossAbility";
 
   onDataUpdate(data: IBossAttackMapData, originalData: IBossAttackMapData): void {
-    this.attack.tags = originalData.attack.tags;
+    if (originalData && originalData.attack)
+      this.attack.tags = originalData.attack.tags;
     this.setItem(this.createBossAttack(this.id, data.attack, data.vertical));
   }
 
