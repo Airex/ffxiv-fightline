@@ -41,7 +41,7 @@
         <nz-form-item>
           <nz-form-control>
             <nz-select formControlName="tags" nzMode="tags" [nzTokenSeparators]="[',']" nzPlaceHolder="Tags">
-              <nz-option *ngFor="let option of defaultTags" [nzLabel]="option" [nzValue]="option"></nz-option>
+              <nz-option *ngFor="let option of presenterManager.activeTags" [nzLabel]="option.text" [nzValue]="option.text"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>

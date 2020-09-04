@@ -87,8 +87,8 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
   applyFilter(filter: Models.IBossAttackFilter): void {
     if (!filter) return;
     this.values.forEach(it => {
-      let visible = !filter.tags || filter.tags.some(value => (!it.attack.tags && value === "Other") || it.attack.tags && it.attack.tags.includes(value));
-      visible = visible && (!filter.sources || filter.sources.some(value => (!it.attack.source && value === "Other") || it.attack.source && it.attack.source === value));
+      let visible = !filter.tags || filter.tags.some(value => ((!it.attack.tags || it.attack.tags.length === 0) && value === "Other") || it.attack.tags && it.attack.tags.includes(value));
+      visible = visible && (!filter.sources || filter.sources.some(value => (!it.attack.source && value === "Other") || (it.attack.source && it.attack.source === value)));
       visible = visible && (filter.isMagical && it.attack.type === Models.DamageType.Magical || filter.isPhysical && it.attack.type === Models.DamageType.Physical || filter.isUnaspected && it.attack.type === Models.DamageType.None);
 
       const item = this.visBossItems.get(it.id);

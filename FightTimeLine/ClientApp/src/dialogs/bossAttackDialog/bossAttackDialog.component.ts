@@ -8,6 +8,7 @@ import { time } from "../../heplers/TimeValidator";
 import { NzModalRef } from "ng-zorro-antd";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
+import * as PresentationManager from "../../core/PresentationManager";
 
 @Component({
   selector: "bossAttackDialog",
@@ -18,6 +19,7 @@ import * as Gameserviceinterface from "../../services/game.service-interface";
 export class BossAttackDialog implements OnInit {
 
   @Input("data") data: M.IBossAbility;
+  @Input("presenterManager") presenterManager: PresentationManager.PresenterManager;
   @Input("holders") holders: H.Holders;
   @ViewChild("syncSettings") syncSettings: SyncSettingsComponent;
   @ViewChild("syncDowntime") syncDowntime: SyncDowntimeComponent;
@@ -27,7 +29,6 @@ export class BossAttackDialog implements OnInit {
   settings: any;
   uniqueIndex: number = 0;
   expression: string;
-  defaultTags:string[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -37,9 +38,6 @@ export class BossAttackDialog implements OnInit {
 
   ngOnInit() {
     this.newAttack = !this.data.name;
-
-    this.defaultTags = this.holders.bossAttacks.uniqueTags;
-    
     this.editForm = this.formBuilder.group({
       bossAttackName: new FormControl(this.data.name, Validators.required),
       damageType: new FormControl(this.data.type, Validators.required),
@@ -66,8 +64,6 @@ export class BossAttackDialog implements OnInit {
     this.data.source = this.f.bossAttackSource.value;
     this.data.description = this.f.description.value;
     this.data.tags = this.f.tags.value;
-    if (this.data.tags && this.data.tags.length == 0)
-      this.data.tags = null;
 
     if (this.syncSettings)
       this.data.syncSettings = this.syncSettings.buildSyncSettings();

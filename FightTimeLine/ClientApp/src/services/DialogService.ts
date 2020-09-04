@@ -1,10 +1,18 @@
 import { Injectable} from "@angular/core"
-import { IBossAbility, IAbilitySetting, IAbilitySettingData, IFight, IAbility, IBoss, IFraction } from "../core/Models";
+import { IBossAbility, IAbilitySetting, IAbilitySettingData, IFight, IAbility, IBoss, IFraction, IAbility as IAbility1,
+  IAbilitySetting as IAbilitySetting1,
+  IAbilitySettingData as IAbilitySettingData1,
+  IFight as IFight1,
+  IBoss as IBoss1,
+  IFraction as IFraction1,
+  IFraction as IFraction2
+} from "../core/Models";
 import * as H from "../core/Holders";
 import { LocalStorageService } from "./LocalStorageService";
 import {NzModalService, NzModalState } from 'ng-zorro-antd';
 import { Observable } from "rxjs";
 import * as D from "../dialogs"
+import * as PresentationManager from "../core/PresentationManager";
 
 @Injectable({
   providedIn: 'root'
@@ -78,7 +86,7 @@ export class DialogService {
     return this.toPromise(dialogRef.afterClose);
   }
 
-  openBossAttackAddDialog(bossAbility: IBossAbility, holders: H.Holders, callBack: (b: any) => void): void {
+  openBossAttackAddDialog(bossAbility: IBossAbility, holders: H.Holders, presenter: PresentationManager.PresenterManager, callBack: (b: any) => void): void {
     const dialogRef = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzTitle: null,
@@ -88,7 +96,8 @@ export class DialogService {
       nzContent: D.BossAttackDialog,
       nzComponentParams: {
         data: bossAbility,
-        holders: holders
+        holders: holders,
+        presenterManager: presenter
       }
     });
 
@@ -97,7 +106,7 @@ export class DialogService {
     });
   }
 
-  openAbilityEditDialog(data: { ability: IAbility, settings: IAbilitySetting[], values: IAbilitySettingData[] },
+  openAbilityEditDialog(data: { ability: IAbility1, settings: IAbilitySetting1[], values: IAbilitySettingData1[] },
     callBack: (b: any) => void): void {
     const dialogRef = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
@@ -169,7 +178,7 @@ export class DialogService {
     return this.toPromise(dialogref.afterClose);
   }
 
-  openSaveFight(dataFn: () => any): Promise<IFight> {
+  openSaveFight(dataFn: () => any): Promise<IFight1> {
     const dialogref = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzTitle: "Save",
@@ -267,7 +276,7 @@ export class DialogService {
     });
   }
 
-  openBossTemplates(needSave: boolean, boss?: IBoss) {
+  openBossTemplates(needSave: boolean, boss?: IBoss1) {
     this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzContent: D.BossTemplatesDialog,
@@ -304,7 +313,7 @@ export class DialogService {
     return this.toPromise(ref.afterClose);
   }
 
-  showFractionSelection(fractions: IFraction[]):Observable<IFraction> {
+  showFractionSelection(fractions: IFraction1[]):Observable<IFraction2> {
     const ref = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzContent: D.FractionSelectionDialog,
