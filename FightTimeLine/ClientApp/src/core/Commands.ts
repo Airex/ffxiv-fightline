@@ -359,7 +359,7 @@ export class MoveCommand implements Command {
 
     this.moveFrom = item.start;
     this.ability = context.holders.itemUsages.get(this.id).ability.ability;
-    console.log(`Moving to ${this.moveTo.toString()} from ${this.moveFrom.toString()}`);
+//    console.log(`Moving to ${this.moveTo.toString()} from ${this.moveFrom.toString()}`);
 
     const affectedAttacks = [
       ...context.holders.bossAttacks.getAffectedAttacks(item.start as Date, this.ability.duration),
@@ -404,13 +404,14 @@ export class AddBatchAttacksCommand implements Command {
       const params = it.serialize().params as IAddBossAttackParams;
       return params.id;
     });
-
     context.holders.bossAttacks.remove(items);
   }
 
   execute(context: ICommandExecutionContext): void {
     const items = this.commands.map(it => {
       const params = it.serialize().params as IAddBossAttackParams;
+      context.addTags(params.attack.tags);
+      context.addSources(params.attack.source);
       return new BossAttackMap(params.id,
         {
           attack: params.attack,

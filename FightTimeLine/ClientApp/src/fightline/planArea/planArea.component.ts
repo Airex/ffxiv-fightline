@@ -95,7 +95,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
           result = t;
         }
       });
-      console.log(result);
+     // console.log(result);
       if (result) {
         callback(item);
       } else {
@@ -185,7 +185,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
         }
       });
 
-      console.log(result);
+     // console.log(result);
       if (result) {
         callback(item);
       } else {
@@ -265,7 +265,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
   }
 
   timelineInitialized(): void {
-    console.log("timeline initialized");
+    //console.log("timeline initialized");
     this.visTimelineService.on(this.visTimeline, "click");
     this.visTimelineService.on(this.visTimeline, "doubleClick");
     this.visTimelineService.on(this.visTimeline, "select");

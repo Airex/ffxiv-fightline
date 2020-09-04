@@ -59,7 +59,7 @@ export class UndoRedoController {
         this.commandExecuted.emit(command.serialize());
     } catch (error) {
       console.error(error);
-      console.log("Unable to execute command " + JSON.stringify(command.serialize()));
+      //console.log("Unable to execute command " + JSON.stringify(command.serialize()));
     }
   }
 

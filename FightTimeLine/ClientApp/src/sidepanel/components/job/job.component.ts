@@ -79,7 +79,7 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
   }
 
   resetJobFilter() {
-    console.log("reset job filter requested");
+    //console.log("reset job filter requested");
     Object.assign(this.jobFilter,
       {
         unused: undefined,

@@ -27,7 +27,7 @@ export class FightHubService {
   sendCommand(fight: string, username: string, data: any) {
     if (this.connected) {
       const message = JSON.stringify(data);
-      console.log(`Message length = ${message.length}`);
+      //console.log(`Message length = ${message.length}`);
       this.hubConnection.invoke("command", fight, username, message).catch((error)=>{
         console.log(error);
       });
@@ -66,7 +66,7 @@ export class FightHubService {
           this.hubConnection
             .invoke("startSession", fight, username)
             .then((result) => {
-              console.log(result);
+              //console.log(result);
               resolve(result);
             });
         })

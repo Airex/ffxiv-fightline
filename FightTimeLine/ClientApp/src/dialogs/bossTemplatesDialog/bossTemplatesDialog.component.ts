@@ -140,7 +140,7 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
   onEncounterSelected(zone, enc: any, skipCheck?: boolean) {
     if (this.data.boss && this.data.boss.ref && !skipCheck)
       return;
-    console.log(enc.name);
+   // console.log(enc.name);
     this.selectedTemplate = null;
     this.visItems.clear();
     this.selectedZone = zone;

@@ -106,7 +106,8 @@ export class FightTimeLineController {
     });
 
     commands.push(new C.AddBatchAttacksCommand(
-      loadData.attacks.map(it => new C.AddBossAttackCommand(it.id || this.idgen.getNextId(M.EntryType.BossAttack),
+      loadData.attacks.map(it => new C.AddBossAttackCommand(
+        it.id || this.idgen.getNextId(M.EntryType.BossAttack), 
         it.ability))));
 
     let index = 1;
@@ -283,7 +284,7 @@ export class FightTimeLineController {
   }
 
   private notifyRemove(id: string, updateAttacks?: boolean): void {
-    console.log(`NotifyRemove ${id}`);
+    //console.log(`NotifyRemove ${id}`);
     if (this.idgen.isAbilityUsage(id)) {
       this.commandBag.push(new C.RemoveAbilityCommand(id, updateAttacks));
     } else if (this.idgen.isStanceUsage(id)) {
@@ -896,7 +897,7 @@ export class FightTimeLineController {
   applyFilter(input?: M.IFilter): void {
     if (this.loading) return;
 
-    console.log("filter requested");
+    //console.log("filter requested");
     if (input)
       this.presenterManager.filter = input;
 

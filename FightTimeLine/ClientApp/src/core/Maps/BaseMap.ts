@@ -13,7 +13,7 @@ export abstract class BaseMap<TKey, TItem extends { className?: string }, TData>
   }
 
   protected buildClass(cls: { [value: string]: boolean }): string {
-    console.log(this.item && this.item.className);
+    //console.log(this.item && this.item.className);
     const b = new ClassNameBuilder(this.item && this.item.className || "");
     b.set(cls);
     return b.build() || "dummy";

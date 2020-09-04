@@ -97,7 +97,7 @@ export class SyncSettingsComponent implements OnInit {
   updateResult(): void {
 
     this.data.syncSettings = JSON.stringify(this.buildSyncSettings());
-    console.log(this.data.syncSettings);
+    //console.log(this.data.syncSettings);
   }
 
   addAnd() {

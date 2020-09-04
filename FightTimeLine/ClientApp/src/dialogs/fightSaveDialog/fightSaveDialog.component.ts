@@ -59,7 +59,7 @@ export class FightSaveDialog implements OnInit {
   }
 
   handleSaveError(error: any) {
-    console.log(error);
+    //console.log(error);
     let text: string = error.statusText;
     if (error.status === 403) {
       text = "Invalid Username or Secret used to update this Fight";

@@ -208,13 +208,13 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   openBossAttackAddDialog(bossAbility: M.IBossAbility, callBack: (b: any) => void): void {
-    console.log("boss attack edit")
+    //console.log("boss attack edit")
     this.dialogService.openBossAttackAddDialog(bossAbility, this.fightLineController.getHolders(), this.presenterManager, callBack);
   }
 
   openAbilityEditDialog(data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[] },
     callBack: (b: any) => void): void {
-    console.log("ability edit")
+    //console.log("ability edit")
     this.dialogService.openAbilityEditDialog(data, callBack);
   }
 
@@ -571,7 +571,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.onCommand(data);
     });
     this.fightHubService.usersChanged.subscribe(() => {
-      console.log(this.fightHubService.users);
+      //console.log(this.fightHubService.users);
     });
     this.subscribeToDispatcher(this.dispatcher);
 
