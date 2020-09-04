@@ -423,8 +423,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
                 for (var cmd of value) {
                   this.handleRemoteCommandData(JSON.parse(cmd.data));
                 }
-                this.planArea.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
                 this.connectToSession().then(() => {
+                  this.planArea.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
                   this.planArea.refresh();
                   ref.close();
                 });
