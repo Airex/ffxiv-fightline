@@ -79,7 +79,7 @@ export class FightTimeLineController {
     });
     this.commandBag = new CommandBag(this.commandStorage);
     this.availabilityController = new AvailabilityController(
-      this.presenterManager.view,
+      this.presenterManager,
       this.holders,
       this.startDate,
       this.idgen

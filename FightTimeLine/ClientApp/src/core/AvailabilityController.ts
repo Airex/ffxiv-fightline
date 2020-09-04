@@ -2,13 +2,14 @@ import * as M from "./Models"
 import * as _ from "lodash"
 import { IdGenerator } from "./Generators"
 import * as Holders from "./Holders";
+import { PresenterManager } from "./PresentationManager";
 import { JobMap, AbilityMap, AbilityAvailabilityMap, AbilityUsageMap, IAbilityAvailabilityMapData } from "./Maps/index";
 
 
 type Range = { start: Date, end: Date };
 
 export class AvailabilityController {
-  constructor(private view: M.IView, private holders: Holders.Holders, private startDate: Date, private idgen: IdGenerator) {
+  constructor(private presenter: PresenterManager, private holders: Holders.Holders, private startDate: Date, private idgen: IdGenerator) {
 
   }
 
@@ -26,32 +27,43 @@ export class AvailabilityController {
   setAbilityAvailabilityView(showAbilityAvailablity: boolean): void {
     this.holders.abilityAvailability.clear();
     if (showAbilityAvailablity) {
-      this.holders.abilities.getAll().forEach(it => {
-        if (it.isStance) return;
+      const maps = this.holders.abilities.getAll().map(it => {
+        if (it.isStance) return [];
         if (!it.ability.charges) {
           const deps = it.ability.overlapStrategy.getDependencies();
-          this.processStandardAbility(it, deps);
+          return this.processStandardAbility(it, deps);
         } else {
-          this.processChargesAbility(it);
+          return this.processChargesAbility(it);
         }
-      });
+      })
+        .reduce((acc: AbilityAvailabilityMap[], v: AbilityAvailabilityMap[]) => {
+          acc.push(...v);
+          return acc;
+        }, []);
+
+      this.holders.abilityAvailability.addRange(maps);
     }
   }
 
   updateAvailability(abilityChanged: M.IAbility): void {
-    if (this.view.showAbilityAvailablity) {
+    if (this.presenter.view.showAbilityAvailablity) {
       const deps = abilityChanged.overlapStrategy.getDependencies();
-      this.holders.abilities
+      const maps = this.holders.abilities
         .filter(it =>
           (it.ability && it.ability.name === abilityChanged.name) ||
           (deps && deps.some((d => d === abilityChanged.name))))
-        .forEach(it => {
+        .map(it => {
           if (!it.ability.charges) {
-            this.processStandardAbility(it, deps);
+            return this.processStandardAbility(it, deps);
           } else {
-            this.processChargesAbility(it);
+            return this.processChargesAbility(it);
           }
-        });
+        })
+        .reduce((acc: AbilityAvailabilityMap[], v: AbilityAvailabilityMap[]) => {
+          acc.push(...v);
+          return acc
+        }, []);
+      this.holders.abilityAvailability.addRange(maps);
     }
   }
 
@@ -62,8 +74,8 @@ export class AvailabilityController {
     return ranges;
   }
 
-  private processChargesAbility(it: AbilityMap) {
-    return;
+  private processChargesAbility(it: AbilityMap): AbilityAvailabilityMap[] {
+    return [];
     const usages = [
       //...this.getDependencies(deps, it.job),
       ...this.holders.itemUsages.getByAbility(it.id)
@@ -111,12 +123,12 @@ export class AvailabilityController {
 
   }
 
-  private processStandardAbility(it: AbilityMap, deps: string[]) {
+  private processStandardAbility(it: AbilityMap, deps: string[]): AbilityAvailabilityMap[] {
     const usages = [
       ...this.getDependencies(deps, it.job),
       ...this.holders.itemUsages.getByAbility(it.id),
       {
-        startAsNumber : this.startDate.valueOf()+30*60*1000+it.ability.cooldown*1000 + it.ability.duration*1000
+        startAsNumber: this.startDate.valueOf() + 30 * 60 * 1000 + it.ability.cooldown * 1000 + it.ability.duration * 1000
       }
     ].sort((a, b) => (a.startAsNumber) - (b.startAsNumber));
 
@@ -143,6 +155,6 @@ export class AvailabilityController {
       }
       return null;
     }).filter(i => i != null);
-    this.holders.abilityAvailability.addRange(maps);
+    return maps;
   }
 }
