@@ -12,14 +12,14 @@ export class PresenterManager {
   public get activeTags(): {text: string, checked: boolean}[] {
     return this.tags.concat("Other").map(t => ({
       text: t,
-      checked: this.filter.attacks.tags.includes(t)
+      checked: this.filter.attacks.tags && this.filter.attacks.tags.includes(t)
     }));
   }
 
   public get activeSources(): { text: string, checked: boolean }[] {
     return this.sources.concat("Other").map(t => ({
       text: t,
-      checked: this.filter.attacks.sources.includes(t)
+      checked: this.filter.attacks.sources && this.filter.attacks.sources.includes(t)
     }));
   }
 
