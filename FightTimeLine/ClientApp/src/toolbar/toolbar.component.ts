@@ -15,6 +15,7 @@ import * as Gameserviceinterface from "../services/game.service-interface";
 import * as _ from "lodash";
 import * as SettingsService from "../services/SettingsService";
 import { ToolsManager } from "../core/ToolsManager";
+import { PresenterManager } from "../core/PresentationManager";
 
 @Component({
   selector: "toolbar",
@@ -44,6 +45,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Input("holders") holders: H.Holders;
 
   @Input("toolsManager") toolsManager: ToolsManager;
+  @Input("presenterManager") presenterManager: PresenterManager;
 
   private _fraction: M.IFraction;
 
@@ -109,15 +111,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       this.menu = grouped;
     } else {
       this.menu = jobs;
-    }
-  }
-
-  setSettings(settings: SettingsService.ISettings) {
-    if (settings) {
-      if (settings.main && settings.main.defaultView)
-        this.view.set(settings.main.defaultView);
-      if (settings.main && settings.main.defaultFilter)
-        this.filter.set(settings.main.defaultFilter);
     }
   }
 

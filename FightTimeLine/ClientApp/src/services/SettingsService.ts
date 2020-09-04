@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core"
-import { IView, IFilter } from "../core/Models"
+import { IView, IFilter,DefaultTags } from "../core/Models"
 import { LocalStorageService } from "./LocalStorageService"
 
 @Injectable()
@@ -27,7 +27,8 @@ export class SettingsService {
           utility: true
         },
         attacks: {
-          tags:null,
+          tags: DefaultTags.concat("Other"),
+          sources: ["Other"],
           isPhysical: true,
           isMagical: true,
           isUnaspected: true,

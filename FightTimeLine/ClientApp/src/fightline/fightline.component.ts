@@ -13,6 +13,7 @@ import { ToolbarComponent } from "../toolbar/toolbar.component"
 import { SidepanelComponent } from "../sidepanel/sidepanel.component"
 import { PlanAreaComponent, Action, EventSource } from "./planArea/planArea.component"
 import { ToolsManager, CopyPasteTool, DowntimeTool } from "../core/ToolsManager"
+import { PresenterManager } from "../core/PresentationManager"
 
 import { IdGenerator } from "../core/Generators"
 import { ICommandData } from "../core/UndoRedo"
@@ -48,6 +49,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   private idgen = new IdGenerator();
   toolsManager = new ToolsManager();
+  presenterManager = new PresenterManager();
   jobs = this.gameService.jobRegistry.getJobs();
   sideNavOpened: boolean = false;
 
@@ -92,7 +94,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   onClickEmpty(source: EventSource, event) {
     const downtimesAtTime = this.fightLineController.getDowntimesAtTime(event.time);
-    if (downtimesAtTime.length > 0 && (source === "boss" || (source === "player" && this.fightLineController.view.showDowntimesInPartyArea))) {
+    if (downtimesAtTime.length > 0 && (source === "boss" || (source === "player" && this.presenterManager.view.showDowntimesInPartyArea))) {
       event.items = downtimesAtTime.map(d => d.id);
       this.planArea.clearSelection();
 
@@ -251,7 +253,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
               .then(() => {
                 this.recent.register("FFLogs " + parser.fight.name, "/fflogs/" + code + "/" + enc);
                 const settings = this.settingsService.load();
-                this.toolbar.setSettings(settings);
+                
+                this.presenterManager.setSettings(settings);
 
                 this.fightLineController.importFromFFLogs(code + ":" + enc, parser);
 
@@ -366,7 +369,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.fightLineController.fraction = fraction;
     this.toolbar.fraction = fraction;
     const settings = this.settingsService.load();
-    this.toolbar.setSettings(settings);
+    this.presenterManager.setSettings(settings);
+
     if (settings && settings.main && settings.main.defaultView)
       this.fightLineController.applyView(settings.main.defaultView);
     if (settings && settings.main && settings.main.defaultFilter)
@@ -394,7 +398,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
             this.recent.register(fight.name, "/" + id.toLowerCase());
 
             const settings = this.settingsService.load();
-            this.toolbar.setSettings(settings);
+            this.presenterManager.setSettings(settings);
             if (settings && settings.main && settings.main.defaultView)
               this.fightLineController.applyView(settings.main.defaultView);
             if (settings && settings.main && settings.main.defaultFilter)
@@ -404,9 +408,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
             if (fight.data) {
               const data = JSON.parse(fight.data) as SerializeController.IFightSerializeData;
               if (data.view)
-                this.toolbar.view.set(data.view);
+                this.presenterManager.view = data.view;
               if (data.filter)
-                this.toolbar.filter.set(data.filter);
+                this.presenterManager.filter = data.filter;
             }
 
             const fraction = this.gameService.extractFraction(fight.game);
@@ -485,7 +489,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
               .then(() => {
                 const settings = this.settingsService.load();
 
-                this.toolbar.setSettings(settings);
+                this.presenterManager.setSettings(settings);
 
                 this.fightLineController.fraction = fraction;
                 this.toolbar.fraction = fraction;
@@ -553,7 +557,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
         openStanceSelector: this.openStanceSelector.bind(this)
       },
       this.gameService,
-      this.settingsService
+      this.settingsService,
+      this.toolsManager,
+      this.presenterManager
     );
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -813,7 +819,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.fightLineController.updateBossAttack(value);
     });
 
-    
+
 
     dispatcher.on("Update Filter").subscribe(value => {
       this.updateFilter();

@@ -3,28 +3,28 @@
 <nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu class="noselect">
     <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="showDowntimesInPartyArea">Downtimes in party area</label>
+      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.showDowntimesInPartyArea">Downtimes in party area</label>
     </li>
     <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="buffmap">Damage Buffs Heatmap</label>
+      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.buffmap">Damage Buffs Heatmap</label>
     </li>
     <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="ogcdAsPoints">OGCD attacks as points</label>
+      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.ogcdAsPoints">OGCD attacks as points</label>
     </li>
     <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="verticalBossAttacks">Vertical Boss Attacks</label>
+      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.verticalBossAttacks">Vertical Boss Attacks</label>
     </li>
     <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="compactView">Compact View</label>
+      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.compactView">Compact View</label>
     </li>
     <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="highlightLoaded">Highlight Loaded</label>
+      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.highlightLoaded">Highlight Loaded</label>
     </li>
     <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="abilityAvailablity">Abilities Availability Map</label>
+      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.showAbilityAvailablity">Abilities Availability Map</label>
     </li>
     <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="colorfulDurations">Colorful Durations</label>
+      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.colorfulDurations">Colorful Durations</label>
     </li>
   </ul>
 </nz-dropdown-menu>

@@ -21,34 +21,34 @@
       </div>
       <ul nz-menu>
         <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="selfDefensive">Self Defense</label>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="presenterManager.filter.abilities.selfDefence">Self Defense</label>
         </li>
         <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="partyDefensive">Party Defense</label>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="presenterManager.filter.abilities.partyDefence">Party Defense</label>
         </li>
         <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="selfDamageBuff">Self Damage Buff</label>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="presenterManager.filter.abilities.selfDamageBuff">Self Damage Buff</label>
         </li>
         <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="partyDamageBuff">Party Damage Buff</label>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="presenterManager.filter.abilities.partyDamageBuff">Party Damage Buff</label>
         </li>
         <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="damage">OGCD Damage</label>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="presenterManager.filter.abilities.damage">OGCD Damage</label>
         </li>
         <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="healing">Healing</label>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="presenterManager.filter.abilities.healing">Healing</label>
         </li>
         <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="healingBuff">Healing Buff</label>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="presenterManager.filter.abilities.healingBuff">Healing Buff</label>
         </li>
         <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="utility">Utility</label>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="presenterManager.filter.abilities.utility">Utility</label>
         </li>
         <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="enmity">Enmity</label>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="presenterManager.filter.abilities.enmity">Enmity</label>
         </li>        
         <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="unused">Show unused</label>
+          <label nz-checkbox (ngModelChange)="updateFilter()" [(ngModel)]="presenterManager.filter.abilities.unused">Show unused</label>
         </li>
       </ul>
     </div>
@@ -59,13 +59,19 @@
         </div>
         <nz-tag *ngFor="let tag of tags" nzMode="checkable" [(nzChecked)]="tag.checked" (nzCheckedChange)="updateFilter()">{{tag.text}}</nz-tag>
       </div>
+      <div>
+        <div *ngIf="sources && sources.length">
+          <strong>Boss Attacks Sources</strong>
+        </div>
+        <nz-tag *ngFor="let source of sources" nzMode="checkable" [(nzChecked)]="source.checked" (nzCheckedChange)="updateFilter()">{{source.text}}</nz-tag>
+      </div>
       <div style="margin-top: 8px;">
         <div>
           <strong>Boss Attacks Damage Type</strong>
         </div>
-        <nz-tag nzMode="checkable" [(nzChecked)]="isMagical" (nzCheckedChange)="updateFilter()">Magical</nz-tag>
-        <nz-tag nzMode="checkable" [(nzChecked)]="isPhysical" (nzCheckedChange)="updateFilter()">Physical</nz-tag>
-        <nz-tag nzMode="checkable" [(nzChecked)]="isUnaspected" (nzCheckedChange)="updateFilter()">Unaspected</nz-tag>
+        <nz-tag nzMode="checkable" [(nzChecked)]="presenterManager.filter.attacks.isMagical" (nzCheckedChange)="updateFilter()">Magical</nz-tag>
+        <nz-tag nzMode="checkable" [(nzChecked)]="presenterManager.filter.attacks.isPhysical" (nzCheckedChange)="updateFilter()">Physical</nz-tag>
+        <nz-tag nzMode="checkable" [(nzChecked)]="presenterManager.filter.attacks.isUnaspected" (nzCheckedChange)="updateFilter()">Unaspected</nz-tag>
       </div>
     </div>
   </div>

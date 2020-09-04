@@ -19,6 +19,8 @@ import { Utils } from "./Utils"
 import { Holders } from "./Holders";
 import { AbilityMap, BossAttackMap, HeatmapMap, JobMap, AbilityUsageMap, BossTargetMap, BossDownTimeMap } from "./Maps";
 import { IMoveable } from "./Holders/BaseHolder";
+import * as PresentationManager from "./PresentationManager";
+import * as ToolsManager from "./ToolsManager";
 
 
 export class FightTimeLineController {
@@ -33,9 +35,6 @@ export class FightTimeLineController {
   private availabilityController: AvailabilityController;
   hasChanges = false;
   fraction: M.IFraction;
-  filter = M.defaultFilter;
-  view = M.defaultView;
-  private tools: M.ITools = { downtime: false, stickyAttacks: false, copypaste: false };
   colorSettings: IColorsSettings;
 
   downtimeChanged = new EventEmitter<void>();
@@ -48,7 +47,9 @@ export class FightTimeLineController {
     bossTimeLine: ITimelineContainer,
     private dialogCallBacks: IDialogs,
     private gameService: Gameserviceinterface.IGameService,
-    private settingsService: SettingsService) {
+    private settingsService: SettingsService,
+    private toolsManager: ToolsManager.ToolsManager,
+    private presenterManager: PresentationManager.PresenterManager) {
     this.holders = new Holders(mainTimeLine, bossTimeLine);
 
     this.commandStorage = new UndoRedoController({
@@ -58,10 +59,10 @@ export class FightTimeLineController {
       update: this.update.bind(this),
       ogcdAttacksAsPoints: (ability: M.IAbility) => (ability.duration === 0 && (ability.cooldown === 1 || ability.cooldown === 0)) ||
         ((ability.abilityType & M.AbilityType.Damage) === M.AbilityType.Damage &&
-          (ability.duration === 0 ? this.view.ogcdAsPoints : false)),
-      verticalBossAttacks: () => this.view.verticalBossAttacks,
-      isCompactView: () => this.view.compactView,
-      highlightLoaded: () => this.view.highlightLoaded
+          (ability.duration === 0 ? this.presenterManager.view.ogcdAsPoints : false)),
+      verticalBossAttacks: () => this.presenterManager.view.verticalBossAttacks,
+      isCompactView: () => this.presenterManager.view.compactView,
+      highlightLoaded: () => this.presenterManager.view.highlightLoaded
     });
     this.commandStorage.changed.subscribe(() => {
       this.canRedoChanged.emit();
@@ -73,7 +74,7 @@ export class FightTimeLineController {
     });
     this.commandBag = new CommandBag(this.commandStorage);
     this.availabilityController = new AvailabilityController(
-      this.view,
+      this.presenterManager.view,
       this.holders,
       this.startDate,
       this.idgen
@@ -199,7 +200,8 @@ export class FightTimeLineController {
     bossAbility.offset = Utils.formatTime(time);
     this.commandStorage.execute(new C.AddBossAttackCommand(id || this.idgen.getNextId(M.EntryType.BossAttack),
       bossAbility));
-    this.filter.attacks.tags = _.union(this.filter.attacks.tags, bossAbility.tags);
+    this.presenterManager.addTags(bossAbility.tags);
+    this.presenterManager.addSource(bossAbility.source);
   }
 
   getLatestBossAttackTime(): Date | null {
@@ -226,7 +228,7 @@ export class FightTimeLineController {
             new C.ChangeBossAttackCommand(itemid, result.data, result.updateAllWithSameName)
           );
 
-          if (this.tools.stickyAttacks) {
+          if (this.toolsManager.active === "Sticky attacks") {
             const afterMe = this.holders.bossAttacks.filter(it => it.start >= map.start && it.id !== itemid);
             commands.push(...afterMe.map(it => {
               return new C.ChangeBossAttackCommand(it.id,
@@ -235,8 +237,8 @@ export class FightTimeLineController {
             }));
           }
           this.commandStorage.execute(new C.CombinedCommand(commands));
-          this.filter.attacks.tags = _.union(this.filter.attacks.tags, result.data.tags);
-          this.holders.bossAttacks.applyFilter(this.filter.attacks);
+          this.presenterManager.addTags(result.data.tags);
+          this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
         }
       });
   }
@@ -312,10 +314,6 @@ export class FightTimeLineController {
     });
 
     this.commandBag.evaluate();
-  }
-
-  updateTools(tools: M.ITools): void {
-    this.tools = tools;
   }
 
   updateAffectedAbilities(ability: M.IAbility): void {
@@ -417,7 +415,7 @@ export class FightTimeLineController {
 
     if (options.abilityChanged) {
       this.updateAffectedAbilities(options.abilityChanged.ability);
-      this.updateBuffHeatmap(this.view.buffmap, options.abilityChanged.ability);
+      this.updateBuffHeatmap(this.presenterManager.view.buffmap, options.abilityChanged.ability);
       this.availabilityController.updateAvailability(options.abilityChanged.ability);
     }
 
@@ -626,7 +624,7 @@ export class FightTimeLineController {
       hidden: true
     });
     this.holders.abilities.update([map]);
-    this.updateBuffHeatmap(this.view.buffmap, map.ability);
+    this.updateBuffHeatmap(this.presenterManager.view.buffmap, map.ability);
 
   }
 
@@ -635,7 +633,7 @@ export class FightTimeLineController {
     const abs = this.holders.itemUsages.getByAbility(group);
     this.handleDelete(abs.map(a => a.id));
     
-    this.updateBuffHeatmap(this.view.buffmap, map.ability);
+    this.updateBuffHeatmap(this.presenterManager.view.buffmap, map.ability);
 
   }
 
@@ -643,7 +641,7 @@ export class FightTimeLineController {
     const map = this.holders.abilities.get(group);
     map.applyData({ hidden: false });
     this.holders.abilities.update([map]);
-    this.updateBuffHeatmap(this.view.buffmap, map.ability);
+    this.updateBuffHeatmap(this.presenterManager.view.buffmap, map.ability);
   }
 
   getHolders(): Holders {
@@ -657,7 +655,7 @@ export class FightTimeLineController {
     });
 
     this.holders.abilities.update(abilities);
-    this.updateBuffHeatmap(this.view.buffmap, null);
+    this.updateBuffHeatmap(this.presenterManager.view.buffmap, null);
     this.applyFilter();
   }
 
@@ -677,7 +675,7 @@ export class FightTimeLineController {
       .filter(it => (ability.abilityType & M.AbilityType[it]) === M.AbilityType[it])
       .map(it => it);
     const color = this.colorSettings[arr[0]];
-    return this.createItemUsageFrame(offsetPercentage, percentage, this.view.colorfulDurations && color ? color : "");
+    return this.createItemUsageFrame(offsetPercentage, percentage, this.presenterManager.view.colorfulDurations && color ? color : "");
   }
 
   createItemUsageFrame(offsetPercentage: number, percentage: number, color: string): string {
@@ -796,7 +794,7 @@ export class FightTimeLineController {
             }
           }
         }
-      this.filter = data.filter;
+      this.presenterManager.filter = data.filter;
 
     } finally {
       this.loading = false;
@@ -826,7 +824,7 @@ export class FightTimeLineController {
       }
     }
 
-    this.availabilityController.setAbilityAvailabilityView(this.view.showAbilityAvailablity);
+    this.availabilityController.setAbilityAvailabilityView(this.presenterManager.view.showAbilityAvailablity);
     this.commandStorage.turnOnFireExecuted();
     this.hasChanges = false;
   }
@@ -898,11 +896,11 @@ export class FightTimeLineController {
 
     console.log("filter requested");
     if (input)
-      this.filter = input;
+      this.presenterManager.filter = input;
 
-    this.holders.abilities.applyFilter(this.filter.abilities,
+    this.holders.abilities.applyFilter(this.presenterManager.filter.abilities,
       (val) => this.holders.itemUsages.filter((item) => item.ability.id === val).length > 0);
-    this.holders.bossAttacks.applyFilter(this.filter.attacks);
+    this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
   }
 
   importFromFFLogs(key: string, parser: Parser.Parser): any {
@@ -924,7 +922,7 @@ export class FightTimeLineController {
       this.holders.bossTargets.initialBossTarget = "boss";
       this.recalculateBossTargets();
 
-      this.applyView(this.view, true);
+      this.applyView(this.presenterManager.view, true);
       this.applyFilter();
 
       this.loading = false;
@@ -933,7 +931,10 @@ export class FightTimeLineController {
   }
 
   applyView(view: M.IView, force?: boolean): void {
-    if (this.view.ogcdAsPoints !== view.ogcdAsPoints || force) {
+    if (!this.viewCopy)
+      this.viewCopy = this.presenterManager.view;
+    view = view || this.viewCopy;
+    if (this.presenterManager.view.ogcdAsPoints !== this.viewCopy.ogcdAsPoints || force) {
       const items = this.holders.itemUsages.getAll();
       items.forEach(x => {
         const map = x.ability;
@@ -943,32 +944,35 @@ export class FightTimeLineController {
       this.holders.itemUsages.update(items);
     }
 
-    if (this.view.buffmap !== view.buffmap || force) {
+    if (this.presenterManager.view.buffmap !== this.viewCopy.buffmap || force) {
       this.updateBuffHeatmap(view.buffmap, null);
     }
 
-    if (this.view.showDowntimesInPartyArea !== view.showDowntimesInPartyArea || force) {
+    if (this.presenterManager.view.showDowntimesInPartyArea !== this.viewCopy.showDowntimesInPartyArea || force) {
       this.holders.bossDownTime.setShowInPartyArea(view.showDowntimesInPartyArea);
     }
 
-    if (this.view.verticalBossAttacks !== view.verticalBossAttacks || force) {
+    if (this.presenterManager.view.verticalBossAttacks !== this.viewCopy.verticalBossAttacks || force) {
       this.holders.bossAttacks.setVertical(view.verticalBossAttacks);
     }
 
-    if (this.view.compactView !== view.compactView || force) {
+    if (this.presenterManager.view.compactView !== this.viewCopy.compactView || force) {
       this.setCompactView(view.compactView);
     }
 
-    if (this.view.highlightLoaded !== view.highlightLoaded || force) {
+    if (this.presenterManager.view.highlightLoaded !== this.viewCopy.highlightLoaded || force) {
       this.setHighLightLoadedView(view.highlightLoaded);
     }
 
-    if (this.view.showAbilityAvailablity !== view.showAbilityAvailablity || force) {
+    if (this.presenterManager.view.showAbilityAvailablity !== this.viewCopy.showAbilityAvailablity || force) {
       this.availabilityController.setAbilityAvailabilityView(view.showAbilityAvailablity);
     }
 
-    Object.assign(this.view, view);
+    this.viewCopy = Object.assign({}, this.presenterManager.view);
   }
+
+
+  viewCopy: M.IView;
 
   isJobGroup(group: string): boolean {
     return !!this.holders.jobs.get(group);
@@ -1004,7 +1008,7 @@ export class FightTimeLineController {
   }
 
   execute(data: ICommandData): void {
-    const command = this.commandFactory.createFromData(data, this.view);
+    const command = this.commandFactory.createFromData(data, this.presenterManager.view);
     if (command) {
       this.commandStorage.execute(command, false);
       this.hasChanges = true;
@@ -1063,8 +1067,8 @@ export class FightTimeLineController {
       this.gameService.name,
       this.fraction,
       this.data,
-      this.filter,
-      this.view);
+      this.presenterManager.filter,
+      this.presenterManager.view);
     return ctr;
   }
 

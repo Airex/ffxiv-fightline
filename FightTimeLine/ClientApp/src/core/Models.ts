@@ -426,7 +426,7 @@ export interface IAbilityFilter {
 
 export interface IBossAttackFilter {
   tags: string[];
-
+  sources: string[];
   isMagical: boolean;
   isPhysical: boolean;
   isUnaspected: boolean;
@@ -453,7 +453,8 @@ export const defaultFilter: IFilter = {
     utility: true,
   },
   attacks: {
-    tags:[],
+    tags: DefaultTags.concat("Other"),
+    sources: ["Other"],
     isMagical: true,
     isPhysical: true,
     isUnaspected: true,

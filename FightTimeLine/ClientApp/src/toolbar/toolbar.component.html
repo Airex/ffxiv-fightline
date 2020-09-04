@@ -67,10 +67,10 @@
     </nz-button-group>
   </span>
   <span style="margin-left: 10px" *ngIf="showfilter">
-    <abilityFilter #filter [holders]="holders" (changed)="updateFilter($event)"></abilityFilter>
+    <abilityFilter #filter [presenterManager]="presenterManager" [holders]="holders" (changed)="updateFilter($event)"></abilityFilter>
   </span>
   <span style="margin-left: 10px" *ngIf="showView">
-    <viewMenu #view (changed)="updateView($event)"></viewMenu>
+    <viewMenu #view [presenterManager]="presenterManager" (changed)="updateView($event)"></viewMenu>
   </span>
   <span style="margin-left: 10px" *ngIf="showTools && !toolsManager.active">
     <button nz-dropdown [nzDropdownMenu]="toolMenu" [nzTrigger]="'click'" nz-button><i nz-icon nzType="tool" theme="twotone"></i>Tools</button>

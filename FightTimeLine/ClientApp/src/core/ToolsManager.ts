@@ -105,19 +105,19 @@ export class StickyAttacksTool implements ITool {
   }
 
   activate(): void {
-    this.fightLineController.updateTools({
-      copypaste: false,
-      downtime: false,
-      stickyAttacks: true
-    });
+//    this.fightLineController.updateTools({
+//      copypaste: false,
+//      downtime: false,
+//      stickyAttacks: true
+//    });
   }
 
   deactivate(): void {
-    this.fightLineController.updateTools({
-      copypaste: false,
-      downtime: false,
-      stickyAttacks: false
-    });
+//    this.fightLineController.updateTools({
+//      copypaste: false,
+//      downtime: false,
+//      stickyAttacks: false
+//    });
   }
 
   refresh(): void {

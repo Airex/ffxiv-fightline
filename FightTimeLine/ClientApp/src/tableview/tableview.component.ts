@@ -10,7 +10,6 @@ import { ToolbarComponent } from "../toolbar/toolbar.component"
 import { SidepanelComponent } from "../sidepanel/sidepanel.component"
 import { NgProgressComponent } from "ngx-progressbar"
 
-import { FirstTemplate } from "../core/ExportTemplates/FirstTemplate"
 import { EachRowOneSecondTemplate } from "../core/ExportTemplates/EachRowOneSecondTemplate"
 import { BossAttackDefensiveTemplate } from "../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { ExportTemplate, ExportData } from "../core/BaseExportTemplate"
@@ -20,10 +19,11 @@ import * as Gameserviceinterface from "../services/game.service-interface";
 import * as SerializeController from "../core/SerializeController";
 
 import { VisStorageService } from "../services";
-import * as CommandFactory from "../core/CommandFactory";
 import * as UndoRedo from "../core/UndoRedo";
 import * as FightTimeLineController from "../core/FightTimeLineController";
 import * as Generators from "../core/Generators";
+import * as ToolsManager from "../core/ToolsManager";
+import * as PresentationManager from "../core/PresentationManager";
 
 
 @Component({
@@ -69,6 +69,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   fightLineController: FightTimeLineController.FightTimeLineController;
   private idgen = new Generators.IdGenerator();
+  toolsManager = new ToolsManager.ToolsManager();
+  presenterManager = new PresentationManager.PresenterManager();
 
   home() {
     this.router.navigateByUrl("/");
@@ -87,7 +89,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
         openStanceSelector: () => {}
       },
       this.gameService,
-      this.settingsService
+      this.settingsService,
+      this.toolsManager,
+      this.presenterManager
     );
 
 

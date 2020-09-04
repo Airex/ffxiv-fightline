@@ -60,6 +60,7 @@ export class SettingsFilterComponent {
       },
       attacks: {
         tags: DefaultTags.concat(["Other"]),
+        sources: ["Other"],
         isPhysical: this.isPhysical,
         isMagical: this.isMagical,
         isUnaspected: this.isUnaspected,
