@@ -29,7 +29,7 @@ export class BossAttackDialog implements OnInit {
   settings: any;
   uniqueIndex: number = 0;
   expression: string;
-  defaultTags: [] = [];
+  defaultTags  = [];
 
   constructor(
     private formBuilder: FormBuilder,
