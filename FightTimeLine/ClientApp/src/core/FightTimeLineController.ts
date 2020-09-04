@@ -49,7 +49,9 @@ export class FightTimeLineController {
     private gameService: Gameserviceinterface.IGameService,
     private settingsService: SettingsService,
     private toolsManager: ToolsManager.ToolsManager,
-    private presenterManager: PresentationManager.PresenterManager) {
+    private presenterManager: PresentationManager.PresenterManager)
+  {
+
     this.holders = new Holders(mainTimeLine, bossTimeLine);
 
     this.commandStorage = new UndoRedoController({
@@ -918,6 +920,11 @@ export class FightTimeLineController {
       const importCommand = importController.buildImportCommand(settings, parser, this.startDate);
 
       this.commandStorage.execute(importCommand);
+
+      this.getHolders().bossAttacks.getAll().forEach(t => {
+        this.presenterManager.addTags(t.attack.tags);
+        this.presenterManager.addSource(t.attack.source);
+      });
 
     } catch (e) {
       console.error(e);
