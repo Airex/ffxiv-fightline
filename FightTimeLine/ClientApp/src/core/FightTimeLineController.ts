@@ -95,6 +95,8 @@ export class FightTimeLineController {
 
     this.holders.bossAttacks.getAll().forEach(it => {
       commands.push(new C.RemoveBossAttackCommand(it.id, false));
+      this.presenterManager.addTags(it.attack.tags);
+      this.presenterManager.addSource(it.attack.source);
     });
     this.holders.bossDownTime.getAll().forEach(it => {
       commands.push(new C.RemoveDownTimeCommand(it.id));
@@ -238,6 +240,7 @@ export class FightTimeLineController {
           }
           this.commandStorage.execute(new C.CombinedCommand(commands));
           this.presenterManager.addTags(result.data.tags);
+          this.presenterManager.addSource(result.data.source);
           this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
         }
       });

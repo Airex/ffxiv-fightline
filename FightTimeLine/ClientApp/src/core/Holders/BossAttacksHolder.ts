@@ -7,40 +7,18 @@ import * as _ from "lodash";
 export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMap> {
   private prefix = "bossAttack_";
 // ReSharper disable once InconsistentNaming
-  private _uniqueTags = Models.DefaultTags.reduce((acc, v) => {
-    acc[v] = "";
-    return acc;
-
-  }, {});
 
   constructor(private visBossItems: DataSetDataItem, private visMainItems: DataSetDataItem) {
     super();
   }
 
-
-  public get uniqueTags() : string[] {
-    return Object.keys(this._uniqueTags);
-  }
-
-  private tryAddToTags(tags: string[]) {
-    if (tags) {
-      tags.forEach(t => {
-        this._uniqueTags[t] = null;
-      });
-    }
-  }
-
   add(i: BossAttackMap): void {
     super.add(i);
     this.addToBoard(i);
-    this.tryAddToTags(i.attack.tags);
   }
 
   addRange(i: BossAttackMap[]): void {
     super.addRange(i);
-    i.forEach(t => {
-      this.tryAddToTags(t.attack.tags);
-    });
     //    this.addRangeToBoard(i);
   }
 
@@ -96,11 +74,6 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
   }
 
   update(itemsToUpdate: BossAttackMap[]): void {
-
-    itemsToUpdate.forEach(t => {
-      this.tryAddToTags(t.attack.tags);
-    });
-
     this.visBossItems.update(this.itemsOf(itemsToUpdate.filter(x => !!this.visBossItems.get(x.id))));
     this.visMainItems.update(itemsToUpdate.map(it => {
       const item = this.visMainItems.get(this.prefix + it.id);
