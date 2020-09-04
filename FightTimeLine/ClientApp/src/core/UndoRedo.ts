@@ -14,6 +14,8 @@ export interface ICommandExecutionContext {
   verticalBossAttacks: () => boolean;
   isCompactView: () => boolean;
   highlightLoaded: () => boolean;
+  addTags: (t: string[]) => void;
+  addSources: (s: string) => void;
 }
 
 export interface IUpdateOptions {

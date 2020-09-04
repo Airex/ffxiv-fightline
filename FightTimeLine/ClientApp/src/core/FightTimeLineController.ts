@@ -59,13 +59,16 @@ export class FightTimeLineController {
       holders: this.holders,
       jobRegistry: this.gameService.jobRegistry,
       update: this.update.bind(this),
-      ogcdAttacksAsPoints: (ability: M.IAbility) => (ability.duration === 0 && (ability.cooldown === 1 || ability.cooldown === 0)) ||
+      ogcdAttacksAsPoints: (ability: M.IAbility) => (ability.duration === 0 &&
+          (ability.cooldown === 1 || ability.cooldown === 0)) ||
         ((ability.abilityType & M.AbilityType.Damage) === M.AbilityType.Damage &&
           (ability.duration === 0 ? this.presenterManager.view.ogcdAsPoints : false)),
       verticalBossAttacks: () => this.presenterManager.view.verticalBossAttacks,
       isCompactView: () => this.presenterManager.view.compactView,
-      highlightLoaded: () => this.presenterManager.view.highlightLoaded
-    });
+      highlightLoaded: () => this.presenterManager.view.highlightLoaded,
+      addTags: (t:string[]) => this.presenterManager.addTags(t),
+      addSources: (s:string)=> this.presenterManager.addSource(s)
+  });
     this.commandStorage.changed.subscribe(() => {
       this.canRedoChanged.emit();
       this.canUndoChanged.emit();
@@ -97,8 +100,6 @@ export class FightTimeLineController {
 
     this.holders.bossAttacks.getAll().forEach(it => {
       commands.push(new C.RemoveBossAttackCommand(it.id, false));
-      this.presenterManager.addTags(it.attack.tags);
-      this.presenterManager.addSource(it.attack.source);
     });
     this.holders.bossDownTime.getAll().forEach(it => {
       commands.push(new C.RemoveDownTimeCommand(it.id));
@@ -204,8 +205,6 @@ export class FightTimeLineController {
     bossAbility.offset = Utils.formatTime(time);
     this.commandStorage.execute(new C.AddBossAttackCommand(id || this.idgen.getNextId(M.EntryType.BossAttack),
       bossAbility));
-    this.presenterManager.addTags(bossAbility.tags);
-    this.presenterManager.addSource(bossAbility.source);
   }
 
   getLatestBossAttackTime(): Date | null {
@@ -241,8 +240,6 @@ export class FightTimeLineController {
             }));
           }
           this.commandStorage.execute(new C.CombinedCommand(commands));
-          this.presenterManager.addTags(result.data.tags);
-          this.presenterManager.addSource(result.data.source);
           this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
         }
       });
@@ -920,11 +917,6 @@ export class FightTimeLineController {
       const importCommand = importController.buildImportCommand(settings, parser, this.startDate);
 
       this.commandStorage.execute(importCommand);
-
-      this.getHolders().bossAttacks.getAll().forEach(t => {
-        this.presenterManager.addTags(t.attack.tags);
-        this.presenterManager.addSource(t.attack.source);
-      });
 
     } catch (e) {
       console.error(e);

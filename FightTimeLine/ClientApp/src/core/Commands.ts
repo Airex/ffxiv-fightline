@@ -219,7 +219,8 @@ export class AddBossAttackCommand implements Command {
         vertical: context.verticalBossAttacks()
       }
     ));
-
+    context.addTags(this.bossAbility.tags);
+    context.addSources(this.bossAbility.source);
     context.update({ updateBossAttacks: [this.id], updateBossTargets: true, updateIntersectedWithBossAttackAtDate: Utils.getDateFromOffset(this.bossAbility.offset) });
   }
 }
@@ -301,6 +302,9 @@ export class ChangeBossAttackCommand implements Command {
         it.applyData({ attack: this.bossAbility });
       else
         it.applyData({ attack: { ...this.bossAbility, ...{ offset: it.attack.offset } } });
+
+      context.addTags(this.bossAbility.tags);
+      context.addSources(this.bossAbility.source);
     });
 
     context.holders.bossAttacks.update(bossAttackMaps);
