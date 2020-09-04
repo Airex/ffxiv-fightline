@@ -7,7 +7,8 @@ export const environment = {
   forceSWTOR: false,
   showDialogOnUnload: false,
   skipHub: true,
-  baseUrl: "http://localhost:5000/"
+  baseUrl: "http://localhost:5000/",
+  version: "development"
 };
 
 /*
