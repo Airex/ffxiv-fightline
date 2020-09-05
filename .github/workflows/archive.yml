@@ -24,6 +24,7 @@ jobs:
         id: sub
         with:
           _input-file: './FightTimeLine/ClientApp/src/environments/environment.prod.ts'
+          _output-file: './FightTimeLine/ClientApp/src/environments/environment.prod.ts'
           _format-key: '%%version%%'
           version: ${{ steps.buildnumber.outputs.build_number }}  
       - name: npm install
