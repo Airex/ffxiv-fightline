@@ -180,7 +180,7 @@ export class SerializeController {
       pet: value.pet,
       filter: value.filter,
       compact: value.isCompact,
-      collapsed: !value.getShowNested()
+      collapsed: value.collapsed
     });
     return map;
   }

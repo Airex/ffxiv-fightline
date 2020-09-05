@@ -6,22 +6,26 @@
          [holders]="fightLineController.getHolders()"
          [fraction]="fightLineController.fraction"
          ></toolbar>
-<div class="content">
+<div class="content noselect">
   <nz-table nsAutoHeightTable #table [nzData]="set.rows" [nzBordered]="true" [nzShowPagination]="false" nzSize="small">
       <thead>
         <tr>
-          <th *ngFor="let column of set.columns" [nzWidth]="getWidth(column.text, !!column.icon)"><img class="abilityIcon" *ngIf="column.icon" [src]="column.icon" />{{column.text}}</th>
+          <th *ngFor="let column of set.columns" style="text-align: center" [nzWidth]="getWidth(column.text, !!column.icon)"><img class="abilityIcon" style="margin-right: 2px;" *ngIf="column.icon" [src]="column.icon" />{{getTitle(column.text)}}</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let row of set.rows">
           <td *ngFor="let cell of row">
             <div *ngFor="let d of cell">
-              <div *ngIf="d.lineColor" [ngStyle]="{'background-color':d.lineColor}" class='marker'></div>
-              <div>
-                <img class="abilityIcon" *ngIf="d.icon" [src]="d.icon" />
-                {{d.text}}
-              </div>
+              <nz-tag *ngIf="d.lineColor" [nzColor]="d.lineColor">
+                <div style="margin: 0 2px 0 2px">{{d.text}}</div>
+              </nz-tag>
+              <nz-tag *ngIf="!d.lineColor">
+                <div style="margin: 0 2px 0 2px">
+                  <img class="abilityIcon" *ngIf="d.icon" [src]="d.icon" />
+                  {{d.text}}
+                </div>
+              </nz-tag>
             </div>
           </td>
         </tr>

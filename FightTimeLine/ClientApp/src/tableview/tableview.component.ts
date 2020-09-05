@@ -44,15 +44,15 @@ export class TableViewComponent implements OnInit, OnDestroy {
   set: IExportResultSet = {
     columns: [],
     rows: [],
-    title : ""
+    title: ""
   };
   columnNames: string[];
-  templates: { [name: string] : ExportTemplate} ={
+  templates: { [name: string]: ExportTemplate } = {
     "defence": new BossAttackDefensiveTemplate(),
     "defencecover": new BossAttackDefensiveTemplate(true),
     "onesecond": new EachRowOneSecondTemplate()
-    };
-    
+  };
+
 
   public constructor(
     @Inject(S.fightServiceToken) private fightService: S.IFightService,
@@ -84,9 +84,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
       this.visStorage.playerContainer,
       this.visStorage.bossContainer,
       {
-        openBossAttackAddDialog: () => {},
-        openAbilityEditDialog: () => {},
-        openStanceSelector: () => {}
+        openBossAttackAddDialog: () => { },
+        openAbilityEditDialog: () => { },
+        openStanceSelector: () => { }
       },
       this.gameService,
       this.settingsService,
@@ -99,7 +99,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
       const id = r["fightId"] as string;
       const template = r["template"] as string;
       if (id && template) {
-//        const settings = this.settingsService.load();
+        //        const settings = this.settingsService.load();
         this.load(id, template);
       }
     });
@@ -107,6 +107,16 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   initTable() {
 
+  }
+
+  handleRemoteCommandData(data: UndoRedo.ICommandData) {
+    if (data.name === "undo") {
+      this.fightLineController.undo();
+    } else if (data.name === "redo") {
+      this.fightLineController.redo();
+    } else {
+      this.fightLineController.execute(data);
+    }
   }
 
   load(id, template) {
@@ -117,21 +127,21 @@ export class TableViewComponent implements OnInit, OnDestroy {
           if (fight) {
             //this.recent.register(fight.name, "/" + id.toLowerCase());
 
-//            const settings = this.settingsService.load();
-//            this.toolbar.setSettings(settings);
+            //            const settings = this.settingsService.load();
+            //            this.toolbar.setSettings(settings);
 
             this.fightService.getCommands(id, new Date(fight.dateModified).valueOf())
               .subscribe(value => {
-                for (var cmd of value) {
+                for (let cmd of value) {
                   const parsed = JSON.parse(cmd.data) as UndoRedo.ICommandData;
-                  this.fightLineController.execute(parsed);
-                  const sr = this.fightLineController.createSerializer()
-                  const exported = sr.serializeForExport();
-                  const d = this.templates[template.toLowerCase()].build(exported);
-                  this.columnNames = d.columns.map(it => it.text);
-                  this.set = d;
-                  ref.close();
+                  this.handleRemoteCommandData(parsed);
                 }
+                const sr = this.fightLineController.createSerializer()
+                const exported = sr.serializeForExport();
+                const d = this.templates[template.toLowerCase()].build(exported);
+                this.columnNames = d.columns.map(it => it.text);
+                this.set = d;
+                ref.close();
               },
                 error => {
                   console.log(error);
@@ -153,14 +163,26 @@ export class TableViewComponent implements OnInit, OnDestroy {
     if (hasIcon)
       return "auto";
     switch (text) {
-    case "time":
-      return "50px";
-    case "boss":
-      return "120px";
-    case "target":
-      return "50px";
+      case "time":
+        return "50px";
+      case "boss":
+        return "200px";
+      case "target":
+        return "65px";
     }
     return "";
+  }
+
+  getTitle(text: string) {
+    switch (text) {
+      case "time":
+        return "Time";
+      case "boss":
+        return "Attack name";
+      case "target":
+        return "Target";
+    }
+    return text;
   }
 
   getExportData(fight: M.IFight): ExportData {

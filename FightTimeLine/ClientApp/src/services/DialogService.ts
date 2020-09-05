@@ -300,7 +300,7 @@ export class DialogService {
     const ref = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzContent: D.WhatsNewDialog,
-      nzTitle: "What is new",
+      nzTitle: "What's new",
       nzWidth: "90%",
       nzClosable: false,
       nzKeyboard: false,
