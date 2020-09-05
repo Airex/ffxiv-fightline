@@ -38,6 +38,10 @@ jobs:
         working-directory: ./FightTimeLine/ClientApp/dist
         run: |
           rm -r assets
+      - name: reset
+        working-directory: ./FightTimeLine/ClientApp/src/environments
+        run: |
+          git checkout -- environment.prod.ts
       - name: send to ftp
         if: github.ref == 'refs/heads/master'                
         uses: SamKirkland/FTP-Deploy-Action@master
