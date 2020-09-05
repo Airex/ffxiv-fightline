@@ -26,6 +26,9 @@ jobs:
         working-directory: ./FightTimeLine/ClientApp/dist
         run: |
           rm -r assets      
+      - name: status        
+        run: |        
+          git status        
       - name: send to ftp
         if: github.ref == 'refs/heads/master'                
         uses: SamKirkland/FTP-Deploy-Action@master
