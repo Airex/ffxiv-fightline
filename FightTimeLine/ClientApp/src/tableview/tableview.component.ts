@@ -121,41 +121,37 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   load(id, template) {
     this.dialogService.executeWithLoading(ref => {
-      this.fightService
-        .getFight(id)
-        .subscribe((fight: M.IFight) => {
-          if (fight) {
-            //this.recent.register(fight.name, "/" + id.toLowerCase());
+      this.fightService.getFight(id).subscribe((fight: M.IFight) => {
+        if (fight) {
 
-            //            const settings = this.settingsService.load();
-            //            this.toolbar.setSettings(settings);
+          this.fightLineController.loadFight(fight);
 
-            this.fightService.getCommands(id, new Date(fight.dateModified).valueOf())
-              .subscribe(value => {
-                for (let cmd of value) {
-                  const parsed = JSON.parse(cmd.data) as UndoRedo.ICommandData;
-                  this.handleRemoteCommandData(parsed);
-                }
-                const sr = this.fightLineController.createSerializer()
-                const exported = sr.serializeForExport();
-                const d = this.templates[template.toLowerCase()].build(exported);
-                this.columnNames = d.columns.map(it => it.text);
-                this.set = d;
+          this.fightService.getCommands(id, new Date(fight.dateModified).valueOf())
+            .subscribe(value => {
+              for (let cmd of value) {
+                const parsed = JSON.parse(cmd.data) as UndoRedo.ICommandData;
+                this.handleRemoteCommandData(parsed);
+              }
+              const sr = this.fightLineController.createSerializer()
+              const exported = sr.serializeForExport();
+              const d = this.templates[template.toLowerCase()].build(exported);
+              this.columnNames = d.columns.map(it => it.text);
+              this.set = d;
+              ref.close();
+            },
+              error => {
+                console.log(error);
+                this.notification.error("Unable to load data");
                 ref.close();
-              },
-                error => {
-                  console.log(error);
-                  this.notification.error("Unable to load data");
-                  ref.close();
-                });
-          } else {
-            ref.close();
-          }
-        },
-          () => {
-            this.notification.showUnableToLoadFight(() => { });
-            ref.close();
-          });
+              });
+        } else {
+          ref.close();
+        }
+      },
+        () => {
+          this.notification.showUnableToLoadFight(() => { });
+          ref.close();
+        });
     });
   }
 
