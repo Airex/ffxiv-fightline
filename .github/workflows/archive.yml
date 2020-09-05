@@ -14,18 +14,7 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
-      - name: Generate build number
-        id: buildnumber
-        uses: einaregilsson/build-number@v2 
-        with:
-          token: ${{secrets.github_token}}        
-      - uses: bluwy/substitute-string-action@v1
-        id: sub
-        with:
-          _input-file: './FightTimeLine/ClientApp/src/environments/environment.prod.ts'          
-          _format-key: '%%version%%'
-          version: ${{ steps.buildnumber.outputs.build_number }}  
+          node-version: ${{ matrix.node-version }}    
       - name: npm install
         working-directory: ./FightTimeLine/ClientApp
         run: |        
