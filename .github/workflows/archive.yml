@@ -23,8 +23,7 @@ jobs:
       - uses: bluwy/substitute-string-action@v1
         id: sub
         with:
-          _input-file: './FightTimeLine/ClientApp/src/environments/environment.prod.ts'
-          _output-file: './FightTimeLine/ClientApp/src/environments/environment.prod.ts'
+          _input-file: './FightTimeLine/ClientApp/src/environments/environment.prod.ts'          
           _format-key: '%%version%%'
           version: ${{ steps.buildnumber.outputs.build_number }}  
       - name: npm install
@@ -37,11 +36,7 @@ jobs:
       - name: remove assets
         working-directory: ./FightTimeLine/ClientApp/dist
         run: |
-          rm -r assets
-      - name: reset
-        working-directory: ./FightTimeLine/ClientApp/src/environments
-        run: |
-          git checkout -- environment.prod.ts
+          rm -r assets      
       - name: send to ftp
         if: github.ref == 'refs/heads/master'                
         uses: SamKirkland/FTP-Deploy-Action@master
