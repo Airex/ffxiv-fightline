@@ -18,17 +18,47 @@
               <div class="card-subtitle">
                 Open recent
               </div>
-              <div>
-                <nz-list [nzDataSource]="container.data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" #recent [ngClass]="{recentList:true}" customScroll>
+              <div customScroll class="recentList">
+                <nz-list [nzDataSource]="container.pinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
+                  <nz-list-header>Pinned</nz-list-header>
                   <ng-template #item let-item>
-                    <nz-list-item (click)="onClick(item.url)">
+                    <nz-list-item (click)="onClick(item.url)" [nzActions]="[pinAction]">
+                      <ng-template #pinAction>
+                        <a (click)="unpin($event, item)"><i class="pin pinned" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
+                      </ng-template>
                       <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription">
                         <ng-template #nzTitle>
                           {{item.name}}
                         </ng-template>
                         <ng-template #nzAvatar>
-                          <img width="48px" height="48px" src="https://dmszsuqyoe6y6.cloudfront.net/img/ff/favicon.png" alt="" *ngIf="item.name.indexOf('FFLogs')>=0">
-                          <img width="48px" height="48px" src="https://xivapi.com/c/BNpcName.png" alt="" *ngIf="item.name.indexOf('FFLogs')<0">
+                          <div  [ngSwitch]="item.source">
+                            <img *ngSwitchCase="0" width="48px" height="48px" src="https://dmszsuqyoe6y6.cloudfront.net/img/ff/favicon.png" alt="" >
+                            <img *ngSwitchDefault width="48px" height="48px" src="https://xivapi.com/c/BNpcName.png" alt="" >
+                          </div>
+                        </ng-template>
+                        <ng-template #nzDescription>
+                          {{ item.timestamp | date:'short' }}
+                        </ng-template>
+                      </nz-list-item-meta>
+                    </nz-list-item>
+                  </ng-template>
+                </nz-list>
+                <nz-list [nzDataSource]="container.nonpinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
+                  <nz-list-header>Activities</nz-list-header>
+                  <ng-template #item let-item>
+                    <nz-list-item (click)="onClick(item.url)" [nzActions]="[pinAction]">
+                      <ng-template #pinAction>
+                        <a (click)="pin($event, item)"><i class="pin" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
+                      </ng-template>
+                      <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription">
+                        <ng-template #nzTitle>
+                          {{item.name}}
+                        </ng-template>
+                        <ng-template #nzAvatar>
+                          <div [ngSwitch]="item.source">
+                            <img *ngSwitchCase="0" width="48px" height="48px" src="https://dmszsuqyoe6y6.cloudfront.net/img/ff/favicon.png" alt="">
+                            <img *ngSwitchDefault width="48px" height="48px" src="https://xivapi.com/c/BNpcName.png" alt="">
+                          </div>
                         </ng-template>
                         <ng-template #nzDescription>
                           {{ item.timestamp | date:'short' }}

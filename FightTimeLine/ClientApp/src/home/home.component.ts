@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import * as S from "../services/index"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
+import { IRecentStorage } from "../services/RecentActivitiesService";
 
 @Component({
   selector: "home",
@@ -11,10 +12,10 @@ import * as Gameserviceinterface from "../services/game.service-interface";
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  public container = { data: [] };
+  public container = { pinned: [], nonpinned: [] };
   private subs = [];
 
-  public fflogsExtraPath:string;
+  public fflogsExtraPath: string;
 
   public constructor(
     private notification: S.ScreenNotificationsService,
@@ -29,14 +30,42 @@ export class HomeComponent implements OnInit, OnDestroy {
     @Inject(Gameserviceprovider.gameServiceToken) public gameService: Gameserviceinterface.IGameService
   ) {
     this.subs.push(
-      dispatcher.on("BossTemplates Load").subscribe(value => {
+      this.dispatcher.on("BossTemplates Load").subscribe(value => {
         value.close();
         this.router.navigateByUrl("/boss/" + value.boss.id);
       }));
   }
 
+  pin($event, item) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    const activityStorage = this.recentService.load();
+    const found = activityStorage.activities.find(t => t.id.toLowerCase() === item.id.toLowerCase());
+    if (found) {
+      found.pinned = true;
+      this.recentService.save(activityStorage);
+      this.container.pinned = activityStorage.activities.filter(ac => ac.pinned);
+      this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned);
+    }
+  }
+
+  unpin($event, item) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    const activityStorage = this.recentService.load();
+    const found = activityStorage.activities.find(t => t.id.toLowerCase() === item.id.toLowerCase());
+    if (found) {
+      found.pinned = false;
+      this.recentService.save(activityStorage);
+      this.container.pinned = activityStorage.activities.filter(ac => ac.pinned);
+      this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned);
+    }
+  }
+
   ngOnInit(): void {
-    this.container.data = this.recentService.load();
+    const activityStorage = this.recentService.load();
+    this.container.pinned = activityStorage.activities.filter(ac => ac.pinned);
+    this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned);
     const settings = this.settingsService.load();
     if (settings.fflogsImport.characterRegion &&
       settings.fflogsImport.characterName &&
@@ -140,7 +169,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.dialogService.showFractionSelection(this.gameService.fractions)
         .subscribe(fraction => {
           if (fraction)
-            this.router.navigateByUrl("/new/"+fraction.name);
+            this.router.navigateByUrl("/new/" + fraction.name);
         });
     } else {
       this.router.navigateByUrl("/new");

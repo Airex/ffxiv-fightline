@@ -3,11 +3,12 @@ import { Observable, of, empty } from "rxjs"
 import { expand, take, concatMap, concat, toArray, map, delay } from "rxjs/operators"
 import { IBoss, IFight, IBossSearchEntry,ISyncData, SyncOperation,ICommandEntry } from "../core/Models"
 import { IFightService } from "./fight.service-interface"
+import { Guid } from "guid-typescript"
 
 @Injectable()
 export class FightsMockService implements IFightService {
   newFight(fraction: string = ""): Observable<IFight> { return of({
-      id: 'dummy',
+      id: 'dummy'+Guid.create().toString().toLowerCase().replace(/-/,""),
       name: 'dummy',
       userName: 'dummy',
       data: null,

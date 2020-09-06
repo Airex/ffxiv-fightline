@@ -70,3 +70,23 @@
   font-weight: bold;
   color: #3f51b5;
 }
+
+.pin {
+  visibility: hidden;
+}
+
+nz-list-item:hover .pin {
+  visibility: visible;
+}
+
+.pin:hover {
+  transform: scale(1.4)
+}
+
+.pinned {
+  transform: rotate(-45deg)
+}
+
+.pinned:hover {
+  transform: scale(1.4) rotate(-45deg)
+}

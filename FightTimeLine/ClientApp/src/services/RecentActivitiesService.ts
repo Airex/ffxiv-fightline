@@ -3,47 +3,68 @@ import { LocalStorageService } from "./LocalStorageService"
 
 @Injectable()
 export class RecentActivityService {
-  private storageKey = "recent";
+  private storageKey = "recentActivity";
 
   constructor(private storage: LocalStorageService) {
 
   }
 
-  public load(): IRecentActivity[] {
-    const cacheString = this.storage.getObject<IRecentActivity[]>(this.storageKey);
-    if (cacheString) {
-      return cacheString.reverse();
-    }
-    return new Array<IRecentActivity>();
+  public load(): IRecentStorage {
+    const result = this.storage.getObject<IRecentStorage>(this.storageKey);
+
+    return result || {
+      activities: []
+    };
   }
 
-  public register(name: string, url: string): void {
-    const cacheString = this.storage.getObject<IRecentActivity[]>(this.storageKey);
-    const data = cacheString || [];
-    data.push({ name: name, url: url, timestamp: new Date() });
+  public save(storage: IRecentStorage) {
+    this.storage.setObject(this.storageKey, storage);
+  }
 
-    let result = new Array<IRecentActivity>();
-    const map = new Map();
-    for (const item of data.reverse()) {
-      if (!map.has(item.url)) {
-        map.set(item.url, {}); // set any value to Map
-        result.push({
-          name: item.name,
-          url: item.url,
-          timestamp: item.timestamp
-        });
+
+  public register(input: Partial<IRecentActivity>): void {
+    const storage = this.load();
+
+    input = { pinned: false, timestamp: new Date(), ...input };
+
+    storage.activities.push(input)
+
+    let result = new Array<Partial<IRecentActivity>>();
+    const map = {};
+    for (const item of storage.activities.reverse()) {
+      if (!map[item.id]) {
+        map[item.id] = null; // set any value to Map
+        result.push(item);
       }
     }
     result = result.reverse();
     if (result.length > 20) {
       result.splice(0, result.length - 20);
     }
-    this.storage.setObject(this.storageKey, result);
+
+    storage.activities = result;
+
+    this.save(storage);
+
   }
 }
 
+export enum ActivitySource {
+  FFLogs,
+  Table,
+  Timeline
+}
+
+export interface IRecentStorage {
+  activities: Partial<IRecentActivity>[]
+
+}
+
 export interface IRecentActivity {
+  id: string,
+  source: ActivitySource;
   name: string;
   url: string;
   timestamp: Date;
+  pinned: boolean;
 }
