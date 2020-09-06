@@ -414,6 +414,14 @@ export class FightLineComponent implements OnInit, OnDestroy {
         .getFight(id)
         .subscribe((fight: M.IFight) => {
           if (fight) {
+
+            this.recent.register({
+              id: fight.id,
+              name: fight.name,
+              source: RecentActivitiesService.ActivitySource.Timeline,
+              url: "/" + fight.id.toLowerCase()
+            });
+
             const settings = this.settingsService.load();
             this.presenterManager.setSettings(settings);
             if (settings && settings.main && settings.main.defaultView)
