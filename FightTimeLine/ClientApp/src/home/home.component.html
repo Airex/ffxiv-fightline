@@ -19,7 +19,7 @@
                 Open recent
               </div>
               <div customScroll class="recentList">
-                <nz-list [nzDataSource]="container.pinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
+                <nz-list [nzDataSource]="container.pinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" *ngIf="container.pinned.length>0">
                   <nz-list-header>Pinned</nz-list-header>
                   <ng-template #item let-item>
                     <nz-list-item (click)="onClick(item.url)" [nzActions]="[pinAction]">
