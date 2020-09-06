@@ -22,11 +22,12 @@
                 <nz-list [nzDataSource]="container.pinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" *ngIf="container.pinned.length>0">
                   <nz-list-header>Pinned</nz-list-header>
                   <ng-template #item let-item>
-                    <nz-list-item (click)="onClick(item.url)" [nzActions]="[pinAction]">
+                    <nz-list-item  [nzActions]="[pinAction]">
                       <ng-template #pinAction>
                         <a (click)="unpin($event, item)"><i class="pin pinned" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
+                        <a nz-popconfirm nzPopconfirmTitle="Are you sure?" (nzOnConfirm)="delete(item,$event)"><i class="pin" nz-icon nzType="delete" nzTheme="twotone"></i></a>
                       </ng-template>
-                      <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription">
+                      <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription" (click)="onClick(item.url)">
                         <ng-template #nzTitle>
                           {{item.name}}
                         </ng-template>
@@ -46,11 +47,12 @@
                 <nz-list [nzDataSource]="container.nonpinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
                   <nz-list-header>Activities</nz-list-header>
                   <ng-template #item let-item>
-                    <nz-list-item (click)="onClick(item.url)" [nzActions]="[unpinAction]">
+                    <nz-list-item  [nzActions]="[unpinAction]">
                       <ng-template #unpinAction>
                         <a (click)="pin($event, item)"><i class="pin" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
+                        <a nz-popconfirm nzPopconfirmTitle="Are you sure?" (nzOnConfirm)="delete(item,$event)"><i class="pin" nz-icon nzType="delete" nzTheme="twotone"></i></a>
                       </ng-template>
-                      <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription">
+                      <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription" (click)="onClick(item.url)">
                         <ng-template #nzTitle>
                           {{item.name}}
                         </ng-template>

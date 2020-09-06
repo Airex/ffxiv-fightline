@@ -13,6 +13,16 @@
   cursor: pointer;
 }
 
-i:hover {
-  color: red;
+
+.action-icon {
+  visibility: hidden;
+  margin: 0 2px 0 2px;
+}
+
+nz-list-item:hover .action-icon {
+  visibility: visible;
+}
+
+.action-icon:hover {
+  transform: scale(1.4)
 }

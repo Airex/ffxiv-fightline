@@ -73,6 +73,7 @@
 
 .pin {
   visibility: hidden;
+  margin:  0 2px 0 2px;
 }
 
 nz-list-item:hover .pin {

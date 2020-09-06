@@ -29,3 +29,17 @@ mat-sidenav-container {
   .loadList .ant-list-item.selected span.selected {
     font-weight: bold !important;
   }
+
+
+.action-icon {
+  visibility: hidden;
+  margin: 0 2px 0 2px;
+}
+
+nz-list-item:hover .action-icon {
+  visibility: visible;
+}
+
+.action-icon:hover {
+  transform: scale(1.4)
+}

@@ -62,6 +62,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
+  delete(item) {
+    const activityStorage = this.recentService.load();
+    const found = activityStorage.activities.find(t => t.id.toLowerCase() === item.id.toLowerCase());
+    if (found) {
+      activityStorage.activities = activityStorage.activities.filter(t => t.id !== item.id);
+      this.recentService.save(activityStorage);
+      this.container.pinned = activityStorage.activities.filter(ac => ac.pinned);
+      this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned);
+    }
+  }
+
   ngOnInit(): void {
     const activityStorage = this.recentService.load();
     this.container.pinned = activityStorage.activities.filter(ac => ac.pinned);
