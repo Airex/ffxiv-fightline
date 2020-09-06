@@ -27,7 +27,11 @@ export class RecentActivityService {
 
     input = { pinned: false, timestamp: new Date(), ...input };
 
-    storage.activities.push(input)
+    const found = storage.activities.find(t => t.id === input.id);
+    if (found)
+      storage.activities.push({ ...found });
+    else
+      storage.activities.push(input);
 
     let result = new Array<Partial<IRecentActivity>>();
     const map = {};
