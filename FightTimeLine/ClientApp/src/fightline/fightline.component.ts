@@ -22,6 +22,7 @@ import * as Gameserviceinterface from "../services/game.service-interface";
 import { VisStorageService } from "../services";
 import * as SerializeController from "../core/SerializeController";
 import * as Environment from "../environments/environment";
+import * as RecentActivitiesService from "../services/RecentActivitiesService";
 
 
 @Component({
@@ -251,9 +252,16 @@ export class FightLineComponent implements OnInit, OnDestroy {
             this.location.replaceState("/" + value.id);
             this.startSession()
               .then(() => {
-                this.recent.register("FFLogs " + parser.fight.name, "/fflogs/" + code + "/" + enc);
+                this.recent.register({
+                  name: parser.fight.name,
+                  source: RecentActivitiesService.ActivitySource.FFLogs,
+                  timestamp: new Date(),
+                  url: "/" + value.id.toLowerCase(),
+                  id: value.id.toLowerCase(),
+                  pinned: false
+                });
                 const settings = this.settingsService.load();
-                
+
                 this.presenterManager.setSettings(settings);
 
                 this.fightLineController.importFromFFLogs(code + ":" + enc, parser);
@@ -316,7 +324,12 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.dialogService.openSaveFight(() => this.fightLineController.createSerializer().serializeFight())
       .then(result => {
         if (result !== null && result !== undefined) {
-          this.recent.register(result.name, "/" + result.id);
+          this.recent.register({
+            name: result.name,
+            url: "/" + result.id.toLowerCase(),
+            source: RecentActivitiesService.ActivitySource.Timeline,
+            id: result.id.toLowerCase()
+          });
           this.fightLineController.updateFight(result);
           this.location.replaceState(`/${result.id}`);
           this.notification.showFightSaved();
@@ -380,10 +393,16 @@ export class FightLineComponent implements OnInit, OnDestroy {
       .subscribe(value => {
         this.fightId = value.id;
         this.location.replaceState("/" + value.id);
+        this.recent.register({
+          name: "New",
+          url: "/" + value.id.toLowerCase(),
+          source: RecentActivitiesService.ActivitySource.Timeline,
+          id: value.id.toLowerCase()
+        });
         this.startSession();
       },
         error => {
-          console.log((error));
+          console.log(error);
           this.notification.error("Unable to start");
         });
   }
@@ -395,8 +414,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
         .getFight(id)
         .subscribe((fight: M.IFight) => {
           if (fight) {
-            this.recent.register(fight.name, "/" + id.toLowerCase());
-
             const settings = this.settingsService.load();
             this.presenterManager.setSettings(settings);
             if (settings && settings.main && settings.main.defaultView)
