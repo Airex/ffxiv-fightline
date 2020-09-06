@@ -33,7 +33,7 @@ export class RecentActivityService {
     const map = {};
     for (const item of storage.activities.reverse()) {
       if (!map[item.id]) {
-        map[item.id] = null; // set any value to Map
+        map[item.id] = {}; // set any value to Map
         result.push(item);
       }
     }

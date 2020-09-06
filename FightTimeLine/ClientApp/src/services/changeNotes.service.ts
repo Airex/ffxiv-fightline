@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core"
 import { HttpClient } from "@angular/common/http"
 import * as LocalStorageService from "./LocalStorageService";
+import { Guid } from "guid-typescript"
 
 @Injectable()
 export class ChangeNotesService {
@@ -10,10 +11,10 @@ export class ChangeNotesService {
   ) {
   }
 
-  load(ignoreRevision?:boolean): Promise<IChahgeNote[]> {
+  load(ignoreRevision?: boolean): Promise<IChahgeNote[]> {
     const promise = new Promise<IChahgeNote[]>((resolve, reject) => {
       this.httpClient
-        .get<IChahgeNote[]>("https://raw.githubusercontent.com/Airex/fightline-resources/master/change-notes.json")
+        .get<IChahgeNote[]>("https://raw.githubusercontent.com/Airex/fightline-resources/master/change-notes.json?v="+Guid.create().toString())
         .subscribe(value => {
           if (value) {
             const changes = value.sort((a, b) => b.revision - a.revision);
