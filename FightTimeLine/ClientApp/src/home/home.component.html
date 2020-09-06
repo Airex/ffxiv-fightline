@@ -46,8 +46,8 @@
                 <nz-list [nzDataSource]="container.nonpinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
                   <nz-list-header>Activities</nz-list-header>
                   <ng-template #item let-item>
-                    <nz-list-item (click)="onClick(item.url)" [nzActions]="[pinAction]">
-                      <ng-template #pinAction>
+                    <nz-list-item (click)="onClick(item.url)" [nzActions]="[unpinAction]">
+                      <ng-template #unpinAction>
                         <a (click)="pin($event, item)"><i class="pin" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
                       </ng-template>
                       <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription">
