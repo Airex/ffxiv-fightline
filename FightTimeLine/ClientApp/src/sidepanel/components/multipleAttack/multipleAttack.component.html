@@ -16,6 +16,9 @@
     </sidepanel-area>
   </nz-space-item>
   <nz-space-item>
+    <button nz-button nzType="primary" #copyButton (click)="copy(it);copyButton.nzType='';">Copy</button>
+  </nz-space-item>
+  <nz-space-item>
     <button nz-button nzType="primary" (click)="remove()" nzDanger>Remove</button>
   </nz-space-item>
 </nz-space>

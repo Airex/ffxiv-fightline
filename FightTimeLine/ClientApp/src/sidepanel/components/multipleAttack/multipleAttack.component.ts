@@ -45,6 +45,13 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
     });
   }
 
+  copy() {
+    this.dispatcher.dispatch({
+      name: "SidePanel Attack Copy",
+      payload: this.items.map(t => t.id)
+  });
+  }
+
   formatDate(date: Date): string {
     return Utils.formatTime(date);
   }

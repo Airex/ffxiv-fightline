@@ -52,7 +52,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   copy(value: BossAttackMap) {
     this.dispatcher.dispatch({
       name: "SidePanel Attack Copy",
-      payload: value.id
+      payload: [value.id]
     });
   }
 

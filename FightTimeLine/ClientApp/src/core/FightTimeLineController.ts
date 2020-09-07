@@ -31,7 +31,6 @@ export class FightTimeLineController {
   private commandBag: CommandBag;
   private loading: boolean = false;
   private commandFactory = new CommandFactory(this.startDate);
-  private copyContainer: any;
   private availabilityController: AvailabilityController;
   hasChanges = false;
   fraction: M.IFraction;
@@ -49,8 +48,7 @@ export class FightTimeLineController {
     private gameService: Gameserviceinterface.IGameService,
     private settingsService: SettingsService,
     private toolsManager: ToolsManager.ToolsManager,
-    private presenterManager: PresentationManager.PresenterManager)
-  {
+    private presenterManager: PresentationManager.PresenterManager) {
 
     this.holders = new Holders(mainTimeLine, bossTimeLine);
 
@@ -60,15 +58,15 @@ export class FightTimeLineController {
       jobRegistry: this.gameService.jobRegistry,
       update: this.update.bind(this),
       ogcdAttacksAsPoints: (ability: M.IAbility) => (ability.duration === 0 &&
-          (ability.cooldown === 1 || ability.cooldown === 0)) ||
+        (ability.cooldown === 1 || ability.cooldown === 0)) ||
         ((ability.abilityType & M.AbilityType.Damage) === M.AbilityType.Damage &&
           (ability.duration === 0 ? this.presenterManager.view.ogcdAsPoints : false)),
       verticalBossAttacks: () => this.presenterManager.view.verticalBossAttacks,
       isCompactView: () => this.presenterManager.view.compactView,
       highlightLoaded: () => this.presenterManager.view.highlightLoaded,
-      addTags: (t:string[]) => this.presenterManager.addTags(t),
-      addSources: (s:string)=> this.presenterManager.addSource(s)
-  });
+      addTags: (t: string[]) => this.presenterManager.addTags(t),
+      addSources: (s: string) => this.presenterManager.addSource(s)
+    });
     this.commandStorage.changed.subscribe(() => {
       this.canRedoChanged.emit();
       this.canUndoChanged.emit();
@@ -107,7 +105,7 @@ export class FightTimeLineController {
 
     commands.push(new C.AddBatchAttacksCommand(
       loadData.attacks.map(it => new C.AddBossAttackCommand(
-        it.id || this.idgen.getNextId(M.EntryType.BossAttack), 
+        it.id || this.idgen.getNextId(M.EntryType.BossAttack),
         it.ability))));
 
     let index = 1;
@@ -584,16 +582,27 @@ export class FightTimeLineController {
   }
 
 
-  copy(id: string) {
-    const ba = this.holders.bossAttacks.get(id);
-    this.copyContainer = Utils.clone(ba.attack);
+  copy(ids: string[]) {
+    const ba = this.holders.bossAttacks.getByIds(ids).map(t => Utils.clone(t.attack));
+    localStorage.setItem("copypaste", JSON.stringify(ba));
   }
 
   paste(time: any) {
-    if (this.copyContainer) {
-      const copy = Utils.clone(this.copyContainer as M.IBossAbility);
-      copy.offset = Utils.formatTime(time);
-      this.addBossAttack(null, time, copy);
+    const containerString = localStorage.getItem("copypaste");
+    if (containerString) {
+      const container = JSON.parse(containerString);
+      if (container) {
+        const copy = container as M.IBossAbility[];
+
+        const minOffset = _.min(copy.map(c => Utils.getDateFromOffset(c.offset).valueOf()));
+
+        this.commandStorage.execute(new C.AddBatchAttacksCommand(copy.map(c => {
+          const originalOffset = Utils.getDateFromOffset(c.offset).valueOf() - minOffset;
+          c.offset = Utils.formatTime(new Date(time.valueOf() + originalOffset));
+          return new C.AddBossAttackCommand(this.idgen.getNextId(M.EntryType.BossAttack), c)
+        })));
+
+      }
     }
   }
 
@@ -635,7 +644,7 @@ export class FightTimeLineController {
     const map = this.holders.abilities.get(group);
     const abs = this.holders.itemUsages.getByAbility(group);
     this.handleDelete(abs.map(a => a.id));
-    
+
     this.updateBuffHeatmap(this.presenterManager.view.buffmap, map.ability);
 
   }
@@ -995,7 +1004,7 @@ export class FightTimeLineController {
         ...this.holders.bossAttacks.getByIds(ids)
       ];
 
-      const itom:any[] = [];
+      const itom: any[] = [];
       for (let r of toMove) {
         const newDate = new Date(new Date(r.start).valueOf() as number + delta * 1000);
         const newDateEnd = r.end && new Date(new Date(r.end).valueOf() as number + delta * 1000);
@@ -1031,7 +1040,7 @@ export class FightTimeLineController {
       it.applyData({ isCompact: compact != undefined ? compact : !it.isCompact });
 
       const items = this.holders.itemUsages.getByAbility(it.id);
-      items.forEach(a => { a.applyData();});
+      items.forEach(a => { a.applyData(); });
       this.holders.itemUsages.update(items);
 
       this.holders.abilities.update([it]);
