@@ -1,6 +1,5 @@
 import * as AbilityUsageHolder from "./Holders/AbilityUsageHolder";
 import * as AbilitiesMapHolder from "./Holders/AbilitiesMapHolder";
-//import * as AbilitySelectionHolder from "./Holders/AbilitySelectionHolder";
 import * as JobsMapHolder from "./Holders/JobsMapHolder";
 import * as BossAttacksHolder from "./Holders/BossAttacksHolder";
 import * as BossDownTimeHolder from "./Holders/BossDownTimeHolder";
@@ -13,7 +12,6 @@ import {ITimelineContainer} from "../services";
 export class Holders {
   itemUsages: AbilityUsageHolder.AbilityUsageHolder;
   abilities: AbilitiesMapHolder.AbilitiesMapHolder;
-//  selectionRegistry: AbilitySelectionHolder.AbilitySelectionHolder;
   jobs: JobsMapHolder.JobsMapHolder;
   bossAttacks: BossAttacksHolder.BossAttacksHolder;
   bossDownTime: BossDownTimeHolder.BossDownTimeHolder;
@@ -25,7 +23,6 @@ export class Holders {
   constructor(mainTimeLine: ITimelineContainer, bossTimeLine: ITimelineContainer) {
     this.itemUsages = new AbilityUsageHolder.AbilityUsageHolder(mainTimeLine.items);
     this.abilities = new AbilitiesMapHolder.AbilitiesMapHolder(mainTimeLine.groups);
-//    this.selectionRegistry = new AbilitySelectionHolder.AbilitySelectionHolder();
     this.jobs = new JobsMapHolder.JobsMapHolder(mainTimeLine.groups);
     this.bossAttacks = new BossAttacksHolder.BossAttacksHolder(bossTimeLine.items, mainTimeLine.items);
     this.bossDownTime = new BossDownTimeHolder.BossDownTimeHolder(bossTimeLine.items, mainTimeLine.items);

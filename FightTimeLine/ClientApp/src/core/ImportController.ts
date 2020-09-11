@@ -30,7 +30,8 @@ export class ImportController {
       const sortOrder = settings.fflogsImport.sortOrderAfterImport;
 
       parser.players.sort((a, b) => sortOrder.indexOf(defaultOrder[a.role]) - sortOrder.indexOf(defaultOrder[b.role])).forEach(it => {
-        commands.push(this.addJob(this.idgen.getNextId(Models.EntryType.Job), it.job, it.actorName, null, false, false));
+        it.rid = this.idgen.getNextId(Models.EntryType.Job);
+        commands.push(this.addJob(it.rid, it.job, it.actorName, null, false, false));
       });
 
       const context: FFLogsCollectors.ICollectorContext = {

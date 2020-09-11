@@ -32,15 +32,22 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
   }
 
   isBossTargetForGroup(group: string): boolean {
-    return this.values.find((b: AbilityMap) => group === b.id && b.ability.settings && b.ability.settings.some((s => s.name === settings.changesTarget.name) as any) && b.job.id !== "boss") !== undefined;
+    return this.values.some((b: AbilityMap) =>
+      group === b.id &&
+      b.ability.settings &&
+      b.ability.settings.some(s => s.name === settings.changesTarget.name) &&
+      b.job.id !== "boss");
   }
 
   getParent(group: string): string {
-    return this.values.find((b: AbilityMap) => group === b.id).job.id;
+    return this.get(group).job.id;
   }
 
   getByParentAndAbility(jobId: string, ability: string): AbilityMap {
-    return this.values.find((b: AbilityMap) => b.job.id === jobId && !!b.ability && (b.ability.name.toUpperCase() === ability.toUpperCase()));
+    return this.values.find((b: AbilityMap) =>
+      b.job.id === jobId &&
+      b.ability &&
+      b.ability.name.toUpperCase() === ability.toUpperCase());
   }
 
   getStancesAbility(jobGroup: string): AbilityMap {

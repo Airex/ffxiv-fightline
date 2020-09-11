@@ -423,7 +423,7 @@ export class FightTimeLineController {
     if (options.updateBossTargets ||
       (options.abilityChanged &&
         options.abilityChanged.ability.settings &&
-        options.abilityChanged.ability.settings.some((s => s.name === "changesTarget") as any)))
+        options.abilityChanged.ability.settings.some(s => s.name === "changesTarget")))
       this.recalculateBossTargets();
 
     if (options.updateFilters)
