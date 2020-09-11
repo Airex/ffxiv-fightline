@@ -476,7 +476,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.showWhatsNew().then(() => {
         const id = r["fightId"];
         if (id) {
-          if (id === "new" || id === "dummy") {
+          if (id === "new" || id.indexOf("dummy") === 0) {
             this.startNew(r["fraction"]);
           } else {
             this.loadFight(id);
@@ -906,9 +906,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     dispatcher.on("SidePanel Multiple Attacks Remove").subscribe(value => {
       this.fightLineController.handleDelete(value);
     });
-
-
-
+    
     dispatcher.on("SidePanel Remove Downtime").subscribe(value => {
       this.fightLineController.removeDownTime(value);
       this.setSidePanel(null);

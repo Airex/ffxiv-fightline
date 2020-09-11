@@ -68,6 +68,11 @@ export class FightHubService {
             .then((result) => {
               //console.log(result);
               resolve(result);
+            })
+            .catch(error => {
+              this.connectedChanged.emit(false);
+              console.error(error);
+              reject(error);
             });
         })
         .catch((err) => {

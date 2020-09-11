@@ -47,11 +47,9 @@ export class AvailabilityController {
 
   updateAvailability(abilityChanged: M.IAbility): void {
     if (this.presenter.view.showAbilityAvailablity) {
-      const deps = abilityChanged.overlapStrategy.getDependencies();
+      const deps = [...(abilityChanged.overlapStrategy.getDependencies() || []), abilityChanged.name];
       const maps = this.holders.abilities
-        .filter(it =>
-          (it.ability && it.ability.name === abilityChanged.name) ||
-          (deps && deps.some((d => d === abilityChanged.name))))
+        .filter(it => it.ability && deps && deps.some((d => d === it.ability.name)))
         .map(it => {
           if (!it.ability.charges) {
             return this.processStandardAbility(it, deps);
@@ -59,10 +57,7 @@ export class AvailabilityController {
             return this.processChargesAbility(it);
           }
         })
-        .reduce((acc: AbilityAvailabilityMap[], v: AbilityAvailabilityMap[]) => {
-          acc.push(...v);
-          return acc
-        }, []);
+        .reduce((acc: AbilityAvailabilityMap[], v: AbilityAvailabilityMap[]) => [...acc, ...v], []);
       this.holders.abilityAvailability.addRange(maps);
     }
   }

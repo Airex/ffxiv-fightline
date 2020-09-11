@@ -11,6 +11,11 @@ export enum Role {
   Range,
   Caster
 }
+
+export type JobAbilities = {
+  [name: string] : IAbility
+}
+
 export interface IJob {
   name: string;
   fullName?: string;
@@ -164,28 +169,6 @@ export interface IOverlapStrategy {
 }
 
 
-class ByNameDetecor implements IDetectionStrategy {
-  constructor(private ids: string[], private names: string[]) {
-    this.names = names;
-  }
-
-  process(ev: FF.Event): { offset: number; name: string } {
-    if (isAbility(ev)) {
-      if (this.names.some((n => n === ev.ability.name) as any)) {
-        return { offset: ev.timestamp, name: this.names[0] }
-      }
-    }
-    return null;
-  }
-
-  get deps(): IDetectionDependencies {
-    return {
-      abilities: this.ids.map(it => parseInt(it)),
-      buffs: []
-    }
-  }
-}
-
 export class BaseOverlapStrategy implements IOverlapStrategy {
   getDependencies(): string[] {
     return null;
@@ -201,7 +184,7 @@ export class BaseOverlapStrategy implements IOverlapStrategy {
       const timeCheck = x.start < context.end && x.end > context.start;
       const selectionCheck = (!context.selectionRegistry || !(x.id in context.selectionRegistry));
       const result = idCheck && timeCheck && selectionCheck;
-      return result as any;
+      return result;
     });
     return result;
   }
@@ -228,7 +211,7 @@ export class SharedOverlapStrategy implements IOverlapStrategy {
 
       const idCheck = (context.id === undefined || x.id !== context.id);
       const timeCheck = x.start < context.end && x.end > context.start;
-      const selectionCheck = (!context.selectionRegistry || x.id in context.selectionRegistry);
+      const selectionCheck = (!context.selectionRegistry || !(x.id in context.selectionRegistry));
       const result = idCheck && timeCheck && selectionCheck;
       return result as any;
     });
@@ -243,6 +226,28 @@ class ChargesBasedOverlapStrategy implements IOverlapStrategy {
 
   check(): boolean {
     return false;
+  }
+}
+
+class ByNameDetecor implements IDetectionStrategy {
+  constructor(private ids: string[], private names: string[]) {
+    this.names = names;
+  }
+
+  process(ev: FF.Event): { offset: number; name: string } {
+    if (isAbility(ev)) {
+      if (this.names.some((n => n === ev.ability.name) as any)) {
+        return { offset: ev.timestamp, name: this.names[0] }
+      }
+    }
+    return null;
+  }
+
+  get deps(): IDetectionDependencies {
+    return {
+      abilities: this.ids.map(it => parseInt(it)),
+      buffs: []
+    }
   }
 }
 

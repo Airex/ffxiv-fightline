@@ -23,15 +23,14 @@ export class FFXIVGameService implements Gameserviceinterface.IGameService {
     private httpClient: Client.HttpClient,
     @Inject("FFLogs_URL") private fflogsUrl: string,
     @Inject("FFLogs_API_KEY") private apiKey: string,
-    private settings: SettingsService.SettingsService,
     private storage: LocalStorageService.LocalStorageService) {
 
     this.jobRegistryValue = new Jobregistryffxivservice.FFXIVJobRegistryService();
-    this.dataServiceValue = new FFLogsdataservice.FFLogsService(this.jobRegistryValue,
+    this.dataServiceValue = new FFLogsdataservice.FFLogsService(
+      this.jobRegistryValue,
       this.httpClient,
       this.fflogsUrl,
       this.apiKey,
-      this.settings,
       this.storage);
     
   }

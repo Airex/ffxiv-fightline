@@ -207,7 +207,7 @@ export function provideConfig() {
 }
 
 export function getBaseUrl() {
-  return environment.baseUrl;;
+  return environment.baseUrl;
 }
 
 

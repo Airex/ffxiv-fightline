@@ -20,7 +20,7 @@ let gameServiceFactory = (
   if (location.hostname.toLowerCase().indexOf("swtor") >= 0 || environment.forceSWTOR) {
     serviceToReturn = new Gameswtorservice.SWTORGameService(httpClient);
   } else {
-    serviceToReturn = new Gameffxivservice.FFXIVGameService(httpClient, fflogsUrl, apiKey, settings, storage);
+    serviceToReturn = new Gameffxivservice.FFXIVGameService(httpClient, fflogsUrl, apiKey, storage);
   }
   return serviceToReturn;
 };

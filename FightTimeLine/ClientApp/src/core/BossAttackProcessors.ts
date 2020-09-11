@@ -140,7 +140,7 @@ const buildTree = (data: M.ISyncData): IExpressionTree<FF.AbilityEvent> => {
 }
 
 
-export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.IBossAbility[], downtimes: IDowntimeSerializeData[]): M.IBossAbility[] => {
+export const process = (fflogsData: FF.AbilityEvent[], startTime: number, attacks: M.IBossAbility[], downtimes: IDowntimeSerializeData[]): M.IBossAbility[] => {
   const buildSettings = (root: M.ISyncData, time: string) => {
     return <IUnit<FF.AbilityEvent>>{
       name: "",
@@ -163,7 +163,7 @@ export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.I
   const windows: Window[] = [];
 
   //build windowsB
-  data.forEach(d => {
+  fflogsData.forEach(d => {
     context.countMe(d.ability.name);
     withSettings.forEach(ws => {
       const value = ws.tree.root.value(d, context);
@@ -186,6 +186,7 @@ export const process = (data: FF.AbilityEvent[], startTime: number, attacks: M.I
     const offset = Utils.getDateFromOffset(it.offset).valueOf();
     const total = windows.filter(w => w.end <= offset).map(v => v.end - v.start).reduce((acc, val) => acc + val, 0);
     it.offset = Utils.formatTime(new Date(offset - total));
+
     if (it.syncDowntime) {
       const found = downtimes.find(d => d.id === it.syncDowntime);
       if (found) {

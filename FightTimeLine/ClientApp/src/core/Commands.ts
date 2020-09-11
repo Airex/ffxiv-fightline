@@ -2,7 +2,7 @@ import { Command, ICommandExecutionContext, ICommandData } from "./UndoRedo"
 import { IAbility, IBossAbility, IAbilitySettingData, IAbilityFilter, Role, EntryType } from "./Models"
 import { Utils } from "./Utils"
 import { Guid } from "guid-typescript"
-import {AbilityMap, AbilityUsageMap, JobMap, BossAttackMap, BossDownTimeMap, JobStanceMap} from "./Maps/index";
+import { AbilityMap, AbilityUsageMap, JobMap, BossAttackMap, BossDownTimeMap, JobStanceMap } from "./Maps/index";
 
 
 interface IAbilityWithUsages { map: AbilityMap, usages: AbilityUsageMap[] }
@@ -83,7 +83,7 @@ export class AddJobCommand implements Command {
       collapsed: this.collapsed
     };
     const jobMap = new JobMap(map.id, map.job, { actorName: map.actorName, collapsed: map.collapsed }, this.filter, this.pet);
-    
+
 
     if (job.stances && job.stances.length) {
       const nextId = this.id + "_" + index;
@@ -106,7 +106,7 @@ export class AddJobCommand implements Command {
     context.holders.jobs.add(jobMap);
     jobMap.useAbilities(abilityIds);
     context.holders.abilities.addRange(abilityIds);
-    
+
 
     if ((context.holders.bossTargets.initialBossTarget == undefined || context.holders.bossTargets.initialBossTarget === "boss") && map.job.role === Role.Tank)
       context.holders.bossTargets.initialBossTarget = this.id;
@@ -276,13 +276,15 @@ export class ChangeBossAttackCommand implements Command {
   }
 
   reverse(context: ICommandExecutionContext): void {
-    const pbossAttackMaps = JSON.parse(this.prevDatas) as any[];
+    const pbossAttackMaps = JSON.parse(this.prevDatas) as BossAttackMap[];
 
     const prevData = context.holders.bossAttacks.get(this.id);
-    const bossAttackMaps = this.updateAllWithSameName ? context.holders.bossAttacks.getByName(prevData.attack.name) : [prevData];
+    const bossAttackMaps = this.updateAllWithSameName
+      ? context.holders.bossAttacks.getByName(prevData.attack.name)
+      : [prevData];
 
     bossAttackMaps.forEach((it) => {
-      const data = { attack: pbossAttackMaps.find(v => v.id === it.id).attack as IBossAbility };
+      const data = { attack: pbossAttackMaps.find(v => v.id === it.id).attack };
       it.applyData(data);
     });
 
@@ -293,18 +295,20 @@ export class ChangeBossAttackCommand implements Command {
   execute(context: ICommandExecutionContext): void {
     const prevData = context.holders.bossAttacks.get(this.id);
     const bossAttackMaps = this.updateAllWithSameName ? context.holders.bossAttacks.getByName(prevData.attack.name) : [prevData];
-    this.prevDatas = JSON.stringify(bossAttackMaps.map(v => {
+    this.prevDatas = JSON.stringify(bossAttackMaps.filter(v => !!v).map(v => {
       return { id: v.id, attack: v.attack }
     }));
 
     bossAttackMaps.forEach((it) => {
-      if (it.id === this.id)
-        it.applyData({ attack: this.bossAbility });
-      else
-        it.applyData({ attack: { ...this.bossAbility, ...{ offset: it.attack.offset } } });
+      if (it) {
+        if (it.id === this.id)
+          it.applyData({attack: this.bossAbility});
+        else
+          it.applyData({attack: {...this.bossAbility, ...{offset: it.attack.offset}}});
 
-      context.addTags(this.bossAbility.tags);
-      context.addSources(this.bossAbility.source);
+        context.addTags(this.bossAbility.tags);
+        context.addSources(this.bossAbility.source);
+      }
     });
 
     context.holders.bossAttacks.update(bossAttackMaps);
@@ -359,7 +363,7 @@ export class MoveCommand implements Command {
 
     this.moveFrom = item.start;
     this.ability = context.holders.itemUsages.get(this.id).ability.ability;
-//    console.log(`Moving to ${this.moveTo.toString()} from ${this.moveFrom.toString()}`);
+    //    console.log(`Moving to ${this.moveTo.toString()} from ${this.moveFrom.toString()}`);
 
     const affectedAttacks = [
       ...context.holders.bossAttacks.getAffectedAttacks(item.start as Date, this.ability.duration),
@@ -668,7 +672,7 @@ export class ChangeAbilitySettingsCommand implements Command {
   }
 }
 
-export type DowntimeData = {start: Date; startId: string; end: Date; endId: string};
+export type DowntimeData = { start: Date; startId: string; end: Date; endId: string };
 
 export class AddDowntimeCommand implements Command {
 

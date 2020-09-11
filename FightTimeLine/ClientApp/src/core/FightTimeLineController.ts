@@ -861,6 +861,7 @@ export class FightTimeLineController {
   }
 
   editAbility(itemid: string): void {
+    return;
     const item = this.holders.itemUsages.get(itemid);
     const settings = item.ability.ability.settings;
     if (settings && settings.length > 0) {
