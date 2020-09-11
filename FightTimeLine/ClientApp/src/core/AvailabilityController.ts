@@ -126,8 +126,10 @@ export class AvailabilityController {
         startAsNumber: this.startDate.valueOf() + 30 * 60 * 1000 + it.ability.cooldown * 1000 + it.ability.duration * 1000
       }
     ].sort((a, b) => (a.startAsNumber) - (b.startAsNumber));
-
     this.holders.abilityAvailability.removeForAbility(it.id);
+
+    if (usages.length -1 === 0) return [];
+    
     let prev: AbilityUsageMap = null;
     const maps = usages.map(c => {
       const start = prev
