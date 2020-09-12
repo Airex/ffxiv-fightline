@@ -12,24 +12,39 @@
 </form>
 
 <div mat-dialog-content style="height: 650px">
-  <nz-table #table [nzData]="set.rows" *ngIf="set" [nzScroll]="{ y: '600px' }" [nzBordered]="true" [nzShowPagination]="false" nzSize="small">
+  <nz-table #table [nzData]="set.rows" [nzLoading]="loading" [nzBordered]="true" [nzScroll]="{ y: '600px' }" [nzShowPagination]="false" [nzFrontPagination]="false" nzSize="small">
     <thead>
-      <tr>
-        <th *ngFor="let column of set.columns" [nzWidth]="getWidth(column.text, !!column.icon)"><img class="abilityIcon" *ngIf="column.icon" [src]="column.icon" />{{column.text}}</th>
-      </tr>
+    <tr>
+      <th *ngFor="let column of set.columns" style="text-align: center" [nzWidth]="getWidth(column.text, !!column.icon)">
+        <img *ngIf="column.icon" class="abilityIcon" style="margin-right: 2px;" [src]="column.icon" />
+        <span>{{getTitle(column.text)}}</span>
+      </th>
+    </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let row of set.rows">
-        <td *ngFor="let cell of row">
-          <div *ngFor="let d of cell">
-            <div *ngIf="d.lineColor" [ngStyle]="{'background-color':d.lineColor}" class='marker'></div>
-            <div>
-              <img class="abilityIcon" *ngIf="d.icon" [src]="d.icon" />
-              {{d.text}}
-            </div>
+    <tr *ngFor="let row of table.data">
+      <td *ngFor="let cell of row.cells">
+        <ng-container [ngSwitch]="cell.type">
+          <div *ngSwitchCase="'text'">
+            <nz-tag [nzColor]="cell.color">
+              <div style="margin: 0 2px 0 2px">{{cell.text}}</div>
+            </nz-tag>
           </div>
-        </td>
-      </tr>
+          <div *ngSwitchCase="'items'">
+            <nz-space *ngFor="let d of cell.items">
+              <nz-space-item>
+                <nz-tag>
+                  <div style="margin: 0 2px 0 2px">
+                    <img class="abilityIcon" *ngIf="d.icon" [src]="d.icon" />
+                    {{d.text}}
+                  </div>
+                </nz-tag>
+              </nz-space-item>
+            </nz-space>
+          </div>
+        </ng-container>
+      </td>
+    </tr>
     </tbody>
   </nz-table>
 </div>

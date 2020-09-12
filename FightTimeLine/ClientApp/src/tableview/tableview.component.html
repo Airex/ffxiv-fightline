@@ -8,10 +8,10 @@
 </toolbar>
 <!-- ReSharper disable once InvalidValue -->
 <div class="content noselect" style="overflow: overlay" customScroll (click)="select(null, $event)">
-  <nz-table #table [nzData]="set.rows" [nzBordered]="true" [nzShowPagination]="false" nzSize="small">
+  <nz-table #table [nzData]="set.rows" [nzBordered]="true" [nzShowPagination]="false"  [nzFrontPagination]="false" nzSize="small">
     <thead>
       <tr>
-        <th *ngFor="let column of set.columns" style="text-align: center" [nzWidth]="getWidth(column.text, !!column.icon)" (click)="select(column.refId, $event)">
+        <th *ngFor="let column of set.columns" style="text-align: center" [nzFilterMultiple]="true" [nzFilters]="column.listOfFilter" [nzFilterFn]="column.filterFn" [nzWidth]="getWidth(column.text, !!column.icon)" (click)="select(column.refId, $event)">
           <img *ngIf="column.icon" class="abilityIcon" style="margin-right: 2px;" [src]="column.icon" />
           <span>{{getTitle(column.text)}}</span>
         </th>

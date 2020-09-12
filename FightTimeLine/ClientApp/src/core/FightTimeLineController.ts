@@ -1074,6 +1074,16 @@ export class FightTimeLineController {
     ];
   }
 
+  handleRemoteCommandData(data: ICommandData) {
+    if (data.name === "undo") {
+      this.undo();
+    } else if (data.name === "redo") {
+      this.redo();
+    } else {
+      this.execute(data);
+    }
+  }
+
   createSerializer(): SerializeController.SerializeController {
     const ctr = new SerializeController.SerializeController(
       this.holders,

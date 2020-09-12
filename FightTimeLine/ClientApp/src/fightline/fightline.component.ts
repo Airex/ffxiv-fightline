@@ -442,9 +442,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
             this.fightLineController.fraction = fraction;
             this.toolbar.fraction = fraction;
-            this.fightLineController.loadFight(fight);
             this.fightService.getCommands(this.fightId, new Date(fight.dateModified).valueOf())
               .subscribe(value => {
+                  this.fightLineController.loadFight(fight);
                 for (var cmd of value) {
                   this.handleRemoteCommandData(JSON.parse(cmd.data));
                 }
@@ -906,7 +906,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     dispatcher.on("SidePanel Multiple Attacks Remove").subscribe(value => {
       this.fightLineController.handleDelete(value);
     });
-    
+
     dispatcher.on("SidePanel Remove Downtime").subscribe(value => {
       this.fightLineController.removeDownTime(value);
       this.setSidePanel(null);

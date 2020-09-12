@@ -83,7 +83,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   }
 
   private setSidePanel(id: string) {
-    
+
     this.ngZone.run(() => {
       if (id) {
         const items = this.fightLineController.getItems([id]);
@@ -133,27 +133,16 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   }
 
-  handleRemoteCommandData(data: UndoRedo.ICommandData) {
-    if (data.name === "undo") {
-      this.fightLineController.undo();
-    } else if (data.name === "redo") {
-      this.fightLineController.redo();
-    } else {
-      this.fightLineController.execute(data);
-    }
-  }
-
   load(id, template) {
     this.dialogService.executeWithLoading(ref => {
       this.fightService.getFight(id).subscribe((fight: M.IFight) => {
         if (fight) {
-
-          this.fightLineController.loadFight(fight);
           this.fightService.getCommands(id, new Date(fight.dateModified).valueOf())
             .subscribe(value => {
+              this.fightLineController.loadFight(fight);
               for (let cmd of value) {
                 const parsed = JSON.parse(cmd.data) as UndoRedo.ICommandData; //todo: optimize to load without events
-                this.handleRemoteCommandData(parsed);
+                this.fightLineController.handleRemoteCommandData(parsed);
               }
               const serializer = this.fightLineController.createSerializer()
               const exported = serializer.serializeForExport();

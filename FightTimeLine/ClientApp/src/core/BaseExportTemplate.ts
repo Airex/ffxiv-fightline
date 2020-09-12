@@ -43,10 +43,13 @@ export interface IExportColumn {
   text: string;
   icon: string;
   refId?: string;
+  listOfFilter?: { text: string; value: any; byDefault ?: boolean }[];
+  filterFn?: (a: any, data: any) => boolean;
 }
 
 export interface IExportRow {
   cells: IExportCell[]
+  filterData?: any;
 }
 
 export interface IExportCell {
