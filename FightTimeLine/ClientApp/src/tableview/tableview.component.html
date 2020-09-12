@@ -4,33 +4,45 @@
          [authenticated]="authenticationService.authenticated"
          [username]="authenticationService.username"
          [holders]="fightLineController.getHolders()"
-         [fraction]="fightLineController.fraction"
-         ></toolbar>
-<div class="content noselect" style="overflow: overlay" customScroll>
+         [fraction]="fightLineController.fraction">
+</toolbar>
+<!-- ReSharper disable once InvalidValue -->
+<div class="content noselect" style="overflow: overlay" customScroll (click)="select(null, $event)">
   <nz-table #table [nzData]="set.rows" [nzBordered]="true" [nzShowPagination]="false" nzSize="small">
-      <thead>
-        <tr>
-          <th *ngFor="let column of set.columns" style="text-align: center" [nzWidth]="getWidth(column.text, !!column.icon)"><img class="abilityIcon" style="margin-right: 2px;" *ngIf="column.icon" [src]="column.icon" />{{getTitle(column.text)}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of set.rows">
-          <td *ngFor="let cell of row">
-            <div *ngFor="let d of cell">
-              <nz-tag *ngIf="d.lineColor" [nzColor]="d.lineColor">
-                <div style="margin: 0 2px 0 2px">{{d.text}}</div>
-              </nz-tag>
-              <nz-tag *ngIf="!d.lineColor">
-                <div style="margin: 0 2px 0 2px">
-                  <img class="abilityIcon" *ngIf="d.icon" [src]="d.icon" />
-                  {{d.text}}
-                </div>
+    <thead>
+      <tr>
+        <th *ngFor="let column of set.columns" style="text-align: center" [nzWidth]="getWidth(column.text, !!column.icon)" (click)="select(column.refId, $event)">
+          <img *ngIf="column.icon" class="abilityIcon" style="margin-right: 2px;" [src]="column.icon" />
+          <span>{{getTitle(column.text)}}</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of table.data">
+        <td *ngFor="let cell of row.cells">
+          <ng-container [ngSwitch]="cell.type">
+            <div *ngSwitchCase="'text'">
+              <nz-tag [nzColor]="cell.color" (click)="select(cell.refId, $event)">
+                <div style="margin: 0 2px 0 2px">{{cell.text}}</div>
               </nz-tag>
             </div>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
+            <div *ngSwitchCase="'items'">
+              <nz-space *ngFor="let d of cell.items">
+                <nz-space-item>
+                  <nz-tag (click)="select(d.refId, $event)">
+                    <div style="margin: 0 2px 0 2px">
+                      <img class="abilityIcon" *ngIf="d.icon" [src]="d.icon" />
+                      {{d.text}}
+                    </div>
+                  </nz-tag>
+                </nz-space-item>
+              </nz-space>
+            </div>
+          </ng-container>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
 </div>
 <nz-drawer #sidenav
            [nzVisible]="sideNavOpened"
@@ -48,4 +60,3 @@
   </div>
 </nz-drawer>
 <ng-progress #progressBar [speed]="500" [trickleSpeed]="30000" [spinner]="false"></ng-progress>
-

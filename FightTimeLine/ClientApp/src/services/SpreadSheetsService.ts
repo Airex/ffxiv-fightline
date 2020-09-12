@@ -1,7 +1,7 @@
 import { Injectable, Inject } from "@angular/core"
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { Observable } from "rxjs"
-import { IExportResultSet,IExportResultItem } from "../core/BaseExportTemplate"
+import { IExportResultSet } from "../core/BaseExportTemplate"
 
 @Injectable()
 export class SpreadSheetsService {
@@ -31,16 +31,16 @@ export class SpreadSheetsService {
                         rightToLeft: false
                     },
                     data: [
-                        {
-                            startRow: 0,
-                            startColumn: 0,
-                            rowData: [
-                                this.valuesCollectionOfStringsFromArray(data.columns.map(it=>it.text)),
-                                ...data.rows.map(it => this.valuesCollectionOfStringsFromArray(
-                                    it.map(
-                                        (it1: IExportResultItem[]) =>
-                                            it1.map((it2: IExportResultItem) => it2.text).join(", "))))]
-                        }
+//                        {
+//                            startRow: 0,
+//                            startColumn: 0,
+//                            rowData: [
+//                                this.valuesCollectionOfStringsFromArray(data.columns.map(it=>it.text)),
+//                                ...data.rows.map(it => this.valuesCollectionOfStringsFromArray(
+//                                    it.map(
+//                                        (it1: IExportResultItem[]) =>
+//                                            it1.map((it2: IExportResultItem) => it2.text).join(", "))))]
+//                        }
                     ],
                     rowGroups: [
                         {

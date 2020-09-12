@@ -508,4 +508,50 @@ export interface IPhase {
   syncData: ISyncData;
 }
 
+export class ExportData {
+  name: string;
+  userName: string;
+  data: {
+    boss: {
+      attacks: {
+        id: string;
+        name: string;
+        type: number;
+        isAoe: boolean;
+        isShareDamage: boolean;
+        isTankBuster: boolean;
+        offset: string;
+      }[];
+      downTimes: {
+        start: string;
+        end: string;
+      }[];
+    };
+    initialTarget: string;
+    bossTargets: {
+      target: string;
+      start: string;
+      end: string;
+    }[],
+    jobs: {
+      id: string;
+      name: string;
+      role: number;
+      order: number;
+      pet: string;
+      icon: string;
+    }[];
+    abilities: {
+      id: string;
+      job: string;
+      ability: string;
+      type: AbilityType;
+      duration: number;
+      start: string;
+      icon: string;
+    }[];
+  }
+}
+
+
 

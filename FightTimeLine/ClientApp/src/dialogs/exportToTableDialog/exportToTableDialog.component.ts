@@ -2,12 +2,13 @@ import { Component, Inject, Input, OnInit, TemplateRef, ViewChild, AfterViewInit
 import { FormControl } from "@angular/forms"
 import { SpreadSheetsService } from "../../services/SpreadSheetsService"
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService"
-import { ExportTemplate, ExportData } from "../../core/BaseExportTemplate"
+import { ExportTemplate } from "../../core/BaseExportTemplate"
 import { FirstTemplate } from "../../core/ExportTemplates/FirstTemplate"
 import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate"
 import { BossAttackDefensiveTemplate } from "../../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { AuthService, GoogleLoginProvider, SocialUser } from "angularx-social-login";
 import { NzModalRef } from "ng-zorro-antd";
+import * as Models from "../../core/Models";
 
 @Component({
   selector: "exportToTableDialog",
@@ -16,7 +17,7 @@ import { NzModalRef } from "ng-zorro-antd";
 })
 export class ExportToTableDialog implements OnInit, AfterViewInit  {
 
-  @Input("data") data: ExportData;
+  @Input("data") data: Models.ExportData;
   @ViewChild("headerTemplate", { static: true }) headerTemplate: TemplateRef<any>;
 
   constructor(

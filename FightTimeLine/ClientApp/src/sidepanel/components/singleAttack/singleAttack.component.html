@@ -18,7 +18,7 @@
   <nz-space-item>
     <span class="description">{{it.attack.description}}</span>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
     <button nz-button nzType="primary" #copyButton (click)="copy(it);copyButton.nzType='';">Copy</button>
   </nz-space-item>
   <nz-space-item>

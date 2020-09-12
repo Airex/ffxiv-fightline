@@ -114,8 +114,21 @@ export class SerializeController {
   }
 
 
-  serializeForExport(): BaseExportTemplate.ExportData {
-    return <BaseExportTemplate.ExportData>{
+  serializeJobs(): IJobSerializeData[] {
+    const map = this.holders.jobs.getAll().map((value: JobMap) => <any>{
+      id: value.id,
+      name: value.job.name,
+      order: value.order,
+      pet: value.pet,
+      filter: value.filter,
+      compact: value.isCompact,
+      collapsed: value.collapsed
+    });
+    return map;
+  }
+
+  serializeForExport(): Models.ExportData {
+    return <Models.ExportData>{
       name: this.data.fight && this.data.fight.name || "",
       userName: this.data.fight && this.data.fight.userName || "",
       data: {
@@ -123,13 +136,14 @@ export class SerializeController {
           attacks: this.holders.bossAttacks.getAll()
             .map((ab: BossAttackMap) => {
               return {
+                id: ab.id,
                 name: ab.attack.name,
                 type: ab.attack.type,
                 tags: ab.attack.tags,
                 isAoe: ab.isAoe,
                 isShareDamage: ab.isShareDamage,
                 isTankBuster: ab.isTankBuster,
-                offset: Utils.formatTime(ab.start)
+                offset: ab.offset
               };
             }),
           downTimes: this.holders.bossDownTime.getAll().map((it) => <any>{
@@ -159,6 +173,7 @@ export class SerializeController {
           .map((value) => {
             const a = value.ability;
             return {
+              id: value.id,
               job: a.job.id,
               ability: a.ability.name,
               type: a.ability.abilityType,
@@ -170,19 +185,6 @@ export class SerializeController {
           })
       }
     };
-  }
-
-  serializeJobs(): IJobSerializeData[] {
-    const map = this.holders.jobs.getAll().map((value: JobMap) => <any>{
-      id: value.id,
-      name: value.job.name,
-      order: value.order,
-      pet: value.pet,
-      filter: value.filter,
-      compact: value.isCompact,
-      collapsed: value.collapsed
-    });
-    return map;
   }
 }
 

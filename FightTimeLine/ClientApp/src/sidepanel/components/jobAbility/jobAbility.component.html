@@ -6,16 +6,16 @@
       <span class="abilityDescription" [innerHtml]="description"></span>
     </div>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
     <label nz-checkbox [(ngModel)]="compactView" (ngModelChange)="compact(compactView)">Compact view</label>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'"> 
     <button nz-button (click)="fill(it)">Fill</button>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
     <button nz-button nzType="primary" (click)="hide(it)">Hide</button>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
     <button nz-button nzType="danger" (click)="clear(it)">Clear</button>
   </nz-space-item>
 </nz-space>

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, ComponentFactoryResolver, Injector, ApplicationRef, ComponentRef } from "@angular/core";
-import { ComponentPortal, Portal, TemplatePortal, CdkPortalOutlet, DomPortalOutlet, PortalOutlet, DomPortalHost, PortalInjector } from "@angular/cdk/portal";
+import { ComponentPortal, DomPortalOutlet, PortalOutlet, PortalInjector } from "@angular/cdk/portal";
 import { SingleAbilityComponent } from "./components/singleAbility/singleAbility.component";
 import { SingleAttackComponent } from "./components/singleAttack/singleAttack.component";
 import { MultipleAbilityComponent } from "./components/multipleAbility/multipleAbility.component";
@@ -48,7 +48,7 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     return its.sort().reduce((p, c) => p + c.id, "");
   }
 
-  setItems(items: BaseHolder.IForSidePanel[], holders: Holders): void {
+  setItems(items: BaseHolder.IForSidePanel[], holders: Holders, mode: string = "default"): void {
     this.items = items;
     const newKey = this.calculateKey(this.items);
     if (newKey === this.key && this.ref) {
@@ -59,8 +59,9 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     this.holders = holders;
     const injector = this.createInjector({
       items: items,
-      holders: holders
-    });
+      holders: holders,
+      mode: mode
+  });
     let component = null;
     if (this.items && this.items.length > 0) {
       switch (this.items[0].sidePanelComponentName) {

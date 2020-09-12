@@ -18,7 +18,7 @@
       </div>
     </sidepanel-area>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
     <sidepanel-area header="Filter">
       <nz-space nzDirection="vertical">
         <nz-space-item >
@@ -60,13 +60,13 @@
       </nz-space>
     </sidepanel-area>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
     <label nz-checkbox [(ngModel)]="compactView" (ngModelChange)="compact(compactView)">Compact view</label>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
     <button nz-button (click)="fill(it)">Fill</button>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
     <button nz-button nzType="primary" (click)="remove(it)" nzDanger>Remove</button>
   </nz-space-item>
 </nz-space>

@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy, Inject, ViewChild } from "@angular/core";
+import { Component, OnInit, OnDestroy, Inject, ViewChild, NgZone } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-
 import { SettingsService } from "../services/SettingsService"
-import { LocalStorageService } from "../services/LocalStorageService"
 import * as S from "../services/index"
 import * as M from "../core/Models";
 
@@ -12,7 +10,7 @@ import { NgProgressComponent } from "ngx-progressbar"
 
 import { EachRowOneSecondTemplate } from "../core/ExportTemplates/EachRowOneSecondTemplate"
 import { BossAttackDefensiveTemplate } from "../core/ExportTemplates/BossAttackDefensiveTemplate"
-import { ExportTemplate, ExportData } from "../core/BaseExportTemplate"
+import { ExportTemplate } from "../core/BaseExportTemplate"
 import { IExportResultSet } from "../core/BaseExportTemplate"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
@@ -46,7 +44,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     rows: [],
     title: ""
   };
-  columnNames: string[];
+
   templates: { [name: string]: ExportTemplate } = {
     "defence": new BossAttackDefensiveTemplate(),
     "defencecover": new BossAttackDefensiveTemplate(true),
@@ -60,9 +58,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
     private notification: S.ScreenNotificationsService,
     private route: ActivatedRoute,
     private dialogService: S.DialogService,
+    private ngZone: NgZone,
     @Inject(S.authenticationServiceToken) public authenticationService: S.IAuthenticationService,
     private router: Router,
-    private storage: LocalStorageService,
     @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
     private settingsService: SettingsService) {
   }
@@ -71,9 +69,36 @@ export class TableViewComponent implements OnInit, OnDestroy {
   private idgen = new Generators.IdGenerator();
   toolsManager = new ToolsManager.ToolsManager();
   presenterManager = new PresentationManager.PresenterManager();
+  sideNavOpened: boolean = false;
 
   home() {
     this.router.navigateByUrl("/");
+  }
+
+  select(id, $event) {
+    console.log(id);
+    $event.stopPropagation();
+    $event.preventDefault();
+    this.setSidePanel(id);
+  }
+
+  private setSidePanel(id: string) {
+    
+    this.ngZone.run(() => {
+      if (id) {
+        const items = this.fightLineController.getItems([id]);
+        if (items && items.length > 0) {
+          this.sidepanel.setItems(items, this.fightLineController.getHolders(), "table");
+          if (!this.sideNavOpened) {
+            this.sideNavOpened = true;
+          }
+          return;
+        }
+      }
+      this.sidepanel.setItems([], null);
+      if (this.sideNavOpened)
+        this.sideNavOpened = false;
+    });
   }
 
   ngOnInit(): void {
@@ -99,7 +124,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
       const id = r["fightId"] as string;
       const template = r["template"] as string;
       if (id && template) {
-        //        const settings = this.settingsService.load();
         this.load(id, template);
       }
     });
@@ -125,18 +149,16 @@ export class TableViewComponent implements OnInit, OnDestroy {
         if (fight) {
 
           this.fightLineController.loadFight(fight);
-
           this.fightService.getCommands(id, new Date(fight.dateModified).valueOf())
             .subscribe(value => {
               for (let cmd of value) {
-                const parsed = JSON.parse(cmd.data) as UndoRedo.ICommandData;
+                const parsed = JSON.parse(cmd.data) as UndoRedo.ICommandData; //todo: optimize to load without events
                 this.handleRemoteCommandData(parsed);
               }
-              const sr = this.fightLineController.createSerializer()
-              const exported = sr.serializeForExport();
-              const d = this.templates[template.toLowerCase()].build(exported);
-              this.columnNames = d.columns.map(it => it.text);
-              this.set = d;
+              const serializer = this.fightLineController.createSerializer()
+              const exported = serializer.serializeForExport();
+              this.set = this.templates[template.toLowerCase()].build(exported) as IExportResultSet;
+
               ref.close();
             },
               error => {
@@ -179,55 +201,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
         return "Target";
     }
     return text;
-  }
-
-  getExportData(fight: M.IFight): ExportData {
-    const data = JSON.parse(fight.data) as SerializeController.IFightSerializeData;
-    const bossData = JSON.parse(data.boss.data);
-    const bossAttacks = bossData.attacks as SerializeController.IBossAbilityUsageData[];
-    return {
-      userName: fight.userName,
-      name: fight.name,
-      data: {
-        boss: {
-          attacks: bossAttacks.map((it) => <any>{
-            name: it.ability.name,
-            type: it.ability.type,
-            tags: it.ability.tags,
-            offset: it.ability.offset
-          }),
-          downTimes: bossData.downTimes.map(it => <any>{
-            start: it.start,
-            end: it.end
-          })
-        },
-        initialTarget: data.initialTarget,
-        bossTargets: [], //todo: parse boss targets
-        jobs: data.jobs.map(it => {
-          const jb = this.gameService.jobRegistry.getJob(it.name);
-          return <any>{
-            id: it.id,
-            name: it.name,
-            role: jb.role,
-            order: it.order,
-            pet: it.pet,
-            icon: jb.icon
-          };
-        }),
-        abilities: data.abilities.map(it => {
-          const jb = data.jobs.find(j => j.id === it.job);
-          const ab = this.gameService.jobRegistry.getAbilityForJob(jb.name, it.ability);
-          return <any>{
-            job: it.job,
-            ability: it.ability,
-            type: ab.abilityType,
-            duration: ab.duration,
-            start: it.start,
-            icon: ab.icon
-          };
-        })
-      }
-    };
   }
 
   ngOnDestroy(): void {
