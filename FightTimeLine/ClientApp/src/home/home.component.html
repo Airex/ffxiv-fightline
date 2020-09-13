@@ -24,7 +24,7 @@
                   <ng-template #item let-item>
                     <nz-list-item [nzActions]="[pinAction]">
                       <ng-template #pinAction>
-                        <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nz-tooltip nzTooltipTitle="Open as table"><i class="pin" nz-icon nzType="hdd" nzTheme="twotone"></i></a>
+                        <a nz-dropdown nzTrigger="click" nzTooltipTrigger="hover" [nzDropdownMenu]="menu" nz-tooltip nzTooltipTitle="Open as table"><i class="pin" nz-icon nzType="hdd" nzTheme="twotone"></i></a>
                         <a nz-tooltip nzTooltipTitle="Unpint" (click)="unpin($event, item)"><i class="pin pinned" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
                         <a nz-tooltip nzTooltipTitle="Remove" nz-popconfirm nzPopconfirmTitle="Are you sure?" (nzOnConfirm)="delete(item,$event)"><i class="pin" nz-icon nzType="delete" nzTheme="twotone"></i></a>
                       </ng-template>
@@ -55,7 +55,7 @@
                   <ng-template #item let-item>
                     <nz-list-item [nzActions]="[unpinAction]">
                       <ng-template #unpinAction>
-                        <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu1" nz-tooltip nzTooltipTitle="Open as table"><i class="pin" nz-icon nzType="hdd" nzTheme="twotone"></i></a>
+                        <a nz-dropdown nzTrigger="click" nzTooltipTrigger="hover" [nzDropdownMenu]="menu1" nz-tooltip nzTooltipTitle="Open as table"><i class="pin" nz-icon nzType="hdd" nzTheme="twotone"></i></a>
                         <a nz-tooltip nzTooltipTitle="Pin" (click)="pin($event, item)"><i class="pin" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
                         <a nz-tooltip nzTooltipTitle="Remove" nz-popconfirm nzPopconfirmTitle="Are you sure?" (nzOnConfirm)="delete(item,$event)"><i class="pin" nz-icon nzType="delete" nzTheme="twotone"></i></a>
                       </ng-template>
