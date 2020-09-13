@@ -8,10 +8,21 @@
 </toolbar>
 <!-- ReSharper disable once InvalidValue -->
 <div class="content noselect" style="overflow: overlay" customScroll (click)="select(null, $event)">
-  <nz-table #table [nzData]="set.rows" [nzBordered]="true" [nzShowPagination]="false" [nzPageSize]="pagesize"  nzSize="small">
+  <nz-table #table
+            [nzData]="set.rows"
+            [nzBordered]="true"
+            [nzShowPagination]="false"
+            [nzPageSize]="pagesize"
+            nzSize="small">
     <thead>
       <tr>
-        <th *ngFor="let column of set.columns; trackBy: trackByName" [nzAlign]="column.align || 'center'" [nzFilterMultiple]="true" [nzFilters]="column.listOfFilter" [nzFilterFn]="column.filterFn" [nzWidth]="getWidth(column.text, !!column.icon)" (click)="select(column.refId, $event)">
+        <th *ngFor="let column of set.columns; trackBy: trackByName"
+            [nzAlign]="column.align || 'center'"
+            [nzFilterMultiple]="true"
+            [nzFilters]="column.listOfFilter"
+            [nzFilterFn]="column.filterFn"
+            [nzWidth]="getWidth(column.text, !!column.icon)"
+            (click)="select(column.refId, $event)">
           <img *ngIf="column.icon" class="abilityIcon" style="margin-right: 2px;" [src]="column.icon" />
           <span>{{getTitle(column.text)}}</span>
         </th>
@@ -19,7 +30,10 @@
     </thead>
     <tbody>
       <tr *ngFor="let row of table.data">
-        <td *ngFor="let cell of row.cells" [nzAlign]="cell.align || 'left'"  [ngStyle]="{'background-color': cell.colorFn && cell.colorFn(row.filterData) || ''}" (click)="select(cell.bgRefIdFn(row.filterData), $event)">
+        <td *ngFor="let cell of row.cells"
+            [nzAlign]="cell.align || 'left'"
+            [ngStyle]="{'background-color': cell.colorFn && cell.colorFn(row.filterData) || ''}"
+            (click)="select(cell.bgRefIdFn && cell.bgRefIdFn(row.filterData) || '', $event)">
           <ng-container [ngSwitch]="cell.type">
             <div *ngSwitchCase="'text'">
               <nz-tag [nzColor]="cell.color" (click)="select(cell.refId, $event)">

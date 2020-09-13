@@ -22,19 +22,25 @@
                 <nz-list [nzDataSource]="container.pinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" *ngIf="container.pinned.length>0">
                   <nz-list-header>Pinned</nz-list-header>
                   <ng-template #item let-item>
-                    <nz-list-item  [nzActions]="[pinAction]">
+                    <nz-list-item [nzActions]="[pinAction]">
                       <ng-template #pinAction>
-                        <a (click)="unpin($event, item)"><i class="pin pinned" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
-                        <a nz-popconfirm nzPopconfirmTitle="Are you sure?" (nzOnConfirm)="delete(item,$event)"><i class="pin" nz-icon nzType="delete" nzTheme="twotone"></i></a>
+                        <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nz-tooltip nzTooltipTitle="Open as table"><i class="pin" nz-icon nzType="hdd" nzTheme="twotone"></i></a>
+                        <a nz-tooltip nzTooltipTitle="Unpint" (click)="unpin($event, item)"><i class="pin pinned" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
+                        <a nz-tooltip nzTooltipTitle="Remove" nz-popconfirm nzPopconfirmTitle="Are you sure?" (nzOnConfirm)="delete(item,$event)"><i class="pin" nz-icon nzType="delete" nzTheme="twotone"></i></a>
                       </ng-template>
+                      <nz-dropdown-menu #menu="nzDropdownMenu">
+                        <ul nz-menu>
+                          <li nz-menu-item (click)="onOpenTable(item,'defence')">Defensives</li>
+                        </ul>
+                      </nz-dropdown-menu>
                       <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription" (click)="onClick(item.url)">
                         <ng-template #nzTitle>
                           {{item.name}}
                         </ng-template>
                         <ng-template #nzAvatar>
-                          <div  [ngSwitch]="item.source">
-                            <img *ngSwitchCase="0" width="48px" height="48px" src="https://dmszsuqyoe6y6.cloudfront.net/img/ff/favicon.png" alt="" >
-                            <img *ngSwitchDefault width="48px" height="48px" src="https://xivapi.com/c/BNpcName.png" alt="" >
+                          <div [ngSwitch]="item.source">
+                            <img *ngSwitchCase="0" width="48px" height="48px" src="https://dmszsuqyoe6y6.cloudfront.net/img/ff/favicon.png" alt="">
+                            <img *ngSwitchDefault width="48px" height="48px" src="https://xivapi.com/c/BNpcName.png" alt="">
                           </div>
                         </ng-template>
                         <ng-template #nzDescription>
@@ -47,11 +53,17 @@
                 <nz-list [nzDataSource]="container.nonpinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
                   <nz-list-header>Activities</nz-list-header>
                   <ng-template #item let-item>
-                    <nz-list-item  [nzActions]="[unpinAction]">
+                    <nz-list-item [nzActions]="[unpinAction]">
                       <ng-template #unpinAction>
-                        <a (click)="pin($event, item)"><i class="pin" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
-                        <a nz-popconfirm nzPopconfirmTitle="Are you sure?" (nzOnConfirm)="delete(item,$event)"><i class="pin" nz-icon nzType="delete" nzTheme="twotone"></i></a>
+                        <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu1" nz-tooltip nzTooltipTitle="Open as table"><i class="pin" nz-icon nzType="hdd" nzTheme="twotone"></i></a>
+                        <a nz-tooltip nzTooltipTitle="Pin" (click)="pin($event, item)"><i class="pin" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
+                        <a nz-tooltip nzTooltipTitle="Remove" nz-popconfirm nzPopconfirmTitle="Are you sure?" (nzOnConfirm)="delete(item,$event)"><i class="pin" nz-icon nzType="delete" nzTheme="twotone"></i></a>
                       </ng-template>
+                      <nz-dropdown-menu #menu1="nzDropdownMenu">
+                        <ul nz-menu>
+                          <li nz-menu-item (click)="onOpenTable(item,'defence')">Defensives</li>
+                        </ul>
+                      </nz-dropdown-menu>
                       <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription" (click)="onClick(item.url)">
                         <ng-template #nzTitle>
                           {{item.name}}

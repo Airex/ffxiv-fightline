@@ -65,10 +65,15 @@ export interface IRecentStorage {
 }
 
 export interface IRecentActivity {
-  id: string,
+  id: string;
   source: ActivitySource;
   name: string;
   url: string;
   timestamp: Date;
   pinned: boolean;
+}
+
+export interface IFFLogsActivity extends  IRecentActivity {
+  source: ActivitySource.FFLogs;
+  url : string;
 }

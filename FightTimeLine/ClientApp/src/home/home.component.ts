@@ -124,6 +124,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(url);
   }
 
+  onOpenTable(item,name){
+    window.open("/table/"+item.id+"/"+name, "_blank");
+}
+
   showHelpForFirstTimers(): Promise<void> {
     if (!this.storage.getString("help_shown")) {
       return this.showHelp();
