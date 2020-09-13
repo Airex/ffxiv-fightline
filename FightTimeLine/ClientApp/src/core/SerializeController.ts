@@ -140,15 +140,13 @@ export class SerializeController {
                 name: ab.attack.name,
                 type: ab.attack.type,
                 tags: ab.attack.tags,
-                isAoe: ab.isAoe,
-                isShareDamage: ab.isShareDamage,
-                isTankBuster: ab.isTankBuster,
                 offset: ab.offset
               };
             }),
           downTimes: this.holders.bossDownTime.getAll().map((it) => <any>{
             start: Utils.formatTime(it.start),
-            end: Utils.formatTime(it.end)
+            end: Utils.formatTime(it.end),
+            comment: it.comment
           })
         },
         bossTargets: this.holders.bossTargets.getAll()

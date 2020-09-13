@@ -26,6 +26,11 @@ export class Utils {
     return d;
   }
 
+  static inRange(startOffset: string, endOffset: string, toCheckOffset: string) : boolean{
+    const orig = this.getDateFromOffset(toCheckOffset);
+    return  orig >= this.getDateFromOffset(startOffset) && orig<= this.getDateFromOffset(endOffset)
+  }
+
   static formatTime(date: Date): string {
     const d = 946677600000;
     const dc = date.valueOf() as number;
@@ -92,7 +97,5 @@ export class Utils {
   }
 
 }
-
-// From Tom Gruner @ http://stackoverflow.com/a/12034334/1660815
 
 

@@ -1,5 +1,7 @@
 import { ExportTemplate, IExportResultSet, ITextCell, IExportColumn, IExportRow, IItemsCell } from "../BaseExportTemplate"
 import * as Models from "../Models";
+import * as PresentationManager from "../PresentationManager";
+import * as Utils from "../Utils";
 
 export class BossAttackDefensiveTemplate extends ExportTemplate {
   constructor(private coverAll: boolean = false) {
@@ -14,7 +16,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
     return (it.type === 1 ? "red" : (it.type === 2 ? "blue" : ""));
   }
 
-  build(data: Models.ExportData): IExportResultSet {
+  build(data: Models.ExportData, presenter: PresentationManager.PresenterManager): IExportResultSet {
 
     const used: any[] = [];
     const jobs = data.data.jobs.sort((a, b) => a.role - b.role);
@@ -42,14 +44,23 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
                 return this.text({ text: a.ability, icon: a.icon, refId: a.id })
               })
           }))
-        ]
+        ],
+        filterData: it
       });
 
 
     return <IExportResultSet>{
       columns: [
-        { text: "time" },
-        { text: "boss" },
+        {
+          text: "time", listOfFilter: data.data.boss.downTimes.map(d => ({ text: d.comment, value: d, byDefault: true })), filterFn: (a, d) => {
+            return a.some(b => Utils.Utils.inRange(b.start, b.end, d.filterData.offset));
+          }},
+        {
+          text: "boss", listOfFilter: (presenter && presenter.tags || []).concat(["Other"]).map(t => ({ text: t, value: t, byDefault: true })), filterFn: (a, d) => {
+            let visible = !a || a.some(value => ((!d.filterData.tags || d.filterData.tags.length === 0) && value === "Other") || d.filterData.tags && d.filterData.tags.includes(value));
+            return visible;
+          }
+        },
         { text: "target" },
         ...jobs.map(it => <IExportColumn>{ text: it.name, icon: it.icon, refId: it.id })],
       rows: rows,

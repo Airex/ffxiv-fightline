@@ -1,10 +1,11 @@
 import { Utils } from "./Utils"
 import * as Models from "./Models";
+import * as PresentationManager from "./PresentationManager";
 
 export abstract class ExportTemplate {
   public startDate = new Date(946677600000);
   name: string;
-  abstract build(data: Models.ExportData): IExportResultSet;
+  abstract build(data: Models.ExportData, presenter: PresentationManager.PresenterManager): IExportResultSet;
 
   offsetCompareFn(a: string, b: string): number {
     const d = new Date();

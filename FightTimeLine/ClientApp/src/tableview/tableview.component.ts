@@ -11,10 +11,9 @@ import { NgProgressComponent } from "ngx-progressbar"
 import { EachRowOneSecondTemplate } from "../core/ExportTemplates/EachRowOneSecondTemplate"
 import { BossAttackDefensiveTemplate } from "../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { ExportTemplate } from "../core/BaseExportTemplate"
-import { IExportResultSet } from "../core/BaseExportTemplate"
+import { IExportResultSet, IExportColumn } from "../core/BaseExportTemplate"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
-import * as SerializeController from "../core/SerializeController";
 
 import { VisStorageService } from "../services";
 import * as UndoRedo from "../core/UndoRedo";
@@ -44,6 +43,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
     rows: [],
     title: ""
   };
+
+  pagesize = Number.MAX_VALUE;
 
   templates: { [name: string]: ExportTemplate } = {
     "defence": new BossAttackDefensiveTemplate(),
@@ -146,7 +147,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
               }
               const serializer = this.fightLineController.createSerializer()
               const exported = serializer.serializeForExport();
-              this.set = this.templates[template.toLowerCase()].build(exported) as IExportResultSet;
+              this.set = this.templates[template.toLowerCase()].build(exported, this.presenterManager) as IExportResultSet;
 
               ref.close();
             },
@@ -178,6 +179,12 @@ export class TableViewComponent implements OnInit, OnDestroy {
         return "65px";
     }
     return "";
+  }
+
+  
+
+  trackByName(_: number, item: IExportColumn): string {
+    return item.text;
   }
 
   getTitle(text: string) {

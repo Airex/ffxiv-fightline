@@ -517,14 +517,13 @@ export class ExportData {
         id: string;
         name: string;
         type: number;
-        isAoe: boolean;
-        isShareDamage: boolean;
-        isTankBuster: boolean;
         offset: string;
+        tags: string[];
       }[];
       downTimes: {
         start: string;
         end: string;
+        comment: string;
       }[];
     };
     initialTarget: string;

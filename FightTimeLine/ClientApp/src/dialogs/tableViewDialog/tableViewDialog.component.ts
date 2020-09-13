@@ -44,7 +44,7 @@ export class TableViewDialog implements OnInit {
 
     this.loading = true;
     setTimeout(() => {
-      const d = this.templates.find(it => it.name === this.exportTemplatesControl.value).build(this.data);
+      const d = this.templates.find(it => it.name === this.exportTemplatesControl.value).build(this.data, null);
       this.set = d;
       this.loading = false;
     }

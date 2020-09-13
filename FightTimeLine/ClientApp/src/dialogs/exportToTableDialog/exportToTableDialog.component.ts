@@ -67,7 +67,7 @@ export class ExportToTableDialog implements OnInit, AfterViewInit  {
   export() {
     if (!this.exportTemplatesControl.value) return;
     this.service.create(this.user.authToken,
-        this.templates.find(it => it.name === this.exportTemplatesControl.value).build(this.data))
+        this.templates.find(it => it.name === this.exportTemplatesControl.value).build(this.data, null))
       .subscribe(ev => {
           this.url = ev.spreadsheetUrl;
           console.log(ev);
