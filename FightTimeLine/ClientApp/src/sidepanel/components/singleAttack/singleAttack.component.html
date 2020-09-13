@@ -1,7 +1,8 @@
 <nz-space nzDirection="vertical">
   <nz-space-item>
     <div>
-      <span class="abilityName">{{it.attack.name}}</span><a class="edit" (click)="edit(it)"> <i nz-icon nzType="edit" nzTheme="twotone"></i></a>
+      <span class="abilityName">{{it.attack.name}}</span>
+      <a *ngIf="data.mode === 'default'" class="edit" (click)="edit(it)"> <i nz-icon nzType="edit" nzTheme="twotone"></i></a>
     </div>
     <div>
       <i nz-icon nzType="clock-circle" theme="twotone"></i><span class="time">{{it.attack.offset}}</span>

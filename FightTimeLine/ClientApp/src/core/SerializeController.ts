@@ -1,8 +1,8 @@
- import * as Models from "./Models";
+import * as Models from "./Models";
 import { Utils } from "./Utils";
 import * as BaseExportTemplate from "./BaseExportTemplate";
 import * as Holders from "./Holders";
-import {JobMap,  BossAttackMap} from "./Maps";
+import { JobMap, BossAttackMap } from "./Maps";
 
 export class SerializeController {
 
@@ -60,7 +60,7 @@ export class SerializeController {
       id: this.data.fight && this.data.fight.id || "",
       name: this.data.fight && this.data.fight.name || "",
       userName: this.data.fight && this.data.fight.userName || "",
-      game: this.gameName+fractionPart,
+      game: this.gameName + fractionPart,
       isPrivate: false,
       data: JSON.stringify(<IFightSerializeData>{
         boss: this.serializeBoss(),
@@ -144,9 +144,11 @@ export class SerializeController {
               };
             }),
           downTimes: this.holders.bossDownTime.getAll().map((it) => <any>{
+            id: it.id,
             start: Utils.formatTime(it.start),
             end: Utils.formatTime(it.end),
-            comment: it.comment
+            comment: it.comment,
+            color: it.color
           })
         },
         bossTargets: this.holders.bossTargets.getAll()

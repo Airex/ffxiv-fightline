@@ -23,7 +23,7 @@
     </thead>
     <tbody>
     <tr *ngFor="let row of table.data">
-      <td *ngFor="let cell of row.cells">
+      <td *ngFor="let cell of row.cells" [ngStyle]="{'background-color': cell.colorFn && cell.colorFn(row.filterData) || ''}">
         <ng-container [ngSwitch]="cell.type">
           <div *ngSwitchCase="'text'">
             <nz-tag [nzColor]="cell.color">

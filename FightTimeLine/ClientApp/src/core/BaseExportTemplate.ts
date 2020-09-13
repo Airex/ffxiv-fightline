@@ -43,6 +43,7 @@ export interface IExportColumn {
   type?: string;
   text: string;
   icon: string;
+  align?: string;
   refId?: string;
   listOfFilter?: { text: string; value: any; byDefault ?: boolean }[];
   filterFn?: (a: any, data: any) => boolean;
@@ -55,7 +56,10 @@ export interface IExportRow {
 
 export interface IExportCell {
   type: string;
+  align?:string;
   refId?: string;
+  colorFn?: (data) => string;
+  bgRefIdFn?: (data) => string;
 }
 
 export interface ITextCell extends IExportCell {

@@ -521,9 +521,11 @@ export class ExportData {
         tags: string[];
       }[];
       downTimes: {
+        id: string;
         start: string;
         end: string;
         comment: string;
+        color: string;
       }[];
     };
     initialTarget: string;

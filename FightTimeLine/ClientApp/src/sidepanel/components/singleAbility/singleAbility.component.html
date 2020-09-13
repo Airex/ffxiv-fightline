@@ -30,10 +30,10 @@
           <nz-form-control>
             <div [ngSwitch]="setting.type">
               <div *ngSwitchCase="'boolean'">
-                <nz-switch [formControlName]="setting.name" style="margin-left: 15px" [id]="setting.name" (ngModelChange)="modified=true"></nz-switch>
+                <nz-switch [nzDisabled]="data.model!=='default'" [formControlName]="setting.name" style="margin-left: 15px" [id]="setting.name" (ngModelChange)="modified=true"></nz-switch>
               </div>
               <div *ngSwitchCase="'partyMember'">
-                <nz-select [formControlName]="setting.name" [id]="setting.name" [nzPlaceHolder]="setting.displayName" (ngModelChange)="modified=true">
+                <nz-select [nzDisabled]="data.model!=='default'" [formControlName]="setting.name" [id]="setting.name" [nzPlaceHolder]="setting.displayName" (ngModelChange)="modified=true">
                   <nz-option nzValue="" nzLabel="None"></nz-option>
                   <nz-option nzCustomContent *ngFor="let j of jobs" [nzValue]="j.id" [nzLabel]="j.job.name+' '+(j.actorName || '')"><img class="abilityIcon" [src]="j.job.icon" /> <span class="usedTarget">{{j.actorName}}</span></nz-option>
                 </nz-select>
