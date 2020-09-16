@@ -140,11 +140,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
         if (fight) {
           this.fightService.getCommands(id, new Date(fight.dateModified).valueOf())
             .subscribe(value => {
-              this.fightLineController.loadFight(fight);
-              for (let cmd of value) {
-                const parsed = JSON.parse(cmd.data) as UndoRedo.ICommandData; //todo: optimize to load without events
-                this.fightLineController.handleRemoteCommandData(parsed);
-              }
+              this.fightLineController.loadFight(fight, value.map(cmd => JSON.parse(cmd.data)));
+
               const serializer = this.fightLineController.createSerializer()
               const exported = serializer.serializeForExport();
               this.set = this.templates[template.toLowerCase()].build(exported, this.presenterManager) as IExportResultSet;

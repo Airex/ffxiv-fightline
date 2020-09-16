@@ -724,7 +724,7 @@ export class FightTimeLineController {
   }
 
 
-  loadFight(fight: M.IFight): void {
+  loadFight(fight: M.IFight, commands?: ICommandData[]): void {
     if (fight === null || fight === undefined || !fight.data) return;
     const data = JSON.parse(fight.data) as SerializeController.IFightSerializeData;
     try {
@@ -806,6 +806,11 @@ export class FightTimeLineController {
             }
           }
         }
+      if (commands) {
+        commands.forEach((c) => {
+          this.handleRemoteCommandData(c);
+        });
+      }
       this.presenterManager.filter = data.filter;
 
     } finally {
