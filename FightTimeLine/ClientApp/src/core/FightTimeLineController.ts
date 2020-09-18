@@ -909,7 +909,7 @@ export class FightTimeLineController {
   }
 
 
-  applyFilter(input?: M.IFilter, source: string): void {
+  applyFilter(input?: M.IFilter, source?: string): void {
     if (this.loading) return;
 
     //console.log("filter requested");
