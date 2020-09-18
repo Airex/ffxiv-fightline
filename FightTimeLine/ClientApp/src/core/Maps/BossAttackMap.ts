@@ -13,6 +13,8 @@ export interface IBossAttackMapData {
 export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData> implements IMoveable, IForSidePanel {
   sidePanelComponentName: string = "bossAbility";
 
+  public visible: boolean = true;
+
   onDataUpdate(data: IBossAttackMapData, originalData: IBossAttackMapData): void {
     if (originalData && originalData.attack)
       this.attack.tags = originalData.attack.tags;
@@ -52,6 +54,7 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
       group: "boss",
       type: "box",
       className: this.buildClass(cls),
+      selectable: true,
       title: attack.offset
     }
   }

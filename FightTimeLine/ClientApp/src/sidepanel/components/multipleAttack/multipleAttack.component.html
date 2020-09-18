@@ -5,7 +5,7 @@
   <nz-space-item>
     <sidepanel-area header="Selection">
       <div>
-        <nz-tag *ngFor="let ab of items" (nzOnClose)="restore(ab)" nzMode="default">
+        <nz-tag *ngFor="let ab of items" (nzOnClose)="restore(ab)" [nzColor]="getColor(ab)" nzMode="default">
           <span>
             <span class='abilityName'>{{ab.attack.name}}</span>
             <i nz-icon nzType="clock-circle" theme="outline"></i>

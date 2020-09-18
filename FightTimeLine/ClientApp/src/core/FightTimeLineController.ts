@@ -909,16 +909,19 @@ export class FightTimeLineController {
   }
 
 
-  applyFilter(input?: M.IFilter): void {
+  applyFilter(input?: M.IFilter, source: string): void {
     if (this.loading) return;
 
     //console.log("filter requested");
     if (input)
       this.presenterManager.filter = input;
 
-    this.holders.abilities.applyFilter(this.presenterManager.filter.abilities,
-      (val) => this.holders.itemUsages.filter((item) => item.ability.id === val).length > 0);
-    this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
+    if (!source || source === 'ability')
+      this.holders.abilities.applyFilter(this.presenterManager.filter.abilities,
+        (val) => this.holders.itemUsages.filter((item) => item.ability.id === val).length > 0);
+    if (!source || source === 'boss')
+      this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
+
   }
 
   importFromFFLogs(key: string, parser: Parser.Parser): any {

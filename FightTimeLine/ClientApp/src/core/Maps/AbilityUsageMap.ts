@@ -69,6 +69,7 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
       className: this.buildClass({ ability: true, compact: ability.isCompact, loaded: data.showLoaded && data.loaded }),
       content: "",
       subgroup: "sg" + ability.id,
+      selectable: true,
       type: data.ogcdAsPoints || !!ability.ability.charges ? "point" : "range",
       title: `<img class='tooltipAbilityIcon' src='${ability.ability.icon}'/><span>${Utils.formatTime(start)} - ${Utils.formatTime(end)}</span>`
     };

@@ -5,6 +5,7 @@ import * as S from "../../../services/index"
 import { Holders } from "../../../core/Holders";
 import { JobMap, AbilityMap } from "../../../core/Maps/index";
 import { Utils } from "../../../core/Utils";
+import * as Index from "../../../core/Maps/index";
 
 @Component({
   selector: "multipleAttack",
@@ -18,7 +19,7 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
     private dispatcher: S.DispatcherService,
     @Inject(SIDEPANEL_DATA) private data: SidepanelParams
   ) {
-    this.items = this.data.items;
+    this.items = this.data.items.sort((a: Index.BossAttackMap , b: Index.BossAttackMap)=> a.startAsNumber - b.startAsNumber );
     this.holders = this.data.holders;
     this.refresh();
   }
@@ -54,6 +55,11 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
 
   formatDate(date: Date): string {
     return Utils.formatTime(date);
+  }
+
+  getColor(ab: Index.BossAttackMap) {
+    const it = ab.attack;
+    return (it.type === 1 ? "red" : (it.type === 2 ? "blue" : ""));
   }
 
   ngOnInit(): void {

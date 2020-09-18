@@ -199,8 +199,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateFilter($data?: M.IFilter): void {
-    this.fightLineController.applyFilter($data);
+  updateFilter(source?: string): void {
+    this.fightLineController.applyFilter(null, source);
   }
 
   updateView($data?: M.IView): void {
@@ -912,6 +912,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     dispatcher.on("BossTemplates Load").subscribe(async value => {
       this.dialogService.executeWithLoading(async ref => {
         const stop = (ref: { close: () => void; }) => {
+          value.close();
           this.progressBar.complete();
           ref.close();
         };
@@ -950,13 +951,12 @@ export class FightLineComponent implements OnInit, OnDestroy {
           });
           value.boss.data = JSON.stringify(bossData);
           this.fightLineController.loadBoss(value.boss);
-          value.close();
+          
           stop(ref);
 
         } else {
           this.fightLineController.loadBoss(value.boss);
-          value.close();
-          ref.close();
+          stop(ref);
         }
       });
 

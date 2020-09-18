@@ -55,6 +55,11 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
     this.visMainItems.remove(this.prefix + i.id);
   }
 
+  private removeRangeFromBoard(i: BossAttackMap[]) {
+    this.visBossItems.remove(i.map(p=>p.id));
+    this.visMainItems.remove(i.map(p => this.prefix + p.id));
+  }
+
   remove(ids: string[]): void {
     super.remove(ids);
     this.visBossItems.remove(ids);
@@ -93,15 +98,23 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
 
       const item = this.visBossItems.get(it.id);
 
+      it.visible = visible;
+
+      const toAdd: any[] = [];
+      const toRemove: any[] = [];
+
       if (visible) {
         if (!item) {
-          this.addToBoard(it);
+          toAdd.push(it)
         }
       } else {
         if (!!item) {
-          this.removeFromBoard(it);
+          toRemove.push(it)
         }
       }
+
+      this.addRangeToBoard(toAdd);
+      this.removeRangeFromBoard(toRemove);
 
     });
   }
