@@ -15,6 +15,9 @@
       </div>
     </sidepanel-area>
   </nz-space-item>
+  <nz-space-item *ngIf="distance">
+    <nz-statistic [nzValue]="distance" [nzTitle]="'Distance'"></nz-statistic>
+  </nz-space-item>
   <nz-space-item>
     <button nz-button nzType="primary" #copyButton (click)="copy(it);copyButton.nzType='';">Copy</button>
   </nz-space-item>

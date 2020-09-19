@@ -27,6 +27,7 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
   isSameName: boolean;
   holders: Holders;
   items: any[];
+  distance: string;
 
   get ability(): any {
     return this.items[0];
@@ -37,6 +38,9 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
       return self.indexOf(value) === index;
     }
     this.isSameName = this.items.map((value) => value.attack.name).filter(distinct).length <= 1;
+    if (this.items.length === 2) {
+      this.distance = Utils.formatTime(new Date(Math.abs(this.items[0].startAsNumber - this.items[1].startAsNumber) + 946677600000));
+    }
   }
 
   remove() {
