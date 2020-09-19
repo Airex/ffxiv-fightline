@@ -45,6 +45,7 @@ export interface IExportColumn {
   icon: string;
   align?: string;
   refId?: string;
+  cursor?: string;
   listOfFilter?: { text: string; value: any; byDefault ?: boolean }[];
   filterFn?: (a: any, data: any) => boolean;
 }

@@ -85,7 +85,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
           text: "target",
           align: "center"
         },
-        ...jobs.map(it => <IExportColumn>{ text: it.name, icon: it.icon, refId: it.id })],
+        ...jobs.map(it => <IExportColumn>{ text: it.name, icon: it.icon, refId: it.id, cursor: 'pointer' })],
       rows: rows,
       title: this.name
     };

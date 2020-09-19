@@ -16,17 +16,18 @@
             nzSize="small">
     <thead>
       <tr>
-        <th *ngFor="let column of set.columns; trackBy: trackByName"
-            [nzAlign]="column.align || 'center'"
-            [nzFilterMultiple]="true"
-            [nzFilters]="column.listOfFilter"
-            [nzFilterFn]="column.filterFn"
-            [nzWidth]="getWidth(column.text, !!column.icon)"
-            (click)="select(column.refId, $event)">
-          <img *ngIf="column.icon" class="abilityIcon" style="margin-right: 2px;" [src]="column.icon" />
-          <span>{{getTitle(column.text)}}</span>
-        </th>
-      </tr>
+          <th *ngFor="let column of set.columns; trackBy: trackByName"
+              [nzAlign]="column.align || 'center'"
+              [nzFilterMultiple]="true"
+              [nzFilters]="column.listOfFilter"
+              [nzFilterFn]="column.filterFn"
+              [nzWidth]="getWidth(column.text, !!column.icon)"
+              [ngStyle]="{ 'cursor': column.cursor }"
+              (click)="select(column.refId, $event)">
+            <img *ngIf="column.icon" class="abilityIcon" style="margin-right: 2px;" [src]="column.icon" />
+            <span>{{getTitle(column.text)}}</span>
+          </th>
+        </tr>
     </thead>
     <tbody>
       <tr *ngFor="let row of table.data">
@@ -34,25 +35,7 @@
             [nzAlign]="cell.align || 'left'"
             [ngStyle]="{'background-color': cell.colorFn && cell.colorFn(row.filterData) || ''}"
             (click)="select(cell.bgRefIdFn && cell.bgRefIdFn(row.filterData) || '', $event)">
-          <ng-container [ngSwitch]="cell.type">
-            <div *ngSwitchCase="'text'">
-              <nz-tag [nzColor]="cell.color" (click)="select(cell.refId, $event)">
-                <div style="margin: 0 2px 0 2px">{{cell.text}}</div>
-              </nz-tag>
-            </div>
-            <div *ngSwitchCase="'items'">
-              <nz-space *ngFor="let d of cell.items">
-                <nz-space-item>
-                  <nz-tag (click)="select(d.refId, $event)">
-                    <div style="margin: 0 2px 0 2px">
-                      <img class="abilityIcon" *ngIf="d.icon" [src]="d.icon" />
-                      {{d.text}}
-                    </div>
-                  </nz-tag>
-                </nz-space-item>
-              </nz-space>
-            </div>
-          </ng-container>
+          <cell [input]="cell" (selected)="select($event)"></cell>
         </td>
       </tr>
     </tbody>

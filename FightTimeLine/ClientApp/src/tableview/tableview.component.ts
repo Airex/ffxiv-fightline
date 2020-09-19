@@ -62,6 +62,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     @Inject(S.authenticationServiceToken) public authenticationService: S.IAuthenticationService,
     private router: Router,
+    private dispatcher: S.DispatcherService,
     @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
     private settingsService: SettingsService) {
   }
@@ -77,9 +78,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
   }
 
   select(id, $event) {
-    console.log(id);
-    $event.stopPropagation();
-    $event.preventDefault();
+    if ($event) {
+      $event.stopPropagation();
+      $event.preventDefault();
+    }
     this.setSidePanel(id);
   }
 
@@ -120,6 +122,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
       this.presenterManager
     );
 
+    this.subscribeToDispatcher(this.dispatcher);
+
 
     this.route.params.subscribe(r => {
       const id = r["fightId"] as string;
@@ -127,6 +131,20 @@ export class TableViewComponent implements OnInit, OnDestroy {
       if (id && template) {
         this.load(id, template);
       }
+    });
+  }
+
+  private subscribeToDispatcher(dispatcher: S.DispatcherService) {
+    dispatcher.on("SidePanel Similar Click").subscribe(value => {
+      this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());
+    });
+
+    dispatcher.on("SidePanel Similar All Click").subscribe(value => {
+      this.sidepanel.setItems(this.fightLineController.getItems(value), this.fightLineController.getHolders());
+    });
+
+    dispatcher.on("SidePanel Ability Click").subscribe(value => {
+      this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());
     });
   }
 
