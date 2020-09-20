@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FightLineComponent } from "../fightline/fightline.component";
 import { TableViewComponent } from "../tableview/tableview.component";
+import { CellComponent } from "../tableview/cell/cell.component";
 //import { BossTemplateComponent } from "../bosstemplate/bosstemplate.component";
 import { HomeComponent } from "../home/home.component";
 import { SidepanelComponent } from "../sidepanel/sidepanel.component";
@@ -64,6 +65,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 
 
 
+
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzCardModule } from 'ng-zorro-antd/card';
@@ -103,6 +105,7 @@ import { NzSkeletonModule } from 'ng-zorro-antd/skeleton';
 import { NzSpaceModule } from "ng-zorro-antd/space";
 import { NzSliderModule } from 'ng-zorro-antd/slider';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzTabsModule } from 'ng-zorro-antd/tabs';
@@ -157,6 +160,7 @@ const zorroModules = [
   NzSliderModule,
   NzSpaceModule,
   NzSpinModule,
+  NzStatisticModule,
   NzSwitchModule,
   NzTableModule,
   NzTabsModule,
@@ -216,6 +220,7 @@ export function getBaseUrl() {
     KeyHandlerDirective,
     AreaComponent,
     AppComponent,
+    CellComponent,
     FightLineComponent,
     ToolbarComponent,
     //    BossTemplateComponent,
@@ -284,7 +289,7 @@ export function getBaseUrl() {
   entryComponents: [
     ViewComponent, FilterComponent, SettingsFilterComponent, AreaComponent, SettingsViewComponent, PingComponent, SingleAbilityComponent,
     SingleAttackComponent, MultipleAbilityComponent, MultipleAttackComponent, SyncSettingsComponent, JobComponent, JobAbilityComponent, SidepanelComponent,
-    DownTimeComponent, PlanAreaComponent, SyncDowntimeComponent,
+    DownTimeComponent, PlanAreaComponent, SyncDowntimeComponent,CellComponent,
     ...DialogsModuleComponents
   ],
   bootstrap: [AppComponent]
