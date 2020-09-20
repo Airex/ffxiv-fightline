@@ -1,4 +1,4 @@
-import { ExportTemplate, IExportResultSet, IExportColumn, IExportRow, ITextCell } from "../BaseExportTemplate"
+import { ExportTemplate, IExportResultSet, IExportColumn, IExportRow } from "../BaseExportTemplate"
 import * as Models from "../Models";
 
 export class FirstTemplate extends ExportTemplate {
@@ -12,8 +12,8 @@ export class FirstTemplate extends ExportTemplate {
       .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
       .map(it => <IExportRow>{
         cells: [
-          <ITextCell>{ text: it.offset, type: "text" },
-          <ITextCell>{ text: it.name, type: "text" }
+          this.text({ text: it.offset }),
+          this.text({ text: it.name })
         ]
       });
     return <IExportResultSet>{

@@ -24,12 +24,12 @@ export abstract class ExportTemplate {
       Utils.getDateFromOffset(end, this.startDate) >= point;
   }
 
-  protected text(input: Partial<ITextCell>): ITextCell {
-    return <ITextCell>{...input, type: "text"};
+  protected text(input: Partial<IExportItem & IExportCell>): IExportCell {
+    return <IExportCell>{ items: [<IExportItem>{ ...<IExportItem>input, visible: true }], ...<IExportCell>input };
   }
 
-  protected items(input: Partial<IItemsCell>): IItemsCell {
-    return <IItemsCell>{ ...input, type: "items" };
+  protected items(items: Partial<IExportItem>[], cell: Partial<IExportCell>): IExportCell {
+    return <IExportCell>{ items: items.map(it => <IExportItem>{ ...it, visible: true }), ...cell };
   }
 }
 
@@ -37,6 +37,7 @@ export interface IExportResultSet {
   columns: IExportColumn[];
   rows: IExportRow[];
   title: string;
+  filterByFirstEntry: boolean;
 }
 
 export interface IExportColumn {
@@ -46,8 +47,9 @@ export interface IExportColumn {
   align?: string;
   refId?: string;
   cursor?: string;
-  listOfFilter?: { text: string; value: any; byDefault ?: boolean }[];
+  listOfFilter?: { text: string; value: any; byDefault?: boolean }[];
   filterFn?: (a: any, data: any) => boolean;
+  name?: string;
 }
 
 export interface IExportRow {
@@ -56,22 +58,18 @@ export interface IExportRow {
 }
 
 export interface IExportCell {
-  type: string;
-  align?:string;
-  refId?: string;
+  items: IExportItem[];
+  align?: string;
+  disableUnique?: boolean;
   colorFn?: (data) => string;
   bgRefIdFn?: (data) => string;
 }
 
-export interface ITextCell extends IExportCell {
-  type: 'text';
+export interface IExportItem {
+  refId?: string;
   text: string;
   icon?: string;
   color?: string;
-}
-
-export interface IItemsCell extends IExportCell {
-  type: 'items',
-  items: ITextCell[]
+  visible?: boolean;
 }
 

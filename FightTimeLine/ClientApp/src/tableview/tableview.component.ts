@@ -11,7 +11,7 @@ import { NgProgressComponent } from "ngx-progressbar"
 import { EachRowOneSecondTemplate } from "../core/ExportTemplates/EachRowOneSecondTemplate"
 import { BossAttackDefensiveTemplate } from "../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { ExportTemplate } from "../core/BaseExportTemplate"
-import { IExportResultSet, IExportColumn } from "../core/BaseExportTemplate"
+import { IExportResultSet, IExportColumn, IExportCell, IExportRow } from "../core/BaseExportTemplate"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
 
@@ -41,8 +41,11 @@ export class TableViewComponent implements OnInit, OnDestroy {
   set: IExportResultSet = {
     columns: [],
     rows: [],
-    title: ""
+    title: "",
+    filterByFirstEntry: false
   };
+
+  fitered: IExportRow[] = [];
 
   pagesize = Number.MAX_VALUE;
 
@@ -104,6 +107,43 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  filterData = {};
+
+  filterChange(event: any, column: string) {
+    if (column) {
+      this.filterData[column] = event;
+    }
+    const cellFilter = this.filterCell();
+    this.fitered = this.set.rows.filter(row => {
+      const visible = this.set.columns.every(c => {
+        return !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row)
+      });
+
+      if (visible)
+        row.cells.forEach(cell => cellFilter(cell));
+
+      return visible;
+    });
+  }
+
+
+  filterCell() {
+    let unique = new Set();
+    const fn = (cell: IExportCell) => {
+      if (cell.disableUnique) return;
+      cell.items.forEach(it => {
+        if (!it.refId) return;
+        if (unique.has(it.refId)) {
+          it.visible = false;
+        } else {
+          it.visible = true;
+          unique.add(it.refId)
+        }
+      });
+    };
+    return fn;
+  }
+
   ngOnInit(): void {
     this.visStorage.clear();
     this.fightLineController = new FightTimeLineController.FightTimeLineController(
@@ -148,10 +188,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  initTable() {
-
-  }
-
   load(id, template) {
     this.dialogService.executeWithLoading(ref => {
       this.fightService.getFight(id).subscribe((fight: M.IFight) => {
@@ -163,6 +199,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
               const serializer = this.fightLineController.createSerializer()
               const exported = serializer.serializeForExport();
               this.set = this.templates[template.toLowerCase()].build(exported, this.presenterManager) as IExportResultSet;
+              this.filterChange(null, null);
 
               ref.close();
             },
@@ -196,7 +233,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     return "";
   }
 
-  
+
 
   trackByName(_: number, item: IExportColumn): string {
     return item.text;

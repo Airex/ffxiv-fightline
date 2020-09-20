@@ -1,13 +1,9 @@
-<ng-container [ngSwitch]="input.type">
-  <ng-container *ngSwitchCase="'text'">
-    <nz-tag [nzColor]="input.color"  (click)="select(input.refId, $event)">
-      <div style="margin: 0 2px 0 2px">
-        <img class="abilityIcon" *ngIf="input.icon" [src]="input.icon"/>
-        {{input.text}}
-      </div>
-    </nz-tag>
-  </ng-container>
-  <ng-container *ngSwitchCase="'items'">
-    <cell [input]="d" *ngFor="let d of input.items" (selected)="select($event)"></cell>
-  </ng-container>
+
+<ng-container *ngFor="let d of input.items">
+<nz-tag [nzColor]="d.color" (click)="select(d.refId, $event)" *ngIf="d.visible" >
+  <div style="margin: 0 2px 0 2px">
+    <img class="abilityIcon" *ngIf="d.icon" [src]="d.icon" />
+    {{d.text}}
+  </div>
+</nz-tag>
 </ng-container>

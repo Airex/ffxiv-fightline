@@ -26,7 +26,8 @@ export class TableViewDialog implements OnInit {
   set: IExportResultSet = {
     rows: [],
     columns: [],
-    title: ""
+    title: "",
+    filterByFirstEntry: false
   };
   loading = false;
   templates: ExportTemplate[] = [

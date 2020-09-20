@@ -11,7 +11,7 @@ export class CellComponent implements OnInit, OnDestroy {
 
 
   @Input("input") input: IExportCell;
-  @Output("selected") selected: EventEmitter<string>= new EventEmitter<string>();
+  @Output("selected") selected = new EventEmitter<string>();
 
   public constructor() {
   }
