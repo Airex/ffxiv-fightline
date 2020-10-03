@@ -24,7 +24,7 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     private xivapi: X.XivapiService,
     private sanitizer: DomSanitizer,
     private dispatcher: S.DispatcherService,
-    @Inject(SIDEPANEL_DATA) private data: SidepanelParams
+    @Inject(SIDEPANEL_DATA) public data: SidepanelParams
     ) {
     this.items = this.data.items;
     this.holders = this.data.holders;

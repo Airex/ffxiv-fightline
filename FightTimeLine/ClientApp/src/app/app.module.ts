@@ -35,6 +35,7 @@ import { MultipleAttackComponent } from "../sidepanel/components/multipleAttack/
 import { JobComponent } from "../sidepanel/components/job/job.component";
 import { JobAbilityComponent } from "../sidepanel/components/jobAbility/jobAbility.component";
 import { DownTimeComponent } from "../sidepanel/components/downtime/downtime.component";
+import { MultipleDownTimeComponent } from "../sidepanel/components/multipleDowntime/multipleDowntime.component";
 import { AreaComponent } from "../sidepanel/components/area/area.component";
 import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
 import * as SocialLogins from "angularx-social-login";
@@ -246,6 +247,7 @@ export function getBaseUrl() {
     MultipleAttackComponent,
     JobComponent,
     JobAbilityComponent,
+    MultipleDownTimeComponent,
     DownTimeComponent,
     SyncSettingsComponent,
     SyncDowntimeComponent,
@@ -289,7 +291,7 @@ export function getBaseUrl() {
   entryComponents: [
     ViewComponent, FilterComponent, SettingsFilterComponent, AreaComponent, SettingsViewComponent, PingComponent, SingleAbilityComponent,
     SingleAttackComponent, MultipleAbilityComponent, MultipleAttackComponent, SyncSettingsComponent, JobComponent, JobAbilityComponent, SidepanelComponent,
-    DownTimeComponent, PlanAreaComponent, SyncDowntimeComponent,CellComponent,
+    DownTimeComponent, PlanAreaComponent, SyncDowntimeComponent,CellComponent,MultipleDownTimeComponent,
     ...DialogsModuleComponents
   ],
   bootstrap: [AppComponent]

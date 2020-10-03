@@ -1,0 +1,22 @@
+<nz-space nzDirection="vertical">
+  <nz-space-item>
+    <span class="header">Downtimes</span>
+  </nz-space-item>
+  <nz-space-item>
+    <nz-list #parses [nzDataSource]="its" [nzRenderItem]="item" nzSize="small">
+      <ng-template #item let-item>
+        <nz-list-item (click)="onSelectClick(item)" [ngClass]="{downtime:true}" [ngStyle]="{'background-color': item.color}">
+          <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="nzDescription">
+            <ng-template #nzTitle>
+              <strong style="font-size: large">{{item.comment}}</strong><span class="example-spacer"></span>
+            </ng-template>
+            <ng-template #nzDescription>
+              <i nz-icon nzType="clock-circle" theme="outline"></i><span class="time">{{formatDate(item.start)}}-{{formatDate(item.end)}}</span>
+            </ng-template>
+          </nz-list-item-meta>
+        </nz-list-item>
+      </ng-template>
+    </nz-list>
+  </nz-space-item>
+
+</nz-space>

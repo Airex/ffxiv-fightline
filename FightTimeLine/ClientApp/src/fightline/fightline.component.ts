@@ -909,6 +909,12 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.setSidePanel(null);
     });
 
+    dispatcher.on("Multiple Downtimes Select").subscribe(value => {      
+      this.setSidePanel({
+        items: [value],        
+      });
+    });
+
     dispatcher.on("BossTemplates Load").subscribe(async value => {
       this.dialogService.executeWithLoading(async ref => {
         const stop = (ref: { close: () => void; }) => {

@@ -22,7 +22,7 @@
     Click below to change color
   </nz-space-item>
   <nz-space-item>
-    <div class="color-pikcer" [cpDisabled]="data.mode!=='default'"  style="" [(colorPicker)]="color" [cpOKButton]="true" cpDialogDisplay="inline" (colorPickerSelect)="setColor($event);" [style.background]="color"></div>
+    <div class="color-pikcer" [cpDisabled]="data.mode!=='default'" [(colorPicker)]="color" [cpOKButton]="true" cpDialogDisplay="inline" (colorPickerSelect)="setColor($event);" [style.background]="color"></div>
   </nz-space-item>
   <nz-space-item *ngIf="data.mode ==='default'">
     <button nz-button nzType="primary" (click)="remove(it)" nzDanger>Remove</button>

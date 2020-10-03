@@ -4,6 +4,7 @@ import { SingleAbilityComponent } from "./components/singleAbility/singleAbility
 import { SingleAttackComponent } from "./components/singleAttack/singleAttack.component";
 import { MultipleAbilityComponent } from "./components/multipleAbility/multipleAbility.component";
 import { MultipleAttackComponent } from "./components/multipleAttack/multipleAttack.component";
+import { MultipleDownTimeComponent } from "./components/multipleDowntime/multipleDowntime.component";
 import { ISidePanelComponent, SidepanelParams, SIDEPANEL_DATA } from "./components/ISidePanelComponent";
 import * as Jobcomponent from "./components/job/job.component";
 import * as JobAbilitycomponent from "./components/jobAbility/jobAbility.component";
@@ -86,7 +87,12 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
           component = new ComponentPortal(JobAbilitycomponent.JobAbilityComponent, null, injector);
           break;
         case "downtime":
-          component = new ComponentPortal(DownTimeComponent, null, injector);
+          if (items.length === 1) {
+            component = new ComponentPortal(DownTimeComponent, null, injector);
+          } else if (items.length > 1) {
+            component = new ComponentPortal(MultipleDownTimeComponent, null, injector);
+          }
+          
           break;
       }
     }

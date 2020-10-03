@@ -20,7 +20,7 @@
         <nz-form-item>
           <nz-form-control nzSpan="12" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.damageType.errors?'error':'success'" nzErrorTip="You must select a value">
             <nz-radio-group formControlName="damageType" nzPlaceHolder="Damage type" [nzButtonStyle]="'solid'">
-              <label nz-radio-button [nzValue]="0" nzLabel="None">None</label>
+              <label nz-radio-button [nzValue]="0" nzLabel="Unaspected">Unaspected</label>
               <label nz-radio-button [nzValue]="1" nzLabel="Physical">Physical</label>
               <label nz-radio-button [nzValue]="2" nzLabel="Magical">Magical</label>
             </nz-radio-group>
