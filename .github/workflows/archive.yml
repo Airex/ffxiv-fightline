@@ -37,4 +37,4 @@ jobs:
           server: ftp://ftp-eu.site4now.net/${{ secrets.FTP_FOLDER }}/ClientApp/dist
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./FightTimeLine/ClientApp/dist          
+          local-dir: ./FightTimeLine/ClientApp/dist/
