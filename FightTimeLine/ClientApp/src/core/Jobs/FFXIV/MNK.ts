@@ -46,26 +46,30 @@ export const MNK: IJob = {
     {
       name: "Tornado Kick",
       duration: 0,
-      cooldown: 10,
+      cooldown: 45,
       xivDbId: "3543",
       icon: ("31_Monk/3543_Tornado Kick"),
       abilityType: AbilityType.Damage,
     },
     {
       name: "Riddle of Earth",
-      duration: 30,
-      cooldown: 60,
+      duration: 6,
+      cooldown: 30,
       xivDbId: "7394",
       icon: ("31_Monk/7394_Riddle Of Earth"),
       abilityType: AbilityType.Utility,
+      charges: {
+        count: 3,
+        cooldown: 30
+      }
     },
     {
       name: "Riddle of Fire",
-      duration: 30,
-      cooldown: 60,
+      duration: 20,
+      cooldown: 90,
       xivDbId: "7395",
       icon: ("31_Monk/7395_Riddle Of Fire"),
-      abilityType: AbilityType.Utility,
+      abilityType: AbilityType.SelfDamageBuff,
     },
     {
       name: "Brotherhood",
