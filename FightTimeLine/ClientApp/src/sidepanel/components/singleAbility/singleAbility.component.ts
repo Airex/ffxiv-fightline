@@ -27,7 +27,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     private xivapi: X.XivapiService,
     private sanitizer: DomSanitizer,
     private dispatcher: S.DispatcherService,
-    @Inject(SIDEPANEL_DATA) private data: SidepanelParams
+    @Inject(SIDEPANEL_DATA) public data: SidepanelParams
   ) {
 
     this.items = this.data.items;
