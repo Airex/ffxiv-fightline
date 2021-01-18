@@ -8,6 +8,22 @@ export const SCH: IJob = {
   icon: ("JobIcons/Scholar_Icon_10"),
   abilities: [
     {
+      name: "Succor",
+      duration: 30,
+      cooldown: 30,
+      xivDbId: "186",
+      icon: ("62_PetsFairy/0186_Succor"),
+      abilityType: AbilityType.PartyShield,
+    },
+    {
+      name: "Adloquium",
+      duration: 30,
+      cooldown: 30,
+      xivDbId: "185",
+      icon: ("62_PetsFairy/0185_Adloquium"),
+      abilityType: AbilityType.PartyShield,
+    },
+    {
       name: "Whispering Dawn",
       duration: 21,
       cooldown: 60,
