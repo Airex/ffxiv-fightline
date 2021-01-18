@@ -62,6 +62,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
                 (((a.type & 1) === 1) ||
                   ((a.type & 256) === 256) ||
                   ((a.type & 1024) === 1024) ||
+                  ((a.type & 4096) === 4096) ||
                   ((a.type & 2048) === 2048)) &&
                 this.isOffsetInRange(it.offset, a.start, this.offsetFromDuration(a.start, a.duration)))
               .map(a => {
