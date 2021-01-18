@@ -48,7 +48,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
 
     if (this.it.ability.ability.settings) {
       for (let d of this.it.ability.ability.settings) {
-        const value = this.it.settings && this.it.settings.find((it) => it.name === d.name);
+        const value = this.it.getSettingData(d.name);
         groups[d.name] = new FormControl(value ? value.value : d.default)
       }
       this.jobs = this.data.holders.jobs.getAll();
@@ -130,7 +130,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
 
     if (this.it.ability.ability.settings) {
       for (let d of this.it.ability.ability.settings) {
-        const value = this.it.settings && this.it.settings.find((it) => it.name === d.name);
+        const value = this.it.getSettingData(d.name);
         this.form.controls[d.name].setValue(value ? value.value : d.default);
       }
       this.jobs = this.data.holders.jobs.getAll();
