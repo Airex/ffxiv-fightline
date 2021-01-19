@@ -4,7 +4,7 @@ import * as PresentationManager from "./PresentationManager";
 
 export abstract class ExportTemplate {
   public startDate = new Date(946677600000);
-  name: string;
+  public name: string;
   abstract build(data: Models.ExportData, presenter: PresentationManager.PresenterManager): IExportResultSet;
 
   offsetCompareFn(a: string, b: string): number {
@@ -29,7 +29,7 @@ export abstract class ExportTemplate {
   }
 
   protected items(items: Partial<IExportItem>[], cell: Partial<IExportCell>): IExportCell {
-    return <IExportCell>{ items: items.map(it => <IExportItem>{ ...it, visible: true }), ...cell };
+    return <IExportCell>{ items: items.map((it: IExportItem) => <IExportItem>{ ...it, visible: true }), ...cell };
   }
 }
 
@@ -48,7 +48,7 @@ export interface IExportColumn {
   refId?: string;
   cursor?: string;
   listOfFilter?: { text: string; value: any; byDefault?: boolean }[];
-  filterFn?: (a: any, data: any) => boolean;
+  filterFn?: (a: any, data: any, c:IExportColumn) => boolean;
   name?: string;
 }
 

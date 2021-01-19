@@ -80,11 +80,16 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
         {
           text: "time",
           name: "time",
-          listOfFilter: data.data.boss.downTimes.map(d => ({ text: d.comment, value: d, byDefault: true })),
-          filterFn: (a, d) => {
-            return a.some(b => Utils.inRange(b.start, b.end, d.filterData.offset));
+          align: "center",
+          listOfFilter: data.data.boss.downTimes.map(d => ({ text: d.comment, value: d, byDefault: true })).concat({ text: "Other", value: undefined, byDefault: true }),
+          filterFn: (data, row, col) => {
+            const dt = col.listOfFilter.find(item => item.value && Utils.inRange(item.value.start, item.value.end, row.filterData.offset));
+            if (!dt) {
+              return data.some(item => item.text === "Other");
+            }
+            
+            return data.some(item => item.text === dt.text);
           },
-          align: "center"
         },
         {
           name: "boss",
