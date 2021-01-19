@@ -16,7 +16,6 @@ import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
 
 import { VisStorageService } from "../services";
-import * as UndoRedo from "../core/UndoRedo";
 import * as FightTimeLineController from "../core/FightTimeLineController";
 import * as Generators from "../core/Generators";
 import * as ToolsManager from "../core/ToolsManager";
@@ -45,7 +44,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     filterByFirstEntry: false
   };
 
-  fitered: IExportRow[] = [];
+  filtered: IExportRow[] = [];
 
   pagesize = Number.MAX_VALUE;
 
@@ -114,9 +113,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
       this.filterData[column] = event;
     }
     const cellFilter = this.filterCell();
-    this.fitered = this.set.rows.filter(row => {
+    this.filtered = this.set.rows.filter(row => {
       const visible = this.set.columns.every(c => {
-        return !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row)
+        return !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c)
       });
 
       if (visible)
@@ -192,22 +191,21 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.dialogService.executeWithLoading(ref => {
       this.fightService.getFight(id).subscribe((fight: M.IFight) => {
         if (fight) {
-          this.fightService.getCommands(id, new Date(fight.dateModified).valueOf())
-            .subscribe(value => {
-              this.fightLineController.loadFight(fight, value.map(cmd => JSON.parse(cmd.data)));
+          this.fightService.getCommands(id, new Date(fight.dateModified).valueOf()).subscribe(value => {
+            this.fightLineController.loadFight(fight, value.map(cmd => JSON.parse(cmd.data)));
 
-              const serializer = this.fightLineController.createSerializer()
-              const exported = serializer.serializeForExport();
-              this.set = this.templates[template.toLowerCase()].build(exported, this.presenterManager) as IExportResultSet;
-              this.filterChange(null, null);
+            const serializer = this.fightLineController.createSerializer()
+            const exported = serializer.serializeForExport();
+            this.set = this.templates[template.toLowerCase()].build(exported, this.presenterManager) as IExportResultSet;
+            this.filterChange(null, null);
 
+            ref.close();
+          },
+            error => {
+              console.log(error);
+              this.notification.error("Unable to load data");
               ref.close();
-            },
-              error => {
-                console.log(error);
-                this.notification.error("Unable to load data");
-                ref.close();
-              });
+            });
         } else {
           ref.close();
         }

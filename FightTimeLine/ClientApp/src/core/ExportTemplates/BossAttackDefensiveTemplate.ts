@@ -84,13 +84,13 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
           listOfFilter: data.data.boss.downTimes
             .map(d => ({ text: d.comment, value: d, byDefault: true }))
             .concat({ text: "Other", value: undefined, byDefault: true }),
-          filterFn: (data, row, col) => {
+          filterFn: (d, row, col) => {
             const dt = col && col.listOfFilter && col.listOfFilter.find(item => item.value && Utils.inRange(item.value.start, item.value.end, row.filterData.offset));
             if (!dt) {
-              return data.some(item => item.text === "Other");
+              return d.some(item => item.text === "Other");
             }
             
-            return data.some(item => item.text === dt.text);
+            return d.some(item => item.text === dt.text);
           },
         },
         {
