@@ -153,7 +153,7 @@ export const SCH: IJob = {
       cooldown: 30,
       xivDbId: "16546",
       icon: ("Scholar/icon_30"),
-      abilityType: AbilityType.Healing,
+      abilityType: AbilityType.Healing | AbilityType.PartyShield,
       charges: {
         count: 2,
         cooldown: 20
