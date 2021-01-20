@@ -36,7 +36,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let row of fitered">
+      <tr *ngFor="let row of filtered">
         <td *ngFor="let cell of row.cells"
             [nzAlign]="cell.align || 'left'"
             [ngStyle]="{'background-color': cell.colorFn && cell.colorFn(row.filterData) || ''}"

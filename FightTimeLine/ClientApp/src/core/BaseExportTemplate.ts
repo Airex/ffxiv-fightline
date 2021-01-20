@@ -63,6 +63,7 @@ export interface IExportCell {
   disableUnique?: boolean;
   colorFn?: (data) => string;
   bgRefIdFn?: (data) => string;
+  noTag?: boolean;
 }
 
 export interface IExportItem {

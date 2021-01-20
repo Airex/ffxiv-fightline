@@ -1,9 +1,12 @@
-
 <ng-container *ngFor="let d of input.items">
-<nz-tag [nzColor]="d.color" (click)="select(d.refId, $event)" *ngIf="d.visible" >
-  <div style="margin: 0 2px 0 2px">
-    <img class="abilityIcon" *ngIf="d.icon" [src]="d.icon" />
-    {{d.text}}
-  </div>
-</nz-tag>
+  <nz-tag [nzColor]="d.color"
+          (click)="select(d.refId, $event)"
+          *ngIf="d.visible">
+    <div style="margin: 0 2px 0 2px">
+      <img class="abilityIcon"
+           *ngIf="d.icon"
+           [src]="d.icon" />
+      {{d.text}}
+    </div>
+  </nz-tag>
 </ng-container>

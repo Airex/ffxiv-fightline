@@ -519,6 +519,7 @@ export class ExportData {
         type: number;
         offset: string;
         tags: string[];
+        desc: string;
       }[];
       downTimes: {
         id: string;

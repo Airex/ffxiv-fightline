@@ -122,7 +122,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
         row.cells.forEach(cell => cellFilter(cell));
 
       return visible;
-    });
+    });    
   }
 
 

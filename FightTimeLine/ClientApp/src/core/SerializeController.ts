@@ -134,15 +134,14 @@ export class SerializeController {
       data: {
         boss: {
           attacks: this.holders.bossAttacks.getAll()
-            .map((ab: BossAttackMap) => {
-              return {
-                id: ab.id,
-                name: ab.attack.name,
-                type: ab.attack.type,
-                tags: ab.attack.tags,
-                offset: ab.offset
-              };
-            }),
+            .map((ab: BossAttackMap) => ({
+              id: ab.id,
+              name: ab.attack.name,
+              type: ab.attack.type,
+              tags: ab.attack.tags,
+              offset: ab.offset,
+              desc: ab.attack.description
+            })),
           downTimes: this.holders.bossDownTime.getAll().map((it) => <any>{
             id: it.id,
             start: Utils.formatTime(it.start),
@@ -152,13 +151,11 @@ export class SerializeController {
           })
         },
         bossTargets: this.holders.bossTargets.getAll()
-          .map((t) => {
-            return {
-              target: t.target,
-              start: Utils.formatTime(t.start as Date),
-              end: Utils.formatTime(t.end as Date)
-            };
-          }),
+          .map((t) => ({
+            target: t.target,
+            start: Utils.formatTime(t.start as Date),
+            end: Utils.formatTime(t.end as Date)
+          })),
         initialTarget: this.holders.bossTargets.initialBossTarget,
         jobs: this.holders.jobs.getAll().map((value: JobMap, index: number) => <any>{
           id: value.id,

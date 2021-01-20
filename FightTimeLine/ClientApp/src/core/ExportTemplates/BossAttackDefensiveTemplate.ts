@@ -69,7 +69,12 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
                 used.push(a);
                 return <IExportItem>{ text: a.ability as string, icon: a.icon as string, refId: a.id as string };
               })
-            , {}))
+            , {})),
+          // this.text({
+          //   text: it.desc,
+          //   noTag: true       
+          // })
+
         ],
         filterData: it
       });
@@ -83,14 +88,16 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
           align: "center",
           listOfFilter: data.data.boss.downTimes
             .map(d => ({ text: d.comment, value: d, byDefault: true }))
-            .concat({ text: "Other", value: undefined, byDefault: true }),
-          filterFn: (d, row, col) => {
-            const dt = col && col.listOfFilter && col.listOfFilter.find(item => item.value && Utils.inRange(item.value.start, item.value.end, row.filterData.offset));
-            if (!dt) {
-              return d.some(item => item.text === "Other");
-            }
-            
-            return d.some(item => item.text === dt.text);
+            .concat({ text: "Other", value: <any>{ comment: "Other" }, byDefault: true }),
+          filterFn: (data, row, col) => {
+            // console.debug(col)
+            // console.debug(data);
+            // console.debug(row);
+            const found = col && col.listOfFilter && col.listOfFilter.find(item => item.value && Utils.inRange(item.value.start, item.value.end, row.filterData.offset))
+            if (found)
+              return data.some(item => item && item.comment === found.value.comment);
+
+            return data.some(item => item && item.comment === "Other");
           },
         },
         {
@@ -106,10 +113,15 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
           text: "target",
           align: "center"
         },
-        ...jobs.map(it => <IExportColumn>{ text: it.name, icon: it.icon, refId: it.id, cursor: 'pointer' })],
+        ...jobs.map(it => <IExportColumn>{ text: it.name, icon: it.icon, refId: it.id, cursor: 'pointer' }),
+        // {          
+        //   text: "Description",          
+        // },
+      ],
       rows: rows,
       title: this.name,
       filterByFirstEntry: true
     };
   }
 }
+
