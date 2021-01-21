@@ -1,9 +1,10 @@
-
 <toolbar showTitle="true"
          [authenticated]="authenticationService.authenticated"
          [username]="authenticationService.username">
 </toolbar>
-<div class="main-content noselect" style="text-align: center; height: calc(100% - 54px); max-height: calc(100% - 54px); overflow: auto" customScroll>
+<div class="main-content noselect"
+     style="text-align: center; height: calc(100% - 54px); max-height: calc(100% - 54px); overflow: auto"
+     customScroll>
   <div style="width: 90%; min-width: 800px; max-width: 1400px; margin-top: 15px; display: inline-block">
     <div style="width: 90%; min-width: 800px; max-width: 1400px; margin-top: 15px; display: inline-block">
       <nz-card [nzTitle]="header">
@@ -12,35 +13,74 @@
             What would you like to do?
           </div>
         </ng-template>
-        <div nz-row rowHeight="90%">
-          <div nz-col nzSpan="16">
+        <div nz-row
+             rowHeight="90%">
+          <div nz-col
+               nzSpan="16">
             <div class="home-column">
               <div class="card-subtitle">
                 Open recent
               </div>
-              <div customScroll class="recentList">
-                <nz-list [nzDataSource]="container.pinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" *ngIf="container.pinned.length>0">
+              <div customScroll
+                   class="recentList">
+                <nz-list [nzDataSource]="container.pinned"
+                         [nzRenderItem]="item"
+                         [nzItemLayout]="'horizontal'"
+                         *ngIf="container.pinned.length>0">
                   <nz-list-header>Pinned</nz-list-header>
-                  <ng-template #item let-item>
+                  <ng-template #item
+                               let-item>
                     <nz-list-item [nzActions]="[pinAction]">
                       <ng-template #pinAction>
-                        <a nz-dropdown nzTrigger="click" nzTooltipTrigger="hover" [nzDropdownMenu]="menu" nz-tooltip nzTooltipTitle="Open as table"><i class="pin" nz-icon nzType="hdd" nzTheme="twotone"></i></a>
-                        <a nz-tooltip nzTooltipTitle="Unpint" (click)="unpin($event, item)"><i class="pin pinned" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
-                        <a nz-tooltip nzTooltipTitle="Remove" nz-popconfirm nzPopconfirmTitle="Are you sure?" (nzOnConfirm)="delete(item,$event)"><i class="pin" nz-icon nzType="delete" nzTheme="twotone"></i></a>
+                        <a nz-dropdown
+                           nzTrigger="click"
+                           nzTooltipTrigger="hover"
+                           [nzDropdownMenu]="menu"
+                           nz-tooltip
+                           nzTooltipTitle="Open as table"><i class="pin"
+                             nz-icon
+                             nzType="hdd"
+                             nzTheme="twotone"></i></a>
+                        <a nz-tooltip
+                           nzTooltipTitle="Unpint"
+                           (click)="unpin($event, item)"><i class="pin pinned"
+                             nz-icon
+                             nzType="pushpin"
+                             nzTheme="twotone"></i></a>
+                        <a nz-tooltip
+                           nzTooltipTitle="Remove"
+                           nz-popconfirm
+                           nzPopconfirmTitle="Are you sure?"
+                           (nzOnConfirm)="delete(item,$event)"><i class="pin"
+                             nz-icon
+                             nzType="delete"
+                             nzTheme="twotone"></i></a>
                       </ng-template>
                       <nz-dropdown-menu #menu="nzDropdownMenu">
                         <ul nz-menu>
-                          <li nz-menu-item (click)="onOpenTable(item,'defence')">Defensives</li>
+                          <li nz-menu-item
+                              (click)="onOpenTable(item,'defence')">Defensives</li>
                         </ul>
                       </nz-dropdown-menu>
-                      <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription" (click)="onClick(item.url)">
+                      <nz-list-item-meta [nzTitle]="nzTitle"
+                                         [nzAvatar]="nzAvatar"
+                                         [nzDescription]="nzDescription"
+                                         (click)="onClick(item.url)">
                         <ng-template #nzTitle>
                           {{item.name}}
                         </ng-template>
                         <ng-template #nzAvatar>
                           <div [ngSwitch]="item.source">
-                            <img *ngSwitchCase="0" width="48px" height="48px" src="https://dmszsuqyoe6y6.cloudfront.net/img/ff/favicon.png" alt="">
-                            <img *ngSwitchDefault width="48px" height="48px" src="https://xivapi.com/c/BNpcName.png" alt="">
+                            <img *ngSwitchCase="0"
+                                 width="48px"
+                                 height="48px"
+                                 src="https://dmszsuqyoe6y6.cloudfront.net/img/ff/favicon.png"
+                                 alt="">
+                            <img *ngSwitchDefault
+                                 width="48px"
+                                 height="48px"
+                                 src="https://xivapi.com/c/BNpcName.png"
+                                 alt="">
                           </div>
                         </ng-template>
                         <ng-template #nzDescription>
@@ -50,28 +90,63 @@
                     </nz-list-item>
                   </ng-template>
                 </nz-list>
-                <nz-list [nzDataSource]="container.nonpinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
+                <nz-list [nzDataSource]="container.nonpinned"
+                         [nzRenderItem]="item"
+                         [nzItemLayout]="'horizontal'">
                   <nz-list-header>Activities</nz-list-header>
-                  <ng-template #item let-item>
+                  <ng-template #item
+                               let-item>
                     <nz-list-item [nzActions]="[unpinAction]">
                       <ng-template #unpinAction>
-                        <a nz-dropdown nzTrigger="click" nzTooltipTrigger="hover" [nzDropdownMenu]="menu1" nz-tooltip nzTooltipTitle="Open as table"><i class="pin" nz-icon nzType="hdd" nzTheme="twotone"></i></a>
-                        <a nz-tooltip nzTooltipTitle="Pin" (click)="pin($event, item)"><i class="pin" nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
-                        <a nz-tooltip nzTooltipTitle="Remove" nz-popconfirm nzPopconfirmTitle="Are you sure?" (nzOnConfirm)="delete(item,$event)"><i class="pin" nz-icon nzType="delete" nzTheme="twotone"></i></a>
+                        <a nz-dropdown
+                           nzTrigger="click"
+                           nzTooltipTrigger="hover"
+                           [nzDropdownMenu]="menu1"
+                           nz-tooltip
+                           nzTooltipTitle="Open as table"><i class="pin"
+                             nz-icon
+                             nzType="hdd"
+                             nzTheme="twotone"></i></a>
+                        <a nz-tooltip
+                           nzTooltipTitle="Pin"
+                           (click)="pin($event, item)"><i class="pin"
+                             nz-icon
+                             nzType="pushpin"
+                             nzTheme="twotone"></i></a>
+                        <a nz-tooltip
+                           nzTooltipTitle="Remove"
+                           nz-popconfirm
+                           nzPopconfirmTitle="Are you sure?"
+                           (nzOnConfirm)="delete(item,$event)"><i class="pin"
+                             nz-icon
+                             nzType="delete"
+                             nzTheme="twotone"></i></a>
                       </ng-template>
                       <nz-dropdown-menu #menu1="nzDropdownMenu">
                         <ul nz-menu>
-                          <li nz-menu-item (click)="onOpenTable(item,'defence')">Defensives</li>
+                          <li nz-menu-item
+                              (click)="onOpenTable(item,'defence')">Defensives</li>
                         </ul>
                       </nz-dropdown-menu>
-                      <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription" (click)="onClick(item.url)">
+                      <nz-list-item-meta [nzTitle]="nzTitle"
+                                         [nzAvatar]="nzAvatar"
+                                         [nzDescription]="nzDescription"
+                                         (click)="onClick(item.url)">
                         <ng-template #nzTitle>
                           {{item.name}}
                         </ng-template>
                         <ng-template #nzAvatar>
                           <div [ngSwitch]="item.source">
-                            <img *ngSwitchCase="0" width="48px" height="48px" src="https://dmszsuqyoe6y6.cloudfront.net/img/ff/favicon.png" alt="">
-                            <img *ngSwitchDefault width="48px" height="48px" src="https://xivapi.com/c/BNpcName.png" alt="">
+                            <img *ngSwitchCase="0"
+                                 width="48px"
+                                 height="48px"
+                                 src="https://dmszsuqyoe6y6.cloudfront.net/img/ff/favicon.png"
+                                 alt="">
+                            <img *ngSwitchDefault
+                                 width="48px"
+                                 height="48px"
+                                 src="https://xivapi.com/c/BNpcName.png"
+                                 alt="">
                           </div>
                         </ng-template>
                         <ng-template #nzDescription>
@@ -84,28 +159,45 @@
               </div>
             </div>
           </div>
-          <div nz-col nzSpan="8" class="home-actions">
+          <div nz-col
+               nzSpan="8"
+               class="home-actions">
             <div class="home-column">
               <div class="card-subtitle">
                 Get started
               </div>
               <div>
-                <button nz-button class="action-button" (click)="showHelp()">Open Help</button>
+                <button nz-button
+                        class="action-button"
+                        (click)="showHelp()">Open Help</button>
               </div>
               <div *ngIf="gameService.showImport">
-                <button nz-button color="primary" class="action-button" (click)="importFromFFLogs()">Import From FFLogs</button>
+                <button nz-button
+                        color="primary"
+                        class="action-button"
+                        (click)="importFromFFLogs()">Import From FFLogs</button>
                 <div style="text-align: right;margin-top: 3px;margin-right: 23px;">
-                  <a target="_blank" [href]="'https://www.fflogs.com/'+ fflogsExtraPath" style="border-bottom-style: dotted;border-bottom-width: thin;">Open FFLogs</a>
+                  <a target="_blank"
+                     [href]="'https://www.fflogs.com/'+ fflogsExtraPath"
+                     style="border-bottom-style: dotted;border-bottom-width: thin;">Open FFLogs</a>
                 </div>
               </div>
               <div>
-                <button nz-button [nzType]="authenticationService.authenticated?'primary':'danger'" class="action-button" (click)="load()">Load</button>
+                <button nz-button
+                        [nzType]="authenticationService.authenticated?'primary':'danger'"
+                        class="action-button"
+                        (click)="load()">Load</button>
               </div>
               <div>
-                <button nz-button class="action-button" (click)="bossTemplates()">Boss Templates</button>
+                <button nz-button
+                        class="action-button"
+                        (click)="bossTemplates()">Boss Templates</button>
               </div>
               <div>
-                <button nz-button color="primary" class="action-button" (click)="new()">Start New</button>
+                <button nz-button
+                        color="primary"
+                        class="action-button"
+                        (click)="new()">Start New</button>
               </div>
             </div>
           </div>
@@ -117,8 +209,3 @@
     </div>
   </div>
 </div>
-
-
-
-
-

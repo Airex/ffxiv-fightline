@@ -75,8 +75,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const activityStorage = this.recentService.load();
-    this.container.pinned = activityStorage.activities.filter(ac => ac.pinned);
-    this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned);
+    this.container.pinned = activityStorage.activities.filter(ac => ac.pinned).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+    this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     const settings = this.settingsService.load();
     if (settings.fflogsImport.characterRegion &&
       settings.fflogsImport.characterName &&
@@ -124,9 +124,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl(url);
   }
 
-  onOpenTable(item,name){
-    window.open("/table/"+item.id+"/"+name, "_blank");
-}
+  onOpenTable(item, name) {
+    window.open("/table/" + item.id + "/" + name, "_blank");
+  }
 
   showHelpForFirstTimers(): Promise<void> {
     if (!this.storage.getString("help_shown")) {
