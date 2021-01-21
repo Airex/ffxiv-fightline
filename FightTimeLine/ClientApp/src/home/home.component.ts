@@ -75,8 +75,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const activityStorage = this.recentService.load();
-    this.container.pinned = activityStorage.activities.filter(ac => ac.pinned).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
-    this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
+    this.container.pinned = activityStorage.activities.filter(ac => ac.pinned).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     const settings = this.settingsService.load();
     if (settings.fflogsImport.characterRegion &&
       settings.fflogsImport.characterName &&
