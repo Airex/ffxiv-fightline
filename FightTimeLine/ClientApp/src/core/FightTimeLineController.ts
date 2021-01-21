@@ -725,15 +725,15 @@ export class FightTimeLineController {
 
 
   loadFight(fight: M.IFight, commands?: ICommandData[]): void {
-    if (fight === null || fight === undefined || !fight.data) return;
-    const data = JSON.parse(fight.data) as SerializeController.IFightSerializeData;
+    if (fight === null || fight === undefined) return;
+    const loadedData = fight.data && JSON.parse(fight.data) as SerializeController.IFightSerializeData;
     try {
 
       this.loading = true;
       this.commandStorage.turnOffFireExecuted();
 
       this.data.fight = fight;
-      this.data.importedFrom = data.importedFrom;
+      this.data.importedFrom = loadedData && loadedData.importedFrom;
 
       this.holders.jobs.clear();
       this.holders.abilities.clear();
@@ -745,14 +745,14 @@ export class FightTimeLineController {
       //      this.commandBag.clear();
 
 
-      if (data.boss) {
+      if (loadedData && loadedData.boss) {
         this.holders.bossAttacks.clear();
-        this.loadBoss(data.boss);
-        this.holders.bossAttacks.applyFilter(data.filter.attacks);
+        this.loadBoss(loadedData.boss);
+        this.holders.bossAttacks.applyFilter(loadedData.filter.attacks);
       }
 
-      if (data.jobs) {
-        for (let j of data.jobs.sort((a, b) => a.order - b.order)) {
+      if (loadedData && loadedData.jobs) {
+        for (let j of loadedData.jobs.sort((a, b) => a.order - b.order)) {
           const rid = this.addJob(j.id, j.name, null, j.pet, j.collapsed, false);
           const jh = this.holders.jobs.get(rid);
           if (jh) {
@@ -764,8 +764,8 @@ export class FightTimeLineController {
         }
       }
 
-      if (data.abilityMaps) {
-        for (let it of data.abilityMaps) {
+      if (loadedData && loadedData.abilityMaps) {
+        for (let it of loadedData.abilityMaps) {
           let ab = this.holders.abilities.getByParentAndAbility(it.job, it.name);
           if (ab) {
             if (it.hidden !== undefined && it.hidden !== null) {
@@ -778,8 +778,8 @@ export class FightTimeLineController {
         }
       }
 
-      if (data.abilities)
-        for (let a of data.abilities) {
+      if (loadedData && loadedData.abilities)
+        for (let a of loadedData.abilities) {
           if (a) {
             const abilityMap = this.holders.abilities.getByParentAndAbility(a.job, a.ability);
             if (abilityMap) {
@@ -792,8 +792,8 @@ export class FightTimeLineController {
 
           }
         }
-      if (data.stances)
-        for (let a of data.stances) {
+      if (loadedData && loadedData.stances)
+        for (let a of loadedData.stances) {
           if (a) {
             const abilityMap = this.holders.abilities.getStancesAbility(a.job);
             if (abilityMap) {
@@ -811,29 +811,30 @@ export class FightTimeLineController {
           this.handleRemoteCommandData(c);
         });
       }
-      this.presenterManager.filter = data.filter;
+      if (loadedData)
+        this.presenterManager.filter = loadedData.filter;
 
     } finally {
       this.loading = false;
       this.commandStorage.clear();
     }
-    const jobMap = this.holders.jobs.get(data.initialTarget);
+    const jobMap = this.holders.jobs.get(loadedData.initialTarget);
     if (jobMap)
       this.switchInitialBossTarget(jobMap, false);
     this.recalculateBossTargets();
 
     this.applyFilter();
-    this.applyView(data.view, true);
+    this.applyView(loadedData.view, true);
 
-    if (data.jobs) {
-      for (let j of data.jobs.sort((a, b) => a.order - b.order)) {
+    if (loadedData.jobs) {
+      for (let j of loadedData.jobs.sort((a, b) => a.order - b.order)) {
         if (j.compact !== undefined && j.compact !== null)
           this.toggleCompactView(j.id, j.compact);
       }
     }
 
-    if (data.abilityMaps) {
-      for (let it of data.abilityMaps) {
+    if (loadedData.abilityMaps) {
+      for (let it of loadedData.abilityMaps) {
         let ab = this.holders.abilities.getByParentAndAbility(it.job, it.name);
         if (ab) {
           this.toggleCompactViewAbility(ab.id, it.compact);
@@ -916,11 +917,19 @@ export class FightTimeLineController {
     if (input)
       this.presenterManager.filter = input;
 
-    if (!source || source === 'ability')
-      this.holders.abilities.applyFilter(this.presenterManager.filter.abilities,
+    if (!source || source === 'ability') {
+      if (this.presenterManager.filter && this.presenterManager.filter.abilities){
+      this.holders.abilities.applyFilter(
+        this.presenterManager.filter.abilities,
         (val) => this.holders.itemUsages.filter((item) => item.ability.id === val).length > 0);
-    if (!source || source === 'boss')
-      this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
+      }
+    }
+
+    if (!source || source === 'boss'){
+      if (this.presenterManager.filter && this.presenterManager.filter.attacks){
+        this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
+      }
+    }
 
   }
 

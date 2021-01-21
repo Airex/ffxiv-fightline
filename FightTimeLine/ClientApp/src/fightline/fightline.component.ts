@@ -414,7 +414,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
         .getFight(id)
         .subscribe((fight: M.IFight) => {
           if (fight) {
-
             this.recent.register({
               id: fight.id,
               name: fight.name,
@@ -424,6 +423,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
             const settings = this.settingsService.load();
             this.presenterManager.setSettings(settings);
+            
             if (settings && settings.main && settings.main.defaultView)
               this.fightLineController.applyView(settings.main.defaultView);
             if (settings && settings.main && settings.main.defaultFilter)
