@@ -140,8 +140,8 @@ export class SerializeController {
     const downTimes = this.holders.bossDownTime.getAll()
       .map((it) => <any>{
         id: it.id,
-        start: Utils.formatTime(it.start),
-        end: Utils.formatTime(it.end),
+        start: it.start< it.end? Utils.formatTime(it.start): Utils.formatTime(it.end),
+        end: it.start > it.end? Utils.formatTime(it.start): Utils.formatTime(it.end),
         comment: it.comment,
         color: it.color
       });
