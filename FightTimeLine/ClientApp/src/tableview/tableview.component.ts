@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, ViewChild, NgZone } from "@angular/core";
+import { Component, OnInit, OnDestroy, Inject, ViewChild, NgZone, HostListener } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SettingsService } from "../services/SettingsService"
 import * as S from "../services/index"
@@ -20,6 +20,9 @@ import * as FightTimeLineController from "../core/FightTimeLineController";
 import * as Generators from "../core/Generators";
 import * as ToolsManager from "../core/ToolsManager";
 import * as PresentationManager from "../core/PresentationManager";
+import { ICommandData } from "src/core/UndoRedo";
+
+
 
 
 @Component({
@@ -29,6 +32,9 @@ import * as PresentationManager from "../core/PresentationManager";
 })
 export class TableViewComponent implements OnInit, OnDestroy {
   startDate = new Date(946677600000);
+
+  fightId: string;
+  template: string;
 
   @ViewChild("sidepanel", { static: true })
   sidepanel: SidepanelComponent;
@@ -65,6 +71,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     @Inject(S.authenticationServiceToken) public authenticationService: S.IAuthenticationService,
     private router: Router,
     private dispatcher: S.DispatcherService,
+    public fightHubService: S.FightHubService,
     @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
     private settingsService: SettingsService) {
   }
@@ -122,7 +129,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
         row.cells.forEach(cell => cellFilter(cell));
 
       return visible;
-    });    
+    });
   }
 
 
@@ -168,6 +175,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
       const id = r["fightId"] as string;
       const template = r["template"] as string;
       if (id && template) {
+        this.template = template;
+        this.fightId = id;
         this.load(id, template);
       }
     });
@@ -187,17 +196,16 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  load(id, template) {
+  load(id, template) {    
     this.dialogService.executeWithLoading(ref => {
       this.fightService.getFight(id).subscribe((fight: M.IFight) => {
         if (fight) {
           this.fightService.getCommands(id, new Date(fight.dateModified).valueOf()).subscribe(value => {
             this.fightLineController.loadFight(fight, value.map(cmd => JSON.parse(cmd.data)));
-
-            const serializer = this.fightLineController.createSerializer()
-            const exported = serializer.serializeForExport();
-            this.set = this.templates[template.toLowerCase()].build(exported, this.presenterManager) as IExportResultSet;
-            this.filterChange(null, null);
+            this.connectToSession().then(() => {
+              this.loadTable();
+              ref.close();
+            });
 
             ref.close();
           },
@@ -215,6 +223,63 @@ export class TableViewComponent implements OnInit, OnDestroy {
           ref.close();
         });
     });
+  }
+
+  private loadTable() {
+    const serializer = this.fightLineController.createSerializer()
+    const exported = serializer.serializeForExport();
+    this.set = this.templates[this.template.toLowerCase()].build(exported, this.presenterManager) as IExportResultSet;
+    this.filterChange(null, null);
+  }
+
+  connectToSession() {
+    const handlers: S.IConnectToSessionHandlers = {
+      onCommand: ((data: M.IHubCommand) => this.handleRemoteCommand(data.id, data.userId)).bind(this),
+      onConnected: ((data: M.IHubUser) => this.notification.showUserConnected(data)).bind(this),
+      onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisonnected(data)).bind(this)
+    };
+
+    const settings = this.settingsService.load();
+    const name = settings.teamwork.displayName || this.authenticationService.username || "Anonymous";
+    return this.fightHubService.connect(this.fightId, name, handlers)
+      .then(() => {
+        this.notification.showConnectedToSession();
+      })
+      .catch(() => {
+        this.notification.showConnectedToSessionError();
+      });
+  }
+
+  stopSession() {
+    this.fightHubService.disconnect(this.fightId);
+  }
+
+  handleRemoteCommand(id: string, userId: string) {
+    this.toolbar.ping(userId, false);
+
+    this.fightService.getCommand(+id).subscribe((data: ICommandData) => {
+      this.handleRemoteCommandData(data);
+    },
+      error => {
+        console.log(error);
+      });
+  }
+
+  handleRemoteCommandData(data: ICommandData) {
+    if (data.name === "undo") {
+      this.fightLineController.undo();
+      
+    } else if (data.name === "redo") {
+      this.fightLineController.redo();      
+    } else {
+      this.fightLineController.execute(data);
+    }
+    this.loadTable();
+  }
+
+  @HostListener("window:unload", ["$event"])
+  unloadHandler(event: any) {
+    this.stopSession();
   }
 
   getWidth(text: string, hasIcon) {

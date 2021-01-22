@@ -23,30 +23,30 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
     const jobs = data.data.jobs.sort((a, b) => a.role - b.role);
     const rows = data.data.boss.attacks
       .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
-      .map(it => <IExportRow>{
+      .map(attack => <IExportRow>{
         cells: [
           this.text({
-            text: it.offset,
+            text: attack.offset,
             align: "center",
-            refId: (data.data.boss.downTimes.find(d => Utils.inRange(d.start, d.end, it.offset)) || { id: null }).id,
+            refId: (data.data.boss.downTimes.find(d => Utils.inRange(d.start, d.end, attack.offset)) || { id: null }).id,
             disableUnique: true,
             colorFn: (a) => {
               const dt = data.data.boss.downTimes.find(d => Utils.inRange(d.start, d.end, a.offset));
               return dt && dt.color || "";
             },
             bgRefIdFn: (a) => {
-              const dt = data.data.boss.downTimes.find(d => Utils.inRange(d.start, d.end, it.offset))
+              const dt = data.data.boss.downTimes.find(d => Utils.inRange(d.start, d.end, attack.offset))
               return dt && dt.id;
             }
           }),
           this.text({
-            text: it.name,
-            color: this.getColor(it),
-            refId: it.id
+            text: attack.name,
+            color: this.getColor(attack),
+            refId: attack.id
           }),
           this.items(
             data.data.bossTargets
-              .filter(bt => this.isOffsetInRange(it.offset, bt.start, bt.end))
+              .filter(bt => this.isOffsetInRange(attack.offset, bt.start, bt.end))
               .map(bt => jobs.find(j => j.id === bt.target))
               .map(p => ({ text: p.name, icon: p.icon, refId: p.id })),
             {
@@ -54,74 +54,73 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
               disableUnique: true
             }
           ),
-          ...jobs.map(t => this.items(
+          ...jobs.map(job => this.items(
             data.data.abilities
-              .filter(a =>
-                (this.coverAll || used.indexOf(a) === -1) &&
-                a.job === t.id &&
-                (((a.type & 1) === 1) ||
-                  ((a.type & 256) === 256) ||
-                  ((a.type & 1024) === 1024) ||
-                  ((a.type & 4096) === 4096) ||
-                  ((a.type & 2048) === 2048)) &&
-                this.isOffsetInRange(it.offset, a.start, this.offsetFromDuration(a.start, a.duration)))
-              .map(a => {
-                used.push(a);
-                return <IExportItem>{ text: a.ability as string, icon: a.icon as string, refId: a.id as string };
+              .filter(ability =>
+                (this.coverAll || used.indexOf(ability) === -1) &&
+                ability.job === job.id &&
+                this.isDefenceAbility(ability) &&
+                this.isOffsetInRange(attack.offset, ability.start, this.offsetFromDuration(ability.start, ability.duration)))
+              .map(ability => {
+                used.push(ability);
+                return <IExportItem>{ text: ability.ability as string, icon: ability.icon as string, refId: ability.id as string };
               })
-            , {})),
-          // this.text({
-          //   text: it.desc,
-          //   noTag: true       
-          // })
-
+            , {}))
         ],
-        filterData: it
+        filterData: attack
       });
+
+    const columns = [
+      {
+        text: "time",
+        name: "time",
+        align: "center",
+        listOfFilter: data.data.boss.downTimes
+          .map(d => ({ text: d.comment, value: d, byDefault: true }))
+          .concat({ text: "Other", value: <any>{ comment: "Other" }, byDefault: true }),
+        filterFn: (data, row, col) => {
+          const found = col && col.listOfFilter && col.listOfFilter.find(item => item.value && Utils.inRange(item.value.start, item.value.end, row.filterData.offset))
+
+          if (found)
+            return data.some(item => item && item.comment === found.value.comment);
+
+          return data.some(item => item && item.comment === "Other");
+        },
+      },
+      {
+        name: "boss",
+        text: "boss",
+        listOfFilter: (presenter && presenter.tags || []).concat(["Other"]).map(t => ({ text: t, value: t, byDefault: true })),
+        filterFn: (a, d) => {
+          let visible = !a || a.some(value => ((!d.filterData.tags || d.filterData.tags.length === 0) && value === "Other") || d.filterData.tags && d.filterData.tags.includes(value));
+          return visible;
+        }
+      },
+      {
+        text: "target",
+        align: "center"
+      },
+      ...jobs.map(it => <IExportColumn>{ text: it.name, icon: it.icon, refId: it.id, cursor: 'pointer' }),
+      // {          
+      //   text: "Description",          
+      // },
+    ];
 
 
     return <IExportResultSet>{
-      columns: [
-        {
-          text: "time",
-          name: "time",
-          align: "center",
-          listOfFilter: data.data.boss.downTimes
-            .map(d => ({ text: d.comment, value: d, byDefault: true }))
-            .concat({ text: "Other", value: <any>{ comment: "Other" }, byDefault: true }),
-          filterFn: (data, row, col) => {
-            // console.debug(col)
-            // console.debug(data);
-            // console.debug(row);
-            const found = col && col.listOfFilter && col.listOfFilter.find(item => item.value && Utils.inRange(item.value.start, item.value.end, row.filterData.offset))
-            if (found)
-              return data.some(item => item && item.comment === found.value.comment);
-
-            return data.some(item => item && item.comment === "Other");
-          },
-        },
-        {
-          name: "boss",
-          text: "boss",
-          listOfFilter: (presenter && presenter.tags || []).concat(["Other"]).map(t => ({ text: t, value: t, byDefault: true })),
-          filterFn: (a, d) => {
-            let visible = !a || a.some(value => ((!d.filterData.tags || d.filterData.tags.length === 0) && value === "Other") || d.filterData.tags && d.filterData.tags.includes(value));
-            return visible;
-          }
-        },
-        {
-          text: "target",
-          align: "center"
-        },
-        ...jobs.map(it => <IExportColumn>{ text: it.name, icon: it.icon, refId: it.id, cursor: 'pointer' }),
-        // {          
-        //   text: "Description",          
-        // },
-      ],
+      columns: columns,
       rows: rows,
       title: this.name,
       filterByFirstEntry: true
     };
+  } 
+
+  private isDefenceAbility(a: any) {
+    return ((a.type & 1) === 1) ||
+      ((a.type & 256) === 256) ||
+      ((a.type & 1024) === 1024) ||
+      ((a.type & 4096) === 4096) ||
+      ((a.type & 2048) === 2048)
   }
 }
 

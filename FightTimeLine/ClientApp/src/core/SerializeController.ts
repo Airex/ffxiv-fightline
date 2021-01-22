@@ -1,12 +1,9 @@
 import * as Models from "./Models";
 import { Utils } from "./Utils";
-import * as BaseExportTemplate from "./BaseExportTemplate";
 import * as Holders from "./Holders";
 import { JobMap, BossAttackMap } from "./Maps";
 
 export class SerializeController {
-
-
 
   constructor(private holders: Holders.Holders, private gameName: string, private fraction, private data: Models.IFightData, private filter: Models.IFilter, private view: Models.IView) {
 
@@ -128,59 +125,77 @@ export class SerializeController {
   }
 
   serializeForExport(): Models.ExportData {
+
+    const attacks = this.holders.bossAttacks.getAll()
+      .map((ab: BossAttackMap) => ({
+        id: ab.id,
+        name: ab.attack.name,
+        type: ab.attack.type,
+        tags: ab.attack.tags,
+        offset: ab.offset,
+        desc: ab.attack.description
+      }));
+
+
+    const downTimes = this.holders.bossDownTime.getAll()
+      .map((it) => <any>{
+        id: it.id,
+        start: Utils.formatTime(it.start),
+        end: Utils.formatTime(it.end),
+        comment: it.comment,
+        color: it.color
+      });
+
+    const boss = {
+      attacks,
+      downTimes
+    };
+
+
+    const bossTargets = this.holders.bossTargets.getAll()
+      .map((t) => ({
+        target: t.target,
+        start: Utils.formatTime(t.start as Date),
+        end: Utils.formatTime(t.end as Date)
+      }));
+
+    const jobs = this.holders.jobs.getAll()
+      .map((value: JobMap, index: number) => <any>{
+        id: value.id,
+        name: value.job.name,
+        role: value.job.role,
+        order: index,
+        pet: value.pet,
+        icon: value.job.icon
+      });
+
+    const abilities = this.holders.itemUsages.getAll()
+      .map((value) => {
+        const a = value.ability;
+        return {
+          id: value.id,
+          job: a.job.id,
+          ability: a.ability.name,
+          type: a.ability.abilityType,
+          duration: value.calculatedDuration,
+          start: Utils.formatTime(value.start),
+          settings: value.settings,
+          icon: value.ability.ability.icon
+        };
+      });
+
+    const data = {
+      boss,
+      bossTargets,
+      initialTarget: this.holders.bossTargets.initialBossTarget,
+      jobs,
+      abilities
+    }
+
     return <Models.ExportData>{
       name: this.data.fight && this.data.fight.name || "",
       userName: this.data.fight && this.data.fight.userName || "",
-      data: {
-        boss: {
-          attacks: this.holders.bossAttacks.getAll()
-            .map((ab: BossAttackMap) => ({
-              id: ab.id,
-              name: ab.attack.name,
-              type: ab.attack.type,
-              tags: ab.attack.tags,
-              offset: ab.offset,
-              desc: ab.attack.description
-            })),
-          downTimes: this.holders.bossDownTime.getAll().map((it) => <any>{
-            id: it.id,
-            start: Utils.formatTime(it.start),
-            end: Utils.formatTime(it.end),
-            comment: it.comment,
-            color: it.color
-          })
-        },
-        bossTargets: this.holders.bossTargets.getAll()
-          .map((t) => ({
-            target: t.target,
-            start: Utils.formatTime(t.start as Date),
-            end: Utils.formatTime(t.end as Date)
-          })),
-        initialTarget: this.holders.bossTargets.initialBossTarget,
-        jobs: this.holders.jobs.getAll().map((value: JobMap, index: number) => <any>{
-          id: value.id,
-          name: value.job.name,
-          role: value.job.role,
-          order: index,
-          pet: value.pet,
-          icon: value.job.icon
-        }),
-        abilities: this.holders.itemUsages
-          .getAll()
-          .map((value) => {
-            const a = value.ability;
-            return {
-              id: value.id,
-              job: a.job.id,
-              ability: a.ability.name,
-              type: a.ability.abilityType,
-              duration: value.calculatedDuration,
-              start: Utils.formatTime(value.start),
-              settings: value.settings,
-              icon: value.ability.ability.icon
-            };
-          })
-      }
+      data: data
     };
   }
 }

@@ -1,7 +1,7 @@
 import * as FF from "./FFLogs"
-import {Holders} from "./Holders";
+import { Holders } from "./Holders";
 //import {AbilitySelectionHolder} from "./Holders/AbilitySelectionHolder";
-import {AbilityUsageMap} from "./Maps/index";
+import { AbilityUsageMap } from "./Maps/index";
 import * as FFLogsCollectors from "./FflogsCollectors/FFLogsCollectors";
 
 export enum Role {
@@ -13,7 +13,7 @@ export enum Role {
 }
 
 export type JobAbilities = {
-  [name: string] : IAbility
+  [name: string]: IAbility
 }
 
 export interface IJob {
@@ -203,9 +203,9 @@ export class SharedOverlapStrategy implements IOverlapStrategy {
     const items = context.holders.itemUsages.getByAbility(context.group);
     const sharedAbility = context.holders.abilities.getByParentAndAbility(map.job.id, this.sharesWith[0]);
     const sharedItems = context.holders.itemUsages.getByAbility(sharedAbility.id);
-    
 
-    const result = [...items,...sharedItems].some((x: AbilityUsageMap) => {
+
+    const result = [...items, ...sharedItems].some((x: AbilityUsageMap) => {
       const chargesBased = !!x.ability.ability.charges;
       if (chargesBased) return false;
 
@@ -307,7 +307,7 @@ export interface IAbility {
   abilityType: AbilityType;
   pet?: string;
   activationOffset?: number;
-  resetsPrevious?:boolean;
+  resetsPrevious?: boolean;
   detectStrategy?: IDetectionStrategy;
   overlapStrategy?: IOverlapStrategy;
   charges?: IAbilityCharges;
@@ -343,7 +343,7 @@ export interface IRelatedAbilitiesOptions {
 
 export enum EntryType {
   Unknown = 'unknown',
-  BossAttack ='b',
+  BossAttack = 'b',
   AbilityUsage = 'u',
   BossTarget = 't',
   BossDownTime = 'd',
@@ -367,12 +367,12 @@ export interface IBossAbility {
   name?: string;
   type?: DamageType;
   offset?: string;
-  tags?:string[];
+  tags?: string[];
   syncSettings?: string;
   syncDowntime?: string;
   syncPreDowntime?: string;
   description?: string;
-  source?:string;
+  source?: string;
 }
 
 export interface ISyncData {
@@ -508,51 +508,65 @@ export interface IPhase {
   syncData: ISyncData;
 }
 
+export interface ExportAttack {
+  id: string;
+  name: string;
+  type: number;
+  offset: string;
+  tags: string[];
+  desc: string;
+}
+
+export interface ExportDowntime {
+  id: string;
+  start: string;
+  end: string;
+  comment: string;
+  color: string;
+}
+
+export interface ExportBoss {
+  attacks: ExportAttack[];
+  downTimes: ExportDowntime[];
+}
+
+export interface ExportBossTarget {
+  target: string;
+  start: string;
+  end: string;
+}
+
+export interface ExportJob {
+  id: string;
+  name: string;
+  role: number;
+  order: number;
+  pet: string;
+  icon: string;
+}
+
+export interface ExportAbility {
+  id: string;
+  job: string;
+  ability: string;
+  type: AbilityType;
+  duration: number;
+  start: string;
+  icon: string;
+}
+
+export interface ExportDataData {
+  boss: ExportBoss;
+  initialTarget: string;
+  bossTargets: ExportBossTarget[],
+  jobs: ExportJob[];
+  abilities: ExportAbility[];
+}
+
 export class ExportData {
   name: string;
   userName: string;
-  data: {
-    boss: {
-      attacks: {
-        id: string;
-        name: string;
-        type: number;
-        offset: string;
-        tags: string[];
-        desc: string;
-      }[];
-      downTimes: {
-        id: string;
-        start: string;
-        end: string;
-        comment: string;
-        color: string;
-      }[];
-    };
-    initialTarget: string;
-    bossTargets: {
-      target: string;
-      start: string;
-      end: string;
-    }[],
-    jobs: {
-      id: string;
-      name: string;
-      role: number;
-      order: number;
-      pet: string;
-      icon: string;
-    }[];
-    abilities: {
-      id: string;
-      job: string;
-      ability: string;
-      type: AbilityType;
-      duration: number;
-      start: string;
-      icon: string;
-    }[];
-  }
+  data: ExportDataData;
 }
 
 
