@@ -666,7 +666,10 @@ export class ChangeAbilitySettingsCommand implements Command {
   execute(context: ICommandExecutionContext): void {
     const item = context.holders.itemUsages.get(this.id);
     this.prevSettings = JSON.stringify(item.settings);
-    item.settings = JSON.parse(this.newSettings);
+    let settings = JSON.parse(this.newSettings);
+    if (typeof settings === "string")
+      settings = JSON.parse(settings);
+    item.settings = settings;
 
     context.update({ updateBossTargets: true });
   }

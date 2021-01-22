@@ -762,7 +762,13 @@ export class FightTimeLineController {
               this.toggleCompactView(j.id, j.compact);
           }
         }
+
+        const jobMap = this.holders.jobs.get(loadedData.initialTarget);
+        if (jobMap)
+          this.switchInitialBossTarget(jobMap, false);
       }
+
+
 
       if (loadedData && loadedData.abilityMaps) {
         for (let it of loadedData.abilityMaps) {
@@ -816,35 +822,35 @@ export class FightTimeLineController {
 
     } finally {
       this.loading = false;
-      this.commandStorage.clear();
+      //this.commandStorage.clear();
     }
-    const jobMap = this.holders.jobs.get(loadedData.initialTarget);
-    if (jobMap)
-      this.switchInitialBossTarget(jobMap, false);
+
     this.recalculateBossTargets();
 
     this.applyFilter();
     this.applyView(loadedData.view, true);
 
-    if (loadedData.jobs) {
-      for (let j of loadedData.jobs.sort((a, b) => a.order - b.order)) {
-        if (j.compact !== undefined && j.compact !== null)
-          this.toggleCompactView(j.id, j.compact);
+    if (loadedData) {
+      if (loadedData.jobs) {
+        for (let j of loadedData.jobs.sort((a, b) => a.order - b.order)) {
+          if (j.compact !== undefined && j.compact !== null)
+            this.toggleCompactView(j.id, j.compact);
+        }
       }
-    }
 
-    if (loadedData.abilityMaps) {
-      for (let it of loadedData.abilityMaps) {
-        let ab = this.holders.abilities.getByParentAndAbility(it.job, it.name);
-        if (ab) {
-          this.toggleCompactViewAbility(ab.id, it.compact);
+      if (loadedData.abilityMaps) {
+        for (let it of loadedData.abilityMaps) {
+          let ab = this.holders.abilities.getByParentAndAbility(it.job, it.name);
+          if (ab) {
+            this.toggleCompactViewAbility(ab.id, it.compact);
+          }
         }
       }
     }
 
     this.availabilityController.setAbilityAvailabilityView(this.presenterManager.view.showAbilityAvailablity);
     this.commandStorage.turnOnFireExecuted();
-    this.hasChanges = false;
+    this.hasChanges = this.commandStorage.canRedo() || this.commandStorage.canUndo();
   }
 
 
@@ -918,15 +924,15 @@ export class FightTimeLineController {
       this.presenterManager.filter = input;
 
     if (!source || source === 'ability') {
-      if (this.presenterManager.filter && this.presenterManager.filter.abilities){
-      this.holders.abilities.applyFilter(
-        this.presenterManager.filter.abilities,
-        (val) => this.holders.itemUsages.filter((item) => item.ability.id === val).length > 0);
+      if (this.presenterManager.filter && this.presenterManager.filter.abilities) {
+        this.holders.abilities.applyFilter(
+          this.presenterManager.filter.abilities,
+          (val) => this.holders.itemUsages.filter((item) => item.ability.id === val).length > 0);
       }
     }
 
-    if (!source || source === 'boss'){
-      if (this.presenterManager.filter && this.presenterManager.filter.attacks){
+    if (!source || source === 'boss') {
+      if (this.presenterManager.filter && this.presenterManager.filter.attacks) {
         this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
       }
     }
