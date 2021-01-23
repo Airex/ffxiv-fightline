@@ -202,23 +202,27 @@ export class TableViewComponent implements OnInit, OnDestroy {
         if (fight) {
           this.fightService.getCommands(id, new Date(fight.dateModified).valueOf()).subscribe(value => {
             this.fightLineController.loadFight(fight, value.map(cmd => JSON.parse(cmd.data)));
-            this.connectToSession().then(() => {
-              this.loadTable();
+            this.connectToSession()
+            .then(() => {
+              this.loadTable();              
+            })
+            .finally(()=>{
               ref.close();
-            });
-
-            ref.close();
+            });            
           },
             error => {
               console.log(error);
-              this.notification.error("Unable to load data");
               ref.close();
+              this.notification.error("Unable to load data");
+              
             });
         } else {
           ref.close();
+          this.notification.showUnableToLoadFight(() => { });          
         }
       },
-        () => {
+        (error) => {
+          console.log(error);
           this.notification.showUnableToLoadFight(() => { });
           ref.close();
         });
