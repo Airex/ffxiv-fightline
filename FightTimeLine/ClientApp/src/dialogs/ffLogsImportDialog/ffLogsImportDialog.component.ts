@@ -4,9 +4,9 @@ import { RecentActivityService } from "../../services/RecentActivitiesService"
 import { SettingsService } from "../../services/SettingsService"
 import { Utils } from "../../core/Utils"
 import { ReportFightsResponse } from "../../core/FFLogs"
-import { NzModalRef } from "ng-zorro-antd";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
   selector: "ffLogsImportDialog",

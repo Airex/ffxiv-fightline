@@ -5,10 +5,10 @@ import { SettingsViewComponent } from "./view/settingsView.component"
 import { SettingsService, ISettings } from "../../services/SettingsService";
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
-import { NzModalRef } from "ng-zorro-antd";
 import * as Gameserviceinterface from "../../services/game.service-interface";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Dispatcherservice from "../../services/dispatcher.service";
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 
 @Component({

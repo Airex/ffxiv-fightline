@@ -7,8 +7,8 @@ import { FirstTemplate } from "../../core/ExportTemplates/FirstTemplate"
 import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate"
 import { BossAttackDefensiveTemplate } from "../../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { AuthService, GoogleLoginProvider, SocialUser } from "angularx-social-login";
-import { NzModalRef } from "ng-zorro-antd";
 import * as Models from "../../core/Models";
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
   selector: "exportToTableDialog",

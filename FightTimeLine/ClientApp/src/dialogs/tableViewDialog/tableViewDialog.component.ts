@@ -5,8 +5,8 @@ import { FirstTemplate } from "../../core/ExportTemplates/FirstTemplate"
 import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate"
 import { BossAttackDefensiveTemplate } from "../../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { ExportTemplate } from "../../core/BaseExportTemplate"
-import { NzModalRef } from "ng-zorro-antd"
 import * as Models from "../../core/Models";
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 
 @Component({

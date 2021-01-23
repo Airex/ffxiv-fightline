@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { NzFormatBeforeDropEvent, NzFormatEmitEvent, NzTreeComponent, NzTreeNodeOptions } from "ng-zorro-antd/tree";
 import { Observable, of } from "rxjs";
 import * as M from "../../../core/Models";
-import { NzTreeNodeOptions, NzTreeComponent, NzFormatEmitEvent, NzFormatBeforeDropEvent } from "ng-zorro-antd";
 
 @Component({
   selector: "syncSettings",

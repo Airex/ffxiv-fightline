@@ -1,6 +1,6 @@
 import { Component, Inject, Input, TemplateRef, ViewChild, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
-import { NzModalRef } from "ng-zorro-antd"
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
   selector: "bossSaveDialog",

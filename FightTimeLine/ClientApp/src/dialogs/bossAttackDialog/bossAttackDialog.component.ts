@@ -5,10 +5,10 @@ import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms"
 import * as M from "../../core/Models";
 import * as H from "../../core/Holders";
 import { time } from "../../heplers/TimeValidator";
-import { NzModalRef } from "ng-zorro-antd";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
 import * as PresentationManager from "../../core/PresentationManager";
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
   selector: "bossAttackDialog",

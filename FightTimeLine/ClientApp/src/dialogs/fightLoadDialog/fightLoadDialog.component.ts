@@ -3,8 +3,9 @@ import { Router } from "@angular/router";
 import { IFightService } from "../../services/fight.service-interface"
 import { fightServiceToken } from "../../services/fight.service-provider"
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService"
-import { NzModalRef, NzListComponent, NzSwitchComponent } from "ng-zorro-antd"
 import * as M from "../../core/Models"
+import { NzSwitchComponent } from "ng-zorro-antd/switch";
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 
 @Component({

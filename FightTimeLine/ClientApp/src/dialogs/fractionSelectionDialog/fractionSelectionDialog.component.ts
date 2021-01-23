@@ -1,8 +1,8 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
 import { IAbilitySetting, IAbilitySettingData,IAbility, IFraction } from "../../core/Models";
-import { NzModalRef } from "ng-zorro-antd";
 import { ActivatedRoute, Router } from "@angular/router";
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
   selector: "fractionSelectionDialog",

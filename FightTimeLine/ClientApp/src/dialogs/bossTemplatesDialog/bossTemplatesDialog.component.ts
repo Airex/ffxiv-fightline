@@ -1,6 +1,5 @@
 import { Component, Inject, OnInit, ViewChild, ElementRef, OnDestroy, TemplateRef, Input } from "@angular/core";
 import { map, first } from "rxjs/operators/"
-import { NzModalRef } from "ng-zorro-antd"
 import { Zone, Encounter } from "../../core/FFLogs"
 import * as M from "../../core/Models"
 import { Utils } from "../../core/Utils"
@@ -14,6 +13,7 @@ import { VisTimelineService, DataSet } from "ngx-vis";
 import { TimelineOptions, DataGroup, DataItem } from "vis-timeline";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
   selector: "bossTemplatesDialog",

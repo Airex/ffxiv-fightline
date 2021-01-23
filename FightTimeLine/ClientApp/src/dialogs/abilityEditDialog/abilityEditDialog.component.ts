@@ -1,7 +1,7 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
+import { NzModalRef } from "ng-zorro-antd/modal";
 import { IAbilitySetting, IAbilitySettingData,IAbility } from "../../core/Models";
-import { NzModalRef } from "ng-zorro-antd";
 
 @Component({
   selector: "abilityEditDialog",

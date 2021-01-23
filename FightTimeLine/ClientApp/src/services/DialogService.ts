@@ -9,10 +9,10 @@ import { IBossAbility, IAbilitySetting, IAbilitySettingData, IFight, IAbility, I
 } from "../core/Models";
 import * as H from "../core/Holders";
 import { LocalStorageService } from "./LocalStorageService";
-import {NzModalService, NzModalState } from 'ng-zorro-antd';
 import { Observable } from "rxjs";
 import * as D from "../dialogs"
 import * as PresentationManager from "../core/PresentationManager";
+import { NzModalService, NzModalState } from "ng-zorro-antd/modal";
 
 @Injectable({
   providedIn: 'root'

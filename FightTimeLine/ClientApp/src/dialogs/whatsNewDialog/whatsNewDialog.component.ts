@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef, Inject, Input, OnInit, TemplateRef, AfterViewInit } from "@angular/core";
-import { NzModalRef } from "ng-zorro-antd";
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 
 @Component({

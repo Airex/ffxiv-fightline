@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewChildren, QueryList, HostListener, Injectable } from "@angular/core";
-import { NzNotificationService, NzMessageService, NzMessageType } from "ng-zorro-antd"
+import { NzMessageService } from "ng-zorro-antd/message";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 import * as M from "../core/Models"
 @Injectable({
   providedIn: "root"

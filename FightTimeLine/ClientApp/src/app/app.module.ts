@@ -57,7 +57,6 @@ import { DisqusModule, DISQUS_SHORTNAME } from "ngx-disqus"
 import { ColorPickerModule } from 'ngx-color-picker';
 import en from '@angular/common/locales/en'
 
-import { en_US, NZ_I18N } from 'ng-zorro-antd';
 
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 
@@ -84,7 +83,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-import { NzI18nModule } from 'ng-zorro-antd/i18n';
+import { en_US, NzI18nModule, NZ_I18N } from 'ng-zorro-antd/i18n';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';

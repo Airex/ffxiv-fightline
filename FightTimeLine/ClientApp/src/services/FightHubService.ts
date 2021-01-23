@@ -95,7 +95,7 @@ export class FightHubService {
             this.hubConnection.invoke("connect", fight, username)
               .then(() => {
                 console.log("connected");
-                resolve();
+                resolve(null);
               })
               .catch((err) => {
                 console.error(err);

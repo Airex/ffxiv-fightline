@@ -29,10 +29,15 @@
               }
             ],
             "styles": [
-              "src/theme.less",
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/ng-zorro-antd/ng-zorro-antd.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "keycharm",
+              "timsort"
+            ]
           },
           "configurations": {
             "production": {

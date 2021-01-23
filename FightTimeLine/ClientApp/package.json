@@ -35,21 +35,21 @@
     "guid-typescript": "^1.0.9",
     "hammerjs": "^2.0.8",
     "keycharm": "^0.3.1",
-    "lodash": "^4.17.19",
-    "moment": "^2.26.0",
-    "ng-zorro-antd": "^9.1.2",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "ng-zorro-antd": "^11.0.2",
     "ngx-captcha": "^8.0.1",
     "ngx-clipboard": "13.0.0",
     "ngx-color-picker": "9.1.0",
     "ngx-disqus": "2.4.3",
     "ngx-progressbar": "6.0.2",
     "ngx-vis": "3.1.0-build1591159265",
-    "propagating-hammerjs": "^1.4.7",
+    "propagating-hammerjs": "^1.5.0",
     "rxjs": "6.5.5",
     "tslib": "^2.0.0",
-    "uuid": "^8.1.0",
-    "vis-data": "^6.5.3",
-    "vis-util": "^4.1.0",
+    "uuid": "^8.3.2",
+    "vis-data": "^6.6.1",
+    "vis-util": "^4.3.4",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
@@ -60,7 +60,7 @@
     "@angular/language-service": "^11.1.0",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "^2.0.8",
-    "@types/node": "^12.12.47",
+    "@types/node": "^12.19.15",
     "codelyzer": "^6.0.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
@@ -73,6 +73,6 @@
     "protractor": "~7.0.0",
     "ts-node": "8.6.2",
     "tslint": "~6.1.0",
-    "typescript": "^4.0.5"
+    "typescript": "^4.1.3"
   }
 }

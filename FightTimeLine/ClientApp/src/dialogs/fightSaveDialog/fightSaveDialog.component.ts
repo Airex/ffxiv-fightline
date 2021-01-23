@@ -4,7 +4,7 @@ import { IFight } from "../../core/Models"
 import { IFightService } from "../../services/fight.service-interface"
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService"
 import { fightServiceToken } from "../../services/fight.service-provider"
-import { NzModalRef } from "ng-zorro-antd"
+import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
   selector: "fightSaveDialog",
