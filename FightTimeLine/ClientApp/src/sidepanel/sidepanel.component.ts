@@ -5,12 +5,13 @@ import { SingleAttackComponent } from "./components/singleAttack/singleAttack.co
 import { MultipleAbilityComponent } from "./components/multipleAbility/multipleAbility.component";
 import { MultipleAttackComponent } from "./components/multipleAttack/multipleAttack.component";
 import { MultipleDownTimeComponent } from "./components/multipleDowntime/multipleDowntime.component";
-import { ISidePanelComponent, SidepanelParams, SIDEPANEL_DATA } from "./components/ISidePanelComponent";
+import { ISidePanelComponent, SidePanelMode, SidepanelParams, SIDEPANEL_DATA } from "./components/ISidePanelComponent";
 import * as Jobcomponent from "./components/job/job.component";
 import * as JobAbilitycomponent from "./components/jobAbility/jobAbility.component";
 import { DownTimeComponent } from "./components/downtime/downtime.component";
 import * as BaseHolder from "../core/Holders/BaseHolder";
 import { Holders } from "../core/Holders";
+import { IForSidePanel } from "../core/Holders/BaseHolder";
 
 
 @Component({
@@ -49,7 +50,7 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     return its.sort().reduce((p, c) => p + c.id, "");
   }
 
-  setItems(items: BaseHolder.IForSidePanel[], holders: Holders, mode: string = "default"): void {
+  setItems(items: BaseHolder.IForSidePanel[], holders: Holders, mode: SidePanelMode = "default"): void {
     this.items = items;
     const newKey = this.calculateKey(this.items);
     if (newKey === this.key && this.ref) {
@@ -58,44 +59,6 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.key = newKey;
     this.holders = holders;
-    const injector = this.createInjector({
-      items: items,
-      holders: holders,
-      mode: mode
-  });
-    let component = null;
-    if (this.items && this.items.length > 0) {
-      switch (this.items[0].sidePanelComponentName) {
-        case "ability":
-          if (items.length === 1) {
-            component = new ComponentPortal(SingleAbilityComponent, null, injector);
-          } else if (items.length > 1) {
-            component = new ComponentPortal(MultipleAbilityComponent, null, injector);
-          }
-          break;
-        case "bossAbility":
-          if (items.length === 1) {
-            component = new ComponentPortal(SingleAttackComponent, null, injector);
-          } else if (items.length > 1) {
-            component = new ComponentPortal(MultipleAttackComponent, null, injector);
-          }
-          break;
-        case "job":
-          component = new ComponentPortal(Jobcomponent.JobComponent, null, injector);
-          break;
-        case "jobAbility":
-          component = new ComponentPortal(JobAbilitycomponent.JobAbilityComponent, null, injector);
-          break;
-        case "downtime":
-          if (items.length === 1) {
-            component = new ComponentPortal(DownTimeComponent, null, injector);
-          } else if (items.length > 1) {
-            component = new ComponentPortal(MultipleDownTimeComponent, null, injector);
-          }
-          
-          break;
-      }
-    }
 
     if (this.op.hasAttached()) {
       this.op.detach();
@@ -103,8 +66,40 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
       this.ref = null;
     }
 
-    if (component) {
-      this.ref = this.op.attach(component) as ComponentRef<ISidePanelComponent>;
+    const componentType = this.componentFactory(this.items);
+    
+    if (componentType) {
+      const injector = this.createInjector({
+        items: items,
+        holders: holders,
+        mode: mode
+      });
+
+      let component = new ComponentPortal(componentType, null, injector);
+
+      if (component) {
+        this.ref = this.op.attach(component) as ComponentRef<ISidePanelComponent>;
+      }
+    }
+
+  }
+
+  componentFactory(items: IForSidePanel[]) {
+    const map = {
+      "ability": [SingleAbilityComponent, MultipleAbilityComponent],
+      "bossAbility": [SingleAttackComponent, MultipleAttackComponent],
+      "job": [Jobcomponent.JobComponent],
+      "jobAbility": [JobAbilitycomponent.JobAbilityComponent],
+      "downtime": [DownTimeComponent, MultipleDownTimeComponent]
+    }
+
+    if (items && this.items.length > 0) {
+      const [one, many] = map[items[0].sidePanelComponentName];
+      if (items.length === 1) {
+        return one;
+      } else if (items.length > 1) {
+        return many;
+      }
     }
   }
 
