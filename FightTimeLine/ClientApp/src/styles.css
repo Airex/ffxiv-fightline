@@ -11,6 +11,10 @@
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
+.ant-table.ant-table-small .ant-table-footer, .ant-table.ant-table-small .ant-table-tbody>tr>td, .ant-table.ant-table-small .ant-table-thead>tr>th, .ant-table.ant-table-small .ant-table-title, .ant-table.ant-table-small tfoot>tr>td, .ant-table.ant-table-small tfoot>tr>th {
+  padding: 2px !important;
+}
+
 .ant-drawer-left.ant-drawer-open, .ant-drawer-right.ant-drawer-open {
   width: 0px !important;
 }

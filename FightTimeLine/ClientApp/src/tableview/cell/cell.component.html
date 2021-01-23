@@ -2,8 +2,8 @@
   <nz-tag [nzColor]="d.color"
           (click)="select(d.refId, $event)"
           *ngIf="d.visible">
-    <div style="margin: 0 2px 0 2px">
-      <img class="abilityIcon"
+    <div style="margin: 0 2px 1px 2px">
+      <img class="abilityIcon" style="margin-top: -3px;"
            *ngIf="d.icon"
            [src]="d.icon" />
       {{d.text}}
