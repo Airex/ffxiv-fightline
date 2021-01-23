@@ -2,6 +2,8 @@
          showHome="true"
          showTitle="true"
          showTeamwork="true"
+         [connectedUsers]="fightHubService.users"
+         [connected]="fightHubService.connected"
          [authenticated]="authenticationService.authenticated"
          [username]="authenticationService.username"
          [holders]="fightLineController.getHolders()"
