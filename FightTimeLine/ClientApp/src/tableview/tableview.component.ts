@@ -286,37 +286,11 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.stopSession();
   }
 
-  getWidth(text: string, hasIcon) {
-    if (hasIcon)
-      return "auto";
-    switch (text) {
-      case "time":
-        return "50px";
-      case "boss":
-        return "200px";
-      case "target":
-        return "65px";
-    }
-    return "";
-  }
-
-
-
   trackByName(_: number, item: IExportColumn): string {
     return item.text;
   }
 
-  getTitle(text: string) {
-    switch (text) {
-      case "time":
-        return "Time";
-      case "boss":
-        return "Attack name";
-      case "target":
-        return "Target";
-    }
-    return text;
-  }
+  
 
   ngOnDestroy(): void {
 

@@ -72,8 +72,9 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
 
     const columns = [
       {
-        text: "time",
+        text: "Time",
         name: "time",
+        width: "50px",
         align: "center",
         listOfFilter: data.data.boss.downTimes
           .map(d => ({ text: d.comment, value: d, byDefault: true }))
@@ -89,7 +90,8 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
       },
       {
         name: "boss",
-        text: "boss",
+        text: "Attack",
+        width: "200px",
         listOfFilter: (presenter && presenter.tags || []).concat(["Other"]).map(t => ({ text: t, value: t, byDefault: true })),
         filterFn: (a, d) => {
           let visible = !a || a.some(value => ((!d.filterData.tags || d.filterData.tags.length === 0) && value === "Other") || d.filterData.tags && d.filterData.tags.includes(value));
@@ -97,10 +99,13 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
         }
       },
       {
-        text: "target",
-        align: "center"
+        name: "target",
+        text: "Target",
+        align: "center",
+        width: "65px"
+
       },
-      ...jobs.map(it => <IExportColumn>{ text: it.name, icon: it.icon, refId: it.id, cursor: 'pointer' }),
+      ...jobs.map(it => <IExportColumn>{ text: it.name, icon: it.icon, refId: it.id, cursor: 'pointer', width: "auto" }),
       // {          
       //   text: "Description",          
       // },

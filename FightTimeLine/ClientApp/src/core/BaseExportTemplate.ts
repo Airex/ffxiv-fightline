@@ -50,6 +50,7 @@ export interface IExportColumn {
   listOfFilter?: { text: string; value: any; byDefault?: boolean }[];
   filterFn?: (a: any, data: any, c?:IExportColumn) => boolean;
   name?: string;
+  width?: string | null
 }
 
 export interface IExportRow {

@@ -26,15 +26,15 @@
             [nzAlign]="column.align || 'center'"
             [nzFilterMultiple]="true"
             [nzFilters]="column.listOfFilter"
-            [nzWidth]="getWidth(column.text, !!column.icon)"
+            [nzWidth]="column.width"
             [ngStyle]="{ 'cursor': column.cursor }"
             (click)="select(column.refId, $event)"
             (nzFilterChange)="filterChange($event, column.name)">
           <img *ngIf="column.icon"
                class="abilityIcon"
-               style="margin-right: 2px;"
+               style="margin-right: 2px;margin-top: -3px;"
                [src]="column.icon" />
-          <span>{{getTitle(column.text)}}</span>
+          <span>{{column.text}}</span>
         </th>
       </tr>
     </thead>
