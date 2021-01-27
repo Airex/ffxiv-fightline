@@ -13,7 +13,7 @@ export class DescriptiveTemplate extends ExportTemplate {
   }
 
   build(data: Models.ExportData, presenter: PresentationManager.PresenterManager): IExportResultSet {
-    
+
     const rows = data.data.boss.attacks
       .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
       .map(attack => <IExportRow>{
@@ -40,6 +40,7 @@ export class DescriptiveTemplate extends ExportTemplate {
           this.text({
             text: attack.desc
           }),
+          this.items(attack.tags.map(t => ({ text: t })), {})
 
         ],
         filterData: attack
@@ -77,6 +78,10 @@ export class DescriptiveTemplate extends ExportTemplate {
         name: "desc",
         text: "Description",
       },
+      {
+        name: "tags",
+        text: "Tags",
+      },
     ];
 
 
@@ -86,6 +91,6 @@ export class DescriptiveTemplate extends ExportTemplate {
       title: this.name,
       filterByFirstEntry: true
     };
-  }  
+  }
 }
 
