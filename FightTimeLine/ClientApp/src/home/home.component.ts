@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewChildren, QueryList, HostListener, Inject } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { Router } from "@angular/router";
 import * as S from "../services/index"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
-import { IRecentStorage } from "../services/RecentActivitiesService";
+
 
 @Component({
   selector: "home",
@@ -44,8 +44,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (found) {
       found.pinned = true;
       this.recentService.save(activityStorage);
-      this.container.pinned = activityStorage.activities.filter(ac => ac.pinned);
-      this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned);
+      this.reload(activityStorage);      
     }
   }
 
@@ -57,8 +56,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (found) {
       found.pinned = false;
       this.recentService.save(activityStorage);
-      this.container.pinned = activityStorage.activities.filter(ac => ac.pinned);
-      this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned);
+      this.reload(activityStorage);      
     }
   }
 
@@ -68,15 +66,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (found) {
       activityStorage.activities = activityStorage.activities.filter(t => t.id !== item.id);
       this.recentService.save(activityStorage);
-      this.container.pinned = activityStorage.activities.filter(ac => ac.pinned);
-      this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned);
+      this.reload(activityStorage);      
     }
+  }
+
+  reload(activityStorage){
+    this.container.pinned = activityStorage.activities.filter(ac => ac.pinned).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
   }
 
   ngOnInit(): void {
     const activityStorage = this.recentService.load();
-    this.container.pinned = activityStorage.activities.filter(ac => ac.pinned).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-    this.container.nonpinned = activityStorage.activities.filter(ac => !ac.pinned).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    this.reload(activityStorage);
     const settings = this.settingsService.load();
     if (settings.fflogsImport.characterRegion &&
       settings.fflogsImport.characterName &&
@@ -84,8 +85,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.fflogsExtraPath = `character/${settings.fflogsImport.characterRegion}/${settings.fflogsImport.characterServer}/${encodeURIComponent(settings.fflogsImport.characterName)}`
     }
     setTimeout(() => {
-      this.showHelpForFirstTimers().then(value => {
-        this.showWhatsNew().then(value => { });
+      this.showHelpForFirstTimers().then(() => {
+        this.showWhatsNew().then(() => { });
       });
     });
 
@@ -132,7 +133,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (!this.storage.getString("help_shown")) {
       return this.showHelp();
     }
-    return new Promise<void>((resolve, reject) => resolve());
+    return new Promise<void>((resolve) => resolve());
   }
 
   gotoDiscord() {
