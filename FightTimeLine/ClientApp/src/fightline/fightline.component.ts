@@ -944,7 +944,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
                 it.ability.name.indexOf("Unknown_") < 0
             }
           );
-          const g = _.groupBy(enemyAttacks, d => d.ability.name + "_" + Math.trunc(d.timestamp / 1000));
+          const g = _.groupBy(enemyAttacks as FF.AbilityEvent[], d => d.ability.name + "_" + Math.trunc(d.timestamp / 1000));
           const attacks: FF.AbilityEvent[] = Object.keys(g).map((k: string) => {
             return g[k][0];
           });

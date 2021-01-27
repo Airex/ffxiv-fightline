@@ -21,6 +21,7 @@ import * as Generators from "../core/Generators";
 import * as ToolsManager from "../core/ToolsManager";
 import * as PresentationManager from "../core/PresentationManager";
 import { ICommandData } from "src/core/UndoRedo";
+import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
 
 
 
@@ -57,7 +58,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
   templates: { [name: string]: ExportTemplate } = {
     "defence": new BossAttackDefensiveTemplate(),
     "defencecover": new BossAttackDefensiveTemplate(true),
-    "onesecond": new EachRowOneSecondTemplate()
+    "onesecond": new EachRowOneSecondTemplate(),
+    "descriptive": new DescriptiveTemplate()
   };
 
 

@@ -12,7 +12,9 @@ export abstract class ExportTemplate {
     return Utils.getDateFromOffset(a, d).valueOf() - Utils.getDateFromOffset(b, d).valueOf();
   }
 
-
+  getColor(it: any) {
+    return (it.type === 1 ? "red" : (it.type === 2 ? "blue" : ""));
+  }
 
   offsetFromDuration(start: string, duration: number): string {
     return Utils.formatTime(new Date(Utils.getDateFromOffset(start, this.startDate).valueOf() + duration * 1000));

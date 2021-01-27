@@ -27,7 +27,7 @@ export class PresenterManager {
 
   addTags(t: string[]) {
     if (t) {
-      const newtags = _.without(t, this.tags);
+      const newtags = _.without(t, ...this.tags);
       this.tags = _.union(this.tags, t);
       this.filter.attacks.tags = _.union(this.filter.attacks.tags, newtags);
     }
@@ -35,7 +35,7 @@ export class PresenterManager {
 
   addSource(s: string) {
     if (s) {
-      const newsources = _.without([s], this.sources);
+      const newsources = _.without([s], ...this.sources);
       this.sources = _.union(this.sources, [s]);
       this.filter.attacks.sources = _.union(this.filter.attacks.sources, newsources);
     }
