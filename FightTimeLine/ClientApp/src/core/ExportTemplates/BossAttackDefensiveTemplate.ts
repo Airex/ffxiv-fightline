@@ -127,8 +127,8 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
   }
 
   private buildTargetIcon(ability: Models.ExportAbility, jobs: Models.ExportJob[]): string {
-    const target = ability.settings?.find(s => s.name == SettingsEnum.Target)?.value;
-    const job = target && jobs?.find(j=>j.name === target);
+    const target = ability.settings?.find(s => s.name === SettingsEnum.Target)?.value;
+    const job = target && jobs?.find(j=>j.id === target);
     return job?.icon;
   }
 

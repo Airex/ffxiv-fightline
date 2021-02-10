@@ -8,10 +8,13 @@
            *ngIf="d.icon"
            [src]="d.icon" />
       <span>{{d.text}}</span>
-      <img class="abilityIcon"
-           style="margin-top: -3px; margin-left: 3px;"
-           *ngIf="d.targetIcon"
+      <span *ngIf="d.targetIcon" style="margin-left: 3px;">
+        <span style="margin-left: 3px;">&gt;</span>
+        <img class="abilityIcon"
+           style="margin-left: 3px;"           
            [src]="d.targetIcon" />
+      </span> 
+      
     </div>
   </nz-tag>
 </ng-container>
