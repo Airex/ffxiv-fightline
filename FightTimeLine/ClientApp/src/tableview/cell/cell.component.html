@@ -3,10 +3,15 @@
           (click)="select(d.refId, $event)"
           *ngIf="d.visible">
     <div style="margin: 0 2px 1px 2px">
-      <img class="abilityIcon" style="margin-top: -3px;"
+      <img class="abilityIcon"
+           style="margin-top: -3px;"
            *ngIf="d.icon"
            [src]="d.icon" />
-      {{d.text}}
+      <span>{{d.text}}</span>
+      <img class="abilityIcon"
+           style="margin-top: -3px; margin-left: 3px;"
+           *ngIf="d.targetIcon"
+           [src]="d.targetIcon" />
     </div>
   </nz-tag>
 </ng-container>

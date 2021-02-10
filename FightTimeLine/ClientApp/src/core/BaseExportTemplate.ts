@@ -75,5 +75,6 @@ export interface IExportItem {
   icon?: string;
   color?: string;
   visible?: boolean;
+  targetIcon?: string;
 }
 

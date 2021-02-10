@@ -553,6 +553,7 @@ export interface ExportAbility {
   duration: number;
   start: string;
   icon: string;
+  settings: IAbilitySettingData[];  
 }
 
 export interface ExportDataData {

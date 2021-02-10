@@ -1,4 +1,5 @@
 import { ExportTemplate, IExportResultSet, IExportColumn, IExportRow, IExportItem } from "../BaseExportTemplate"
+import { SettingsEnum } from "../Jobs/FFXIV/shared";
 import * as Models from "../Models";
 import * as PresentationManager from "../PresentationManager";
 import { Utils } from "../Utils";
@@ -63,7 +64,12 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
                 this.isOffsetInRange(attack.offset, ability.start, this.offsetFromDuration(ability.start, ability.duration)))
               .map(ability => {
                 used.push(ability);
-                return <IExportItem>{ text: ability.ability as string, icon: ability.icon as string, refId: ability.id as string };
+                return <IExportItem>{
+                  text: ability.ability,
+                  icon: ability.icon,
+                  refId: ability.id,
+                  targetIcon: this.buildTargetIcon(ability, jobs)
+                };
               })
             , {}))
         ],
@@ -118,7 +124,13 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
       title: this.name,
       filterByFirstEntry: true
     };
-  } 
+  }
+
+  private buildTargetIcon(ability: Models.ExportAbility, jobs: Models.ExportJob[]): string {
+    const target = ability.settings?.find(s => s.name == SettingsEnum.Target)?.value;
+    const job = target && jobs?.find(j=>j.name === target);
+    return job?.icon;
+  }
 
   private isDefenceAbility(a: any) {
     return ((a.type & 1) === 1) ||
