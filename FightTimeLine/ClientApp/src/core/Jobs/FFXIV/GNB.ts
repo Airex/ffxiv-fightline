@@ -38,7 +38,7 @@ export const GNB: IJob = {
       xivDbId: "16151",
       icon: ("Gunbreaker/icon_13"),
       abilityType: AbilityType.Healing,
-      setting: [settings.target]
+      settings: [settings.target]
     },
     {
       name: "Superbolide",
@@ -83,7 +83,7 @@ export const GNB: IJob = {
       xivDbId: "16161",
       icon: ("Gunbreaker/icon_22"),
       abilityType: AbilityType.PartyDefense,
-      setting: [settings.target]
+      settings: [settings.target]
     },
     {
       name: "Bloodfest",
