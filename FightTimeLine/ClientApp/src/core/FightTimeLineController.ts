@@ -752,7 +752,7 @@ export class FightTimeLineController {
       }
 
       if (loadedData && loadedData.jobs) {
-        for (let j of loadedData.jobs.sort((a, b) => a.order - b.order)) {
+        for (let j of loadedData.jobs.sort((a, b) => b.order - a.order)) {
           const rid = this.addJob(j.id, j.name, null, j.pet, j.collapsed, false);
           const jh = this.holders.jobs.get(rid);
           if (jh) {
