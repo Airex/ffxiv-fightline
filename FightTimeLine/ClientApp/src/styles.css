@@ -225,6 +225,7 @@ sidepanel nz-space {
 
 .expand-sign {
   margin-right: 4px;
+  font: "";
 }
 
 .vis-label.vis-nesting-group .vis-inner {
