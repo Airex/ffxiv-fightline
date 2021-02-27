@@ -68,8 +68,9 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
                   text: ability.ability,
                   icon: ability.icon,
                   refId: ability.id,
-                  targetIcon: this.buildTargetIcon(ability, jobs)
-                };
+                  targetIcon: this.buildTargetIcon(ability, jobs),
+                  usageOffset: Utils.formatTime(new Date(Utils.getDateFromOffset(ability.start).getTime() - Utils.getDateFromOffset(attack.offset).getTime()))
+                };  
               })
             , {}))
         ],

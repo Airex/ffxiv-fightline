@@ -8,13 +8,15 @@
            *ngIf="d.icon"
            [src]="d.icon" />
       <span>{{d.text}}</span>
-      <span *ngIf="d.targetIcon" style="margin-left: 2px;">
+      <span class="usageOffset" *ngIf="d.usageOffset"> -{{d.usageOffset}}</span>
+      <span *ngIf="d.targetIcon"
+            style="margin-left: 2px;">
         <span style="margin-left: 2px;">&gt;</span>
         <img class="abilityIcon"
-           style="margin-left: 2px;margin-top: -3px;"           
-           [src]="d.targetIcon" />
-      </span> 
-      
+             style="margin-left: 2px;margin-top: -3px;"
+             [src]="d.targetIcon" />
+      </span>
+
     </div>
   </nz-tag>
 </ng-container>

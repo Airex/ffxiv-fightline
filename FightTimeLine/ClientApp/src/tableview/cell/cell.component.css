@@ -1,3 +1,7 @@
 nz-tag {
   cursor: pointer !important;
 }
+
+.usegeOffset {
+  margin-left: 2px;  
+}

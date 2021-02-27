@@ -27,11 +27,17 @@ export abstract class ExportTemplate {
   }
 
   protected text(input: Partial<IExportItem & IExportCell>): IExportCell {
-    return <IExportCell>{ items: [<IExportItem>{ ...<IExportItem>input, visible: true }], ...<IExportCell>input };
+    return <IExportCell>{ 
+      items: [<IExportItem>{ ...<IExportItem>input, visible: true }], 
+      ...input 
+    };
   }
 
   protected items(items: Partial<IExportItem>[], cell: Partial<IExportCell>): IExportCell {
-    return <IExportCell>{ items: items.map((it: IExportItem) => <IExportItem>{ ...it, visible: true }), ...cell };
+    return <IExportCell>{ 
+      items: items.map(it => <IExportItem>{ ...it, visible: true }), 
+      ...cell 
+    };
   }
 }
 
@@ -76,5 +82,6 @@ export interface IExportItem {
   color?: string;
   visible?: boolean;
   targetIcon?: string;
+  usageOffset?: string;
 }
 
