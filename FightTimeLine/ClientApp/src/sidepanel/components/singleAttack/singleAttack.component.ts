@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
-import { ISidePanelComponent,SidepanelParams,SIDEPANEL_DATA } from "../ISidePanelComponent"
+import { ISidePanelComponent, SidepanelParams, SIDEPANEL_DATA } from "../ISidePanelComponent"
 import * as M from "../../../core/Models"
 import * as S from "../../../services/index"
 import { Utils } from "../../../core/Utils"
-import {Holders} from "../../../core/Holders";
-import {BossAttackMap} from "../../../core/Maps/index";
+import { Holders } from "../../../core/Holders";
+import { BossAttackMap } from "../../../core/Maps/index";
 
 
 @Component({
@@ -23,11 +23,11 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
 
   constructor(
     private dispatcher: S.DispatcherService,
-    @Inject(SIDEPANEL_DATA) private data: SidepanelParams
+    @Inject(SIDEPANEL_DATA) public data: SidepanelParams
   ) {
     this.items = this.data.items;
     this.holders = this.data.holders;
-   this.refresh();
+    this.refresh();
   }
 
   get it(): BossAttackMap {
@@ -91,7 +91,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
     const bossAttackItems = this.holders.bossAttacks.get(this.it.id);
 
     if (!bossAttackItems) return [];
-    
+
     const defAbilities = this.holders.abilities.filter((it) => {
       return it.isDef;
     });
@@ -102,7 +102,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
         const end = new Date(ab.startAsNumber + ab.ability.ability.cooldown * 1000);
         return ab.start <= bossAttackItems.start && end >= bossAttackItems.start;
       })
-      
+
     });
 
     const values = intersected.map((it) => {

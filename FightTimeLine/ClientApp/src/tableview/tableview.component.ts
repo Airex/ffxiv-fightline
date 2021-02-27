@@ -88,7 +88,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl("/");
   }
 
-  select(id, $event) {
+  select(id:any, $event?: any) {
     if ($event) {
       $event.stopPropagation();
       $event.preventDefault();

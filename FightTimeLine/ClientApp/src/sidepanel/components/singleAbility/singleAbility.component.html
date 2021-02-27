@@ -1,50 +1,91 @@
 <nz-space nzDirection="vertical">
   <nz-space-item>
-    <img [src]="ability.icon" class="icon" />
-    <span class="abilityName">{{ability.name}}</span>
-  </nz-space-item>
-  <nz-space-item>
-    <div class="abilityDescriptionContainer">
-      <span class="abilityDescription" [innerHtml]="description"></span>
+    <div>
+      <img [src]="ability.icon"
+           class="icon" />
+      <span class="abilityName">{{ability.name}}</span>
+    </div>
+    <div>
+      <i nz-icon
+         nzType="clock-circle"
+         theme="twotone"></i><span class="time">{{formatTime(it.start)}}</span>
     </div>
   </nz-space-item>
   <nz-space-item>
-    <sidepanel-area header="Used on" *ngIf="!!ptyMemUsages">
+    <div class="abilityDescriptionContainer">
+      <span class="abilityDescription"
+            [innerHtml]="description"></span>
+    </div>
+  </nz-space-item>
+  <nz-space-item>
+    <sidepanel-area header="Used on"
+                    *ngIf="!!ptyMemUsages">
       <div *ngFor="let it of ptyMemUsages">
-        <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="usedTime">{{it.offset}}</span></a><img class="abilityIcon" [src]="it.icon" /> <span class="usedTarget">{{it.target}}</span>
+        <i nz-icon
+           nzType="clock-circle"
+           theme="outline"></i><a class="similarLink"
+           (click)="similarClick(it)"><span class="usedTime">{{it.offset}}</span></a><img class="abilityIcon"
+             [src]="it.icon" /> <span class="usedTarget">{{it.target}}</span>
       </div>
     </sidepanel-area>
   </nz-space-item>
   <nz-space-item>
-    <sidepanel-area header="Covered" *ngIf="covered && covered.length > 0">
+    <sidepanel-area header="Covered"
+                    *ngIf="covered && covered.length > 0">
       <div *ngFor="let it of covered">
-        <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(it)"><span class="usedTime">{{it.offset}}</span></a> <span class="usedTarget">{{it.attack.name}}</span>
+        <i nz-icon
+           nzType="clock-circle"
+           theme="outline"></i><a class="similarLink"
+           (click)="similarClick(it)"><span class="usedTime">{{it.offset}}</span></a> <span
+              class="usedTarget">{{it.attack.name}}</span>
       </div>
     </sidepanel-area>
   </nz-space-item>
   <nz-space-item *ngIf="it.ability.ability.settings && it.ability.ability.settings.length > 0">
     <sidepanel-area header="Settings">
-      <form nz-form [formGroup]="form" nzLayout="vertical">
+      <form nz-form
+            [formGroup]="form"
+            nzLayout="vertical">
         <nz-form-item *ngFor="let setting of it.ability.ability.settings">
-          <nz-form-label [nzFor]="setting.name">{{setting.displayName}}<i nz-icon nzType="info-circle" theme="twotone" style="margin-left: 8px" nz-tooltip [nzTooltipTitle]="setting.description"></i></nz-form-label>
+          <nz-form-label [nzFor]="setting.name">{{setting.displayName}}<i nz-icon
+               nzType="info-circle"
+               theme="twotone"
+               style="margin-left: 8px"
+               nz-tooltip
+               [nzTooltipTitle]="setting.description"></i></nz-form-label>
           <nz-form-control>
             <div [ngSwitch]="setting.type">
               <div *ngSwitchCase="'boolean'">
-                <nz-switch [nzDisabled]="data.mode!=='default'" [formControlName]="setting.name" style="margin-left: 15px" [id]="setting.name" (ngModelChange)="modified=true"></nz-switch>
+                <nz-switch [nzDisabled]="data.mode!=='default'"
+                           [formControlName]="setting.name"
+                           style="margin-left: 15px"
+                           [id]="setting.name"
+                           (ngModelChange)="modified=true"></nz-switch>
               </div>
               <div *ngSwitchCase="'partyMember'">
-                <nz-select [nzDisabled]="data.mode!=='default'" [formControlName]="setting.name" [id]="setting.name" [nzPlaceHolder]="setting.displayName" (ngModelChange)="modified=true">
-                  <nz-option nzValue="" nzLabel="None"></nz-option>
-                  <nz-option nzCustomContent *ngFor="let j of jobs" [nzValue]="j.id" [nzLabel]="j.job.name+' '+(j.actorName || '')"><img class="abilityIcon" [src]="j.job.icon" /> <span class="usedTarget">{{j.actorName}}</span></nz-option>
+                <nz-select [nzDisabled]="data.mode!=='default'"
+                           [formControlName]="setting.name"
+                           [id]="setting.name"
+                           [nzPlaceHolder]="setting.displayName"
+                           (ngModelChange)="modified=true">
+                  <nz-option nzValue=""
+                             nzLabel="None"></nz-option>
+                  <nz-option nzCustomContent
+                             *ngFor="let j of jobs"
+                             [nzValue]="j.id"
+                             [nzLabel]="j.job.name+' '+(j.actorName || '')"><img class="abilityIcon"
+                         [src]="j.job.icon" /> <span class="usedTarget">{{j.actorName}}</span></nz-option>
                 </nz-select>
               </div>
             </div>
 
           </nz-form-control>
         </nz-form-item>
-        <nz-form-item *ngIf="modified" >
+        <nz-form-item *ngIf="modified">
           <nz-form-control>
-            <button nz-button nzType="" (click)="saveSettings(it);modified=false;">Save</button>
+            <button nz-button
+                    nzType=""
+                    (click)="saveSettings();modified=false;">Save</button>
           </nz-form-control>
         </nz-form-item>
       </form>

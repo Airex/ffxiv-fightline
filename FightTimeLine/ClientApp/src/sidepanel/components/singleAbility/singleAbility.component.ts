@@ -79,6 +79,10 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     });
   }
 
+  formatTime(time){
+    return Utils.formatTime(time);
+  }
+
   saveSettings() {
 
     const settings = new Array<M.IAbilitySettingData>();

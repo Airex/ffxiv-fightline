@@ -8,7 +8,7 @@
       <i nz-icon nzType="clock-circle" theme="twotone"></i><span class="time">{{it.attack.offset}}</span>
     </div>
     <div>
-      <nz-tag *ngIf="!!it.attack.source" [nzColor]="warning">{{it.attack.source}}</nz-tag>
+      <nz-tag *ngIf="!!it.attack.source" nzColor="warning">{{it.attack.source}}</nz-tag>
       <nz-tag [nzColor]="getTypeColor(it.attack.type)">{{getType(it.attack.type)}}</nz-tag>
     </div>
 
@@ -20,7 +20,7 @@
     <span class="description">{{it.attack.description}}</span>
   </nz-space-item>
   <nz-space-item *ngIf="data.mode === 'default'">
-    <button nz-button nzType="primary" #copyButton (click)="copy(it);copyButton.nzType='';">Copy</button>
+    <button nz-button nzType="primary" #copyButton (click)="copy(it);copyButton.nzType=null;">Copy</button>
   </nz-space-item>
   <nz-space-item>
     <sidepanel-area header="Defensives" *ngIf="defs.length>0">
@@ -67,7 +67,7 @@
         </ul>
       </div>
       <div>
-        <a class="similarLink" (click)="similarAllClick(it)"><span class="">Select all</span></a>
+        <a class="similarLink" (click)="similarAllClick()"><span class="">Select all</span></a>
       </div>
 
     </sidepanel-area>
