@@ -2,7 +2,6 @@ nz-tag {
   cursor: pointer !important;
 }
 
-.usegeOffset {
-  margin-left: 2px;  
-  font-size: smaller !important;
+.usageOffset {  
+  font-size: smaller;
 }
