@@ -75,6 +75,24 @@ export class SerializeController {
 
   serializeBoss(): Models.IBoss {
 
+    var attacks = this.holders.bossAttacks.getAll()
+      .map(ab => {
+        return <IBossAbilityUsageData>{
+          id: ab.id,
+          ability: <Models.IBossAbility>{
+            name: ab.attack.name,
+            type: ab.attack.type,
+            tags: ab.attack.tags,
+            offset: Utils.formatTime(ab.start),
+            syncSettings: ab.attack.syncSettings,
+            source: ab.attack.source,
+            syncDowntime: ab.attack.syncDowntime,
+            syncPreDowntime: ab.attack.syncPreDowntime,
+            description: ab.attack.description
+          }
+        };
+      })
+
     return <Models.IBoss>{
       id: this.data.boss && this.data.boss.id || "",
       name: this.data.boss && this.data.boss.name || "",
@@ -82,23 +100,18 @@ export class SerializeController {
       isPrivate: this.data.boss && this.data.boss.isPrivate || false,
       ref: this.data.boss && this.data.boss.ref || "",
       data: JSON.stringify(<IBossSerializeData>{
-        attacks: this.holders.bossAttacks.getAll()
-          .map(ab => {
-            return <IBossAbilityUsageData>{
-              id: ab.id,
-              ability: <Models.IBossAbility>{
-                name: ab.attack.name,
-                type: ab.attack.type,
-                tags: ab.attack.tags,
-                offset: Utils.formatTime(ab.start),
-                syncSettings: ab.attack.syncSettings,
-                source: ab.attack.source,
-                syncDowntime: ab.attack.syncDowntime,
-                syncPreDowntime: ab.attack.syncPreDowntime,
-                description: ab.attack.description
-              }
-            };
-          }),
+        attacks: [
+          {
+            id: "", ability: {
+              name: "Pull",
+              type: Models.DamageType.None,
+              tags: [],
+              offset: "00:00",
+              description: "Pull"
+            }
+          },
+          ...attacks
+        ],
         downTimes: this.holders.bossDownTime.getAll().map((it) => <IDowntimeSerializeData>{
           id: it.id,
           start: Utils.formatTime(it.start),
@@ -112,15 +125,16 @@ export class SerializeController {
 
 
   serializeJobs(): IJobSerializeData[] {
-    const map = this.holders.jobs.getAll().map((value: JobMap) => <any>{
-      id: value.id,
-      name: value.job.name,
-      order: value.order,
-      pet: value.pet,
-      filter: value.filter,
-      compact: value.isCompact,
-      collapsed: value.collapsed
-    });
+    const map = this.holders.jobs.getAll()
+      .map((value: JobMap) => <any>{
+        id: value.id,
+        name: value.job.name,
+        order: value.order,
+        pet: value.pet,
+        filter: value.filter,
+        compact: value.isCompact,
+        collapsed: value.collapsed
+      });
     return map;
   }
 
@@ -140,8 +154,8 @@ export class SerializeController {
     const downTimes = this.holders.bossDownTime.getAll()
       .map((it) => <any>{
         id: it.id,
-        start: it.start< it.end? Utils.formatTime(it.start): Utils.formatTime(it.end),
-        end: it.start > it.end? Utils.formatTime(it.start): Utils.formatTime(it.end),
+        start: it.start < it.end ? Utils.formatTime(it.start) : Utils.formatTime(it.end),
+        end: it.start > it.end ? Utils.formatTime(it.start) : Utils.formatTime(it.end),
         comment: it.comment,
         color: it.color
       });
