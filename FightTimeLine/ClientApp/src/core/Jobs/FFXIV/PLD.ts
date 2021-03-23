@@ -59,7 +59,7 @@ export const PLD: IJob = {
       cooldown: 420,
       xivDbId: "30",
       icon: ("11_Paladin/0030_Hallowed Ground"),
-      abilityType: AbilityType.SelfShield,
+      abilityType: AbilityType.SelfDefense,
       defensiveStats: {
         mitigationPercent: 100
       }
