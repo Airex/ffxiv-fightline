@@ -18,7 +18,8 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
   }
 
   build(data: Models.ExportData, presenter: PresentationManager.PresenterManager): IExportResultSet {
-    const used: any[] = [];
+    const coverAll = this.coverAll;
+    const used = new Set<string>();
     const jobs = data.data.jobs.sort((a, b) => a.role - b.role);
     const rows = data.data.boss.attacks
       .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
@@ -55,22 +56,28 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
           ),
           ...jobs.map(job => this.items(
             data.data.abilities
-              .filter(ability =>
-                (this.coverAll || used.indexOf(ability) === -1) &&
-                ability.job === job.id &&
-                this.isDefenceAbility(ability) &&
-                this.isOffsetInRange(attack.offset, ability.start, this.offsetFromDuration(ability.start, ability.duration)))
+              .filter(ability => {
+                const res = (coverAll || !used.has(ability.id)) &&
+                  ability.job === job.id &&
+                  this.isDefenceAbility(ability) &&
+                  this.isOffsetInRange(attack.offset, ability.start, this.offsetFromDuration(ability.start, ability.duration))
+
+                if (!used.has(ability.id))
+                  used.add(ability.id);
+                return res;
+              })
               .map(ability => {
-                used.push(ability);
                 return <IExportItem>{
                   text: ability.ability,
                   icon: ability.icon,
                   refId: ability.id,
                   targetIcon: this.buildTargetIcon(ability, jobs),
-                  usageOffset: Utils.formatTime(new Date(Utils.getDateFromOffset(ability.start).getTime() - Utils.getDateFromOffset(attack.offset).getTime()))
-                };  
+                  usageOffset: Utils.formatTime(new Date(Utils.getDateFromOffset(ability.start).getTime() - Utils.getDateFromOffset(attack.offset).getTime())),
+                };
               })
-            , {}))
+            , {
+              disableUnique: coverAll
+            }))
         ],
         filterData: attack
       });
@@ -127,7 +134,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
 
   private buildTargetIcon(ability: Models.ExportAbility, jobs: Models.ExportJob[]): string {
     const target = ability.settings?.find(s => s.name === SettingsEnum.Target)?.value;
-    const job = target && jobs?.find(j=>j.id === target);
+    const job = target && jobs?.find(j => j.id === target);
     return job?.icon;
   }
 

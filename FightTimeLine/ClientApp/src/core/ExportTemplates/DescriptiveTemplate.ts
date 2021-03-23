@@ -40,7 +40,7 @@ export class DescriptiveTemplate extends ExportTemplate {
           this.text({
             text: attack.desc
           }),
-          this.items(attack.tags.map(t => ({ text: t })), {})
+          this.items(attack.tags?.map(t => ({ text: t })) || [], {})
 
         ],
         filterData: attack
