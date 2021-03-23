@@ -3,7 +3,7 @@ import { settings, abilitySortFn, getAbilitiesFrom, healerSharedAbilities, medic
 
 export const SCH: IJob = {
   name: "SCH",
-  fullName:"Scholar",
+  fullName: "Scholar",
   role: Role.Healer,
   icon: ("JobIcons/Scholar_Icon_10"),
   abilities: [
@@ -14,6 +14,9 @@ export const SCH: IJob = {
       xivDbId: "186",
       icon: ("62_PetsFairy/0186_Succor"),
       abilityType: AbilityType.PartyShield,
+      defensiveStats: {
+        shieldPercent: 10
+      }
     },
     {
       name: "Adloquium",
@@ -22,6 +25,9 @@ export const SCH: IJob = {
       xivDbId: "185",
       icon: ("62_PetsFairy/0185_Adloquium"),
       abilityType: AbilityType.PartyShield,
+      defensiveStats: {
+        shieldPercent: 15
+      }
     },
     {
       name: "Whispering Dawn",
@@ -37,7 +43,10 @@ export const SCH: IJob = {
       cooldown: 120,
       xivDbId: "805",
       icon: ("62_PetsFairy/0805_Fey Illumination"),
-      abilityType: AbilityType.Healing | AbilityType.PartyDefense,
+      abilityType: AbilityType.HealingBuff | AbilityType.PartyDefense,
+      defensiveStats: {
+        mitigationPercent: 5
+      }
     },
     {
       name: "Aetherflow",
@@ -70,7 +79,10 @@ export const SCH: IJob = {
       cooldown: 30,
       xivDbId: "188",
       icon: ("62_PetsFairy/0188_Sacred Soil"),
-      abilityType: AbilityType.SelfDefense | AbilityType.PartyDefense,
+      abilityType: AbilityType.PartyDefense,
+      defensiveStats: {
+        mitigationPercent : 10
+      }
     },
     {
       name: "Indomitability",
@@ -158,9 +170,12 @@ export const SCH: IJob = {
         count: 2,
         cooldown: 20
       },
-//      detectStrategy: byName()
+      defensiveStats: {
+        shieldPercent: 12
+      }
+      //      detectStrategy: byName()
     },
-   
+
     ...getAbilitiesFrom(healerSharedAbilities),
     medicine.Mind
   ].sort(abilitySortFn)

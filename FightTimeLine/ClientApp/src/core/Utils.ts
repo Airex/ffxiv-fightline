@@ -19,16 +19,16 @@ export class Utils {
       const parts = offset.split(":");
       const mins = Math.abs(parseInt(parts[0]));
       const secs = parseInt(parts[1]);
-      const number = (offset.indexOf("-")>=0?-1:1) * (mins * 60 * 1000 + secs * 1000);
+      const number = (offset.indexOf("-") >= 0 ? -1 : 1) * (mins * 60 * 1000 + secs * 1000);
       d = new Date(d.valueOf() as number + number);
     }
 
     return d;
   }
 
-  static inRange(startOffset: string, endOffset: string, toCheckOffset: string) : boolean{
+  static inRange(startOffset: string, endOffset: string, toCheckOffset: string): boolean {
     const orig = this.getDateFromOffset(toCheckOffset);
-    return  orig >= this.getDateFromOffset(startOffset) && orig<= this.getDateFromOffset(endOffset)
+    return orig >= this.getDateFromOffset(startOffset) && orig <= this.getDateFromOffset(endOffset)
   }
 
   static formatTime(date: Date): string {
@@ -44,15 +44,14 @@ export class Utils {
     return JSON.parse(JSON.stringify(obj)) as T;
   }
 
-  static groupBy(input: any[], keyFn: (x: any) => string): { [key: string]: any[] } {
-    const group: any = {};
+  static groupBy<T>(input: T[], keyFn: (x: T) => string): { [key: string]: T[] } {
+    const group: { [name: string]: T[] } = {};
     input.forEach((value) => {
       const key = keyFn(value);
       if (group[key]) {
         group[key].push(value);
       } else {
-        group[key] = [];
-        group[key].push(value);
+        group[key] = [value];        
       }
     });
     return group;
@@ -66,14 +65,14 @@ export class Utils {
           (startDate.valueOf() as number));
         var result;
         switch (scale) {
-        case 'second':
-          result = (diff < 0 ? -1 : 1) * cd.getSeconds();
-          break;
-        case 'minute':
-          result = (diff < 0 ? -1 : 1) * cd.getMinutes();
-          break;
-        default:
-          return new Date(date);
+          case 'second':
+            result = (diff < 0 ? -1 : 1) * cd.getSeconds();
+            break;
+          case 'minute':
+            result = (diff < 0 ? -1 : 1) * cd.getMinutes();
+            break;
+          default:
+            return new Date(date);
         }
         return result;
       },
@@ -82,14 +81,14 @@ export class Utils {
         var cd = new Date(Math.abs(diff) + (startDate.valueOf() as number));
         var result;
         switch (scale) {
-        case 'second':
-          result = (diff < 0 ? -1 : 1) * cd.getMinutes();
-          break;
-        case 'minute':
-          result = 0;
-          break;
-        default:
-          return new Date(date);
+          case 'second':
+            result = (diff < 0 ? -1 : 1) * cd.getMinutes();
+            break;
+          case 'minute':
+            result = 0;
+            break;
+          default:
+            return new Date(date);
         }
         return result;
       }

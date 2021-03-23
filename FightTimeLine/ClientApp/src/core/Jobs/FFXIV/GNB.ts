@@ -22,6 +22,9 @@ export const GNB: IJob = {
       xivDbId: "16140",
       icon: ("Gunbreaker/icon_04"),
       abilityType: AbilityType.SelfDefense,
+      defensiveStats: {
+        mitigationPercent : 10
+      }
     },
     {
       name: "Nebula",
@@ -30,6 +33,9 @@ export const GNB: IJob = {
       xivDbId: "16148",
       icon: ("Gunbreaker/icon_11"),
       abilityType: AbilityType.SelfDefense,
+      defensiveStats: {
+        mitigationPercent : 30
+      }
     },
     {
       name: "Aurora",
@@ -47,6 +53,9 @@ export const GNB: IJob = {
       xivDbId: "16152",
       icon: ("Gunbreaker/icon_14"),
       abilityType: AbilityType.SelfDefense,
+      defensiveStats:{
+        mitigationPercent: 100
+      }
     },
     {
       name: "Rough Divide",
@@ -75,6 +84,9 @@ export const GNB: IJob = {
       xivDbId: "16160",
       icon: ("Gunbreaker/icon_21"),
       abilityType: AbilityType.PartyDefense,
+      defensiveStats: {
+        mitigationPercent: 10
+      }
     },
     {
       name: "Heart of Stone",
@@ -82,8 +94,11 @@ export const GNB: IJob = {
       cooldown: 25,
       xivDbId: "16161",
       icon: ("Gunbreaker/icon_22"),
-      abilityType: AbilityType.PartyDefense,
-      settings: [settings.target]
+      abilityType: AbilityType.TargetDefense,
+      settings: [settings.target],
+      defensiveStats: {
+        mitigationPercent: 15
+      }
     },
     {
       name: "Bloodfest",

@@ -48,6 +48,9 @@ export const PLD: IJob = {
       xivDbId: "17",
       icon: ("11_Paladin/0017_Sentinel"),
       abilityType: AbilityType.SelfDefense,
+      defensiveStats: {
+        mitigationPercent: 30
+      }
 
     },
     {
@@ -57,6 +60,9 @@ export const PLD: IJob = {
       xivDbId: "30",
       icon: ("11_Paladin/0030_Hallowed Ground"),
       abilityType: AbilityType.SelfShield,
+      defensiveStats: {
+        mitigationPercent: 100
+      }
     },
     {
       name: "Divine Veil",
@@ -65,6 +71,9 @@ export const PLD: IJob = {
       xivDbId: "3540",
       icon: ("11_Paladin/3540_Divine Veil"),
       abilityType: AbilityType.PartyShield,
+      defensiveStats: {
+        shieldPercent: 10
+      }
     },
     {
       name: "Passage of Arms",
@@ -73,6 +82,9 @@ export const PLD: IJob = {
       xivDbId: "7385",
       icon: ("11_Paladin/7385_Passage Of Arms"),
       abilityType: AbilityType.PartyDefense,
+      defensiveStats: {
+        mitigationPercent: 15
+      }
     },
     {
       name: "Cover",
@@ -82,6 +94,9 @@ export const PLD: IJob = {
       icon: ("11_Paladin/0027_Cover"),
       abilityType: AbilityType.PartyDefense,
       settings: [settings.target],
+      defensiveStats: {
+        mitigationPercent: 10
+      }
     },
     {
       name: "Sheltron",
@@ -91,6 +106,9 @@ export const PLD: IJob = {
       requiresBossTarget: true,
       icon: ("11_Paladin/3542_Sheltron"),
       abilityType: AbilityType.SelfDefense,
+      defensiveStats: {
+        mitigationPercent: 18
+      }
     },
     {
       name: "Intervention",
@@ -101,6 +119,9 @@ export const PLD: IJob = {
       icon: ("11_Paladin/7382_Intervention"),
       abilityType: AbilityType.TargetDefense,
       settings: [settings.target],
+      defensiveStats: {
+        mitigationPercent: 10
+      }
     },
     {
       name: "Intervene",

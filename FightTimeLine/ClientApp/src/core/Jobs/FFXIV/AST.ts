@@ -51,7 +51,10 @@ export const AST: IJob = {
       cooldown: 60,
       xivDbId: "3613",
       icon: ("23_Astrologian/3613_Collective Unconscious"),
-      abilityType: AbilityType.PartyDefense,
+      abilityType: AbilityType.PartyDefense,      
+      defensiveStats: {
+        mitigationPercent: 10        
+      }
     },
     {
       name: "Celestial Opposition",

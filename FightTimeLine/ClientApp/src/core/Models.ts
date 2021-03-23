@@ -293,6 +293,13 @@ class ByBuffRemoveDetector implements IDetectionStrategy {
   }
 }
 
+export interface IDefensiveStats {
+  shieldPercent?: number;
+  mitigationPercent?: number;
+  shareGroup?: string;
+  damageType?: DamageType;
+}
+
 export interface IAbility {
   name: string;
   duration: number;
@@ -311,6 +318,7 @@ export interface IAbility {
   detectStrategy?: IDetectionStrategy;
   overlapStrategy?: IOverlapStrategy;
   charges?: IAbilityCharges;
+  defensiveStats?: IDefensiveStats;
 }
 
 export interface IAbilityCharges {
@@ -553,7 +561,7 @@ export interface ExportAbility {
   duration: number;
   start: string;
   icon: string;
-  settings: IAbilitySettingData[];  
+  settings: IAbilitySettingData[];
 }
 
 export interface ExportDataData {

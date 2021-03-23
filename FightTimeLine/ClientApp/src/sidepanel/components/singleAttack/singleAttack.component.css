@@ -8,6 +8,11 @@
   height: 24px;
 }
 
+.jobName {
+  vertical-align: middle;
+  margin-left: 3px;
+}
+
 .area {
   margin-top: 3px;
 }
@@ -16,6 +21,7 @@
   margin-left: 3px;
 }
 .abilityNameDef {
+  vertical-align: middle;
   margin-left: 3px;
 }
 

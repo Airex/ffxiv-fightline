@@ -40,6 +40,8 @@
 
 .jobName {
   pointer-events: none;
+  margin-left: 3px;
+  vertical-align: middle;
 }
 
 body {
@@ -209,6 +211,7 @@ sidepanel nz-space {
 
 .abilityName {
   padding-left: 2px;
+  vertical-align: middle;
 }
 
 .vis-item.notCovered .name {

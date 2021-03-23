@@ -8,7 +8,7 @@ export const DRK: IJob = {
   icon: ("JobIcons/Dark_Knight_Icon_10"),
   abilities: <IAbility[]>[
     {
-      name: "Blood Weapon",
+      name: "Blood Weapon",      
       duration: 10,
       cooldown: 60,
       xivDbId: "3625",
@@ -83,6 +83,9 @@ export const DRK: IJob = {
       damageAffected: DamageType.All,
       goodForTankBusters: true,
       abilityType: AbilityType.SelfDefense,
+      defensiveStats: {
+        mitigationPercent: 30
+      }
     },
     {
       name: "Dark Mind",
@@ -93,6 +96,9 @@ export const DRK: IJob = {
       damageAffected: DamageType.Magical,
       goodForTankBusters: true,
       abilityType: AbilityType.SelfDefense,
+      defensiveStats: {
+        mitigationPercent : 20
+      }
     },
     {
       name: "Living Dead",
@@ -104,6 +110,9 @@ export const DRK: IJob = {
       extendDurationOnNextAbility: 10,
       isUltimateSave: true,
       abilityType: AbilityType.SelfDefense,
+      defensiveStats: {
+        mitigationPercent: 100
+      }
     },
     {
       name: "The Blackest Night",
@@ -115,6 +124,9 @@ export const DRK: IJob = {
       goodForTankBusters: false,
       abilityType: AbilityType.SelfShield,
       settings: [settings.target],
+      defensiveStats: {
+        shieldPercent : 25
+      }
     },
     {
       name: "Delirium",
@@ -133,6 +145,9 @@ export const DRK: IJob = {
       requiresBossTarget: false,
       icon: ("13_DarkKnight/icon_24"),
       abilityType: AbilityType.PartyDefense,
+      defensiveStats: {
+        mitigationPercent: 10
+      }
     },
     {
       name: "Living Shadow",

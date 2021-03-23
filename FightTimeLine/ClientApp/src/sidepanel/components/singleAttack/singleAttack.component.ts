@@ -2,9 +2,12 @@ import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
 import { ISidePanelComponent, SidepanelParams, SIDEPANEL_DATA } from "../ISidePanelComponent"
 import * as M from "../../../core/Models"
 import * as S from "../../../services/index"
-import { Utils } from "../../../core/Utils"
 import { Holders } from "../../../core/Holders";
 import { BossAttackMap } from "../../../core/Maps/index";
+import { calculateAvailDefsForAttack, calculateDefsForAttack } from "src/core/Defensives";
+import { settings } from "src/core/Jobs/FFXIV";
+import { SettingsEnum } from "src/core/Jobs/FFXIV/shared";
+import { sum } from "ng-zorro-antd/core/util";
 
 
 @Component({
@@ -17,6 +20,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   defs: any[] = null;
   availDefs: any[] = null;
   similar: any[] = null;
+  defStats: any[] = [];
 
   items: any[];
   holders: Holders;
@@ -57,68 +61,12 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   }
 
   calculateDefs() {
-    const bossAttackItems = this.holders.bossAttacks.get(this.it.id);
-
-    if (!bossAttackItems) return [];
-
-    const defAbilities = this.holders.itemUsages.filter((it) => {
-      const ab = it.ability;
-      return ab.isDef;
-    });
-
-    const intersected = defAbilities.filter((it) => {
-      const end = new Date(it.startAsNumber + it.calculatedDuration * 1000);
-      return it.start <= bossAttackItems.start && end >= bossAttackItems.start;
-    });
-
-    const values = intersected.map((it) => {
-      const jobMap = it.ability.job;
-      return { jobId: jobMap.id, jobName: jobMap.job.name, ability: it.ability.ability, id: it.id };
-    });
-
-    const grouped = Utils.groupBy(values, x => x.jobId);
-
-    return Object.keys(grouped).map((value) => {
-      return {
-        job: this.holders.jobs.get(value).job,
-        abilities: grouped[value]
-      };
-    }).sort((a, b) => a.job.role - b.job.role);
-
+    const newLocal = calculateDefsForAttack(this.holders, this.it.id);
+    return newLocal;
   }
 
   calculateAvailDefs() {
-    const bossAttackItems = this.holders.bossAttacks.get(this.it.id);
-
-    if (!bossAttackItems) return [];
-
-    const defAbilities = this.holders.abilities.filter((it) => {
-      return it.isDef;
-    });
-
-    const intersected = defAbilities.filter((it) => {
-      const abilities = this.holders.itemUsages.getByAbility(it.id);
-      return !abilities.some(ab => {
-        const end = new Date(ab.startAsNumber + ab.ability.ability.cooldown * 1000);
-        return ab.start <= bossAttackItems.start && end >= bossAttackItems.start;
-      })
-
-    });
-
-    const values = intersected.map((it) => {
-      const jobMap = it.job;
-      return { jobId: jobMap.id, jobName: jobMap.job.name, ability: it.ability, id: it.id };
-    });
-
-    const grouped = Utils.groupBy(values, x => x.jobId);
-
-    return Object.keys(grouped).map((value) => {
-      return {
-        job: this.holders.jobs.get(value).job,
-        abilities: grouped[value]
-      };
-    }).sort((a, b) => a.job.role - b.job.role);
-
+    return calculateAvailDefsForAttack(this.holders, this.it.id);
   }
 
   edit(it) {
@@ -149,10 +97,73 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
     });
   }
 
+  abilityMatch(input:M.AbilityType, toMatch: M.AbilityType){
+    return (input & toMatch) === toMatch
+  }
+
   refresh() {
     this.defs = this.calculateDefs();
     this.availDefs = this.calculateAvailDefs();
     this.similar = this.holders.bossAttacks.filter(it => it.attack.name === this.it.attack.name && it.id !== this.it.id);
+
+    var partyMitigation = -1;
+    var partyShield = 0;
+    var sums = {};
+    var abs = this.defs.reduce((ac, j) => {
+      return [...ac, ...j.abilities]
+    }, []);
+    var used = new Set();
+    abs.forEach((a: { ability: M.IAbility, jobId: string, id: string }) => {
+      if (used.has(a.ability.name) || used.has(a.ability.defensiveStats?.shareGroup)) return;
+
+      used.add(a.ability.name);
+      if (a.ability.defensiveStats?.shareGroup)
+        used.add(a.ability.defensiveStats?.shareGroup);
+
+      if (this.abilityMatch(a.ability.abilityType, M.AbilityType.PartyDefense)) {
+        if (partyMitigation === -1) partyMitigation = 1;
+        partyMitigation *= 1 - (a.ability.defensiveStats?.mitigationPercent || 0) / 100
+      }
+
+      if (this.abilityMatch(a.ability.abilityType, M.AbilityType.PartyShield)) {
+        if (partyShield === -1) partyShield = 0;
+        partyShield += a.ability.defensiveStats?.shieldPercent || 0
+      }
+
+      if (a.ability.abilityType === M.AbilityType.SelfShield) {
+        const settingData = this.holders.itemUsages.get(a.id).getSettingData(SettingsEnum.Target);
+        var jobId = settingData?.value || a.jobId;
+        if (jobId) {
+          if (!sums[jobId]) sums[jobId] = {shield: 0, mitigation : -1};
+          sums[jobId].shield += a.ability.defensiveStats?.shieldPercent || 0
+        }        
+      }
+
+      if (this.abilityMatch(a.ability.abilityType, M.AbilityType.SelfDefense) || this.abilityMatch(a.ability.abilityType, M.AbilityType.TargetDefense)) {
+        const settingData = this.holders.itemUsages.get(a.id).getSettingData(SettingsEnum.Target);
+        var jobId = settingData?.value || a.jobId;
+        if (jobId) {
+          if (!sums[jobId]) sums[jobId] = {shield: 0, mitigation : -1};
+          if (sums[jobId].mitigation === -1) sums[jobId].mitigation = 1;
+          sums[jobId].mitigation *= 1 - (a.ability.defensiveStats?.mitigationPercent || 0) / 100
+        }        
+      }
+    });
+
+    this.defStats = Object.keys(sums).map(s =>
+    ({
+      name: this.holders.jobs.get(s).job.name,
+      mitigation: 1 - Math.abs(sums[s].mitigation * partyMitigation),
+      shield: sums[s].shield + partyShield,
+      icon: this.holders.jobs.get(s).job.icon
+    })
+    );
+    this.defStats.push({
+      name: "Party",
+      mitigation: 1 - Math.abs(partyMitigation),
+      shield: partyShield
+    })
+
   }
 
   ngOnInit(): void {

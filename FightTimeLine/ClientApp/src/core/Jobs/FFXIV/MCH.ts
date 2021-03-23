@@ -74,6 +74,10 @@ export const MCH: IJob = {
       xivDbId: "16889",
       icon: ("42_Machinist/icon_16"),
       abilityType: AbilityType.PartyDefense,
+      defensiveStats: {
+        mitigationPercent: 10,
+        shareGroup: "rangeDef"
+      }
     },
     {
       name: "Barrel Stabilizer",

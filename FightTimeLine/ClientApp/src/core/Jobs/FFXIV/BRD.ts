@@ -94,6 +94,10 @@ export const BRD: IJob = {
       xivDbId: "7405",
       icon: ("41_Bard/7405_Troubadour"),
       abilityType: AbilityType.PartyDefense,
+      defensiveStats: {
+        mitigationPercent: 10,
+        shareGroup: "rangeDef"
+      }
     },
     {
       name: "Nature's Minne",

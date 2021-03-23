@@ -32,6 +32,9 @@ export const WHM: IJob = {
       icon: ("21_WhiteMage/9621_Divine Benison"),
       abilityType: AbilityType.SelfShield,
       settings: [settings.target],
+      defensiveStats: {
+        shieldPercent: 15
+      }
     },
     {
       name: "Benediction",
@@ -82,6 +85,9 @@ export const WHM: IJob = {
       xivDbId: "16536",
       icon: ("21_WhiteMage/icon_29"),
       abilityType: AbilityType.HealingBuff | AbilityType.PartyDefense,
+      defensiveStats: {
+        mitigationPercent: 10
+      }
     },
     {
       name: "Thin Air",

@@ -7,7 +7,10 @@ export interface IAbilities {
 export const abilitySortFn = (a1: IAbility, a2: IAbility): number => {
   const st: AbilityType[] = [
     AbilityType.PartyDefense,
-    AbilityType.SelfDefense,
+    AbilityType.PartyShield,
+    AbilityType.TargetDefense,
+    AbilityType.SelfShield,
+    AbilityType.SelfDefense,    
     AbilityType.PartyDamageBuff,
     AbilityType.SelfDamageBuff,
     AbilityType.Utility,
@@ -30,7 +33,8 @@ export const getAbilitiesFrom = (arr: IAbilities): IAbility[] => {
 
 export enum SettingsEnum {
   Target = "target",
-  ChangesTarget = "changesTarget"
+  ChangesTarget = "changesTarget",
+  HealShield = "healShield"
 }
 
 export type SettingsType = { [T in SettingsEnum]: IAbilitySetting }
@@ -54,12 +58,29 @@ export const settings: SettingsType = {
     description: "Determines if ability changes boss target",
     type: "boolean",
     default: true
+  },
+  healShield: <IAbilitySetting>{
+    name: "healShield",
+    displayName: "Shield?",
+    description: "Determines if ability applies shield",
+    type: "boolean",
+    default: false
   }
 }
 
 export const tankSharedAbilities: IAbilities = {
-  Rampart: { name: "Rampart", duration: 20, cooldown: 90, xivDbId: "7531", icon: "10_TankRole/7531_Rampart", abilityType: AbilityType.SelfDefense },
-  Reprisal: { name: "Reprisal", duration: 10, cooldown: 60, xivDbId: "7535", icon: "10_TankRole/7535_Reprisal", abilityType: AbilityType.PartyDefense, requiresBossTarget: false, },
+  Rampart: {
+    name: "Rampart", duration: 20, cooldown: 90, xivDbId: "7531", icon: "10_TankRole/7531_Rampart", abilityType: AbilityType.SelfDefense,
+    defensiveStats: {
+      mitigationPercent: 20
+    }
+  },
+  Reprisal: {
+    name: "Reprisal", duration: 10, cooldown: 60, xivDbId: "7535", icon: "10_TankRole/7535_Reprisal", abilityType: AbilityType.PartyDefense, requiresBossTarget: false,
+    defensiveStats: {
+      mitigationPercent: 10
+    }
+  },
   Provoke: { name: "Provoke", duration: 0, cooldown: 30, xivDbId: "7533", icon: "10_TankRole/7533_Provoke", abilityType: AbilityType.Enmity, settings: [settings.changesTarget], requiresBossTarget: true, },
   Shirk: { name: "Shirk", duration: 0, cooldown: 120, xivDbId: "7537", icon: "10_TankRole/7537_Shirk", abilityType: AbilityType.Enmity }
 };
@@ -71,12 +92,22 @@ const magicSharedAbilities: IAbilities = {
 };
 
 export const meleeSharedAbilities: IAbilities = {
-  Feint: { name: "Feint", duration: 10, cooldown: 90, xivDbId: "7549", icon: ("30_MeleeDPSRole/7549_Feint"), abilityType: AbilityType.PartyDefense, requiresBossTarget: true, },
+  Feint: {
+    name: "Feint", duration: 10, cooldown: 90, xivDbId: "7549", icon: ("30_MeleeDPSRole/7549_Feint"), abilityType: AbilityType.PartyDefense, requiresBossTarget: true,
+    defensiveStats: {
+      mitigationPercent: 10
+    }
+  },
 };
 export const rangeSharedAbilities: IAbilities = {
 };
 export const casterSharedAbilities: IAbilities = {
-  Addle: { name: "Addle", duration: 10, cooldown: 90, xivDbId: "7560", icon: ("50_MagicDPSRole/7560_Addle"), abilityType: AbilityType.PartyDefense, requiresBossTarget: true, },
+  Addle: {
+    name: "Addle", duration: 10, cooldown: 90, xivDbId: "7560", icon: ("50_MagicDPSRole/7560_Addle"), abilityType: AbilityType.PartyDefense, requiresBossTarget: true,
+    defensiveStats: {
+      mitigationPercent: 10
+    }
+  },
   ...magicSharedAbilities
 };
 export const healerSharedAbilities: IAbilities = {
@@ -90,7 +121,7 @@ enum MedicineEnum {
   Strength = "Strength"
 }
 
-export const medicine: {[TName in MedicineEnum]:IAbility} = {
+export const medicine: { [TName in MedicineEnum]: IAbility } = {
   Mind: { name: "Medicine", duration: 30, cooldown: 270, xivDbId: "27999", icon: ("Medicine/22451_Mind"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
   Intelligence: { name: "Medicine", duration: 30, cooldown: 270, xivDbId: "27998", icon: ("Medicine/22450_Intelligence"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
   Dexterity: { name: "Medicine", duration: 30, cooldown: 270, xivDbId: "27996", icon: ("Medicine/22448_Dexterity"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },

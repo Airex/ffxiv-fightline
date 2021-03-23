@@ -55,6 +55,9 @@ export const WAR: IJob = {
       icon: ("12_Warrior/0044_Vengeance"),
       relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },
       abilityType: AbilityType.SelfDefense,
+      defensiveStats: {
+        mitigationPercent: 30
+      }
     },
     {
       name: "Holmgang",
@@ -65,6 +68,9 @@ export const WAR: IJob = {
       icon: ("12_Warrior/0043_Holmgang"),
       isUltimateSave: true,
       abilityType: AbilityType.SelfDefense,
+      defensiveStats: {
+        mitigationPercent: 100
+      }
     },
     {
       name: "Shake It Off",
@@ -77,6 +83,9 @@ export const WAR: IJob = {
       {
         affects: ["Thrill of Battle", "Vengence", "Raw Intuition"],
         parentOnly: true
+      },
+      defensiveStats: {
+        shieldPercent: 15
       }
     },
     {
@@ -96,7 +105,10 @@ export const WAR: IJob = {
       icon: ("12_Warrior/3551_Raw Intuition"),
       abilityType: AbilityType.SelfDefense,
       relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },
-      overlapStrategy: new SharedOverlapStrategy(["Nascent Flash"])
+      overlapStrategy: new SharedOverlapStrategy(["Nascent Flash"]),
+      defensiveStats: {
+        mitigationPercent : 20
+      }
     },
     {
       name: "Equilibrium",
@@ -114,7 +126,10 @@ export const WAR: IJob = {
       icon: ("12_Warrior/icon_24 (1)"),
       abilityType: AbilityType.TargetDefense,
       settings: [settings.target],
-      overlapStrategy: new SharedOverlapStrategy(["Raw Intuition"])
+      overlapStrategy: new SharedOverlapStrategy(["Raw Intuition"]), 
+      defensiveStats: {
+        mitigationPercent: 10
+      }
     },
     ...getAbilitiesFrom(tankSharedAbilities),
     medicine["Strength"]

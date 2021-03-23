@@ -36,22 +36,10 @@ export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJob
 
   private buildAbility(a: Models.IAbility): Models.IAbility {
     return {
-      name: a.name,
-      abilityType: a.abilityType,
-      cooldown: a.cooldown,
-      duration: a.duration,
+      ...a,
       icon: this.getIcon(a.icon),
-      activationOffset: a.activationOffset,
-      pet: a.pet,
-      requiresBossTarget: a.requiresBossTarget,
-      extendDurationOnNextAbility: a.extendDurationOnNextAbility,
-      relatedAbilities: a.relatedAbilities,
-      settings: a.settings,
-      xivDbId: a.xivDbId,
-      xivDbType: a.xivDbType,
-      charges: a.charges,
       detectStrategy: a.detectStrategy || Models.byName([a.xivDbId], [a.name]),
-      overlapStrategy: a.overlapStrategy || new Models.BaseOverlapStrategy()
+      overlapStrategy: a.overlapStrategy || new Models.BaseOverlapStrategy()      
     }
   }
 

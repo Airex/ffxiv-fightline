@@ -14,6 +14,10 @@ export const DNC: IJob = {
       xivDbId: "16012",
       icon: ("Dancer/icon_14"),
       abilityType: AbilityType.PartyDefense,
+      defensiveStats: {
+        mitigationPercent: 10,
+        shareGroup: "rangeDef"
+      }
     },
     {
       name: "Improvisation",

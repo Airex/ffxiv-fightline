@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
-import { ISidePanelComponent,SidepanelParams, SIDEPANEL_DATA } from "../ISidePanelComponent"
+import { ISidePanelComponent, SidepanelParams, SIDEPANEL_DATA } from "../ISidePanelComponent"
 import * as M from "../../../core/Models"
 import * as S from "../../../services/index"
 import { Holders } from "../../../core/Holders";
 import { AbilityMap } from "../../../core/Maps/index";
 import { DomSanitizer } from "@angular/platform-browser";
 import * as X from "@xivapi/angular-client"
+import { calculateDefsForAttack } from "src/core/Defensives";
 
 
 @Component({
@@ -15,8 +16,8 @@ import * as X from "@xivapi/angular-client"
 })
 export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelComponent {
 
-  description:any = "";
-  compactView:boolean;
+  description: any = "";
+  compactView: boolean;
   items: any[];
   holders: Holders;
 
@@ -25,11 +26,11 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     private sanitizer: DomSanitizer,
     private dispatcher: S.DispatcherService,
     @Inject(SIDEPANEL_DATA) public data: SidepanelParams
-    ) {
+  ) {
     this.items = this.data.items;
     this.holders = this.data.holders;
     this.refresh();
-   
+
   }
 
   get it(): AbilityMap {
@@ -47,22 +48,22 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
 
   private getEndpoint(type: string): X.XivapiEndpoint {
     switch (type) {
-    case "item":
-      return X.XivapiEndpoint.Item;
-    default:
+      case "item":
+        return X.XivapiEndpoint.Item;
+      default:
     }
     return X.XivapiEndpoint.Action;
   }
 
-  
 
-  compact(value) {
+
+  compact() {
     setTimeout(() => {
-        this.dispatcher.dispatch({
-          name: "SidePanel Toggle Job Ability Compact View",
-          payload: this.it.id
-        });
-      },
+      this.dispatcher.dispatch({
+        name: "SidePanel Toggle Job Ability Compact View",
+        payload: this.it.id
+      });
+    },
       1);
   }
 
@@ -70,7 +71,7 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     this.dispatcher.dispatch({
       name: "SidePanel Hide Job Ability",
       payload: ab.id
-  });
+    });
   }
 
   clear(ab: AbilityMap) {
@@ -91,15 +92,21 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     this.compactView = this.it.isCompact;
 
     if (this.ability.xivDbId) {
-      this.xivapi.get(this.getEndpoint(this.ability.xivDbType), Number(this.ability.xivDbId)).subscribe(a => {
-        if (a && a.Description) {
-          this.description =
-            this.sanitizer.bypassSecurityTrustHtml(a.Description.replace(new RegExp("\\n+", "g"), "<br/>"));
-        } else {
-          this.description = "";
-        }
-      });
+      this.xivapi.get(this.getEndpoint(this.ability.xivDbType), Number(this.ability.xivDbId), {})
+        .subscribe(a => {
+          if (a && a.Description) {
+            this.description =
+              this.sanitizer.bypassSecurityTrustHtml(a.Description.replace(new RegExp("\\n+", "g"), "<br/>"));
+          } else {
+            this.description = "";
+          }
+        });
     }
+  }
+
+  calculateDefs() {
+    const usages = this.holders.itemUsages.getByAbility(this.it.id);
+    calculateDefsForAttack(this.holders, this.it.id);
   }
 
 
