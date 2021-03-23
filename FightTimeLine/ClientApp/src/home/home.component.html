@@ -51,7 +51,7 @@
                            nzTooltipTitle="Remove"
                            nz-popconfirm
                            nzPopconfirmTitle="Are you sure?"
-                           (nzOnConfirm)="delete(item,$event)"><i class="pin"
+                           (nzOnConfirm)="delete(item)"><i class="pin"
                              nz-icon
                              nzType="delete"
                              nzTheme="twotone"></i></a>
@@ -60,6 +60,8 @@
                         <ul nz-menu>
                           <li nz-menu-item
                               (click)="onOpenTable(item,'defence')">Defensives</li>
+                          <li nz-menu-item
+                              (click)="onOpenTable(item,'defencecover')">Defensives (cover)</li>
                           <li nz-menu-item
                               (click)="onOpenTable(item,'descriptive')">Timeline</li>
                         </ul>
@@ -119,7 +121,7 @@
                            nzTooltipTitle="Remove"
                            nz-popconfirm
                            nzPopconfirmTitle="Are you sure?"
-                           (nzOnConfirm)="delete(item,$event)"><i class="pin"
+                           (nzOnConfirm)="delete(item)"><i class="pin"
                              nz-icon
                              nzType="delete"
                              nzTheme="twotone"></i></a>
