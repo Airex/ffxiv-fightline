@@ -18,8 +18,6 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
   }
 
   build(data: Models.ExportData, presenter: PresentationManager.PresenterManager): IExportResultSet {
-    this.coverAll = true;
-
     const used: any[] = [];
     const jobs = data.data.jobs.sort((a, b) => a.role - b.role);
     const rows = data.data.boss.attacks
