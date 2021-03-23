@@ -1,5 +1,6 @@
 <ng-container *ngFor="let d of input.items">
   <nz-tag [nzColor]="d.color"
+          [class.clone]="d.clone"
           (click)="select(d.refId, $event)"
           *ngIf="d.visible && d.text">
     <div style="margin: 0 2px 1px 2px">
@@ -8,7 +9,8 @@
            *ngIf="d.icon"
            [src]="d.icon" />
       <span>{{d.text}}</span>
-      <span class="usageOffset" *ngIf="d.usageOffset"> ({{d.usageOffset}})</span>
+      <span class="usageOffset"
+            *ngIf="d.usageOffset && !d.clone"> ({{d.usageOffset}})</span>
       <span *ngIf="d.targetIcon"
             style="margin-left: 2px;">
         <span style="margin-left: 2px;">&gt;</span>

@@ -72,7 +72,7 @@ export interface IExportCell {
   disableUnique?: boolean;
   colorFn?: (data) => string;
   bgRefIdFn?: (data) => string;
-  noTag?: boolean;
+  noTag?: boolean;  
 }
 
 export interface IExportItem {
@@ -83,5 +83,6 @@ export interface IExportItem {
   visible?: boolean;
   targetIcon?: string;
   usageOffset?: string;
+  clone?: boolean;
 }
 

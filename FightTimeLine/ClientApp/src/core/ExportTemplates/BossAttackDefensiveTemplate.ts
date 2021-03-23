@@ -56,25 +56,29 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
           ),
           ...jobs.map(job => this.items(
             data.data.abilities
-              .filter(ability => {
-                const res = (coverAll || !used.has(ability.id)) &&
+              .map(ability => {
+                const condition = (coverAll || !used.has(ability.id)) &&
                   ability.job === job.id &&
                   this.isDefenceAbility(ability) &&
                   this.isOffsetInRange(attack.offset, ability.start, this.offsetFromDuration(ability.start, ability.duration))
 
-                if (!used.has(ability.id))
-                  used.add(ability.id);
-                return res;
-              })
-              .map(ability => {
-                return <IExportItem>{
+                if (!condition) return null;
+
+                const result = <IExportItem>{
                   text: ability.ability,
                   icon: ability.icon,
                   refId: ability.id,
                   targetIcon: this.buildTargetIcon(ability, jobs),
                   usageOffset: Utils.formatTime(new Date(Utils.getDateFromOffset(ability.start).getTime() - Utils.getDateFromOffset(attack.offset).getTime())),
+                  clone: used.has(ability.id)
                 };
+
+                if (!used.has(ability.id))
+                  used.add(ability.id);
+
+                return result;
               })
+              .filter(a => !!a)
             , {
               disableUnique: coverAll
             }))
