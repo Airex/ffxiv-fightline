@@ -1,4 +1,4 @@
-import { IJob, Role, AbilityType } from "../../Models"
+import { IJob, Role, AbilityType, DamageType } from "../../Models"
 import { settings, abilitySortFn, getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared"
 
 export const SCH: IJob = {
@@ -45,7 +45,8 @@ export const SCH: IJob = {
       icon: ("62_PetsFairy/0805_Fey Illumination"),
       abilityType: AbilityType.HealingBuff | AbilityType.PartyDefense,
       defensiveStats: {
-        mitigationPercent: 5
+        mitigationPercent: 5,
+        damageType: DamageType.Magical
       }
     },
     {

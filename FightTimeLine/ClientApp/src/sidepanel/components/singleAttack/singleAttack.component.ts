@@ -122,7 +122,8 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
 
       if (this.abilityMatch(a.ability.abilityType, M.AbilityType.PartyDefense)) {
         if (partyMitigation === -1) partyMitigation = 1;
-        partyMitigation *= 1 - (a.ability.defensiveStats?.mitigationPercent || 0) / 100
+        if (this.it.attack.type === M.DamageType.None || !a.ability.defensiveStats?.damageType || (a.ability.defensiveStats?.damageType === this.it.attack.type))
+          partyMitigation *= 1 - (a.ability.defensiveStats?.mitigationPercent || 0) / 100
       }
 
       if (this.abilityMatch(a.ability.abilityType, M.AbilityType.PartyShield)) {
@@ -145,7 +146,8 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
         if (jobId) {
           if (!sums[jobId]) sums[jobId] = {shield: 0, mitigation : -1};
           if (sums[jobId].mitigation === -1) sums[jobId].mitigation = 1;
-          sums[jobId].mitigation *= 1 - (a.ability.defensiveStats?.mitigationPercent || 0) / 100
+          if (this.it.attack.type === M.DamageType.None || !a.ability.defensiveStats?.damageType || (a.ability.defensiveStats?.damageType === this.it.attack.type))
+            sums[jobId].mitigation *= 1 - (a.ability.defensiveStats?.mitigationPercent || 0) / 100
         }        
       }
     });

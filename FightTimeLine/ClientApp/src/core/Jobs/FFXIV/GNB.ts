@@ -1,4 +1,4 @@
-import { IJob, Role, AbilityType } from "../../Models"
+import { IJob, Role, AbilityType, DamageType } from "../../Models"
 import { settings, getAbilitiesFrom, tankSharedAbilities, abilitySortFn, medicine } from "./shared"
 
 export const GNB: IJob = {
@@ -85,7 +85,8 @@ export const GNB: IJob = {
       icon: ("Gunbreaker/icon_21"),
       abilityType: AbilityType.PartyDefense,
       defensiveStats: {
-        mitigationPercent: 10
+        mitigationPercent: 10,
+        damageType: DamageType.Magical
       }
     },
     {

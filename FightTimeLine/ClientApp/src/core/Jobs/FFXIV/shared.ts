@@ -1,4 +1,4 @@
-import { IAbility, IAbilitySetting, AbilityType, byBuffApply, byBuffRemove } from "../../Models"
+import { IAbility, IAbilitySetting, AbilityType, byBuffApply, byBuffRemove, DamageType } from "../../Models"
 
 export interface IAbilities {
   [name: string]: IAbility
@@ -95,7 +95,8 @@ export const meleeSharedAbilities: IAbilities = {
   Feint: {
     name: "Feint", duration: 10, cooldown: 90, xivDbId: "7549", icon: ("30_MeleeDPSRole/7549_Feint"), abilityType: AbilityType.PartyDefense, requiresBossTarget: true,
     defensiveStats: {
-      mitigationPercent: 10
+      mitigationPercent: 10,
+      damageType: DamageType.Physical 
     }
   },
 };
@@ -105,7 +106,8 @@ export const casterSharedAbilities: IAbilities = {
   Addle: {
     name: "Addle", duration: 10, cooldown: 90, xivDbId: "7560", icon: ("50_MagicDPSRole/7560_Addle"), abilityType: AbilityType.PartyDefense, requiresBossTarget: true,
     defensiveStats: {
-      mitigationPercent: 10
+      mitigationPercent: 10, 
+      damageType: DamageType.Magical
     }
   },
   ...magicSharedAbilities

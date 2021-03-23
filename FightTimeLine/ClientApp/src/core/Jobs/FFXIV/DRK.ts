@@ -97,7 +97,8 @@ export const DRK: IJob = {
       goodForTankBusters: true,
       abilityType: AbilityType.SelfDefense,
       defensiveStats: {
-        mitigationPercent : 20
+        mitigationPercent : 20,
+        damageType: DamageType.Magical
       }
     },
     {
@@ -146,7 +147,8 @@ export const DRK: IJob = {
       icon: ("13_DarkKnight/icon_24"),
       abilityType: AbilityType.PartyDefense,
       defensiveStats: {
-        mitigationPercent: 10
+        mitigationPercent: 10,
+        damageType: DamageType.Magical
       }
     },
     {

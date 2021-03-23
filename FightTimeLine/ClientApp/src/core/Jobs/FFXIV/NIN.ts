@@ -13,7 +13,10 @@ export const NIN: IJob = {
       cooldown: 120,
       xivDbId: "2241",
       icon: ("33_Ninja/2241_Shade Shift"),
-      abilityType: AbilityType.SelfDefense,
+      abilityType: AbilityType.SelfShield,
+      defensiveStats: {
+        shieldPercent: 20
+      }
     },
     {
       name: "Mug",
