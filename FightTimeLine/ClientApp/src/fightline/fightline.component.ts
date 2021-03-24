@@ -473,7 +473,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.showWhatsNew().then(() => {
         const id = r["fightId"];
         if (id) {
-          if (id === "new" || id.indexOf("dummy") === 0) {
+          if (id.indexOf("dummy") === 0){
+            this.loadFight("");
+          }else  if (id === "new" ) {
             this.startNew(r["fraction"]);
           } else {
             this.loadFight(id);

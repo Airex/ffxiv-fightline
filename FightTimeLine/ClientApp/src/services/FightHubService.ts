@@ -109,7 +109,7 @@ export class FightHubService {
       });
 
     }
-    return Promise.reject();
+    return Promise.resolve();
   }
 
   attachHandlers(connection: HubConnection, handlers: ISessionHandlers): void {

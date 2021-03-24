@@ -18,9 +18,20 @@ export class FightsMockService implements IFightService {
       game: 'ffxiv'
   }); }
 
-  addCommand(fight: string, data): Observable<any> { return empty(); }
+  addCommand(fight: string, data): Observable<any> { 
+    const ms = localStorage.getItem("fight_mock")
+    const d = !!ms? JSON.parse(ms): []
+    d.push({data});
+    localStorage.setItem("fight_mock",JSON.stringify(d))
+    return empty(); 
+  }
 
-  getCommands(fight: string, timestamp: number): Observable<ICommandEntry[]> { return empty() }
+  getCommands(fight: string, timestamp: number): Observable<ICommandEntry[]> { 
+    const ms = localStorage.getItem("fight_mock")
+    const d = !!ms? JSON.parse(ms): []
+    return of(d);
+    
+  }
 
   getCommand(id: number): Observable<string> {
     return empty();
@@ -83,7 +94,15 @@ export class FightsMockService implements IFightService {
   }
 
   getFight(id: string): Observable<IFight> {
-    return Observable.throw("Error");
+    return of(
+      { 
+        id: "",
+        name: "",
+        userName:"",
+        data:"[]",
+        game: "ff"
+      }
+    );
 
   }
 
