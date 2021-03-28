@@ -96,7 +96,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
 
   getTargetIcon(ab) : string{
     const us = this.holders.itemUsages.get(ab.id);
-    const target =  us.getSettingData(SettingsEnum.Target);
+    const target = us?.getSettingData(SettingsEnum.Target);
     if (target){
       const jobMap = this.holders.jobs.get(target.value);
       return jobMap?.job?.icon;
