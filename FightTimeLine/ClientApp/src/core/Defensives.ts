@@ -1,7 +1,10 @@
-import { Holders } from "./Holders";
+import * as H from "./Holders";
+import * as M from "./Models";
+import { SettingsEnum } from "./Jobs/FFXIV/shared";
 import { Utils } from "./Utils";
+import { DefaultMitigationsModifier } from "./Models";
 
-export function calculateDefsForAttack(holders: Holders, id: string) {
+export function calculateDefsForAttack(holders: H.Holders, id: string) {
     const bossAttack = holders.bossAttacks.get(id);
 
     if (!bossAttack) return [];
@@ -37,7 +40,7 @@ export function calculateDefsForAttack(holders: Holders, id: string) {
 
 }
 
-export function calculateAvailDefsForAttack(holders: Holders, id: string) {
+export function calculateAvailDefsForAttack(holders: H.Holders, id: string) {
     const bossAttack = holders.bossAttacks.get(id);
 
     if (!bossAttack) return [];
@@ -69,4 +72,74 @@ export function calculateAvailDefsForAttack(holders: Holders, id: string) {
         };
     }).sort((a, b) => a.job.role - b.job.role);
 
+}
+
+function abilityMatch(input: M.AbilityType, toMatch: M.AbilityType) {
+    return (input & toMatch) === toMatch
+}
+
+export function calculateMitigationForAttack(holders: H.Holders, defs, attack: M.IBossAbility) {
+    var partyMitigation = -1;
+    var partyShield = 0;
+    var sums = {};
+    var abs = defs.reduce((ac, j) => {
+        return [...ac, ...j.abilities]
+    }, []);
+    var used = new Set();
+    abs.forEach((a: { ability: M.IAbility, jobId: string, id: string }) => {
+        if (used.has(a.ability.name) || used.has(a.ability.defensiveStats?.shareGroup)) return;
+
+        const defensiveStats = (a.ability.defensiveStats?.modifier || DefaultMitigationsModifier)(holders, a.jobId, a.id);
+
+        used.add(a.ability.name);
+        if (defensiveStats?.shareGroup)
+            used.add(defensiveStats?.shareGroup);
+
+        if (abilityMatch(a.ability.abilityType, M.AbilityType.PartyDefense)) {
+            if (partyMitigation === -1) partyMitigation = 1;
+            if (attack.type === M.DamageType.None || !defensiveStats?.damageType || (defensiveStats?.damageType === attack.type))
+                partyMitigation *= 1 - (defensiveStats?.mitigationPercent || 0) / 100
+        }
+
+        if (abilityMatch(a.ability.abilityType, M.AbilityType.PartyShield)) {
+            if (partyShield === -1) partyShield = 0;
+            partyShield += defensiveStats?.shieldPercent || 0
+        }
+
+        if (a.ability.abilityType === M.AbilityType.SelfShield) {
+            const settingData = holders.itemUsages.get(a.id).getSettingData(SettingsEnum.Target);
+            var jobId = settingData?.value || a.jobId;
+            if (jobId) {
+                if (!sums[jobId]) sums[jobId] = { shield: 0, mitigation: -1 };
+                sums[jobId].shield += defensiveStats?.shieldPercent || 0
+            }
+        }
+
+        if (abilityMatch(a.ability.abilityType, M.AbilityType.SelfDefense) || abilityMatch(a.ability.abilityType, M.AbilityType.TargetDefense)) {
+            const settingData = holders.itemUsages.get(a.id).getSettingData(SettingsEnum.Target);
+            var jobId = settingData?.value || a.jobId;
+            if (jobId) {
+                if (!sums[jobId]) sums[jobId] = { shield: 0, mitigation: -1 };
+                if (sums[jobId].mitigation === -1) sums[jobId].mitigation = 1;
+                if (attack.type === M.DamageType.None || !defensiveStats?.damageType || (defensiveStats?.damageType === attack.type))
+                    sums[jobId].mitigation *= 1 - (defensiveStats?.mitigationPercent || 0) / 100
+            }
+        }
+    });
+
+    var defStats = Object.keys(sums).map(s =>
+    ({
+        name: holders.jobs.get(s).job.name,
+        mitigation: 1 - Math.abs(sums[s].mitigation * partyMitigation),
+        shield: sums[s].shield + partyShield,
+        icon: holders.jobs.get(s).job.icon
+    }));
+    defStats.push({
+        name: "Party",
+        mitigation: 1 - Math.abs(partyMitigation),
+        shield: partyShield,
+        icon: null
+    })
+
+    return defStats;
 }

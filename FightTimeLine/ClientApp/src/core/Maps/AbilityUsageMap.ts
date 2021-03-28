@@ -57,6 +57,10 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
     return this.ability.ability.settings && this.ability.ability.settings.find(it => it.name === name);
   }
 
+  checkCoversDate(date: Date) : boolean {
+    return this.start <= date && new Date(this.startAsNumber + this.ability.ability.duration * 1000)>= date;
+  }
+
   createAbilityUsage(id: string, ability: AbilityMap.AbilityMap, data: IAbilityUsageMapData): DataItem {
     const start = data.start;
     const end = new Date(start.valueOf() as number + ability.ability.cooldown * 1000);
@@ -66,7 +70,11 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
       start: start,
       end: end,
       group: ability.id,
-      className: this.buildClass({ ability: true, compact: ability.isCompact, loaded: data.showLoaded && data.loaded }),
+      className: this.buildClass({
+        ability: true,
+        compact: ability.isCompact,
+        loaded: data.showLoaded && data.loaded
+      }),
       content: "",
       subgroup: "sg" + ability.id,
       selectable: true,

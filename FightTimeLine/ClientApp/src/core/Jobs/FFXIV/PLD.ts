@@ -1,9 +1,27 @@
-import { IJob, DamageType, IAbility, IAbilitySetting, Role, AbilityType, IStance, byName, byBuffApply, byBuffRemove } from "../../Models"
+import { IJob, DamageType, IAbility, IAbilitySetting, Role, AbilityType, IStance, byName, byBuffApply, byBuffRemove, MitigationsModifier } from "../../Models"
 import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared"
+
+const InterventionMitigationModifier: MitigationsModifier = (holders, jobId, abilityId) => {
+
+  const original = holders.itemUsages.get(abilityId);
+
+
+  const rampart = holders.abilities.getByParentAndAbility(jobId, "Rampart");
+  const sentinel = holders.abilities.getByParentAndAbility(jobId, "Sentinel");
+
+  const hasRampart = holders.itemUsages.getByAbility(rampart.id).some(ab => ab.checkCoversDate(original.start))
+  const hasSentinel = holders.itemUsages.getByAbility(sentinel.id).some(ab => ab.checkCoversDate(original.start))
+
+  const om = original.ability.ability.defensiveStats.mitigationPercent;
+  return {
+    ...original.ability.ability.defensiveStats,
+    mitigationPercent: (1 - (1 - om / 100) * (1 - (hasRampart ? 0.2 : 0))*(1 - (hasSentinel ? 0.3 : 0)))*100
+  };
+}
 
 export const PLD: IJob = {
   name: "PLD",
-  fullName:"Paladin",
+  fullName: "Paladin",
   role: Role.Tank,
   icon: ("JobIcons/Paladin_Icon_10"),
   abilities: [
@@ -120,7 +138,8 @@ export const PLD: IJob = {
       abilityType: AbilityType.TargetDefense,
       settings: [settings.target],
       defensiveStats: {
-        mitigationPercent: 10
+        mitigationPercent: 10,
+        modifier: InterventionMitigationModifier
       }
     },
     {

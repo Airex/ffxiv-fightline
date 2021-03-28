@@ -1,9 +1,29 @@
-import { IJob,  Role, AbilityType,  byName, SharedOverlapStrategy } from "../../Models"
+import { IJob, Role, AbilityType, byName, SharedOverlapStrategy, MitigationsModifier } from "../../Models"
 import { abilitySortFn, getAbilitiesFrom, settings, tankSharedAbilities, medicine } from "./shared"
+
+const ShakeItOffMitigationModifier: MitigationsModifier = (holders, jobId, abilityId) => {
+
+  const original = holders.itemUsages.get(abilityId);
+
+  const abs = ["Thrill of Battle", "Vengeance", "Raw Intuition"];
+  const sum = abs
+    .map(a => {
+      const ab = holders.abilities.getByParentAndAbility(jobId, a);
+      const has = holders.itemUsages.getByAbility(ab.id).some(ab => ab.checkCoversDate(original.start));
+      return has ? 1 : 0;
+    })
+    .reduce((acc,v) => acc += v, 0)
+  
+  const sp = original.ability.ability.defensiveStats.shieldPercent;
+  return {
+    ...original.ability.ability.defensiveStats,
+    shieldPercent: sp + 2 * sum
+  };
+}
 
 export const WAR: IJob = {
   name: "WAR",
-  fullName:"Warrior",
+  fullName: "Warrior",
   role: Role.Tank,
   icon: ("JobIcons/Warrior_Icon_10"),
   abilities: [
@@ -85,7 +105,8 @@ export const WAR: IJob = {
         parentOnly: true
       },
       defensiveStats: {
-        shieldPercent: 15
+        shieldPercent: 15,
+        modifier: ShakeItOffMitigationModifier
       }
     },
     {
@@ -107,7 +128,7 @@ export const WAR: IJob = {
       relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },
       overlapStrategy: new SharedOverlapStrategy(["Nascent Flash"]),
       defensiveStats: {
-        mitigationPercent : 20
+        mitigationPercent: 20
       }
     },
     {
@@ -126,7 +147,7 @@ export const WAR: IJob = {
       icon: ("12_Warrior/icon_24 (1)"),
       abilityType: AbilityType.TargetDefense,
       settings: [settings.target],
-      overlapStrategy: new SharedOverlapStrategy(["Raw Intuition"]), 
+      overlapStrategy: new SharedOverlapStrategy(["Raw Intuition"]),
       defensiveStats: {
         mitigationPercent: 10
       }

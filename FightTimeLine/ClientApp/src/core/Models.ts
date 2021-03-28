@@ -293,11 +293,16 @@ class ByBuffRemoveDetector implements IDetectionStrategy {
   }
 }
 
+export type MitigationsModifier = (holders:Holders, jobId: string, abilityId: string) => IDefensiveStats;
+
+export const DefaultMitigationsModifier: MitigationsModifier = (holders, jobId, abilityId) => holders.itemUsages.get(abilityId).ability.ability.defensiveStats;
+
 export interface IDefensiveStats {
   shieldPercent?: number;
   mitigationPercent?: number;
   shareGroup?: string;
   damageType?: DamageType;
+  modifier?: MitigationsModifier;
 }
 
 export interface IAbility {

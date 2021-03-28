@@ -19,7 +19,7 @@ export class PresenterManager {
   public get activeSources(): { text: string, checked: boolean }[] {
     return this.sources.concat("Other").map(t => ({
       text: t,
-      checked: this.filter.attacks.sources && this.filter.attacks.sources.includes(t)
+      checked: this.filter.attacks && this.filter.attacks.sources && this.filter.attacks.sources.includes(t)
     }));
   }
 

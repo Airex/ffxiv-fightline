@@ -49,7 +49,8 @@
               <img *ngIf="d.icon"
                    class="abilityIcon"
                    [src]="d.icon" />
-              <span class="abilityNameDef" style="vertical-align:middle">{{d.name}}: </span>
+              <span class="abilityNameDef"
+                    style="vertical-align:middle">{{d.name}}: </span>
             </td>
             <td> {{(d.mitigation*100).toFixed()}}%</td>
             <td> {{(d.shield).toFixed()}}%</td>
@@ -70,11 +71,19 @@
           </div>
           <ul style="padding-left: 10px">
             <li style="list-style-type: none;"
-                *ngFor="let it of d.abilities">
+                *ngFor="let ab of d.abilities">
               <img class="abilityIcon"
-                   [src]="it.ability.icon" />
+                   [src]="ab.ability.icon" />
               <a class="defenseLink"
-                 (click)="defenseClick(it)"> <span class="abilityNameDef">{{it.ability.name}}</span></a>
+                 (click)="defenseClick(it)"> <span class="abilityNameDef">{{ab.ability.name}}</span>
+              </a>
+              <span *ngIf="getTargetIcon(ab)"
+                    style="margin-left: 2px;vertical-align: middle;">
+                <span style="margin-left: 2px;">&gt;</span>
+                <img class="abilityIcon"
+                     style="margin-left: 2px;margin-top: -3px;"
+                     [src]="getTargetIcon(ab)" />
+              </span>
             </li>
           </ul>
         </div>

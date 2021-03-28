@@ -79,9 +79,9 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
   }
 
   update(itemsToUpdate: BossAttackMap[]): void {
-    this.visBossItems.update(this.itemsOf(itemsToUpdate.filter(x => !!this.visBossItems.get(x.id))));
+    this.visBossItems.update(this.itemsOf(itemsToUpdate.filter(x => x && !!this.visBossItems.get(x.id))));
     this.visMainItems.update(itemsToUpdate.map(it => {
-      const item = this.visMainItems.get(this.prefix + it.id);
+      const item = it && this.visMainItems.get(this.prefix + it.id);
       if (!item) return null;
       item.start = it.start;
       item.end = new Date(item.start.valueOf() + 10);

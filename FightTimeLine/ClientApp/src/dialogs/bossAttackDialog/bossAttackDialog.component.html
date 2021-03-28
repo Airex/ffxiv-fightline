@@ -11,7 +11,7 @@
           Main
         </nz-badge>
       </ng-template>
-      <form nz-form [formGroup]="editForm" [nzGutter]="24">
+      <form nz-form [formGroup]="editForm">
         <nz-form-item>
           <nz-form-control nzSpan="12" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.bossAttackName.errors?'error':'success'" nzErrorTip="You must enter a value">
             <input nz-input formControlName="bossAttackName" placeholder="Attack name">
