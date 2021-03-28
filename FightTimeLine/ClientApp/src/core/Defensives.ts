@@ -74,8 +74,8 @@ export function calculateAvailDefsForAttack(holders: H.Holders, id: string) {
 
 }
 
-function abilityMatch(input: M.AbilityType, toMatch: M.AbilityType) {
-    return (input & toMatch) === toMatch
+function abilityMatch(input: M.AbilityType, ...toMatch: M.AbilityType[]) {
+    return toMatch.some(tm => (input & tm) === tm);
 }
 
 export function calculateMitigationForAttack(holders: H.Holders, defs, attack: M.IBossAbility) {
@@ -115,7 +115,7 @@ export function calculateMitigationForAttack(holders: H.Holders, defs, attack: M
             }
         }
 
-        if (abilityMatch(a.ability.abilityType, M.AbilityType.SelfDefense) || abilityMatch(a.ability.abilityType, M.AbilityType.TargetDefense)) {
+        if (abilityMatch(a.ability.abilityType, M.AbilityType.SelfDefense, M.AbilityType.TargetDefense)) {
             const settingData = holders.itemUsages.get(a.id).getSettingData(SettingsEnum.Target);
             var jobId = settingData?.value || a.jobId;
             if (jobId) {

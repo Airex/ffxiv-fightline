@@ -20,29 +20,30 @@
   <nz-space-item>
     <sidepanel-area header="Used on"
                     *ngIf="!!ptyMemUsages">
-      <div *ngFor="let it of ptyMemUsages">
+      <div *ngFor="let ab of ptyMemUsages">
         <i nz-icon
            nzType="clock-circle"
            theme="outline"></i>
         <a class="similarLink"
-           (click)="similarClick(it)">
-          <span class="usedTime">{{it.offset}}</span>
+           (click)="similarClick(ab)">
+          <span class="usedTime">{{ab.offset}}</span>
         </a>
         <img class="abilityIcon"
-             [src]="it.icon" />
-        <span class="usedTarget">{{it.target}}</span>
+             style="vertical-align:text-top"
+             [src]="ab.icon" />
+        <span class="usedTarget">{{ab.target}}</span>
       </div>
     </sidepanel-area>
   </nz-space-item>
   <nz-space-item>
     <sidepanel-area header="Covered"
                     *ngIf="covered && covered.length > 0">
-      <div *ngFor="let it of covered">
+      <div *ngFor="let ab of covered">
         <i nz-icon
            nzType="clock-circle"
            theme="outline"></i><a class="similarLink"
-           (click)="similarClick(it)"><span class="usedTime">{{it.offset}}</span></a> <span
-              class="usedTarget">{{it.attack.name}}</span>
+           (click)="similarClick(ab)"><span class="usedTime">{{ab.offset}}</span></a> <span
+              class="usedTarget">{{ab.attack.name}}</span>
       </div>
     </sidepanel-area>
   </nz-space-item>
