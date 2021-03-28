@@ -5,11 +5,7 @@ import * as S from "../../../services/index"
 import { Holders } from "../../../core/Holders";
 import { BossAttackMap } from "../../../core/Maps/index";
 import { calculateAvailDefsForAttack, calculateDefsForAttack, calculateMitigationForAttack } from "src/core/Defensives";
-import { settings } from "src/core/Jobs/FFXIV";
 import { SettingsEnum } from "src/core/Jobs/FFXIV/shared";
-import { sum } from "ng-zorro-antd/core/util";
-import { ThrowStmt } from "@angular/compiler";
-
 
 @Component({
   selector: "singleAttack",
@@ -114,10 +110,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
     this.availDefs = this.calculateAvailDefs();
     this.similar = this.holders.bossAttacks.filter(it => it.attack.name === this.it.attack.name && it.id !== this.it.id);
     this.defStats = calculateMitigationForAttack(this.holders, this.defs, this.it.attack)
-
-  }
-
-  
+  } 
 
   ngOnInit(): void {
 

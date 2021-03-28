@@ -1,9 +1,16 @@
 import { IJob, DamageType, IAbility, IAbilitySetting, Role, AbilityType, IStance, byName, byBuffApply, byBuffRemove, MitigationsModifier } from "../../Models"
-import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared"
+import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, tankSharedAbilities, medicine, SettingsEnum } from "./shared"
 
 const InterventionMitigationModifier: MitigationsModifier = (holders, jobId, abilityId) => {
 
   const original = holders.itemUsages.get(abilityId);
+
+  const target = original.getSettingData(SettingsEnum.Target);
+
+  if (!target || !target.value || jobId === target.value) return {
+    ...original.ability.ability.defensiveStats,
+    mitigationPercent: 0
+  };
 
 
   const rampart = holders.abilities.getByParentAndAbility(jobId, "Rampart");
@@ -15,7 +22,7 @@ const InterventionMitigationModifier: MitigationsModifier = (holders, jobId, abi
   const om = original.ability.ability.defensiveStats.mitigationPercent;
   return {
     ...original.ability.ability.defensiveStats,
-    mitigationPercent: (1 - (1 - om / 100) * (1 - (hasRampart ? 0.2 : 0))*(1 - (hasSentinel ? 0.3 : 0)))*100
+    mitigationPercent: (1 - (1 - om / 100) * (1 - (hasRampart ? 0.2 : 0)) * (1 - (hasSentinel ? 0.3 : 0))) * 100
   };
 }
 
