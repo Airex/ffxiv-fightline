@@ -12,18 +12,35 @@ const InterventionMitigationModifier: MitigationsModifier = (holders, jobId, abi
     mitigationPercent: 0
   };
 
+  const abs = ["Rampart", "Sentinel"]
 
-  const rampart = holders.abilities.getByParentAndAbility(jobId, "Rampart");
-  const sentinel = holders.abilities.getByParentAndAbility(jobId, "Sentinel");
-
-  const hasRampart = holders.itemUsages.getByAbility(rampart.id).some(ab => ab.checkCoversDate(original.start))
-  const hasSentinel = holders.itemUsages.getByAbility(sentinel.id).some(ab => ab.checkCoversDate(original.start))
+  const mts = abs
+    .map(abName => {
+      const ab = holders.abilities.getByParentAndAbility(jobId, abName);
+      const has = holders.itemUsages.getByAbility(ab.id).some(ab => ab.checkCoversDate(original.start))
+      return has ? ab.ability.defensiveStats.mitigationPercent : 0;
+    })
+    .reduce((acc, v) => { return acc *= (1 - v / 100) }, 1)
 
   const om = original.ability.ability.defensiveStats.mitigationPercent;
   return {
     ...original.ability.ability.defensiveStats,
-    mitigationPercent: (1 - (1 - om / 100) * (1 - (hasRampart ? 0.2 : 0)) * (1 - (hasSentinel ? 0.3 : 0))) * 100
+    mitigationPercent: (1 - (1 - om / 100) * mts) * 100
   };
+}
+
+const CoverMitigationModifier: MitigationsModifier = (holders, jobId, abilityId) => {
+
+  const original = holders.itemUsages.get(abilityId);
+
+  const target = original.getSettingData(SettingsEnum.Target);
+
+  if (!target || !target.value || jobId === target.value) return {
+    ...original.ability.ability.defensiveStats,
+    mitigationPercent: 0
+  };
+
+  return original.ability.ability.defensiveStats;
 }
 
 export const PLD: IJob = {
@@ -117,10 +134,11 @@ export const PLD: IJob = {
       cooldown: 120,
       xivDbId: "27",
       icon: ("11_Paladin/0027_Cover"),
-      abilityType: AbilityType.PartyDefense,
+      abilityType: AbilityType.TargetDefense,
       settings: [settings.target],
       defensiveStats: {
-        mitigationPercent: 10
+        mitigationPercent: 100,
+        modifier: CoverMitigationModifier
       }
     },
     {
