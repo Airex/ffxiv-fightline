@@ -437,7 +437,7 @@ export class FightTimeLineController {
     if (active) {
       const maps = this.holders.itemUsages.getAll().map((it) => {
         const amap = it.ability;
-        if (amap && !amap.hidden && amap.isDamage) {
+        if (amap && !amap.hidden && !amap.filtered && amap.isDamage) {
           const start = new Date(it.startAsNumber + (amap.ability.activationOffset || 0) * 1000);
           const end = new Date((start.valueOf() as number) + this.calculateDuration(it.start, amap) * 1000);
           const id = this.idgen.getNextId(M.EntryType.BuffMap) + "_" + it.id;
