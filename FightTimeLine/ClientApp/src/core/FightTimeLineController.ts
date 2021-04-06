@@ -937,6 +937,8 @@ export class FightTimeLineController {
       }
     }
 
+    this.updateBuffHeatmap(this.presenterManager.view.buffmap, null);    
+
   }
 
   importFromFFLogs(key: string, parser: Parser.Parser): any {
