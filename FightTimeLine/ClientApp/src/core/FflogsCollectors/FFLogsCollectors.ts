@@ -35,7 +35,7 @@ export abstract class BaseCollector implements IFFLogsCollector {
 export class AbilityUsagesCollector extends BaseCollector {
 
   private commands: AddAbilityCommand[] = [];
-  jobs: {[name:string] : M.IJob} = {};
+  jobs: { [name: string]: M.IJob } = {};
 
   detectAbility(job: M.IJob, event: any): { offset: number, name: string } {
     const data = job.abilities.map(a => a.detectStrategy.process(event)).filter(a => !!a);
@@ -204,7 +204,7 @@ export class BossAttacksCollector extends BaseCollector {
         it.ability.name.indexOf("Unknown_") < 0);
       if (ability) {
         const date = Utils.getDateFromOffset((ability.timestamp - this.context.parser.fight.start_time) / 1000);
-        const tags:string[] = [];
+        const tags: string[] = [];
         if (arr.length > 0) tags.push(M.DefaultTags[1])
         if (tbs.indexOf(ability.ability.name) >= 0) tags.push(M.DefaultTags[0])
 
@@ -215,7 +215,7 @@ export class BossAttacksCollector extends BaseCollector {
             type: this.getAbilityType(ability),
             offset: Utils.formatTime(date),
             tags: tags,
-            source : ability.source && ability.source.name
+            source: ability.source && ability.source.name
           }));
       }
     });
@@ -226,6 +226,8 @@ export class BossAttacksCollector extends BaseCollector {
   private getAbilityType(ability: FF.AbilityEvent): M.DamageType {
     return ability.ability.type === FF.AbilityType.PHYSICAL_DIRECT
       ? M.DamageType.Physical
-      : (ability.ability.type === FF.AbilityType.MAGICAL_DIRECT ? M.DamageType.Magical : M.DamageType.None);
+      : (ability.ability.type === FF.AbilityType.MAGICAL_DIRECT 
+        ? M.DamageType.Magical 
+        : M.DamageType.None);
   }
 }

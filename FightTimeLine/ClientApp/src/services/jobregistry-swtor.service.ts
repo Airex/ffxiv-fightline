@@ -2,13 +2,15 @@ import * as Jobregistryserviceinterface from "./jobregistry.service-interface";
 import * as Models from "../core/Models";
 import * as Shared from "../core/Jobs/FFXIV/shared";
 import * as Index from "../core/Jobs/SWTOR/index";
+import { BaseOverlapStrategy } from "src/core/Overlap";
+import { byName } from "src/core/AbilityDetectors";
 
 export class SWTORJobRegistryService implements Jobregistryserviceinterface.IJobRegistryService {
   private jobs: Models.IJob[];
 
 
   public getJobs(): Models.IJob[] {
-    return this.jobs = (this.jobs = [
+    return (this.jobs = [
       Index.Sith_Assassin_Darkness,
       Index.Sith_Assassin_Deception,
       Index.Sith_Assassin_Hatred,
@@ -88,8 +90,8 @@ export class SWTORJobRegistryService implements Jobregistryserviceinterface.IJob
       extendDurationOnNextAbility: a.extendDurationOnNextAbility,
       relatedAbilities: a.relatedAbilities,
       settings: a.settings,
-      detectStrategy: a.detectStrategy || Models.byName([a.xivDbId], [a.name]),
-      overlapStrategy: a.overlapStrategy || new Models.BaseOverlapStrategy()
+      detectStrategy: a.detectStrategy || byName([a.xivDbId], [a.name]),
+      overlapStrategy: a.overlapStrategy || new BaseOverlapStrategy()
     }
   }
 

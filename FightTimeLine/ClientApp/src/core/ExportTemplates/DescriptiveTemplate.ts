@@ -1,6 +1,6 @@
-import { ExportTemplate, IExportResultSet, IExportColumn, IExportRow, IExportItem } from "../BaseExportTemplate"
-import * as Models from "../Models";
-import * as PresentationManager from "../PresentationManager";
+import { ExportTemplate } from "../BaseExportTemplate"
+import { ExportData, IExportResultSet, IExportRow } from "../ExportModels";
+import { PresenterManager } from "../PresentationManager";
 import { Utils } from "../Utils";
 
 export class DescriptiveTemplate extends ExportTemplate {
@@ -12,7 +12,7 @@ export class DescriptiveTemplate extends ExportTemplate {
     return "Descriptive";
   }
 
-  build(data: Models.ExportData, presenter: PresentationManager.PresenterManager): IExportResultSet {
+  build(data: ExportData, presenter: PresenterManager): IExportResultSet {
 
     const rows = data.data.boss.attacks
       .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))

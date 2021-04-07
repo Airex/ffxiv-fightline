@@ -1,13 +1,13 @@
-import { ExportTemplate, IExportResultSet, IExportColumn, IExportRow } from "../BaseExportTemplate"
+import { ExportTemplate } from "../BaseExportTemplate"
+import { ExportData, IExportColumn, IExportResultSet, IExportRow } from "../ExportModels";
 import { Utils } from "../Utils"
-import * as Models from "../Models";
 
 export class EachRowOneSecondTemplate extends ExportTemplate {
   get name(): string {
     return "Each row as one second";
   }
 
-  build(data: Models.ExportData): IExportResultSet {
+  build(data: ExportData): IExportResultSet {
     const list: IExportRow[] = [];
 
     for (let i = 946677600000; i < 946677600000 + 200 * 1000; i += 1000) {

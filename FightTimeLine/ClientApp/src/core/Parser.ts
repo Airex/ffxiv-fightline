@@ -9,7 +9,7 @@ export class Parser {
   public fight: FFLogs.Fight;
   public events: FFLogs.Event[];
 
-  constructor(private instance: number,private rawFight: FFLogs.ReportFightsResponse) {
+  constructor(private instance: number, private rawFight: FFLogs.ReportFightsResponse) {
     this.fight = this.rawFight.fights.find((it: any) => it.id === instance);
     this.players = this.parseJobs(this.rawFight);
   }
@@ -34,40 +34,40 @@ export class Parser {
 
   private mapJob(input: string): { jobName: string, order: number } {
     switch (input) {
-    case "Bard":
-      return { jobName: "BRD", order: 2 };
-    case "WhiteMage":
-      return { jobName: "WHM", order: 1 };
-    case "Summoner":
-      return { jobName: "SMN", order: 2 };
-    case "Ninja":
-      return { jobName: "NIN", order: 2 };
-    case "Dragoon":
-      return { jobName: "DRG", order: 2 };
-    case "Scholar":
-      return { jobName: "SCH", order: 1 };
-    case "Warrior":
-      return { jobName: "WAR", order: 0 };
-    case "DarkKnight":
-      return { jobName: "DRK", order: 0 };
-    case "Machinist":
-      return { jobName: "MCH", order: 2 };
-    case "Paladin":
-      return { jobName: "PLD", order: 0 };
-    case "Astrologian":
-      return { jobName: "AST", order: 1 };
-    case "Samurai":
-      return { jobName: "SAM", order: 2 };
-    case "Monk":
-      return { jobName: "MNK", order: 2 };
-    case "BlackMage":
-      return { jobName: "BLM", order: 2 };
-    case "RedMage":
-      return { jobName: "RDM", order: 2 };
-    case "Gunbreaker":
-      return { jobName: "GNB", order: 0 };
-    case "Dancer":
-      return { jobName: "DNC", order: 2 };
+      case "Bard":
+        return { jobName: "BRD", order: 2 };
+      case "WhiteMage":
+        return { jobName: "WHM", order: 1 };
+      case "Summoner":
+        return { jobName: "SMN", order: 2 };
+      case "Ninja":
+        return { jobName: "NIN", order: 2 };
+      case "Dragoon":
+        return { jobName: "DRG", order: 2 };
+      case "Scholar":
+        return { jobName: "SCH", order: 1 };
+      case "Warrior":
+        return { jobName: "WAR", order: 0 };
+      case "DarkKnight":
+        return { jobName: "DRK", order: 0 };
+      case "Machinist":
+        return { jobName: "MCH", order: 2 };
+      case "Paladin":
+        return { jobName: "PLD", order: 0 };
+      case "Astrologian":
+        return { jobName: "AST", order: 1 };
+      case "Samurai":
+        return { jobName: "SAM", order: 2 };
+      case "Monk":
+        return { jobName: "MNK", order: 2 };
+      case "BlackMage":
+        return { jobName: "BLM", order: 2 };
+      case "RedMage":
+        return { jobName: "RDM", order: 2 };
+      case "Gunbreaker":
+        return { jobName: "GNB", order: 0 };
+      case "Dancer":
+        return { jobName: "DNC", order: 2 };
     }
     return null;
   }
@@ -82,14 +82,14 @@ export class Parser {
     const abilityByBuffIds = _.concat([], js.map(j => j.abilities.map(a => a.detectStrategy.deps.buffs)));
     const stances = _.concat([], js.map(j => j.stances && j.stances.map(a => a.ability.detectStrategy.deps.buffs)));
     const buffs = _.uniq(_.flattenDeep(_.concat(stances, abilityByBuffIds))).filter(a => !!a).join();
-    const partyIds = _.concat(this.players.map(j => j.guid), _.flattenDeep(this.players.map(p=>p.petguids))).join();
+    const partyIds = _.concat(this.players.map(j => j.guid), _.flattenDeep(this.players.map(p => p.petguids))).join();
 
     const bossAutoAttacks =
       "1478,1479,1480,1481,6631,6882,6910,7319,7351,8535,8645,8938,9202,9375,9441,9442,9448,9654,9895,9908,9936,9989,10236,10237,10238,10239,10433,11070";
     const filter = `
     (
       (
-         type in ('cast', 'damage') and ability.id in (${abilityIds}) and source.id in (${partyIds})
+        type in ('cast', 'damage') and ability.id in (${abilityIds}) and source.id in (${partyIds})
       )or(
         type in ('cast', 'damage') and source.id in (${enemyIds})
 	    )or(
@@ -112,7 +112,7 @@ export class Parser {
     });
   }
 
-  *iterateEvents() : IterableIterator<FFLogs.Event> {
+  *iterateEvents(): IterableIterator<FFLogs.Event> {
     const iterator = this.events[Symbol.iterator]();
 
     let obj
@@ -129,5 +129,5 @@ export class Parser {
     this.events = events;
   }
 
-  
+
 }

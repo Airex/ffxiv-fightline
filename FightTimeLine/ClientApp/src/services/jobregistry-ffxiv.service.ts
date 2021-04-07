@@ -2,6 +2,8 @@ import { PLD, WAR, DRK, WHM, SCH, AST, BRD, MCH, DRG, MNK, NIN, SAM, BLM, RDM, S
 import * as Jobregistryserviceinterface from "./jobregistry.service-interface";
 import * as Models from "../core/Models";
 import * as Shared from "../core/Jobs/FFXIV/shared";
+import { BaseOverlapStrategy } from "src/core/Overlap";
+import { byName } from "src/core/AbilityDetectors";
 
 export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJobRegistryService {
   private jobs: Models.IJob[];
@@ -38,8 +40,8 @@ export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJob
     return {
       ...a,
       icon: this.getIcon(a.icon),
-      detectStrategy: a.detectStrategy || Models.byName([a.xivDbId], [a.name]),
-      overlapStrategy: a.overlapStrategy || new Models.BaseOverlapStrategy()      
+      detectStrategy: a.detectStrategy || byName([a.xivDbId], [a.name]),
+      overlapStrategy: a.overlapStrategy || new BaseOverlapStrategy()      
     }
   }
 

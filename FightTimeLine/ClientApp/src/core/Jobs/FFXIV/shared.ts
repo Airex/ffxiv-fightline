@@ -1,4 +1,5 @@
-import { IAbility, IAbilitySetting, AbilityType, byBuffApply, byBuffRemove, DamageType } from "../../Models"
+import { byBuffRemove } from "src/core/AbilityDetectors";
+import { IAbility, IAbilitySetting, AbilityType, DamageType } from "../../Models"
 
 export interface IAbilities {
   [name: string]: IAbility

@@ -1,5 +1,5 @@
-import { IJob, DamageType, IAbility, IAbilitySetting, Role, AbilityType, IStance, byName, byBuffApply, byBuffRemove } from "../../Models"
-import { settings, IAbilities, getAbilitiesFrom, meleeSharedAbilities, medicine } from "./shared"
+import { IJob, Role, AbilityType,  } from "../../Models"
+import { getAbilitiesFrom, meleeSharedAbilities, medicine } from "./shared"
 
 export const SAM: IJob = {
   name: "SAM",

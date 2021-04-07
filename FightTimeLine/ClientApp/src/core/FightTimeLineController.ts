@@ -164,19 +164,19 @@ export class FightTimeLineController {
   addClassAbility(id: string, map: AbilityMap, time: Date, loaded: boolean, settings: string = null): void {
     if (map) {
       if (map.isStance) {
-        this.dialogCallBacks.openStanceSelector(map.job.job.stances.map((it) => <M.IContextMenuData>{
-          text: it.ability.name,
-          icon: it.ability.icon,
-          handler: () => {
-            this.commandStorage.execute(new C.AddStanceCommand(id || this.idgen.getNextId(M.EntryType.StanceUsage),
-              map.job.id,
-              it.ability.name,
-              time,
-              this.holders.stances.getNext(new Date(time.valueOf() as number - 1000)),
-              loaded));
-          },
-          item: null
-        }));
+        // this.dialogCallBacks.openStanceSelector(map.job.job.stances.map((it) => <M.IContextMenuData>{
+        //   text: it.ability.name,
+        //   icon: it.ability.icon,
+        //   handler: () => {
+        //     this.commandStorage.execute(new C.AddStanceCommand(id || this.idgen.getNextId(M.EntryType.StanceUsage),
+        //       map.job.id,
+        //       it.ability.name,
+        //       time,
+        //       this.holders.stances.getNext(new Date(time.valueOf() as number - 1000)),
+        //       loaded));
+        //   },
+        //   item: null
+        // }));
       } else {
         if (map.ability.requiresBossTarget && time < this.startDate) return;
 
@@ -1129,5 +1129,5 @@ export class FightTimeLineController {
 export interface IDialogs {
   openBossAttackAddDialog: (bossAbility: M.IBossAbility | {}, callBack: (b: any) => void) => void;
   openAbilityEditDialog: (data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[], jobs: JobMap[] }, callBack: (b: any) => void) => void;
-  openStanceSelector: (data: M.IContextMenuData[]) => void;
+  // openStanceSelector: (data: M.IContextMenuData[]) => void;
 }

@@ -1,6 +1,6 @@
-import { ExportTemplate, IExportResultSet, IExportColumn, IExportRow, IExportItem } from "../BaseExportTemplate"
+import { ExportTemplate } from "../BaseExportTemplate";
+import { ExportAbility, ExportData, ExportJob, IExportColumn, IExportItem, IExportResultSet, IExportRow } from "../ExportModels";
 import { SettingsEnum } from "../Jobs/FFXIV/shared";
-import * as Models from "../Models";
 import * as PresentationManager from "../PresentationManager";
 import { Utils } from "../Utils";
 
@@ -17,7 +17,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
     return (it.type === 1 ? "red" : (it.type === 2 ? "blue" : ""));
   }
 
-  build(data: Models.ExportData, presenter: PresentationManager.PresenterManager): IExportResultSet {
+  build(data: ExportData, presenter: PresentationManager.PresenterManager): IExportResultSet {
     const coverAll = this.coverAll;
     const used = new Set<string>();
     const jobs = data.data.jobs.sort((a, b) => a.role - b.role);
@@ -136,7 +136,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
     };
   }
 
-  private buildTargetIcon(ability: Models.ExportAbility, jobs: Models.ExportJob[]): string {
+  private buildTargetIcon(ability: ExportAbility, jobs: ExportJob[]): string {
     const target = ability.settings?.find(s => s.name === SettingsEnum.Target)?.value;
     const job = target && jobs?.find(j => j.id === target);
     return job?.icon;

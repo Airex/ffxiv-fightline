@@ -7,8 +7,8 @@ import { FirstTemplate } from "../../core/ExportTemplates/FirstTemplate"
 import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate"
 import { BossAttackDefensiveTemplate } from "../../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { AuthService, GoogleLoginProvider, SocialUser } from "angularx-social-login";
-import * as Models from "../../core/Models";
 import { NzModalRef } from "ng-zorro-antd/modal";
+import { ExportData } from "src/core/ExportModels";
 
 @Component({
   selector: "exportToTableDialog",
@@ -17,7 +17,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 })
 export class ExportToTableDialog implements OnInit, AfterViewInit  {
 
-  @Input("data") data: Models.ExportData;
+  @Input("data") data: ExportData;
   @ViewChild("headerTemplate", { static: true }) headerTemplate: TemplateRef<any>;
 
   constructor(

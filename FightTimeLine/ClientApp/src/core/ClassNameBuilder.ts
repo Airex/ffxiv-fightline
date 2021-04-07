@@ -40,15 +40,15 @@ export class ClassNameBuilder {
         return this;
     }
 
-    set(input: { [value:string]:boolean }): ClassNameBuilder {
+    set(input: { [value: string]: boolean }): ClassNameBuilder {
         for (let s in input) {
-          if (input.hasOwnProperty(s)) {
-            if (input[s]) {
-              this.add([s]);
-            } else {
-              this.remove([s]);
+            if (input.hasOwnProperty(s)) {
+                if (input[s]) {
+                    this.add([s]);
+                } else {
+                    this.remove([s]);
+                }
             }
-          }
         }
         return this;
     }

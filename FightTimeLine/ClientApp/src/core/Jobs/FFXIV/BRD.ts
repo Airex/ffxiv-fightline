@@ -1,5 +1,6 @@
-import { IJob, DamageType, IAbility, IAbilitySetting, Role, AbilityType, IStance, byName, byBuffApply, byBuffRemove } from "../../Models"
-import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, rangeSharedAbilities, medicine } from "./shared"
+import { byName } from "src/core/AbilityDetectors";
+import { IJob, Role, AbilityType } from "../../Models"
+import { settings, getAbilitiesFrom, rangeSharedAbilities, medicine } from "./shared"
 
 export const BRD: IJob = {
   name: "BRD",

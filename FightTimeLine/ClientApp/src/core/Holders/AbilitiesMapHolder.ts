@@ -98,7 +98,7 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
         visible = visible || filterUnit(Models.AbilityType.Damage, filter.damage, jobFilter.damage);
         visible = visible || filterUnit(Models.AbilityType.HealingBuff, filter.healingBuff, jobFilter.healingBuff);
         visible = visible || filterUnit(Models.AbilityType.Healing, filter.healing, jobFilter.healing);
-        visible = visible || filterUnit(Models.AbilityType.Pet, filter.pet, jobFilter.pet);
+        // visible = visible || filterUnit(Models.AbilityType.Pet, filter.pet, jobFilter.pet);
         visible = visible || filterUnit(Models.AbilityType.Utility, filter.utility, jobFilter.utility);
         visible = visible || filterUnit(Models.AbilityType.Enmity, filter.enmity, jobFilter.enmity);
 

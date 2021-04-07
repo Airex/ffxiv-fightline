@@ -1,5 +1,4 @@
-import { IJob, DamageType, IAbility, IAbilitySetting, Role, AbilityType, IStance, byName, byBuffApply, byBuffRemove } from "../../../Models"
-import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, tankSharedAbilities, medicine } from "../../FFXIV/shared"
+import { IJob, Role } from "../../../Models"
 import * as Fractions from "../fractions";
 
 export const Gunslinger_Saboteur: IJob = {

@@ -11,7 +11,6 @@ import { NgProgressComponent } from "ngx-progressbar"
 import { EachRowOneSecondTemplate } from "../core/ExportTemplates/EachRowOneSecondTemplate"
 import { BossAttackDefensiveTemplate } from "../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { ExportTemplate } from "../core/BaseExportTemplate"
-import { IExportResultSet, IExportColumn, IExportCell, IExportRow } from "../core/BaseExportTemplate"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
 
@@ -22,6 +21,7 @@ import * as ToolsManager from "../core/ToolsManager";
 import * as PresentationManager from "../core/PresentationManager";
 import { ICommandData } from "src/core/UndoRedo";
 import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
+import { IExportCell, IExportColumn, IExportResultSet, IExportRow } from "src/core/ExportModels";
 
 
 
@@ -162,7 +162,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
       {
         openBossAttackAddDialog: () => { },
         openAbilityEditDialog: () => { },
-        openStanceSelector: () => { }
+        // openStanceSelector: () => { }
       },
       this.gameService,
       this.settingsService,

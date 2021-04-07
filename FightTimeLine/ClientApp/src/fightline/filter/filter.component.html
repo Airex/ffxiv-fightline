@@ -2,8 +2,7 @@
         nzPopoverTrigger="click"
         nz-popover
         (click)="change()"
-        [(nzPopoverVisible)]="visible"
-        (nzPopoverVisibleChange)="change($event)"
+        (nzPopoverVisibleChange)="change()"
         nzPopoverTrigger="click"
         nzPopoverPlacement="bottomLeft"
         [nzPopoverContent]="contentTemplate">
@@ -17,39 +16,13 @@
   <div nz-row style="width: 560px;" class="noselect">
     <div nz-col nzSpan="12">
       <div>
-        <strong>Ability types</strong>
+        <label nz-checkbox (ngModelChange)="checkAllFunc($event)" [(ngModel)]="checkAll" [nzIndeterminate]="checkAll === undefined"><strong>Ability types</strong></label>          
+        
       </div>
       <ul nz-menu>
-        <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter('ability')" [(ngModel)]="presenterManager.filter.abilities.selfDefence">Self Defense</label>
-        </li>
-        <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter('ability')" [(ngModel)]="presenterManager.filter.abilities.partyDefence">Party Defense</label>
-        </li>
-        <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter('ability')" [(ngModel)]="presenterManager.filter.abilities.selfDamageBuff">Self Damage Buff</label>
-        </li>
-        <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter('ability')" [(ngModel)]="presenterManager.filter.abilities.partyDamageBuff">Party Damage Buff</label>
-        </li>
-        <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter('ability')" [(ngModel)]="presenterManager.filter.abilities.damage">OGCD Damage</label>
-        </li>
-        <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter('ability')" [(ngModel)]="presenterManager.filter.abilities.healing">Healing</label>
-        </li>
-        <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter('ability')" [(ngModel)]="presenterManager.filter.abilities.healingBuff">Healing Buff</label>
-        </li>
-        <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter('ability')" [(ngModel)]="presenterManager.filter.abilities.utility">Utility</label>
-        </li>
-        <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter('ability')" [(ngModel)]="presenterManager.filter.abilities.enmity">Enmity</label>
+        <li nz-menu-item *ngFor="let f of filters">
+          <label nz-checkbox (ngModelChange)="updateFilter('ability', f.name, $event)" [(ngModel)]="presenterManager.filter.abilities[f.name]">{{f.desc}}</label>          
         </li>        
-        <li nz-menu-item>
-          <label nz-checkbox (ngModelChange)="updateFilter('ability')" [(ngModel)]="presenterManager.filter.abilities.unused">Show unused</label>
-        </li>
       </ul>
     </div>
     <div nz-col nzSpan="12" style="padding: 5px;">

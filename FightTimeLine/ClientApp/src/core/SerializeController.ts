@@ -2,6 +2,7 @@ import * as Models from "./Models";
 import { Utils } from "./Utils";
 import * as Holders from "./Holders";
 import { JobMap, BossAttackMap } from "./Maps";
+import { ExportData } from "./ExportModels";
 
 export class SerializeController {
 
@@ -138,7 +139,7 @@ export class SerializeController {
     return map;
   }
 
-  serializeForExport(): Models.ExportData {
+  serializeForExport(): ExportData {
 
     const attacks = this.holders.bossAttacks.getAll()
       .map((ab: BossAttackMap) => ({
@@ -206,7 +207,7 @@ export class SerializeController {
       abilities
     }
 
-    return <Models.ExportData>{
+    return <ExportData>{
       name: this.data.fight && this.data.fight.name || "",
       userName: this.data.fight && this.data.fight.userName || "",
       data: data

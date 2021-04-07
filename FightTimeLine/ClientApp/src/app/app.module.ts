@@ -117,6 +117,7 @@ import { NzTransferModule } from 'ng-zorro-antd/transfer';
 import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
+import { SoloPartyPipe } from 'src/heplers/SoloPartyPipe';
 
 
 const zorroModules = [
@@ -238,6 +239,7 @@ export function getBaseUrl() {
     FFLogsMatcherDirective,
     CustomScrollDirective,
     KillsOnlyPipe,
+    SoloPartyPipe,
     NoDraftsPipe,
     SidepanelComponent,
     SingleAbilityComponent,

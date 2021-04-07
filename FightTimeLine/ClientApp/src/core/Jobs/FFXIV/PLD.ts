@@ -1,5 +1,5 @@
-import { IJob, DamageType, IAbility, IAbilitySetting, Role, AbilityType, IStance, byName, byBuffApply, byBuffRemove, MitigationsModifier } from "../../Models"
-import { settings, IAbilities, abilitySortFn, getAbilitiesFrom, tankSharedAbilities, medicine, SettingsEnum } from "./shared"
+import { IJob, Role, AbilityType, MitigationsModifier } from "../../Models"
+import { settings, abilitySortFn, getAbilitiesFrom, tankSharedAbilities, medicine, SettingsEnum } from "./shared"
 
 const InterventionMitigationModifier: MitigationsModifier = (holders, jobId, abilityId) => {
 

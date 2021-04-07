@@ -1,5 +1,5 @@
-import { ExportTemplate, IExportResultSet, IExportColumn, IExportRow } from "../BaseExportTemplate"
-import * as Models from "../Models";
+import { ExportTemplate } from "../BaseExportTemplate"
+import { ExportData, IExportColumn, IExportResultSet, IExportRow } from "../ExportModels";
 
 export class FirstTemplate extends ExportTemplate {
   get name(): string {
@@ -7,7 +7,7 @@ export class FirstTemplate extends ExportTemplate {
   }
 
 
-  build(data: Models.ExportData): IExportResultSet {
+  build(data: ExportData): IExportResultSet {
     const rows = data.data.boss.attacks
       .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
       .map(it => <IExportRow>{

@@ -1,6 +1,7 @@
 <nz-space nzDirection="vertical">
   <nz-space-item>
-    <img [src]="it.job.icon" class="icon" />
+    <img [src]="it.job.icon"
+         class="icon" />
     <span class="header abilityName">{{it.job.name}}</span>
   </nz-space-item>
   <nz-space-item>
@@ -9,9 +10,12 @@
   <nz-space-item *ngIf="hiddenAbilities.length>0">
     <sidepanel-area header="Hidden abilities">
       <div>
-        <nz-tag *ngFor="let ab of hiddenAbilities" (nzOnClose)="restore(ab)" nzMode="closeable">
+        <nz-tag *ngFor="let ab of hiddenAbilities"
+                (nzOnClose)="restore(ab)"
+                nzMode="closeable">
           <span>
-            <img class='abilityIcon' [src]="ab.ability.icon" />
+            <img class='abilityIcon'
+                 [src]="ab.ability.icon" />
             <span class='abilityName'>{{ab.ability.name}}</span>
           </span>
         </nz-tag>
@@ -19,55 +23,35 @@
     </sidepanel-area>
   </nz-space-item>
   <nz-space-item *ngIf="data.mode === 'default'">
-    <sidepanel-area header="Filter">
+    <sidepanel-area header="Filter"
+                    [extra]="resetAllTpl">
       <nz-space nzDirection="vertical">
-        <nz-space-item >
-          <label nz-checkbox (ngModelChange)="updateFilter($event, 'selfDefence')" [(ngModel)]="jobFilter.selfDefence" [nzIndeterminate]="jobFilter.selfDefence === undefined">Self Defense</label>
-        </nz-space-item>
-        <nz-space-item  >
-          <label nz-checkbox (ngModelChange)="updateFilter($event, 'partyDefence')" [(ngModel)]="jobFilter.partyDefence" [nzIndeterminate]="jobFilter.partyDefence === undefined">Party Defense</label>
-        </nz-space-item>
-        <nz-space-item>
-          <label nz-checkbox (ngModelChange)="updateFilter($event,'selfDamageBuff')" [nzIndeterminate]="jobFilter.selfDamageBuff == undefined" [(ngModel)]="jobFilter.selfDamageBuff">Self Damage Buff</label>
-        </nz-space-item>
-        <nz-space-item  >
-          <label nz-checkbox (ngModelChange)="updateFilter($event,'partyDamageBuff')" [nzIndeterminate]="jobFilter.partyDamageBuff == undefined" [(ngModel)]="jobFilter.partyDamageBuff">Party Damage Buff</label>
-        </nz-space-item>
-        <nz-space-item >
-          <label nz-checkbox (ngModelChange)="updateFilter($event,'damage')" [nzIndeterminate]="jobFilter.damage == undefined" [(ngModel)]="jobFilter.damage">OGCD Damage</label>
-        </nz-space-item>
-        <nz-space-item>
-          <label nz-checkbox (ngModelChange)="updateFilter($event,'healing')" [nzIndeterminate]="jobFilter.healing == undefined" [(ngModel)]="jobFilter.healing">Healing</label>
-        </nz-space-item>
-        <nz-space-item >
-          <label nz-checkbox (ngModelChange)="updateFilter($event,'healingBuff')" [nzIndeterminate]="jobFilter.healingBuff == undefined" [(ngModel)]="jobFilter.healingBuff">Healing Buff</label>
-        </nz-space-item>
-        <nz-space-item >
-          <label nz-checkbox (ngModelChange)="updateFilter($event,'utility')" [nzIndeterminate]="jobFilter.utility == undefined" [(ngModel)]="jobFilter.utility">Utility</label>
-        </nz-space-item>
-        <nz-space-item >
-          <label nz-checkbox (ngModelChange)="updateFilter($event,'enmity')" [nzIndeterminate]="jobFilter.enmity == undefined" [(ngModel)]="jobFilter.enmity">Enmity</label>
-        </nz-space-item>
-        <!-- <ng-template contextMenuItem [visible]="true" [enabled]="true" passive="true"> -->
-        <!--   <label nz-checkbox (ngModelChange)="updateFilter($event,'pet')" [nzIndeterminate]="jobFilter.pet == undefined" [(ngModel)]="jobFilter.pet">Pet</label> -->
-        <!-- </ng-template> -->
-        <nz-space-item >
-          <label nz-checkbox (ngModelChange)="updateFilter($event,'unused')" [nzIndeterminate]="jobFilter.unused == undefined" [(ngModel)]="jobFilter.unused">Show Unused</label>
-        </nz-space-item>
-        <nz-space-item >
-          <button nz-button (click)="resetJobFilter()">Reset</button>
+        <nz-space-item *ngFor="let f of filters">
+          <label nz-checkbox
+                 (ngModelChange)="updateFilter($event, f.name)"
+                 [(ngModel)]="jobFilter[f.name]"
+                 [nzIndeterminate]="jobFilter[f.name] === undefined">{{f.desc}}</label>
+          <a (click)="resetJobFilter(f.name)">reset</a>
         </nz-space-item>
       </nz-space>
     </sidepanel-area>
+    <ng-template #resetAllTpl>
+      <a (click)="$event.stopPropagation();resetJobFilter()">reset</a>
+    </ng-template>
   </nz-space-item>
   <nz-space-item *ngIf="data.mode === 'default'">
-    <label nz-checkbox [(ngModel)]="compactView" (ngModelChange)="compact(compactView)">Compact view</label>
+    <label nz-checkbox
+           [(ngModel)]="compactView"
+           (ngModelChange)="compact(compactView)">Compact view</label>
   </nz-space-item>
   <nz-space-item *ngIf="data.mode === 'default'">
-    <button nz-button (click)="fill(it)">Fill</button>
+    <button nz-button
+            (click)="fill(it)">Fill</button>
   </nz-space-item>
   <nz-space-item *ngIf="data.mode === 'default'">
-    <button nz-button nzType="primary" (click)="remove(it)" nzDanger>Remove</button>
+    <button nz-button
+            nzType="primary"
+            (click)="remove(it)"
+            nzDanger>Remove</button>
   </nz-space-item>
 </nz-space>
-

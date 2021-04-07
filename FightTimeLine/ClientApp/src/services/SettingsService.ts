@@ -20,7 +20,7 @@ export class SettingsService {
           healingBuff: true,
           partyDamageBuff: true,
           partyDefence: true,
-          pet: true,
+          enmity: true,          
           selfDamageBuff: true,
           selfDefence: true,
           unused: true,

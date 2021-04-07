@@ -48,17 +48,23 @@
     </sidepanel-area>
   </nz-space-item>
   <nz-space-item *ngIf="it.ability.ability.settings && it.ability.ability.settings.length > 0">
-    <sidepanel-area header="Settings">
+    <sidepanel-area header="Settings" [extra]="saveSettingsTpl">
       <form nz-form
             [formGroup]="form"
             nzLayout="vertical">
         <nz-form-item *ngFor="let setting of it.ability.ability.settings">
-          <nz-form-label [nzFor]="setting.name">{{setting.displayName}}<i nz-icon
+          <nz-form-label [nzFor]="setting.name">
+            <span>
+              {{setting.displayName}}
+            </span>
+            <i nz-icon
                nzType="info-circle"
                theme="twotone"
                style="margin-left: 8px"
                nz-tooltip
-               [nzTooltipTitle]="setting.description"></i></nz-form-label>
+               [nzTooltipTitle]="setting.description">
+            </i>
+          </nz-form-label>
           <nz-form-control>
             <div [ngSwitch]="setting.type">
               <div *ngSwitchCase="'boolean'">
@@ -66,7 +72,8 @@
                            [formControlName]="setting.name"
                            style="margin-left: 15px"
                            [id]="setting.name"
-                           (ngModelChange)="modified=true"></nz-switch>
+                           (ngModelChange)="modified=true">
+                </nz-switch>
               </div>
               <div *ngSwitchCase="'partyMember'">
                 <nz-select [nzDisabled]="data.mode!=='default'"
@@ -76,26 +83,28 @@
                            (ngModelChange)="modified=true">
                   <nz-option nzValue=""
                              nzLabel="None"></nz-option>
-                  <nz-option nzCustomContent
-                             *ngFor="let j of jobs"
+                  <nz-option *ngFor="let j of jobs"
+                             nzCustomContent
                              [nzValue]="j.id"
-                             [nzLabel]="j.job.name+' '+(j.actorName || '')"><img class="abilityIcon"
-                         [src]="j.job.icon" /> <span class="usedTarget">{{j.actorName}}</span></nz-option>
+                             [nzLabel]="j.job.name+' '+(j.actorName || '')">
+                    <img class="abilityIcon"
+                         [src]="j.job.icon" />
+                    <span class="usedTarget">{{j.actorName}}</span>
+                  </nz-option>
                 </nz-select>
               </div>
             </div>
-
           </nz-form-control>
-        </nz-form-item>
-        <nz-form-item *ngIf="modified">
-          <nz-form-control>
-            <button nz-button
-                    nzType=""
-                    (click)="saveSettings();modified=false;">Save</button>
-          </nz-form-control>
-        </nz-form-item>
+        </nz-form-item>        
       </form>
     </sidepanel-area>
+    <ng-template #saveSettingsTpl>
+      <button nz-button
+              *ngIf="modified"
+              [nzSize]="'small'"
+              nzType="primary"
+              (click)="$event.stopPropagation();$event.preventDefault();saveSettings();">Save</button>
+    </ng-template>
   </nz-space-item>
 
 </nz-space>

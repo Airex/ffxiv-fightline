@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, TemplateRef } from "@angular/core";
 
 
 
@@ -11,6 +11,7 @@ export class AreaComponent {
 
   @Input() header: string;
   @Input() maxHeigth:string;
+  @Input() extra: string | TemplateRef<void>;
 
   get opened() {
     return sessionStorage && sessionStorage.getItem(this.header+"Opened") === "true";

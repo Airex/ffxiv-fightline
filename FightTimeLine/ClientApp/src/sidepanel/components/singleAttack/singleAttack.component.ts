@@ -21,6 +21,10 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
 
   items: any[];
   holders: Holders;
+  defSolo = true;
+  defParty = true;
+  defSoloAv = true;
+  defPartyAv = true;
 
   constructor(
     private dispatcher: S.DispatcherService,
@@ -94,10 +98,10 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
     });
   }
 
-  getTargetIcon(ab) : string{
+  getTargetIcon(ab): string {
     const us = this.holders.itemUsages.get(ab.id);
     const target = us?.getSettingData(SettingsEnum.Target);
-    if (target){
+    if (target) {
       const jobMap = this.holders.jobs.get(target.value);
       return jobMap?.job?.icon;
     }
@@ -109,9 +113,11 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   refresh() {
     this.defs = this.calculateDefs();
     this.availDefs = this.calculateAvailDefs();
-    this.similar = this.holders.bossAttacks.filter(it => it.attack.name === this.it.attack.name && it.id !== this.it.id);
+    this.similar = this.holders.bossAttacks
+      .filter(it => it.attack.name === this.it.attack.name && it.id !== this.it.id)
+      .sort((a,b) => a.startAsNumber - b.startAsNumber);
     this.defStats = calculateMitigationForAttack(this.holders, this.defs, this.it.attack)
-  } 
+  }
 
   ngOnInit(): void {
 

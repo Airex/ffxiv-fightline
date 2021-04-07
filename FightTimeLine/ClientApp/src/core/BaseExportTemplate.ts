@@ -1,11 +1,11 @@
 import { Utils } from "./Utils"
-import * as Models from "./Models";
-import * as PresentationManager from "./PresentationManager";
+import { ExportData, IExportCell, IExportItem, IExportResultSet } from "./ExportModels";
+import { PresenterManager } from "./PresentationManager";
 
 export abstract class ExportTemplate {
   public startDate = new Date(946677600000);
   public abstract get name(): string;
-  abstract build(data: Models.ExportData, presenter: PresentationManager.PresenterManager): IExportResultSet;
+  abstract build(data: ExportData, presenter: PresenterManager): IExportResultSet;
 
   offsetCompareFn(a: string, b: string): number {
     const d = new Date();
@@ -41,48 +41,4 @@ export abstract class ExportTemplate {
   }
 }
 
-export interface IExportResultSet {
-  columns: IExportColumn[];
-  rows: IExportRow[];
-  title: string;
-  filterByFirstEntry: boolean;
-}
-
-export interface IExportColumn {
-  type?: string;
-  text: string;
-  icon: string;
-  align?: string;
-  refId?: string;
-  cursor?: string;
-  listOfFilter?: { text: string; value: any; byDefault?: boolean }[];
-  filterFn?: (a: any, data: any, c?:IExportColumn) => boolean;
-  name?: string;
-  width?: string | null
-}
-
-export interface IExportRow {
-  cells: IExportCell[]
-  filterData?: any;
-}
-
-export interface IExportCell {
-  items: IExportItem[];
-  align?: string;
-  disableUnique?: boolean;
-  colorFn?: (data) => string;
-  bgRefIdFn?: (data) => string;
-  noTag?: boolean;  
-}
-
-export interface IExportItem {
-  refId?: string;
-  text: string;
-  icon?: string;
-  color?: string;
-  visible?: boolean;
-  targetIcon?: string;
-  usageOffset?: string;
-  clone?: boolean;
-}
 

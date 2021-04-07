@@ -5,9 +5,6 @@ import * as S from "../../../services/index"
 import { Holders } from "../../../core/Holders";
 import { JobMap, AbilityMap } from "../../../core/Maps/index";
 
-
-
-
 @Component({
   selector: "job-area",
   templateUrl: "./job.component.html",
@@ -20,6 +17,24 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
   hiddenAbilities: any[] = null;
   compactView: boolean;
   jobFilter: M.IAbilityFilter;
+
+
+  filters = Object.entries(<{ [name: string]: [number, string] }>{
+    selfDefence: [0, "Self Defense"],
+    partyDefence: [1, "Party Defense"],
+    selfDamageBuff: [2, "Self Damage Buff"],
+    partyDamageBuff: [3, "Party Damage Buff"],
+    damage: [4, "OGCD Damage"],
+    healing: [5, "Healing"],
+    healingBuff: [6, "Healing Buff"],
+    utility: [7, "Utility"],
+    enmity: [8, "Enmity"],
+    unused: [10, "Show Unused"],
+    pet: [9, null],
+  })
+    .filter(f => f[1][1])
+    .sort((a, b) => a[1][0] - b[1][0])
+    .map(a => ({ name: a[0], desc: a[1][1] }));
 
 
   constructor(
@@ -78,27 +93,35 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
     this.refresh();
   }
 
-  resetJobFilter() {
+  resetJobFilter(name?: string) {
     //console.log("reset job filter requested");
-    Object.assign(this.jobFilter,
-      {
-        unused: undefined,
-        utility: undefined,
-        damage: undefined,
-        selfDefence: undefined,
-        partyDefence: undefined,
-        healing: undefined,
-        healingBuff: undefined,
-        partyDamageBuff: undefined,
-        selfDamageBuff: undefined,
-        enmity: undefined,
-      });
+    if (name) {
+      Object.assign(this.jobFilter,
+        {
+          [name]: undefined          
+        });
+    }
+    else {
+      Object.assign(this.jobFilter,
+        {
+          unused: undefined,
+          utility: undefined,
+          damage: undefined,
+          selfDefence: undefined,
+          partyDefence: undefined,
+          healing: undefined,
+          healingBuff: undefined,
+          partyDamageBuff: undefined,
+          selfDamageBuff: undefined,
+          enmity: undefined,
+        });
+    }
     this.dispatcher.dispatch({
       name: "Update Filter"
     });
   }
 
-  updateFilter(data: M.IAbilityFilter, prop: string): void {
+  updateFilter(data: boolean, prop: string): void {
     this.jobFilter[prop] = data;
     this.dispatcher.dispatch({
       name: "Update Filter"

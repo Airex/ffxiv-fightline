@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Inject, Input, Output, ViewChild, NgZone, EventEmitter } from "@angular/core";
-import { IExportCell } from "../../core/BaseExportTemplate"
+import { IExportCell } from "src/core/ExportModels";
 
 
 @Component({

@@ -1,7 +1,7 @@
 import { Injectable, Inject } from "@angular/core"
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { Observable } from "rxjs"
-import { IExportResultSet } from "../core/BaseExportTemplate"
+import { IExportResultSet } from "src/core/ExportModels";
 
 @Injectable()
 export class SpreadSheetsService {

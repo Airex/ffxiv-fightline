@@ -1,5 +1,4 @@
 import { Component, Inject, EventEmitter, ViewChild, Output, Input } from "@angular/core";
-import { IFilter} from "../../core/Models"
 import * as H from "../../core/Holders"
 import { PresenterManager } from "../../core/PresentationManager"
 
@@ -16,21 +15,59 @@ export class FilterComponent {
 
   tags: { text: string, checked: boolean }[];
   sources: { text: string, checked: boolean }[];
+  checkAll = true;
 
   @Output() public changed: EventEmitter<string> = new EventEmitter();
 
-  change(value: boolean) {
+  filters = Object.entries(<{ [name: string]: [number, string] }>{
+    selfDefence: [0, "Self Defense"],
+    partyDefence: [1, "Party Defense"],
+    selfDamageBuff: [2, "Self Damage Buff"],
+    partyDamageBuff: [3, "Party Damage Buff"],
+    damage: [4, "OGCD Damage"],
+    healing: [5, "Healing"],
+    healingBuff: [6, "Healing Buff"],
+    utility: [7, "Utility"],
+    enmity: [8, "Enmity"],
+    unused: [10, "Show Unused"],
+    pet: [9, null],
+  })
+    .filter(f => f[1][1])
+    .sort((a, b) => a[1][0] - b[1][0])
+    .map(a => ({ name: a[0], desc: a[1][1] }));
+
+  change() {
     this.tags = this.presenterManager.activeTags;
     this.sources = this.presenterManager.activeSources;
   }
 
-  updateFilter(source: string): void {
+  checkAllFunc(value: boolean) {
+    Object.keys(this.presenterManager.filter.abilities).forEach(key => {
+      this.presenterManager.filter.abilities[key] = value;
+    })
+    setTimeout(() => {
+      this.changed.emit('ability');
+    });
+  }
+
+  updateFilter(source: string, name?: string, value?: boolean): void {
+
+    if (source === 'ability' && name) {
+      this.presenterManager.filter.abilities[name] = value;
+    }
+
+    this.checkAll = undefined;
+    if (Object.values(this.presenterManager.filter.abilities).every(e => e))
+      this.checkAll = true;
+    if (Object.values(this.presenterManager.filter.abilities).every(e => !e))
+      this.checkAll = false;
+
     this.presenterManager.filter.attacks.tags = this.tags.filter(t => t.checked).map(t => t.text);
     this.presenterManager.filter.attacks.sources = this.sources.filter(t => t.checked).map(t => t.text);
     setTimeout(() => {
       this.changed.emit(source);
     });
-    ;
+    
   }
 }
 

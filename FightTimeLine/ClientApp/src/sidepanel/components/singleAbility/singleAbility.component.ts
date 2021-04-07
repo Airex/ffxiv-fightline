@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
+import { FormGroup, FormControl } from "@angular/forms"
 import { ISidePanelComponent, SidepanelParams, SIDEPANEL_DATA } from "../ISidePanelComponent"
 import * as M from "../../../core/Models"
 import * as X from "@xivapi/angular-client"
 import { Utils } from "../../../core/Utils"
 import { DomSanitizer } from "@angular/platform-browser";
 import * as S from "../../../services/index"
-import * as Shared from "../../../core/Jobs/FFXIV/shared";
 import { AbilityUsageMap, JobStanceMap } from "../../../core/Maps/index";
+import { settings } from "src/core/Jobs/FFXIV/shared";
 
 
 @Component({
@@ -23,6 +23,8 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
   jobs;
   modified = false;
   covered: any[];
+  items: any[];
+
   constructor(
     private xivapi: X.XivapiService,
     private sanitizer: DomSanitizer,
@@ -36,9 +38,9 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
 
     if (this.ability.xivDbId) {
       this.xivapi.get(this.getEndpoint(this.ability.xivDbType), Number(this.ability.xivDbId)).subscribe(a => {
-        if (a && a.Description) {
+        if (a?.Description) {
           this.description =
-            this.sanitizer.bypassSecurityTrustHtml(a.Description.replace(new RegExp("\\n+", "g"), "<br/>"));
+            this.sanitizer.bypassSecurityTrustHtml(a.Description.replace(/\n+/g, "<br/>"));
         } else {
           this.description = "";
         }
@@ -59,8 +61,6 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     this.refresh();
   }
 
-  items: any[];
-
   get it(): AbilityUsageMap {
     return this.items[0] as AbilityUsageMap;
   }
@@ -79,7 +79,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     });
   }
 
-  formatTime(time){
+  formatTime(time) {
     return Utils.formatTime(time);
   }
 
@@ -102,6 +102,8 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
         settings: settings
       }
     });
+
+    this.modified=false;
   }
 
   private getEndpoint(type: string): X.XivapiEndpoint {
@@ -114,7 +116,8 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
   }
 
   refresh() {
-    const setting = !this.it.ability.isStance && this.it.getSetting(Shared.settings.target.name);
+    const ab = this.it.ability;
+    const setting = !ab.isStance && this.it.getSetting(settings.target.name);
     if (setting) {
       this.ptyMemUsages = this.data.holders.itemUsages
         .getByAbility(this.it.ability.id)

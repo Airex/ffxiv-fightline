@@ -1,4 +1,5 @@
-import { IJob, Role, AbilityType, byName, SharedOverlapStrategy, MitigationsModifier } from "../../Models"
+import { SharedOverlapStrategy } from "src/core/Overlap";
+import { IJob, Role, AbilityType, MitigationsModifier } from "../../Models"
 import { abilitySortFn, getAbilitiesFrom, settings, tankSharedAbilities, medicine } from "./shared"
 
 const ShakeItOffMitigationModifier: MitigationsModifier = (holders, jobId, abilityId) => {

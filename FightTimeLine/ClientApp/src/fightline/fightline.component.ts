@@ -170,9 +170,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
     window.open(this.router.serializeUrl(this.router.createUrlTree(["/table", this.fightId, temlate])), "_blank")
   }
 
-  private openStanceSelector(data: M.IContextMenuData[]): void {
-    //    this.contextMenu.openStanceSelector(data);
-  }
+  // private openStanceSelector(data: M.IContextMenuData[]): void {
+  //   //    this.contextMenu.openStanceSelector(data);
+  // }
 
   exportToTable() {
     this.dialogService.openExportToTable(() => this.fightLineController.createSerializer().serializeForExport());
@@ -578,7 +578,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
       {
         openBossAttackAddDialog: this.openBossAttackAddDialog.bind(this),
         openAbilityEditDialog: this.openAbilityEditDialog.bind(this),
-        openStanceSelector: this.openStanceSelector.bind(this)
+        // openStanceSelector: null
       },
       this.gameService,
       this.settingsService,

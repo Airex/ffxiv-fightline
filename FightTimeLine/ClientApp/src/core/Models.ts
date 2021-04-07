@@ -1,7 +1,5 @@
 import * as FF from "./FFLogs"
 import { Holders } from "./Holders";
-//import {AbilitySelectionHolder} from "./Holders/AbilitySelectionHolder";
-import { AbilityUsageMap } from "./Maps/index";
 import * as FFLogsCollectors from "./FflogsCollectors/FFLogsCollectors";
 
 export enum Role {
@@ -10,10 +8,6 @@ export enum Role {
   Melee,
   Range,
   Caster
-}
-
-export type JobAbilities = {
-  [name: string]: IAbility
 }
 
 export interface IJob {
@@ -27,6 +21,7 @@ export interface IJob {
   defaultPet?: string;
   stances?: IStance[];
   fraction?: IFraction;
+  settings?: IAbilitySetting[];
 }
 
 export interface IFraction {
@@ -105,43 +100,6 @@ export interface IHubUser {
   name: string;
 }
 
-export interface IContextMenuData {
-  text: string;
-  item: any;
-  icon?: string;
-  handler: (item: any) => void;
-  isDivider?: boolean;
-  isDowntime?: boolean;
-  filter?: IAbilityFilter;
-  pets?: any[];
-  isCheckBox?: boolean;
-  checked?: boolean;
-  hidden?: any[];
-}
-
-export const byName = (ids: string[], names: string[]) => {
-  return new ByNameDetecor(ids, names);
-}
-
-export const byBuffApply = (id: number, abilityName?: string) => {
-  return new ByBuffApplyDetector(id, abilityName);
-}
-
-export const byBuffRemove = (id: number, abilityName?: string, offsetCorrect?: number) => {
-  return new ByBuffRemoveDetector(id, abilityName, offsetCorrect);
-}
-
-const isAbility = (ev: FF.Event): ev is FF.AbilityEvent => {
-  return (ev.type === "cast");
-}
-
-const isBuffApply = (ev: FF.Event): ev is FF.BuffEvent => {
-  return (ev.type === "applybuff");
-}
-
-const isBuffRemove = (ev: FF.Event): ev is FF.BuffEvent => {
-  return (ev.type === "removebuff");
-}
 
 export interface IDetectionDependencies {
   abilities: number[];
@@ -166,131 +124,6 @@ export interface IOverlapCheckContext {
 export interface IOverlapStrategy {
   check(context: IOverlapCheckContext): boolean;
   getDependencies(): string[];
-}
-
-
-export class BaseOverlapStrategy implements IOverlapStrategy {
-  getDependencies(): string[] {
-    return null;
-  }
-
-  check(context: IOverlapCheckContext): boolean {
-
-    const result = context.holders.itemUsages.getByAbility(context.group).some((x: AbilityUsageMap) => {
-      const chargesBased = !!x.ability.ability.charges;
-      if (chargesBased) return false;
-
-      const idCheck = (context.id === undefined || x.id !== context.id);
-      const timeCheck = x.start < context.end && x.end > context.start;
-      const selectionCheck = (!context.selectionRegistry || !(x.id in context.selectionRegistry));
-      const result = idCheck && timeCheck && selectionCheck;
-      return result;
-    });
-    return result;
-  }
-}
-
-export class SharedOverlapStrategy implements IOverlapStrategy {
-  getDependencies(): string[] {
-    return this.sharesWith;
-  }
-
-  constructor(private sharesWith: string[]) {
-
-  }
-  check(context: IOverlapCheckContext): boolean {
-    const map = context.holders.abilities.get(context.group);
-    const items = context.holders.itemUsages.getByAbility(context.group);
-    const sharedAbility = context.holders.abilities.getByParentAndAbility(map.job.id, this.sharesWith[0]);
-    const sharedItems = context.holders.itemUsages.getByAbility(sharedAbility.id);
-
-
-    const result = [...items, ...sharedItems].some((x: AbilityUsageMap) => {
-      const chargesBased = !!x.ability.ability.charges;
-      if (chargesBased) return false;
-
-      const idCheck = (context.id === undefined || x.id !== context.id);
-      const timeCheck = x.start < context.end && x.end > context.start;
-      const selectionCheck = (!context.selectionRegistry || !(x.id in context.selectionRegistry));
-      const result = idCheck && timeCheck && selectionCheck;
-      return result as any;
-    });
-    return result;
-  }
-}
-
-class ChargesBasedOverlapStrategy implements IOverlapStrategy {
-  getDependencies(): string[] {
-    return null;
-  }
-
-  check(): boolean {
-    return false;
-  }
-}
-
-class ByNameDetecor implements IDetectionStrategy {
-  constructor(private ids: string[], private names: string[]) {
-    this.names = names;
-  }
-
-  process(ev: FF.Event): { offset: number; name: string } {
-    if (isAbility(ev)) {
-      if (this.names.some((n => n === ev.ability.name) as any)) {
-        return { offset: ev.timestamp, name: this.names[0] }
-      }
-    }
-    return null;
-  }
-
-  get deps(): IDetectionDependencies {
-    return {
-      abilities: this.ids.map(it => parseInt(it)),
-      buffs: []
-    }
-  }
-}
-
-class ByBuffApplyDetector implements IDetectionStrategy {
-  constructor(private id: number, private abilityName?: string) {
-  }
-
-  process(ev: FF.Event): { offset: number; name: string } {
-    if (isBuffApply(ev)) {
-      if (ev.ability.guid === this.id) {
-        return { offset: ev.timestamp, name: this.abilityName || ev.ability.name }
-      }
-    }
-    return null;
-  }
-
-  get deps(): IDetectionDependencies {
-    return {
-      abilities: [],
-      buffs: [this.id]
-    };
-  }
-}
-
-class ByBuffRemoveDetector implements IDetectionStrategy {
-  constructor(private id: number, private abilityName?: string, private offsetCorrection?: number) {
-  }
-
-  process(ev: FF.Event): { offset: number; name: string } {
-    if (isBuffRemove(ev)) {
-      if (ev.ability.guid === this.id && ev.sourceID === ev.targetID) {
-        return { offset: ev.timestamp - (this.offsetCorrection || 0) * 1000, name: this.abilityName || ev.ability.name }
-      }
-    }
-    return null;
-  }
-
-  get deps(): IDetectionDependencies {
-    return {
-      abilities: [],
-      buffs: [this.id]
-    };
-  }
 }
 
 export type MitigationsModifier = (holders:Holders, jobId: string, abilityId: string) => IDefensiveStats;
@@ -436,8 +269,7 @@ export interface IAbilityFilter {
   damage?: boolean;
   healing?: boolean;
   healingBuff?: boolean;
-  utility?: boolean;
-  pet?: boolean;
+  utility?: boolean;  
   unused?: boolean;
   enmity?: boolean;
 };
@@ -462,11 +294,11 @@ export const defaultFilter: IFilter = {
     damage: true,
     selfDefence: true,
     partyDefence: true,
+    enmity: true,    
     healing: true,
     healingBuff: true,
     partyDamageBuff: true,
-    selfDamageBuff: true,
-    pet: true,
+    selfDamageBuff: true,    
     unused: true,
     utility: true,
   },
@@ -512,7 +344,6 @@ export interface IBossTemplate {
   name: string;
   encounter: number;
   rootPhase: IPhase;
-
 }
 
 export interface IPhase {
@@ -521,67 +352,7 @@ export interface IPhase {
   syncData: ISyncData;
 }
 
-export interface ExportAttack {
-  id: string;
-  name: string;
-  type: number;
-  offset: string;
-  tags: string[];
-  desc: string;
-}
 
-export interface ExportDowntime {
-  id: string;
-  start: string;
-  end: string;
-  comment: string;
-  color: string;
-}
-
-export interface ExportBoss {
-  attacks: ExportAttack[];
-  downTimes: ExportDowntime[];
-}
-
-export interface ExportBossTarget {
-  target: string;
-  start: string;
-  end: string;
-}
-
-export interface ExportJob {
-  id: string;
-  name: string;
-  role: number;
-  order: number;
-  pet: string;
-  icon: string;
-}
-
-export interface ExportAbility {
-  id: string;
-  job: string;
-  ability: string;
-  type: AbilityType;
-  duration: number;
-  start: string;
-  icon: string;
-  settings: IAbilitySettingData[];
-}
-
-export interface ExportDataData {
-  boss: ExportBoss;
-  initialTarget: string;
-  bossTargets: ExportBossTarget[],
-  jobs: ExportJob[];
-  abilities: ExportAbility[];
-}
-
-export class ExportData {
-  name: string;
-  userName: string;
-  data: ExportDataData;
-}
 
 
 

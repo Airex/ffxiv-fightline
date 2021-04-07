@@ -1,14 +1,11 @@
 import { Component, Inject, Input, TemplateRef, ViewChild, OnInit } from "@angular/core";
-import { IExportCell, IExportColumn, IExportResultSet, IExportRow } from "../../core/BaseExportTemplate"
-import { FormBuilder, FormGroup, Validators, ValidatorFn, FormControl } from "@angular/forms"
-import { FirstTemplate } from "../../core/ExportTemplates/FirstTemplate"
 import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate"
 import { BossAttackDefensiveTemplate } from "../../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { ExportTemplate } from "../../core/BaseExportTemplate"
-import * as Models from "../../core/Models";
-import * as PresentationManager from "../../core/PresentationManager";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
+import { ExportData, IExportCell, IExportColumn, IExportResultSet, IExportRow } from "src/core/ExportModels";
+import { PresenterManager } from "src/core/PresentationManager";
 
 
 @Component({
@@ -24,8 +21,8 @@ export class TableViewDialog implements OnInit {
   }
 
   @Input("data")
-  data: Models.ExportData;
-  presenterManager = new PresentationManager.PresenterManager();
+  data: ExportData;
+  presenterManager = new PresenterManager();
 
   selectedValue = null;
   

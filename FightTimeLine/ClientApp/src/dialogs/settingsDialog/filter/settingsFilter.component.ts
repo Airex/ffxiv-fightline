@@ -32,8 +32,7 @@ export class SettingsFilterComponent {
     this.healing = filter.abilities.healing;
     this.healingBuff = filter.abilities.healing;
     this.utility = filter.abilities.utility;
-    this.enmity = filter.abilities.enmity;
-    this.pet = filter.abilities.pet;
+    this.enmity = filter.abilities.enmity;    
     this.unused = filter.abilities.unused;
     this.isMagical = filter.attacks.isMagical;
     this.isPhysical = filter.attacks.isPhysical;
@@ -54,8 +53,7 @@ export class SettingsFilterComponent {
         healing: this.healing,
         healingBuff: this.healingBuff,
         utility: this.utility,
-        enmity: this.enmity,
-        pet: this.pet,
+        enmity: this.enmity,        
         unused: this.unused
       },
       attacks: {
