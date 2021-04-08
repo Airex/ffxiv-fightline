@@ -101,18 +101,7 @@ export class SerializeController {
       isPrivate: this.data.boss && this.data.boss.isPrivate || false,
       ref: this.data.boss && this.data.boss.ref || "",
       data: JSON.stringify(<IBossSerializeData>{
-        attacks: [
-          {
-            id: "", ability: {
-              name: "Pull",
-              type: Models.DamageType.None,
-              tags: [],
-              offset: "00:00",
-              description: "Pull"
-            }
-          },
-          ...attacks
-        ],
+        attacks,
         downTimes: this.holders.bossDownTime.getAll().map((it) => <IDowntimeSerializeData>{
           id: it.id,
           start: Utils.formatTime(it.start),

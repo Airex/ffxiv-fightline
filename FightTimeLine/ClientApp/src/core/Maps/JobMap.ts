@@ -3,6 +3,7 @@ import * as BaseMap from "./BaseMap";
 import * as BaseHolder from "../Holders/BaseHolder";
 import * as Models from "../Models";
 import * as AbilityMap from "./AbilityMap";
+import { Utils } from "../Utils";
 
 export interface IJobMapData {
   actorName?: string;
@@ -35,7 +36,7 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
   constructor(id: string, job: Models.IJob, data: IJobMapData, filter?: Models.IAbilityFilter, pet?: string) {
     super(id);
     this.job = job;
-    this.filter = filter || defaultFilter;
+    this.filter = filter || Utils.clone(defaultFilter);
     this.pet = pet || job.defaultPet;
     this.applyData(data);
   }
