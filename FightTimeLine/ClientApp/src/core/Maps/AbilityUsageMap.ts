@@ -37,6 +37,10 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
     return this.item.start as Date;
   }
 
+  get offset(): string {
+    return Utils.formatTime(this.item.start as Date);
+  }
+
   get end(): Date {
     return this.item.end as Date;
   }

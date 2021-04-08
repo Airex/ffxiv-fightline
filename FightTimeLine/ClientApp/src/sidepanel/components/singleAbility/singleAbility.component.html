@@ -48,7 +48,8 @@
     </sidepanel-area>
   </nz-space-item>
   <nz-space-item *ngIf="it.ability.ability.settings && it.ability.ability.settings.length > 0">
-    <sidepanel-area header="Settings" [extra]="saveSettingsTpl">
+    <sidepanel-area header="Settings"
+                    [extra]="saveSettingsTpl">
       <form nz-form
             [formGroup]="form"
             nzLayout="vertical">
@@ -95,7 +96,7 @@
               </div>
             </div>
           </nz-form-control>
-        </nz-form-item>        
+        </nz-form-item>
       </form>
     </sidepanel-area>
     <ng-template #saveSettingsTpl>
@@ -106,5 +107,32 @@
               (click)="$event.stopPropagation();$event.preventDefault();saveSettings();">Save</button>
     </ng-template>
   </nz-space-item>
-
+  <nz-space-item *ngIf="coveredOgcds">
+    <sidepanel-area header="Covered OGCDs">
+      <div>
+        <div class="job"
+             *ngFor="let j of coveredOgcds">
+          <div class="jobHead">
+            <img class="jobIcon"
+                 [src]="j.jobIcon" /><span class="jobName">{{j.jobName}}</span>
+          </div>
+          <ul style="padding-left: 10px">
+            <li style="list-style-type: none;"
+                *ngFor="let ab of j.abilities">
+              <i nz-icon
+                 nzType="clock-circle"
+                 theme="outline"></i>
+              <a class="similarLink">
+                <span class="usedTime">{{ab.offset}}</span>
+              </a>
+              <img class="abilityIcon"
+                   [src]="ab.ability.ability.icon" />
+              <a class="defenseLink"><span class="abilityNameDef">{{ab.ability.ability.name}}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </sidepanel-area>
+  </nz-space-item>
 </nz-space>

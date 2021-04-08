@@ -53,6 +53,10 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     return this.hasValue(Models.AbilityType.SelfDefense) || this.hasValue(Models.AbilityType.SelfShield) || this.hasValue(Models.AbilityType.TargetDefense);
   }
 
+  public get isOgcd(): boolean {
+    return this.hasValue(Models.AbilityType.Damage);
+  }
+
   public get isPartyDef(): boolean {
     return this.hasValue(Models.AbilityType.PartyDefense) || this.hasValue(Models.AbilityType.PartyShield);
   }

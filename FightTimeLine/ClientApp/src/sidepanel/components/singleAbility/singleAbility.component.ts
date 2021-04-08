@@ -7,7 +7,7 @@ import { Utils } from "../../../core/Utils"
 import { DomSanitizer } from "@angular/platform-browser";
 import * as S from "../../../services/index"
 import { AbilityUsageMap, JobStanceMap } from "../../../core/Maps/index";
-import { settings } from "src/core/Jobs/FFXIV/shared";
+import { settings, SettingsEnum } from "src/core/Jobs/FFXIV/shared";
 
 
 @Component({
@@ -23,6 +23,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
   jobs;
   modified = false;
   covered: any[];
+  coveredOgcds: any[];
   items: any[];
 
   constructor(
@@ -103,7 +104,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
       }
     });
 
-    this.modified=false;
+    this.modified = false;
   }
 
   private getEndpoint(type: string): X.XivapiEndpoint {
@@ -117,7 +118,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
 
   refresh() {
     const ab = this.it.ability;
-    const setting = !ab.isStance && this.it.getSetting(settings.target.name);
+    const setting = !ab.isStance && this.it.getSetting(SettingsEnum.Target);
     if (setting) {
       this.ptyMemUsages = this.data.holders.itemUsages
         .getByAbility(this.it.ability.id)
@@ -148,6 +149,29 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
       this.covered = this.data.holders.bossAttacks.getAll().filter((it) => {
         return it.start >= this.it.start && it.start <= new Date(this.it.startAsNumber + this.it.calculatedDuration * 1000)
       }).sort((a, b) => a.startAsNumber - b.startAsNumber);
+    }
+
+    if (this.it.ability.isSelfDamage || this.it.ability.isPartyDamage) {
+      const jobs = this.it.ability.isSelfDamage
+        ? [this.it.ability.job]
+        : this.data.holders.jobs.getAll();
+        
+      this.coveredOgcds = jobs.map(j => {
+        const ogcds = this.data.holders.abilities.getByParentId(j.id).filter(ab => ab.isOgcd);
+        var list: AbilityUsageMap[] = [];
+        ogcds.forEach(ab => {
+          var cov = this.data.holders.itemUsages.getByAbility(ab.id).filter(ab => this.it.checkCoversDate(ab.start));
+          list.push(...cov);
+        });
+
+        if (list.length == 0) return null;
+
+        return {
+          jobName: j.job.name,
+          jobIcon: j.job.icon,
+          abilities: list.sort((a, b) => a.startAsNumber - b.startAsNumber)
+        }
+      }).filter(a => !!a);
     }
 
   }
