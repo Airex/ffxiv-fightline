@@ -12,6 +12,7 @@ import { DownTimeComponent } from "./components/downtime/downtime.component";
 import * as BaseHolder from "../core/Holders/BaseHolder";
 import { Holders } from "../core/Holders";
 import { IForSidePanel } from "../core/Holders/BaseHolder";
+import { VisStorageService } from "src/services/VisStorageService";
 
 
 @Component({
@@ -35,10 +36,11 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private injector: Injector,
+    private visStorage: VisStorageService,
     private componentFactoryResolver: ComponentFactoryResolver,
     private appRef: ApplicationRef
   ) {
-
+    this.holders = visStorage.holders;
   }
 
   items: BaseHolder.IForSidePanel[];
