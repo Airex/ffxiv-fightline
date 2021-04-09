@@ -7,7 +7,8 @@ import { Utils } from "../../../core/Utils"
 import { DomSanitizer } from "@angular/platform-browser";
 import * as S from "../../../services/index"
 import { AbilityUsageMap, JobStanceMap } from "../../../core/Maps/index";
-import { settings, SettingsEnum } from "src/core/Jobs/FFXIV/shared";
+import { SettingsEnum } from "src/core/Jobs/FFXIV/shared";
+import { FFXIVApiService } from "src/services/FFxivApiService";
 
 
 @Component({
@@ -27,7 +28,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
   items: any[];
 
   constructor(
-    private xivapi: X.XivapiService,
+    private xivapi: FFXIVApiService,
     private sanitizer: DomSanitizer,
     private dispatcher: S.DispatcherService,
     @Inject(SIDEPANEL_DATA) public data: SidepanelParams
@@ -38,7 +39,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     const groups = {};
 
     if (this.ability.xivDbId) {
-      this.xivapi.get(this.getEndpoint(this.ability.xivDbType), Number(this.ability.xivDbId)).subscribe(a => {
+      this.xivapi.loadDescription(this.ability.xivDbType, this.ability.xivDbId).subscribe(a => {
         if (a?.Description) {
           this.description =
             this.sanitizer.bypassSecurityTrustHtml(a.Description.replace(/\n+/g, "<br/>"));
@@ -107,15 +108,6 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     this.modified = false;
   }
 
-  private getEndpoint(type: string): X.XivapiEndpoint {
-    switch (type) {
-      case "item":
-        return X.XivapiEndpoint.Item;
-      default:
-    }
-    return X.XivapiEndpoint.Action;
-  }
-
   refresh() {
     const ab = this.it.ability;
     const setting = !ab.isStance && this.it.getSetting(SettingsEnum.Target);
@@ -155,23 +147,27 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
       const jobs = this.it.ability.isSelfDamage
         ? [this.it.ability.job]
         : this.data.holders.jobs.getAll();
-        
-      this.coveredOgcds = jobs.map(j => {
-        const ogcds = this.data.holders.abilities.getByParentId(j.id).filter(ab => ab.isOgcd);
-        var list: AbilityUsageMap[] = [];
-        ogcds.forEach(ab => {
-          var cov = this.data.holders.itemUsages.getByAbility(ab.id).filter(ab => this.it.checkCoversDate(ab.start));
-          list.push(...cov);
-        });
 
-        if (list.length == 0) return null;
+      this.coveredOgcds = jobs.reduce((oacc, j) => {
+        const ogcds = this.data.holders.abilities
+          .getByParentId(j.id)
+          .filter(ab => ab.isOgcd);
+        var list = ogcds.reduce((acc, ab) => {
+          var cov = this.data.holders.itemUsages
+            .getByAbility(ab.id)
+            .filter(ab => this.it.checkCoversDate(ab.start));
+          return acc.concat(cov);
+        }, []);
 
-        return {
+        if (list.length == 0) return;
+
+        oacc.push({
           jobName: j.job.name,
           jobIcon: j.job.icon,
           abilities: list.sort((a, b) => a.startAsNumber - b.startAsNumber)
-        }
-      }).filter(a => !!a);
+        })
+        return oacc;
+      }, []);
     }
 
   }

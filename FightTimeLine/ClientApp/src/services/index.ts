@@ -15,6 +15,7 @@ import { ChangeNotesService, IChahgeNote } from "./changeNotes.service"
 import { VisStorageService, ITimelineContainer } from "./VisStorageService"
 import { FightHubService, IConnectToSessionHandlers, IStartSessionHandlers } from "./FightHubService"
 import * as Gameserviceprovider from "./game.service-provider";
+import { FFXIVApiService } from "./FFxivApiService"
 
 export {
   IAuthenticationService,
@@ -34,6 +35,7 @@ export {
   authenticationServiceToken,
   fightServiceProvider,
   fightServiceToken,
+  FFXIVApiService,
   FightHubService,
   IChahgeNote,
   ChangeNotesService,
@@ -58,6 +60,7 @@ export const ServicesModuleComponents =
     authenticationServiceProvider,
     fightServiceProvider,
     Gameserviceprovider.gameServiceProvider,
-    VisStorageService
+    VisStorageService,
+    FFXIVApiService
   ];
 

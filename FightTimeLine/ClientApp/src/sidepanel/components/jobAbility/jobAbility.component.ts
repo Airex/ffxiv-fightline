@@ -5,8 +5,7 @@ import * as S from "../../../services/index"
 import { Holders } from "../../../core/Holders";
 import { AbilityMap } from "../../../core/Maps/index";
 import { DomSanitizer } from "@angular/platform-browser";
-import * as X from "@xivapi/angular-client"
-import { calculateDefsForAttack } from "src/core/Defensives";
+import { FFXIVApiService } from "src/services/FFxivApiService";
 
 
 @Component({
@@ -22,7 +21,7 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
   holders: Holders;
 
   constructor(
-    private xivapi: X.XivapiService,
+    private xivapi: FFXIVApiService,
     private sanitizer: DomSanitizer,
     private dispatcher: S.DispatcherService,
     @Inject(SIDEPANEL_DATA) public data: SidepanelParams
@@ -46,14 +45,7 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     return M.DamageType[id];
   }
 
-  private getEndpoint(type: string): X.XivapiEndpoint {
-    switch (type) {
-      case "item":
-        return X.XivapiEndpoint.Item;
-      default:
-    }
-    return X.XivapiEndpoint.Action;
-  }
+
 
 
 
@@ -92,7 +84,7 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     this.compactView = this.it.isCompact;
 
     if (this.ability.xivDbId) {
-      this.xivapi.get(this.getEndpoint(this.ability.xivDbType), Number(this.ability.xivDbId), {})
+      this.xivapi.loadDescription(this.ability.xivDbType,this.ability.xivDbId)
         .subscribe(a => {
           if (a && a.Description) {
             this.description =
@@ -105,8 +97,8 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
   }
 
   calculateDefs() {
-    const usages = this.holders.itemUsages.getByAbility(this.it.id);
-    calculateDefsForAttack(this.holders, this.it.id);
+    //const usages = this.holders.itemUsages.getByAbility(this.it.id);
+    //calculateDefsForAttack(this.holders, this.it.id);
   }
 
 
