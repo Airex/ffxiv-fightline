@@ -165,7 +165,7 @@ export class SyncSettingsComponent implements OnInit {
     }
   }
 
-  nzDrop(event: NzFormatEmitEvent) {
+  nzDrop() {
     this.updateExpression();
   }
 

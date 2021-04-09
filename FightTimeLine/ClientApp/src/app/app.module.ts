@@ -118,6 +118,7 @@ import { NzTreeModule } from 'ng-zorro-antd/tree';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { SoloPartyPipe } from 'src/heplers/SoloPartyPipe';
+import { VisStorageService } from 'src/services/VisStorageService';
 
 
 const zorroModules = [
@@ -286,7 +287,8 @@ export function getBaseUrl() {
     { provide: AuthServiceConfig, useFactory: provideConfig },
     { provide: NZ_I18N, useValue: en_US },
     { provide: DISQUS_SHORTNAME, useFactory: () => location.hostname.toLowerCase().indexOf("swtor") >= 0 ? "swtor-fightline" : "ffxiv-fightline" },
-    ...Services.ServicesModuleComponents
+    ...Services.ServicesModuleComponents,
+    VisStorageService
 
   ],
   entryComponents: [

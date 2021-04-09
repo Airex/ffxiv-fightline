@@ -5,6 +5,7 @@ import * as S from "../../../services/index"
 import { Holders } from "../../../core/Holders";
 import { JobMap, AbilityMap } from "../../../core/Maps/index";
 import { Utils } from "../../../core/Utils";
+import { VisStorageService } from "src/services/VisStorageService";
 
 
 @Component({
@@ -16,11 +17,12 @@ export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelCo
 
 
   constructor(
+    private visStorage: VisStorageService,
     private dispatcher: S.DispatcherService,
     @Inject(SIDEPANEL_DATA) private data: SidepanelParams
   ) {
     this.items = this.data.items.sort((a:any, b:any) => a.start - b.start);
-    this.holders = this.data.holders;
+    this.holders = this.visStorage.holders;
     this.refresh();
 
   }

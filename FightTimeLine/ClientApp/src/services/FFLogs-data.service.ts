@@ -1,12 +1,12 @@
-import {HttpClient} from "@angular/common/http"
-import {tap, debounceTime, flatMap, map, merge, concatMap} from "rxjs/operators";
-import {Observable, of, from} from "rxjs"
-import {LocalStorageService} from "./LocalStorageService"
-import {Event, ReportEventsResponse, ReportFightsResponse, Events, Zone, IJobInfo} from "../core/FFLogs"
+import { HttpClient } from "@angular/common/http"
+import { tap, debounceTime } from "rxjs/operators";
+import { Observable, of } from "rxjs"
+import { LocalStorageService } from "./LocalStorageService"
+import { Event, ReportEventsResponse, ReportFightsResponse, Zone } from "../core/FFLogs"
 import * as _ from "lodash"
 import * as Dataserviceinterface from "./data.service-interface";
 import * as Jobregistryserviceinterface from "./jobregistry.service-interface";
-import * as Parser from "../core/Parser";
+import { Parser } from "src/core/Parser";
 
 export class FFLogsService implements Dataserviceinterface.IDataService {
 
@@ -28,8 +28,8 @@ export class FFLogsService implements Dataserviceinterface.IDataService {
 
     const item =
       cache.find(it => it.key === itemKey &&
-          (new Date().valueOf() - it.timestamp.valueOf()) < 1000 * 60 * 60 * 24 * cacheDays) ||
-        {key: itemKey, timestamp: new Date(), data: await action()};
+        (new Date().valueOf() - it.timestamp.valueOf()) < 1000 * 60 * 60 * 24 * cacheDays) ||
+      { key: itemKey, timestamp: new Date(), data: await action() };
     item.timestamp = new Date();
 
     cache.push(item);
@@ -60,19 +60,16 @@ export class FFLogsService implements Dataserviceinterface.IDataService {
       .get<ReportEventsResponse>(
         `${this.fflogsUrl}v1/report/events/${code}?translate=true&api_key=${this.apiKey}&start=${start}&end=${end
         }&actorinstance=${instance}&filter=${filter}`)
-      .pipe(tap(() => {}));
+      .pipe();
   }
 
 
-  async getEvents(code: string, instance: number, callBack: (percentage: number) => void): Promise<Parser.Parser> {
+  async getEvents(code: string, instance: number, callBack: (percentage: number) => void): Promise<Parser> {
 
     const f = await this.getFight(code);
-    const resp = await this.getCached<Event[]>("events_cache",
-      code + instance,
-      10,
-      10,
+    const resp = await this.getCached<Event[]>("events_cache", code + instance, 10, 10,
       async () => {
-        const parser = new Parser.Parser(instance, f);
+        const parser = new Parser(instance, f);
 
         const foundFight = parser.fight;
         if (!foundFight) return Promise.resolve(null);
@@ -99,7 +96,7 @@ export class FFLogsService implements Dataserviceinterface.IDataService {
         return events;
       });
 
-    const parser = new Parser.Parser(instance, f);
+    const parser = new Parser(instance, f);
     parser.setEvents(resp);
     return parser;
   }
@@ -112,7 +109,7 @@ export class FFLogsService implements Dataserviceinterface.IDataService {
       }
     }
     const observable = this.httpClient.get<Zone[]>(`${this.fflogsUrl}v1/zones?api_key=${this.apiKey}`).pipe(tap(x => {
-      this.storage.setObject("zones_cache", {key: "", data: x, timestamp: new Date()});
+      this.storage.setObject("zones_cache", { key: "", data: x, timestamp: new Date() });
     }));
     return observable;
   }
@@ -120,9 +117,8 @@ export class FFLogsService implements Dataserviceinterface.IDataService {
   getParses(characterName: string, serverName: string, region: string): Observable<any[]> {
     const observable = this.httpClient
       .get<Zone[]>(
-        `${this.fflogsUrl}v1/parses/character/${encodeURIComponent(characterName)}/${encodeURIComponent(serverName)}/${
-        encodeURIComponent(region)}?api_key=${this.apiKey}`).pipe(tap(x => {
-      }));
+        `${this.fflogsUrl}v1/parses/character/${encodeURIComponent(characterName)}/${encodeURIComponent(serverName)}/${encodeURIComponent(region)}?api_key=${this.apiKey}`).pipe(tap(x => {
+        }));
     return observable;
   }
 

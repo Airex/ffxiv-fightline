@@ -27,10 +27,10 @@
       <nz-form-control nzErrorTip="Captcha is required">
         <div style="margin-top: 15px">
           <ngx-recaptcha2 formControlName="recaptcha"
-                          size="Normal"
+                          [size]="'normal'"
                           hl="en"
-                          theme="Light"
-                          type="Image"
+                          [theme]="'light'"
+                          [type]="'image'"
                           siteKey="6LfToGAUAAAAAKcp3joBgzcqJ3sK_s_WCltAL7Tn"
                           (success)="handleSuccess($event)">
           </ngx-recaptcha2>

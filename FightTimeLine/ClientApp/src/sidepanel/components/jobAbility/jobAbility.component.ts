@@ -6,6 +6,7 @@ import { Holders } from "../../../core/Holders";
 import { AbilityMap } from "../../../core/Maps/index";
 import { DomSanitizer } from "@angular/platform-browser";
 import { FFXIVApiService } from "src/services/FFxivApiService";
+import { VisStorageService } from "src/services/VisStorageService";
 
 
 @Component({
@@ -21,13 +22,14 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
   holders: Holders;
 
   constructor(
+    private visStorage: VisStorageService,
     private xivapi: FFXIVApiService,
     private sanitizer: DomSanitizer,
     private dispatcher: S.DispatcherService,
     @Inject(SIDEPANEL_DATA) public data: SidepanelParams
   ) {
     this.items = this.data.items;
-    this.holders = this.data.holders;
+    this.holders = this.visStorage.holders;
     this.refresh();
 
   }

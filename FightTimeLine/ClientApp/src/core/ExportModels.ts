@@ -74,7 +74,7 @@ export interface IExportColumn {
   type?: string;
   text: string;
   icon: string;
-  align?: string;
+  align?: 'left' | 'right' | 'center' | null;
   refId?: string;
   cursor?: string;
   listOfFilter?: { text: string; value: any; byDefault?: boolean }[];
@@ -90,7 +90,7 @@ export interface IExportRow {
 
 export interface IExportCell {
   items: IExportItem[];
-  align?: string;
+  align?: 'left' | 'right' | 'center' | null;
   disableUnique?: boolean;
   colorFn?: (data) => string;
   bgRefIdFn?: (data) => string;

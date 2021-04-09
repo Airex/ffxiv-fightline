@@ -12,10 +12,10 @@ import { ScreenNotificationsService } from "./ScreenNotificationsService"
 import { LocalStorageService } from "./LocalStorageService"
 import { DispatcherService } from "./dispatcher.service"
 import { ChangeNotesService, IChahgeNote } from "./changeNotes.service"
-import { VisStorageService, ITimelineContainer } from "./VisStorageService"
 import { FightHubService, IConnectToSessionHandlers, IStartSessionHandlers } from "./FightHubService"
 import * as Gameserviceprovider from "./game.service-provider";
 import { FFXIVApiService } from "./FFxivApiService"
+import { VisStorageService } from "./VisStorageService"
 
 export {
   IAuthenticationService,
@@ -38,10 +38,7 @@ export {
   FFXIVApiService,
   FightHubService,
   IChahgeNote,
-  ChangeNotesService,
-  VisStorageService,
-  ITimelineContainer
-
+  ChangeNotesService
 }
 
 export const ServicesModuleComponents =

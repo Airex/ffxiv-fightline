@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy, NgZone, EventEmitter, Output } from "@angular/core";
 import { VisTimelineService, TimelineOptions, DataItem, DataGroup } from "ngx-vis";
+import { ITimelineContainer } from "src/core/Holders/BaseHolder";
+import { VisStorageService } from "src/services/VisStorageService";
 import { ClassNameBuilder } from "../../core/ClassNameBuilder"
 import { Utils } from "../../core/Utils"
-import { VisStorageService, ITimelineContainer } from "../../services";
 
 export type ActionName = "delete" | "canMove" | "move" | "selected" | "clickGroup" | "clickEmpty" | "doubleClickGroup" | "doubleClickEmpty" | "doubleClickItem" | "timeChanged" | "visibleFrameTemplate" | "itemTooltip" | "keyMove";
 export type EventSource = "player" | "boss" | "user";

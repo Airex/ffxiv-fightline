@@ -9,6 +9,7 @@ import * as S from "../../../services/index"
 import { AbilityUsageMap, JobStanceMap } from "../../../core/Maps/index";
 import { SettingsEnum } from "src/core/Jobs/FFXIV/shared";
 import { FFXIVApiService } from "src/services/FFxivApiService";
+import { VisStorageService } from "src/services/VisStorageService";
 
 
 @Component({
@@ -28,6 +29,8 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
   items: any[];
 
   constructor(
+
+    private visStorage: VisStorageService,
     private xivapi: FFXIVApiService,
     private sanitizer: DomSanitizer,
     private dispatcher: S.DispatcherService,
@@ -55,7 +58,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
         const value = this.it.getSettingData(d.name);
         groups[d.name] = new FormControl(value ? value.value : d.default)
       }
-      this.jobs = this.data.holders.jobs.getAll();
+      this.jobs = this.visStorage.holders.jobs.getAll();
     }
 
     this.form = new FormGroup(groups);
@@ -112,12 +115,12 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     const ab = this.it.ability;
     const setting = !ab.isStance && this.it.getSetting(SettingsEnum.Target);
     if (setting) {
-      this.ptyMemUsages = this.data.holders.itemUsages
+      this.ptyMemUsages = this.visStorage.holders.itemUsages
         .getByAbility(this.it.ability.id)
         .sort((a, b) => a.startAsNumber - b.startAsNumber)
         .map(ab => {
           const s = ab.getSettingData(setting.name);
-          const jobMap = s?.value && this.data.holders.jobs.get(s.value) || ab.ability.job;
+          const jobMap = s?.value && this.visStorage.holders.jobs.get(s.value) || ab.ability.job;
           const actor = jobMap?.actorName;
           return {
             id: ab.id,
@@ -133,12 +136,12 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
         const value = this.it.getSettingData(d.name);
         this.form.controls[d.name].setValue(value ? value.value : d.default);
       }
-      this.jobs = this.data.holders.jobs.getAll();
+      this.jobs = this.visStorage.holders.jobs.getAll();
       this.modified = false;
     }
 
     if (this.it.ability.isDef || this.it.ability.isHeal) {
-      this.covered = this.data.holders.bossAttacks.getAll().filter((it) => {
+      this.covered = this.visStorage.holders.bossAttacks.getAll().filter((it) => {
         return it.start >= this.it.start && it.start <= new Date(this.it.startAsNumber + this.it.calculatedDuration * 1000)
       }).sort((a, b) => a.startAsNumber - b.startAsNumber);
     }
@@ -146,14 +149,14 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     if (this.it.ability.isSelfDamage || this.it.ability.isPartyDamage) {
       const jobs = this.it.ability.isSelfDamage
         ? [this.it.ability.job]
-        : this.data.holders.jobs.getAll();
+        : this.visStorage.holders.jobs.getAll();
 
       this.coveredOgcds = jobs.reduce((oacc, j) => {
-        const ogcds = this.data.holders.abilities
+        const ogcds = this.visStorage.holders.abilities
           .getByParentId(j.id)
           .filter(ab => ab.isOgcd);
         var list = ogcds.reduce((acc, ab) => {
-          var cov = this.data.holders.itemUsages
+          var cov = this.visStorage.holders.itemUsages
             .getByAbility(ab.id)
             .filter(ab => this.it.checkCoversDate(ab.start));
           return acc.concat(cov);

@@ -1,18 +1,11 @@
-import { Injectable} from "@angular/core"
-import { IBossAbility, IAbilitySetting, IAbilitySettingData, IFight, IAbility, IBoss, IFraction, IAbility as IAbility1,
-  IAbilitySetting as IAbilitySetting1,
-  IAbilitySettingData as IAbilitySettingData1,
-  IFight as IFight1,
-  IBoss as IBoss1,
-  IFraction as IFraction1,
-  IFraction as IFraction2
-} from "../core/Models";
+import { Injectable } from "@angular/core"
 import * as H from "../core/Holders";
 import { LocalStorageService } from "./LocalStorageService";
 import { Observable } from "rxjs";
 import * as D from "../dialogs"
-import * as PresentationManager from "../core/PresentationManager";
 import { NzModalService, NzModalState } from "ng-zorro-antd/modal";
+import { IAbility, IAbilitySetting, IAbilitySettingData, IBoss, IBossAbility, IFight, IFraction } from "src/core/Models";
+import { PresenterManager } from "src/core/PresentationManager";
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +18,7 @@ export class DialogService {
   }
 
   public get isAnyDialogOpened(): boolean {
-    return this.dialogs.openModals.some(m=>m.getState() === NzModalState.OPEN);
+    return this.dialogs.openModals.some(m => m.getState() === NzModalState.OPEN);
   }
 
   dialog: any;
@@ -86,7 +79,7 @@ export class DialogService {
     return this.toPromise(dialogRef.afterClose);
   }
 
-  openBossAttackAddDialog(bossAbility: IBossAbility, holders: H.Holders, presenter: PresentationManager.PresenterManager, callBack: (b: any) => void): void {
+  openBossAttackAddDialog(bossAbility: IBossAbility, presenter: PresenterManager, callBack: (b: any) => void): void {
     const dialogRef = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzTitle: null,
@@ -96,7 +89,6 @@ export class DialogService {
       nzContent: D.BossAttackDialog,
       nzComponentParams: {
         data: bossAbility,
-        holders: holders,
         presenterManager: presenter
       }
     });
@@ -106,28 +98,28 @@ export class DialogService {
     });
   }
 
-  openAbilityEditDialog(data: { ability: IAbility1, settings: IAbilitySetting1[], values: IAbilitySettingData1[] },
-    callBack: (b: any) => void): void {
-    const dialogRef = this.dialogs.create({
-      nzWrapClassName: "vertical-center-modal",
-      nzTitle: "Properties",
-      nzContent: D.AbilityEditDialog,
-      nzWidth: 700,
-      nzClosable: false,
-      nzKeyboard: false,
-      nzOkDisabled: true,
-      nzCancelDisabled: true,
-      nzFooter: null,
-      nzMaskClosable: false,
-      nzComponentParams: {
-        data: data
-      }
-    });
+  // openAbilityEditDialog(data: { ability: IAbility, settings: IAbilitySetting[], values: IAbilitySettingData[] },
+  //   callBack: (b: any) => void): void {
+  //   const dialogRef = this.dialogs.create({
+  //     nzWrapClassName: "vertical-center-modal",
+  //     nzTitle: "Properties",
+  //     nzContent: D.AbilityEditDialog,
+  //     nzWidth: 700,
+  //     nzClosable: false,
+  //     nzKeyboard: false,
+  //     nzOkDisabled: true,
+  //     nzCancelDisabled: true,
+  //     nzFooter: null,
+  //     nzMaskClosable: false,
+  //     nzComponentParams: {
+  //       data: data
+  //     }
+  //   });
 
-    dialogRef.afterClose.subscribe(result => {
-      callBack(result);
-    });
-  }
+  //   dialogRef.afterClose.subscribe(result => {
+  //     callBack(result);
+  //   });
+  // }
 
   openLoad(): void {
     this.dialogs.create({
@@ -178,7 +170,7 @@ export class DialogService {
     return this.toPromise(dialogref.afterClose);
   }
 
-  openSaveFight(dataFn: () => any): Promise<IFight1> {
+  openSaveFight(dataFn: () => any): Promise<IFight> {
     const dialogref = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzTitle: "Save",
@@ -276,7 +268,7 @@ export class DialogService {
     });
   }
 
-  openBossTemplates(needSave: boolean, boss?: IBoss1) {
+  openBossTemplates(needSave: boolean, boss?: IBoss) {
     this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzContent: D.BossTemplatesDialog,
@@ -313,7 +305,7 @@ export class DialogService {
     return this.toPromise(ref.afterClose);
   }
 
-  showFractionSelection(fractions: IFraction1[]):Observable<IFraction2> {
+  showFractionSelection(fractions: IFraction[]): Observable<IFraction> {
     const ref = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzContent: D.FractionSelectionDialog,

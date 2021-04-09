@@ -3,7 +3,6 @@ import * as _ from "lodash"
 import { DataItem, IdType } from "vis-timeline"
 import * as Gameserviceinterface from "../services/game.service-interface"
 import { IColorsSettings, SettingsService } from "../services/SettingsService"
-import { ITimelineContainer } from "../services"
 import { AvailabilityController } from "./AvailabilityController"
 import { CommandBag } from "./CommandBag"
 import { CommandFactory } from "./CommandFactory"
@@ -24,8 +23,7 @@ import * as ToolsManager from "./ToolsManager";
 
 
 export class FightTimeLineController {
-  data: M.IFightData = {};
-  private readonly holders: Holders;
+  data: M.IFightData = {};  
   private bossGroup: string = "boss";
   private commandStorage: UndoRedoController;
   private commandBag: CommandBag;
@@ -42,15 +40,12 @@ export class FightTimeLineController {
   constructor(
     private startDate: Date,
     private idgen: IdGenerator,
-    mainTimeLine: ITimelineContainer,
-    bossTimeLine: ITimelineContainer,
+    private holders: Holders,    
     private dialogCallBacks: IDialogs,
     private gameService: Gameserviceinterface.IGameService,
     private settingsService: SettingsService,
     private toolsManager: ToolsManager.ToolsManager,
     private presenterManager: PresentationManager.PresenterManager) {
-
-    this.holders = new Holders(mainTimeLine, bossTimeLine);
 
     this.commandStorage = new UndoRedoController({
       idGen: this.idgen,
@@ -83,10 +78,7 @@ export class FightTimeLineController {
       this.idgen
     );
 
-    this.colorSettings = this.settingsService.load().colors;
-
-    bossTimeLine.groups.add({ id: "boss", content: "BOSS", className: "boss" });
-    mainTimeLine.groups.add({ id: 0, content: "", className: "" });
+    this.colorSettings = this.settingsService.load().colors;    
   }
 
   loadBoss(boss: M.IBoss): void {
@@ -249,9 +241,9 @@ export class FightTimeLineController {
       if (this.idgen.isBossAttack(itemid)) {
         this.updateBossAttack(itemid);
       }
-      if (this.idgen.isAbilityUsage(itemid)) {
-        this.editAbility(itemid);
-      }
+      // if (this.idgen.isAbilityUsage(itemid)) {
+      //   this.editAbility(itemid);
+      // }
       return;
     }
 
@@ -644,9 +636,7 @@ export class FightTimeLineController {
     const map = this.holders.abilities.get(group);
     const abs = this.holders.itemUsages.getByAbility(group);
     this.handleDelete(abs.map(a => a.id));
-
     this.updateBuffHeatmap(this.presenterManager.view.buffmap, map.ability);
-
   }
 
   showAbility(group: string) {
@@ -654,10 +644,6 @@ export class FightTimeLineController {
     map.applyData({ hidden: false });
     this.holders.abilities.update([map]);
     this.updateBuffHeatmap(this.presenterManager.view.buffmap, map.ability);
-  }
-
-  getHolders(): Holders {
-    return this.holders;
   }
 
   restoreHidden(group: string) {
@@ -872,27 +858,27 @@ export class FightTimeLineController {
       color, comment));
   }
 
-  editAbility(itemid: string): void {
-    return;
-    const item = this.holders.itemUsages.get(itemid);
-    const settings = item.ability.ability.settings;
-    if (settings && settings.length > 0) {
+  // editAbility(itemid: string): void {
+  //   return;
+  //   const item = this.holders.itemUsages.get(itemid);
+  //   const settings = item.ability.ability.settings;
+  //   if (settings && settings.length > 0) {
 
-      this.dialogCallBacks.openAbilityEditDialog(
-        {
-          ability: item.ability.ability,
-          settings: settings,
-          values: item.settings,
-          jobs: this.holders.jobs.getAll()
-        },
-        (b: any) => {
-          if (b) {
-            this.commandStorage.execute(new C.ChangeAbilitySettingsCommand(itemid, b));
-          }
-        });
-    }
+  //     this.dialogCallBacks.openAbilityEditDialog(
+  //       {
+  //         ability: item.ability.ability,
+  //         settings: settings,
+  //         values: item.settings,
+  //         jobs: this.holders.jobs.getAll()
+  //       },
+  //       (b: any) => {
+  //         if (b) {
+  //           this.commandStorage.execute(new C.ChangeAbilitySettingsCommand(itemid, b));
+  //         }
+  //       });
+  //   }
 
-  }
+  // }
 
   notifyTimeChanged(id: string, date: Date): void {
     const map = this.holders.bossDownTime.getById(id);
@@ -937,7 +923,7 @@ export class FightTimeLineController {
       }
     }
 
-    this.updateBuffHeatmap(this.presenterManager.view.buffmap, null);    
+    this.updateBuffHeatmap(this.presenterManager.view.buffmap, null);
 
   }
 
@@ -1128,6 +1114,6 @@ export class FightTimeLineController {
 
 export interface IDialogs {
   openBossAttackAddDialog: (bossAbility: M.IBossAbility | {}, callBack: (b: any) => void) => void;
-  openAbilityEditDialog: (data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[], jobs: JobMap[] }, callBack: (b: any) => void) => void;
+  // openAbilityEditDialog: (data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[], jobs: JobMap[] }, callBack: (b: any) => void) => void;
   // openStanceSelector: (data: M.IContextMenuData[]) => void;
 }

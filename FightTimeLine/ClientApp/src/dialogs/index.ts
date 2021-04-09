@@ -1,4 +1,3 @@
-import { AbilityEditDialog } from "./abilityEditDialog/abilityEditDialog.component"
 import { BossAttackDialog } from "./bossAttackDialog/bossAttackDialog.component"
 import { BossTemplatesDialog } from "./bossTemplatesDialog/bossTemplatesDialog.component"
 import { ExportToTableDialog } from "./exportToTableDialog/exportToTableDialog.component"
@@ -16,7 +15,6 @@ import { BossSaveDialog } from "./bossSaveDialog/bossSaveDialog.component"
 import { FractionSelectionDialog } from "./fractionSelectionDialog/fractionSelectionDialog.component"
 
 export {
-  AbilityEditDialog,
   BossAttackDialog,
   BossTemplatesDialog,
   ExportToTableDialog,
@@ -42,8 +40,7 @@ export const DialogsModuleComponents =
     FightLoadDialog,
     BossSaveDialog,
     FightSaveDialog,
-    SettingsDialog,
-    AbilityEditDialog,
+    SettingsDialog,    
     FFLogsImportDialog,
     LoadingDialog,
     LoginDialog,

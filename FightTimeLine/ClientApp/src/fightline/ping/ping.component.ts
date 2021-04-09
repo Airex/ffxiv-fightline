@@ -45,7 +45,7 @@ export class PingComponent implements OnInit {
     this.pinged = true;
   }
 
-  onAnimationEvent(event: AnimationEvent) {
+  onAnimationEvent() {
     this.pinged = false;
   }
 

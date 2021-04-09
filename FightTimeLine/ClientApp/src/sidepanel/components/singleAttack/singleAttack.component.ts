@@ -6,6 +6,7 @@ import { Holders } from "../../../core/Holders";
 import { BossAttackMap } from "../../../core/Maps/index";
 import { calculateAvailDefsForAttack, calculateDefsForAttack, calculateMitigationForAttack } from "src/core/Defensives";
 import { SettingsEnum } from "src/core/Jobs/FFXIV/shared";
+import { VisStorageService } from "src/services/VisStorageService";
 
 @Component({
   selector: "singleAttack",
@@ -27,11 +28,12 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   defPartyAv = true;
 
   constructor(
+    private visStorage: VisStorageService,
     private dispatcher: S.DispatcherService,
     @Inject(SIDEPANEL_DATA) public data: SidepanelParams
   ) {
     this.items = this.data.items;
-    this.holders = this.data.holders;
+    this.holders = this.visStorage.holders;
     this.refresh();
   }
 

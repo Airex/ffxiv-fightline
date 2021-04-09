@@ -14,7 +14,6 @@ import { ExportTemplate } from "../core/BaseExportTemplate"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
 
-import { VisStorageService } from "../services";
 import * as FightTimeLineController from "../core/FightTimeLineController";
 import * as Generators from "../core/Generators";
 import * as ToolsManager from "../core/ToolsManager";
@@ -22,6 +21,7 @@ import * as PresentationManager from "../core/PresentationManager";
 import { ICommandData } from "src/core/UndoRedo";
 import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
 import { IExportCell, IExportColumn, IExportResultSet, IExportRow } from "src/core/ExportModels";
+import { VisStorageService } from "src/services/VisStorageService";
 
 
 
@@ -102,7 +102,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
       if (id) {
         const items = this.fightLineController.getItems([id]);
         if (items && items.length > 0) {
-          this.sidepanel.setItems(items, this.fightLineController.getHolders(), "table");
+          this.sidepanel.setItems(items, "table");
           if (!this.sideNavOpened) {
             this.sideNavOpened = true;
           }
@@ -157,11 +157,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.fightLineController = new FightTimeLineController.FightTimeLineController(
       this.startDate,
       this.idgen,
-      this.visStorage.playerContainer,
-      this.visStorage.bossContainer,
+      this.visStorage.holders,
       {
         openBossAttackAddDialog: () => { },
-        openAbilityEditDialog: () => { },
+        // openAbilityEditDialog: () => { },
         // openStanceSelector: () => { }
       },
       this.gameService,
@@ -186,15 +185,15 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   private subscribeToDispatcher(dispatcher: S.DispatcherService) {
     dispatcher.on("SidePanel Similar Click").subscribe(value => {
-      this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());
+      this.sidepanel.setItems(this.fightLineController.getItems([value]));
     });
 
     dispatcher.on("SidePanel Similar All Click").subscribe(value => {
-      this.sidepanel.setItems(this.fightLineController.getItems(value), this.fightLineController.getHolders());
+      this.sidepanel.setItems(this.fightLineController.getItems(value));
     });
 
     dispatcher.on("SidePanel Ability Click").subscribe(value => {
-      this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());
+      this.sidepanel.setItems(this.fightLineController.getItems([value]));
     });
   }
 

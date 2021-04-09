@@ -1,5 +1,4 @@
 import { Component, Inject, EventEmitter, ViewChild, Output, Input } from "@angular/core";
-import * as H from "../../core/Holders"
 import { PresenterManager } from "../../core/PresentationManager"
 
 
@@ -9,10 +8,7 @@ import { PresenterManager } from "../../core/PresentationManager"
   styleUrls: ["./filter.component.css"]
 })
 export class FilterComponent {
-
-  @Input("holders") holders: H.Holders;
   @Input("presenterManager") presenterManager: PresenterManager;
-
   tags: { text: string, checked: boolean }[];
   sources: { text: string, checked: boolean }[];
   checkAll = true;
@@ -67,7 +63,7 @@ export class FilterComponent {
     setTimeout(() => {
       this.changed.emit(source);
     });
-    
+
   }
 }
 

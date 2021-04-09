@@ -6,6 +6,7 @@ import { Holders } from "../../../core/Holders";
 import { JobMap, AbilityMap } from "../../../core/Maps/index";
 import { Utils } from "../../../core/Utils";
 import * as Index from "../../../core/Maps/index";
+import { VisStorageService } from "src/services/VisStorageService";
 
 @Component({
   selector: "multipleAttack",
@@ -16,11 +17,12 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
   
 
   constructor(
+    private visStorage: VisStorageService,
     private dispatcher: S.DispatcherService,
     @Inject(SIDEPANEL_DATA) private data: SidepanelParams
   ) {
     this.items = this.data.items.sort((a: Index.BossAttackMap , b: Index.BossAttackMap)=> a.startAsNumber - b.startAsNumber );
-    this.holders = this.data.holders;
+    this.holders = this.visStorage.holders;
     this.refresh();
   }
 

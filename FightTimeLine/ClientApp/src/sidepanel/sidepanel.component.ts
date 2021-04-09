@@ -50,15 +50,14 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     return its.sort().reduce((p, c) => p + c.id, "");
   }
 
-  setItems(items: BaseHolder.IForSidePanel[], holders: Holders, mode: SidePanelMode = "default"): void {
+  setItems(items: BaseHolder.IForSidePanel[], mode: SidePanelMode = "default"): void {
     this.items = items;
     const newKey = this.calculateKey(this.items);
     if (newKey === this.key && this.ref) {
       this.ref.instance.refresh();
       return;
     }
-    this.key = newKey;
-    this.holders = holders;
+    this.key = newKey;    
 
     if (this.op.hasAttached()) {
       this.op.detach();
@@ -70,8 +69,7 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     
     if (componentType) {
       const injector = this.createInjector({
-        items: items,
-        holders: holders,
+        items: items,        
         mode: mode
       });
 

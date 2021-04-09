@@ -1,6 +1,6 @@
 import * as Models from "./Models";
 import * as _ from "lodash"
-import * as SettingsService from "../services/SettingsService";
+import { ISettings } from "src/services/SettingsService";
 
 export class PresenterManager {
   tags: string[] = Models.DefaultTags;
@@ -12,19 +12,17 @@ export class PresenterManager {
   public get activeTags(): {text: string, checked: boolean}[] {
     return this.tags.concat("Other").map(t => ({
       text: t,
-      checked:  this.filter.attacks && this.filter.attacks.tags && this.filter.attacks.tags.includes(t)
+      checked: this.filter?.attacks?.tags?.includes(t) || false
     }));
   }
 
   public get activeSources(): { text: string, checked: boolean }[] {
     return this.sources.concat("Other").map(t => ({
       text: t,
-      checked: this.filter.attacks && this.filter.attacks.sources && this.filter.attacks.sources.includes(t)
+      checked: this.filter?.attacks?.sources?.includes(t) || false
     }));
   }
-
-
-
+  
   addTags(t: string[]) {
     if (t) {
       const newtags = _.without(t, ...this.tags);
@@ -41,7 +39,7 @@ export class PresenterManager {
     }
   }
 
-  setSettings(iSettings: SettingsService.ISettings) {
+  setSettings(iSettings: ISettings) {
     this.filter = iSettings.main.defaultFilter;
     this.view = iSettings.main.defaultView;
   }

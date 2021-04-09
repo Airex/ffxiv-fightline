@@ -4,6 +4,7 @@ import * as M from "../../../core/Models"
 import * as S from "../../../services/index"
 import { Holders } from "../../../core/Holders";
 import { JobMap, AbilityMap } from "../../../core/Maps/index";
+import { VisStorageService } from "src/services/VisStorageService";
 
 @Component({
   selector: "job-area",
@@ -39,10 +40,11 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
 
   constructor(
     private dispatcher: S.DispatcherService,
+    private visStorage: VisStorageService,
     @Inject(SIDEPANEL_DATA) public data: SidepanelParams
   ) {
     this.items = this.data.items;
-    this.holders = this.data.holders;
+    this.holders = this.visStorage.holders;
     this.refresh();
 
   }

@@ -3,7 +3,6 @@ import { SyncSettingsComponent } from "./syncSettings/syncSettings.component"
 import { SyncDowntimeComponent } from "./syncDowntime/syncDowntime.component"
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms"
 import * as M from "../../core/Models";
-import * as H from "../../core/Holders";
 import { time } from "../../heplers/TimeValidator";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
@@ -15,12 +14,10 @@ import { NzModalRef } from "ng-zorro-antd/modal";
   templateUrl: "./bossAttackDialog.component.html",
   styleUrls: ["./bossAttackDialog.component.css"]
 })
-
 export class BossAttackDialog implements OnInit {
 
   @Input("data") data: M.IBossAbility;
-  @Input("presenterManager") presenterManager: PresentationManager.PresenterManager;
-  @Input("holders") holders: H.Holders;
+  @Input("presenterManager") presenterManager: PresentationManager.PresenterManager;  
   @ViewChild("syncSettings") syncSettings: SyncSettingsComponent;
   @ViewChild("syncDowntime") syncDowntime: SyncDowntimeComponent;
   editForm: FormGroup;
@@ -33,7 +30,8 @@ export class BossAttackDialog implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    @Inject(Gameserviceprovider.gameServiceToken) public gameService: Gameserviceinterface.IGameService,
+    @Inject(Gameserviceprovider.gameServiceToken) 
+    public gameService: Gameserviceinterface.IGameService,
     public dialogRef: NzModalRef) {
   }
 

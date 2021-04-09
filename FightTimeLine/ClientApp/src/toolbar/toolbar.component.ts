@@ -9,13 +9,12 @@ import { ScreenNotificationsService } from "../services/ScreenNotificationsServi
 import { LocalStorageService } from "../services/LocalStorageService"
 import { IAuthenticationService, authenticationServiceToken, ChangeNotesService } from "../services/index"
 import * as M from "../core/Models"
-import * as H from "../core/Holders"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
 import * as _ from "lodash";
-import * as SettingsService from "../services/SettingsService";
 import { ToolsManager } from "../core/ToolsManager";
 import { PresenterManager } from "../core/PresentationManager";
+import { VisStorageService } from "src/services/VisStorageService";
 
 @Component({
   selector: "toolbar",
@@ -42,8 +41,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Input("canRedo") canRedo: boolean;
   @Input("connectedUsers") connectedUsers: M.IHubUser[];
   @Input("connected") connected: boolean;
-  @Input("holders") holders: H.Holders;
-
   @Input("toolsManager") toolsManager: ToolsManager;
   @Input("presenterManager") presenterManager: PresenterManager;
 

@@ -1,12 +1,11 @@
 <toolbar #toolbar
-         showHome="true"
-         showTitle="true"
-         showTeamwork="true"
+         [showHome]="true"
+         [showTitle]="true"
+         [showTeamwork]="true"
          [connectedUsers]="fightHubService.users"
          [connected]="fightHubService.connected"
          [authenticated]="authenticationService.authenticated"
-         [username]="authenticationService.username"
-         [holders]="fightLineController.getHolders()"
+         [username]="authenticationService.username"         
          [fraction]="fightLineController.fraction">
 </toolbar>
 <!-- ReSharper disable once InvalidValue -->

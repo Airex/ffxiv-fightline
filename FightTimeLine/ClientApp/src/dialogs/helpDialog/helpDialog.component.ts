@@ -13,7 +13,7 @@ export class HelpDialog implements  OnInit {
 
   
   constructor(
-    private dialogRef: NzModalRef
+    public dialogRef: NzModalRef
     ) { }
 
   onNoClick(): void {

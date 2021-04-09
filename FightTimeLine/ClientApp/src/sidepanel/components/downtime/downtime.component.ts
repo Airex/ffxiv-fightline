@@ -5,6 +5,7 @@ import * as S from "../../../services"
 import { Holders } from "../../../core/Holders";
 import { Utils } from "../../../core/Utils";
 import { BossDownTimeMap } from "../../../core/Maps";
+import { VisStorageService } from "src/services/VisStorageService";
 
 
 
@@ -24,9 +25,13 @@ export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent
   to: string;
   showCommentButton = false;
 
-  constructor(private dispatcher: S.DispatcherService, @Inject(SIDEPANEL_DATA) public data: SidepanelParams ) {
+  constructor(
+    private dispatcher: S.DispatcherService, 
+    private visStorage:VisStorageService,    
+    @Inject(SIDEPANEL_DATA) 
+    public data: SidepanelParams ) {
     this.items = this.data.items;
-    this.holders = this.data.holders;
+    this.holders = visStorage.holders;
     this.refresh();
  
   }

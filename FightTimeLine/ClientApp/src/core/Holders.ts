@@ -7,7 +7,7 @@ import * as BuffHeatmapHolder from "./Holders/BuffHeatmapHolder";
 import * as BossTargetHolder from "./Holders/BossTargetHolder";
 import * as StancesHolder from "./Holders/StancesHolder";
 import * as AbilityAvailablityHolder from "./Holders/AbilityAvailablityHolder";
-import {ITimelineContainer} from "../services";
+import { ITimelineContainer } from "./Holders/BaseHolder";
 
 export class Holders {
   itemUsages: AbilityUsageHolder.AbilityUsageHolder;
@@ -30,6 +30,18 @@ export class Holders {
     this.bossTargets = new BossTargetHolder.BossTargetHolder(mainTimeLine.items, "boss");
     this.stances = new StancesHolder.StancesHolder(mainTimeLine.items);
     this.abilityAvailability = new AbilityAvailablityHolder.AbilityAvailablityHolder(mainTimeLine.items);
+  }
+
+  clear(){
+    this.itemUsages.clear();
+    this.abilities.clear();
+    this.jobs.clear();
+    this.bossAttacks.clear();
+    this.bossDownTime.clear();
+    this.heatMaps.clear();
+    this.bossTargets.clear();
+    this.stances.clear();
+    this.abilityAvailability.clear();
   }
 
   isIn(ids: string[]) {

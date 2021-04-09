@@ -19,10 +19,10 @@ import { IdGenerator } from "../core/Generators"
 import { ICommandData } from "../core/UndoRedo"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
-import { VisStorageService } from "../services";
 import * as SerializeController from "../core/SerializeController";
 import * as Environment from "../environments/environment";
 import * as RecentActivitiesService from "../services/RecentActivitiesService";
+import { VisStorageService } from "src/services/VisStorageService";
 
 
 @Component({
@@ -186,7 +186,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
         const items = this.fightLineController.getItems(eventData.items || [eventData.group]);
         if (items && items.length > 0) {
 
-          this.sidepanel.setItems(items, this.fightLineController.getHolders());
+          this.sidepanel.setItems(items);
           if (!this.sideNavOpened) {
             this.sideNavOpened = true;
           }
@@ -210,14 +210,14 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   openBossAttackAddDialog(bossAbility: M.IBossAbility, callBack: (b: any) => void): void {
     //console.log("boss attack edit")
-    this.dialogService.openBossAttackAddDialog(bossAbility, this.fightLineController.getHolders(), this.presenterManager, callBack);
+    this.dialogService.openBossAttackAddDialog(bossAbility, this.presenterManager, callBack);
   }
 
-  openAbilityEditDialog(data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[] },
-    callBack: (b: any) => void): void {
-    //console.log("ability edit")
-    this.dialogService.openAbilityEditDialog(data, callBack);
-  }
+  // openAbilityEditDialog(data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[] },
+  //   callBack: (b: any) => void): void {
+  //   //console.log("ability edit")
+  //   this.dialogService.openAbilityEditDialog(data, callBack);
+  // }
 
   load(): void {
     if (!this.authenticationService.authenticated) {
@@ -573,11 +573,10 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.fightLineController = new FightTimeLineController(
       this.startDate,
       this.idgen,
-      this.visStorage.playerContainer,
-      this.visStorage.bossContainer,
+      this.visStorage.holders,      
       {
         openBossAttackAddDialog: this.openBossAttackAddDialog.bind(this),
-        openAbilityEditDialog: this.openAbilityEditDialog.bind(this),
+        // openAbilityEditDialog: this.openAbilityEditDialog.bind(this),
         // openStanceSelector: null
       },
       this.gameService,
@@ -743,17 +742,17 @@ export class FightLineComponent implements OnInit, OnDestroy {
   private subscribeToDispatcher(dispatcher: S.DispatcherService) {
     dispatcher.on("SidePanel Similar Click").subscribe(value => {
       this.planArea.selectBossAttaks([value]);
-      this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());
+      this.sidepanel.setItems(this.fightLineController.getItems([value]));
     });
 
     dispatcher.on("SidePanel Similar All Click").subscribe(value => {
       this.planArea.selectBossAttaks(value);
-      this.sidepanel.setItems(this.fightLineController.getItems(value), this.fightLineController.getHolders());
+      this.sidepanel.setItems(this.fightLineController.getItems(value));
     });
 
     dispatcher.on("SidePanel Ability Click").subscribe(value => {
       this.planArea.selectAbilities([value]);
-      this.sidepanel.setItems(this.fightLineController.getItems([value]), this.fightLineController.getHolders());
+      this.sidepanel.setItems(this.fightLineController.getItems([value]));
     });
 
     dispatcher.on("BossTemplates Save").subscribe(value => {
@@ -853,9 +852,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.updateView();
     });
 
-    dispatcher.on("SidePanel Ability Settings").subscribe(value => {
-      this.fightLineController.editAbility(value.id);
-    });
+    // dispatcher.on("SidePanel Ability Settings").subscribe(value => {
+    //   this.fightLineController.editAbility(value.id);
+    // });
 
     dispatcher.on("SidePanel Ability Save Settings").subscribe(value => {
       this.fightLineController.updateAbilitySettings(value.id, value.settings);

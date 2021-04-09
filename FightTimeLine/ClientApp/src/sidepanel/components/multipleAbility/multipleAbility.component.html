@@ -5,7 +5,7 @@
   <nz-space-item>
     <sidepanel-area header="Selection">
       <div>
-        <nz-tag *ngFor="let ab of items" (nzOnClose)="restore(ab)" nzMode="default">
+        <nz-tag *ngFor="let ab of items" nzMode="default">
           <span>
             <img class='abilityIcon' [src]="ab.ability.ability.icon" />
             <span class='abilityName'>{{ab.ability.ability.name}}</span>

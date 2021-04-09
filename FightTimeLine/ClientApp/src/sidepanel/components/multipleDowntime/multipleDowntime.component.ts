@@ -5,6 +5,7 @@ import * as S from "../../../services"
 import { Holders } from "../../../core/Holders";
 import { Utils } from "../../../core/Utils";
 import { BossDownTimeMap } from "../../../core/Maps";
+import { VisStorageService } from "src/services/VisStorageService";
 
 
 
@@ -18,9 +19,13 @@ export class MultipleDownTimeComponent implements OnInit, OnDestroy, ISidePanelC
   items: any[];
   holders: Holders;
 
-  constructor(private dispatcher: S.DispatcherService, @Inject(SIDEPANEL_DATA) public data: SidepanelParams) {
+  constructor(
+    private visStorage: VisStorageService,    
+    private dispatcher: S.DispatcherService, 
+    @Inject(SIDEPANEL_DATA) 
+    public data: SidepanelParams) {
     this.items = this.data.items;
-    this.holders = this.data.holders;
+    this.holders = this.visStorage.holders;
     this.refresh();
 
   }

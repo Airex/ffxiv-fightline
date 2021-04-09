@@ -1,27 +1,27 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
-
+import { Component, Input, OnInit } from "@angular/core";
+import { VisStorageService } from "src/services/VisStorageService";
 import * as M from "../../../core/Models";
-import * as H from "../../../core/Holders";
-
 
 @Component({
   selector: "syncDowntime",
   templateUrl: "./syncDowntime.component.html",
   styleUrls: ["./syncDowntime.component.css"]
 })
-
-
-
 export class SyncDowntimeComponent implements OnInit {
 
-  @Input("data") data: M.IBossAbility;
-  @Input("holders") holders: H.Holders;
+  @Input("data") data: M.IBossAbility;  
   downtimes: any[];
   selected: any;
   selectedPre: any;
 
+  constructor(
+    private visStorage: VisStorageService
+  ){
+
+  }
+
   ngOnInit() {
-    this.downtimes = this.holders.bossDownTime.getAll();
+    this.downtimes = this.visStorage.holders.bossDownTime.getAll();
     this.selected = this.data.syncDowntime;
     this.selectedPre = this.data.syncPreDowntime;
   }

@@ -3,7 +3,7 @@
     <div *ngIf="!loading && container.fights && container.fights.length>0">
       <div style="height: 360px;overflow: auto" customScroll>
         <nz-list #fights
-                 [nzDataSource]="container.fights | nodrafts:showDrafts && showDrafts.isChecked"
+                 [nzDataSource]="container.fights"
                  [nzRenderItem]="item"
                  nzSize="small"
                  [ngClass]="{loadList:true}">
@@ -19,7 +19,7 @@
                 </ng-template>
               </nz-list-item-meta>
               <ng-template #removeAction>
-                <a nz-popconfirm nzPopconfirmTitle="Are you sure delete this fight?" (nzOnConfirm)="remove(item,$event)">
+                <a nz-popconfirm nzPopconfirmTitle="Are you sure delete this fight?" (nzOnConfirm)="remove(item)">
                   <i nz-icon nzType="delete" class="action-icon" nzTheme="twotone"></i>
                 </a>
               </ng-template>

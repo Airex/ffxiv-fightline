@@ -70,12 +70,12 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
   isTimelineLoading: boolean = false;
 
   constructor(
-    private dialogRef: NzModalRef,
+    public dialogRef: NzModalRef,
     @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
     @Inject(fightServiceToken) private fightService: IFightService,
     private visTimelineService: VisTimelineService,
     private dispatcher: DispatcherService,
-    @Inject(authenticationServiceToken) private authService: IAuthenticationService,
+    @Inject(authenticationServiceToken) public authService: IAuthenticationService,
     private notification: ScreenNotificationsService
   ) {
 

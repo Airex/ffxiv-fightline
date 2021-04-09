@@ -13,7 +13,7 @@ export class WhatsNewDialog {
   @Input("data") data: any;
   @ViewChild("timeline", { static: false }) timeline: ElementRef;
   constructor(
-    private dialogRef: NzModalRef) {
+    public dialogRef: NzModalRef) {
     this.dialogRef.afterOpen.subscribe(() => {
       setTimeout(() => {
           this.timeline.nativeElement.scrollTop = 0;

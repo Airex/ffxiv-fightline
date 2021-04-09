@@ -1,6 +1,6 @@
 <nz-layout [ngStyle]="{width:'100%', height:'100%'}">
   <nz-sider customScroll nzTheme="light" [ngStyle]="{ height:'384px', overflow: 'auto'}">
-    <nz-tree #tree [nzData]="settings" [ngStyle]="{width:'100%', height:'100%'}" nzDraggable [nzMultiple]="false" [nzBlockNode]="true" [nzShowLine]="true" (nzOnDrop)="nzDrop($event)" [nzBeforeDrop]="beforeDrop">
+    <nz-tree #tree [nzData]="settings" [ngStyle]="{width:'100%', height:'100%'}" nzDraggable [nzMultiple]="false" [nzBlockNode]="true" [nzShowLine]="true" (nzOnDrop)="nzDrop()" [nzBeforeDrop]="beforeDrop">
     </nz-tree>
   </nz-sider>
   <nz-sider nzTheme="light" [nzWidth]="45" [ngStyle]="{'text-align':'center'}">
