@@ -82,7 +82,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     },
     editable: { remove: true, updateTime: true, add: false },
     horizontalScroll: true,
-    margin: { item: { horizontal: 0, vertical: 5 } },
+    margin: { item: { horizontal: 0, vertical: 5 } },    
     onRemove: (item: any, callback: any) => {
       callback(null);
       this.emitAction("delete", "player", this.visTimelineService.getSelection(this.visTimeline));
@@ -273,6 +273,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     this.visTimelineService.on(this.visTimeline, "timechanged");
     this.visTimelineService.on(this.visTimeline, "timechange");
     this.visTimelineService.on(this.visTimeline, "rangechange");
+    this.visTimelineService.on(this.visTimeline, "mouseOver");
   }
 
   timelineBossInitialized(): void {
@@ -416,6 +417,11 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
         }
       });
     }));
+
+    this.subs.push(this.visTimelineService.itemover.subscribe((eventData: any[]) => {
+      console.debug(eventData);
+
+    }));
   }
 
   selectGroup(id: string) {
@@ -448,7 +454,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     this.visTimelineService.off(this.visTimeline, "timechanged");
     this.visTimelineService.off(this.visTimeline, "timechange");
     this.visTimelineService.off(this.visTimeline, "rangechange");
-    this.visTimelineService.off(this.visTimelineBoss, "rangechange");
+    this.visTimelineService.off(this.visTimelineBoss, "rangechange");    
 
     this.visTimelineService.destroy(this.visTimeline);
     this.visTimelineService.destroy(this.visTimelineBoss);

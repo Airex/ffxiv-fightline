@@ -63,17 +63,17 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
     this.visItems.update(this.itemsOf(items));
   }
 
-  applyFilter(filter: Models.IAbilityFilter, used: (a) => boolean) {
+  applyFilter(filter: Models.IAbilityFilter, jobFilters: Models.JobFilters, used: (a) => boolean) {
     this.values.forEach(value => {
       const jobMap = value.job;
-      const visible = this.abilityFilter(value, filter, jobMap, used);
+      const jobFilter = jobFilters[jobMap.id] || {};      
+      const visible = this.abilityFilter(value, filter, jobFilter,  jobMap, used);
       value.applyData({ filtered: !visible });
     });
     this.update(this.values);
   }
 
-  private abilityFilter(value: AbilityMap, filter: Models.IAbilityFilter, jobMap: JobMap, used: (a) => boolean): boolean {
-    const jobFilter = jobMap.filter;
+  private abilityFilter(value: AbilityMap, filter: Models.IAbilityFilter, jobFilter: Models.IAbilityFilter, jobMap: JobMap, used: (a) => boolean): boolean {    
     const filterUnit = (aType: Models.AbilityType | Models.AbilityType[], globalFilter: boolean, jobFilter: boolean) => {
       let visible = false;
       const valueArray = Array.isArray(aType) ? aType : [aType];

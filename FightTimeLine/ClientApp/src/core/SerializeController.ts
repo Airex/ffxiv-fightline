@@ -121,7 +121,7 @@ export class SerializeController {
         name: value.job.name,
         order: value.order,
         pet: value.pet,
-        filter: value.filter,
+        // filter: value.filter,
         compact: value.isCompact,
         collapsed: value.collapsed
       });

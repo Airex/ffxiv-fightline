@@ -3,49 +3,35 @@ import * as BaseMap from "./BaseMap";
 import * as BaseHolder from "../Holders/BaseHolder";
 import * as Models from "../Models";
 import * as AbilityMap from "./AbilityMap";
-import { Utils } from "../Utils";
 
 export interface IJobMapData {
   actorName?: string;
   collapsed?: boolean;
 }
 
-export const defaultFilter: Models.IAbilityFilter = {
-  damage: undefined,
-  selfDefence: undefined,
-  partyDefence: undefined,
-  healing: undefined,
-  healingBuff: undefined,
-  partyDamageBuff: undefined,
-  selfDamageBuff: undefined,
-  unused: undefined,  
-  utility: undefined
-}
-
 export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> implements BaseHolder.IForSidePanel {
   sidePanelComponentName: string = "job";
 
   onDataUpdate(data: IJobMapData): void {
-    //    if (this.abilityIds)
     this.setItem(this.createJob(this.job, this.id, data));
   }
 
   static jobIndex = Number.MAX_SAFE_INTEGER;
-  index: number | undefined = JobMap.jobIndex--;
+  private index: number | undefined = JobMap.jobIndex--;
+  private abilityIds: AbilityMap.AbilityMap[];
+  job: Models.IJob;  
+  pet: string;
+  isCompact: boolean = false;
+  settings: Models.IAbilitySettingData[];
 
-  constructor(id: string, job: Models.IJob, data: IJobMapData, filter?: Models.IAbilityFilter, pet?: string) {
+  constructor(id: string, job: Models.IJob, data: IJobMapData, pet?: string) {
     super(id);
     this.job = job;
-    this.filter = filter || Utils.clone(defaultFilter);
     this.pet = pet || job.defaultPet;
     this.applyData(data);
   }
 
-  job: Models.IJob;
-  filter?: Models.IAbilityFilter;
-  pet: string;
-  isCompact: boolean = false;
-  settings: Models.IAbilitySettingData[];
+  
 
   get actorName(): string {
     return this.data.actorName || "";
@@ -81,7 +67,6 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
   }
 
   createJob(job: Models.IJob, id: string, data: IJobMapData): DataGroup {
-
     const el = this.createElementFromHtml(
       `<span class="expand-sign">${data.collapsed ? "►" : "▼"}</span><img class='abilityIcon' src='${job.icon}'/><span class='jobName'>${job.name}<span>`);
 
@@ -104,7 +89,7 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
     return this.data.collapsed || false;
   }
 
-  private abilityIds: AbilityMap.AbilityMap[];
+  
 
   useAbilities(abilityIds: AbilityMap.AbilityMap[]) {
     this.abilityIds = abilityIds;

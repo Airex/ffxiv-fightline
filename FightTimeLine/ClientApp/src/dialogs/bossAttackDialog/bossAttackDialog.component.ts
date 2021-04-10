@@ -8,6 +8,7 @@ import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
 import * as PresentationManager from "../../core/PresentationManager";
 import { NzModalRef } from "ng-zorro-antd/modal";
+import { VisStorageService } from "src/services/VisStorageService";
 
 @Component({
   selector: "bossAttackDialog",
@@ -16,8 +17,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 })
 export class BossAttackDialog implements OnInit {
 
-  @Input("data") data: M.IBossAbility;
-  @Input("presenterManager") presenterManager: PresentationManager.PresenterManager;  
+  @Input("data") data: M.IBossAbility;  
   @ViewChild("syncSettings") syncSettings: SyncSettingsComponent;
   @ViewChild("syncDowntime") syncDowntime: SyncDowntimeComponent;
   editForm: FormGroup;
@@ -29,6 +29,7 @@ export class BossAttackDialog implements OnInit {
   defaultTags  = [];
 
   constructor(
+    private visStorage: VisStorageService,
     private formBuilder: FormBuilder,
     @Inject(Gameserviceprovider.gameServiceToken) 
     public gameService: Gameserviceinterface.IGameService,
@@ -37,7 +38,7 @@ export class BossAttackDialog implements OnInit {
 
   ngOnInit() {
     this.newAttack = !this.data.name;
-    this.defaultTags = this.presenterManager.activeTags.filter(t => t.text !==  "Other");
+    this.defaultTags = this.visStorage.presenter.activeTags.filter(t => t.text !==  "Other");
     this.editForm = this.formBuilder.group({
       bossAttackName: new FormControl(this.data.name, Validators.required),
       damageType: new FormControl(this.data.type, Validators.required),

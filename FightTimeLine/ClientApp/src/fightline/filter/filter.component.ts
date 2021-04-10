@@ -1,4 +1,6 @@
-import { Component, Inject, EventEmitter, ViewChild, Output, Input } from "@angular/core";
+import { Component, EventEmitter, Output } from "@angular/core";
+import { IAbilityFilter } from "src/core/Models";
+import { VisStorageService } from "src/services/VisStorageService";
 import { PresenterManager } from "../../core/PresentationManager"
 
 
@@ -8,14 +10,20 @@ import { PresenterManager } from "../../core/PresentationManager"
   styleUrls: ["./filter.component.css"]
 })
 export class FilterComponent {
-  @Input("presenterManager") presenterManager: PresenterManager;
+  public presenterManager: PresenterManager;
   tags: { text: string, checked: boolean }[];
   sources: { text: string, checked: boolean }[];
   checkAll = true;
 
   @Output() public changed: EventEmitter<string> = new EventEmitter();
 
-  filters = Object.entries(<{ [name: string]: [number, string] }>{
+  constructor(
+    private visStorage: VisStorageService
+  ){
+    this.presenterManager = this.visStorage.presenter;
+  }
+
+  filters = Object.entries(<{ [name in keyof IAbilityFilter]: [number, string] }>{
     selfDefence: [0, "Self Defense"],
     partyDefence: [1, "Party Defense"],
     selfDamageBuff: [2, "Self Damage Buff"],

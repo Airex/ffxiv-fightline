@@ -742,8 +742,10 @@ export class FightTimeLineController {
           const rid = this.addJob(j.id, j.name, null, j.pet, j.collapsed, false);
           const jh = this.holders.jobs.get(rid);
           if (jh) {
-            if (j.filter)
-              jh.filter = j.filter;
+            if (j.filter){
+              //jh.filter = j.filter;
+              this.presenterManager.jobFilters[j.id] = j.filter;
+            }
             if (j.compact !== undefined && j.compact !== null)
               this.toggleCompactView(j.id, j.compact);
           }
@@ -910,9 +912,10 @@ export class FightTimeLineController {
       this.presenterManager.filter = input;
 
     if (!source || source === 'ability') {
-      if (this.presenterManager.filter && this.presenterManager.filter.abilities) {
+      if (this.presenterManager.filter?.abilities) {
         this.holders.abilities.applyFilter(
           this.presenterManager.filter.abilities,
+          this.presenterManager.jobFilters,
           (val) => this.holders.itemUsages.filter((item) => item.ability.id === val).length > 0);
       }
     }

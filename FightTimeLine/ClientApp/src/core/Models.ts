@@ -283,6 +283,7 @@ export interface IBossAttackFilter {
 
   keywords: string[];
 }
+export type JobFilters = { [id: string]: IAbilityFilter }
 
 export interface IFilter {
   abilities: IAbilityFilter;

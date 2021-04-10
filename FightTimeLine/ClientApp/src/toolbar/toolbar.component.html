@@ -17,26 +17,7 @@
           </li>
         </ul>
       </nz-dropdown-menu>
-    </span>
-    <span *ngIf="gameService.name == 'swtor'">
-      <button nz-dropdown [nzDropdownMenu]="swtorMenu" nz-button nzType="primary" nzTrigger="click">Add Class</button>
-      <nz-dropdown-menu #swtorMenu="nzDropdownMenu">
-        <ul nz-menu>
-          <li nz-submenu *ngFor="let cl of menu | keyvalue">
-            <span title style="font-size: large">{{cl.key}}</span>
-            <ul>
-              <li nz-menu-item *ngFor="let c of cl.value" (click)="onAddJob(c.name)">
-                <img [src]="c.icon" style="height: 52px; margin-right: 6px; width: 52px;"/>
-                <span style="font-weight: bold">
-                  {{c.name}}
-                </span>
-              </li>
-            </ul>
-          </li>
-
-        </ul>
-      </nz-dropdown-menu>
-    </span>
+    </span>  
   </span>
   <span *ngIf="showMenu">
     <button nz-dropdown [nzDropdownMenu]="mainMenu" nzTooltipTrigger="click" nz-button nz-tooltip nzTooltipTitle="Menu">
@@ -68,10 +49,10 @@
     </nz-button-group>
   </span>
   <span style="margin-left: 10px" *ngIf="showfilter">
-    <abilityFilter #filter [presenterManager]="presenterManager" (changed)="updateFilter($event)"></abilityFilter>
+    <abilityFilter #filter (changed)="updateFilter($event)"></abilityFilter>
   </span>
   <span style="margin-left: 10px" *ngIf="showView">
-    <viewMenu #view [presenterManager]="presenterManager" (changed)="updateView($event)"></viewMenu>
+    <viewMenu #view (changed)="updateView($event)"></viewMenu>
   </span>
   <span style="margin-left: 10px" *ngIf="showTools && !toolsManager.active">
     <button nz-dropdown [nzDropdownMenu]="toolMenu" [nzTrigger]="'click'" nz-button><i nz-icon nzType="tool" theme="twotone"></i>Tools</button>

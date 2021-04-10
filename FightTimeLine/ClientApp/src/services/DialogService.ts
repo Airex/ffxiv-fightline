@@ -88,8 +88,7 @@ export class DialogService {
       nzMaskClosable: false,
       nzContent: D.BossAttackDialog,
       nzComponentParams: {
-        data: bossAbility,
-        presenterManager: presenter
+        data: bossAbility        
       }
     });
 

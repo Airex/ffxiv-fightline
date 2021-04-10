@@ -31,8 +31,7 @@ export class CombinedCommand implements Command {
 
 }
 
-export class AddJobCommand implements Command {
-  private filter: IAbilityFilter;
+export class AddJobCommand implements Command {  
 
   constructor(private id: string, private jobName: string, private actorName: string, private prevBossTarget: string, private doUpdates: boolean, private pet: string, private collapsed: boolean) {
 
@@ -57,10 +56,10 @@ export class AddJobCommand implements Command {
     for (let sg of abilities) {
       context.holders.abilities.remove([sg.id]);
     }
-    const job = context.holders.jobs.get(this.id);
+    // const job = context.holders.jobs.get(this.id);
     context.holders.jobs.remove([this.id]);
 
-    this.filter = job.filter;
+    // this.filter = job.filter;
 
     context.holders.bossTargets.initialBossTarget = this.prevBossTarget;
 
@@ -82,7 +81,7 @@ export class AddJobCommand implements Command {
       isCompactView: context.isCompactView(),
       collapsed: this.collapsed
     };
-    const jobMap = new JobMap(map.id, map.job, { actorName: map.actorName, collapsed: map.collapsed }, this.filter, this.pet);
+    const jobMap = new JobMap(map.id, map.job, { actorName: map.actorName, collapsed: map.collapsed }, this.pet);
 
 
     if (job.stances && job.stances.length) {

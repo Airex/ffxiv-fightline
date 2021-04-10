@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core"
 import { DataItem, DataGroup, DataSet } from "ngx-vis";
 import { Holders } from "src/core/Holders";
 import { ITimelineContainer } from "src/core/Holders/BaseHolder";
+import { PresenterManager } from "src/core/PresentationManager";
 
 @Injectable()
 export class VisStorageService {
@@ -11,6 +12,7 @@ export class VisStorageService {
   private groupsBoss: DataSet<DataGroup>;
 
   public holders: Holders;
+  public presenter: PresenterManager;
 
   constructor() {
     this.items = new DataSet<DataItem>([], {});
@@ -22,6 +24,7 @@ export class VisStorageService {
     this.playerContainer.groups.add({ id: 0, content: "", className: "" });
 
     this.holders = new Holders(this.playerContainer, this.bossContainer);
+    this.presenter = new PresenterManager();
   }
 
   get playerContainer(): ITimelineContainer {

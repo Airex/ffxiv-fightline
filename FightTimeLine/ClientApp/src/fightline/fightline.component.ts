@@ -50,7 +50,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   private idgen = new IdGenerator();
   toolsManager = new ToolsManager();
-  presenterManager = new PresenterManager();
+  private presenterManager: PresenterManager;
   jobs = this.gameService.jobRegistry.getJobs();
   sideNavOpened: boolean = false;
 
@@ -72,6 +72,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     private storage: S.LocalStorageService,
     public fightHubService: S.FightHubService,
     private dispatcher: S.DispatcherService) {
+    this.presenterManager = visStorage.presenter;
   }
 
   onAction(event: Action) {
@@ -201,10 +202,22 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   updateFilter(source?: string): void {
     this.fightLineController.applyFilter(null, source);
+
+    this.storage.setObject("presenter_" + this.fightId, {      
+      filter: this.presenterManager.filter,
+      view: this.presenterManager.view,
+      jobFilters: this.presenterManager.jobFilters,
+    })
   }
 
   updateView($data?: M.IView): void {
     this.fightLineController.applyView($data);
+    //todo: remove
+    this.storage.setObject("presenter_" + this.fightId, {            
+      filter: this.presenterManager.filter,
+      view: this.presenterManager.view,
+      jobFilters: this.presenterManager.jobFilters,
+    })
     setTimeout(() => this.planArea.refresh());
   }
 
@@ -421,13 +434,20 @@ export class FightLineComponent implements OnInit, OnDestroy {
               url: "/" + fight.id.toLowerCase()
             });
 
-            const settings = this.settingsService.load();
-            this.presenterManager.setSettings(settings);
-            
-            if (settings && settings.main && settings.main.defaultView)
-              this.fightLineController.applyView(settings.main.defaultView);
-            if (settings && settings.main && settings.main.defaultFilter)
-              this.fightLineController.applyFilter(settings.main.defaultFilter);
+            var storedPresenter = this.storage.getObject("presenter_" + this.fightId) as any;
+            if (storedPresenter) {
+              this.presenterManager.filter = storedPresenter.filter;
+              this.presenterManager.view = storedPresenter.view;
+              this.presenterManager.jobFilters = storedPresenter.jobFilters;
+            }
+            else {
+              const settings = this.settingsService.load();
+              this.presenterManager.setSettings(settings);
+              if (settings && settings.main && settings.main.defaultView)
+                this.fightLineController.applyView(settings.main.defaultView);
+              if (settings && settings.main && settings.main.defaultFilter)
+                this.fightLineController.applyFilter(settings.main.defaultFilter);
+            }
 
 
             if (fight.data) {
@@ -473,9 +493,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.showWhatsNew().then(() => {
         const id = r["fightId"];
         if (id) {
-          if (id.indexOf("dummy") === 0){
+          if (id.indexOf("dummy") === 0) {
             this.loadFight("");
-          }else  if (id === "new" ) {
+          } else if (id === "new") {
             this.startNew(r["fraction"]);
           } else {
             this.loadFight(id);
@@ -573,7 +593,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.fightLineController = new FightTimeLineController(
       this.startDate,
       this.idgen,
-      this.visStorage.holders,      
+      this.visStorage.holders,
       {
         openBossAttackAddDialog: this.openBossAttackAddDialog.bind(this),
         // openAbilityEditDialog: this.openAbilityEditDialog.bind(this),
@@ -910,9 +930,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.setSidePanel(null);
     });
 
-    dispatcher.on("Multiple Downtimes Select").subscribe(value => {      
+    dispatcher.on("Multiple Downtimes Select").subscribe(value => {
       this.setSidePanel({
-        items: [value],        
+        items: [value],
       });
     });
 
@@ -933,17 +953,17 @@ export class FightLineComponent implements OnInit, OnDestroy {
           const data = await this.gameService.dataService.getEvents(parts[0], Number(parts[1]), percentage => this.progressBar.set(percentage * 100));
 
           const enemyAttacks = data.events.filter((it: FF.AbilityEvent) => {
-              if (it.sourceIsFriendly && FF.isDamageEvent(it)) {
-                bossHp = it.targetResources.hitPoints / it.targetResources.maxHitPoints * 100;
-              }
-
-              it.bossHp = bossHp;
-              return !it.sourceIsFriendly &&
-                it.ability &&
-                it.ability.name.toLowerCase() !== "attack" &&
-                it.ability.name.trim() !== "" &&
-                it.ability.name.indexOf("Unknown_") < 0
+            if (it.sourceIsFriendly && FF.isDamageEvent(it)) {
+              bossHp = it.targetResources.hitPoints / it.targetResources.maxHitPoints * 100;
             }
+
+            it.bossHp = bossHp;
+            return !it.sourceIsFriendly &&
+              it.ability &&
+              it.ability.name.toLowerCase() !== "attack" &&
+              it.ability.name.trim() !== "" &&
+              it.ability.name.indexOf("Unknown_") < 0
+          }
           );
           const g = _.groupBy(enemyAttacks as FF.AbilityEvent[], d => d.ability.name + "_" + Math.trunc(d.timestamp / 1000));
           const attacks: FF.AbilityEvent[] = Object.keys(g).map((k: string) => {
@@ -958,7 +978,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
           });
           value.boss.data = JSON.stringify(bossData);
           this.fightLineController.loadBoss(value.boss);
-          
+
           stop(ref);
 
         } else {
