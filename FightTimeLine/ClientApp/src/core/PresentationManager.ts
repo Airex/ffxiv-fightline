@@ -1,15 +1,16 @@
 import * as Models from "./Models";
 import * as _ from "lodash"
 import { ISettings } from "src/services/SettingsService";
+import { JobFilters } from "./Models";
 
 export class PresenterManager {
   tags: string[] = Models.DefaultTags;
   sources: string[] = [];
-  filter = Models.defaultFilter;
-  view = Models.defaultView;
+  filter: Models.IFilter = Models.defaultFilter;
+  view: Models.IView = Models.defaultView;
+  jobFilters: JobFilters = {}
 
-
-  public get activeTags(): {text: string, checked: boolean}[] {
+  public get activeTags(): { text: string, checked: boolean }[] {
     return this.tags.concat("Other").map(t => ({
       text: t,
       checked: this.filter?.attacks?.tags?.includes(t) || false
@@ -22,7 +23,7 @@ export class PresenterManager {
       checked: this.filter?.attacks?.sources?.includes(t) || false
     }));
   }
-  
+
   addTags(t: string[]) {
     if (t) {
       const newtags = _.without(t, ...this.tags);
