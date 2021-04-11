@@ -3,12 +3,27 @@ import * as _ from "lodash"
 import { ISettings } from "src/services/SettingsService";
 import { JobFilters } from "./Models";
 
-export class PresenterManager {
+export class PresenterManager implements Models.IPresenterData {
+
   tags: string[] = Models.DefaultTags;
   sources: string[] = [];
-  filter: Models.IFilter = Models.defaultFilter;
+  filter: Models.IFilter = Models.defaultFilter();
   view: Models.IView = Models.defaultView;
-  jobFilters: JobFilters = {}
+  private jobFilters: JobFilters = {}  
+
+  reset(){
+    this.tags = Models.DefaultTags;
+    this.sources = [];
+    this.filter = Models.defaultFilter();
+    this.view = Models.defaultView;
+    this.jobFilters = {}
+    
+  }
+
+  jobFilter(jobId: string): Models.JobFilter {
+    this.jobFilters[jobId] ||= { abilityCompact: [], abilityHidden: [], filter: {} };
+    return this.jobFilters[jobId];
+  }
 
   public get activeTags(): { text: string, checked: boolean }[] {
     return this.tags.concat("Other").map(t => ({
@@ -40,9 +55,62 @@ export class PresenterManager {
     }
   }
 
+  setJobCompact(jobId: string, value: boolean) {
+    this.jobFilter(jobId).isCompact = value;    
+  }
+
+  setJobCollapsed(jobId: string, value: boolean) {
+    this.jobFilter(jobId).isCollapsed = value;
+  } 
+
+  setHiddenAbility(jobId: string, ability: string, value: boolean) {    
+    const hidden = this.jobFilter(jobId).abilityHidden;
+
+    const index = hidden.indexOf(ability);
+    if (value && index === -1) {
+      hidden.push(ability);
+    }
+    if (!value && index >= 0) {
+      hidden.splice(index, 1)
+    }
+  }
+
+  setAbilityCompact(jobId: string, ability: string, value: boolean) {
+    const compact = this.jobFilter(jobId).abilityCompact;
+
+    const index = compact.indexOf(ability);
+    if (value && index === -1) {
+      compact.push(ability);
+    }
+    if (!value && index >= 0) {
+      compact.splice(index, 1)
+    }    
+  }  
+
   setSettings(iSettings: ISettings) {
     this.filter = iSettings.main.defaultFilter;
     this.view = iSettings.main.defaultView;
+  }
+
+  save(storage: Models.IStorage, id: string) {
+    storage.setObject("presenter_" + id, {
+      filter: this.filter,
+      view: this.view,
+      jobFilters: this.jobFilters,
+    })
+  }
+
+  load(storage: Models.IStorage, id: string): boolean {
+    const data = storage.getObject<any>("presenter_" + id);
+    if (data) {
+      if (data.filter)
+        this.filter = data.filter;
+      if (data.view)
+        this.view = data.view;
+      if (data.jobFilters)
+        this.jobFilters = data.jobFilters;
+    }
+    return !!data;
   }
 }
 

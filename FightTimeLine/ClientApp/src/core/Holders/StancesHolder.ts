@@ -23,6 +23,7 @@ export class StancesHolder extends BaseHolder<string, DataItem, JobStanceMap> {
   }
 
   update(items: JobStanceMap[]) {
+    console.log("update JobStanceMap")   
     this.visItems.update(this.itemsOf(items));
   }
 

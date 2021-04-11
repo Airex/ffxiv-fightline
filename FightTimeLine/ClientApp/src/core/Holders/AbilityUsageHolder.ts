@@ -19,7 +19,7 @@ export class AbilityUsageHolder extends BaseHolder.BaseHolder<string, DataItem, 
     super();
   }
 
-  add(i: AbilityUsageMap): void {
+  add(i: AbilityUsageMap): void {    
     super.add(i);
     this.visItems.add(this.itemOf(i));
   }
@@ -40,6 +40,7 @@ export class AbilityUsageHolder extends BaseHolder.BaseHolder<string, DataItem, 
   }
 
   update(items: AbilityUsageMap[]) {
+    console.log("update AbilityUsageMap")   
     this.visItems.update(this.itemsOf(items));
   }
 

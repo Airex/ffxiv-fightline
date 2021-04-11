@@ -61,7 +61,7 @@ export class AbilityUsagesCollector extends BaseCollector {
     const ability = this.context.jobRegistry.getAbilityForJob(job.name, detectedAbility.name);
     if (!ability) return;
 
-    const settingsData: M.IAbilitySettingData[] = [];
+    const settingsData: M.ISettingData[] = [];
 
     if (ability.settings) {
       ability.settings.forEach((setting) => {

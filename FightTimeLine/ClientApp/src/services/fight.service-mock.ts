@@ -8,7 +8,7 @@ import { Guid } from "guid-typescript"
 @Injectable()
 export class FightsMockService implements IFightService {
   newFight(fraction: string = ""): Observable<IFight> { return of({
-      id: 'dummy'+Guid.create().toString().toLowerCase().replace(/-/,""),
+      id: 'dummy',//+Guid.create().toString().toLowerCase().replace(/-/,""),
       name: 'dummy',
       userName: 'dummy',
       data: null,
@@ -99,7 +99,7 @@ export class FightsMockService implements IFightService {
         id: "",
         name: "",
         userName:"",
-        data:"[]",
+        data:"{}",
         game: "ff"
       }
     );

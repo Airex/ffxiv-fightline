@@ -1,4 +1,5 @@
 import { DataItem } from "vis-timeline";
+import { IPresenterData } from "../Models";
 import { BaseMap } from "./BaseMap";
 
 export interface IBossTargetMapData {
@@ -11,8 +12,8 @@ export class BossTargetMap extends BaseMap<string, DataItem, IBossTargetMapData>
     this.setItem(this.createBossTarget(this.id, data.start, data.end, this.target));
   }
 
-  constructor(id: string, target: string, data: IBossTargetMapData) {
-    super(id);
+  constructor(presenter: IPresenterData, id: string, target: string, data: IBossTargetMapData) {
+    super(presenter, id);
     this.target = target;
     this.applyData(data);
   }

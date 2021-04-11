@@ -1,6 +1,6 @@
 import * as BaseHolder from "./BaseHolder";
-import {DataSetDataGroup, DataGroup } from "vis-timeline"
-import { AbilityMap }from "../Maps/AbilityMap";
+import { DataSetDataGroup, DataGroup } from "vis-timeline"
+import { AbilityMap } from "../Maps/AbilityMap";
 import * as Models from "../Models";
 import { JobMap } from "../Maps/JobMap";
 import { settings } from "../Jobs/FFXIV/shared";
@@ -60,20 +60,22 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
 
 
   update(items: AbilityMap[]): void {
+    console.log("update AbilityMap")
     this.visItems.update(this.itemsOf(items));
   }
 
-  applyFilter(filter: Models.IAbilityFilter, jobFilters: Models.JobFilters, used: (a) => boolean) {
+  applyFilter(used: (a) => boolean) {
+    console.log("AbilitiesMapHolder ApplyFilter")
     this.values.forEach(value => {
       const jobMap = value.job;
-      const jobFilter = jobFilters[jobMap.id] || {};      
-      const visible = this.abilityFilter(value, filter, jobFilter,  jobMap, used);
+      const jobFilter = jobMap.presenter.jobFilter(jobMap.id);
+      const visible = this.abilityFilter(value, jobMap.presenter.filter?.abilities, jobFilter?.filter, jobMap, used);
       value.applyData({ filtered: !visible });
     });
     this.update(this.values);
   }
 
-  private abilityFilter(value: AbilityMap, filter: Models.IAbilityFilter, jobFilter: Models.IAbilityFilter, jobMap: JobMap, used: (a) => boolean): boolean {    
+  private abilityFilter(value: AbilityMap, filter: Models.IAbilityFilter, jobFilter: Models.IAbilityFilter, jobMap: JobMap, used: (a) => boolean): boolean {
     const filterUnit = (aType: Models.AbilityType | Models.AbilityType[], globalFilter: boolean, jobFilter: boolean) => {
       let visible = false;
       const valueArray = Array.isArray(aType) ? aType : [aType];
@@ -92,15 +94,15 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
         visible = false;
       } else {
         visible = filterUnit([Models.AbilityType.SelfDefense, Models.AbilityType.SelfShield], filter.selfDefence, jobFilter.selfDefence);
-        visible = visible || filterUnit([Models.AbilityType.PartyDefense, Models.AbilityType.PartyShield, Models.AbilityType.TargetDefense], filter.partyDefence, jobFilter.partyDefence);
-        visible = visible || filterUnit(Models.AbilityType.SelfDamageBuff, filter.selfDamageBuff, jobFilter.selfDamageBuff);
-        visible = visible || filterUnit(Models.AbilityType.PartyDamageBuff, filter.partyDamageBuff, jobFilter.partyDamageBuff);
-        visible = visible || filterUnit(Models.AbilityType.Damage, filter.damage, jobFilter.damage);
-        visible = visible || filterUnit(Models.AbilityType.HealingBuff, filter.healingBuff, jobFilter.healingBuff);
-        visible = visible || filterUnit(Models.AbilityType.Healing, filter.healing, jobFilter.healing);
-        // visible = visible || filterUnit(Models.AbilityType.Pet, filter.pet, jobFilter.pet);
-        visible = visible || filterUnit(Models.AbilityType.Utility, filter.utility, jobFilter.utility);
-        visible = visible || filterUnit(Models.AbilityType.Enmity, filter.enmity, jobFilter.enmity);
+        visible ||= filterUnit([Models.AbilityType.PartyDefense, Models.AbilityType.PartyShield, Models.AbilityType.TargetDefense], filter.partyDefence, jobFilter.partyDefence);
+        visible ||= filterUnit(Models.AbilityType.SelfDamageBuff, filter.selfDamageBuff, jobFilter.selfDamageBuff);
+        visible ||= filterUnit(Models.AbilityType.PartyDamageBuff, filter.partyDamageBuff, jobFilter.partyDamageBuff);
+        visible ||= filterUnit(Models.AbilityType.Damage, filter.damage, jobFilter.damage);
+        visible ||= filterUnit(Models.AbilityType.HealingBuff, filter.healingBuff, jobFilter.healingBuff);
+        visible ||= filterUnit(Models.AbilityType.Healing, filter.healing, jobFilter.healing);
+        // visible =filterUnit(Models.AbilityType.Pet, filter.pet, jobFilter.pet);
+        visible ||= filterUnit(Models.AbilityType.Utility, filter.utility, jobFilter.utility);
+        visible ||= filterUnit(Models.AbilityType.Enmity, filter.enmity, jobFilter.enmity);
 
         if (!filter.unused ||
           (jobFilter.unused !== undefined && !jobFilter.unused)) {
@@ -110,7 +112,7 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
       }
     }
 
-    visible = visible && !value.hidden;
+    // visible = visible && !value.hidden;
 
     return visible;
   }

@@ -23,8 +23,9 @@ export class VisStorageService {
     this.bossContainer.groups.add({ id: "boss", content: "BOSS", className: "boss" });
     this.playerContainer.groups.add({ id: 0, content: "", className: "" });
 
-    this.holders = new Holders(this.playerContainer, this.bossContainer);
     this.presenter = new PresenterManager();
+    this.holders = new Holders(this.playerContainer, this.bossContainer, this.presenter);
+    
   }
 
   get playerContainer(): ITimelineContainer {

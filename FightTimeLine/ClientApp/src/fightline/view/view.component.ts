@@ -1,5 +1,4 @@
-import { Component, Inject, EventEmitter, ViewChild, Output, Input } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
+import { Component, EventEmitter, Output } from "@angular/core";
 import { VisStorageService } from "src/services/VisStorageService";
 import { IView } from "../../core/Models"
 import { PresenterManager } from "../../core/PresentationManager"
@@ -12,8 +11,7 @@ import { PresenterManager } from "../../core/PresentationManager"
 })
 export class ViewComponent {
 
-  private presenterManager: PresenterManager;
-
+  public presenterManager: PresenterManager;
   @Output() public changed: EventEmitter<IView> = new EventEmitter();
 
   constructor(

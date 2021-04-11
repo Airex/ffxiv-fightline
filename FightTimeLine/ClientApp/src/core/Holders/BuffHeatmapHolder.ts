@@ -29,6 +29,7 @@ export class BuffHeatmapHolder extends BaseHolder<string, DataItem, HeatmapMap> 
   }
 
   update(items: HeatmapMap[]) {
+    console.log("update HeatmapMap")   
     this.visItems.update(this.itemsOf(items));
   }
 }

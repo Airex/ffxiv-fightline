@@ -90,7 +90,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
 
   saveSettings() {
 
-    const settings = new Array<M.IAbilitySettingData>();
+    const settings = new Array<M.ISettingData>();
 
     const controls = this.form.controls;
     for (let d in controls) {
@@ -152,23 +152,23 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
         : this.visStorage.holders.jobs.getAll();
 
       this.coveredOgcds = jobs.reduce((oacc, j) => {
-        const ogcds = this.visStorage.holders.abilities
+        const list = this.visStorage.holders.abilities
           .getByParentId(j.id)
-          .filter(ab => ab.isOgcd);
-        var list = ogcds.reduce((acc, ab) => {
-          var cov = this.visStorage.holders.itemUsages
-            .getByAbility(ab.id)
-            .filter(ab => this.it.checkCoversDate(ab.start));
-          return acc.concat(cov);
-        }, []);
+          .filter(ab => ab.isOgcd)
+          .reduce((acc, ab) => {
+            var cov = this.visStorage.holders.itemUsages
+              .getByAbility(ab.id)
+              .filter(ab => this.it.checkCoversDate(ab.start));
+            return acc.concat(cov);
+          }, []);
 
-        if (list.length == 0) return;
-
-        oacc.push({
-          jobName: j.job.name,
-          jobIcon: j.job.icon,
-          abilities: list.sort((a, b) => a.startAsNumber - b.startAsNumber)
-        })
+        if (list.length > 0) {
+          oacc.push({
+            jobName: j.job.name,
+            jobIcon: j.job.icon,
+            abilities: list.sort((a, b) => a.startAsNumber - b.startAsNumber)
+          })
+        }
         return oacc;
       }, []);
     }

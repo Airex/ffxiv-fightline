@@ -1,6 +1,7 @@
-import {DataItem} from "vis-timeline";
-import {BaseMap} from "./BaseMap";
+import { DataItem } from "vis-timeline";
+import { BaseMap } from "./BaseMap";
 import { AbilityMap } from "./AbilityMap";
+import { IPresenterData } from "../Models";
 
 export interface IAbilityAvailabilityMapData {
   start?: Date;
@@ -13,8 +14,8 @@ export class AbilityAvailabilityMap extends BaseMap<string, DataItem, IAbilityAv
     this.setItem(this.createAbilityAvailability(this.id, this.ability.id, data));
   }
 
-  constructor(id: string, ability: AbilityMap, data?: IAbilityAvailabilityMapData) {
-    super(id);
+  constructor(presenter: IPresenterData, id: string, ability: AbilityMap, data?: IAbilityAvailabilityMapData) {
+    super(presenter, id);
     this.ability = ability;
     this.applyData(data);
   }

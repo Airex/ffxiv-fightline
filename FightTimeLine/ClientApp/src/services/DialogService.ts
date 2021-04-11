@@ -4,7 +4,7 @@ import { LocalStorageService } from "./LocalStorageService";
 import { Observable } from "rxjs";
 import * as D from "../dialogs"
 import { NzModalService, NzModalState } from "ng-zorro-antd/modal";
-import { IAbility, IAbilitySetting, IAbilitySettingData, IBoss, IBossAbility, IFight, IFraction } from "src/core/Models";
+import { IAbility, IAbilitySetting, ISettingData, IBoss, IBossAbility, IFight, IFraction } from "src/core/Models";
 import { PresenterManager } from "src/core/PresentationManager";
 
 @Injectable({

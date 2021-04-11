@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core"
+import { IStorage } from "../core/Models"
 
 @Injectable()
-export class LocalStorageService {
+export class LocalStorageService implements IStorage {
   setString(key: string, value: string): void {
     if (localStorage) {
       try {

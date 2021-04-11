@@ -1,13 +1,25 @@
 import _ from "lodash";
 import * as BaseHolder from "../Holders/BaseHolder";
 import { ClassNameBuilder } from "../ClassNameBuilder";
+import { IPresenterData } from "../Models";
+import { Holders } from "../Holders";
+
+export interface IOverlapCheckData {
+  holders: Holders,
+  id: string,
+  group: string,
+  start: Date,
+  end: Date,
+  globalStart: Date,
+  selectionRegistry: string[]
+}
 
 export abstract class BaseMap<TKey, TItem extends { className?: string }, TData> implements BaseHolder.IBaseHolderItem<TKey> {
   id: TKey;
   protected item: TItem;
-  protected data = <TData>({});
+  protected data = <TData>({});  
 
-  protected constructor(id: TKey, item?: TItem) {
+  protected constructor(public presenter: IPresenterData, id: TKey, item?: TItem ) {
     this.id = id;
     this.item = item;
   }
@@ -26,6 +38,10 @@ export abstract class BaseMap<TKey, TItem extends { className?: string }, TData>
   }
 
   abstract onDataUpdate(data: TData, originalData?: TData): void;
+
+  canMove(overlapData: IOverlapCheckData): boolean{
+    return false;
+  }
 
   setItem(item: TItem): void {
     if (!this.item)

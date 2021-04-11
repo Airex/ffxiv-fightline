@@ -1,7 +1,9 @@
 import { DataItem, DataGroup, DataSet } from "ngx-vis";
+import { IPresenterData } from "../Models";
 
 export interface IBaseHolderItem<TKey> {
   id: TKey;
+  presenter: IPresenterData;
 }
 
 export interface IItemHolder<TI> {
@@ -23,10 +25,9 @@ export interface ITimelineContainer {
 }
 
 
-export class BaseHolder<TK, TI, T extends IBaseHolderItem<TK>> {
+export class BaseHolder<TK, TI, T extends IBaseHolderItem<TK>> {  
   protected items: { [id: string]: T } = {};
-
-  add(i: T): void {
+  add(i: T): void {     
     this.items[i.id as any] = i;
   }
 

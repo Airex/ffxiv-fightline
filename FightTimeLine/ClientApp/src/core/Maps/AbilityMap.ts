@@ -5,26 +5,24 @@ import * as Models from "../Models";
 import * as JobMap from "./JobMap";
 
 export interface IAbilityMapData {
-  hidden?: boolean;
-  isCompact?: boolean;
   filtered?: boolean;
-  collapsed?: boolean;
 }
 
 export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapData> implements BaseHolder.IForSidePanel {
+
   sidePanelComponentName: string = "jobAbility";
 
   onDataUpdate(data: IAbilityMapData): void {
-    this.setItem(this.isStance ? this.createStances(this.id, data.hidden) : this.createJobAbility(this.ability, this.id, data));
+    this.setItem(this.isStance ? this.createStances(this.id, data) : this.createJobAbility(this.ability, this.id, data));
   }
 
-  constructor(id: string, job: JobMap.JobMap, ability: Models.IAbility, isStance: boolean, data?: IAbilityMapData) {
-    super(id);
+  constructor(presenter: Models.IPresenterData, id: string, job: JobMap.JobMap, ability: Models.IAbility, isStance: boolean, data?: IAbilityMapData) {
+    super(presenter, id);
     this.job = job;
     this.ability = ability;
     this.isStance = isStance;
 
-    this.applyData(Object.assign({ hidden: false, isCompact: false }, data) as IAbilityMapData);
+    this.applyData(Object.assign({ }, data) as IAbilityMapData);
   }
 
   job: JobMap.JobMap;
@@ -77,16 +75,16 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     return this.hasValue(Models.AbilityType.PartyDamageBuff);
   }
 
-  createStances(id: string, hidden: boolean): DataGroup {
+  createStances(id: string, data: IAbilityMapData): DataGroup {
     const key: any = { sgDummy: true };
     key[`sg${id}`] = false;
 
     return <DataGroup>{
       id: id,
-      visible: !hidden,
+      visible: !this.hidden,
       subgroupStack: key,
       content: "Stance",
-      
+
     }
   }
 
@@ -94,8 +92,6 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
   createElementFromHtml(htmlString): HTMLElement {
     const div = document.createElement('div');
     div.innerHTML = htmlString.trim();
-
-    // Change this to div.childNodes to support multiple top-level nodes
     return div;
   }
 
@@ -107,21 +103,18 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
       ? this.createElementFromHtml(`<span><img class='abilityIcon' src='${ability.icon}'/><span class='abilityName'>${ability.name}</span></span>`)
       : this.createElementFromHtml(`<span>${ability.name}</span>`);
 
-//    el.addEventListener("click", this.select.bind(this));
-
-    return <DataGroup>{
+    console.log(this.job.id+" "+this.ability.name+" "+this.job.isCompact) 
+    return {
       id: id,
-      //      subgroupStack: key,
-      className: this.buildClass({compact: data.isCompact}),
-      visible: !(data.hidden || data.filtered || data.collapsed),
+      className: this.buildClass({ compact: this.isCompact || this.job.isCompact || this.presenter.view.compactView }),
+      visible: !(this.hidden || data.filtered || this.job.collapsed),
       content: el,
       value: this.index
-
-  } as DataGroup;
+    } as DataGroup;
   }
 
   get hidden(): boolean {
-    return this.data.hidden;
+    return this.presenter.jobFilter(this.job.id).abilityHidden.indexOf(this.ability.name) >= 0;
   }
 
   get filtered(): boolean {
@@ -129,8 +122,10 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
   }
 
   get isCompact(): boolean {
-    return this.data.isCompact;
+    return this.presenter.jobFilter(this.job.id).abilityCompact.indexOf(this.ability.name) >= 0;
   }
 
   
+
+
 }

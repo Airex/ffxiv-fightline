@@ -74,8 +74,7 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
 
   refresh() {
     this.compactView = this.it.isCompact;
-
-    this.jobFilter = this.visStorage.presenter.jobFilters[this.it.id] = this.visStorage.presenter.jobFilters[this.it.id] || {};
+    this.jobFilter = this.it.filter;
     this.hiddenAbilities = this.holders.abilities.getByParentId(this.it.id).filter(t => t.hidden);
   }
 

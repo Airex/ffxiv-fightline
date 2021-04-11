@@ -21,6 +21,7 @@ export class FilterComponent {
     private visStorage: VisStorageService
   ){
     this.presenterManager = this.visStorage.presenter;
+    this.updateCheckAll();
   }
 
   filters = Object.entries(<{ [name in keyof IAbilityFilter]: [number, string] }>{
@@ -54,17 +55,21 @@ export class FilterComponent {
     });
   }
 
+  updateCheckAll(){
+    this.checkAll = undefined;
+    if (Object.values(this.presenterManager.filter.abilities).every(e => e))
+      this.checkAll = true;
+    if (Object.values(this.presenterManager.filter.abilities).every(e => !e))
+      this.checkAll = false;
+  }
+
   updateFilter(source: string, name?: string, value?: boolean): void {
 
     if (source === 'ability' && name) {
       this.presenterManager.filter.abilities[name] = value;
     }
 
-    this.checkAll = undefined;
-    if (Object.values(this.presenterManager.filter.abilities).every(e => e))
-      this.checkAll = true;
-    if (Object.values(this.presenterManager.filter.abilities).every(e => !e))
-      this.checkAll = false;
+    this.updateCheckAll();
 
     this.presenterManager.filter.attacks.tags = this.tags.filter(t => t.checked).map(t => t.text);
     this.presenterManager.filter.attacks.sources = this.sources.filter(t => t.checked).map(t => t.text);

@@ -113,7 +113,7 @@ export class AvailabilityController {
         end: value.end,
         available: true
       }) as any);
-      return new AbilityAvailabilityMap(id, it, iAbilityAvailabilityMapData);
+      return new AbilityAvailabilityMap(this.presenter, id, it, iAbilityAvailabilityMapData);
     }));
 
   }
@@ -141,7 +141,7 @@ export class AvailabilityController {
       const av = diff > it.ability.cooldown;
       prev = c;
       if (av) {
-        return new AbilityAvailabilityMap(
+        return new AbilityAvailabilityMap(this.presenter,
           this.idgen.getNextId(M.EntryType.AbilityAvailability),
           it,
           {

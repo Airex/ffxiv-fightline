@@ -1,4 +1,5 @@
 import { DataItem } from "vis-timeline"
+import { IPresenterData } from "../Models";
 import {BaseMap} from "./BaseMap";
 
 export interface IHeatmapMapData {
@@ -11,8 +12,8 @@ export class HeatmapMap extends BaseMap<string, DataItem, IHeatmapMapData> {
     this.setItem(this.createHeatMap(data.start, data.end, this.id, this.target));
   }
 
-  constructor(id: string, target: string, data: IHeatmapMapData) {
-    super(id);
+  constructor(presenter: IPresenterData, id: string, target: string, data: IHeatmapMapData) {
+    super(presenter, id);
     this.target = target;
     this.applyData(data);
   }

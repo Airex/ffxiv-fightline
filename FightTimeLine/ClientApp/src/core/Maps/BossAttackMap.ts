@@ -1,5 +1,5 @@
 import { DataItem } from "vis-timeline"
-import { BaseMap } from "./BaseMap";
+import { BaseMap, IOverlapCheckData } from "./BaseMap";
 import { Utils } from "../Utils";
 import * as Models from "../Models";
 import { IForSidePanel, IMoveable } from "../Holders/BaseHolder";
@@ -21,8 +21,8 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
     this.setItem(this.createBossAttack(this.id, data.attack, data.vertical));
   }
 
-  constructor(id: string, data: IBossAttackMapData) {
-    super(id);
+  constructor(presenter: Models.IPresenterData, id: string, data: IBossAttackMapData) {
+    super(presenter, id);
     this.applyData(data);
   }
 
@@ -71,8 +71,8 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
     return true;
   }
 
-  public get isTankBuster():boolean {
-    return this.attack.tags && this.attack.tags.indexOf(Models.DefaultTags[0])>=0;
+  public get isTankBuster(): boolean {
+    return this.attack.tags && this.attack.tags.indexOf(Models.DefaultTags[0]) >= 0;
   }
 
   public get isAoe(): boolean {
@@ -81,6 +81,10 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
 
   public get isShareDamage(): boolean {
     return this.attack.tags && this.attack.tags.indexOf(Models.DefaultTags[2]) >= 0;
+  }
+
+  canMove(overlapData: IOverlapCheckData): boolean {
+    return overlapData.start >= overlapData.globalStart;
   }
 }
 

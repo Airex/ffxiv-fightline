@@ -16,12 +16,12 @@ import * as Gameserviceinterface from "../services/game.service-interface";
 
 import * as FightTimeLineController from "../core/FightTimeLineController";
 import * as Generators from "../core/Generators";
-import * as ToolsManager from "../core/ToolsManager";
 import * as PresentationManager from "../core/PresentationManager";
 import { ICommandData } from "src/core/UndoRedo";
 import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
 import { IExportCell, IExportColumn, IExportResultSet, IExportRow } from "src/core/ExportModels";
 import { VisStorageService } from "src/services/VisStorageService";
+import { IFightSerializeData } from "src/core/SerializeController";
 
 
 
@@ -36,6 +36,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   fightId: string;
   template: string;
+  fightLineController: FightTimeLineController.FightTimeLineController;
+  private idgen = new Generators.IdGenerator();
+  presenterManager = new PresentationManager.PresenterManager();
+  sideNavOpened: boolean = false;
 
   @ViewChild("sidepanel", { static: true })
   sidepanel: SidepanelComponent;
@@ -52,7 +56,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
   };
 
   filtered: IExportRow[] = [];
-
   pagesize = Number.MAX_VALUE;
 
   templates: { [name: string]: ExportTemplate } = {
@@ -65,30 +68,26 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   public constructor(
     @Inject(S.fightServiceToken) private fightService: S.IFightService,
+    @Inject(S.authenticationServiceToken) public authenticationService: S.IAuthenticationService,
+    @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
     private visStorage: VisStorageService,
     private notification: S.ScreenNotificationsService,
     private route: ActivatedRoute,
     private dialogService: S.DialogService,
     private ngZone: NgZone,
-    @Inject(S.authenticationServiceToken) public authenticationService: S.IAuthenticationService,
     private router: Router,
     private dispatcher: S.DispatcherService,
     public fightHubService: S.FightHubService,
-    @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
     private settingsService: SettingsService) {
   }
 
-  fightLineController: FightTimeLineController.FightTimeLineController;
-  private idgen = new Generators.IdGenerator();
-  toolsManager = new ToolsManager.ToolsManager();
-  presenterManager = new PresentationManager.PresenterManager();
-  sideNavOpened: boolean = false;
+  
 
   home() {
     this.router.navigateByUrl("/");
   }
 
-  select(id:any, $event?: any) {
+  select(id: any, $event?: any) {
     if ($event) {
       $event.stopPropagation();
       $event.preventDefault();
@@ -97,7 +96,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
   }
 
   private setSidePanel(id: string) {
-
     this.ngZone.run(() => {
       if (id) {
         const items = this.fightLineController.getItems([id]);
@@ -165,7 +163,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
       },
       this.gameService,
       this.settingsService,
-      this.toolsManager,
       this.presenterManager
     );
 
@@ -197,36 +194,34 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  load(id, template) {    
+  load(id, template) {
     this.dialogService.executeWithLoading(ref => {
       this.fightService.getFight(id).subscribe((fight: M.IFight) => {
         if (fight) {
           this.fightService.getCommands(id, new Date(fight.dateModified).valueOf()).subscribe(value => {
-            this.fightLineController.loadFight(fight, value.map(cmd => JSON.parse(cmd.data)));
+            const loadedData = fight.data && JSON.parse(fight.data) as IFightSerializeData;
+            this.fightLineController.loadFight(fight, loadedData, value.map(cmd => JSON.parse(cmd.data)));
             this.connectToSession()
-            .then(() => {
-              this.loadTable();              
-            })
-            .finally(()=>{
-              ref.close();
-            });            
-          },
-            error => {
-              console.log(error);
-              ref.close();
-              this.notification.error("Unable to load data");
-              
-            });
+              .then(() => {
+                this.loadTable();
+              })
+              .finally(() => {
+                ref.close();
+              });
+          }, error => {
+            console.log(error);
+            ref.close();
+            this.notification.error("Unable to load data");
+          });
         } else {
           ref.close();
-          this.notification.showUnableToLoadFight(() => { });          
-        }
-      },
-        (error) => {
-          console.log(error);
           this.notification.showUnableToLoadFight(() => { });
-          ref.close();
-        });
+        }
+      }, (error) => {
+        console.log(error);
+        this.notification.showUnableToLoadFight(() => { });
+        ref.close();
+      });
     });
   }
 
@@ -273,9 +268,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
   handleRemoteCommandData(data: ICommandData) {
     if (data.name === "undo") {
       this.fightLineController.undo();
-      
     } else if (data.name === "redo") {
-      this.fightLineController.redo();      
+      this.fightLineController.redo();
     } else {
       this.fightLineController.execute(data);
     }
@@ -291,7 +285,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     return item.text;
   }
 
-  
+
 
   ngOnDestroy(): void {
 

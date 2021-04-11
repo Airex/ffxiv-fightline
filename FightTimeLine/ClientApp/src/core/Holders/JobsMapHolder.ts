@@ -33,6 +33,7 @@ export class JobsMapHolder extends BaseHolder.BaseHolder<string, DataGroup, JobM
   }
 
   update(items: JobMap[]): void {
+    console.log("update JobMap")   
     this.visItems.update(this.itemsOf(items));
   }
 

@@ -5,12 +5,12 @@ import * as Models from "../Models";
 import * as AbilityMap from "./AbilityMap";
 
 export interface IJobMapData {
-  actorName?: string;
-  collapsed?: boolean;
+  actorName?: string;  
 }
 
 export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> implements BaseHolder.IForSidePanel {
   sidePanelComponentName: string = "job";
+  
 
   onDataUpdate(data: IJobMapData): void {
     this.setItem(this.createJob(this.job, this.id, data));
@@ -20,18 +20,24 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
   private index: number | undefined = JobMap.jobIndex--;
   private abilityIds: AbilityMap.AbilityMap[];
   job: Models.IJob;  
-  pet: string;
-  isCompact: boolean = false;
-  settings: Models.IAbilitySettingData[];
+  pet: string;  
+  settings: Models.ISettingData[];
 
-  constructor(id: string, job: Models.IJob, data: IJobMapData, pet?: string) {
-    super(id);
+  constructor(presenter: Models.IPresenterData, id: string, job: Models.IJob, data: IJobMapData, pet?: string) {
+    super(presenter, id);
     this.job = job;
     this.pet = pet || job.defaultPet;
     this.applyData(data);
   }
 
-  
+  get isCompact(): boolean {
+    return this.presenter.jobFilter(this.id).isCompact;
+  }
+
+
+  get filter(): Models.IAbilityFilter {
+    return this.presenter.jobFilter(this.id).filter;
+  }
 
   get actorName(): string {
     return this.data.actorName || "";
@@ -49,44 +55,31 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
     return div;
   }
 
-  getSettingData(name: string): Models.IAbilitySettingData {
+  getSettingData(name: string): Models.ISettingData {
     return this.settings && this.settings.find && this.settings.find(it => it.name === name);
   }
 
   getSetting(name: string): Models.IAbilitySetting {
     return this.job.settings?.find(it => it.name === name);
-  }
-
-  toggleExpand(e): void {
-    this.applyData({ collapsed: !this.collapsed });
-
-    this.abilityIds.forEach((value) => {
-      value.applyData({ hidden: this.collapsed });
-      //      value.update();
-    });
-  }
+  }  
 
   createJob(job: Models.IJob, id: string, data: IJobMapData): DataGroup {
     const el = this.createElementFromHtml(
-      `<span class="expand-sign">${data.collapsed ? "►" : "▼"}</span><img class='abilityIcon' src='${job.icon}'/><span class='jobName'>${job.name}<span>`);
-
-    //    el.addEventListener("dblclick", this.toggleExpand.bind(this));
-    //    el.addEventListener("click", this.select.bind(this));
+      `<span class="expand-sign">${this.collapsed ? "►" : "▼"}</span><img class='abilityIcon' src='${job.icon}'/><span class='jobName'>${job.name}<span>`);    
 
     return <DataGroup>{
-      id: id,
-      //      subgroupStack: false,
-      //      nestedGroups: abilityIds,
-      content: el,
-      //      showNested: !collapsed,
+      id: id,      
+      content: el,      
       className: this.buildClass({ job: true }),
       value: this.index,
       title: data.actorName,
     }
   }
 
+  
+
   get collapsed(): boolean {
-    return this.data.collapsed || false;
+    return this.presenter.jobFilter(this.id).isCollapsed  || false;
   }
 
   

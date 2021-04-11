@@ -41,6 +41,7 @@ export class BossDownTimeHolder extends BaseHolder<string, DataItem, BossDownTim
   }
 
   update(items: BossDownTimeMap[]): void {
+    console.log("update BossDownTimeMap")   
     const tu = this.itemsOf(items);
     this.visBossItems.update(tu);
     if (this.showInPartyArea)

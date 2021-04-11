@@ -1,6 +1,6 @@
 import { EventEmitter } from "@angular/core"
 import { IdGenerator } from "./Generators"
-import { IAbility } from "./Models"
+import { IAbility, IPresenterData } from "./Models"
 import * as Jobregistryserviceinterface from "../services/jobregistry.service-interface";
 import * as Holders from "./Holders";
 import * as Index from "./Maps/index";
@@ -9,6 +9,7 @@ export interface ICommandExecutionContext {
   idGen: IdGenerator;
   holders: Holders.Holders,
   jobRegistry: Jobregistryserviceinterface.IJobRegistryService;
+  presenter: IPresenterData,
   update: (options: IUpdateOptions) => void;
   ogcdAttacksAsPoints: (ability: IAbility) => boolean;
   verticalBossAttacks: () => boolean;
@@ -33,7 +34,7 @@ export class UndoRedoController {
   private context: ICommandExecutionContext;
 
   public changed = new EventEmitter<void>();
-  public commandExecuted = new EventEmitter<ICommandData>();
+  public executed = new EventEmitter<ICommandData>();
   private fireExecuted = true;
 
   public turnOnFireExecuted() {
@@ -48,6 +49,8 @@ export class UndoRedoController {
     this.context = context;
   }
 
+  
+
   public execute(command: Command, fireExecuted: boolean = true) {
     try {
       command.execute(this.getContext());
@@ -56,7 +59,7 @@ export class UndoRedoController {
       this.redoCommands = new Array<Command>();
       this.changed.emit();
       if (fireExecuted && this.fireExecuted)
-        this.commandExecuted.emit(command.serialize());
+        this.executed.emit(command.serialize());
     } catch (error) {
       console.error(error);
       //console.log("Unable to execute command " + JSON.stringify(command.serialize()));

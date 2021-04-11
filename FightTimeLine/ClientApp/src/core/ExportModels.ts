@@ -1,4 +1,4 @@
-import { AbilityType, IAbilitySettingData } from "./Models";
+import { AbilityType, ISettingData } from "./Models";
 
 export interface ExportAttack {
   id: string;
@@ -45,7 +45,7 @@ export interface ExportAbility {
   duration: number;
   start: string;
   icon: string;
-  settings: IAbilitySettingData[];
+  settings: ISettingData[];
 }
 
 export interface ExportDataData {

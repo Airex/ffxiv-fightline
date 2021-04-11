@@ -27,8 +27,8 @@ export class JobStanceMap extends BaseMap<string, DataItem, IJobStanceMapData> i
     this.setItem(this.createStanceUsage(this.stanceAbility, this.id, this.ability.id, data.start, data.end, data.loaded, data.showLoaded));
   }
 
-  constructor(id: string, ability: AbilityMap, stanceAbility: Models.IAbility, data: IJobStanceMapData) {
-    super(id);
+  constructor(presenter: Models.IPresenterData, id: string, ability: AbilityMap, stanceAbility: Models.IAbility, data: IJobStanceMapData) {
+    super(presenter, id);
     this.ability = ability;
     this.stanceAbility = stanceAbility;
     this.applyData(Object.assign({ loaded: false, showLoaded: false }, data));
@@ -66,5 +66,11 @@ export class JobStanceMap extends BaseMap<string, DataItem, IJobStanceMapData> i
       type: "range",
       title: `<img class='tooltipAbilityIcon' src='${ability.icon}'/>${ability.name}  ${Utils.formatTime(start)} - ${Utils.formatTime(end)}`,
     };
-  }
+  }  
+
+  // case M.EntryType.StanceUsage:
+      //   const sability = this.holders.abilities.get(item.group).ability;
+      //   return (item.end as number) - (item.start as number) > 0 &&
+      //     new Date(item.start) >= new Date(this.startDate.valueOf() as number - 30 * 1000) &&
+      //     !sability.overlapStrategy.check({ ...overlapCheckData, ability });
 }

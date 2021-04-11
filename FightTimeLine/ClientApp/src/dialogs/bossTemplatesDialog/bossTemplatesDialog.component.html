@@ -142,7 +142,7 @@
             *ngIf="!!selectedTemplate"
             (click)="load()">Load</button>
     <button nz-button
-            *ngIf="data && data.needSave && selectedEncounter && (data.boss && data.boss.userName === authService.username || !data.boss)"
+            *ngIf="data && data.needSave && selectedEncounter && (data.boss && data.boss.userName === authService.username || !data.boss)"            
             [nzType]="authService.authenticated ? null : 'danger'"
             (click)="save()">Save</button>
     <button nz-button

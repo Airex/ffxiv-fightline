@@ -111,17 +111,18 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onDoubleClickItem(source: EventSource, event) {
-    this.fightLineController.notifyDoubleClick(event.item, event.group, new Date(event.time));
+    this.fightLineController.notifyDoubleClick(event.item, event.group, new Date(event.time));   
   }
 
   onDoubleClickGroup(source: EventSource, event) {
     if (source === "player") {
       if (!this.fightLineController.isJobGroup(event.group)) {
         this.fightLineController.toggleCompactViewAbility(event.group);
-        this.fightLineController.applyFilter();
+        this.presenterManager.save(this.storage, this.fightId);
+        // this.fightLineController.applyFilter();
       } else {
         this.fightLineController.toggleJobCollapsed(event.group);
-        this.fightLineController.applyFilter();
+        this.presenterManager.save(this.storage, this.fightId);        
       }
       setTimeout(() => this.planArea.refresh());
     }
@@ -202,35 +203,18 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   updateFilter(source?: string): void {
     this.fightLineController.applyFilter(null, source);
-
-    this.storage.setObject("presenter_" + this.fightId, {      
-      filter: this.presenterManager.filter,
-      view: this.presenterManager.view,
-      jobFilters: this.presenterManager.jobFilters,
-    })
+    this.presenterManager.save(this.storage, this.fightId);
   }
 
   updateView($data?: M.IView): void {
-    this.fightLineController.applyView($data);
-    //todo: remove
-    this.storage.setObject("presenter_" + this.fightId, {            
-      filter: this.presenterManager.filter,
-      view: this.presenterManager.view,
-      jobFilters: this.presenterManager.jobFilters,
-    })
+    this.fightLineController.applyView($data);    
+    this.presenterManager.save(this.storage, this.fightId);
     setTimeout(() => this.planArea.refresh());
   }
 
-  openBossAttackAddDialog(bossAbility: M.IBossAbility, callBack: (b: any) => void): void {
-    //console.log("boss attack edit")
+  openBossAttackAddDialog(bossAbility: M.IBossAbility, callBack: (b: any) => void): void {    
     this.dialogService.openBossAttackAddDialog(bossAbility, this.presenterManager, callBack);
   }
-
-  // openAbilityEditDialog(data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[] },
-  //   callBack: (b: any) => void): void {
-  //   //console.log("ability edit")
-  //   this.dialogService.openAbilityEditDialog(data, callBack);
-  // }
 
   load(): void {
     if (!this.authenticationService.authenticated) {
@@ -277,10 +261,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
                 this.presenterManager.setSettings(settings);
 
-                this.fightLineController.importFromFFLogs(code + ":" + enc, parser);
-
-                this.fightLineController.applyView(settings.main.defaultView);
-                this.fightLineController.applyFilter(settings.main.defaultFilter);
+                this.fightLineController.importFromFFLogs(code + ":" + enc, parser);               
 
                 this.planArea.setInitialWindow(this.fightLineController.getLatestAbilityUsageTime(), 2);
                 this.planArea.refresh();
@@ -388,21 +369,19 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
 
   private startNew(fractionParam) {
+    this.presenterManager.reset();
+
     let fraction = null;
     if (this.gameService.fractions) {
       fraction = this.gameService.fractions.find(it => it.name === fractionParam);
     }
     this.fightLineController.fraction = fraction;
     this.toolbar.fraction = fraction;
+
     const settings = this.settingsService.load();
     this.presenterManager.setSettings(settings);
 
-    if (settings && settings.main && settings.main.defaultView)
-      this.fightLineController.applyView(settings.main.defaultView);
-    if (settings && settings.main && settings.main.defaultFilter)
-      this.fightLineController.applyFilter(settings.main.defaultFilter);
-
-    this.fightService.newFight(this.fightLineController.fraction ? this.fightLineController.fraction.name : "")
+    this.fightService.newFight(fraction || "")
       .subscribe(value => {
         this.fightId = value.id;
         this.location.replaceState("/" + value.id);
@@ -421,69 +400,55 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   private loadFight(id) {
+    this.presenterManager.reset();
     this.fightId = id;
     this.dialogService.executeWithLoading(ref => {
-      this.fightService
-        .getFight(id)
-        .subscribe((fight: M.IFight) => {
-          if (fight) {
-            this.recent.register({
-              id: fight.id,
-              name: fight.name,
-              source: RecentActivitiesService.ActivitySource.Timeline,
-              url: "/" + fight.id.toLowerCase()
-            });
-
-            var storedPresenter = this.storage.getObject("presenter_" + this.fightId) as any;
-            if (storedPresenter) {
-              this.presenterManager.filter = storedPresenter.filter;
-              this.presenterManager.view = storedPresenter.view;
-              this.presenterManager.jobFilters = storedPresenter.jobFilters;
-            }
-            else {
-              const settings = this.settingsService.load();
-              this.presenterManager.setSettings(settings);
-              if (settings && settings.main && settings.main.defaultView)
-                this.fightLineController.applyView(settings.main.defaultView);
-              if (settings && settings.main && settings.main.defaultFilter)
-                this.fightLineController.applyFilter(settings.main.defaultFilter);
-            }
-
-
-            if (fight.data) {
-              const data = JSON.parse(fight.data) as SerializeController.IFightSerializeData;
-              if (data.view)
-                this.presenterManager.view = data.view;
-              if (data.filter)
-                this.presenterManager.filter = data.filter;
-            }
-
-            const fraction = this.gameService.extractFraction(fight.game);
-
-            this.fightLineController.fraction = fraction;
-            this.toolbar.fraction = fraction;
-            this.fightService.getCommands(this.fightId, new Date(fight.dateModified).valueOf())
-              .subscribe(value => {
-                this.fightLineController.loadFight(fight, value.map(cmd => JSON.parse(cmd.data)));
-                this.connectToSession().then(() => {
-                  this.planArea.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
-                  this.planArea.refresh();
-                  ref.close();
-                });
-              },
-                error => {
-                  console.log(error);
-                  this.notification.error("Unable to load data");
-                  ref.close();
-                });
-          } else {
-            ref.close();
-          }
-        },
-          () => {
-            this.notification.showUnableToLoadFight(() => { });
-            ref.close();
+      this.fightService.getFight(id).subscribe((fight: M.IFight) => {
+        if (fight) {
+          this.recent.register({
+            id: fight.id,
+            name: fight.name,
+            source: RecentActivitiesService.ActivitySource.Timeline,
+            url: "/" + fight.id.toLowerCase()
           });
+
+          const settings = this.settingsService.load();
+          this.presenterManager.setSettings(settings);
+
+          const loadedData = fight.data && JSON.parse(fight.data) as SerializeController.IFightSerializeData;
+          console.debug(loadedData);
+          if (loadedData.filter)
+            this.presenterManager.filter = loadedData.filter;
+          if (loadedData.view)
+            this.presenterManager.view = loadedData.view;
+
+          this.presenterManager.load(this.storage, fight.id);
+
+          const fraction = this.gameService.extractFraction(fight.game);
+          this.fightLineController.fraction = fraction;
+          this.toolbar.fraction = fraction;
+
+          this.fightService.getCommands(this.fightId, new Date(fight.dateModified).valueOf())
+            .subscribe(commands => {
+              this.connectToSession().then(() => {
+                this.planArea.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
+                this.planArea.refresh();
+              }).finally(() => {
+                this.fightLineController.loadFight(fight, loadedData, commands.map(cmd => JSON.parse(cmd.data)));
+              });
+            }, error => {
+              console.log(error);
+              this.notification.error("Unable to load data");
+            }, () => {
+              ref.close();
+            });
+        } else {
+          ref.close();
+        }
+      }, () => {
+        this.notification.showUnableToLoadFight(() => { });
+        ref.close();
+      });
     });
   }
 
@@ -601,7 +566,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
       },
       this.gameService,
       this.settingsService,
-      this.toolsManager,
       this.presenterManager
     );
 
@@ -666,10 +630,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     this.fightService.getCommand(+id).subscribe((data: ICommandData) => {
       this.handleRemoteCommandData(data);
-    },
-      error => {
-        console.log(error);
-      });
+    }, error => {
+      console.log(error);
+    });
   }
 
   handleRemoteCommandData(data: ICommandData) {
@@ -744,7 +707,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   showWhatsNew() {
     const promise = new Promise<void>((resolve) => {
-
       this.changeNotesService.load()
         .then(value => {
           this.dialogService.openWhatsNew(value)
@@ -840,7 +802,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
             value.close();
           }
         });
-
     });
 
     dispatcher.on("SettingsUpdate").subscribe(value => {
@@ -883,6 +844,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     dispatcher.on("SidePanel Hide Job Ability").subscribe(value => {
       this.fightLineController.hideAbility(value);
       this.setSidePanel(null);
+      this.presenterManager.save(this.storage, this.fightId);
     });
 
     dispatcher.on("SidePanel Clear Job Ability").subscribe(value => {
@@ -900,13 +862,18 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     dispatcher.on("SidePanel Restore Job Ability").subscribe(value => {
       this.fightLineController.showAbility(value);
+      this.presenterManager.save(this.storage, this.fightId);
     });
     dispatcher.on("SidePanel Toggle Job Compact View").subscribe(value => {
-      this.fightLineController.toggleCompactView(value);
+      this.fightLineController.toggleJobCompactView(value);
+      this.fightLineController.applyFilter();
+      this.presenterManager.save(this.storage, this.fightId);
     });
 
     dispatcher.on("SidePanel Toggle Job Ability Compact View").subscribe(value => {
       this.fightLineController.toggleCompactViewAbility(value);
+      // this.fightLineController.applyFilter();
+      this.presenterManager.save(this.storage, this.fightId);
     });
 
     dispatcher.on("SidePanel Color Downtime").subscribe(value => {

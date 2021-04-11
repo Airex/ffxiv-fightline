@@ -19,11 +19,10 @@ import { Holders } from "./Holders";
 import { AbilityMap, BossAttackMap, HeatmapMap, JobMap, AbilityUsageMap, BossTargetMap, BossDownTimeMap } from "./Maps";
 import { IMoveable } from "./Holders/BaseHolder";
 import * as PresentationManager from "./PresentationManager";
-import * as ToolsManager from "./ToolsManager";
-
+import { IOverlapCheckData } from "./Maps/BaseMap"
 
 export class FightTimeLineController {
-  data: M.IFightData = {};  
+  data: M.IFightData = {};
   private bossGroup: string = "boss";
   private commandStorage: UndoRedoController;
   private commandBag: CommandBag;
@@ -33,6 +32,7 @@ export class FightTimeLineController {
   hasChanges = false;
   fraction: M.IFraction;
   colorSettings: IColorsSettings;
+  viewCopy: M.IView;
 
   downtimeChanged = new EventEmitter<void>();
   commandExecuted = new EventEmitter<ICommandData>();
@@ -40,11 +40,10 @@ export class FightTimeLineController {
   constructor(
     private startDate: Date,
     private idgen: IdGenerator,
-    private holders: Holders,    
+    private holders: Holders,
     private dialogCallBacks: IDialogs,
     private gameService: Gameserviceinterface.IGameService,
     private settingsService: SettingsService,
-    private toolsManager: ToolsManager.ToolsManager,
     private presenterManager: PresentationManager.PresenterManager) {
 
     this.commandStorage = new UndoRedoController({
@@ -52,10 +51,10 @@ export class FightTimeLineController {
       holders: this.holders,
       jobRegistry: this.gameService.jobRegistry,
       update: this.update.bind(this),
-      ogcdAttacksAsPoints: (ability: M.IAbility) => (ability.duration === 0 &&
-        (ability.cooldown === 1 || ability.cooldown === 0)) ||
-        ((ability.abilityType & M.AbilityType.Damage) === M.AbilityType.Damage &&
-          (ability.duration === 0 ? this.presenterManager.view.ogcdAsPoints : false)),
+      presenter: this.presenterManager,
+      ogcdAttacksAsPoints: (ability: M.IAbility) =>
+        (ability.duration === 0 && (ability.cooldown === 1 || ability.cooldown === 0)) ||
+        ((ability.abilityType & M.AbilityType.Damage) === M.AbilityType.Damage && (ability.duration === 0 ? this.presenterManager.view.ogcdAsPoints : false)),
       verticalBossAttacks: () => this.presenterManager.view.verticalBossAttacks,
       isCompactView: () => this.presenterManager.view.compactView,
       highlightLoaded: () => this.presenterManager.view.highlightLoaded,
@@ -67,7 +66,7 @@ export class FightTimeLineController {
       this.canUndoChanged.emit();
       this.hasChanges = true;
     });
-    this.commandStorage.commandExecuted.subscribe((data: ICommandData) => {
+    this.commandStorage.executed.subscribe((data: ICommandData) => {
       this.commandExecuted.emit(data);
     });
     this.commandBag = new CommandBag(this.commandStorage);
@@ -78,7 +77,7 @@ export class FightTimeLineController {
       this.idgen
     );
 
-    this.colorSettings = this.settingsService.load().colors;    
+    this.colorSettings = this.settingsService.load().colors;
   }
 
   loadBoss(boss: M.IBoss): void {
@@ -106,8 +105,8 @@ export class FightTimeLineController {
       commands.push(new C.AddDowntimeCommand(nextId,
         {
           start: Utils.getDateFromOffset(d.start, this.startDate),
-          end: Utils.getDateFromOffset(d.end, this.startDate),
           startId: (index++).toString(),
+          end: Utils.getDateFromOffset(d.end, this.startDate),
           endId: (index++).toString(),
         },
         d.color, d.comment));
@@ -155,40 +154,27 @@ export class FightTimeLineController {
 
   addClassAbility(id: string, map: AbilityMap, time: Date, loaded: boolean, settings: string = null): void {
     if (map) {
-      if (map.isStance) {
-        // this.dialogCallBacks.openStanceSelector(map.job.job.stances.map((it) => <M.IContextMenuData>{
-        //   text: it.ability.name,
-        //   icon: it.ability.icon,
-        //   handler: () => {
-        //     this.commandStorage.execute(new C.AddStanceCommand(id || this.idgen.getNextId(M.EntryType.StanceUsage),
-        //       map.job.id,
-        //       it.ability.name,
-        //       time,
-        //       this.holders.stances.getNext(new Date(time.valueOf() as number - 1000)),
-        //       loaded));
-        //   },
-        //   item: null
-        // }));
-      } else {
-        if (map.ability.requiresBossTarget && time < this.startDate) return;
+      if (map.ability.requiresBossTarget && time < this.startDate) return;
 
-        if (!map.ability.overlapStrategy.check({
-          ability: map.ability,
-          holders: this.holders,
-          group: map.id,
-          id: id,
-          start: time,
-          end: new Date(time.valueOf() as number + map.ability.cooldown * 1000),
-          selectionRegistry: null
-        }))
-          this.commandStorage.execute(new C.AddAbilityCommand(id || this.idgen.getNextId(M.EntryType.AbilityUsage),
-            null,
-            map.job.id,
-            map.ability.name,
-            time,
-            loaded,
-            JSON.parse(settings)));
-      }
+      const overlap = map.ability.overlapStrategy.check({
+        ability: map.ability,
+        holders: this.holders,
+        group: map.id,
+        id: id,
+        start: time,
+        end: new Date(time.valueOf() as number + map.ability.cooldown * 1000),
+        selectionRegistry: null
+      })
+
+      if (!overlap)
+        this.commandStorage.execute(new C.AddAbilityCommand(id || this.idgen.getNextId(M.EntryType.AbilityUsage),
+          null,
+          map.job.id,
+          map.ability.name,
+          time,
+          loaded,
+          JSON.parse(settings))
+        );
     }
   }
 
@@ -212,28 +198,16 @@ export class FightTimeLineController {
 
   updateBossAttack(itemid: string): void {
     const map = this.holders.bossAttacks.get(itemid);
-    this.dialogCallBacks.openBossAttackAddDialog(Utils.clone<M.IBossAbility>(map.attack),
-      (result: { updateAllWithSameName: boolean, data: M.IBossAbility }) => {
-        if (result != null) {
-          const commands: any[] = [];
-          const delta = ((Utils.getDateFromOffset(result.data.offset, this.startDate).valueOf() as number) -
-            (map.start.valueOf() as number));
-          commands.push(
-            new C.ChangeBossAttackCommand(itemid, result.data, result.updateAllWithSameName)
-          );
-
-          if (this.toolsManager.active === "Sticky attacks") {
-            const afterMe = this.holders.bossAttacks.filter(it => it.start >= map.start && it.id !== itemid);
-            commands.push(...afterMe.map(it => {
-              return new C.ChangeBossAttackCommand(it.id,
-                { offset: Utils.formatTime(new Date(it.startAsNumber + delta * 1000)) },
-                false);
-            }));
-          }
-          this.commandStorage.execute(new C.CombinedCommand(commands));
-          this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
-        }
-      });
+    this.dialogCallBacks.openBossAttackAddDialog(Utils.clone<M.IBossAbility>(map.attack), result => {
+      if (result) {
+        const commands: any[] = [];
+        commands.push(
+          new C.ChangeBossAttackCommand(itemid, result.data, result.updateAllWithSameName)
+        );
+        this.commandStorage.execute(new C.CombinedCommand(commands));
+        this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
+      }
+    });
   }
 
   notifyDoubleClick(itemid: string, group: string, time: Date): void {
@@ -241,9 +215,6 @@ export class FightTimeLineController {
       if (this.idgen.isBossAttack(itemid)) {
         this.updateBossAttack(itemid);
       }
-      // if (this.idgen.isAbilityUsage(itemid)) {
-      //   this.editAbility(itemid);
-      // }
       return;
     }
 
@@ -252,14 +223,13 @@ export class FightTimeLineController {
 
     if (group === this.bossGroup || !group) {
       if (time >= this.startDate) {
-        this.dialogCallBacks.openBossAttackAddDialog({ offset: Utils.formatTime(time) },
-          (result: { updateAllWithSameName: boolean, data: M.IBossAbility }) => {
-            if (result != null) {
-              this.addBossAttack(this.idgen.getNextId(M.EntryType.BossAttack),
-                Utils.getDateFromOffset(result.data.offset, this.startDate),
-                result.data);
-            }
-          });
+        this.dialogCallBacks.openBossAttackAddDialog({ offset: Utils.formatTime(time) }, result => {
+          if (result) {
+            this.addBossAttack(this.idgen.getNextId(M.EntryType.BossAttack),
+              Utils.getDateFromOffset(result.data.offset, this.startDate),
+              result.data);
+          }
+        });
       }
     } else {
       const map = this.holders.abilities.get(group);
@@ -291,18 +261,7 @@ export class FightTimeLineController {
       } else if (this.idgen.isStanceUsage(item.id)) {
         this.commandBag.push(new C.MoveStanceCommand(item.id.toString(), item.start as Date, item.end as Date));
       } else if (this.idgen.isBossAttack(item.id)) {
-        this.commandBag.push(new C.ChangeBossAttackCommand(item.id.toString(), { offset: Utils.formatTime(new Date(item.start)) }, false));
-        //        if (this.tools.stickyAttacks) {
-        //          const afterMe = this.holders.bossAttacks.filter(it => it.start >= found.time && it.id !== item.id);
-        //          this.commandBag.push(new C.CombinedCommand(afterMe.map(it => {
-        //            return new C.ChangeBossAttackCommand(it.id,
-        //              {
-        //                offset: Utils.formatTime(new Date((it.start.valueOf() as number) +
-        //                  ((item.start.valueOf() as number) - (found.time.valueOf() as number))))
-        //              },
-        //              false);
-        //          })));
-        //        }
+        this.commandBag.push(new C.ChangeBossAttackCommand(item.id.toString(), { offset: Utils.formatTime(new Date(item.start)) }, false));        
       }
     });
 
@@ -346,7 +305,7 @@ export class FightTimeLineController {
       if (start >= end || start > latestBossTime) return;
 
       const id = this.idgen.getNextId(M.EntryType.BossTarget);
-      this.holders.bossTargets.add(new BossTargetMap(id, target, { start: start, end: end }));
+      this.holders.bossTargets.add(new BossTargetMap(this.presenterManager, id, target, { start: start, end: end }));
 
       if (i < bossTargetChangeAbilities.length) {
         target = bossTargetChangeAbilities[i].ability.job.id;
@@ -358,36 +317,25 @@ export class FightTimeLineController {
   canMove(item: DataItem, selection: string[]): boolean {
     const type = this.idgen.getEntryType(item.id);
 
+    const overlapCheckData: IOverlapCheckData = {
+      holders: this.holders,
+      id: item.id.toString(),
+      group: item.group,
+      start: new Date(item.start),
+      end: new Date(item.end),
+      globalStart: this.startDate,
+      selectionRegistry: selection
+    }
+
     switch (type) {
-      case M.EntryType.AbilityUsage:
-        const ability = this.holders.abilities.get(item.group).ability;
-        return (item.end as number) - (item.start as number) === ability.cooldown * 1000 &&
-          new Date(item.start) >=
-          new Date(this.startDate.valueOf() as number - ((ability.requiresBossTarget ? 0 : 1) * 30 * 1000)) &&
-          !ability.overlapStrategy.check({
-            ability: ability,
-            holders: this.holders,
-            id: item.id.toString(),
-            group: item.group,
-            start: new Date(item.start),
-            end: new Date(item.end),
-            selectionRegistry: selection
-          });
-      case M.EntryType.StanceUsage:
-        const sability = this.holders.abilities.get(item.group).ability;
-        return (item.end as number) - (item.start as number) > 0 &&
-          new Date(item.start) >= new Date(this.startDate.valueOf() as number - 30 * 1000) &&
-          !sability.overlapStrategy.check({
-            ability: sability,
-            holders: this.holders,
-            id: item.id.toString(),
-            group: item.group,
-            start: new Date(item.start),
-            end: new Date(item.end),
-            selectionRegistry: selection
-          });
-      case M.EntryType.BossAttack:
-        return new Date(item.start) >= this.startDate;
+      case M.EntryType.AbilityUsage: {
+        const ability = this.holders.itemUsages.get(overlapCheckData.id);
+        return ability.canMove(overlapCheckData);
+      }
+      case M.EntryType.BossAttack: {
+        const ability = this.holders.bossAttacks.get(overlapCheckData.id);
+        return ability.canMove(overlapCheckData);       
+      }
     }
     return false;
   }
@@ -400,9 +348,10 @@ export class FightTimeLineController {
     }
 
     if (options.updateIntersectedWithBossAttackAtDate) {
-      const intersected = this.holders.itemUsages.filter(
-        (x) => options.updateIntersectedWithBossAttackAtDate >= x.start &&
-          options.updateIntersectedWithBossAttackAtDate <= x.end);
+      const intersected = this.holders.itemUsages.filter((x) =>
+        options.updateIntersectedWithBossAttackAtDate >= x.start &&
+        options.updateIntersectedWithBossAttackAtDate <= x.end
+      );
       this.holders.itemUsages.update(intersected);
     }
 
@@ -412,11 +361,12 @@ export class FightTimeLineController {
       this.availabilityController.updateAvailability(options.abilityChanged.ability);
     }
 
-    if (options.updateBossTargets ||
-      (options.abilityChanged &&
-        options.abilityChanged.ability.settings &&
-        options.abilityChanged.ability.settings.some(s => s.name === "changesTarget")))
+    if (
+      options.updateBossTargets ||
+      options.abilityChanged?.ability?.settings?.some(s => s.name === "changesTarget")
+    ) {
       this.recalculateBossTargets();
+    }
 
     if (options.updateFilters)
       this.applyFilter();
@@ -434,7 +384,7 @@ export class FightTimeLineController {
           const end = new Date((start.valueOf() as number) + this.calculateDuration(it.start, amap) * 1000);
           const id = this.idgen.getNextId(M.EntryType.BuffMap) + "_" + it.id;
           const group = amap.isPartyDamage ? null : amap.job.id;
-          return new HeatmapMap(id, group, { start: start, end: end });
+          return new HeatmapMap(this.presenterManager, id, group, { start: start, end: end });
         }
         return null;
       }).filter(it => it != null);
@@ -536,42 +486,42 @@ export class FightTimeLineController {
     const max = _.maxBy(usages, (it: AbilityUsageMap) => it.end) as AbilityUsageMap;
     const maxValue = max && max.end || this.startDate;
     const count = 6 * 60 / map.ability.cooldown;
-    return _.range(count).map(it => new C.AddAbilityCommand(this.idgen.getNextId(M.EntryType.AbilityUsage),
+    return _.range(count).map(index => new C.AddAbilityCommand(this.idgen.getNextId(M.EntryType.AbilityUsage),
       null,
       map.job.id,
       map.ability.name,
-      new Date(maxValue.valueOf() + (it * map.ability.cooldown * 1000)),
+      new Date(maxValue.valueOf() + (index * map.ability.cooldown * 1000)),
       false,
       null));
   }
 
-  splitStance(id: string, time: any) {
-    const stance = this.holders.stances.get(id);
-    if (stance) {
-      this.commandStorage.execute(new C.CombinedCommand([
-        new C.MoveStanceCommand(id, stance.start, new Date(time.valueOf() as number - 1000)),
-        new C.AddStanceCommand(this.idgen.getNextId(M.EntryType.StanceUsage),
-          stance.ability.job.id,
-          stance.stanceAbility.name,
-          time,
-          this.holders.stances.getNext(time),
-          false)
-      ]));
-    }
-  }
+  // splitStance(id: string, time: any) {
+  //   const stance = this.holders.stances.get(id);
+  //   if (stance) {
+  //     this.commandStorage.execute(new C.CombinedCommand([
+  //       new C.MoveStanceCommand(id, stance.start, new Date(time.valueOf() as number - 1000)),
+  //       new C.AddStanceCommand(this.idgen.getNextId(M.EntryType.StanceUsage),
+  //         stance.ability.job.id,
+  //         stance.stanceAbility.name,
+  //         time,
+  //         this.holders.stances.getNext(time),
+  //         false)
+  //     ]));
+  //   }
+  // }
 
-  fillStance(id: string) {
-    const stance = this.holders.stances.get(id);
-    if (stance) {
-      const next = this.holders.stances.getNext(stance.end);
-      const prev = this.holders.stances.getPrev(stance.start);
-      if (next !== stance.end || prev !== stance.start) {
-        this.commandStorage.execute(new C.CombinedCommand([
-          new C.MoveStanceCommand(id, prev, next)
-        ]));
-      }
-    }
-  }
+  // fillStance(id: string) {
+  //   const stance = this.holders.stances.get(id);
+  //   if (stance) {
+  //     const next = this.holders.stances.getNext(stance.end);
+  //     const prev = this.holders.stances.getPrev(stance.start);
+  //     if (next !== stance.end || prev !== stance.start) {
+  //       this.commandStorage.execute(new C.CombinedCommand([
+  //         new C.MoveStanceCommand(id, prev, next)
+  //       ]));
+  //     }
+  //   }
+  // }
 
 
   copy(ids: string[]) {
@@ -598,38 +548,37 @@ export class FightTimeLineController {
     }
   }
 
-  toggleCompactView(group: string, value?: boolean): void {
-    const job = this.holders.jobs.get(group);
+  toggleJobCompactView(jobId: string): void {
+    const job = this.holders.jobs.get(jobId);
     if (!job) return;
-    if (value == null || value == undefined)
-      job.isCompact = !job.isCompact;
-    else
-      job.isCompact = value;
+    this.setJobCompactView(jobId, !job.isCompact);
+  }
 
-    const abilities = this.holders.abilities.getByParentId(group);
-    abilities.forEach(it => {
-      if (it.isStance) return;
-      it.applyData({
-        isCompact: job.isCompact
-      });
-
-      const items = this.holders.itemUsages.getByAbility(it.id);
-      items.forEach(a => {
-        a.applyData();
-      });
-      this.holders.itemUsages.update(items);
-    });
-    this.holders.abilities.update(abilities);
+  setJobCompactView(jobId: string, value?: boolean) {
+    const job = this.holders.jobs.get(jobId);
+    if (!job) return;
+    if (value!==undefined)
+      this.presenterManager.setJobCompact(job.id, value);
+    job.applyData();
+    this.holders.jobs.update([job]);
+    const abs = this.holders.abilities.getByParentId(jobId);
+    abs.forEach(ab => {
+      ab.applyData();
+      const its = this.holders.itemUsages.getByAbility(ab.id);
+      its.forEach(it => {
+        it.applyData();
+      })
+      this.holders.itemUsages.update(its);
+    })
+    this.holders.abilities.update(abs);   
   }
 
   hideAbility(group: string) {
     const map = this.holders.abilities.get(group);
-    map.applyData({
-      hidden: true
-    });
-    this.holders.abilities.update([map]);
+    this.presenterManager.setHiddenAbility(map.job.id, map.ability.name, true);
     this.updateBuffHeatmap(this.presenterManager.view.buffmap, map.ability);
-
+    map.applyData();
+    this.holders.abilities.update([map]);
   }
 
   clearAbility(group: string) {
@@ -641,20 +590,10 @@ export class FightTimeLineController {
 
   showAbility(group: string) {
     const map = this.holders.abilities.get(group);
-    map.applyData({ hidden: false });
-    this.holders.abilities.update([map]);
+    this.presenterManager.setHiddenAbility(map.job.id, map.ability.name, false);
     this.updateBuffHeatmap(this.presenterManager.view.buffmap, map.ability);
-  }
-
-  restoreHidden(group: string) {
-    const abilities = this.holders.abilities.getByParentId(group);
-    abilities.forEach((it: AbilityMap) => {
-      it.applyData({ hidden: false });
-    });
-
-    this.holders.abilities.update(abilities);
-    this.updateBuffHeatmap(this.presenterManager.view.buffmap, null);
-    this.applyFilter();
+    map.applyData();
+    this.holders.abilities.update([map]);
   }
 
   visibleFrameTemplate(item: DataItem): string {
@@ -710,69 +649,44 @@ export class FightTimeLineController {
   }
 
 
-  loadFight(fight: M.IFight, commands?: ICommandData[]): void {
-    if (fight === null || fight === undefined) return;
-    const loadedData = fight.data && JSON.parse(fight.data) as SerializeController.IFightSerializeData;
+  loadFight(fight: M.IFight, loadedData: SerializeController.IFightSerializeData, commands?: ICommandData[]): void {
+
+    if (!fight) return;
+
     try {
 
       this.loading = true;
       this.commandStorage.turnOffFireExecuted();
 
       this.data.fight = fight;
-      this.data.importedFrom = loadedData && loadedData.importedFrom;
+      this.data.importedFrom = loadedData?.importedFrom;
 
       this.holders.jobs.clear();
       this.holders.abilities.clear();
       this.holders.itemUsages.clear();
       this.holders.heatMaps.clear();
       this.holders.bossTargets.clear();
-      //      this.holders.selectionRegistry.clear();
       this.commandStorage.clear();
-      //      this.commandBag.clear();
 
-
-      if (loadedData && loadedData.boss) {
+      if (loadedData?.boss) {
         this.holders.bossAttacks.clear();
         this.loadBoss(loadedData.boss);
         this.holders.bossAttacks.applyFilter(loadedData.filter.attacks);
       }
 
-      if (loadedData && loadedData.jobs) {
+      if (loadedData?.jobs) {
         for (let j of loadedData.jobs.sort((a, b) => b.order - a.order)) {
-          const rid = this.addJob(j.id, j.name, null, j.pet, j.collapsed, false);
-          const jh = this.holders.jobs.get(rid);
-          if (jh) {
-            if (j.filter){
-              //jh.filter = j.filter;
-              this.presenterManager.jobFilters[j.id] = j.filter;
-            }
-            if (j.compact !== undefined && j.compact !== null)
-              this.toggleCompactView(j.id, j.compact);
-          }
+          const jid = this.addJob(j.id, j.name, null, j.pet, j.collapsed, false);
         }
+      }
 
+      if (loadedData?.initialTarget) {
         const jobMap = this.holders.jobs.get(loadedData.initialTarget);
         if (jobMap)
           this.switchInitialBossTarget(jobMap, false);
       }
 
-
-
-      if (loadedData && loadedData.abilityMaps) {
-        for (let it of loadedData.abilityMaps) {
-          let ab = this.holders.abilities.getByParentAndAbility(it.job, it.name);
-          if (ab) {
-            if (it.hidden !== undefined && it.hidden !== null) {
-              if (it.hidden) //todo: optimize this
-                this.hideAbility(ab.id);
-              else
-                this.showAbility(ab.id);
-            }
-          }
-        }
-      }
-
-      if (loadedData && loadedData.abilities)
+      if (loadedData?.abilities) {
         for (let a of loadedData.abilities) {
           if (a) {
             const abilityMap = this.holders.abilities.getByParentAndAbility(a.job, a.ability);
@@ -786,57 +700,24 @@ export class FightTimeLineController {
 
           }
         }
-      if (loadedData && loadedData.stances)
-        for (let a of loadedData.stances) {
-          if (a) {
-            const abilityMap = this.holders.abilities.getStancesAbility(a.job);
-            if (abilityMap) {
-              this.commandStorage.execute(new C.AddStanceCommand(this.idgen.getNextId(M.EntryType.StanceUsage),
-                abilityMap.job.id,
-                a.ability,
-                Utils.getDateFromOffset(a.start, this.startDate),
-                Utils.getDateFromOffset(a.end, this.startDate),
-                true));
-            }
-          }
-        }
+      }
+
       if (commands) {
         commands.forEach((c) => {
           this.handleRemoteCommandData(c);
         });
       }
-      if (loadedData)
-        this.presenterManager.filter = loadedData.filter;
+
+      this.recalculateBossTargets();
 
     } finally {
       this.loading = false;
-      //this.commandStorage.clear();
     }
 
-    this.recalculateBossTargets();
 
     this.applyFilter();
     this.applyView(loadedData.view, true);
 
-    if (loadedData) {
-      if (loadedData.jobs) {
-        for (let j of loadedData.jobs.sort((a, b) => a.order - b.order)) {
-          if (j.compact !== undefined && j.compact !== null)
-            this.toggleCompactView(j.id, j.compact);
-        }
-      }
-
-      if (loadedData.abilityMaps) {
-        for (let it of loadedData.abilityMaps) {
-          let ab = this.holders.abilities.getByParentAndAbility(it.job, it.name);
-          if (ab) {
-            this.toggleCompactViewAbility(ab.id, it.compact);
-          }
-        }
-      }
-    }
-
-    this.availabilityController.setAbilityAvailabilityView(this.presenterManager.view.showAbilityAvailablity);
     this.commandStorage.turnOnFireExecuted();
     this.hasChanges = this.commandStorage.canRedo() || this.commandStorage.canUndo();
   }
@@ -859,28 +740,6 @@ export class FightTimeLineController {
       window,
       color, comment));
   }
-
-  // editAbility(itemid: string): void {
-  //   return;
-  //   const item = this.holders.itemUsages.get(itemid);
-  //   const settings = item.ability.ability.settings;
-  //   if (settings && settings.length > 0) {
-
-  //     this.dialogCallBacks.openAbilityEditDialog(
-  //       {
-  //         ability: item.ability.ability,
-  //         settings: settings,
-  //         values: item.settings,
-  //         jobs: this.holders.jobs.getAll()
-  //       },
-  //       (b: any) => {
-  //         if (b) {
-  //           this.commandStorage.execute(new C.ChangeAbilitySettingsCommand(itemid, b));
-  //         }
-  //       });
-  //   }
-
-  // }
 
   notifyTimeChanged(id: string, date: Date): void {
     const map = this.holders.bossDownTime.getById(id);
@@ -907,16 +766,15 @@ export class FightTimeLineController {
   applyFilter(input?: M.IFilter, source?: string): void {
     if (this.loading) return;
 
-    //console.log("filter requested");
+    console.log("FTLC ApplyFilter");
     if (input)
       this.presenterManager.filter = input;
 
     if (!source || source === 'ability') {
       if (this.presenterManager.filter?.abilities) {
         this.holders.abilities.applyFilter(
-          this.presenterManager.filter.abilities,
-          this.presenterManager.jobFilters,
-          (val) => this.holders.itemUsages.filter((item) => item.ability.id === val).length > 0);
+          (val) => this.holders.itemUsages.filter((item) => item.ability.id === val).length > 0
+        );
       }
     }
 
@@ -925,9 +783,7 @@ export class FightTimeLineController {
         this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
       }
     }
-
     this.updateBuffHeatmap(this.presenterManager.view.buffmap, null);
-
   }
 
   importFromFFLogs(key: string, parser: Parser.Parser): any {
@@ -937,8 +793,10 @@ export class FightTimeLineController {
       this.loading = true;
       const settings = this.settingsService.load();
 
-      const importController =
-        new ImportController.ImportController(this.idgen, this.holders, this.gameService.jobRegistry);
+      const importController = new ImportController.ImportController(
+        this.idgen,
+        this.holders,
+        this.gameService.jobRegistry);
       const importCommand = importController.buildImportCommand(settings, parser, this.startDate);
 
       this.commandStorage.execute(importCommand);
@@ -958,8 +816,11 @@ export class FightTimeLineController {
   }
 
   applyView(view: M.IView, force?: boolean): void {
+    console.log("FTLC ApplyView");
+
     if (!this.viewCopy)
       this.viewCopy = this.presenterManager.view;
+
     view = view || this.viewCopy;
     if (this.presenterManager.view.ogcdAsPoints !== this.viewCopy.ogcdAsPoints || force) {
       const items = this.holders.itemUsages.getAll();
@@ -984,7 +845,7 @@ export class FightTimeLineController {
     }
 
     if (this.presenterManager.view.compactView !== this.viewCopy.compactView || force) {
-      this.setCompactView(view.compactView);
+      this.refreshCompactView();
     }
 
     if (this.presenterManager.view.highlightLoaded !== this.viewCopy.highlightLoaded || force) {
@@ -999,7 +860,7 @@ export class FightTimeLineController {
   }
 
 
-  viewCopy: M.IView;
+
 
   isJobGroup(group: string): boolean {
     return !!this.holders.jobs.get(group);
@@ -1042,38 +903,33 @@ export class FightTimeLineController {
     }
   }
 
-
-  setCompactView(compactView: boolean): void {
+  refreshCompactView(): void {
     this.holders.jobs.getAll().forEach(it => {
-      this.toggleCompactView(it.id, compactView);
+      this.setJobCompactView(it.id);
     });
   }
 
-  toggleCompactViewAbility(id: string, compact?: boolean): void {
+  toggleCompactViewAbility(id: string): void {
     const it = this.holders.abilities.get(id);
-    if (it) {
-      it.applyData({ isCompact: compact != undefined ? compact : !it.isCompact });
-
-      const items = this.holders.itemUsages.getByAbility(it.id);
-      items.forEach(a => { a.applyData(); });
-      this.holders.itemUsages.update(items);
-
-      this.holders.abilities.update([it]);
-    }
+    this.presenterManager.setAbilityCompact(it.job.id, it.ability.name, !it.isCompact);
+    it.applyData();
+    this.holders.abilities.update([it]);
+    const abs = this.holders.itemUsages.getByAbility(id);
+    abs.forEach(ab => ab.applyData());
+    this.holders.itemUsages.update(abs);
   }
 
   setHighLightLoadedView(highlightLoaded: boolean): void {
     this.holders.setHighLightLoadedView(highlightLoaded);
   }
 
-  toggleJobCollapsed(group) {
-    const j = this.holders.jobs.get(group);
-    j.applyData({ collapsed: !j.collapsed });
-
-    const abs = this.holders.abilities.getByParentId(j.id);
-    abs.forEach(value => value.applyData({ collapsed: j.collapsed }));
-
+  toggleJobCollapsed(jobId) {
+    const j = this.holders.jobs.get(jobId);
+    this.presenterManager.setJobCollapsed(jobId, !j.collapsed)
+    j.applyData();
     this.holders.jobs.update([j]);
+    const abs = this.holders.abilities.getByParentId(jobId);
+    abs.forEach(ab => ab.applyData());
     this.holders.abilities.update(abs);
   }
 
@@ -1109,14 +965,14 @@ export class FightTimeLineController {
     return ctr;
   }
 
-  updateAbilitySettings(id, settings) {
+  updateAbilitySettings(id: string, settings: any) {
     this.commandStorage.execute(new C.ChangeAbilitySettingsCommand(id, settings));
   }
 }
 
 
 export interface IDialogs {
-  openBossAttackAddDialog: (bossAbility: M.IBossAbility | {}, callBack: (b: any) => void) => void;
+  openBossAttackAddDialog: (bossAbility: M.IBossAbility | {}, callBack: (b: { updateAllWithSameName: boolean, data: M.IBossAbility }) => void) => void;
   // openAbilityEditDialog: (data: { ability: M.IAbility, settings: M.IAbilitySetting[], values: M.IAbilitySettingData[], jobs: JobMap[] }, callBack: (b: any) => void) => void;
   // openStanceSelector: (data: M.IContextMenuData[]) => void;
 }

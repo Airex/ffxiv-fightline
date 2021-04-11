@@ -289,7 +289,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     if (source === "player") {
       this.visTimelineService.setSelectionToId(this.visTimelineBoss, "");
       this.setSelectionOfBossAttacks([]);
-      this.emitAction("selected", source, //todo
+      this.emitAction("selected", source, //TODO
         {
           target: "friend",
           data: eventData
@@ -298,7 +298,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     if (source === "boss") {
       this.visTimelineService.setSelectionToId(this.visTimeline, "");
       this.setSelectionOfBossAttacks(this.visTimelineService.getSelection(this.visTimelineBoss) as string[]);
-      this.emitAction("selected", source, //todo
+      this.emitAction("selected", source, //TODO
         {
           target: "boss",
           data: eventData

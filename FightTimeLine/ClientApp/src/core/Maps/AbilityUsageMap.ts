@@ -1,9 +1,9 @@
 import { DataItem } from "vis-timeline"
-import { BaseMap } from "./BaseMap";
+import { BaseMap, IOverlapCheckData } from "./BaseMap";
 import { IMoveable, IForSidePanel } from "../Holders/BaseHolder";
-import * as AbilityMap from "./AbilityMap";
 import { Utils } from "../Utils";
 import * as Models from "../Models";
+import { AbilityMap } from "./AbilityMap";
 
 export interface IAbilityUsageMapData {
   start?: Date;
@@ -19,8 +19,8 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
     this.setItem(this.createAbilityUsage(this.id, this.ability, data));
   }
 
-  constructor(id: string, ability: AbilityMap.AbilityMap, settings: Models.IAbilitySettingData[], data: IAbilityUsageMapData) {
-    super(id);
+  constructor(presenter: Models.IPresenterData, id: string, ability: AbilityMap, settings: Models.ISettingData[], data: IAbilityUsageMapData) {
+    super(presenter, id);
     this.ability = ability;
     this.calculatedDuration = ability.ability.duration;
     this.settings = settings;
@@ -28,9 +28,9 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
     this.applyData(Object.assign({ ogcdAsPoints: false, loaded: false, showLoaded: false }, data));
   }
 
-  ability: AbilityMap.AbilityMap;
+  ability: AbilityMap;
   calculatedDuration: number;
-  settings: Models.IAbilitySettingData[];
+  settings: Models.ISettingData[];
 
 
   get start(): Date {
@@ -53,7 +53,7 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
     return this.item.end.valueOf() as number;
   }
 
-  getSettingData(name: string): Models.IAbilitySettingData {
+  getSettingData(name: string): Models.ISettingData {
     return this.settings && this.settings.find && this.settings.find(it => it.name === name);
   }
 
@@ -65,7 +65,7 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
     return this.start <= date && new Date(this.startAsNumber + this.ability.ability.duration * 1000)>= date;
   }
 
-  createAbilityUsage(id: string, ability: AbilityMap.AbilityMap, data: IAbilityUsageMapData): DataItem {
+  createAbilityUsage(id: string, ability: AbilityMap, data: IAbilityUsageMapData): DataItem {
     const start = data.start;
     const end = new Date(start.valueOf() as number + ability.ability.cooldown * 1000);
 
@@ -76,7 +76,7 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
       group: ability.id,
       className: this.buildClass({
         ability: true,
-        compact: ability.isCompact,
+        compact: ability.isCompact || ability.job.isCompact || this.presenter.view.compactView,
         loaded: data.showLoaded && data.loaded
       }),
       content: "",
@@ -95,5 +95,11 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
     const newDate = new Date(this.startAsNumber + delta * 1000);
     this.applyData({ start: newDate });
     return true;
+  }
+
+  canMove(overlapData: IOverlapCheckData): boolean {
+    return overlapData.end.valueOf() - overlapData.start.valueOf() === this.ability.ability.cooldown * 1000 &&
+      overlapData.start >= new Date(overlapData.globalStart.valueOf() - ((this.ability.ability.requiresBossTarget ? 0 : 1) * 30 * 1000)) &&
+      !this.ability.ability.overlapStrategy.check({ ...overlapData, ability: this.ability.ability });
   }
 }

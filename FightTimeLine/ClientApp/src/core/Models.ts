@@ -126,7 +126,7 @@ export interface IOverlapStrategy {
   getDependencies(): string[];
 }
 
-export type MitigationsModifier = (holders:Holders, jobId: string, abilityId: string) => IDefensiveStats;
+export type MitigationsModifier = (holders: Holders, jobId: string, abilityId: string) => IDefensiveStats;
 
 export const DefaultMitigationsModifier: MitigationsModifier = (holders, jobId, abilityId) => holders.itemUsages.get(abilityId).ability.ability.defensiveStats;
 
@@ -175,7 +175,7 @@ export interface IAbilitySetting {
   process?: (context: FFLogsCollectors.ICollectorContext, data: FF.AbilityEvent) => string;
 }
 
-export interface IAbilitySettingData {
+export interface ISettingData {
   name: string;
   value: any;
 }
@@ -269,7 +269,7 @@ export interface IAbilityFilter {
   damage?: boolean;
   healing?: boolean;
   healingBuff?: boolean;
-  utility?: boolean;  
+  utility?: boolean;
   unused?: boolean;
   enmity?: boolean;
 };
@@ -283,23 +283,34 @@ export interface IBossAttackFilter {
 
   keywords: string[];
 }
-export type JobFilters = { [id: string]: IAbilityFilter }
+
+export interface JobFilter {
+  filter?: IAbilityFilter,
+  isCollapsed?: boolean;
+  isCompact?: boolean;
+  abilityCompact?: string[],
+  abilityHidden?: string[]
+}
+
+export type JobFilters = {
+  [id: string]: JobFilter
+}
 
 export interface IFilter {
   abilities: IAbilityFilter;
   attacks?: IBossAttackFilter;
 }
 
-export const defaultFilter: IFilter = {
+export const defaultFilter: () => IFilter = () => ({
   abilities: {
     damage: true,
     selfDefence: true,
     partyDefence: true,
-    enmity: true,    
+    enmity: true,
     healing: true,
     healingBuff: true,
     partyDamageBuff: true,
-    selfDamageBuff: true,    
+    selfDamageBuff: true,
     unused: true,
     utility: true,
   },
@@ -311,7 +322,7 @@ export const defaultFilter: IFilter = {
     isUnaspected: true,
     keywords: []
   }
-};
+});
 
 export interface IView {
   buffmap: boolean;
@@ -353,7 +364,17 @@ export interface IPhase {
   syncData: ISyncData;
 }
 
+export interface IStorage {
+  setString(key: string, value: string): void ;
+  getString(key: string): string;
+  setObject(key: string, value: object): void ;
+  getObject<T>(key: string): T ;
+}
 
-
-
-
+export interface IPresenterData {
+  tags: string[];
+  sources: string[];
+  filter: IFilter;
+  view: IView;
+  jobFilter(jobId: string): JobFilter;
+}
