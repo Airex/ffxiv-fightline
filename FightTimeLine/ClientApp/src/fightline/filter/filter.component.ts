@@ -44,6 +44,7 @@ export class FilterComponent {
   change() {
     this.tags = this.presenterManager.activeTags;
     this.sources = this.presenterManager.activeSources;
+    this.updateCheckAll();
   }
 
   checkAllFunc(value: boolean) {
