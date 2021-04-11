@@ -114,7 +114,7 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
   }
 
   get hidden(): boolean {
-    return this.presenter.jobFilter(this.job.id).abilityHidden.indexOf(this.ability.name) >= 0;
+    return this.presenter.jobFilter(this.job.id).abilityHidden?.indexOf(this.ability.name) >= 0 || false;
   }
 
   get filtered(): boolean {
@@ -122,7 +122,7 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
   }
 
   get isCompact(): boolean {
-    return this.presenter.jobFilter(this.job.id).abilityCompact.indexOf(this.ability.name) >= 0;
+    return this.presenter.jobFilter(this.job.id).abilityCompact?.indexOf(this.ability.name) >= 0 || false;
   }
 
   
