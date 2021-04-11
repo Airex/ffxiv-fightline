@@ -2,6 +2,7 @@ import * as Models from "./Models";
 import * as _ from "lodash"
 import { ISettings } from "src/services/SettingsService";
 import { JobFilters } from "./Models";
+import { isEmpty } from "rxjs/operators";
 
 export class PresenterManager implements Models.IPresenterData {
 
@@ -9,15 +10,15 @@ export class PresenterManager implements Models.IPresenterData {
   sources: string[] = [];
   filter: Models.IFilter = Models.defaultFilter();
   view: Models.IView = Models.defaultView;
-  private jobFilters: JobFilters = {}  
+  private jobFilters: JobFilters = {}
 
-  reset(){
+  reset() {
     this.tags = Models.DefaultTags;
     this.sources = [];
     this.filter = Models.defaultFilter();
     this.view = Models.defaultView;
     this.jobFilters = {}
-    
+
   }
 
   jobFilter(jobId: string): Models.JobFilter {
@@ -56,14 +57,14 @@ export class PresenterManager implements Models.IPresenterData {
   }
 
   setJobCompact(jobId: string, value: boolean) {
-    this.jobFilter(jobId).isCompact = value;    
+    this.jobFilter(jobId).isCompact = value;
   }
 
   setJobCollapsed(jobId: string, value: boolean) {
     this.jobFilter(jobId).isCollapsed = value;
-  } 
+  }
 
-  setHiddenAbility(jobId: string, ability: string, value: boolean) {    
+  setHiddenAbility(jobId: string, ability: string, value: boolean) {
     const hidden = this.jobFilter(jobId).abilityHidden;
 
     const index = hidden.indexOf(ability);
@@ -84,12 +85,14 @@ export class PresenterManager implements Models.IPresenterData {
     }
     if (!value && index >= 0) {
       compact.splice(index, 1)
-    }    
-  }  
+    }
+  }
 
   setSettings(iSettings: ISettings) {
-    this.filter = iSettings.main.defaultFilter;
-    this.view = iSettings.main.defaultView;
+    if (iSettings.main.defaultFilter)
+      this.filter = iSettings.main.defaultFilter;
+    if (iSettings.main.defaultView)
+      this.view = iSettings.main.defaultView;
   }
 
   save(storage: Models.IStorage, id: string) {

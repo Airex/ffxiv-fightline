@@ -415,8 +415,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
           const settings = this.settingsService.load();
           this.presenterManager.setSettings(settings);
 
-          const loadedData = fight.data && JSON.parse(fight.data) as SerializeController.IFightSerializeData;
-          console.debug(loadedData);
+          const loadedData = fight.data && JSON.parse(fight.data) as SerializeController.IFightSerializeData;          
           if (loadedData.filter)
             this.presenterManager.filter = loadedData.filter;
           if (loadedData.view)

@@ -652,9 +652,7 @@ export class FightTimeLineController {
   loadFight(fight: M.IFight, loadedData: SerializeController.IFightSerializeData, commands?: ICommandData[]): void {
 
     if (!fight) return;
-
     try {
-
       this.loading = true;
       this.commandStorage.turnOffFireExecuted();
 
@@ -697,7 +695,6 @@ export class FightTimeLineController {
                 true,
                 a.settings);
             }
-
           }
         }
       }
@@ -713,7 +710,6 @@ export class FightTimeLineController {
     } finally {
       this.loading = false;
     }
-
 
     this.applyFilter();
     this.applyView(loadedData.view, true);
