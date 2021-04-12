@@ -94,6 +94,14 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
     this.refresh();
   }
 
+  restoreAll() {
+    this.dispatcher.dispatch({
+      name: "SidePanel Restore All Job Ability",
+      payload: this.it.id
+    });
+    this.refresh();
+  }
+
   resetJobFilter(name?: string) {
     //console.log("reset job filter requested");
     if (name) {

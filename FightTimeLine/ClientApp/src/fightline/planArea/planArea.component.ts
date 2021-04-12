@@ -272,8 +272,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     this.visTimelineService.on(this.visTimeline, "select");
     this.visTimelineService.on(this.visTimeline, "timechanged");
     this.visTimelineService.on(this.visTimeline, "timechange");
-    this.visTimelineService.on(this.visTimeline, "rangechange");
-    this.visTimelineService.on(this.visTimeline, "mouseOver");
+    this.visTimelineService.on(this.visTimeline, "rangechange");    
   }
 
   timelineBossInitialized(): void {
@@ -289,7 +288,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     if (source === "player") {
       this.visTimelineService.setSelectionToId(this.visTimelineBoss, "");
       this.setSelectionOfBossAttacks([]);
-      this.emitAction("selected", source, //TODO
+      this.emitAction("selected", source, 
         {
           target: "friend",
           data: eventData
@@ -298,7 +297,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     if (source === "boss") {
       this.visTimelineService.setSelectionToId(this.visTimeline, "");
       this.setSelectionOfBossAttacks(this.visTimelineService.getSelection(this.visTimelineBoss) as string[]);
-      this.emitAction("selected", source, //TODO
+      this.emitAction("selected", source,
         {
           target: "boss",
           data: eventData

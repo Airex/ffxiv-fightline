@@ -8,7 +8,7 @@
     <span class="abilityDescription">{{it.actorName}}</span>
   </nz-space-item>
   <nz-space-item *ngIf="hiddenAbilities.length>0">
-    <sidepanel-area header="Hidden abilities">
+    <sidepanel-area header="Hidden abilities" [extra]="restoreAllTpl">
       <div>
         <nz-tag *ngFor="let ab of hiddenAbilities"
                 (nzOnClose)="restore(ab)"
@@ -21,6 +21,9 @@
         </nz-tag>
       </div>
     </sidepanel-area>
+    <ng-template #restoreAllTpl>
+      <a (click)="$event.stopPropagation();restoreAll()">restore all</a>
+    </ng-template>
   </nz-space-item>
   <nz-space-item *ngIf="data.mode === 'default'">
     <sidepanel-area header="Filter"

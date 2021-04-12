@@ -434,12 +434,14 @@ export class FightLineComponent implements OnInit, OnDestroy {
                 this.planArea.refresh();
               }).finally(() => {
                 this.fightLineController.loadFight(fight, loadedData, commands.map(cmd => JSON.parse(cmd.data)));
+                ref.close();
               });
             }, error => {
               console.log(error);
               this.notification.error("Unable to load data");
-            }, () => {
               ref.close();
+            }, () => {
+              
             });
         } else {
           ref.close();
@@ -859,10 +861,21 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.fightLineController.combineAndExecute(this.fightLineController.fillJob(value));
     });
 
-    dispatcher.on("SidePanel Restore Job Ability").subscribe(value => {
-      this.fightLineController.showAbility(value);
+    dispatcher.on("SidePanel Restore All Job Ability").subscribe(value => {
+      const hidden = [...this.presenterManager.jobFilter(value).abilityHidden];
+      hidden?.forEach(h=>{
+        const ab = this.visStorage.holders.abilities.getByParentAndAbility(value, h);
+        this.fightLineController.showAbility(ab.id);
+      });      
       this.presenterManager.save(this.storage, this.fightId);
     });
+
+    dispatcher.on("SidePanel Restore Job Ability").subscribe(value => {
+      this.fightLineController.showAbility(value); 
+      this.presenterManager.save(this.storage, this.fightId);
+    });
+
+    
     dispatcher.on("SidePanel Toggle Job Compact View").subscribe(value => {
       this.fightLineController.toggleJobCompactView(value);
       this.fightLineController.applyFilter();
