@@ -3,7 +3,7 @@ import { getAbilitiesFrom, medicine, meleeSharedAbilities } from "./shared"
 
 export const MNK: IJob = {
   name: "MNK",
-  fullName:"Monk",
+  fullName: "Monk",
   role: Role.Melee,
   icon: ("JobIcons/Monk_Icon_10"),
   abilities: [
@@ -49,15 +49,18 @@ export const MNK: IJob = {
       cooldown: 45,
       xivDbId: "3543",
       icon: ("31_Monk/3543_Tornado Kick"),
-      abilityType: AbilityType.Damage,
+      abilityType: AbilityType.Damage
     },
     {
       name: "Riddle of Earth",
-      duration: 6,
+      duration: 10,
       cooldown: 30,
       xivDbId: "7394",
       icon: ("31_Monk/7394_Riddle Of Earth"),
-      abilityType: AbilityType.Utility,
+      abilityType: AbilityType.Utility | AbilityType.SelfShield,
+      defensiveStats: {
+        shieldPercent: 10
+      },
       charges: {
         count: 3,
         cooldown: 30
@@ -79,16 +82,16 @@ export const MNK: IJob = {
       icon: ("31_Monk/7396_Brotherhood"),
       abilityType: AbilityType.PartyDamageBuff,
     },
-//    {
-//      name: "Anatman",
-//      duration: 0,
-//      cooldown: 60,
-//      xivDbId: "16475",
-//      icon: ("31_Monk/icon_24"),
-//      abilityType: AbilityType.Utility,
-//    },
+    //    {
+    //      name: "Anatman",
+    //      duration: 0,
+    //      cooldown: 60,
+    //      xivDbId: "16475",
+    //      icon: ("31_Monk/icon_24"),
+    //      abilityType: AbilityType.Utility,
+    //    },
     ...getAbilitiesFrom(meleeSharedAbilities),
-    medicine["Strength"]
+    medicine.Strength
   ]
 };
 
