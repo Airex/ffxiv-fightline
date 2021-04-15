@@ -119,7 +119,12 @@ import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzResizableModule } from 'ng-zorro-antd/resizable';
 import { SoloPartyPipe } from 'src/heplers/SoloPartyPipe';
 import { VisStorageService } from 'src/services/VisStorageService';
-
+import { SettingsDialogMainTab } from 'src/dialogs/settingsDialog/tabs/main/main.component';
+import { SettingsDialogColorTab } from 'src/dialogs/settingsDialog/tabs/colors/colors.component';
+import { SettingsDialogFflogsTab } from 'src/dialogs/settingsDialog/tabs/fflogs/fflogs.component';
+import { SettingsDialogTableviewTab } from 'src/dialogs/settingsDialog/tabs/tableview/tableview.component';
+import { SettingsDialogTeamworkTab } from 'src/dialogs/settingsDialog/tabs/teamwork/teamwork.component';
+import { SettingsDialogPresetsTab } from 'src/dialogs/settingsDialog/tabs/presets/presets.component';
 
 const zorroModules = [
   NzAlertModule,
@@ -217,6 +222,7 @@ export function getBaseUrl() {
 }
 
 
+
 @NgModule({
   declarations: [
     KeyHandlerDirective,
@@ -253,6 +259,12 @@ export function getBaseUrl() {
     DownTimeComponent,
     SyncSettingsComponent,
     SyncDowntimeComponent,
+    SettingsDialogMainTab,
+    SettingsDialogColorTab,
+    SettingsDialogFflogsTab,
+    SettingsDialogTableviewTab,
+    SettingsDialogTeamworkTab,
+    SettingsDialogPresetsTab,    
     ...DialogsModuleComponents
   ],
   imports: [
@@ -294,7 +306,8 @@ export function getBaseUrl() {
   entryComponents: [
     ViewComponent, FilterComponent, SettingsFilterComponent, AreaComponent, SettingsViewComponent, PingComponent, SingleAbilityComponent,
     SingleAttackComponent, MultipleAbilityComponent, MultipleAttackComponent, SyncSettingsComponent, JobComponent, JobAbilityComponent, SidepanelComponent,
-    DownTimeComponent, PlanAreaComponent, SyncDowntimeComponent,CellComponent,MultipleDownTimeComponent,
+    DownTimeComponent, PlanAreaComponent, SyncDowntimeComponent, CellComponent, MultipleDownTimeComponent,
+    SettingsDialogMainTab, SettingsDialogColorTab, SettingsDialogFflogsTab, SettingsDialogTableviewTab, SettingsDialogTeamworkTab,SettingsDialogPresetsTab,
     ...DialogsModuleComponents
   ],
   bootstrap: [AppComponent]

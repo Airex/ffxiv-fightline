@@ -34,15 +34,13 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Input("showTools") showTools: boolean;
   @Input("showTeamwork") showTeamwork: boolean;
   @Input("showRefresh") showRefresh: boolean;
-
   @Input("authenticated") authenticated: boolean;
   @Input("username") username: string;
   @Input("canUndo") canUndo: boolean;
   @Input("canRedo") canRedo: boolean;
   @Input("connectedUsers") connectedUsers: M.IHubUser[];
   @Input("connected") connected: boolean;
-  @Input("toolsManager") toolsManager: ToolsManager;
-  @Input("presenterManager") presenterManager: PresenterManager;
+  @Input("toolsManager") toolsManager: ToolsManager;  
 
   private _fraction: M.IFraction;
 
@@ -75,14 +73,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   @Output("addJob") addJob: EventEmitter<string> = new EventEmitter<string>();
 
-
-
-  @ViewChild("filter")
-  public filter: FilterComponent;
-  @ViewChild("view")
-  public view: ViewComponent;
-  @ViewChildren(PingComponent)
-  pings: QueryList<PingComponent>;
+  @ViewChild("filter") public filter: FilterComponent;
+  @ViewChild("view") public view: ViewComponent;
+  @ViewChildren(PingComponent) pings: QueryList<PingComponent>;
 
 
   container = { data: [] };
@@ -90,6 +83,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   menu: any;
 
   public constructor(
+    private visStorage: VisStorageService,
     private dialogService: DialogService,
     @Inject(authenticationServiceToken) private authenticationService: IAuthenticationService,
     @Inject(Gameserviceprovider.gameServiceToken) public gameService: Gameserviceinterface.IGameService,
@@ -276,5 +270,5 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   onNew() {
     this.startNew.emit();
-  }
+  } 
 }

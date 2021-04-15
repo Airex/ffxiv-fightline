@@ -1,22 +1,32 @@
 import * as Models from "./Models";
 import * as _ from "lodash"
 import { ISettings } from "src/services/SettingsService";
-import { JobFilters } from "./Models";
-import { isEmpty } from "rxjs/operators";
+import { IPresetTemplate, JobFilters } from "./Models";
+import { Holders } from "./Holders";
+import { Utils } from "./Utils";
 
 export class PresenterManager implements Models.IPresenterData {
+
+  loadTemplate(template: Models.IPresetTemplate, holders: Holders) {
+    this.filter = template.filter;
+    this.view = template.view;
+    this.jobFilters = holders.jobs.getAll().reduce((acc, j) =>{
+      return {...acc, [j.id]: template.jobFilters[j.job.name] || {}};
+    },{});
+    
+  }
 
   tags: string[] = Models.DefaultTags;
   sources: string[] = [];
   filter: Models.IFilter = Models.defaultFilter();
-  view: Models.IView = Models.defaultView;
+  view: Models.IView = Models.defaultView();
   private jobFilters: JobFilters = {}
 
   reset() {
     this.tags = Models.DefaultTags;
     this.sources = [];
     this.filter = Models.defaultFilter();
-    this.view = Models.defaultView;
+    this.view = Models.defaultView();
     this.jobFilters = {}
 
   }
@@ -114,6 +124,18 @@ export class PresenterManager implements Models.IPresenterData {
         this.jobFilters = data.jobFilters;
     }
     return !!data;
+  }
+
+  generatePresetTemplate(holders: Holders) {
+    const template: IPresetTemplate = Utils.clone({
+      filter: this.filter,
+      view: this.view,      
+      jobFilters: Object.entries(this.jobFilters).reduce((acc, v) => {
+        const jobMap = holders.jobs.get(v[0]);
+        return { ...acc, [jobMap.job.name]: v[1] }
+      }, {})
+    });
+    return template;
   }
 }
 

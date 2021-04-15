@@ -1,0 +1,62 @@
+<form [formGroup]="fflogsForm"
+      class="settings-tab">
+  <div class="settings-container">
+    <div class="settings-title">
+      Source for Boss attacks:
+    </div>
+    <div class="settings-body">
+      <nz-radio-group class="example-radio-group"
+                      formControlName="bossAttacksSource">
+        <label nz-radio
+               class="example-radio-button"
+               nzValue="cast">Cast</label>
+        <label nz-radio
+               class="example-radio-button"
+               nzValue="damage">Damage</label>
+      </nz-radio-group>
+    </div>
+    <div class="settings-title">
+      Sort order after import
+    </div>
+    <div class="settings-body">
+      <div class="example-list"
+           cdkDropList
+           (cdkDropListDropped)="drop($event)">
+        <div class="example-box"
+             cdkDrag
+             *ngFor="let movie of container.classes">
+          <div class="example-custom-placeholder"
+               *cdkDragPlaceholder></div>
+          <img [src]="movie.icon"
+               style="margin-right: 10px" /> {{movie.name}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="settings-container">
+    <div class="settings-title">
+      Character:
+    </div>
+    <div class="settings-body">
+      <nz-form-item>
+        <input nz-input
+               formControlName="characterName"
+               placeholder="Your character name here" />
+      </nz-form-item>
+      <nz-form-item>
+        <nz-select style="width: 235px"
+                   nzShowSearch
+                   nzAllowClear
+                   formControlName="characterServer"
+                   nzPlaceHolder="Select server">
+          <nz-option-group *ngFor="let dc of datacenters | keyvalue"
+                           [nzLabel]="dc.key">
+            <nz-option *ngFor="let s of dc.value"
+                       [nzLabel]="s.server"
+                       [nzValue]="s.server+'|'+s.region"></nz-option>
+          </nz-option-group>
+        </nz-select>
+      </nz-form-item>
+    </div>
+  </div>
+</form>

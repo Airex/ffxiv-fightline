@@ -2,3 +2,11 @@
   display: flex;
   flex-direction: column;
 }
+
+.settings-filter {
+  margin-top: 2px;
+}
+
+.settings-header {
+  font-weight: bold;
+}

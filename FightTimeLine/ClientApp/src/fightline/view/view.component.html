@@ -1,31 +1,19 @@
-
-<button nz-button [nzDropdownMenu]="menu" nz-dropdown [nzTrigger]="'click'" [nzClickHide]="false"><i nz-icon nzType="eye" theme="twotone"></i>View</button>
+<button nz-button
+        [nzDropdownMenu]="menu"
+        nz-dropdown
+        [nzTrigger]="'click'"
+        [nzClickHide]="false">
+  <i nz-icon
+     nzType="eye"
+     theme="twotone"></i>View</button>
 <nz-dropdown-menu #menu="nzDropdownMenu">
-  <ul nz-menu class="noselect">
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.showDowntimesInPartyArea">Downtimes in party area</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.buffmap">Damage Buffs Heatmap</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.ogcdAsPoints">OGCD attacks as points</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.verticalBossAttacks">Vertical Boss Attacks</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.compactView">Compact View</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.highlightLoaded">Highlight Loaded</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.showAbilityAvailablity">Abilities Availability Map</label>
-    </li>
-    <li nz-menu-item>
-      <label nz-checkbox (ngModelChange)="updateView()" [(ngModel)]="presenterManager.view.colorfulDurations">Colorful Durations</label>
+  <ul nz-menu
+      class="noselect">
+    <li nz-menu-item
+        *ngFor="let f of options">
+      <label nz-checkbox
+             (ngModelChange)="updateView()"
+             [(ngModel)]="presenterManager.view[f.name]">{{f.desc}}</label>
     </li>
   </ul>
 </nz-dropdown-menu>
-

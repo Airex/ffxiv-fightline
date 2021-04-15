@@ -1,5 +1,4 @@
-import { Component, Inject, EventEmitter, ViewChild, Output, Input } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
+import { Component } from "@angular/core";
 import { IView } from "../../../core/Models"
 
 
@@ -10,14 +9,14 @@ import { IView } from "../../../core/Models"
 })
 export class SettingsViewComponent {
 
-  buffmap = false;
-  ogcdAsPoints = false;
-  showDowntimesInPartyArea = false;
-  verticalBossAttacks = false;
-  compactView = false;
-  highlightLoaded = false;
-  abilityAvailablity = false;
-  colorfulDurations = false;
+  public buffmap = false;
+  public ogcdAsPoints = false;
+  public showDowntimesInPartyArea = false;
+  public verticalBossAttacks = false;
+  public compactView = false;
+  public highlightLoaded = false;
+  public abilityAvailablity = false;
+  public colorfulDurations = false;
 
 
   public set(view: IView): void {

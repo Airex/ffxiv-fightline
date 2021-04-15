@@ -1,115 +1,37 @@
-
-  <div style="min-height: 560px;">
-    <nz-tabset [nzSelectedIndex]="1">
-      <nz-tab [nzDisabled]="true" [nzTitle]="header">
-        <ng-template #header>
-          <h3 style="color: black;margin: 0 0 0">Settings</h3>
-        </ng-template>
-      </nz-tab>
-      <nz-tab nzTitle="Main">
-        <form [formGroup]="mainForm" class="settings-tab">
-          <div class="settings-container">
-            <div class="settings-title">
-              Default filters
-            </div>
-            <div class="settings-body">
-              <settingsFilter #filter></settingsFilter>
-            </div>
-          </div>
-          <div class="settings-container">
-            <div class="settings-title">
-              Default view
-            </div>
-            <div class="settings-body">
-              <settingsView #view></settingsView>
-            </div>
-          </div>
-          <div class="settings-container">
-            <div class="settings-title">
-              Caches
-            </div>
-            <div class="settings-body">
-              <button nz-button nzType="danger" (click)="onClearCachesClick()">Clear Caches</button>
-            </div>
-          </div>
-        </form>
-      </nz-tab>
-      <nz-tab nzTitle="FFLogs" *ngIf="gameService.showImport">
-        <form [formGroup]="fflogsForm" class="settings-tab">
-          <div class="settings-container">
-            <div class="settings-title">
-              Source for Boss attacks:
-            </div>
-            <div class="settings-body">
-              <nz-radio-group class="example-radio-group" formControlName="bossAttacksSource">
-                <label nz-radio class="example-radio-button" nzValue="cast">Cast</label>
-                <label nz-radio class="example-radio-button" nzValue="damage">Damage</label>
-              </nz-radio-group>
-            </div>
-            <div class="settings-title">
-              Sort order after import
-            </div>
-            <div class="settings-body">
-              <div class="example-list" cdkDropList (cdkDropListDropped)="drop($event)">
-                <div class="example-box" cdkDrag *ngFor="let movie of container.classes">
-                  <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-                  <img [src]="movie.icon" style="margin-right: 10px" /> {{movie.name}}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="settings-container">
-            <div class="settings-title">
-              Character:
-            </div>
-            <div class="settings-body">
-              <nz-form-item>
-                <input nz-input formControlName="characterName" placeholder="Your character name here" />
-              </nz-form-item>
-              <nz-form-item>
-                <nz-select style="width: 235px"
-                           nzAllowClear
-                           formControlName="characterServer"
-                           nzPlaceHolder="Select a server">
-                  <nz-option-group *ngFor="let dc of datacenters | keyvalue" [nzLabel]="dc.key">
-                    <nz-option *ngFor="let s of dc.value" [nzLabel]="s.server" [nzValue]="s.server+'|'+s.region"></nz-option>
-                  </nz-option-group>
-                </nz-select>
-              </nz-form-item>
-            </div>
-          </div>
-        </form>
-      </nz-tab>
-      <nz-tab nzTitle="Teamwork">
-        <form [formGroup]="teamworkForm" class="settings-tab">
-          <div class="settings-container">
-            <div class="settings-title">
-              Display name:
-            </div>
-            <div class="settings-body">
-              <input nz-input formControlName="displayName" placeholder="Your preffered name here" />
-            </div>
-          </div>
-        </form>
-      </nz-tab>
-      <nz-tab nzTitle="Tableview">
-        <form [formGroup]="tableViewForm" class="settings-tab"></form>
-      </nz-tab>
-      <nz-tab nzTitle="Colors">
-        <form [formGroup]="colorsForm" nz-form>
-          <nz-form-item *ngFor="let c of colors" style="margin-bottom: 0">
-            <nz-form-label [nzSpan]="6" [nzFor]="c.name">{{colorDisplayNames[c.name]}}</nz-form-label>
-            <nz-form-control [nzSpan]="14">
-              <input [name]="c.name" style="height: 24px;cursor: pointer" [(colorPicker)]="c.color" [style.background]="c.color" />
-            </nz-form-control>
-          </nz-form-item>
-        </form>
-      </nz-tab>
-    </nz-tabset>
-    <div *nzModalFooter>
-      <button nz-button (click)="onYesClick()" cdkFocusInitial>Save</button>
-      <button nz-button nzType="primary" (click)="onNoClick()">Cancel</button>
-    </div>
+<div style="min-height: 560px;">
+  <nz-tabset [nzSelectedIndex]="1">
+    <nz-tab [nzDisabled]="true"
+            [nzTitle]="header">
+      <ng-template #header>
+        <h3 style="color: black;margin: 0 0 0">Settings</h3>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Main">
+      <settingsMainTab ></settingsMainTab>
+    </nz-tab>
+    <nz-tab nzTitle="FFLogs"
+            *ngIf="gameService.showImport">
+      <settingsDialogFflogsTab ></settingsDialogFflogsTab>
+    </nz-tab>
+    <nz-tab nzTitle="Presets">
+      <settingsDialogPresetsTab ></settingsDialogPresetsTab>
+    </nz-tab>
+    <nz-tab nzTitle="Teamwork">
+      <settingsDialogTeamworkTab ></settingsDialogTeamworkTab>
+    </nz-tab>
+    <nz-tab nzTitle="Tableview">
+      <settingsDialogTableviewTab ></settingsDialogTableviewTab>
+    </nz-tab>
+    <nz-tab nzTitle="Colors">
+      <settingsColorsTab ></settingsColorsTab>
+    </nz-tab>
+  </nz-tabset>
+  <div *nzModalFooter>
+    <button nz-button
+            (click)="onYesClick()"
+            cdkFocusInitial>Save</button>
+    <button nz-button
+            nzType="primary"
+            (click)="onNoClick()">Cancel</button>
   </div>
-
-
+</div>

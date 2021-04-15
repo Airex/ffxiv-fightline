@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Output } from "@angular/core";
-import { IAbilityFilter } from "src/core/Models";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { IAbilityFilter, IPresetTemplate } from "src/core/Models";
+import { LocalStorageService } from "src/services";
 import { VisStorageService } from "src/services/VisStorageService";
 import { PresenterManager } from "../../core/PresentationManager"
 
@@ -9,19 +10,25 @@ import { PresenterManager } from "../../core/PresentationManager"
   templateUrl: "./filter.component.html",
   styleUrls: ["./filter.component.css"]
 })
-export class FilterComponent {
+export class FilterComponent implements OnInit {
   public presenterManager: PresenterManager;
   tags: { text: string, checked: boolean }[];
   sources: { text: string, checked: boolean }[];
   checkAll = true;
+  presets = [];
+  currentPreset;
 
   @Output() public changed: EventEmitter<string> = new EventEmitter();
 
   constructor(
-    private visStorage: VisStorageService
-  ){
+    private visStorage: VisStorageService,
+    private storage: LocalStorageService
+  ) {
     this.presenterManager = this.visStorage.presenter;
     this.updateCheckAll();
+  }
+  ngOnInit(): void {
+    this.presets = this.storage.getObject("presets") || [];
   }
 
   filters = Object.entries(<{ [name in keyof IAbilityFilter]: [number, string] }>{
@@ -56,7 +63,7 @@ export class FilterComponent {
     });
   }
 
-  updateCheckAll(){
+  updateCheckAll() {
     this.checkAll = undefined;
     if (Object.values(this.presenterManager.filter.abilities).every(e => e))
       this.checkAll = true;
@@ -77,6 +84,33 @@ export class FilterComponent {
     setTimeout(() => {
       this.changed.emit(source);
     });
+
+  }
+
+  addPreset(input: HTMLInputElement) {
+    if (input.value?.trim()) {
+      const template = this.presenterManager.generatePresetTemplate(this.visStorage.holders);
+      this.presets = [...this.presets, {
+        name: input.value,
+        template
+      }];
+
+      this.storage.setObject("presets", this.presets);
+    }
+  }
+
+  presetChanged(ev: any) {
+    if (ev) {
+      const template = ev.template as IPresetTemplate;
+      this.presenterManager.loadTemplate(template, this.visStorage.holders);
+      const abs = this.visStorage.holders.abilities.getAll();
+      const jobs = this.visStorage.holders.jobs.getAll();
+      const items = this.visStorage.holders.itemUsages.getAll();
+      this.visStorage.holders.abilities.applyFilter(() => true);
+      this.visStorage.holders.abilities.update(abs.map(ab => { ab.applyData(); return ab; }))
+      this.visStorage.holders.jobs.update(jobs.map(j => { j.applyData(); return j; }))
+      this.visStorage.holders.itemUsages.update(items.map(i => { i.applyData(); return i; }))
+    }
 
   }
 }

@@ -260,9 +260,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
                 const settings = this.settingsService.load();
 
                 this.presenterManager.setSettings(settings);
-
                 this.fightLineController.importFromFFLogs(code + ":" + enc, parser);               
-
                 this.planArea.setInitialWindow(this.fightLineController.getLatestAbilityUsageTime(), 2);
                 this.planArea.refresh();
 

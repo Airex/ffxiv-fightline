@@ -335,7 +335,7 @@ export interface IView {
   colorfulDurations: boolean;
 }
 
-export const defaultView: IView = {
+export const defaultView: () => IView = () => ({
   buffmap: false,
   ogcdAsPoints: false,
   showDowntimesInPartyArea: false,
@@ -344,7 +344,7 @@ export const defaultView: IView = {
   highlightLoaded: false,
   showAbilityAvailablity: false,
   colorfulDurations: false
-};
+});
 
 export interface ITools {
   downtime: boolean;
@@ -365,10 +365,10 @@ export interface IPhase {
 }
 
 export interface IStorage {
-  setString(key: string, value: string): void ;
+  setString(key: string, value: string): void;
   getString(key: string): string;
-  setObject(key: string, value: object): void ;
-  getObject<T>(key: string): T ;
+  setObject(key: string, value: object): void;
+  getObject<T>(key: string): T;
 }
 
 export interface IPresenterData {
@@ -377,4 +377,10 @@ export interface IPresenterData {
   filter: IFilter;
   view: IView;
   jobFilter(jobId: string): JobFilter;
+}
+
+export interface IPresetTemplate {
+  filter: IFilter;
+  view: IView;
+  jobFilters: { [job: string]: JobFilter }
 }

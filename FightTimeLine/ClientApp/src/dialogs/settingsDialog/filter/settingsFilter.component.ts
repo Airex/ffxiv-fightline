@@ -8,20 +8,20 @@ import { IFilter, DefaultTags } from "../../../core/Models"
 })
 export class SettingsFilterComponent {
 
-  selfDefensive = true;
-  partyDefensive = true;
-  selfDamageBuff = true;
-  partyDamageBuff = true;
-  damage = true;
-  healing = true;
-  healingBuff = true;
-  utility = true;
-  enmity = true;
-  pet = true;
-  unused = true;
-  isMagical = true;
-  isPhysical = true;
-  isUnaspected = true;
+  public selfDefensive = true;
+  public partyDefensive = true;
+  public selfDamageBuff = true;
+  public partyDamageBuff = true;
+  public damage = true;
+  public healing = true;
+  public healingBuff = true;
+  public utility = true;
+  public enmity = true;
+  public pet = true;
+  public unused = true;
+  public isMagical = true;
+  public isPhysical = true;
+  public isUnaspected = true;
 
   public set(filter: IFilter): void {
     this.selfDefensive = filter.abilities.selfDefence;
