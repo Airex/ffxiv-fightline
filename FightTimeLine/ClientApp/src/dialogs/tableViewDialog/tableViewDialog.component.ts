@@ -70,11 +70,12 @@ export class TableViewDialog implements OnInit {
     const cellFilter = this.filterCell();
     this.filtered = this.set.rows.filter(row => {
       const visible = this.set.columns.every(c => {
-        return !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c)
+        const v =  !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c)        
+        return v;
       });
 
       if (visible)
-        row.cells.forEach(cell => cellFilter(cell));
+        row.cells.forEach((cell, index) => cellFilter(cell,this.filterData[this.set.columns[index].name]));
 
       return visible;
     });
@@ -83,9 +84,13 @@ export class TableViewDialog implements OnInit {
 
   filterCell() {
     let unique = new Set();
-    const fn = (cell: IExportCell) => {
-      if (cell.disableUnique) return;
-      cell.items.forEach(it => {
+    const fn = (cell: IExportCell, data: string[]) => {      
+      cell.items.forEach(it => {  
+        if (it.filterFn && data && !it.filterFn(data)){
+          it.visible = false;
+          return;
+        }
+        if (cell.disableUnique) return;
         if (!it.refId) return;
         if (unique.has(it.refId)) {
           it.visible = false;

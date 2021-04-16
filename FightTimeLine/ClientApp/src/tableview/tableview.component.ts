@@ -136,13 +136,13 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   filterCell() {
     let unique = new Set();
-    const fn = (cell: IExportCell, data: string[]) => {
-      if (cell.disableUnique) return;
+    const fn = (cell: IExportCell, data: string[]) => {      
       cell.items.forEach(it => {  
         if (it.filterFn && data && !it.filterFn(data)){
           it.visible = false;
           return;
         }
+        if (cell.disableUnique) return;
         if (!it.refId) return;
         if (unique.has(it.refId)) {
           it.visible = false;
