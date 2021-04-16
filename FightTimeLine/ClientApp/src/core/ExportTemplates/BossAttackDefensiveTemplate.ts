@@ -1,6 +1,7 @@
 import { ExportTemplate } from "../BaseExportTemplate";
 import { ExportAbility, ExportData, ExportJob, IExportColumn, IExportItem, IExportResultSet, IExportRow } from "../ExportModels";
 import { SettingsEnum } from "../Jobs/FFXIV/shared";
+import { AbilityType } from "../Models";
 import * as PresentationManager from "../PresentationManager";
 import { Utils } from "../Utils";
 
@@ -54,32 +55,42 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
               disableUnique: true
             }
           ),
-          ...jobs.map(job => this.items(
-            data.data.abilities
-              .map(ability => {
-                const condition = (coverAll || !used.has(ability.id)) &&
-                  ability.job === job.id &&
-                  this.isDefenceAbility(ability) &&
-                  this.isOffsetInRange(attack.offset, ability.start, this.offsetFromDuration(ability.start, ability.duration))
+          ...jobs.map(job => this.items(data.data.abilities
+            .reduce((acc, ability) => {
+              const condition = (coverAll || !used.has(ability.id)) &&
+                ability.job === job.id &&
+                this.isDefenceAbility(ability) &&
+                this.isOffsetInRange(attack.offset, ability.start, this.offsetFromDuration(ability.start, ability.duration))
 
-                if (!condition) return null;
+              if (!condition) return acc;
 
-                const result = <IExportItem>{
-                  text: ability.ability,
-                  icon: ability.icon,
-                  refId: ability.id,
-                  targetIcon: this.buildTargetIcon(ability, jobs),
-                  usageOffset: Utils.formatTime(new Date(Utils.getDateFromOffset(ability.start).getTime() - Utils.getDateFromOffset(attack.offset).getTime())),
-                  clone: used.has(ability.id)
-                };
+              const result = <IExportItem>{
+                text: ability.ability,
+                icon: ability.icon,
+                refId: ability.id,
+                targetIcon: this.buildTargetIcon(ability, jobs),
+                usageOffset: Utils.formatTime(new Date(Utils.getDateFromOffset(ability.start).getTime() - Utils.getDateFromOffset(attack.offset).getTime())),
+                clone: used.has(ability.id),
+                filterFn: (a) =>
+                  (
+                    (ability.type & AbilityType.SelfDefense) === AbilityType.SelfDefense ||
+                    (ability.type & AbilityType.TargetDefense) === AbilityType.TargetDefense ||
+                    (ability.type & AbilityType.SelfShield) === AbilityType.SelfShield
+                  ) && a.indexOf("solo") >= 0 ||
+                  (
+                    (ability.type & AbilityType.PartyDefense) === AbilityType.PartyDefense ||
+                    (ability.type & AbilityType.PartyShield) === AbilityType.PartyShield
+                  ) && a.indexOf("party") >= 0
+              };
 
-                if (!used.has(ability.id))
-                  used.add(ability.id);
+              if (!used.has(ability.id))
+                used.add(ability.id);
 
-                return result;
-              })
-              .filter(a => !!a)
-            , {
+              acc.push(result);
+
+              return acc;
+            }, []),
+            {
               disableUnique: coverAll
             }))
         ],
@@ -121,7 +132,23 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
         width: "65px"
 
       },
-      ...jobs.map(it => <IExportColumn>{ text: it.name, icon: it.icon, refId: it.id, cursor: 'pointer', width: "auto" }),
+      ...jobs.map(it => <IExportColumn>{
+        text: it.name,
+        name: it.id,
+        icon: it.icon,
+        refId: it.id,
+        cursor: 'pointer',
+        width: "auto",
+        listOfFilter: [{
+          text: "solo",
+          value: "solo",
+          byDefault: true
+        }, {
+          text: "party",
+          value: "party",
+          byDefault: true
+        }]       
+      }),
       // {          
       //   text: "Description",          
       // },

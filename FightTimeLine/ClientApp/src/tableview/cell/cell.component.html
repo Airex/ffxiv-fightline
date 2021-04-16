@@ -1,6 +1,6 @@
 <ng-container *ngFor="let d of input.items">
   <nz-tag [nzColor]="d.color"
-          [class.clone]="d.clone"
+          [class.clone]="d.clone"          
           (click)="select(d.refId, $event)"
           *ngIf="d.visible && d.text">
     <div style="margin: 0 2px 1px 2px">

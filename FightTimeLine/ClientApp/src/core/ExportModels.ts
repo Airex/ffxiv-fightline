@@ -78,7 +78,7 @@ export interface IExportColumn {
   refId?: string;
   cursor?: string;
   listOfFilter?: { text: string; value: any; byDefault?: boolean }[];
-  filterFn?: (a: any, data: any, c?:IExportColumn) => boolean;
+  filterFn?: (a: any, data: IExportRow, c?:IExportColumn) => boolean;
   name?: string;
   width?: string | null
 }
@@ -105,5 +105,6 @@ export interface IExportItem {
   visible?: boolean;
   targetIcon?: string;
   usageOffset?: string;
-  clone?: boolean;
+  clone?: boolean;  
+  filterFn?:(a:string[]) => boolean;
 }

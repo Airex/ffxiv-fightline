@@ -81,7 +81,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService) {
   }
 
-  
+
 
   home() {
     this.router.navigateByUrl("/");
@@ -113,7 +113,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterData = {};
+  filterData: {[name:string]:string[]} = {};
 
   filterChange(event: any, column: string) {
     if (column) {
@@ -122,11 +122,12 @@ export class TableViewComponent implements OnInit, OnDestroy {
     const cellFilter = this.filterCell();
     this.filtered = this.set.rows.filter(row => {
       const visible = this.set.columns.every(c => {
-        return !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c)
+        const v =  !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c)        
+        return v;
       });
 
       if (visible)
-        row.cells.forEach(cell => cellFilter(cell));
+        row.cells.forEach((cell, index) => cellFilter(cell,this.filterData[this.set.columns[index].name]));
 
       return visible;
     });
@@ -135,9 +136,13 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   filterCell() {
     let unique = new Set();
-    const fn = (cell: IExportCell) => {
+    const fn = (cell: IExportCell, data: string[]) => {
       if (cell.disableUnique) return;
-      cell.items.forEach(it => {
+      cell.items.forEach(it => {  
+        if (it.filterFn && data && !it.filterFn(data)){
+          it.visible = false;
+          return;
+        }
         if (!it.refId) return;
         if (unique.has(it.refId)) {
           it.visible = false;
@@ -202,14 +207,12 @@ export class TableViewComponent implements OnInit, OnDestroy {
             const loadedData = fight.data && JSON.parse(fight.data) as IFightSerializeData;
             this.fightLineController.loadFight(fight, loadedData, value.map(cmd => JSON.parse(cmd.data)));
             this.connectToSession()
-              .then(() => {
-                this.loadTable();
-              })
               .finally(() => {
+                this.loadTable();
                 ref.close();
               });
           }, error => {
-            console.log(error);
+            console.error(error);
             ref.close();
             this.notification.error("Unable to load data");
           });
@@ -218,7 +221,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
           this.notification.showUnableToLoadFight(() => { });
         }
       }, (error) => {
-        console.log(error);
+        console.error(error);
         this.notification.showUnableToLoadFight(() => { });
         ref.close();
       });
@@ -228,7 +231,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   private loadTable() {
     const serializer = this.fightLineController.createSerializer()
     const exported = serializer.serializeForExport();
-    this.set = this.templates[this.template.toLowerCase()].build(exported, this.presenterManager) as IExportResultSet;
+    this.set = this.templates[this.template.toLowerCase()].build(exported, this.presenterManager);
     this.filterChange(null, null);
   }
 
