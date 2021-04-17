@@ -9,6 +9,8 @@ import { BossAttackDefensiveTemplate } from "../../core/ExportTemplates/BossAtta
 import { AuthService, GoogleLoginProvider, SocialUser } from "angularx-social-login";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { ExportData } from "src/core/ExportModels";
+import { gameServiceToken } from "src/services/game.service-provider";
+import { IGameService } from "src/services/game.service-interface";
 
 @Component({
   selector: "exportToTableDialog",
@@ -24,6 +26,7 @@ export class ExportToTableDialog implements OnInit, AfterViewInit  {
     private authService: AuthService,
     private service: SpreadSheetsService,
     private notification: ScreenNotificationsService,
+    @Inject(gameServiceToken) private gameService: IGameService,
     public dialogRef:NzModalRef,
     @Inject("GOOGLE_API_CLIENT_KEY") public apiKey: string) {
   }
@@ -67,7 +70,7 @@ export class ExportToTableDialog implements OnInit, AfterViewInit  {
   export() {
     if (!this.exportTemplatesControl.value) return;
     this.service.create(this.user.authToken,
-        this.templates.find(it => it.name === this.exportTemplatesControl.value).build(this.data, null))
+        this.templates.find(it => it.name === this.exportTemplatesControl.value).build(this.data, null, this.gameService.jobRegistry))
       .subscribe(ev => {
           this.url = ev.spreadsheetUrl;
           console.log(ev);

@@ -68,6 +68,10 @@
             <li nz-menu-item
                 (click)="onTable('defencecover')">Defence (cover)</li>
             <li nz-menu-item
+                (click)="onTable('defenceaf')">Defence AF</li>
+            <li nz-menu-item
+                (click)="onTable('defencecoveraf')">Defence AF (cover)</li>
+            <li nz-menu-item
                 (click)="onTable('descriptive')">Timeline</li>
           </ul>
         </li>
@@ -134,7 +138,7 @@
                     [name]="user.name"
                     [id]="user.id"
                     [ngStyle]="{'margin-right':'2px'}"></avatarWithPing>
-  </span> 
+  </span>
 
   <span class="example-spacer"></span>
 

@@ -59,8 +59,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
   pagesize = Number.MAX_VALUE;
 
   templates: { [name: string]: ExportTemplate } = {
-    "defence": new BossAttackDefensiveTemplate(),
-    "defencecover": new BossAttackDefensiveTemplate(true),
+    "defence": new BossAttackDefensiveTemplate(false, false),
+    "defencecover": new BossAttackDefensiveTemplate(true, false),
+    "defenceaf": new BossAttackDefensiveTemplate(false, true),
+    "defencecoveraf": new BossAttackDefensiveTemplate(true, true),
     "onesecond": new EachRowOneSecondTemplate(),
     "descriptive": new DescriptiveTemplate()
   };
@@ -233,7 +235,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   private loadTable() {
     const serializer = this.fightLineController.createSerializer()
     const exported = serializer.serializeForExport();
-    this.set = this.templates[this.template.toLowerCase()].build(exported, this.presenterManager);
+    this.set = this.templates[this.template.toLowerCase()].build(exported, this.presenterManager, this.gameService.jobRegistry);
     this.filterChange(null, null);
   }
 

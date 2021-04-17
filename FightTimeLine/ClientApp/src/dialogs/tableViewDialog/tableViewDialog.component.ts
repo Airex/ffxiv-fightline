@@ -6,6 +6,8 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
 import { ExportData, IExportCell, IExportColumn, IExportResultSet, IExportRow } from "src/core/ExportModels";
 import { PresenterManager } from "src/core/PresentationManager";
+import { gameServiceToken } from "src/services/game.service-provider";
+import { IGameService } from "src/services/game.service-interface";
 
 
 @Component({
@@ -25,7 +27,7 @@ export class TableViewDialog implements OnInit {
   presenterManager = new PresenterManager();
 
   selectedValue = null;
-  
+
   set: IExportResultSet = {
     rows: [],
     columns: [],
@@ -33,15 +35,16 @@ export class TableViewDialog implements OnInit {
     filterByFirstEntry: false
   };
   loading = false;
-  templates: ExportTemplate[] = [    
-    new EachRowOneSecondTemplate(), 
+  templates: ExportTemplate[] = [
+    new EachRowOneSecondTemplate(),
     new BossAttackDefensiveTemplate(),
     new BossAttackDefensiveTemplate(true),
     new DescriptiveTemplate()
   ];
 
   constructor(
-    public dialogRef: NzModalRef
+    public dialogRef: NzModalRef,
+    @Inject(gameServiceToken) private gameService: IGameService,
   ) {
   }
 
@@ -50,7 +53,7 @@ export class TableViewDialog implements OnInit {
 
     this.loading = true;
     setTimeout(() => {
-      const d = this.templates.find(it => it.name === this.selectedValue).build(this.data, this.presenterManager);
+      const d = this.templates.find(it => it.name === this.selectedValue).build(this.data, this.presenterManager, this.gameService.jobRegistry);
       this.set = d;
       this.filterChange(null, null);
       this.loading = false;
@@ -58,7 +61,7 @@ export class TableViewDialog implements OnInit {
     )
 
   }
-  
+
   filtered: IExportRow[] = [];
 
   filterData = {};
@@ -70,12 +73,12 @@ export class TableViewDialog implements OnInit {
     const cellFilter = this.filterCell();
     this.filtered = this.set.rows.filter(row => {
       const visible = this.set.columns.every(c => {
-        const v =  !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c)        
+        const v = !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c)
         return v;
       });
 
       if (visible)
-        row.cells.forEach((cell, index) => cellFilter(cell,this.filterData[this.set.columns[index].name]));
+        row.cells.forEach((cell, index) => cellFilter(cell, this.filterData[this.set.columns[index].name]));
 
       return visible;
     });
@@ -84,19 +87,22 @@ export class TableViewDialog implements OnInit {
 
   filterCell() {
     let unique = new Set();
-    const fn = (cell: IExportCell, data: string[]) => {      
-      cell.items.forEach(it => {  
-        if (it.filterFn && data && !it.filterFn(data)){
+    const fn = (cell: IExportCell, data: string[]) => {
+      cell.items.forEach(it => {
+        it.visible = true
+        if (it.filterFn && data && !it.filterFn(data)) {
           it.visible = false;
           return;
         }
-        if (cell.disableUnique) return;
-        if (!it.refId) return;
-        if (unique.has(it.refId)) {
-          it.visible = false;
-        } else {
-          it.visible = true;
-          unique.add(it.refId)
+        else {
+          if (cell.disableUnique) return;
+          if (!it.refId) return;
+          if (unique.has(it.refId)) {
+            it.visible = false;
+          } else {
+            it.visible = true;
+            unique.add(it.refId)
+          }
         }
       });
     };

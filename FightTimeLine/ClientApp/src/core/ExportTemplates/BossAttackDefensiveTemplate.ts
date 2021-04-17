@@ -1,3 +1,4 @@
+import { IJobRegistryService } from "src/services/jobregistry.service-interface";
 import { ExportTemplate } from "../BaseExportTemplate";
 import { ExportAbility, ExportData, ExportJob, IExportColumn, IExportItem, IExportResultSet, IExportRow } from "../ExportModels";
 import { SettingsEnum } from "../Jobs/FFXIV/shared";
@@ -6,7 +7,7 @@ import * as PresentationManager from "../PresentationManager";
 import { Utils } from "../Utils";
 
 export class BossAttackDefensiveTemplate extends ExportTemplate {
-  constructor(private coverAll: boolean = false) {
+  constructor(private coverAll: boolean = false, private filterByAbility: boolean = true) {
     super();
   }
 
@@ -18,7 +19,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
     return (it.type === 1 ? "red" : (it.type === 2 ? "blue" : ""));
   }
 
-  build(data: ExportData, presenter: PresentationManager.PresenterManager): IExportResultSet {
+  build(data: ExportData, presenter: PresentationManager.PresenterManager, jobRegistry: IJobRegistryService): IExportResultSet {
     const coverAll = this.coverAll;
     const used = new Set<string>();
     const jobs = data.data.jobs.sort((a, b) => a.role - b.role);
@@ -59,7 +60,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
             .reduce((acc, ability) => {
               const condition = (coverAll || !used.has(ability.id)) &&
                 ability.job === job.id &&
-                this.isDefenceAbility(ability) &&
+                this.isDefenceAbility(ability.type) &&
                 this.isOffsetInRange(attack.offset, ability.start, this.offsetFromDuration(ability.start, ability.duration))
 
               if (!condition) return acc;
@@ -71,16 +72,21 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
                 targetIcon: this.buildTargetIcon(ability, jobs),
                 usageOffset: Utils.formatTime(new Date(Utils.getDateFromOffset(ability.start).getTime() - Utils.getDateFromOffset(attack.offset).getTime())),
                 clone: used.has(ability.id),
-                filterFn: (a) =>
-                  (
-                    (ability.type & AbilityType.SelfDefense) === AbilityType.SelfDefense ||
-                    (ability.type & AbilityType.TargetDefense) === AbilityType.TargetDefense ||
-                    (ability.type & AbilityType.SelfShield) === AbilityType.SelfShield
-                  ) && a.indexOf("solo") >= 0 ||
-                  (
-                    (ability.type & AbilityType.PartyDefense) === AbilityType.PartyDefense ||
-                    (ability.type & AbilityType.PartyShield) === AbilityType.PartyShield
-                  ) && a.indexOf("party") >= 0
+                filterFn: (a) => {
+                  if (!this.filterByAbility)
+                    return (
+                      (ability.type & AbilityType.SelfDefense) === AbilityType.SelfDefense ||
+                      (ability.type & AbilityType.TargetDefense) === AbilityType.TargetDefense ||
+                      (ability.type & AbilityType.SelfShield) === AbilityType.SelfShield
+                    ) && a.indexOf("solo") >= 0 ||
+                      (
+                        (ability.type & AbilityType.PartyDefense) === AbilityType.PartyDefense ||
+                        (ability.type & AbilityType.PartyShield) === AbilityType.PartyShield
+                      ) && a.indexOf("party") >= 0
+                  else {
+                    return a.indexOf(ability.ability) >=0
+                  }
+                }
               };
 
               if (!used.has(ability.id))
@@ -132,22 +138,33 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
         width: "65px"
 
       },
-      ...jobs.map(it => <IExportColumn>{
-        text: it.name,
-        name: it.id,
-        icon: it.icon,
-        refId: it.id,
-        cursor: 'pointer',
-        width: "auto",
-        listOfFilter: [{
-          text: "solo",
-          value: "solo",
-          byDefault: true
-        }, {
-          text: "party",
-          value: "party",
-          byDefault: true
-        }]       
+      ...jobs.map(it => {
+
+        const filters = !this.filterByAbility
+          ? [{
+            text: "solo",
+            value: "solo",
+            byDefault: true
+          }, {
+            text: "party",
+            value: "party",
+            byDefault: true
+          }]
+          : jobRegistry.getJob(it.name).abilities.filter(jab=>this.isDefenceAbility(jab.abilityType)).map(jab => ({
+            text: jab.name,
+            value: jab.name,
+            byDefault: true
+          }));
+
+        return <IExportColumn>{
+          text: it.name,
+          name: it.id,
+          icon: it.icon,
+          refId: it.id,
+          cursor: 'pointer',
+          width: "auto",
+          listOfFilter: filters
+        }
       }),
       // {          
       //   text: "Description",          
@@ -169,12 +186,12 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
     return job?.icon;
   }
 
-  private isDefenceAbility(a: any) {
-    return ((a.type & 1) === 1) ||
-      ((a.type & 256) === 256) ||
-      ((a.type & 1024) === 1024) ||
-      ((a.type & 4096) === 4096) ||
-      ((a.type & 2048) === 2048)
+  private isDefenceAbility(type: AbilityType) {
+    return ((type & 1) === 1) ||
+      ((type & 256) === 256) ||
+      ((type & 1024) === 1024) ||
+      ((type & 4096) === 4096) ||
+      ((type & 2048) === 2048)
   }
 }
 
