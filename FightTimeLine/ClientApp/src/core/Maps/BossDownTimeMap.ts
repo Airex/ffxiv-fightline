@@ -53,7 +53,7 @@ export class BossDownTimeMap extends BaseMap<string, DataItem, IBossDownTimeMapD
       start: start < end ? start : end,
       end: end < start ? start : end,
       id: id,
-      content: "",
+      content: this.data.comment || "",
       type: "background",
       style: "background-color:" + color,
       className: "downtime"

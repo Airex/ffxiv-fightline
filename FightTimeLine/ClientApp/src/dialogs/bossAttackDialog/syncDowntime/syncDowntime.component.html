@@ -2,7 +2,7 @@
     <nz-content style="padding: 4px;">
       <form nz-form>
         <nz-form-item>
-          <nz-form-label [nzSpan]="6" nzFor="predowntime">Pre Downtime</nz-form-label>
+          <nz-form-label [nzSpan]="6" nzFor="predowntime">Pre Phase</nz-form-label>
           <nz-form-control [nzSpan]="14">
             <nz-select name="predowntime" style="width: 90%;" [(ngModel)]="selectedPre" nzPlaceHolder="Select downtime to connect">
               <nz-option nzValue="" nzLabel="None"></nz-option>
@@ -14,7 +14,7 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
-          <nz-form-label [nzSpan]="6" nzFor="downtime">Downtime</nz-form-label>
+          <nz-form-label [nzSpan]="6" nzFor="downtime">Phase</nz-form-label>
           <nz-form-control [nzSpan]="14">
             <nz-select name="downtime" style="width: 90%;" [(ngModel)]="selected" nzPlaceHolder="Select downtime to connect">
               <nz-option nzValue="" nzLabel="None"></nz-option>

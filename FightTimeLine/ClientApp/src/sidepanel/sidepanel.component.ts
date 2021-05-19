@@ -40,7 +40,7 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     private componentFactoryResolver: ComponentFactoryResolver,
     private appRef: ApplicationRef
   ) {
-    this.holders = visStorage.holders;
+    this.holders = this.visStorage.holders;
   }
 
   items: BaseHolder.IForSidePanel[];
@@ -103,10 +103,12 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  createInjector(dataToPass: SidepanelParams): PortalInjector {
-    const injectorTokens = new WeakMap();
-    injectorTokens.set(SIDEPANEL_DATA, dataToPass);
-    return new PortalInjector(this.injector, injectorTokens);
+  createInjector(dataToPass: SidepanelParams): Injector {    
+    return Injector.create({
+      providers:[{provide:SIDEPANEL_DATA, useValue:dataToPass}],
+      parent: this.injector,
+      name: "Sidepanel injector"
+    });    
   }
 
   ngAfterViewInit(): void {

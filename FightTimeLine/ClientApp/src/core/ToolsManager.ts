@@ -89,7 +89,7 @@ export class DowntimeTool implements ITool {
     this.modeChanged(this.isInBossDownTimeMode);
   }
 
-  name = "Downtime";
+  name = "Phases";
 }
 
 export class StickyAttacksTool implements ITool {

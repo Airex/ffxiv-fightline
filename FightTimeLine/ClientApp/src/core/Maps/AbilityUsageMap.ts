@@ -69,7 +69,7 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
     const start = data.start;
     const end = new Date(start.valueOf() as number + ability.ability.cooldown * 1000);
 
-    return <DataItem>{
+    let item = <DataItem>{
       id: id,
       start: start,
       end: end,
@@ -79,12 +79,15 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
         compact: ability.isCompact || ability.job.isCompact || this.presenter.view.compactView,
         loaded: data.showLoaded && data.loaded
       }),
-      content: "",
+      content: "",      
       subgroup: "sg" + ability.id,
       selectable: true,
       type: data.ogcdAsPoints || !!ability.ability.charges ? "point" : "range",
       title: `<img class='tooltipAbilityIcon' src='${ability.ability.icon}'/><span>${Utils.formatTime(start)} - ${Utils.formatTime(end)}</span>`
     };
+
+    (item as any).limitSize=false;
+    return item;
   }
 
   get loaded(): boolean {

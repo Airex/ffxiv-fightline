@@ -60,7 +60,7 @@
     <nz-tab nzTitle="FFLogs Sync" *ngIf="gameService.showImport">
       <syncSettings #syncSettings [data]="data"></syncSettings>
     </nz-tab>
-    <nz-tab nzTitle="Downtime Sync" *ngIf="gameService.showImport">
+    <nz-tab nzTitle="Phases Sync" *ngIf="gameService.showImport">
       <syncDowntime #syncDowntime [data]="data"></syncDowntime>
     </nz-tab>
   </nz-tabset>

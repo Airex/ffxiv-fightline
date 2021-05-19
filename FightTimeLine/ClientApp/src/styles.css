@@ -164,6 +164,11 @@ html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-con
   font-size: 10px;
 }
 
+.downtime .vis-item-content {
+  bottom: 0px !important;
+  font-size: 12px;
+  font-style: italic;
+}
 
 .vis-item.targets {
   background-color: rgb(243, 71, 71) !important;

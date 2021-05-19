@@ -135,7 +135,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
-
   filterCell() {
     let unique = new Set();
     const fn = (cell: IExportCell, data: string[]) => {
@@ -295,6 +294,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy(): void {
-
+      this.dispatcher.destroy();
   }
 }

@@ -104,6 +104,7 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
 
   resetJobFilter(name?: string) {
     //console.log("reset job filter requested");
+    this.jobFilter ||= {};
     if (name) {
       Object.assign(this.jobFilter,
         {
@@ -131,6 +132,7 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
   }
 
   updateFilter(data: boolean, prop: string): void {
+    this.jobFilter ||= {};
     this.jobFilter[prop] = data;
     this.dispatcher.dispatch({
       name: "Update Filter"
