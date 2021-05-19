@@ -25,11 +25,11 @@
             nzColor="green">{{t}}</nz-tag>
   </nz-space-item>
   <nz-space-item>
-    <span *ngIf="it.attack.description.indexOf('\n') === -1"
+    <span *ngIf="it.attack.description && it.attack.description.indexOf('\n') === -1"
           style="white-space: pre-line;"
           class="description">{{it.attack.description}}</span>
     <sidepanel-area header="Description"
-                    *ngIf="it.attack.description.indexOf('\n') >=0">
+                    *ngIf="it.attack.description && it.attack.description.indexOf('\n') >=0">
       <span style="white-space: pre-line;"
             class="description">{{it.attack.description}}</span>
     </sidepanel-area>
