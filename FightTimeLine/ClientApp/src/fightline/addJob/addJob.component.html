@@ -1,0 +1,32 @@
+<button nz-button
+        nz-popover
+        nzType="primary"        
+        (nzPopoverVisibleChange)="change($event)"
+        nzPopoverTrigger="click"
+        nzPopoverPlacement="bottomLeft"
+        [nzPopoverVisible]="visible"
+        [nzPopoverContent]="contentTemplate">
+  <span>
+    Add Job
+  </span>
+</button>
+
+<ng-template #contentTemplate>
+  <div nz-row
+       style="width: 520px;"
+       class="noselect">
+    <div nz-col
+         *ngFor="let role of roles">
+      <ul nz-menu
+          class="noselect">
+        <li nz-menu-item
+            *ngFor="let c of jobs | jobrole:role"
+            (click)="onAddJob(c.name)">
+          <img [src]="c.icon"
+               style="height: 30px; margin-right: 6px; width: 30px;" />
+          <span style="font-weight: bold">{{c.name}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</ng-template>

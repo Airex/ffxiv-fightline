@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewChildren, QueryList, HostListener, Input, Output, EventEmitter, Inject } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, OnInit, OnDestroy, ViewChild, ViewChildren, QueryList, Input, Output, EventEmitter, Inject } from "@angular/core";
+import { Router } from "@angular/router";
 import { IJob, IFilter, IView } from "../core/Models";
 import { DialogService } from "../services/index"
 import { FilterComponent } from "../fightline/filter/filter.component"
@@ -13,7 +13,6 @@ import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
 import * as _ from "lodash";
 import { ToolsManager } from "../core/ToolsManager";
-import { PresenterManager } from "../core/PresentationManager";
 import { VisStorageService } from "src/services/VisStorageService";
 
 @Component({
@@ -46,8 +45,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   @Input("fraction")
   set fraction(value: M.IFraction) {
-    this._fraction = value;
-    this.setMenu();
+    this._fraction = value;    
   }
 
   get fraction(): M.IFraction {
@@ -78,12 +76,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @ViewChildren(PingComponent) pings: QueryList<PingComponent>;
 
 
-  container = { data: [] };
+  container = { data: [] };  
 
-  menu: any;
-
-  public constructor(
-    private visStorage: VisStorageService,
+  public constructor(    
     private dialogService: DialogService,
     @Inject(authenticationServiceToken) private authenticationService: IAuthenticationService,
     @Inject(Gameserviceprovider.gameServiceToken) public gameService: Gameserviceinterface.IGameService,
@@ -92,18 +87,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     private router: Router,
     private storage: LocalStorageService
   ) {
-    this.setMenu();
   }
 
-  private setMenu() {
-    const jobs = this.gameService.jobRegistry.getJobs().filter(it => !this.fraction || it.fraction.name === this.fraction.name);
-    if (this.gameService.name === 'swtor') {
-      const grouped = _.groupBy(jobs, (it: IJob) => it.baseClass);
-      this.menu = grouped;
-    } else {
-      this.menu = jobs;
-    }
-  }
+
 
   onHome() {
     this.router.navigateByUrl("/");

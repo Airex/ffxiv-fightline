@@ -15,14 +15,11 @@ export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJob
 
   private build(job: Models.IJob): Models.IJob {
     return {
-      name: job.name,
-      icon: this.getIcon(job.icon),
-      defaultPet: job.defaultPet,
-      fullName: job.fullName,
+      ...job,      
+      icon: this.getIcon(job.icon),           
       pets: job.pets && job.pets.map((p) => {
-        return { name: p.name, icon: this.getIcon(p.icon) }
-      }),
-      role: job.role,
+        return { ...p, icon: this.getIcon(p.icon) }
+      }),      
       stances: job.stances && job.stances.map(s => {
         return {
           ability: this.buildAbility(s.ability)
