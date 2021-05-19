@@ -28,7 +28,7 @@
     <span *ngIf="it.attack.description.indexOf('\n') === -1"
           style="white-space: pre-line;"
           class="description">{{it.attack.description}}</span>
-    <sidepanel-area header="Mitigations"
+    <sidepanel-area header="Description"
                     *ngIf="it.attack.description.indexOf('\n') >=0">
       <span style="white-space: pre-line;"
             class="description">{{it.attack.description}}</span>
