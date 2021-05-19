@@ -25,7 +25,14 @@
             nzColor="green">{{t}}</nz-tag>
   </nz-space-item>
   <nz-space-item>
-    <span class="description">{{it.attack.description}}</span>
+    <span *ngIf="it.attack.description.indexOf('\n') === -1"
+          style="white-space: pre-line;"
+          class="description">{{it.attack.description}}</span>
+    <sidepanel-area header="Mitigations"
+                    *ngIf="it.attack.description.indexOf('\n') >=0">
+      <span style="white-space: pre-line;"
+            class="description">{{it.attack.description}}</span>
+    </sidepanel-area>
   </nz-space-item>
   <nz-space-item *ngIf="data.mode === 'default'">
     <button nz-button

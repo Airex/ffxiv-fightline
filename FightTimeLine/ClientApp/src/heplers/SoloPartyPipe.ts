@@ -19,12 +19,13 @@ export class SoloPartyPipe implements PipeTransform {
     }
     // filter items array, items which match and return true will be
     // kept, false will be filtered out
+    const [solo, party] = filter;
     return items.filter(item => (!item.ability ||
-      (item.ability.abilityType & AbilityType.PartyDefense) === AbilityType.PartyDefense && filter[1] ||
-      (item.ability.abilityType & AbilityType.PartyShield) === AbilityType.PartyShield && filter[1] ||
-      (item.ability.abilityType & AbilityType.SelfDefense) === AbilityType.SelfDefense && filter[0] ||      
-      (item.ability.abilityType & AbilityType.SelfShield) === AbilityType.SelfShield && filter[0] ||
-      (item.ability.abilityType & AbilityType.TargetDefense) === AbilityType.TargetDefense && filter[0]
+      (item.ability.abilityType & AbilityType.PartyDefense) === AbilityType.PartyDefense && party ||
+      (item.ability.abilityType & AbilityType.PartyShield) === AbilityType.PartyShield && party ||
+      (item.ability.abilityType & AbilityType.SelfDefense) === AbilityType.SelfDefense && solo ||      
+      (item.ability.abilityType & AbilityType.SelfShield) === AbilityType.SelfShield && solo ||
+      (item.ability.abilityType & AbilityType.TargetDefense) === AbilityType.TargetDefense && solo
     ));
   }
 }
