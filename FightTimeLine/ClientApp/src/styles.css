@@ -168,6 +168,7 @@ html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-con
   bottom: 0px !important;
   font-size: 12px;
   font-style: italic;
+  padding-bottom: 0px !important;
 }
 
 .vis-item.targets {
