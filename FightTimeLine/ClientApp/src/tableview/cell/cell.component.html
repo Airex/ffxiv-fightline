@@ -1,6 +1,7 @@
 <ng-container *ngFor="let d of input.items">
   <nz-tag [nzColor]="d.color"
-          [nz-tooltip]="d.tooltip"
+          [nz-tooltip]="!!d.tooltip && tt"
+          [nzTooltipPlacement]="'right'"
           [class.clone]="d.clone"          
           (click)="select(d.refId, $event)"
           *ngIf="d.visible && d.text">
@@ -19,7 +20,9 @@
              style="margin-left: 2px;margin-top: -3px;"
              [src]="d.targetIcon" />
       </span>
-
     </div>
-  </nz-tag>
+    <ng-template #tt>
+      <span style="white-space: pre-wrap;">{{d.tooltip}}</span>
+    </ng-template>
+  </nz-tag>  
 </ng-container>
