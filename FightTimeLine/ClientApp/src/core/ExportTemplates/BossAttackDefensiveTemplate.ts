@@ -44,7 +44,8 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
           this.text({
             text: attack.name,
             color: this.getColor(attack),
-            refId: attack.id
+            refId: attack.id,
+            tooltip: attack.desc
           }),
           this.items(
             data.data.bossTargets
@@ -53,7 +54,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
               .map(p => ({ text: p.name, icon: p.icon, refId: p.id })),
             {
               align: "center",
-              disableUnique: true
+              disableUnique: true,
             }
           ),
           ...jobs.map(job => this.items(data.data.abilities
@@ -84,7 +85,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
                         (ability.type & AbilityType.PartyShield) === AbilityType.PartyShield
                       ) && a.indexOf("party") >= 0
                   else {
-                    return a.indexOf(ability.ability) >=0
+                    return a.indexOf(ability.ability) >= 0
                   }
                 }
               };
@@ -150,7 +151,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
             value: "party",
             byDefault: true
           }]
-          : jobRegistry.getJob(it.name).abilities.filter(jab=>this.isDefenceAbility(jab.abilityType)).map(jab => ({
+          : jobRegistry.getJob(it.name).abilities.filter(jab => this.isDefenceAbility(jab.abilityType)).map(jab => ({
             text: jab.name,
             value: jab.name,
             byDefault: true
@@ -166,11 +167,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
           listOfFilter: filters
         }
       }),
-      // {          
-      //   text: "Description",          
-      // },
     ];
-
 
     return <IExportResultSet>{
       columns: columns,

@@ -106,5 +106,6 @@ export interface IExportItem {
   targetIcon?: string;
   usageOffset?: string;
   clone?: boolean;  
+  tooltip?: string;
   filterFn?:(a:string[]) => boolean;
 }
