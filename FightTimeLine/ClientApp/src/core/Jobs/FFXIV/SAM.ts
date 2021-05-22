@@ -14,6 +14,7 @@ export const SAM: IJob = {
       xivDbId: "7499",
       icon: ("34_Samurai/7499_Meikyo Shisui"),
       abilityType: AbilityType.Utility,
+      levelAcquired: 50
     },
 //    {
 //      name: "Meditate",
@@ -30,6 +31,7 @@ export const SAM: IJob = {
       xivDbId: "16482",
       icon: ("34_Samurai/icon_22"),
       abilityType: AbilityType.Utility,
+      levelAcquired: 68
     },
     {
       name: "Hissatsu: Guren",
@@ -38,6 +40,7 @@ export const SAM: IJob = {
       xivDbId: "7496",
       icon: ("34_Samurai/7496_Hissatsu Guren"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 70
     },
     {
       name: "Hissatsu: Senei",
@@ -46,6 +49,7 @@ export const SAM: IJob = {
       xivDbId: "16481",
       icon: ("34_Samurai/icon_24"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 72
     },
     {
       name: "Tsubame-gaeshi",
@@ -54,6 +58,7 @@ export const SAM: IJob = {
       xivDbId: "16483",
       icon: ("34_Samurai/icon_25"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 76
     },
     {
       name: "Shoha",
@@ -62,6 +67,7 @@ export const SAM: IJob = {
       xivDbId: "16487",
       icon: ("34_Samurai/icon_26"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 80
     },
 
     ...getAbilitiesFrom(meleeSharedAbilities),

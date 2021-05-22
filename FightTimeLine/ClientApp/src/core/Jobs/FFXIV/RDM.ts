@@ -14,6 +14,7 @@ export const RDM: IJob = {
       xivDbId: "7520",
       icon: ("53_RedMage/7520_Embolden"),
       abilityType: AbilityType.PartyDamageBuff,
+      levelAcquired: 60
     },
     {
       name: "Fleche",
@@ -23,6 +24,7 @@ export const RDM: IJob = {
       requiresBossTarget: true,
       icon: ("53_RedMage/7517_Fleche"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 45
     },
     {
       name: "Contre Sixte",
@@ -32,6 +34,7 @@ export const RDM: IJob = {
       requiresBossTarget: true,
       icon: ("53_RedMage/7519_Contre Sixte"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 56
     },
     {
       name: "Manafication",
@@ -41,6 +44,17 @@ export const RDM: IJob = {
       requiresBossTarget: true,
       icon: ("53_RedMage/7521_Manafication"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 60
+    },
+    {
+      name: "Acceleration",
+      duration: 20,
+      cooldown: 55,
+      xivDbId: "7518",
+      requiresBossTarget: false,
+      icon: ("53_RedMage/7518_Acceleration"),
+      abilityType: AbilityType.Utility,
+      levelAcquired: 50
     },
     ...getAbilitiesFrom(casterSharedAbilities),
     medicine["Intelligence"]

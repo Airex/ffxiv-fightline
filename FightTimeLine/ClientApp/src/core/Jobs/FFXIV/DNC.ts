@@ -17,7 +17,8 @@ export const DNC: IJob = {
       defensiveStats: {
         mitigationPercent: 10,
         shareGroup: "rangeDef"
-      }
+      },
+      levelAcquired: 56
     },
     {
       name: "Improvisation",
@@ -26,6 +27,7 @@ export const DNC: IJob = {
       xivDbId: "16014",
       icon: ("Dancer/icon_21"),
       abilityType: AbilityType.Utility,
+      levelAcquired: 80
     },
     {
       name: "Flourish",
@@ -34,6 +36,7 @@ export const DNC: IJob = {
       xivDbId: "16013",
       icon: ("Dancer/icon_19"),
       abilityType: AbilityType.Utility,
+      levelAcquired: 72
     },
     {
       name: "Devilment",
@@ -42,6 +45,7 @@ export const DNC: IJob = {
       xivDbId: "16011",
       icon: ("Dancer/icon_16"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 62
     },
     {
       name: "Closed Position",
@@ -50,7 +54,8 @@ export const DNC: IJob = {
       xivDbId: "16006",
       icon: ("Dancer/icon_15"),
       abilityType: AbilityType.Utility,
-      settings: [settings.target]
+      settings: [settings.target],
+      levelAcquired: 60
     },
     {
       name: "Curing Waltz",
@@ -59,6 +64,7 @@ export const DNC: IJob = {
       xivDbId: "16015",
       icon: ("Dancer/icon_13"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 52
     },
     {
       name: "Standard Step",
@@ -68,6 +74,7 @@ export const DNC: IJob = {
       xivDbId: "15997",
       icon: ("Dancer/icon_04"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 15
     },
     {
       name: "Technical Step",
@@ -77,6 +84,7 @@ export const DNC: IJob = {
       activationOffset: 4,
       icon: ("Dancer/icon_18"),
       abilityType: AbilityType.SelfDamageBuff | AbilityType.PartyDamageBuff,
+      levelAcquired: 70
     },
     ...getAbilitiesFrom(rangeSharedAbilities),
     medicine["Dexterity"]

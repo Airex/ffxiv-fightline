@@ -69,13 +69,13 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
     this.values.forEach(value => {
       const jobMap = value.job;
       const jobFilter = jobMap.presenter.jobFilter(jobMap.id);
-      const visible = this.abilityFilter(value, jobMap.presenter.filter?.abilities, jobFilter?.filter, jobMap, used);
+      const visible = this.abilityFilter(value, jobMap.presenter.filter?.abilities, jobFilter?.filter, jobMap, used, jobMap.presenter.fightLevel);
       value.applyData({ filtered: !visible });
     });
     this.update(this.values);
   }
 
-  private abilityFilter(value: AbilityMap, filter: Models.IAbilityFilter, jobFilter: Models.IAbilityFilter, jobMap: JobMap, used: (a) => boolean): boolean {
+  private abilityFilter(value: AbilityMap, filter: Models.IAbilityFilter, jobFilter: Models.IAbilityFilter, jobMap: JobMap, used: (a) => boolean, fightLevel: number): boolean {
     const filterUnit = (aType: Models.AbilityType | Models.AbilityType[], globalFilter: boolean, jobFilter: boolean) => {
       let visible = false;
       const valueArray = Array.isArray(aType) ? aType : [aType];
@@ -86,10 +86,12 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
       }
       return visible;
     };
-    let visible: boolean;
+    let visible: boolean;    
     if (!filter || !jobFilter || !value.ability) {
       visible = true;
     } else {
+      if (value.ability.levelAcquired>fightLevel)
+        return false;
       if ((jobMap.pet || jobMap.job.defaultPet) && value.ability.pet && value.ability.pet !== (jobMap.pet || jobMap.job.defaultPet)) {
         visible = false;
       } else {

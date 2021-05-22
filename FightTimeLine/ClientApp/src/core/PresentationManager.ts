@@ -20,10 +20,12 @@ export class PresenterManager implements Models.IPresenterData {
   sources: string[] = [];
   filter: Models.IFilter = Models.defaultFilter();
   view: Models.IView = Models.defaultView();
+  fightLevel: number = 80;
   private jobFilters: JobFilters = {}
 
   reset() {
     this.tags = Models.DefaultTags;
+    this.fightLevel = 80;
     this.sources = [];
     this.filter = Models.defaultFilter();
     this.view = Models.defaultView();
@@ -98,6 +100,10 @@ export class PresenterManager implements Models.IPresenterData {
     }
   }
 
+  setFightLevel(level: number){
+    this.fightLevel = level;
+  }
+
   setSettings(iSettings: ISettings) {
     if (iSettings.main.defaultFilter)
       this.filter = iSettings.main.defaultFilter;
@@ -122,6 +128,8 @@ export class PresenterManager implements Models.IPresenterData {
         this.view = data.view;
       if (data.jobFilters)
         this.jobFilters = data.jobFilters;
+      if (data.fightLevel)
+        this.fightLevel = data.fightLevel;
     }
     return !!data;
   }

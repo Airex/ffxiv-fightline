@@ -15,6 +15,7 @@ export const DRG: IJob = {
       xivDbId: "85",
       icon: ("32_Dragoon/0085_Blood For Blood"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 30
     },
     {
       name: "Life Surge",
@@ -23,6 +24,7 @@ export const DRG: IJob = {
       xivDbId: "83",
       icon: ("32_Dragoon/0083_Life Surge"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 6
     },
     {
       name: "Dragon Sight",
@@ -32,7 +34,8 @@ export const DRG: IJob = {
       icon: ("32_Dragoon/10032_Dragon Sight"),
       abilityType: AbilityType.PartyDamageBuff | AbilityType.SelfDamageBuff,
       settings: [settings.target],
-      detectStrategy: byBuffApply(1001454, "Dragon Sight")
+      detectStrategy: byBuffApply(1001454, "Dragon Sight"),
+      levelAcquired: 66
     },
     {
       name: "Battle Litany",
@@ -41,6 +44,7 @@ export const DRG: IJob = {
       xivDbId: "3557",
       icon: ("32_Dragoon/3557_Battle Litany"),
       abilityType: AbilityType.PartyDamageBuff,
+      levelAcquired: 52
     },
     {
       name: "Dragonfire Dive",
@@ -50,6 +54,7 @@ export const DRG: IJob = {
       requiresBossTarget: true,
       icon: ("32_Dragoon/0096_Dragonfire Dive"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 50
     },
     {
       name: "Geirskogul",
@@ -59,6 +64,7 @@ export const DRG: IJob = {
       requiresBossTarget: true,
       icon: ("32_Dragoon/3555_Geirskogul"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 60
     },
     {
       name: "High Jump",
@@ -68,6 +74,7 @@ export const DRG: IJob = {
       requiresBossTarget: true,
       icon: ("32_Dragoon/icon_23"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 74
     },
     {
       name: "Spineshatter Dive",
@@ -77,6 +84,7 @@ export const DRG: IJob = {
       requiresBossTarget: true,
       icon: ("32_Dragoon/8802_Spineshatter Dive"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 45
     },
     {
       name: "Stardiver",
@@ -86,6 +94,7 @@ export const DRG: IJob = {
       requiresBossTarget: true,
       icon: ("32_Dragoon/icon_24"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 80
     },
     ...getAbilitiesFrom(meleeSharedAbilities),
     medicine["Strength"]

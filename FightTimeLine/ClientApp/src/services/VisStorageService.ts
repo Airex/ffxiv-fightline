@@ -24,7 +24,7 @@ export class VisStorageService {
     this.playerContainer.groups.add({ id: 0, content: "", className: "" });
 
     this.presenter = new PresenterManager();
-    this.holders = new Holders(this.playerContainer, this.bossContainer, this.presenter);
+    this.holders = new Holders(this.playerContainer, this.bossContainer);
     
   }
 

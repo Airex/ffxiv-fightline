@@ -14,6 +14,7 @@ export const WHM: IJob = {
       xivDbId: "3571",
       icon: ("21_WhiteMage/9620_Assize"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 56
     },
     {
       name: "Tetragrammaton",
@@ -23,6 +24,7 @@ export const WHM: IJob = {
       icon: ("21_WhiteMage/3570_Tetragrammaton"),
       abilityType: AbilityType.Healing,
       settings: [settings.target],
+      levelAcquired: 60
     },
     {
       name: "Divine Benison",
@@ -34,7 +36,8 @@ export const WHM: IJob = {
       settings: [settings.target],
       defensiveStats: {
         shieldPercent: 15
-      }
+      },
+      levelAcquired: 66
     },
     {
       name: "Benediction",
@@ -44,6 +47,7 @@ export const WHM: IJob = {
       icon: ("21_WhiteMage/0140_Benediction"),
       abilityType: AbilityType.Healing,
       settings: [settings.target],
+      levelAcquired: 50
     },
     {
       name: "Afflatus Solace",
@@ -53,6 +57,7 @@ export const WHM: IJob = {
       icon: ("21_WhiteMage/icon_16 (1)"),
       abilityType: AbilityType.Healing,
       settings: [settings.target],
+      levelAcquired: 52
     },
     {
       name: "Afflatus Rapture",
@@ -61,6 +66,7 @@ export const WHM: IJob = {
       xivDbId: "16534",
       icon: ("21_WhiteMage/16534_Afflatus Rapture"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 76
     },
     {
       name: "Asylum",
@@ -69,6 +75,7 @@ export const WHM: IJob = {
       xivDbId: "3569",
       icon: ("21_WhiteMage/3569_Asylum"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 52
     },
     {
       name: "Plenary Indulgence",
@@ -77,6 +84,7 @@ export const WHM: IJob = {
       xivDbId: "7433",
       icon: ("21_WhiteMage/7433_Plenary Indulgence"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 70
     },
     {
       name: "Temperance",
@@ -87,7 +95,8 @@ export const WHM: IJob = {
       abilityType: AbilityType.HealingBuff | AbilityType.PartyDefense,
       defensiveStats: {
         mitigationPercent: 10
-      }
+      },
+      levelAcquired: 80
     },
     {
       name: "Thin Air",
@@ -96,6 +105,7 @@ export const WHM: IJob = {
       xivDbId: "7430",
       icon: ("21_WhiteMage/7430_Thin Air"),
       abilityType: AbilityType.Utility,
+      levelAcquired: 58
     },
     {
       name: "Presence of Mind",
@@ -104,6 +114,7 @@ export const WHM: IJob = {
       xivDbId: "136",
       icon: ("21_WhiteMage/0136_Presence Of Mind"),
       abilityType: AbilityType.Utility,
+      levelAcquired: 30
     },
     ...getAbilitiesFrom(healerSharedAbilities),
     medicine["Mind"]

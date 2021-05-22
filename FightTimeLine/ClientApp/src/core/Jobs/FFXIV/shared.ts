@@ -11,7 +11,7 @@ export const abilitySortFn = (a1: IAbility, a2: IAbility): number => {
     AbilityType.PartyShield,
     AbilityType.TargetDefense,
     AbilityType.SelfShield,
-    AbilityType.SelfDefense,    
+    AbilityType.SelfDefense,
     AbilityType.PartyDamageBuff,
     AbilityType.SelfDamageBuff,
     AbilityType.Utility,
@@ -74,22 +74,24 @@ export const tankSharedAbilities: IAbilities = {
     name: "Rampart", duration: 20, cooldown: 90, xivDbId: "7531", icon: "10_TankRole/7531_Rampart", abilityType: AbilityType.SelfDefense,
     defensiveStats: {
       mitigationPercent: 20
-    }
+    },
+    levelAcquired: 8
   },
   Reprisal: {
     name: "Reprisal", duration: 10, cooldown: 60, xivDbId: "7535", icon: "10_TankRole/7535_Reprisal", abilityType: AbilityType.PartyDefense, requiresBossTarget: false,
     defensiveStats: {
       mitigationPercent: 10
-    }
+    },
+    levelAcquired: 22
   },
-  Provoke: { name: "Provoke", duration: 0, cooldown: 30, xivDbId: "7533", icon: "10_TankRole/7533_Provoke", abilityType: AbilityType.Enmity, settings: [settings.changesTarget], requiresBossTarget: true, },
-  Shirk: { name: "Shirk", duration: 0, cooldown: 120, xivDbId: "7537", icon: "10_TankRole/7537_Shirk", abilityType: AbilityType.Enmity }
+  Provoke: { name: "Provoke",levelAcquired: 15, duration: 0, cooldown: 30, xivDbId: "7533", icon: "10_TankRole/7533_Provoke", abilityType: AbilityType.Enmity, settings: [settings.changesTarget], requiresBossTarget: true, },
+  Shirk: { name: "Shirk", duration: 0, levelAcquired: 48, cooldown: 120, xivDbId: "7537", icon: "10_TankRole/7537_Shirk", abilityType: AbilityType.Enmity }
 };
 
 const magicSharedAbilities: IAbilities = {
-  Swiftcast: { name: "Swiftcast", duration: 0, cooldown: 60, icon: ("90_Others/7561_Swiftcast"), xivDbId: "7561", abilityType: AbilityType.Utility },
-  Surecast: { name: "Surecast", duration: 6, cooldown: 120, xivDbId: "7559", icon: ("90_Others/7559_Surecast"), abilityType: AbilityType.Utility },
-  LucidDreaming: { name: "Lucid Dreaming", duration: 21, cooldown: 60, xivDbId: "7562", icon: ("90_Others/7562_Lucid Dreaming"), abilityType: AbilityType.Utility },
+  Swiftcast: { name: "Swiftcast", duration: 0,levelAcquired: 18, cooldown: 60, icon: ("90_Others/7561_Swiftcast"), xivDbId: "7561", abilityType: AbilityType.Utility },
+  Surecast: { name: "Surecast", duration: 6, levelAcquired: 44, cooldown: 120, xivDbId: "7559", icon: ("90_Others/7559_Surecast"), abilityType: AbilityType.Utility },
+  LucidDreaming: { name: "Lucid Dreaming", duration: 21, levelAcquired: 24, cooldown: 60, xivDbId: "7562", icon: ("90_Others/7562_Lucid Dreaming"), abilityType: AbilityType.Utility },
 };
 
 export const meleeSharedAbilities: IAbilities = {
@@ -97,8 +99,9 @@ export const meleeSharedAbilities: IAbilities = {
     name: "Feint", duration: 10, cooldown: 90, xivDbId: "7549", icon: ("30_MeleeDPSRole/7549_Feint"), abilityType: AbilityType.PartyDefense, requiresBossTarget: true,
     defensiveStats: {
       mitigationPercent: 10,
-      damageType: DamageType.Physical 
-    }
+      damageType: DamageType.Physical
+    },
+    levelAcquired: 2
   },
 };
 export const rangeSharedAbilities: IAbilities = {
@@ -107,9 +110,10 @@ export const casterSharedAbilities: IAbilities = {
   Addle: {
     name: "Addle", duration: 10, cooldown: 90, xivDbId: "7560", icon: ("50_MagicDPSRole/7560_Addle"), abilityType: AbilityType.PartyDefense, requiresBossTarget: true,
     defensiveStats: {
-      mitigationPercent: 10, 
+      mitigationPercent: 10,
       damageType: DamageType.Magical
-    }
+    },
+    levelAcquired: 8
   },
   ...magicSharedAbilities
 };
@@ -125,10 +129,10 @@ enum MedicineEnum {
 }
 
 export const medicine: { [TName in MedicineEnum]: IAbility } = {
-  Mind: { name: "Medicine", duration: 30, cooldown: 270, xivDbId: "27999", icon: ("Medicine/22451_Mind"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
-  Intelligence: { name: "Medicine", duration: 30, cooldown: 270, xivDbId: "27998", icon: ("Medicine/22450_Intelligence"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
-  Dexterity: { name: "Medicine", duration: 30, cooldown: 270, xivDbId: "27996", icon: ("Medicine/22448_Dexterity"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
-  Strength: { name: "Medicine", duration: 30, cooldown: 270, xivDbId: "27995", icon: ("Medicine/22447_Strength"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
+  Mind: { name: "Medicine", duration: 30, levelAcquired: 1, cooldown: 270, xivDbId: "27999", icon: ("Medicine/22451_Mind"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
+  Intelligence: { name: "Medicine", duration: 30, levelAcquired: 1, cooldown: 270, xivDbId: "27998", icon: ("Medicine/22450_Intelligence"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
+  Dexterity: { name: "Medicine", duration: 30, cooldown: 270, levelAcquired: 1, xivDbId: "27996", icon: ("Medicine/22448_Dexterity"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
+  Strength: { name: "Medicine", duration: 30, cooldown: 270, levelAcquired: 1, xivDbId: "27995", icon: ("Medicine/22447_Strength"), abilityType: AbilityType.SelfDamageBuff, xivDbType: "item", detectStrategy: byBuffRemove(1000049, "Medicine", 30) },
 
 };
 

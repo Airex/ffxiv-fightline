@@ -74,19 +74,23 @@ export function calculateAvailDefsForAttack(holders: H.Holders, id: string) {
 
 }
 
-function abilityMatch(input: M.AbilityType, ...toMatch: M.AbilityType[]) {
-    return toMatch.some(tm => (input & tm) === tm);
+function abilityMatchFunc(input: M.AbilityType) {
+    return  (...toMatch: M.AbilityType[]) => {
+        return toMatch.some(tm => (input & tm) === tm);
+    }
 }
 
-export function calculateMitigationForAttack(holders: H.Holders, defs, attack: M.IBossAbility) {
+export function calculateMitigationForAttack(holders: H.Holders, defs, attack: { type?: M.DamageType | number }) {
     var partyMitigation = -1;
     var partyShield = 0;
     var sums = {};
     var abs = defs.reduce((ac, j) => {
         return [...ac, ...j.abilities]
     }, []);
+    
     var used = new Set();
     abs.forEach((a: { ability: M.IAbility, jobId: string, id: string }) => {
+        const abilityMatch = abilityMatchFunc(a.ability.abilityType);
         if (used.has(a.ability.name) || used.has(a.ability.defensiveStats?.shareGroup)) return;
 
         const defensiveStats = (a.ability.defensiveStats?.modifier || DefaultMitigationsModifier)(holders, a.jobId, a.id);
@@ -95,18 +99,18 @@ export function calculateMitigationForAttack(holders: H.Holders, defs, attack: M
         if (defensiveStats?.shareGroup)
             used.add(defensiveStats?.shareGroup);
 
-        if (abilityMatch(a.ability.abilityType, M.AbilityType.PartyDefense)) {
+        if (abilityMatch(M.AbilityType.PartyDefense)) {
             if (partyMitigation === -1) partyMitigation = 1;
             if (attack.type === M.DamageType.None || !defensiveStats?.damageType || (defensiveStats?.damageType === attack.type))
                 partyMitigation *= 1 - (defensiveStats?.mitigationPercent || 0) / 100
         }
 
-        if (abilityMatch(a.ability.abilityType, M.AbilityType.PartyShield)) {
+        if (abilityMatch(M.AbilityType.PartyShield)) {
             if (partyShield === -1) partyShield = 0;
             partyShield += defensiveStats?.shieldPercent || 0
         }
 
-        if (a.ability.abilityType === M.AbilityType.SelfShield) {
+        if (abilityMatch(M.AbilityType.SelfShield)) {
             const settingData = holders.itemUsages.get(a.id).getSettingData(SettingsEnum.Target);
             var jobId = settingData?.value || a.jobId;
             if (jobId) {
@@ -115,7 +119,7 @@ export function calculateMitigationForAttack(holders: H.Holders, defs, attack: M
             }
         }
 
-        if (abilityMatch(a.ability.abilityType, M.AbilityType.SelfDefense, M.AbilityType.TargetDefense)) {
+        if (abilityMatch(M.AbilityType.SelfDefense, M.AbilityType.TargetDefense)) {
             const settingData = holders.itemUsages.get(a.id).getSettingData(SettingsEnum.Target);
             var jobId = settingData?.value || a.jobId;
             if (jobId) {
@@ -130,12 +134,14 @@ export function calculateMitigationForAttack(holders: H.Holders, defs, attack: M
     var defStats = Object.keys(sums).map(s =>
     ({
         name: holders.jobs.get(s).job.name,
+        id: s,
         mitigation: 1 - Math.abs(sums[s].mitigation * partyMitigation),
         shield: sums[s].shield + partyShield,
         icon: holders.jobs.get(s).job.icon
     }));
     defStats.push({
         name: "Party",
+        id: "party",
         mitigation: 1 - Math.abs(partyMitigation),
         shield: partyShield,
         icon: null

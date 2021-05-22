@@ -51,7 +51,7 @@ export enum AbilityType {
   Damage = 16,
   HealingBuff = 32,
   Pet = 128,
-  Enmity = 512
+  Enmity = 512  
 }
 
 export interface IBoss {
@@ -81,6 +81,7 @@ export interface IFight {
   dateModified?: Date;
   dateCreated?: Date;
   game: string;
+  level?: number;
 }
 
 export interface ICommandEntry {
@@ -157,6 +158,7 @@ export interface IAbility {
   overlapStrategy?: IOverlapStrategy;
   charges?: IAbilityCharges;
   defensiveStats?: IDefensiveStats;
+  levelAcquired: number;
 }
 
 export interface IAbilityCharges {
@@ -375,6 +377,7 @@ export interface IPresenterData {
   tags: string[];
   sources: string[];
   filter: IFilter;
+  fightLevel: number;
   view: IView;
   jobFilter(jobId: string): JobFilter;
 }

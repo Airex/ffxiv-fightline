@@ -56,6 +56,7 @@ export const PLD: IJob = {
       xivDbId: "20",
       icon: ("11_Paladin/0020_Fight Or Flight"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 2
     },
     {
       name: "Circle of Scorn",
@@ -64,6 +65,7 @@ export const PLD: IJob = {
       xivDbId: "23",
       icon: ("11_Paladin/0023_Circle Of Scorn"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 50
     },
     {
       name: "Spirits Within",
@@ -73,6 +75,7 @@ export const PLD: IJob = {
       requiresBossTarget: true,
       icon: ("11_Paladin/0029_Spirits Within"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 30
     },
     {
       name: "Requiescat",
@@ -82,6 +85,7 @@ export const PLD: IJob = {
       requiresBossTarget: true,
       icon: ("11_Paladin/7383_Requiescat"),
       abilityType: AbilityType.SelfDamageBuff | AbilityType.Damage,
+      levelAcquired: 68
     },
     {
       name: "Sentinel",
@@ -92,7 +96,8 @@ export const PLD: IJob = {
       abilityType: AbilityType.SelfDefense,
       defensiveStats: {
         mitigationPercent: 30
-      }
+      },
+      levelAcquired: 38
 
     },
     {
@@ -104,7 +109,8 @@ export const PLD: IJob = {
       abilityType: AbilityType.SelfDefense,
       defensiveStats: {
         mitigationPercent: 100
-      }
+      },
+      levelAcquired: 50
     },
     {
       name: "Divine Veil",
@@ -115,7 +121,8 @@ export const PLD: IJob = {
       abilityType: AbilityType.PartyShield,
       defensiveStats: {
         shieldPercent: 10
-      }
+      },
+      levelAcquired: 56
     },
     {
       name: "Passage of Arms",
@@ -126,7 +133,8 @@ export const PLD: IJob = {
       abilityType: AbilityType.PartyDefense,
       defensiveStats: {
         mitigationPercent: 15
-      }
+      },
+      levelAcquired: 70
     },
     {
       name: "Cover",
@@ -139,7 +147,8 @@ export const PLD: IJob = {
       defensiveStats: {
         mitigationPercent: 100,
         modifier: CoverMitigationModifier
-      }
+      },
+      levelAcquired: 45
     },
     {
       name: "Sheltron",
@@ -151,7 +160,8 @@ export const PLD: IJob = {
       abilityType: AbilityType.SelfDefense,
       defensiveStats: {
         mitigationPercent: 18
-      }
+      },
+      levelAcquired: 35
     },
     {
       name: "Intervention",
@@ -165,7 +175,8 @@ export const PLD: IJob = {
       defensiveStats: {
         mitigationPercent: 10,
         modifier: InterventionMitigationModifier
-      }
+      },
+      levelAcquired: 62
     },
     {
       name: "Intervene",
@@ -178,7 +189,8 @@ export const PLD: IJob = {
       charges: {
         count: 2,
         cooldown: 30
-      }
+      },
+      levelAcquired: 74
     },
     ...getAbilitiesFrom(tankSharedAbilities),
     medicine["Strength"]

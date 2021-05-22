@@ -16,7 +16,8 @@ export const NIN: IJob = {
       abilityType: AbilityType.SelfShield,
       defensiveStats: {
         shieldPercent: 20
-      }
+      },
+      levelAcquired: 2
     },
     {
       name: "Mug",
@@ -26,6 +27,7 @@ export const NIN: IJob = {
       requiresBossTarget: true,
       icon: ("33_Ninja/8813_Mug"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 15
     },
     {
       name: "Trick Attack",
@@ -35,6 +37,7 @@ export const NIN: IJob = {
       requiresBossTarget: true,
       icon: ("33_Ninja/2258_Trick Attack"),
       abilityType: AbilityType.PartyDamageBuff,
+      levelAcquired: 18
     },
     {
       name: "Kassatsu",
@@ -44,6 +47,7 @@ export const NIN: IJob = {
       requiresBossTarget: true,
       icon: ("33_Ninja/2264_Kassatsu"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 50
     },
     {
       name: "Dream Within a Dream",
@@ -53,6 +57,7 @@ export const NIN: IJob = {
       requiresBossTarget: true,
       icon: ("33_Ninja/3566_Dream Within A Dream"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 56
     },
     {
       name: "Bhavacakra",
@@ -62,6 +67,7 @@ export const NIN: IJob = {
       requiresBossTarget: true,
       icon: ("33_Ninja/8815_Bhavacakra"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 68
     },
     {
       name: "Ten Chi Jin",
@@ -71,6 +77,7 @@ export const NIN: IJob = {
       requiresBossTarget: true,
       icon: ("33_Ninja/7403_Ten Chi Jin"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 70
     },
     {
       name: "Meisui",
@@ -80,6 +87,7 @@ export const NIN: IJob = {
       requiresBossTarget: true,
       icon: ("33_Ninja/icon_24"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 72
     },
     {
       name: "Bunshin",
@@ -89,6 +97,7 @@ export const NIN: IJob = {
       requiresBossTarget: true,
       icon: ("33_Ninja/icon_25"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 80
     },
     ...getAbilitiesFrom(meleeSharedAbilities),
     medicine["Dexterity"]

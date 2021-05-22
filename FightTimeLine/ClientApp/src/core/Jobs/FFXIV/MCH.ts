@@ -14,6 +14,7 @@ export const MCH: IJob = {
       xivDbId: "2876",
       icon: ("42_Machinist/2876_Reassemble"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 10
     },
     {
       name: "Gauss Round",
@@ -26,7 +27,8 @@ export const MCH: IJob = {
       charges: {
         count: 3,
         cooldown: 30
-      }
+      },
+      levelAcquired: 15
     },
     {
       name: "Wildfire",
@@ -36,6 +38,7 @@ export const MCH: IJob = {
       requiresBossTarget: true,
       icon: ("42_Machinist/2878_Wildfire"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 45
     },
     {
       name: "Ricochet",
@@ -48,7 +51,8 @@ export const MCH: IJob = {
       charges: {
         count: 3,
         cooldown: 30
-      }
+      },
+      levelAcquired: 50
     },
     {
       name: "Flamethrower",
@@ -57,6 +61,7 @@ export const MCH: IJob = {
       xivDbId: "7418",
       icon: ("42_Machinist/7418_Flamethrower"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 70
     },
   
     {
@@ -66,6 +71,7 @@ export const MCH: IJob = {
       xivDbId: "17209",
       icon: ("42_Machinist/icon_08"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 30
     },
     {
       name: "Tactician",
@@ -77,7 +83,8 @@ export const MCH: IJob = {
       defensiveStats: {
         mitigationPercent: 10,
         shareGroup: "rangeDef"
-      }
+      },
+      levelAcquired: 56
     },
     {
       name: "Barrel Stabilizer",
@@ -87,6 +94,7 @@ export const MCH: IJob = {
       requiresBossTarget: true,
       icon: ("42_Machinist/7414_Barrel Stabilizer"),
       abilityType: AbilityType.Utility,
+      levelAcquired: 66
     },
     ...getAbilitiesFrom(rangeSharedAbilities),
     medicine["Dexterity"]

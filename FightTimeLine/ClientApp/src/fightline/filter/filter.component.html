@@ -99,6 +99,18 @@
           </div>
         </ng-template>
       </div>
+      <div style="margin-top: 8px;">
+        <div>
+          <strong>Fight level</strong>
+        </div>
+        <nz-select 
+                   [(ngModel)]="currentLevel"
+                   (ngModelChange)="levelChanged($event)">
+          <nz-option *ngFor="let l of levels"
+                     [nzLabel]="''+l"
+                     [nzValue]="l"></nz-option>
+        </nz-select>        
+      </div>
     </div>
   </div>
 </ng-template>

@@ -73,7 +73,7 @@ export interface IExportResultSet {
 export interface IExportColumn {
   type?: string;
   text: string;
-  icon: string;
+  icon?: string;
   align?: 'left' | 'right' | 'center' | null;
   refId?: string;
   cursor?: string;

@@ -8,8 +8,6 @@ import * as BossTargetHolder from "./Holders/BossTargetHolder";
 import * as StancesHolder from "./Holders/StancesHolder";
 import * as AbilityAvailablityHolder from "./Holders/AbilityAvailablityHolder";
 import { ITimelineContainer } from "./Holders/BaseHolder";
-import { IPresenterData } from "./Models";
-import { BaseMap } from "./Maps";
 
 export class Holders {
   itemUsages: AbilityUsageHolder.AbilityUsageHolder;
@@ -22,7 +20,7 @@ export class Holders {
   stances: StancesHolder.StancesHolder;
   abilityAvailability: AbilityAvailablityHolder.AbilityAvailablityHolder;
 
-  constructor(mainTimeLine: ITimelineContainer, bossTimeLine: ITimelineContainer, presenter: IPresenterData) {
+  constructor(mainTimeLine: ITimelineContainer, bossTimeLine: ITimelineContainer) {
     this.itemUsages = new AbilityUsageHolder.AbilityUsageHolder(mainTimeLine.items);
     this.abilities = new AbilitiesMapHolder.AbilitiesMapHolder(mainTimeLine.groups);
     this.jobs = new JobsMapHolder.JobsMapHolder(mainTimeLine.groups);

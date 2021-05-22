@@ -39,7 +39,8 @@ export const WAR: IJob = {
       charges: {
         count: 2,
         cooldown: 60
-      }
+      },
+      levelAcquired: 50
     },
     {
       name: "Inner Release",
@@ -49,6 +50,7 @@ export const WAR: IJob = {
       xivDbId: "7389",
       icon: ("12_Warrior/7389_Inner Release"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 70
     },
     {
       name: "Onslaught",
@@ -58,6 +60,7 @@ export const WAR: IJob = {
       requiresBossTarget: true,
       icon: ("12_Warrior/7386_Onslaught"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 62
     },
     {
       name: "Upheaval",
@@ -67,6 +70,7 @@ export const WAR: IJob = {
       requiresBossTarget: true,
       icon: ("12_Warrior/7387_Upheaval"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 64
     },
     {
       name: "Vengeance",
@@ -78,7 +82,8 @@ export const WAR: IJob = {
       abilityType: AbilityType.SelfDefense,
       defensiveStats: {
         mitigationPercent: 30
-      }
+      },
+      levelAcquired: 38
     },
     {
       name: "Holmgang",
@@ -91,7 +96,8 @@ export const WAR: IJob = {
       abilityType: AbilityType.SelfDefense,
       defensiveStats: {
         mitigationPercent: 100
-      }
+      },
+      levelAcquired: 42
     },
     {
       name: "Shake It Off",
@@ -108,7 +114,8 @@ export const WAR: IJob = {
       defensiveStats: {
         shieldPercent: 15,
         modifier: ShakeItOffMitigationModifier
-      }
+      },
+      levelAcquired: 68
     },
     {
       name: "Thrill of Battle",
@@ -117,7 +124,8 @@ export const WAR: IJob = {
       xivDbId: "40",
       icon: ("12_Warrior/0040_Thrill Of Battle"),
       abilityType: AbilityType.SelfDefense,
-      relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true }
+      relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },
+      levelAcquired: 30
     },
     {
       name: "Raw Intuition",
@@ -130,7 +138,8 @@ export const WAR: IJob = {
       overlapStrategy: new SharedOverlapStrategy(["Nascent Flash"]),
       defensiveStats: {
         mitigationPercent: 20
-      }
+      },
+      levelAcquired: 56
     },
     {
       name: "Equilibrium",
@@ -139,6 +148,7 @@ export const WAR: IJob = {
       xivDbId: "3552",
       icon: ("12_Warrior/3552_Equilibrium"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 58
     },
     {
       name: "Nascent Flash",
@@ -151,7 +161,8 @@ export const WAR: IJob = {
       overlapStrategy: new SharedOverlapStrategy(["Raw Intuition"]),
       defensiveStats: {
         mitigationPercent: 10
-      }
+      },
+      levelAcquired: 76
     },
     ...getAbilitiesFrom(tankSharedAbilities),
     medicine["Strength"]

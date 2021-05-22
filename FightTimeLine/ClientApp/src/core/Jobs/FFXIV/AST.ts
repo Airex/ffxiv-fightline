@@ -14,6 +14,7 @@ export const AST: IJob = {
       xivDbId: "3606",
       icon: ("23_Astrologian/3606_Lightspeed"),
       abilityType: AbilityType.Utility,
+      levelAcquired: 6
     },
     {
       name: "Essential Dignity",
@@ -26,7 +27,8 @@ export const AST: IJob = {
       charges: {
         count: 2,
         cooldown: 40
-      }
+      },
+      levelAcquired: 15
     },
     {
       name: "Synastry",
@@ -36,6 +38,7 @@ export const AST: IJob = {
       icon: ("23_Astrologian/3612_Synastry"),
       abilityType: AbilityType.Healing,
       settings: [settings.target],
+      levelAcquired: 50
     },
     {
       name: "Divination",
@@ -44,6 +47,7 @@ export const AST: IJob = {
       xivDbId: "16552",
       icon: ("23_Astrologian/icon_19"),
       abilityType: AbilityType.PartyDamageBuff,
+      levelAcquired: 50
     },
     {
       name: "Collective Unconscious",
@@ -54,7 +58,8 @@ export const AST: IJob = {
       abilityType: AbilityType.PartyDefense,      
       defensiveStats: {
         mitigationPercent: 10        
-      }
+      },
+      levelAcquired: 58
     },
     {
       name: "Celestial Opposition",
@@ -63,6 +68,7 @@ export const AST: IJob = {
       xivDbId: "16553",
       icon: ("23_Astrologian/3616_Celestial Opposition"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 60
     },
     {
       name: "Earthly Star",
@@ -71,6 +77,7 @@ export const AST: IJob = {
       xivDbId: "7439",
       icon: ("23_Astrologian/7439_Earthly Star"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 62
     },
     {
       name: "Sleeve Draw",
@@ -79,6 +86,7 @@ export const AST: IJob = {
       xivDbId: "7448",
       icon: ("23_Astrologian/7448_Sleeve Draw"),
       abilityType: AbilityType.Utility,
+      levelAcquired: 70
     },
     {
       name: "Celestial Intersection",
@@ -87,6 +95,7 @@ export const AST: IJob = {
       xivDbId: "16556",
       icon: ("23_Astrologian/icon_28"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 74
     },
     {
       name: "Horoscope",
@@ -95,6 +104,7 @@ export const AST: IJob = {
       xivDbId: "16557",
       icon: ("23_Astrologian/icon_29"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 76
     },
     {
       name: "Neutral Sect",
@@ -103,6 +113,7 @@ export const AST: IJob = {
       xivDbId: "16559",
       icon: ("23_Astrologian/icon_30"),
       abilityType: AbilityType.HealingBuff,
+      levelAcquired: 80
     },
 
     ...getAbilitiesFrom(healerSharedAbilities),

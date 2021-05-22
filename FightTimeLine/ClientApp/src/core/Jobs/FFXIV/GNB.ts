@@ -14,6 +14,7 @@ export const GNB: IJob = {
       xivDbId: "16138",
       icon: ("Gunbreaker/icon_02"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 2
     },
     {
       name: "Camouflage",
@@ -24,7 +25,8 @@ export const GNB: IJob = {
       abilityType: AbilityType.SelfDefense,
       defensiveStats: {
         mitigationPercent : 10
-      }
+      },
+      levelAcquired: 6
     },
     {
       name: "Nebula",
@@ -35,7 +37,8 @@ export const GNB: IJob = {
       abilityType: AbilityType.SelfDefense,
       defensiveStats: {
         mitigationPercent : 30
-      }
+      },
+      levelAcquired: 38
     },
     {
       name: "Aurora",
@@ -44,7 +47,8 @@ export const GNB: IJob = {
       xivDbId: "16151",
       icon: ("Gunbreaker/icon_13"),
       abilityType: AbilityType.Healing,
-      settings: [settings.target]
+      settings: [settings.target],
+      levelAcquired: 45
     },
     {
       name: "Superbolide",
@@ -55,7 +59,8 @@ export const GNB: IJob = {
       abilityType: AbilityType.SelfDefense,
       defensiveStats:{
         mitigationPercent: 100
-      }
+      },
+      levelAcquired: 50
     },
     {
       name: "Rough Divide",
@@ -67,7 +72,8 @@ export const GNB: IJob = {
       charges: {
         count: 2,
         cooldown: 30
-      }
+      },
+      levelAcquired: 56
     },
     {
       name: "Bow Shock",
@@ -76,6 +82,7 @@ export const GNB: IJob = {
       xivDbId: "16159",
       icon: ("Gunbreaker/icon_20"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 62
     },
     {
       name: "Heart of Light",
@@ -87,7 +94,8 @@ export const GNB: IJob = {
       defensiveStats: {
         mitigationPercent: 10,
         damageType: DamageType.Magical
-      }
+      },
+      levelAcquired: 64
     },
     {
       name: "Heart of Stone",
@@ -99,7 +107,8 @@ export const GNB: IJob = {
       settings: [settings.target],
       defensiveStats: {
         mitigationPercent: 15
-      }
+      },
+      levelAcquired: 68
     },
     {
       name: "Bloodfest",
@@ -108,6 +117,7 @@ export const GNB: IJob = {
       xivDbId: "16164",
       icon: ("Gunbreaker/icon_25"),
       abilityType: AbilityType.Utility,
+      levelAcquired: 76
     },
     {
       name: "Blasting Zone",
@@ -116,6 +126,7 @@ export const GNB: IJob = {
       xivDbId: "16165",
       icon: ("Gunbreaker/icon_26"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 80
     },
     ...getAbilitiesFrom(tankSharedAbilities),
     medicine["Strength"]

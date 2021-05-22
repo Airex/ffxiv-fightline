@@ -14,6 +14,7 @@ export const MNK: IJob = {
       xivDbId: "65",
       icon: ("31_Monk/0065_Mantra"),
       abilityType: AbilityType.HealingBuff,
+      levelAcquired: 42
     },
     {
       name: "Perfect Balance",
@@ -22,6 +23,7 @@ export const MNK: IJob = {
       xivDbId: "69",
       icon: ("31_Monk/0069_Perfect Balance"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 50
     },
     {
       name: "Shoulder Tackle",
@@ -33,7 +35,8 @@ export const MNK: IJob = {
       charges: {
         count: 2,
         cooldown: 30
-      }
+      },
+      levelAcquired: 35
     },
     {
       name: "Elixir Field",
@@ -42,6 +45,7 @@ export const MNK: IJob = {
       xivDbId: "3545",
       icon: ("31_Monk/3545_Elixir Field"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 56
     },
     {
       name: "Tornado Kick",
@@ -49,7 +53,8 @@ export const MNK: IJob = {
       cooldown: 45,
       xivDbId: "3543",
       icon: ("31_Monk/3543_Tornado Kick"),
-      abilityType: AbilityType.Damage
+      abilityType: AbilityType.Damage,
+      levelAcquired: 60
     },
     {
       name: "Riddle of Earth",
@@ -64,7 +69,8 @@ export const MNK: IJob = {
       charges: {
         count: 3,
         cooldown: 30
-      }
+      },
+      levelAcquired: 64
     },
     {
       name: "Riddle of Fire",
@@ -73,6 +79,7 @@ export const MNK: IJob = {
       xivDbId: "7395",
       icon: ("31_Monk/7395_Riddle Of Fire"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 68
     },
     {
       name: "Brotherhood",
@@ -81,6 +88,7 @@ export const MNK: IJob = {
       xivDbId: "7396",
       icon: ("31_Monk/7396_Brotherhood"),
       abilityType: AbilityType.PartyDamageBuff,
+      levelAcquired: 70
     },
     //    {
     //      name: "Anatman",

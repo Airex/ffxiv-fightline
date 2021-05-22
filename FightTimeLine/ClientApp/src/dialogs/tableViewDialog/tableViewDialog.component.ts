@@ -8,6 +8,8 @@ import { ExportData, IExportCell, IExportColumn, IExportResultSet, IExportRow } 
 import { PresenterManager } from "src/core/PresentationManager";
 import { gameServiceToken } from "src/services/game.service-provider";
 import { IGameService } from "src/services/game.service-interface";
+import { MitigationsTemplate } from "src/core/ExportTemplates/MitigationsTemplate";
+import { VisStorageService } from "src/services/VisStorageService";
 
 
 @Component({
@@ -39,11 +41,13 @@ export class TableViewDialog implements OnInit {
     new EachRowOneSecondTemplate(),
     new BossAttackDefensiveTemplate(),
     new BossAttackDefensiveTemplate(true),
-    new DescriptiveTemplate()
+    new DescriptiveTemplate(),
+    new MitigationsTemplate()
   ];
 
   constructor(
     public dialogRef: NzModalRef,
+    private visStorage: VisStorageService,
     @Inject(gameServiceToken) private gameService: IGameService,
   ) {
   }
@@ -53,7 +57,7 @@ export class TableViewDialog implements OnInit {
 
     this.loading = true;
     setTimeout(() => {
-      const d = this.templates.find(it => it.name === this.selectedValue).build(this.data, this.presenterManager, this.gameService.jobRegistry);
+      const d = this.templates.find(it => it.name === this.selectedValue).build(this.data, this.presenterManager, this.gameService.jobRegistry, this.visStorage.holders);
       this.set = d;
       this.filterChange(null, null);
       this.loading = false;

@@ -16,6 +16,8 @@ export class FilterComponent implements OnInit {
   sources: { text: string, checked: boolean }[];
   checkAll = true;
   presets = [];
+  currentLevel: number;
+  levels = [50,60,70,80];  
   currentPreset;
 
   @Output() public changed: EventEmitter<string> = new EventEmitter();
@@ -52,6 +54,7 @@ export class FilterComponent implements OnInit {
     this.tags = this.presenterManager.activeTags;
     this.sources = this.presenterManager.activeSources;
     this.updateCheckAll();
+    this.currentLevel = this.presenterManager.fightLevel;
   }
 
   checkAllFunc(value: boolean) {
@@ -97,6 +100,13 @@ export class FilterComponent implements OnInit {
 
       this.storage.setObject("presets", this.presets);
     }
+  }
+
+  levelChanged(l: number){
+    this.presenterManager.setFightLevel(l);
+    setTimeout(() => {
+      this.changed.emit();
+    });
   }
 
   presetChanged(ev: any) {

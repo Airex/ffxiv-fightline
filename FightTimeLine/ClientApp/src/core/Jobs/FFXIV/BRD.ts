@@ -1,4 +1,5 @@
 import { byName } from "src/core/AbilityDetectors";
+import { SharedOverlapStrategy } from "src/core/Overlap";
 import { IJob, Role, AbilityType } from "../../Models"
 import { settings, getAbilitiesFrom, rangeSharedAbilities, medicine } from "./shared"
 
@@ -15,6 +16,7 @@ export const BRD: IJob = {
       xivDbId: "101",
       icon: ("41_Bard/0101_Raging Strikes"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 4
     },
     {
       name: "Barrage",
@@ -23,6 +25,7 @@ export const BRD: IJob = {
       xivDbId: "107",
       icon: ("41_Bard/0107_Barrage"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 38
     },
     {
       name: "Mage's Ballad",
@@ -38,6 +41,7 @@ export const BRD: IJob = {
         affectedBy: ["Army's Paeon", "The Wanderer's Minuet"],
         parentOnly: true
       },
+      levelAcquired: 30
     },
     {
       name: "Army's Paeon",
@@ -53,6 +57,7 @@ export const BRD: IJob = {
         affectedBy: ["Mage's Ballad", "The Wanderer's Minuet"],
         parentOnly: true
       },
+      levelAcquired: 40
     },
     {
       name: "Battle Voice",
@@ -62,6 +67,7 @@ export const BRD: IJob = {
       xivDbId: "118",
       icon: ("41_Bard/0118_Battle Voice"),
       abilityType: AbilityType.PartyDamageBuff,
+      levelAcquired: 50
     },
     {
       name: "The Wanderer's Minuet",
@@ -76,7 +82,8 @@ export const BRD: IJob = {
         affectedBy: ["Mage's Ballad", "Army's Paeon"],
         parentOnly: true
       },
-      detectStrategy: byName(["3559"], ["The Wanderer's Minuet", "the Wanderer's Minuet"])
+      detectStrategy: byName(["3559"], ["The Wanderer's Minuet", "the Wanderer's Minuet"]),
+      levelAcquired: 52
     },
     {
       name: "Sidewinder",
@@ -86,6 +93,8 @@ export const BRD: IJob = {
       requiresBossTarget: true,
       icon: ("41_Bard/8841_Sidewinder"),
       abilityType: AbilityType.Damage,
+      overlapStrategy: new SharedOverlapStrategy(["Shadowbite"]),
+      levelAcquired: 60
     },
     {
       name: "Troubadour",
@@ -98,7 +107,8 @@ export const BRD: IJob = {
       defensiveStats: {
         mitigationPercent: 10,
         shareGroup: "rangeDef"
-      }
+      },
+      levelAcquired: 62
     },
     {
       name: "Nature's Minne",
@@ -108,6 +118,7 @@ export const BRD: IJob = {
       icon: ("41_Bard/7408_Natures Minne"),
       abilityType: AbilityType.HealingBuff,
       settings: [settings.target],
+      levelAcquired: 66
     },
     {
       name: "Shadowbite",
@@ -115,7 +126,9 @@ export const BRD: IJob = {
       cooldown: 60,
       xivDbId: "16494",
       icon: ("41_Bard/icon_25 (1)"),
-      abilityType: AbilityType.Damage
+      abilityType: AbilityType.Damage,
+      overlapStrategy: new SharedOverlapStrategy(["Sidewinder"]),
+      levelAcquired: 72
     },
     ...getAbilitiesFrom(rangeSharedAbilities),
     medicine["Dexterity"]

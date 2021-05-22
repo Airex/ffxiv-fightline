@@ -16,7 +16,8 @@ export const SCH: IJob = {
       abilityType: AbilityType.PartyShield,
       defensiveStats: {
         shieldPercent: 10
-      }
+      },
+      levelAcquired: 35
     },
     {
       name: "Adloquium",
@@ -27,7 +28,8 @@ export const SCH: IJob = {
       abilityType: AbilityType.PartyShield,
       defensiveStats: {
         shieldPercent: 15
-      }
+      },
+      levelAcquired: 30
     },
     {
       name: "Whispering Dawn",
@@ -36,6 +38,7 @@ export const SCH: IJob = {
       xivDbId: "803",
       icon: ("62_PetsFairy/0803_Whispering Dawn"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 20
     },
     {
       name: "Fey Illumination",
@@ -47,7 +50,8 @@ export const SCH: IJob = {
       defensiveStats: {
         mitigationPercent: 5,
         damageType: DamageType.Magical
-      }
+      },
+      levelAcquired: 40
     },
     {
       name: "Aetherflow",
@@ -56,6 +60,7 @@ export const SCH: IJob = {
       icon: ("62_PetsFairy/8908_Aetherflow"),
       xivDbId: "166",
       abilityType: AbilityType.Utility,
+      levelAcquired: 45
     },
     {
       name: "Lustrate",
@@ -65,6 +70,7 @@ export const SCH: IJob = {
       icon: ("62_PetsFairy/0189_Lustrate"),
       abilityType: AbilityType.Healing,
       settings: [settings.target],
+      levelAcquired: 45
     },
     {
       name: "Energy Drain",
@@ -73,6 +79,7 @@ export const SCH: IJob = {
       xivDbId: "0167",
       icon: ("52_Summoner/0167_Energy Drain"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 45
     },
     {
       name: "Sacred Soil",
@@ -83,7 +90,8 @@ export const SCH: IJob = {
       abilityType: AbilityType.PartyDefense,
       defensiveStats: {
         mitigationPercent : 10
-      }
+      },
+      levelAcquired: 50
     },
     {
       name: "Indomitability",
@@ -92,14 +100,16 @@ export const SCH: IJob = {
       xivDbId: "3583",
       icon: ("62_PetsFairy/3583_Indomitability"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 52
     },
     {
       name: "Deployment Tactics",
       duration: 0,
       cooldown: 120,
       xivDbId: "3585",
-      icon: ("62_PetsFairy/3585_Deployment Tactics"),
+      icon: ("62_PetsFairy/3585_Deployment Tactics"),      
       abilityType: AbilityType.Healing,
+      levelAcquired: 56
     },
     {
       name: "Dissipation",
@@ -108,6 +118,7 @@ export const SCH: IJob = {
       xivDbId: "3587",
       icon: ("62_PetsFairy/3587_Dissipation"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 60
     },
     {
       name: "Excogitation",
@@ -118,6 +129,7 @@ export const SCH: IJob = {
       icon: ("62_PetsFairy/7434_Excogitation"),
       abilityType: AbilityType.Healing,
       settings: [settings.target],
+      levelAcquired: 62
     },
     {
       name: "Chain Stratagem",
@@ -127,6 +139,7 @@ export const SCH: IJob = {
       requiresBossTarget: true,
       icon: ("62_PetsFairy/7436_Chain Stratagem"),
       abilityType: AbilityType.PartyDamageBuff,
+      levelAcquired: 66
     },
     {
       name: "Aetherpact",
@@ -135,6 +148,7 @@ export const SCH: IJob = {
       xivDbId: "7437",
       icon: ("62_PetsFairy/7437_Aetherpact"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 70
     },
     {
       name: "Recitation",
@@ -143,6 +157,7 @@ export const SCH: IJob = {
       xivDbId: "16542",
       icon: ("Scholar/icon_27"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 74
     },
     {
       name: "Fey Blessing",
@@ -151,6 +166,7 @@ export const SCH: IJob = {
       xivDbId: "16543",
       icon: ("Scholar/icon_28"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 75
     },
     {
       name: "Summon Seraph",
@@ -159,6 +175,7 @@ export const SCH: IJob = {
       xivDbId: "16545",
       icon: ("Scholar/icon_29"),
       abilityType: AbilityType.Healing,
+      levelAcquired: 80
     },
     {
       name: "Consolation",
@@ -173,7 +190,8 @@ export const SCH: IJob = {
       },
       defensiveStats: {
         shieldPercent: 12
-      }
+      },
+      levelAcquired: 80
       //      detectStrategy: byName()
     },
 

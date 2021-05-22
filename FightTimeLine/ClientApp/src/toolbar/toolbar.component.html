@@ -12,8 +12,8 @@
   </span>
   <span *ngIf="showTitle"
         class="toolbar-title">Fight Time Line</span>
-  <span *ngIf="showJobButton">        
-      <addJob (added)="onAddJob($event)"></addJob>          
+  <span *ngIf="showJobButton">
+    <addJob (added)="onAddJob($event)"></addJob>
   </span>
   <span *ngIf="showMenu">
     <button nz-dropdown
@@ -50,6 +50,8 @@
                 (click)="onTable('defencecoveraf')">Defence AF (cover)</li>
             <li nz-menu-item
                 (click)="onTable('descriptive')">Timeline</li>
+            <li nz-menu-item
+                (click)="onTable('mitigations')">Mitigations</li>
           </ul>
         </li>
         <li nz-menu-item

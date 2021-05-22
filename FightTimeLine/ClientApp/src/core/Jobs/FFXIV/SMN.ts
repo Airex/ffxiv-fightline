@@ -27,7 +27,8 @@ export const SMN: IJob = {
       cooldown: 30,
       xivDbId: "16508",
       icon: ("52_Summoner/0167_Energy Drain"),
-      abilityType: AbilityType.Damage
+      abilityType: AbilityType.Damage,
+      levelAcquired: 18
     },
 //    {
 //      name: "Egi Assault II",
@@ -50,7 +51,8 @@ export const SMN: IJob = {
       icon: ("61_PetsEgi/0184_Enkindle"),
       requiresBossTarget: true,
       abilityType: AbilityType.Damage,
-      detectStrategy: byName(["120", "16803"], ["Enkindle","Enkindle: Inferno"])
+      detectStrategy: byName(["120", "16803"], ["Enkindle","Enkindle: Inferno"]),
+      levelAcquired: 50
     },
     {
       name: "Tri-disaster",
@@ -60,6 +62,7 @@ export const SMN: IJob = {
       icon: ("61_PetsEgi/3580_Tri-disaster"),
       requiresBossTarget: true,
       abilityType: AbilityType.Damage,
+      levelAcquired: 56
     },
     {
       name: "Aetherpact",
@@ -68,6 +71,7 @@ export const SMN: IJob = {
       xivDbId: "7423",
       icon: ("61_PetsEgi/7423_Aetherpact"),
       abilityType: AbilityType.PartyDamageBuff,
+      levelAcquired: 64
     },
     ...getAbilitiesFrom(casterSharedAbilities),
     medicine["Intelligence"]

@@ -6,20 +6,23 @@ import { BaseOverlapStrategy } from "src/core/Overlap";
 import { byName } from "src/core/AbilityDetectors";
 
 export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJobRegistryService {
-  private jobs: Models.IJob[];
+  private jobs: { [name: string]: Models.IJob };
 
+  constructor() {
+    this.jobs = [PLD, WAR, DRK, GNB, WHM, SCH, AST, BRD, MCH, DNC, DRG, MNK, NIN, SAM, BLM, RDM, SMN].reduce((acc, j) => ({ ...acc, [j.name]: this.build(j) }), {});
+  }
 
   public getJobs(): Models.IJob[] {
-    return this.jobs = (this.jobs = [PLD, WAR, DRK, GNB, WHM, SCH, AST, BRD, MCH, DNC, DRG, MNK, NIN, SAM, BLM, RDM, SMN].map(j => this.build(j)));
+    return Object.values(this.jobs);
   }
 
   private build(job: Models.IJob): Models.IJob {
     return {
-      ...job,      
-      icon: this.getIcon(job.icon),           
+      ...job,
+      icon: this.getIcon(job.icon),
       pets: job.pets && job.pets.map((p) => {
         return { ...p, icon: this.getIcon(p.icon) }
-      }),      
+      }),
       stances: job.stances && job.stances.map(s => {
         return {
           ability: this.buildAbility(s.ability)
@@ -38,12 +41,12 @@ export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJob
       ...a,
       icon: this.getIcon(a.icon),
       detectStrategy: a.detectStrategy || byName([a.xivDbId], [a.name]),
-      overlapStrategy: a.overlapStrategy || new BaseOverlapStrategy()      
+      overlapStrategy: a.overlapStrategy || new BaseOverlapStrategy()
     }
   }
 
   getJob(jobName: string): Models.IJob {
-    const job = this.jobs.find((j: Models.IJob) => j.name === jobName) as Models.IJob;
+    const job = this.jobs[jobName];
     return job;
   }
 

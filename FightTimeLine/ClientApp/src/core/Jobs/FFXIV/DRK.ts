@@ -1,19 +1,20 @@
-import { IJob, DamageType, Role, AbilityType,IAbility } from "../../Models"
+import { IJob, DamageType, Role, AbilityType, IAbility } from "../../Models"
 import { settings, abilitySortFn, getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared"
 
 export const DRK: IJob = {
   name: "DRK",
-  fullName:"Dark Knight",
+  fullName: "Dark Knight",
   role: Role.Tank,
   icon: ("JobIcons/Dark_Knight_Icon_10"),
   abilities: <IAbility[]>[
     {
-      name: "Blood Weapon",      
+      name: "Blood Weapon",
       duration: 10,
       cooldown: 60,
       xivDbId: "3625",
       icon: ("13_DarkKnight/3625_Blood Weapon"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 35
     },
     {
       name: "Flood of Shadow",
@@ -23,6 +24,7 @@ export const DRK: IJob = {
       requiresBossTarget: true,
       icon: ("13_DarkKnight/icon_22"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 74
     },
     {
       name: "Edge of Shadow",
@@ -32,7 +34,8 @@ export const DRK: IJob = {
       requiresBossTarget: true,
       icon: ("13_DarkKnight/icon_23"),
       abilityType: AbilityType.Damage,
-      
+      levelAcquired: 74
+
     },
     {
       name: "Salted Earth",
@@ -42,6 +45,7 @@ export const DRK: IJob = {
       requiresBossTarget: true,
       icon: ("13_DarkKnight/3639_Salted Earth"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 52
     },
     {
       name: "Abyssal Drain",
@@ -51,6 +55,7 @@ export const DRK: IJob = {
       requiresBossTarget: true,
       icon: ("13_DarkKnight/3641_Abyssal Drain"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 56
     },
     {
       name: "Plunge",
@@ -63,7 +68,8 @@ export const DRK: IJob = {
       charges: {
         count: 2,
         cooldown: 30
-      }
+      },
+      levelAcquired: 54
     },
     {
       name: "Carve and Spit",
@@ -73,6 +79,7 @@ export const DRK: IJob = {
       requiresBossTarget: true,
       icon: ("13_DarkKnight/3643_Carve And Spit"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 60
     },
     {
       name: "Shadow Wall",
@@ -85,7 +92,8 @@ export const DRK: IJob = {
       abilityType: AbilityType.SelfDefense,
       defensiveStats: {
         mitigationPercent: 30
-      }
+      },
+      levelAcquired: 38
     },
     {
       name: "Dark Mind",
@@ -97,9 +105,10 @@ export const DRK: IJob = {
       goodForTankBusters: true,
       abilityType: AbilityType.SelfDefense,
       defensiveStats: {
-        mitigationPercent : 20,
+        mitigationPercent: 20,
         damageType: DamageType.Magical
-      }
+      },
+      levelAcquired: 45
     },
     {
       name: "Living Dead",
@@ -113,7 +122,8 @@ export const DRK: IJob = {
       abilityType: AbilityType.SelfDefense,
       defensiveStats: {
         mitigationPercent: 100
-      }
+      },
+      levelAcquired: 50
     },
     {
       name: "The Blackest Night",
@@ -126,8 +136,9 @@ export const DRK: IJob = {
       abilityType: AbilityType.SelfShield,
       settings: [settings.target],
       defensiveStats: {
-        shieldPercent : 25
-      }
+        shieldPercent: 25
+      },
+      levelAcquired: 70
     },
     {
       name: "Delirium",
@@ -137,6 +148,7 @@ export const DRK: IJob = {
       requiresBossTarget: true,
       icon: ("13_DarkKnight/7390_Delirium"),
       abilityType: AbilityType.SelfDamageBuff,
+      levelAcquired: 68
     },
     {
       name: "Dark Missionary",
@@ -149,7 +161,8 @@ export const DRK: IJob = {
       defensiveStats: {
         mitigationPercent: 10,
         damageType: DamageType.Magical
-      }
+      },
+      levelAcquired: 76
     },
     {
       name: "Living Shadow",
@@ -159,6 +172,7 @@ export const DRK: IJob = {
       requiresBossTarget: false,
       icon: ("13_DarkKnight/icon_25"),
       abilityType: AbilityType.Damage,
+      levelAcquired: 80
     },
     ...getAbilitiesFrom(tankSharedAbilities),
     medicine["Strength"]

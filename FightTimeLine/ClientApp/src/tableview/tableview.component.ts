@@ -22,6 +22,7 @@ import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplat
 import { IExportCell, IExportColumn, IExportResultSet, IExportRow } from "src/core/ExportModels";
 import { VisStorageService } from "src/services/VisStorageService";
 import { IFightSerializeData } from "src/core/SerializeController";
+import { MitigationsTemplate } from "src/core/ExportTemplates/MitigationsTemplate";
 
 
 
@@ -64,7 +65,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
     "defenceaf": new BossAttackDefensiveTemplate(false, true),
     "defencecoveraf": new BossAttackDefensiveTemplate(true, true),
     "onesecond": new EachRowOneSecondTemplate(),
-    "descriptive": new DescriptiveTemplate()
+    "descriptive": new DescriptiveTemplate(),
+    "mitigations": new MitigationsTemplate()
   };
 
 
@@ -234,7 +236,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   private loadTable() {
     const serializer = this.fightLineController.createSerializer()
     const exported = serializer.serializeForExport();
-    this.set = this.templates[this.template.toLowerCase()].build(exported, this.presenterManager, this.gameService.jobRegistry);
+    this.set = this.templates[this.template.toLowerCase()].build(exported, this.presenterManager, this.gameService.jobRegistry, this.visStorage.holders);
     this.filterChange(null, null);
   }
 
