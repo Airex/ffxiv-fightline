@@ -9,3 +9,7 @@ nz-tag {
 .clone {
   opacity: 0.4
 }
+
+.tooltip {
+  white-space: pre-wrap;
+}

@@ -111,6 +111,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
         width: "50px",
         align: "center",
         listOfFilter: data.data.boss.downTimes
+          .sort((a, b) => this.offsetCompareFn(a.start, b.start))
           .map(d => ({ text: d.comment, value: d, byDefault: true }))
           .concat({ text: "Other", value: <any>{ comment: "Other" }, byDefault: true }),
         filterFn: (data, row, col) => {
@@ -142,20 +143,17 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
       ...jobs.map(it => {
 
         const filters = !this.filterByAbility
-          ? [{
-            text: "solo",
-            value: "solo",
-            byDefault: true
-          }, {
-            text: "party",
-            value: "party",
-            byDefault: true
-          }]
-          : jobRegistry.getJob(it.name).abilities.filter(jab => this.isDefenceAbility(jab.abilityType)).map(jab => ({
-            text: jab.name,
-            value: jab.name,
-            byDefault: true
-          }));
+          ? this.createSoloPartFilter()
+          : jobRegistry
+            .getJob(it.name)
+            .abilities
+            .filter(jab => this.isDefenceAbility(jab.abilityType))
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(jab => ({
+              text: jab.name,
+              value: jab.name,
+              byDefault: true
+            }));
 
         return <IExportColumn>{
           text: it.name,
@@ -177,6 +175,18 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
     };
   }
 
+  private createSoloPartFilter() {
+    return [{
+      text: "solo",
+      value: "solo",
+      byDefault: true
+    }, {
+      text: "party",
+      value: "party",
+      byDefault: true
+    }];
+  }
+
   private buildTargetIcon(ability: ExportAbility, jobs: ExportJob[]): string {
     const target = ability.settings?.find(s => s.name === SettingsEnum.Target)?.value;
     const job = target && jobs?.find(j => j.id === target);
@@ -184,11 +194,11 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
   }
 
   private isDefenceAbility(type: AbilityType) {
-    return ((type & 1) === 1) ||
-      ((type & 256) === 256) ||
-      ((type & 1024) === 1024) ||
-      ((type & 4096) === 4096) ||
-      ((type & 2048) === 2048)
+    return ((type & AbilityType.SelfDefense) === AbilityType.SelfDefense) ||
+      ((type & AbilityType.PartyDefense) === AbilityType.PartyDefense) ||
+      ((type & AbilityType.SelfShield) === AbilityType.SelfShield) ||
+      ((type & AbilityType.TargetDefense) === AbilityType.TargetDefense) ||
+      ((type & AbilityType.PartyShield) === AbilityType.PartyShield)
   }
 }
 
