@@ -18,10 +18,10 @@
   <nz-space-item *ngIf="distance">
     <nz-statistic [nzValue]="distance" [nzTitle]="'Distance'"></nz-statistic>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
     <button nz-button nzType="primary" #copyButton (click)="copy();copyButton.nzType=null;">Copy</button>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
     <button nz-button nzType="primary" (click)="remove()" nzDanger>Remove</button>
   </nz-space-item>
 </nz-space>

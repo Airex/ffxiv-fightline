@@ -171,7 +171,7 @@
       </div>
     </sidepanel-area>
     <ng-template #similarSelectAll>
-      <a class="similarLink"
+      <a *ngIf="data.mode === 'default'" class="similarLink"
          (click)="similarAllClick()"><span class="">Select all</span></a>
     </ng-template>
   </nz-space-item>

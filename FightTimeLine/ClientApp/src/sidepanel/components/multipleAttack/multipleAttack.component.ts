@@ -19,7 +19,7 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
   constructor(
     private visStorage: VisStorageService,
     private dispatcher: S.DispatcherService,
-    @Inject(SIDEPANEL_DATA) private data: SidepanelParams
+    @Inject(SIDEPANEL_DATA) public data: SidepanelParams
   ) {
     this.items = this.data.items.sort((a: Index.BossAttackMap , b: Index.BossAttackMap)=> a.startAsNumber - b.startAsNumber );
     this.holders = this.visStorage.holders;

@@ -16,7 +16,7 @@
       </div>
     </sidepanel-area>
   </nz-space-item>
-  <nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
     <button nz-button nzType="primary" (click)="remove()" nzDanger>Remove</button>
   </nz-space-item>
 </nz-space>
