@@ -1,12 +1,39 @@
 import { IJobRegistryService } from "src/services/jobregistry.service-interface";
 import { ExportTemplate } from "../BaseExportTemplate";
-import { ExportAbility, ExportData, ExportJob, IExportColumn, IExportItem, IExportResultSet, IExportRow } from "../ExportModels";
+import { ExportAbility, ExportData, ExportJob, IExportColumn, IExportItem, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings, TableOptionSettingType } from "../ExportModels";
 import { SettingsEnum } from "../Jobs/FFXIV/shared";
 import { AbilityType } from "../Models";
 import * as PresentationManager from "../PresentationManager";
 import { Utils } from "../Utils";
 
 export class BossAttackDefensiveTemplate extends ExportTemplate {
+  public get options(): ITableOptionSettings {
+    return {
+      settings: [
+        {
+          name: "cover",
+          "defaultValue": false,
+          displayName: "Cover Attacks",
+          type: TableOptionSettingType.Boolean,
+          description: "Renders ability shadows in for attacka ability covers when active"
+        },
+        {
+          name: "afFilter",
+          "defaultValue": false,
+          displayName: "Filter by Ability",
+          type: TableOptionSettingType.Boolean,
+          description: "Allows to filter by Ability Name if turned on, filter by solo/party effect instead"
+        },
+        {
+          name: "iconsOnly",
+          "defaultValue": false,
+          displayName: "Icons only",
+          type: TableOptionSettingType.Boolean,
+          description: "Does not render ability names when turned on"
+        }       
+      ]
+    }
+  }
   constructor(private coverAll: boolean = false, private filterByAbility: boolean = true) {
     super();
   }
@@ -19,8 +46,30 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
     return (it.type === 1 ? "red" : (it.type === 2 ? "blue" : ""));
   }
 
-  build(data: ExportData, presenter: PresentationManager.PresenterManager, jobRegistry: IJobRegistryService): IExportResultSet {
-    const coverAll = this.coverAll;
+  getOptions(options: ITableOptions) {
+    let coverAll = this.coverAll;
+    if (options && options["cover"] !== undefined)
+      coverAll = options["cover"];
+
+    let afFilter = this.filterByAbility;
+    if (options && options["afFilter"] !== undefined)
+      afFilter = options["afFilter"];
+
+    let iconsOnly = false;
+    if (options && options["iconsOnly"] !== undefined)
+      iconsOnly = options["iconsOnly"];
+
+    let showTarget = false;
+    if (options && options["showTarget"] !== undefined)
+      showTarget = options["showTarget"];
+
+    return [coverAll, afFilter, iconsOnly, showTarget];
+  }
+
+  build(data: ExportData, presenter: PresentationManager.PresenterManager, jobRegistry: IJobRegistryService, options: ITableOptions): IExportResultSet {
+
+    const [coverAll, afFilter, iconsOnly, showTarget] = this.getOptions(options);
+
     const used = new Set<string>();
     const jobs = data.data.jobs.sort((a, b) => a.role - b.role);
     const rows = data.data.boss.attacks
@@ -67,14 +116,14 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
               if (!condition) return acc;
 
               const result = <IExportItem>{
-                text: ability.ability,
+                text: iconsOnly ? "" : ability.ability,
                 icon: ability.icon,
                 refId: ability.id,
                 targetIcon: this.buildTargetIcon(ability, jobs),
                 usageOffset: Utils.formatTime(new Date(Utils.getDateFromOffset(ability.start).getTime() - Utils.getDateFromOffset(attack.offset).getTime())),
                 clone: used.has(ability.id),
                 filterFn: (a) => {
-                  if (!this.filterByAbility)
+                  if (!afFilter)
                     return (
                       (ability.type & AbilityType.SelfDefense) === AbilityType.SelfDefense ||
                       (ability.type & AbilityType.TargetDefense) === AbilityType.TargetDefense ||
@@ -142,7 +191,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
       },
       ...jobs.map(it => {
 
-        const filters = !this.filterByAbility
+        const filters = !afFilter
           ? this.createSoloPartFilter()
           : jobRegistry
             .getJob(it.name)

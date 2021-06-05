@@ -1,0 +1,53 @@
+<button nz-button
+        nz-popover        
+        nzPopoverTrigger="click"
+        nzPopoverPlacement="bottomLeft"
+        [nzPopoverContent]="contentTemplate">
+  <span>
+    <i nz-icon
+       nzType="setting"
+       theme="twotone"></i>
+    Options
+  </span>
+</button>
+
+<ng-template #contentTemplate>
+  <div nz-row
+       style="width: 320px;"
+       class="noselect">
+    <div nz-col
+         nzSpan="24">
+      <form nz-form
+            [formGroup]="form"
+            nzLayout="vertical">
+        <nz-form-item *ngFor="let setting of settings?.settings">
+          <nz-form-label [nzFor]="setting.name">
+            <span>
+              {{setting.displayName}}
+            </span>
+            <i nz-icon
+               nzType="info-circle"
+               theme="twotone"
+               style="margin-left: 8px"
+               nz-tooltip
+               *ngIf="setting.description"
+               [nzTooltipTitle]="setting.description">
+            </i>
+          </nz-form-label>
+          <nz-form-control>
+            <div [ngSwitch]="setting.type">
+              <div *ngSwitchCase="0">
+                <nz-switch [nzDisabled]="false"
+                           [formControlName]="setting.name"
+                           style="margin-left: 15px"
+                           [id]="setting.name"
+                           (ngModelChange)="change(setting.name, $event)">
+                </nz-switch>
+              </div>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+  </div>
+</ng-template>

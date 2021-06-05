@@ -6,7 +6,10 @@
          [connected]="fightHubService.connected"
          [authenticated]="authenticationService.authenticated"
          [username]="authenticationService.username"         
-         [fraction]="fightLineController.fraction">
+         [fraction]="fightLineController.fraction"
+         [tableviewoptions]="options"
+         (tableViewOptionsChanged)="optionsChanged($event)"
+         >
 </toolbar>
 <!-- ReSharper disable once InvalidValue -->
 <div class="content noselect"

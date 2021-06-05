@@ -61,6 +61,9 @@
       </ul>
     </nz-dropdown-menu>
   </span>
+  <span style="margin-left: 10px;">
+    <tableviewoptions [settings]="tableviewoptions" (changed)="onTableOptionsChanged($event)"></tableviewoptions>
+  </span>
   <span style="margin-left: 10px"
         *ngIf="showUndoRedo">
     <nz-button-group>

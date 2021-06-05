@@ -1,8 +1,11 @@
 import { ExportTemplate } from "../BaseExportTemplate"
-import { ExportData, IExportColumn, IExportResultSet, IExportRow } from "../ExportModels";
+import { ExportData, IExportColumn, IExportResultSet, IExportRow, ITableOptionSettings } from "../ExportModels";
 import { Utils } from "../Utils"
 
 export class EachRowOneSecondTemplate extends ExportTemplate {
+  public get options(): ITableOptionSettings {
+    return null;
+  }
   get name(): string {
     return "Each row as one second";
   }

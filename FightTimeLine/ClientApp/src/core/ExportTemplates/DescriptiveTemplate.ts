@@ -1,9 +1,12 @@
 import { ExportTemplate } from "../BaseExportTemplate"
-import { ExportData, IExportResultSet, IExportRow } from "../ExportModels";
+import { ExportData, IExportResultSet, IExportRow, ITableOptionSettings } from "../ExportModels";
 import { PresenterManager } from "../PresentationManager";
 import { Utils } from "../Utils";
 
 export class DescriptiveTemplate extends ExportTemplate {
+  public get options(): ITableOptionSettings {
+    return null;
+  }
   constructor() {
     super();
   }

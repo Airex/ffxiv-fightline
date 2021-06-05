@@ -57,7 +57,9 @@ export class TableViewDialog implements OnInit {
 
     this.loading = true;
     setTimeout(() => {
-      const d = this.templates.find(it => it.name === this.selectedValue).build(this.data, this.presenterManager, this.gameService.jobRegistry, this.visStorage.holders);
+      const d = this.templates
+        .find(it => it.name === this.selectedValue)
+        .build(this.data, this.presenterManager, this.gameService.jobRegistry, null, this.visStorage.holders);
       this.set = d;
       this.filterChange(null, null);
       this.loading = false;

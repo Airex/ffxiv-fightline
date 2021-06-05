@@ -127,6 +127,7 @@ import { SettingsDialogTeamworkTab } from 'src/dialogs/settingsDialog/tabs/teamw
 import { SettingsDialogPresetsTab } from 'src/dialogs/settingsDialog/tabs/presets/presets.component';
 import { AddJobComponent } from 'src/fightline/addJob/addJob.component';
 import { JobRolePipe } from 'src/heplers/JobRolePipe';
+import { TableViewOptionsComponent } from 'src/components/tableviewoptions/tableviewoptions.component';
 
 const zorroModules = [
   NzAlertModule,
@@ -260,6 +261,7 @@ export function getBaseUrl() {
     JobAbilityComponent,
     AddJobComponent,
     MultipleDownTimeComponent,
+    TableViewOptionsComponent,
     DownTimeComponent,
     SyncSettingsComponent,
     SyncDowntimeComponent,
@@ -310,7 +312,7 @@ export function getBaseUrl() {
   entryComponents: [
     ViewComponent, FilterComponent, SettingsFilterComponent, AreaComponent, AddJobComponent, SettingsViewComponent, PingComponent, SingleAbilityComponent,
     SingleAttackComponent, MultipleAbilityComponent, MultipleAttackComponent, SyncSettingsComponent, JobComponent, JobAbilityComponent, SidepanelComponent,
-    DownTimeComponent, PlanAreaComponent, SyncDowntimeComponent, CellComponent, MultipleDownTimeComponent,
+    DownTimeComponent, PlanAreaComponent, SyncDowntimeComponent, CellComponent, MultipleDownTimeComponent,TableViewOptionsComponent,
     SettingsDialogMainTab, SettingsDialogColorTab, SettingsDialogFflogsTab, SettingsDialogTableviewTab, SettingsDialogTeamworkTab,SettingsDialogPresetsTab,
     ...DialogsModuleComponents
   ],

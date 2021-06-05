@@ -4,7 +4,7 @@
           [nzTooltipPlacement]="'right'"
           [class.clone]="d.clone"          
           (click)="select(d.refId, $event)"
-          *ngIf="d.visible && d.text">
+          *ngIf="d.visible">
     <div style="margin: 0 2px 1px 2px">
       <img class="abilityIcon"
            style="margin-top: -3px; margin-right: 2px;"
@@ -12,7 +12,7 @@
            [src]="d.icon" />
       <span style="white-space: pre-line;">{{d.text}}</span>
       <span class="usageOffset"
-            *ngIf="d.usageOffset && !d.clone"> ({{d.usageOffset}})</span>
+            *ngIf="d.usageOffset && !d.clone && d.text"> ({{d.usageOffset}})</span>
       <span *ngIf="d.targetIcon"
             style="margin-left: 2px;">
         <span style="margin-left: 2px;">&gt;</span>

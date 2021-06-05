@@ -1,12 +1,15 @@
 import { IJobRegistryService } from "src/services/jobregistry.service-interface";
 import { ExportTemplate } from "../BaseExportTemplate";
 import { calculateDefsForAttack, calculateMitigationForAttack } from "../Defensives";
-import { ExportAttack, ExportData, ExportJob, IExportCell, IExportColumn, IExportResultSet, IExportRow } from "../ExportModels";
+import { ExportAttack, ExportData, ExportJob, IExportCell, IExportColumn, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings } from "../ExportModels";
 import { Holders } from "../Holders";
 import { PresenterManager } from "../PresentationManager";
 import { Utils } from "../Utils";
 
 export class MitigationsTemplate extends ExportTemplate {
+   public get options(): ITableOptionSettings {
+      return null;
+   }
    public get name(): string {
       return "Mitigations";
    }
@@ -15,7 +18,7 @@ export class MitigationsTemplate extends ExportTemplate {
       super()
    }
 
-   build(data: ExportData, presenter: PresenterManager, jobRegistry: IJobRegistryService, holders: Holders): IExportResultSet {
+   build(data: ExportData, presenter: PresenterManager, jobRegistry: IJobRegistryService,options:ITableOptions, holders: Holders): IExportResultSet {
 
       const jobs = data.data.jobs.sort((a, b) => a.role - b.role);
 

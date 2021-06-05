@@ -109,3 +109,23 @@ export interface IExportItem {
   tooltip?: string;
   filterFn?:(a:string[]) => boolean;
 }
+
+export enum TableOptionSettingType {
+  Boolean
+}
+
+export interface ITableOptionsSetting {
+  name: string;
+  type: TableOptionSettingType;
+  description?: string;
+  defaultValue?: any
+  displayName: string;
+}
+
+export interface ITableOptionSettings {
+  settings: ITableOptionsSetting[];
+}
+
+export interface ITableOptions{
+  [name: string] : any
+}

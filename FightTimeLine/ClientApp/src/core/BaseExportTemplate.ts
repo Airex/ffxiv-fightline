@@ -1,5 +1,5 @@
 import { Utils } from "./Utils"
-import { ExportData, IExportCell, IExportItem, IExportResultSet } from "./ExportModels";
+import { ExportData, IExportCell, IExportItem, IExportResultSet, ITableOptions, ITableOptionSettings } from "./ExportModels";
 import { PresenterManager } from "./PresentationManager";
 import { Holders } from "./Holders";
 import { IJobRegistryService } from "src/services/jobregistry.service-interface";
@@ -7,7 +7,16 @@ import { IJobRegistryService } from "src/services/jobregistry.service-interface"
 export abstract class ExportTemplate {
   public startDate = new Date(946677600000);
   public abstract get name(): string;
-  abstract build(data: ExportData, presenter: PresenterManager, jobRegistry: IJobRegistryService, holders?:Holders): IExportResultSet;
+  abstract build(
+    data: ExportData, 
+    presenter: PresenterManager, 
+    jobRegistry: IJobRegistryService, 
+    options?:ITableOptions,
+    holders?:Holders
+    )
+    : IExportResultSet;
+
+  public abstract get options(): ITableOptionSettings | null;
 
   offsetCompareFn(a: string, b: string): number {
     const d = new Date();

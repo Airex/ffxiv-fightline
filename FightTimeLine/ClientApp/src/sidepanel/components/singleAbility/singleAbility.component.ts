@@ -39,19 +39,19 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
 
     this.items = this.data.items;
 
-    const groups = {};
-
+    
     if (this.ability.xivDbId) {
       this.xivapi.loadDescription(this.ability.xivDbType, this.ability.xivDbId).subscribe(a => {
         if (a?.Description) {
           this.description =
-            this.sanitizer.bypassSecurityTrustHtml(a.Description.replace(/\n+/g, "<br/>"));
+          this.sanitizer.bypassSecurityTrustHtml(a.Description.replace(/\n+/g, "<br/>"));
         } else {
           this.description = "";
         }
       });
     }
-
+    
+    const groups = {};
 
     if (this.it.ability.ability.settings) {
       for (let d of this.it.ability.ability.settings) {

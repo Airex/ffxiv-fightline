@@ -19,7 +19,7 @@ import * as Generators from "../core/Generators";
 import * as PresentationManager from "../core/PresentationManager";
 import { ICommandData } from "src/core/UndoRedo";
 import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
-import { IExportCell, IExportColumn, IExportResultSet, IExportRow } from "src/core/ExportModels";
+import { IExportCell, IExportColumn, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings } from "src/core/ExportModels";
 import { VisStorageService } from "src/services/VisStorageService";
 import { IFightSerializeData } from "src/core/SerializeController";
 import { MitigationsTemplate } from "src/core/ExportTemplates/MitigationsTemplate";
@@ -41,6 +41,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   private idgen = new Generators.IdGenerator();
   presenterManager = new PresentationManager.PresenterManager();
   sideNavOpened: boolean = false;
+  options: ITableOptionSettings;
 
   @ViewChild("sidepanel", { static: true })
   sidepanel: SidepanelComponent;
@@ -233,10 +234,14 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  private loadTable() {
+  private loadTable(opts:ITableOptions = null) {
     const serializer = this.fightLineController.createSerializer()
     const exported = serializer.serializeForExport();
-    this.set = this.templates[this.template.toLowerCase()].build(exported, this.presenterManager, this.gameService.jobRegistry, this.visStorage.holders);
+    const template = this.templates[this.template.toLowerCase()];    
+    if (!opts)
+      this.options = template.options;
+    this.set = template
+      .build(exported, this.presenterManager, this.gameService.jobRegistry, opts, this.visStorage.holders);
     this.filterChange(null, null);
   }
 
@@ -281,7 +286,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     } else {
       this.fightLineController.execute(data);
     }
-    this.loadTable();
+    this.loadTable(null);
   }
 
   @HostListener("window:unload", ["$event"])
@@ -293,6 +298,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
     return item.text;
   }
 
+  optionsChanged(values) {
+    this.loadTable(values);
+  }
 
 
   ngOnDestroy(): void {

@@ -1,7 +1,10 @@
 import { ExportTemplate } from "../BaseExportTemplate"
-import { ExportData, IExportColumn, IExportResultSet, IExportRow } from "../ExportModels";
+import { ExportData, IExportColumn, IExportResultSet, IExportRow, ITableOptionSettings } from "../ExportModels";
 
 export class FirstTemplate extends ExportTemplate {
+  public get options(): ITableOptionSettings {
+    return null;
+  }
   get name(): string {
     return "First template";
   }

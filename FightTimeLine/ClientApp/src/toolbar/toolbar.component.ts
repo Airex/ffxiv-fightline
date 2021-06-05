@@ -13,7 +13,7 @@ import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
 import * as _ from "lodash";
 import { ToolsManager } from "../core/ToolsManager";
-import { VisStorageService } from "src/services/VisStorageService";
+import { ITableOptions } from "src/core/ExportModels";
 
 @Component({
   selector: "toolbar",
@@ -40,6 +40,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Input("connectedUsers") connectedUsers: M.IHubUser[];
   @Input("connected") connected: boolean;
   @Input("toolsManager") toolsManager: ToolsManager;  
+  @Input("tableviewoptions") tableviewoptions: any;  
 
   private _fraction: M.IFraction;
 
@@ -70,6 +71,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   @Output("table") table: EventEmitter<string> = new EventEmitter<string>();
 
   @Output("addJob") addJob: EventEmitter<string> = new EventEmitter<string>();
+  @Output("tableViewOptionsChanged") tableViewOptionsChanged: EventEmitter<ITableOptions> = new EventEmitter<ITableOptions>();
 
   @ViewChild("filter") public filter: FilterComponent;
   @ViewChild("view") public view: ViewComponent;
@@ -134,6 +136,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   onOpenBossTemplates() {
     this.bossTemplates.emit();
   }
+
+  onTableOptionsChanged(values){
+    this.tableViewOptionsChanged.emit(values);
+  }
+
 
   onSave() {
     this.saveFight.emit();
