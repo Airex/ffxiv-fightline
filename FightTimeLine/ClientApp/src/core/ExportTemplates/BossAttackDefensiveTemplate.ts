@@ -100,7 +100,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
             data.data.bossTargets
               .filter(bt => this.isOffsetInRange(attack.offset, bt.start, bt.end))
               .map(bt => jobs.find(j => j.id === bt.target))
-              .map(p => ({ text: p.name, icon: p.icon, refId: p.id })),
+              .map(p => ({ text: iconsOnly ? "" : p.name, icon: p.icon, refId: p.id })),
             {
               align: "center",
               disableUnique: true,
@@ -205,7 +205,7 @@ export class BossAttackDefensiveTemplate extends ExportTemplate {
             }));
 
         return <IExportColumn>{
-          text: it.name,
+          text: iconsOnly? "": it.name,
           name: it.id,
           icon: it.icon,
           refId: it.id,
