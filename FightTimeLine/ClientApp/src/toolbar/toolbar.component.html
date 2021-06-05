@@ -61,7 +61,7 @@
       </ul>
     </nz-dropdown-menu>
   </span>
-  <span style="margin-left: 10px;">
+  <span style="margin-left: 10px;" *ngIf="tableviewoptions">
     <tableviewoptions [settings]="tableviewoptions" (changed)="onTableOptionsChanged($event)"></tableviewoptions>
   </span>
   <span style="margin-left: 10px"
