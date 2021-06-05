@@ -38,6 +38,7 @@
             <div [ngSwitch]="setting.type">
               <div *ngSwitchCase="0">
                 <nz-switch [nzDisabled]="false"
+                            [nzSize]="'small'"
                            [formControlName]="setting.name"
                            style="margin-left: 15px"
                            [id]="setting.name"

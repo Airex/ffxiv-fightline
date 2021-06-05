@@ -535,3 +535,7 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
 .bot-logo:hover {
   visibility: collapse;
 }
+
+.ant-tag.tableview {
+  padding: 0 2px !important;
+}

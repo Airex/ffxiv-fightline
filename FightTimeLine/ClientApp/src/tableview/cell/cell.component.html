@@ -3,14 +3,15 @@
           [nz-tooltip]="!!d.tooltip && tt"
           [nzTooltipPlacement]="'right'"
           [class.clone]="d.clone"          
+          [class.tableview]="true"
           (click)="select(d.refId, $event)"
-          *ngIf="d.visible">
+          *ngIf="d.visible && (d.text || (!d.text && d.icon))">
     <div style="margin: 0 2px 1px 2px">
       <img class="abilityIcon"
-           style="margin-top: -3px; margin-right: 2px;"
+           style="margin-top: -3px; "
            *ngIf="d.icon"
            [src]="d.icon" />
-      <span style="white-space: pre-line;">{{d.text}}</span>
+      <span *ngIf="d.text" style="white-space: pre-line;margin-left: 2px;">{{d.text}}</span>
       <span class="usageOffset"
             *ngIf="d.usageOffset && !d.clone && d.text"> ({{d.usageOffset}})</span>
       <span *ngIf="d.targetIcon"
