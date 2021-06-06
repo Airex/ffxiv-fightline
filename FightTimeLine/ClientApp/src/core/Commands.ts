@@ -664,6 +664,8 @@ export class ChangeAbilitySettingsCommand implements Command {
     const item = context.holders.itemUsages.get(this.id);
     item.settings = JSON.parse(this.prevSettings);
 
+    context.holders.itemUsages.update([item]);
+    
     context.update({ updateBossTargets: true });
   }
 
@@ -674,6 +676,7 @@ export class ChangeAbilitySettingsCommand implements Command {
     if (typeof settings === "string")
       settings = JSON.parse(settings);
     item.settings = settings;
+    context.holders.itemUsages.update([item]);
 
     context.update({ updateBossTargets: true });
   }

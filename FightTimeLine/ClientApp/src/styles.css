@@ -144,6 +144,18 @@ html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-con
   /* margin-top: -16px; */
 }
 
+.progress-wrapper-fl.note:after {
+  content: '';
+  left: 0;
+  top: 0;
+  position: absolute;
+  -webkit-clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  clip-path: polygon(100% 0, 0 0, 0 100%);
+  background: #000000;
+  width: 9px;
+  height: 9px;
+}
+
 .vis-item.compact .progress-wrapper-fl {
   height: 3px;
 }

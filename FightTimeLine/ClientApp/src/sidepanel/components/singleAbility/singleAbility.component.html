@@ -73,6 +73,7 @@
                 <textarea nz-input
                           [nzAutosize]="{ minRows: 3, maxRows: 8 }"                          
                           [formControlName]="setting.name"
+                          [disabled]="data.mode!=='default'"
                           style="margin-left: 15px;width: 90%;"                          
                           [id]="setting.name"
                           (ngModelChange)="modified=true"

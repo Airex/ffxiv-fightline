@@ -100,6 +100,10 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
     return true;
   }
 
+  get hasNote(): boolean{
+    return !!this.getSettingData("note")?.value;
+  }
+
   canMove(overlapData: IOverlapCheckData): boolean {
     return overlapData.end.valueOf() - overlapData.start.valueOf() === this.ability.ability.cooldown * 1000 &&
       overlapData.start >= new Date(overlapData.globalStart.valueOf() - ((this.ability.ability.requiresBossTarget ? 0 : 1) * 30 * 1000)) &&

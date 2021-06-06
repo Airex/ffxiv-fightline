@@ -598,9 +598,10 @@ export class FightTimeLineController {
 
   visibleFrameTemplate(item: DataItem): string {
     if (item == null) return "";
-    if (!this.idgen.isAbilityUsage(item.id)) return "";
+    if (!this.idgen.isAbilityUsage(item.id)) return "";    
     const map = this.holders.abilities.get(item.group);
     if (!map) return "";
+    const usageMap = this.holders.itemUsages.get(item.id as string);
     const ability = map.ability;
 
     const offset = ability.activationOffset || 0;
@@ -612,11 +613,12 @@ export class FightTimeLineController {
       .filter(it => (ability.abilityType & M.AbilityType[it]) === M.AbilityType[it])
       .map(it => it);
     const color = this.colorSettings[arr[0]];
-    return this.createItemUsageFrame(offsetPercentage, percentage, this.presenterManager.view.colorfulDurations && color ? color : "");
+    const hasNote = usageMap.hasNote;
+    return this.createItemUsageFrame(offsetPercentage, percentage, this.presenterManager.view.colorfulDurations && color ? color : "", hasNote);
   }
 
-  createItemUsageFrame(offsetPercentage: number, percentage: number, color: string): string {
-    return `<div class="progress-wrapper-fl"><div class="progress-fl-offset" style = "width:${offsetPercentage}%"></div><div class="progress-fl" style="width:${percentage}%;background-color:${color}"> </div></div >`;
+  createItemUsageFrame(offsetPercentage: number, percentage: number, color: string, hasNote: boolean): string {
+    return `<div class="progress-wrapper-fl ${hasNote?"note":""}"><div class="progress-fl-offset" style = "width:${offsetPercentage}%"></div><div class="progress-fl" style="width:${percentage}%;background-color:${color}"> </div></div >`;
   }
 
   tooltipOnItemUpdateTime(item: DataItem): any {
