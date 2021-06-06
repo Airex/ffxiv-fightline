@@ -35,7 +35,8 @@ export const getAbilitiesFrom = (arr: IAbilities): IAbility[] => {
 export enum SettingsEnum {
   Target = "target",
   ChangesTarget = "changesTarget",
-  HealShield = "healShield"
+  HealShield = "healShield",
+  Note = "note"
 }
 
 export type SettingsType = { [T in SettingsEnum]: IAbilitySetting }
@@ -66,6 +67,13 @@ export const settings: SettingsType = {
     description: "Determines if ability applies shield",
     type: "boolean",
     default: false
+  },
+  note: {
+    name: "note",
+    displayName:"Note",
+    description: "",
+    type: "text",
+    default: ""
   }
 }
 

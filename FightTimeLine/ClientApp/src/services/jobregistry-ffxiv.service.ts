@@ -41,7 +41,8 @@ export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJob
       ...a,
       icon: this.getIcon(a.icon),
       detectStrategy: a.detectStrategy || byName([a.xivDbId], [a.name]),
-      overlapStrategy: a.overlapStrategy || new BaseOverlapStrategy()
+      overlapStrategy: a.overlapStrategy || new BaseOverlapStrategy(),
+      settings: [Shared.settings.note, ...(a.settings || [])]
     }
   }
 

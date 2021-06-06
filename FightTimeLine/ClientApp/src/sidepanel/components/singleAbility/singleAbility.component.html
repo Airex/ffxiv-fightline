@@ -63,15 +63,27 @@
                theme="twotone"
                style="margin-left: 8px"
                nz-tooltip
+               *ngIf="setting.description"
                [nzTooltipTitle]="setting.description">
             </i>
           </nz-form-label>
-          <nz-form-control>
+          <nz-form-control>            
             <div [ngSwitch]="setting.type">
+              <div *ngSwitchCase="'text'">
+                <textarea nz-input
+                          [nzAutosize]="{ minRows: 3, maxRows: 8 }"                          
+                          [formControlName]="setting.name"
+                          style="margin-left: 15px;width: 90%;"                          
+                          [id]="setting.name"
+                          (ngModelChange)="modified=true"
+                          placeholder="Leave your note here">
+                </textarea>              
+              </div>
               <div *ngSwitchCase="'boolean'">
                 <nz-switch [nzDisabled]="data.mode!=='default'"
                            [formControlName]="setting.name"
                            style="margin-left: 15px"
+                           [nzSize]="'small'"
                            [id]="setting.name"
                            (ngModelChange)="modified=true">
                 </nz-switch>
