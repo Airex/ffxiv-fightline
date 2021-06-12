@@ -9,7 +9,7 @@ import { SidepanelComponent } from "../sidepanel/sidepanel.component"
 import { NgProgressComponent } from "ngx-progressbar"
 
 import { EachRowOneSecondTemplate } from "../core/ExportTemplates/EachRowOneSecondTemplate"
-import { BossAttackDefensiveTemplate } from "../core/ExportTemplates/BossAttackDefensiveTemplate"
+import { BossAttackDefensiveTemplateV2 } from "../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { ExportTemplate } from "../core/BaseExportTemplate"
 import * as Gameserviceprovider from "../services/game.service-provider";
 import * as Gameserviceinterface from "../services/game.service-interface";
@@ -61,10 +61,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
   pagesize = Number.MAX_VALUE;
 
   templates: { [name: string]: ExportTemplate } = {
-    "defence": new BossAttackDefensiveTemplate(false, false),
-    "defencecover": new BossAttackDefensiveTemplate(true, false),
-    "defenceaf": new BossAttackDefensiveTemplate(false, true),
-    "defencecoveraf": new BossAttackDefensiveTemplate(true, true),
+    "defence": new BossAttackDefensiveTemplateV2(),
+    "defencecover": new BossAttackDefensiveTemplateV2(),
+    "defenceaf": new BossAttackDefensiveTemplateV2(),
+    "defencecoveraf": new BossAttackDefensiveTemplateV2(),
     "onesecond": new EachRowOneSecondTemplate(),
     "descriptive": new DescriptiveTemplate(),
     "mitigations": new MitigationsTemplate()
@@ -241,7 +241,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     if (!opts)
       this.options = template.options;
     this.set = template
-      .build(exported, this.presenterManager, this.gameService.jobRegistry, opts, this.visStorage.holders);
+      .buildTable(exported, this.presenterManager, this.gameService.jobRegistry, opts, this.visStorage.holders);
     this.filterChange(null, null);
   }
 

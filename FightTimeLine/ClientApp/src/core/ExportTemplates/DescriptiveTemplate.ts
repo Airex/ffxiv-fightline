@@ -1,9 +1,9 @@
-import { ExportTemplate } from "../BaseExportTemplate"
-import { ExportData, IExportResultSet, IExportRow, ITableOptionSettings } from "../ExportModels";
+import { AttackRowExportTemplate } from "../BaseExportTemplate"
+import { ExportAttack, ExportData, IExportCell, IExportColumn, ITableOptionSettings } from "../ExportModels";
 import { PresenterManager } from "../PresentationManager";
-import { Utils } from "../Utils";
+import { AttackNameColumn, BaseColumnTemplate, IColumnTemplate, TimeColumn } from "../TableModels";
 
-export class DescriptiveTemplate extends ExportTemplate {
+export class DescriptiveTemplate extends AttackRowExportTemplate {
   public get options(): ITableOptionSettings {
     return null;
   }
@@ -15,85 +15,39 @@ export class DescriptiveTemplate extends ExportTemplate {
     return "Descriptive";
   }
 
-  build(data: ExportData, presenter: PresenterManager): IExportResultSet {
-
-    const rows = data.data.boss.attacks
-      .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
-      .map(attack => <IExportRow>{
-        cells: [
-          this.text({
-            text: attack.offset,
-            align: "center",
-            refId: (data.data.boss.downTimes.find(d => Utils.inRange(d.start, d.end, attack.offset)) || { id: null }).id,
-            disableUnique: true,
-            colorFn: (a) => {
-              const dt = data.data.boss.downTimes.find(d => Utils.inRange(d.start, d.end, a.offset));
-              return dt && dt.color || "";
-            },
-            bgRefIdFn: (a) => {
-              const dt = data.data.boss.downTimes.find(d => Utils.inRange(d.start, d.end, attack.offset))
-              return dt && dt.id;
-            }
-          }),
-          this.text({
-            text: attack.name,
-            color: this.getColor(attack),
-            refId: attack.id
-          }),
-          this.text({
-            text: attack.desc
-          }),
-          this.items(attack.tags?.map(t => ({ text: t })) || [], {})
-
-        ],
-        filterData: attack
-      });
-
-    const columns = [
-      {
-        text: "Time",
-        name: "time",
-        width: "50px",
-        align: "center",
-        listOfFilter: data.data.boss.downTimes
-          .map(d => ({ text: d.comment, value: d, byDefault: true }))
-          .concat({ text: "Other", value: <any>{ comment: "Other" }, byDefault: true }),
-        filterFn: (data, row, col) => {
-          const found = col && col.listOfFilter && col.listOfFilter.find(item => item.value && Utils.inRange(item.value.start, item.value.end, row.filterData.offset))
-
-          if (found)
-            return data.some(item => item && item.comment === found.value.comment);
-
-          return data.some(item => item && item.comment === "Other");
-        },
-      },
-      {
-        name: "boss",
-        text: "Attack",
-        width: "200px",
-        listOfFilter: (presenter && presenter.tags || []).concat(["Other"]).map(t => ({ text: t, value: t, byDefault: true })),
-        filterFn: (a, d) => {
-          let visible = !a || a.some(value => ((!d.filterData.tags || d.filterData.tags.length === 0) && value === "Other") || d.filterData.tags && d.filterData.tags.includes(value));
-          return visible;
-        }
-      },
-      {
-        name: "desc",
-        text: "Description",
-      },
-      {
-        name: "tags",
-        text: "Tags",
-      },
+  getColumns(data: ExportData, presenter: PresenterManager): IColumnTemplate<ExportAttack>[] {
+    return [
+      new TimeColumn(),
+      new AttackNameColumn(presenter),
+      new AttackDescriptionColumn(),
+      new AttackTagsColumn()
     ];
+  }
+}
 
-
-    return <IExportResultSet>{
-      columns: columns,
-      rows: rows,
-      title: this.name,
-      filterByFirstEntry: true
+class AttackDescriptionColumn extends BaseColumnTemplate implements IColumnTemplate<ExportAttack>{
+  buildHeader(data: ExportData): IExportColumn {
+    return {
+      name: "desc",
+      text: "Description",
     };
+  }
+  buildCell(data: ExportData, attack: ExportAttack): IExportCell {
+    return this.text({
+      text: attack.desc
+    })
+  }
+}
+
+class AttackTagsColumn extends BaseColumnTemplate implements IColumnTemplate<ExportAttack>{
+  buildHeader(data: ExportData): IExportColumn {
+    return {
+      name: "tags",
+      text: "Tags",
+    };
+  }
+  buildCell(data: ExportData, attack: ExportAttack): IExportCell {
+    return this.items(attack.tags?.map(t => ({ text: t })) || [], {});
   }
 }
 

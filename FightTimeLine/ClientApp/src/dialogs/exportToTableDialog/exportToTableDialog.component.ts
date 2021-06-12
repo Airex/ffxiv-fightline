@@ -3,21 +3,21 @@ import { FormControl } from "@angular/forms"
 import { SpreadSheetsService } from "../../services/SpreadSheetsService"
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService"
 import { ExportTemplate } from "../../core/BaseExportTemplate"
-import { FirstTemplate } from "../../core/ExportTemplates/FirstTemplate"
-import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate"
-import { BossAttackDefensiveTemplate } from "../../core/ExportTemplates/BossAttackDefensiveTemplate"
+import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { AuthService, GoogleLoginProvider, SocialUser } from "angularx-social-login";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { ExportData } from "src/core/ExportModels";
 import { gameServiceToken } from "src/services/game.service-provider";
 import { IGameService } from "src/services/game.service-interface";
+import { MitigationsTemplate } from "src/core/ExportTemplates/MitigationsTemplate";
+import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
 
 @Component({
   selector: "exportToTableDialog",
   templateUrl: "./exportToTableDialog.component.html",
   styleUrls: ["./exportToTableDialog.component.css"]
 })
-export class ExportToTableDialog implements OnInit, AfterViewInit  {
+export class ExportToTableDialog implements OnInit, AfterViewInit {
 
   @Input("data") data: ExportData;
   @ViewChild("headerTemplate", { static: true }) headerTemplate: TemplateRef<any>;
@@ -27,7 +27,7 @@ export class ExportToTableDialog implements OnInit, AfterViewInit  {
     private service: SpreadSheetsService,
     private notification: ScreenNotificationsService,
     @Inject(gameServiceToken) private gameService: IGameService,
-    public dialogRef:NzModalRef,
+    public dialogRef: NzModalRef,
     @Inject("GOOGLE_API_CLIENT_KEY") public apiKey: string) {
   }
 
@@ -36,13 +36,13 @@ export class ExportToTableDialog implements OnInit, AfterViewInit  {
   url: string;
   user: SocialUser;
   loggedIn: boolean;
-  templates: ExportTemplate[] = [new FirstTemplate(), new EachRowOneSecondTemplate(), new BossAttackDefensiveTemplate()];
+  templates: ExportTemplate[] = [new BossAttackDefensiveTemplateV2(), new MitigationsTemplate(), new DescriptiveTemplate()];
   scope = [
     "https://www.googleapis.com/auth/spreadsheets",
   ].join(" ");
 
   ngOnInit(): void {
-    
+
 
     this.authService.authState.subscribe((user) => {
       this.user = user;
@@ -55,7 +55,7 @@ export class ExportToTableDialog implements OnInit, AfterViewInit  {
   ngAfterViewInit() {
     setTimeout(() => {
       this.dialogRef.getConfig().nzTitle = this.headerTemplate;
-    },0);
+    }, 0);
 
   }
 
@@ -70,11 +70,13 @@ export class ExportToTableDialog implements OnInit, AfterViewInit  {
   export() {
     if (!this.exportTemplatesControl.value) return;
     this.service.create(this.user.authToken,
-        this.templates.find(it => it.name === this.exportTemplatesControl.value).build(this.data, null, this.gameService.jobRegistry))
+      this
+        .templates.find(it => it.name === this.exportTemplatesControl.value)
+        .buildTable(this.data, null, this.gameService.jobRegistry))
       .subscribe(ev => {
-          this.url = ev.spreadsheetUrl;
-          console.log(ev);
-        },
+        this.url = ev.spreadsheetUrl;
+        console.log(ev);
+      },
         ev => {
           this.authService.signOut();
         });

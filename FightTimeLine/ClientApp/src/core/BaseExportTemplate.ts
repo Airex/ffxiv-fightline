@@ -1,20 +1,28 @@
 import { Utils } from "./Utils"
-import { ExportData, IExportCell, IExportItem, IExportResultSet, ITableOptions, ITableOptionSettings } from "./ExportModels";
+import { ExportAttack, ExportData, IExportCell, IExportItem, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings } from "./ExportModels";
 import { PresenterManager } from "./PresentationManager";
 import { Holders } from "./Holders";
 import { IJobRegistryService } from "src/services/jobregistry.service-interface";
+import { IColumnTemplate } from "./TableModels";
 
-export abstract class ExportTemplate {
-  public startDate = new Date(946677600000);
+export abstract class ExportTemplate<RowType = any> {
   public abstract get name(): string;
-  abstract build(
-    data: ExportData, 
-    presenter: PresenterManager, 
-    jobRegistry: IJobRegistryService, 
-    options?:ITableOptions,
-    holders?:Holders
-    )
-    : IExportResultSet;
+
+  abstract getColumns(
+    data: ExportData,
+    presenter: PresenterManager,
+    jobRegistry: IJobRegistryService,
+    options?: ITableOptions,
+    holders?: Holders
+  ): IColumnTemplate<RowType>[];
+
+  abstract buildTable(
+    data: ExportData,
+    presenter: PresenterManager,
+    jobRegistry: IJobRegistryService,
+    options?: ITableOptions,
+    holders?: Holders
+  ): IExportResultSet;
 
   public abstract get options(): ITableOptionSettings | null;
 
@@ -22,32 +30,32 @@ export abstract class ExportTemplate {
     const d = new Date();
     return Utils.getDateFromOffset(a, d).valueOf() - Utils.getDateFromOffset(b, d).valueOf();
   }
+}
 
-  getColor(it: any) {
-    return (it.type === 1 ? "red" : (it.type === 2 ? "blue" : ""));
-  }
+export abstract class AttackRowExportTemplate extends ExportTemplate<ExportAttack>{
+  buildTable(
+    data: ExportData,
+    presenter: PresenterManager,
+    jobRegistry: IJobRegistryService,
+    options?: ITableOptions,
+    holders?: Holders
+  ): IExportResultSet {
 
-  offsetFromDuration(start: string, duration: number): string {
-    return Utils.formatTime(new Date(Utils.getDateFromOffset(start, this.startDate).valueOf() + duration * 1000));
-  }
+    const cols = this.getColumns(data, presenter, jobRegistry, options, holders);
+    const rows = data.data.boss.attacks
+      .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
+      .map(attack => <IExportRow>{
+        cells: cols.map(t => t.buildCell(data, attack)),
+        filterData: attack
+      });
 
-  isOffsetInRange(offset: string, start: string, end: string) {
-    const point = Utils.getDateFromOffset(offset, this.startDate);
-    return Utils.getDateFromOffset(start, this.startDate) <= point &&
-      Utils.getDateFromOffset(end, this.startDate) >= point;
-  }
+    const columns = cols.map(t => t.buildHeader(data));
 
-  protected text(input: Partial<IExportItem & IExportCell>): IExportCell {
-    return <IExportCell>{ 
-      items: [<IExportItem>{ ...<IExportItem>input, visible: true }], 
-      ...input 
-    };
-  }
-
-  protected items(items: Partial<IExportItem>[], cell: Partial<IExportCell>): IExportCell {
-    return <IExportCell>{ 
-      items: items.map(it => <IExportItem>{ ...it, visible: true }), 
-      ...cell 
+    return <IExportResultSet>{
+      columns: columns,
+      rows: rows,
+      title: this.name,
+      filterByFirstEntry: true
     };
   }
 }

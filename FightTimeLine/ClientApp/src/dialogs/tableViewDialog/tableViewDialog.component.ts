@@ -1,6 +1,6 @@
-import { Component, Inject, Input, TemplateRef, ViewChild, OnInit } from "@angular/core";
+import { Component, Inject, Input, OnInit } from "@angular/core";
 import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate"
-import { BossAttackDefensiveTemplate } from "../../core/ExportTemplates/BossAttackDefensiveTemplate"
+import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate"
 import { ExportTemplate } from "../../core/BaseExportTemplate"
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
@@ -37,10 +37,9 @@ export class TableViewDialog implements OnInit {
     filterByFirstEntry: false
   };
   loading = false;
-  templates: ExportTemplate[] = [
+  templates: ExportTemplate<any>[] = [
     new EachRowOneSecondTemplate(),
-    new BossAttackDefensiveTemplate(),
-    new BossAttackDefensiveTemplate(true),
+    new BossAttackDefensiveTemplateV2(),    
     new DescriptiveTemplate(),
     new MitigationsTemplate()
   ];
@@ -59,7 +58,8 @@ export class TableViewDialog implements OnInit {
     setTimeout(() => {
       const d = this.templates
         .find(it => it.name === this.selectedValue)
-        .build(this.data, this.presenterManager, this.gameService.jobRegistry, null, this.visStorage.holders);
+        .buildTable(this.data, this.presenterManager, this.gameService.jobRegistry, null, this.visStorage.holders);        
+
       this.set = d;
       this.filterChange(null, null);
       this.loading = false;

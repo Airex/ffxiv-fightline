@@ -36,13 +36,12 @@ export class Utils {
     return orig >= startOffset && orig <= endOffset
   }
 
-  static formatTime(date: Date): string {
+  static formatTime(date: Date, showplus = false): string {
     const d = 946677600000;
     const dc = date.valueOf() as number;
     const padLeft = (nr: number, n: number, str?: string): string => new Array(n - String(nr).length + 1).join(str || "0") + nr;
-    return (Math.sign(dc - d) + 1 ? "" : "-") +
-      (date => `${padLeft((date).getMinutes(), 2)}:${padLeft((date as Date).getSeconds(), 2)}`).apply(null,
-        [new Date(Math.abs(dc - d) + d)]);
+    return (Math.sign(dc - d) + 1 ? (showplus ? "+" : "") : "-") +
+      (date => `${padLeft((date).getMinutes(), 2)}:${padLeft((date as Date).getSeconds(), 2)}`).apply(null, [new Date(Math.abs(dc - d) + d)]);
   }
 
   static clone<T>(obj: T): T {
@@ -56,7 +55,7 @@ export class Utils {
       if (group[key]) {
         group[key].push(value);
       } else {
-        group[key] = [value];        
+        group[key] = [value];
       }
     });
     return group;
