@@ -133,11 +133,11 @@ export function calculateMitigationForAttack(holders: H.Holders, defs, attack: {
 
     var defStats = Object.keys(sums).map(s =>
     ({
-        name: holders.jobs.get(s).job.name,
+        name: holders.jobs.get(s)?.job.name,
         id: s,
         mitigation: 1 - Math.abs(sums[s].mitigation * partyMitigation),
         shield: sums[s].shield + partyShield,
-        icon: holders.jobs.get(s).job.icon
+        icon: holders.jobs.get(s)?.job.icon
     }));
     defStats.push({
         name: "Party",
