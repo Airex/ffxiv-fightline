@@ -1,0 +1,25 @@
+/* Keep the nav menu independent of scrolling and on top of other items */
+.fightline-root {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+.menu-icon {
+    margin-right: 4px;
+    width: 20px;
+    height: 20px;
+}
+
+.example-container {
+    min-width: 100% !important;
+    width: 100% !important;
+    min-height: 100% !important;
+    height: 100% !important;
+}
+
+.side-panel {
+  background-color: rgba(255, 255, 255, 0.8);
+}

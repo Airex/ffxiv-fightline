@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <title>@ViewData["Title"]</title>
+    <base href="@Url.Content("~/")" />
+
+    <link rel="stylesheet" href="~/dist/vendor.css" asp-append-version="true" />
+@*    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>*@
+    <script defer src="https://apis.google.com/js/platform.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+
+        html, body, app, .container-fluid, .row, .body-content, .timeline {
+            min-width: 100% !important;
+            width: 100% !important;
+            min-height: 100% !important;
+            height: 100% !important;
+        }
+
+        .main-content {
+            min-width: 100% !important;
+            width: 100% !important;
+            height: -moz-calc(100% - (55px)) !important;
+            height: -webkit-calc(100% - (55px)) !important;
+            height: calc(100% - (55px)) !important;
+        }
+
+        .body-content {
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+        }
+
+        .row {
+            margin-left: 0px !important;
+            margin-right: 0px !important;
+        }
+
+        .progress-wrapper-fl {
+            width: 100%;
+            height: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mat-dialog-content {
+            max-height: 74vh !important;
+        }
+
+        .progress-fl {
+            width: 60%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: #63ed63;
+            margin-bottom: 0px;
+        }
+
+        .vis-item.compact .progress-wrapper-fl {
+            height: 3px;
+        }
+
+        .vis-item.ability .vis-item-content {
+            padding: 0;
+        }
+
+        .vis-item.stance .vis-item-content {
+            padding: 0;
+        }
+        .vis-item.availability .vis-item-content {
+            padding: 0;
+        }
+
+        .vis-item.ability .vis-item-overflow {
+            display: none;
+        }
+
+        .vis-item.stance .vis-item-overflow {
+            height: 16px;
+            font-size: 10px;
+        }
+
+        .vis-item.availability .vis-item-overflow {
+            height: 16px;
+            font-size: 10px;
+        }
+        
+
+        .vis-item.targets {
+            background-color: rgb(243, 71, 71) !important;
+        }
+
+        .abilityIcon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .mat-raised-button {
+            line-height: 30px !important;
+            min-width: 60px !important;
+        }
+
+        .mat-toolbar-row, .mat-toolbar-single-row {
+            height: 54px !important;
+        }
+
+        .mat-toolbar-multiple-rows {
+            min-height: 54px !important;
+        }
+
+        .mat-slide-toggle {
+            margin-top: 7px;
+        }
+
+        .abilityName {
+            padding-left: 2px;
+        }
+
+        .vis-item.notCovered .name {
+            color: red;
+        }
+
+        .example-icon {
+            padding: 0 14px;
+        }
+
+        .example-spacer {
+            flex: 1 1 auto;
+        }
+
+        .vis-label.vis-nesting-group .vis-inner {
+            height: 23px !important;
+            font-size: 12px !important;
+            padding: 1px !important;
+            padding-left: 5px !important;
+        }
+
+        .vis-label .vis-inner {
+            height: 23px !important;
+            font-size: 12px !important;
+            padding: 1px !important;
+            padding-left: 20px !important;
+        }
+
+        .vis-label.compact .vis-inner {
+            height: 8px !important;
+        }
+
+        .vis-label.compact span {
+            display: none;
+        }
+
+        .vis-label.vis-nesting-group {
+            padding-left: 5px !important;
+            min-width: 168px !important;
+        }
+
+        .vis-label.boss .vis-inner {
+            font-size: 35px !important;
+            padding: 1px !important;
+            padding-left: 2px !important;
+            min-height: 50px;
+            font-weight: bold;
+            min-width: 168px !important;
+        }
+
+        .vis-item.bossAttack .vis-item-content {
+            padding: 2px !important;
+            font-size: 12px;
+        }
+
+        .vis-item .vis-delete {
+            top: -7px;
+        }
+
+        .vis-item.buffMap {
+            background-color: rgba(36, 36, 119, 0.15);
+        }
+
+        .vis-item.vis-point .vis-item.vis-dot.ability {
+            top: -13px !important;
+            border-color: #63ed63;
+        }
+
+        .vis-item.vis-point.compact .vis-item.vis-dot.ability {
+            top: -5px !important;
+        }
+
+        .vis-item.vis-dot.compact {
+            border-width: 3px;
+        }
+
+        .vis-item.vis-point.vis-selected .vis-item.vis-dot.ability {
+            top: -13px !important;
+            border-color: #ffc200;
+        }
+
+        .vis-item.vis-point.compact-view-ability .vis-item-content {
+            padding: 1px !important;
+        }
+
+
+
+        .vis-item.vis-background.bossAttack {
+            background-color: #97b0f8;
+        }
+
+            .vis-item.vis-background.bossAttack.selected {
+                background-color: #ffc200;
+                z-index: 2;
+            }
+
+        .vis-item.vis-dot.bossAttack {
+            visibility: hidden !important;
+        }
+
+        .vis-labelset .vis-label .vis-inner.vis-hidden {
+            padding: 0;
+            min-width: 168px !important;
+        }
+
+        .compact-view-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+
+        .vis-item.vis-background.targets {
+            height: 2px !important;
+        }
+
+        .marker {
+            height: 1px;
+            margin-bottom: 1px;
+        }
+
+        .bossAttack.Physical.vis-box.vis-item .marker {
+            background-color: red;
+        }
+
+        .bossAttack.Magical.vis-box.vis-item .marker {
+            background-color: blue;
+        }
+
+        .vis-onUpdateTime-tooltip {
+            width: auto !important;
+        }
+
+        .boss-timeline .vis-onUpdateTime-tooltip {
+            width: auto !important;
+            padding: 1px !important;
+            font-size: 10px;
+        }
+
+        .downtime.green {
+            background-color: rgba(0, 128, 0,0.4);
+        }
+
+        .downtime.pink {
+            background-color: rgba(255, 192, 203,0.4);
+        }
+
+        .downtime.yellow {
+            background-color: rgba(255, 255, 0,0.4);
+        }
+
+        .downtime.orange {
+            background-color: rgba(255, 165, 0, 0.4);
+        }
+
+        .downtime.red {
+            background-color: rgba(255, 0, 0,0.4);
+        }
+
+        .downtime.aqua {
+            background-color: rgba(0, 255, 255,0.4);
+        }
+
+        .availability.available {
+            background: linear-gradient(to bottom, #bfd255 0%,#8eb92a 31%,#72aa00 55%,#9ecb2d 100%);
+        }
+
+        .availability.notAvailable {
+            background-color: red;
+        }
+
+        .vis-custom-time {
+            z-index: 100 !important;
+        }
+
+        .vis-item.bossAttack.vertical .name {
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+        }
+
+        .boss-timeline .vis-tooltip {
+              position: fixed !important;
+              z-index: 10000 !important;
+          }
+
+        .boss-timeline .vis-tooltip p {
+            margin: 0;
+        }
+
+        .zones-list mat-pseudo-checkbox {
+            display: none;
+        }
+
+        .vis-item.loaded {
+            background-color: #59d4d8;
+        }
+
+    </style>
+</head>
+<body>
+    @RenderBody()
+
+    @RenderSection("scripts", required: false)
+    <environment include="Production">
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-96549107-2"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+
+            gtag('config', 'UA-96549107-2');
+        </script>
+    </environment>
+</body>
+</html>

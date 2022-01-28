@@ -1,0 +1,8 @@
+<div [@ping]="pinged?'end':'start'"
+     (@ping.done)="onAnimationEvent()">
+  <nz-avatar [nzText]="compactname"
+             style="color:#000000; background-color:#fde3cf;"
+             [nzSrc]="owner?'/assets/images/crown.png':''"             
+             nz-tooltip
+             [nzTooltipTitle]="name"></nz-avatar>
+</div>

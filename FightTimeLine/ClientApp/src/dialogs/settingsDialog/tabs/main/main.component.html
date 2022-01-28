@@ -1,0 +1,29 @@
+<form [formGroup]="mainForm"
+      class="settings-tab">
+  <div class="settings-container">
+    <div class="settings-title">
+      Default filters
+    </div>
+    <div class="settings-body">
+      <settingsFilter #filter></settingsFilter>
+    </div>
+  </div>
+  <div class="settings-container">
+    <div class="settings-title">
+      Default view
+    </div>
+    <div class="settings-body">
+      <settingsView #view></settingsView>
+    </div>
+  </div>
+  <div class="settings-container">
+    <div class="settings-title">
+      Caches
+    </div>
+    <div class="settings-body">
+      <button nz-button
+              nzType="danger"
+              (click)="onClearCachesClick()">Clear Caches</button>
+    </div>
+  </div>
+</form>

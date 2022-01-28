@@ -1,0 +1,22 @@
+<div style="height: 215px">
+  <form nz-form [formGroup]="loginForm" (ngSubmit)="onLoginClick()">
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Username is required">
+        <input nz-input type="text" formControlName="username" placeholder="Username"  />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Password is required">
+        <input nz-input type="password" formControlName="password" placeholder="Password" />
+      </nz-form-control>
+    </nz-form-item>
+    <div>
+      Do not have account? <a href="#" (click)="onSignUp()">Sign up</a>
+    </div>
+    <div *nzModalFooter>
+      <button type="submit" nz-button (click)="onLoginClick()" [nzLoading]="loading" [disabled]="loading" cdkFocusInitial>Login</button>
+      <button nz-button (click)="onNoClick()" nzType="primary">No Thanks</button>
+    </div>
+  </form>  
+</div>
+

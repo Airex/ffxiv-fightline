@@ -1,0 +1,40 @@
+.abilityName {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.jobIcon {
+  width: 24px;
+  height: 24px;
+}
+
+.jobName {
+  vertical-align: middle;
+  margin-left: 3px;
+}
+
+.area {
+  margin-top: 3px;
+}
+
+.edit {
+  margin-left: 3px;
+}
+.abilityNameDef {
+  vertical-align: middle;
+  margin-left: 3px;
+}
+
+.time {
+  margin-left: 3px;
+}
+
+.similarLink {
+  margin-right: 2px;
+  margin-left: 3px;
+  cursor: pointer;
+}
+
+.defenseLink {
+  cursor: pointer;
+}

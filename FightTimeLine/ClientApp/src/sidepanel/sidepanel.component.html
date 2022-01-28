@@ -1,0 +1,10 @@
+<nz-drawer #sidenav [nzVisible]="sideNavOpened" nzPlacement="right" [nzClosable]="false" [nzMask]="false"
+    [nzWidth]="width" [nzMaskClosable]="true" [nzBodyStyle]="{padding: '2px'}" [nzMaskStyle]="{width:'0px !important'}">
+    <div style="width: 100%;height: 100%;" class="drawer-body" nzBounds="window" [nzMinWidth]="300" class="noselect" customScroll nz-resizable (nzResize)="onResize($event)">
+        <nz-resize-handles [nzDirections]="['left']"></nz-resize-handles>
+        <div>
+            <div #portalOutlet class="sidepanel">
+            </div>
+        </div>
+    </div>
+</nz-drawer>

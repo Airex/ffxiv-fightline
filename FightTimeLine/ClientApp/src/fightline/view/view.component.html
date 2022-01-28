@@ -1,0 +1,19 @@
+<button nz-button
+        [nzDropdownMenu]="menu"
+        nz-dropdown
+        [nzTrigger]="'click'"
+        [nzClickHide]="false">
+  <i nz-icon
+     nzType="eye"
+     theme="twotone"></i>View</button>
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu
+      class="noselect">
+    <li nz-menu-item
+        *ngFor="let f of options">
+      <label nz-checkbox
+             (ngModelChange)="updateView()"
+             [(ngModel)]="presenterManager.view[f.name]">{{f.desc}}</label>
+    </li>
+  </ul>
+</nz-dropdown-menu>

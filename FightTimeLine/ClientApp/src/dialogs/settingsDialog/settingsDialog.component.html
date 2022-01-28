@@ -1,0 +1,37 @@
+<div style="min-height: 560px;">
+  <nz-tabset [nzSelectedIndex]="1">
+    <nz-tab [nzDisabled]="true"
+            [nzTitle]="header">
+      <ng-template #header>
+        <h3 class="header" nz-typography>Settings</h3>
+      </ng-template>
+    </nz-tab>
+    <nz-tab nzTitle="Main">
+      <settingsMainTab ></settingsMainTab>
+    </nz-tab>
+    <nz-tab nzTitle="FFLogs"
+            *ngIf="gameService.showImport">
+      <settingsDialogFflogsTab ></settingsDialogFflogsTab>
+    </nz-tab>
+    <nz-tab nzTitle="Presets">
+      <settingsDialogPresetsTab ></settingsDialogPresetsTab>
+    </nz-tab>
+    <nz-tab nzTitle="Teamwork">
+      <settingsDialogTeamworkTab ></settingsDialogTeamworkTab>
+    </nz-tab>
+    <nz-tab nzTitle="Tableview">
+      <settingsDialogTableviewTab ></settingsDialogTableviewTab>
+    </nz-tab>
+    <nz-tab nzTitle="Colors">
+      <settingsColorsTab ></settingsColorsTab>
+    </nz-tab>
+  </nz-tabset>
+  <div *nzModalFooter>
+    <button nz-button
+            (click)="onYesClick()"
+            cdkFocusInitial>Save</button>
+    <button nz-button
+            nzType="primary"
+            (click)="onNoClick()">Cancel</button>
+  </div>
+</div>

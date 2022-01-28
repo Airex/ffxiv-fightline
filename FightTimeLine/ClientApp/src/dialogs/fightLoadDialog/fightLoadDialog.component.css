@@ -1,0 +1,46 @@
+.importDialogList {
+  height: 290px;
+  overflow: auto;
+  scroll-behavior: auto;
+}
+
+:host-context(body.dark) .loadList .ant-list-item:hover {
+  background-color: #646464;
+}
+
+:host-context(body.dark) .loadList .ant-list-item.selected {
+  background-color: #111b26;
+}
+
+.loadList .ant-list-item:hover {
+  background-color: #e6f7ff;
+}
+
+.loadList .ant-list-item {
+  cursor: pointer;
+}
+
+.action-icon{
+  margin: 0 2px 0 2px;
+}
+
+.action-icon:hover {
+  transform: scale(1.4)
+}
+
+.forcevisible .action-icon {
+  transform: scale(1.4)
+}
+
+
+nz-list-item span.actions {
+  visibility: hidden;  
+}
+
+nz-list-item:hover span.actions {
+  visibility: visible;
+}
+
+nz-list-item span.actions.forcevisible {
+  visibility: visible;
+}

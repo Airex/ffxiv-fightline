@@ -1,0 +1,46 @@
+<div style="height: 275px">
+  <form nz-form [formGroup]="form" (ngSubmit)="onRegisterClick()">
+    <nz-form-item>
+      <nz-form-control nzHasFeedback [nzValidateStatus]="checkingUser?'validating':(f.username.value.length > 0 && !checkingUser && !f.username.errors?'success':'error')" [nzErrorTip]="usernameerrors">
+        <input nz-input type="text" formControlName="username" placeholder="Username" />
+        <ng-template #usernameerrors>
+          <ng-container *ngIf="f.username.errors && f.username.errors.required">Username is required</ng-container>
+          <ng-container *ngIf="f.username.value.length > 0 && f.username.errors && !f.username.errors.isUserNameUnique">Username is already in use</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzHasFeedback nzErrorTip="Password is required">
+        <input nz-input type="password" formControlName="password" placeholder="Password" />
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzHasFeedback [nzErrorTip]="confirmerrors">
+        <input nz-input type="password" formControlName="repeatPassword" placeholder="Confirm password" />
+        <ng-template #confirmerrors>
+          <ng-container *ngIf="f.repeatPassword.errors && f.repeatPassword.errors.required">Password confirmation is required</ng-container>
+          <ng-container *ngIf="f.repeatPassword.errors && f.repeatPassword.errors.matchOther">Passwords are not same</ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Captcha is required">
+        <div style="margin-top: 15px">
+          <ngx-recaptcha2 formControlName="recaptcha"
+                          [size]="'normal'"
+                          hl="en"
+                          [theme]="'light'"
+                          [type]="'image'"
+                          siteKey="6LfToGAUAAAAAKcp3joBgzcqJ3sK_s_WCltAL7Tn"
+                          (success)="handleSuccess($event)">
+          </ngx-recaptcha2>
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <div *nzModalFooter>
+
+    <button nz-button (click)="onRegisterClick()" [nzLoading]="loading" [disabled]="loading" cdkFocusInitial>Register</button>
+    <button nz-button nzType="primary" (click)="onNoClick()">No Thanks</button>
+  </div>
+</div>

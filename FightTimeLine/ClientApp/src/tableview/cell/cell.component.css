@@ -1,0 +1,29 @@
+nz-tag {
+  cursor: pointer !important;
+}
+
+.usageOffset {  
+  font-size: smaller;
+}
+
+.clone {
+  opacity: 0.4
+}
+
+.fullwidth {
+  width: 100%;  
+}
+
+.tooltip {
+  white-space: pre-wrap;
+}
+
+.largeIcon {
+  width: 28px;
+  height: 28px;
+  
+}
+
+.largeIconTag{
+  line-height: 29px;
+}

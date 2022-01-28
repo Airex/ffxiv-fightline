@@ -1,0 +1,17 @@
+.header {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.time {
+  margin-left: 3px;
+}
+
+.color-pikcer {
+  height: 24px;
+  width: 100%;
+  cursor: pointer;
+  border: 1px black solid;
+  text-align: center;
+  background-color: rgba(213, 221, 246, .4);
+}

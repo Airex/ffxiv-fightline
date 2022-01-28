@@ -1,0 +1,9 @@
+.importDialogList {
+    height: 290px;
+    overflow: auto;
+    scroll-behavior: auto;
+}
+
+i {
+  cursor: pointer;
+}

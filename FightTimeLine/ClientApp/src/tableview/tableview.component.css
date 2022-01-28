@@ -1,0 +1,65 @@
+/* Keep the nav menu independent of scrolling and on top of other items */
+.fightline-root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.menu-icon {
+  margin-right: 4px;
+  width: 20px;
+  height: 20px;
+}
+
+.example-container {
+  min-width: 100% !important;
+  width: 100% !important;
+  min-height: 100% !important;
+  height: 100% !important;
+}
+
+
+mat-footer-row, mat-row {
+  min-height: 24px !important;
+}
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+  *:after,
+  *:before {
+    box-sizing: border-box;
+  }
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.header {
+  flex: 0 0 auto;
+  background: #aaa;
+}
+
+.content {
+  min-width: 100% !important;
+  width: 100% !important;
+  height: -moz-calc(100% - (55px)) !important;
+  height: -webkit-calc(100% - (55px)) !important;
+  height: calc(100% - (55px)) !important;
+}
+
+.footer {
+  flex: 0 0 auto;
+  background: #aaa;
+}
+
+

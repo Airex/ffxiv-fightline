@@ -1,0 +1,53 @@
+.zones-list mat-pseudo-checkbox {
+    display: none;
+}
+
+mat-sidenav-container {
+    height: 100%;
+}
+
+.loadList {
+  min-height: 100%;
+}
+
+.loadList .ant-list-item:hover {
+  background-color: #e6f7ff;
+}
+
+:host-context(body.dark) .loadList .ant-list-item:hover {
+  background-color: #646464;
+}
+
+:host-context(body.dark) .loadList .ant-list-item.selected {
+  background-color: #111b26;
+}
+
+.loadList .ant-list-item {
+  cursor: pointer;
+  padding-left: 5px;
+}
+
+
+
+.loadList .ant-list-item.selected  {
+  background-color: #e6f7ff;
+  cursor: pointer;
+}
+
+  .loadList .ant-list-item.selected span.selected {
+    font-weight: bold !important;
+  }
+
+
+.action-icon {
+  visibility: hidden;
+  margin: 0 2px 0 2px;
+}
+
+nz-list-item:hover .action-icon {
+  visibility: visible;
+}
+
+.action-icon:hover {
+  transform: scale(1.4)
+}

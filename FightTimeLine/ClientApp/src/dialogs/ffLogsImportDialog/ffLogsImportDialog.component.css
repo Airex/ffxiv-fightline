@@ -1,0 +1,26 @@
+.importDialogList {
+    height: 290px;
+    overflow: auto;
+    scroll-behavior: auto;
+}
+
+.fflogsitem {
+  cursor: pointer;
+  padding-right: 3px;
+}
+
+:host-context(body.dark) .fflogsitem:hover {
+  background-color: #646464;
+}
+
+  .fflogsitem:hover {
+    background-color: #e6f7ff;
+  }
+
+.job-icon {
+  width: 28px;
+  height: 28px;
+}
+
+
+

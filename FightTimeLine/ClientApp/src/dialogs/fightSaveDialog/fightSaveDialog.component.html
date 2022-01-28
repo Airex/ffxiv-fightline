@@ -1,0 +1,15 @@
+<div mat-dialog-content style="height: 70px;">
+  <form nz-form>
+    <nz-form-item>
+      <nz-form-control nzHasFeedback [nzValidateStatus]="submitted && fightNameControl.errors && fightNameControl.errors.required?'error':''" nzErrorTip="You must enter a value">
+        <input name="fightName" required nz-input placeholder="Fight name" [formControl]="fightNameControl" [(ngModel)]="data.name" />
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <div *nzModalFooter>
+    <button nz-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
+    <button nz-button (click)="onSaveAsNewClick()" *ngIf="!!data.id" cdkFocusInitial>Save as new</button>
+    <button nz-button nzType="primary" (click)="onNoClick()">Cancel</button>
+  </div>
+</div>
+

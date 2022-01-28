@@ -1,0 +1,30 @@
+<nz-space nzDirection="vertical">
+  <nz-space-item>
+    <img [src]="ability.icon"
+         class="icon" />
+    <span class="abilityName">{{ability.name}}</span>
+    <div class="abilityDescriptionContainer">
+      <span class="abilityDescription"
+            [innerHtml]="description"></span>
+    </div>
+  </nz-space-item>
+  <nz-space-item *ngIf="data.mode === 'default'">
+    <label nz-checkbox
+           [(ngModel)]="compactView"
+           (ngModelChange)="compact()">Compact view</label>
+  </nz-space-item>
+  <!-- <nz-space-item *ngIf="data.mode === 'default'">
+    <button nz-button
+            (click)="fill(it)">Fill</button>
+  </nz-space-item> -->
+  <nz-space-item *ngIf="data.mode === 'default'">
+    <nz-button-group>
+      <button nz-button
+      nzType="primary"
+      (click)="hide(it)">Hide</button>
+      <button nz-button
+            nzType="danger"
+            (click)="clear(it)">Clear</button>
+    </nz-button-group>    
+  </nz-space-item>  
+</nz-space>

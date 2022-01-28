@@ -1,0 +1,71 @@
+<toolbar #toolbar [showHome]="true">
+  <span>
+    <addJob (added)="addJob($event)"></addJob>
+  </span>
+  <span>
+    <button nz-dropdown [nzDropdownMenu]="mainMenu" nzTooltipTrigger="click" nz-button nz-tooltip nzTooltipTitle="Menu">
+      <i nz-icon nzType="menu"></i>
+    </button>
+    <nz-dropdown-menu #mainMenu="nzDropdownMenu">
+      <ul nz-menu>
+        <li nz-menu-item (click)="onNew()">New</li>
+        <li nz-menu-item (click)="load()">Load</li>
+        <li nz-menu-item (click)="saveFight()">Save</li>
+        <li nz-menu-item (click)="openBossTemplates()">Boss templates</li>
+        <li nz-menu-item (click)="showAsTable()">Table view</li>
+        <li nz-submenu nzTitle="Open as Table">
+          <ul>
+            <li nz-menu-item (click)="onTable('defence')">Defence</li>
+            <li nz-menu-item (click)="onTable('descriptive')">Timeline</li>
+            <li nz-menu-item (click)="onTable('mitigations')">Mitigations</li>
+          </ul>
+        </li>
+        <li nz-submenu nzTitle="FFLogs" *ngIf="gameService.showImport">
+          <ul>
+            <li nz-menu-item (click)="importFromFFLogs()">Import</li>
+            <li nz-menu-item (click)="importBossAttacksFromFFLogs()">Import Boss Attacks</li>
+          </ul>
+        </li>
+      </ul>
+    </nz-dropdown-menu>
+  </span>
+  <span style="margin-left: 10px">
+    <nz-button-group>
+      <button nz-button (click)="onUndo()" [disabled]="!fightLineController.canUndo" nzPlacement="bottom"><i nz-icon
+          nzType="undo"></i>Undo</button>
+      <button nz-button (click)="onRedo()" [disabled]="!fightLineController.canRedo" nzPlacement="bottom"><i nz-icon
+          nzType="redo"></i>Redo</button>
+    </nz-button-group>
+  </span>
+  <span style="margin-left: 10px">
+    <abilityFilter #filter [fromFFlogs]="!!fflogsCode" (changed)="updateFilter($event)"></abilityFilter>
+  </span>
+  <span style="margin-left: 10px">
+    <viewMenu #view (changed)="updateView($event)"></viewMenu>
+  </span>
+  <span style="margin-left: 10px" *ngIf="!toolsManager.active">
+    <button nz-dropdown [nzDropdownMenu]="toolMenu" [nzTrigger]="'click'" nz-button><i nz-icon nzType="tool"
+        theme="twotone"></i>Tools</button>
+    <nz-dropdown-menu #toolMenu="nzDropdownMenu">
+      <ul nz-menu class="noselect">
+        <li nz-menu-item (click)="useTool(t)" *ngFor="let t of toolsManager.toolNames">{{t}}</li>
+      </ul>
+    </nz-dropdown-menu>
+  </span>
+  <span style="margin-left: 10px" *ngIf="toolsManager.active">
+    <button nz-button nzType="danger" (click)="useTool(null)">{{toolsManager.active}}</button>
+  </span>
+  <span style="display: inline-flex; margin-left: 20px;">
+    <avatarWithPing *ngFor="let user of fightHubService.users" [owner]="false" textSizeRatio="3" [name]="user.name"
+      [id]="user.id" [ngStyle]="{'margin-right':'2px'}"></avatarWithPing>
+  </span>
+  <span right>
+    <button nz-button nzShape="circle" nzType="primary" nz-tooltip nzTooltipTitle="Refresh" (click)="planArea.refresh()"
+      style="margin-left: 10px">
+      <i nz-icon nzType="sync"></i>
+    </button>
+  </span>
+</toolbar>
+<planArea #planArea (action)="onAction($event)"></planArea>
+<sidepanel #sidepanel></sidepanel>
+<ng-progress #progressBar [speed]="500" [trickleSpeed]="30000" [spinner]="false"></ng-progress>

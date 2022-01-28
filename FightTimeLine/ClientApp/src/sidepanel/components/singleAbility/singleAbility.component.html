@@ -1,0 +1,109 @@
+<nz-space nzDirection="vertical">
+  <nz-space-item>
+    <div>
+      <img [src]="ability.icon" class="icon" />
+      <span class="abilityName">{{ability.name}}</span>
+    </div>
+    <div>
+      <i nz-icon nzType="clock-circle" theme="twotone"></i><span class="time">{{formatTime(it.start)}}</span>
+    </div>
+  </nz-space-item>
+  <nz-space-item>
+    <div class="abilityDescriptionContainer">
+      <span class="abilityDescription" [innerHtml]="description"></span>
+    </div>
+  </nz-space-item>
+  <nz-space-item>
+    <sidepanel-area header="Used on" *ngIf="!!ptyMemUsages">
+      <div *ngFor="let ab of ptyMemUsages">
+        <i nz-icon nzType="clock-circle" theme="outline"></i>
+        <a class="similarLink" (click)="similarClick(ab)">
+          <span class="usedTime">{{ab.offset}}</span>
+        </a>
+        <img class="abilityIcon" style="vertical-align:text-top" [src]="ab.icon" />
+        <span class="usedTarget">{{ab.target}}</span>
+      </div>
+    </sidepanel-area>
+  </nz-space-item>
+  <nz-space-item>
+    <sidepanel-area header="Covered" *ngIf="covered && covered.length > 0">
+      <div *ngFor="let ab of covered">
+        <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(ab)"><span
+            class="usedTime">{{ab.offset}}</span></a> <span class="usedTarget">{{ab.attack.name}}</span>
+      </div>
+    </sidepanel-area>
+  </nz-space-item>
+  <nz-space-item *ngIf="it.ability.ability.settings && it.ability.ability.settings.length > 0">
+    <sidepanel-area header="Settings" [extra]="saveSettingsTpl">
+      <form nz-form [formGroup]="form" nzLayout="vertical">
+        <nz-form-item *ngFor="let setting of it.ability.ability.settings">
+          <nz-form-label [nzFor]="setting.name">
+            <span>
+              {{setting.displayName}}
+            </span>
+            <i nz-icon nzType="info-circle" theme="twotone" style="margin-left: 8px" nz-tooltip
+              *ngIf="setting.description" [nzTooltipTitle]="setting.description">
+            </i>
+          </nz-form-label>
+          <nz-form-control>
+            <div [ngSwitch]="setting.type">
+              <div *ngSwitchCase="'text'">
+                <textarea nz-input [nzAutosize]="{ minRows: 3, maxRows: 8 }" [formControlName]="setting.name"
+                  [disabled]="data.mode!=='default'" style="margin-left: 15px;width: 90%;" [id]="setting.name"
+                  (ngModelChange)="modified=true" placeholder="Leave your note here">
+                </textarea>
+              </div>
+              <div *ngSwitchCase="'boolean'">
+                <nz-switch [nzDisabled]="data.mode!=='default'" [formControlName]="setting.name"
+                  style="margin-left: 15px" [nzSize]="'small'" [id]="setting.name" (ngModelChange)="modified=true">
+                </nz-switch>
+              </div>
+              <div *ngSwitchCase="'number'">
+                <nz-input-number nz-input [nzStep]="1" [disabled]="data.mode!=='default'" [formControlName]="setting.name"
+                  style="margin-left: 15px" [nzSize]="'small'" [id]="setting.name" (ngModelChange)="modified=true">
+                </nz-input-number>
+              </div>
+              <div *ngSwitchCase="'partyMember'">
+                <nz-select [nzDisabled]="data.mode!=='default'" [formControlName]="setting.name" [id]="setting.name"
+                  [nzPlaceHolder]="setting.displayName" (ngModelChange)="modified=true">
+                  <nz-option nzValue="" nzLabel="None"></nz-option>
+                  <nz-option *ngFor="let j of jobs" nzCustomContent [nzValue]="j.id"
+                    [nzLabel]="j.job.name+' '+(j.actorName || '')">
+                    <img class="abilityIcon" [src]="j.job.icon" />
+                    <span class="usedTarget">{{j.actorName}}</span>
+                  </nz-option>
+                </nz-select>
+              </div>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </sidepanel-area>
+    <ng-template #saveSettingsTpl>
+      <button nz-button *ngIf="modified" [nzSize]="'small'" nzType="primary"
+        (click)="$event.stopPropagation();$event.preventDefault();saveSettings();">Save</button>
+    </ng-template>
+  </nz-space-item>
+  <nz-space-item *ngIf="coveredOgcds">
+    <sidepanel-area header="Covered OGCDs">
+      <div>
+        <div class="job" *ngFor="let j of coveredOgcds">
+          <div class="jobHead">
+            <img class="jobIcon" [src]="j.jobIcon" /><span class="jobName">{{j.jobName}}</span>
+          </div>
+          <ul style="padding-left: 10px">
+            <li style="list-style-type: none;" *ngFor="let ab of j.abilities">
+              <i nz-icon nzType="clock-circle" theme="outline"></i>
+              <a class="similarLink">
+                <span class="usedTime">{{ab.offset}}</span>
+              </a>
+              <img class="abilityIcon" [src]="ab.ability.ability.icon" />
+              <a class="defenseLink"><span class="abilityNameDef">{{ab.ability.ability.name}}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </sidepanel-area>
+  </nz-space-item>
+</nz-space>

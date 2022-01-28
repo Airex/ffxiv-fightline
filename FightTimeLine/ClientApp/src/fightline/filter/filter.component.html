@@ -1,0 +1,86 @@
+<button nz-button nz-popover (click)="change()" (nzPopoverVisibleChange)="change()" nzPopoverTrigger="click"
+  nzPopoverPlacement="bottomLeft" [nzPopoverContent]="contentTemplate">
+  <span>
+    <i nz-icon nzType="filter" theme="twotone"></i>
+    Filter
+  </span>
+</button>
+
+<ng-template #contentTemplate>
+  <div nz-row style="width: 560px;" class="noselect">
+    <div nz-col nzSpan="12">
+      <div>
+        <label nz-checkbox (ngModelChange)="checkAllFunc($event)" [(ngModel)]="checkAll"
+          [nzIndeterminate]="checkAll === undefined"><strong>Ability types</strong></label>
+
+      </div>
+      <ul nz-menu>
+        <li nz-menu-item *ngFor="let f of filters">
+          <label nz-checkbox (ngModelChange)="updateFilter('ability', f.name, $event)"
+            [(ngModel)]="presenterManager.filter.abilities[f.name]">{{f.desc}}</label>
+        </li>
+      </ul>
+    </div>
+    <div nz-col nzSpan="12" style="padding: 5px;">
+      <div>
+        <div>
+          <strong>Boss Attacks Tags</strong>
+        </div>
+        <nz-tag *ngFor="let tag of tags" nzMode="checkable" [(nzChecked)]="tag.checked"
+          (nzCheckedChange)="updateFilter('boss')">{{tag.text}}</nz-tag>
+      </div>
+      <div>
+        <div *ngIf="sources && sources.length">
+          <strong>Boss Attacks Sources</strong>
+        </div>
+        <nz-tag *ngFor="let source of sources" nzMode="checkable" [(nzChecked)]="source.checked"
+          (nzCheckedChange)="updateFilter('boss')">{{source.text}}</nz-tag>
+      </div>
+      <div style="margin-top: 8px;">
+        <div>
+          <strong>Boss Attacks Damage Type</strong>
+        </div>
+        <nz-tag nzMode="checkable" [(nzChecked)]="presenterManager.filter.attacks.isMagical"
+          (nzCheckedChange)="updateFilter('boss')">Magical</nz-tag>
+        <nz-tag nzMode="checkable" [(nzChecked)]="presenterManager.filter.attacks.isPhysical"
+          (nzCheckedChange)="updateFilter('boss')">Physical</nz-tag>
+        <nz-tag nzMode="checkable" [(nzChecked)]="presenterManager.filter.attacks.isUnaspected"
+          (nzCheckedChange)="updateFilter('boss')">Unaspected</nz-tag>
+      </div>
+      <div style="margin-top: 8px;">
+        <div>
+          <strong>FFLogs Attacks Source</strong>
+        </div>
+        <nz-switch [ngModel]="true" 
+                  nzCheckedChildren="Cast" nzUnCheckedChildren="Damage" [(ngModel)]="fflogsSource"
+          (ngModelChange)="fflogsSourceChanged($event)">></nz-switch>
+      </div>
+      <div style="margin-top: 8px;">
+        <div>
+          <strong>Presets</strong>
+        </div>
+        <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderTemplate" [(ngModel)]="currentPreset"
+          (ngModelChange)="presetChanged($event)" nzPlaceHolder="Select preset">
+          <nz-option *ngFor="let item of presets" [nzLabel]="item.name" [nzValue]="item"></nz-option>
+        </nz-select>
+        <ng-template #renderTemplate>
+          <nz-divider></nz-divider>
+          <div class="container">
+            <input nz-input nzSize="small" required type="text" #inputElement />
+            <a class="add-item" (click)="addPreset(inputElement)">
+              Save
+            </a>
+          </div>
+        </ng-template>
+      </div>
+      <div style="margin-top: 8px;">
+        <div>
+          <strong>Fight level</strong>
+        </div>
+        <nz-select [(ngModel)]="currentLevel" (ngModelChange)="levelChanged($event)">
+          <nz-option *ngFor="let l of levels" [nzLabel]="''+l" [nzValue]="l"></nz-option>
+        </nz-select>
+      </div>
+    </div>
+  </div>
+</ng-template>

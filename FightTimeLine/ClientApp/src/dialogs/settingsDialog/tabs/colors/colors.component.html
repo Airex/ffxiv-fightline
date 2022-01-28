@@ -1,0 +1,14 @@
+<form [formGroup]="colorsForm"
+      nz-form>
+  <nz-form-item *ngFor="let c of colors"
+                style="margin-bottom: 0">
+    <nz-form-label [nzSpan]="6"
+                   [nzFor]="c.name">{{colorDisplayNames[c.name]}}</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <input [name]="c.name"
+             style="height: 24px;cursor: pointer"
+             [(colorPicker)]="c.color"
+             [style.background]="c.color" />
+    </nz-form-control>
+  </nz-form-item>
+</form>

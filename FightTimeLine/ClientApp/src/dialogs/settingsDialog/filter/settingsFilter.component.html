@@ -1,0 +1,54 @@
+<div class="filter-container">
+  <div class="settings-filter">
+    <div class="settings-header">
+      Ability types:
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="selfDefensive">Self Defense</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="partyDefensive">Party Defense</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="selfDamageBuff">Self Damage Buff</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="partyDamageBuff">Party Damage Buff</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="damage">OGCD Damage</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="healing">Healing</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="healingBuff">Healing Buff</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="utility">Utility</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="enmity">Enmity</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="pet">Pets</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="unused">Show unused</label>
+    </div>
+  </div>
+  <div class="settings-filter">
+    <div class="settings-header">
+      Boss attack types:
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="isMagical">Magical damage</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="isPhysical">Physical damage</label>
+    </div>
+    <div>
+      <label nz-checkbox [(ngModel)]="isUnaspected">Unaspected damage</label>
+    </div>
+  </div>
+</div>

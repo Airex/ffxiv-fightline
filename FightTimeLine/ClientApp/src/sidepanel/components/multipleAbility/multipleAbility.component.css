@@ -1,0 +1,16 @@
+.abilityName {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 5px;
+}
+
+.abilityTime {
+  margin-left: 3px;
+}
+
+

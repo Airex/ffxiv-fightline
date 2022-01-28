@@ -1,0 +1,31 @@
+<nz-layout [ngStyle]="{width:'100%', height:'100%'}">  
+    <nz-content style="padding: 4px;">
+      <form nz-form>
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzFor="predowntime">Pre Phase</nz-form-label>
+          <nz-form-control [nzSpan]="14">
+            <nz-select name="predowntime" style="width: 90%;" [(ngModel)]="selectedPre" nzPlaceHolder="Select downtime to connect">
+              <nz-option nzValue="" nzLabel="None"></nz-option>
+              <nz-option *ngFor="let it of downtimes" [nzValue]="it.id" [nzLabel]="it.dispayName"></nz-option>
+            </nz-select>
+          </nz-form-control>
+          <nz-form-control>
+            <i nz-icon nzType="info-circle" theme="twotone" style="margin-left: 8px" nz-tooltip nzTooltipTitle="Connects End of Downtime to this Attack"></i>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzFor="downtime">Phase</nz-form-label>
+          <nz-form-control [nzSpan]="14">
+            <nz-select name="downtime" style="width: 90%;" [(ngModel)]="selected" nzPlaceHolder="Select downtime to connect">
+              <nz-option nzValue="" nzLabel="None"></nz-option>
+              <nz-option *ngFor="let it of downtimes" [nzValue]="it.id" [nzLabel]="it.dispayName"></nz-option>
+            </nz-select>
+          </nz-form-control>
+          <nz-form-control>
+            <i nz-icon nzType="info-circle" theme="twotone" style="margin-left: 8px" nz-tooltip nzTooltipTitle="Connects Start and End of Downtime to this Attack"></i>
+          </nz-form-control>
+        </nz-form-item>
+
+      </form>
+    </nz-content>  
+</nz-layout>
