@@ -5,6 +5,7 @@ import { Holders } from "../../../core/Holders";
 import { Utils } from "../../../core/Utils";
 import { VisStorageService } from "src/services/VisStorageService";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
+import { Subscription } from "rxjs";
 
 
 @Component({
@@ -22,6 +23,9 @@ export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelCo
   ) {
     this.items = this.data.items.sort((a: any, b: any) => a.start - b.start);
     this.holders = this.visStorage.holders;
+    this.sub = this.data.refresh.subscribe(()=>{
+      this.refresh();
+    });
     this.refresh();
 
   }
@@ -29,6 +33,7 @@ export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelCo
   isSameGroup: boolean;
   holders: Holders;
   items: any[];
+  sub:Subscription;
 
   refresh() {
     const distinct = (value, index, self) => {
@@ -50,7 +55,7 @@ export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelCo
   }
 
   ngOnDestroy(): void {
-
+    this.sub.unsubscribe();
   }
 
 }

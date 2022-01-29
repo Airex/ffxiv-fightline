@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener, Inject, QueryList, ViewChildren } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, HostListener, Inject, QueryList, ViewChildren, Renderer2 } from "@angular/core";
 import { Location } from "@angular/common";
 import { ActivatedRoute, Params, Router } from "@angular/router";
 import * as _ from "lodash";
@@ -24,6 +24,7 @@ import { VisStorageService } from "src/services/VisStorageService";
 import { PingComponent } from "../components/ping/ping.component";
 import { ActivitySource } from "src/services/RecentActivitiesService";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
+import { DomSanitizer } from "@angular/platform-browser";
 
 
 @Component({
@@ -63,6 +64,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private location: Location,
     private router: Router,
+    private renderer: Renderer2,    
     private dialogService: S.DialogService,
     @Inject(S.authenticationServiceToken) public authenticationService: S.IAuthenticationService,
     private settingsService: S.SettingsService,
@@ -152,6 +154,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   onTimeChanged(source: EventSource, event) {
     this.fightLineController.notifyTimeChanged(event.id, event.date);
+    this.sidepanel.refresh();
   }
 
   onDelete(source: EventSource, event) {
@@ -168,7 +171,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   onVisibleFrameTemplate(source: EventSource, event) {
     if (source === "player") {
-      event.handler(this.fightLineController.visibleFrameTemplate(event.item))
+      const html = this.fightLineController.visibleFrameTemplate(event.item);      
+      event.handler(html);
     }
   }
 
@@ -191,8 +195,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   //   //    this.contextMenu.openStanceSelector(data);
   // }
 
-  exportToTable() {
-    this.dialogService.openExportToTable(() => this.fightLineController.createSerializer().serializeForExport());
+  exportToTable() {    
   }
 
 

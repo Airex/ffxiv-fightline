@@ -7,6 +7,7 @@ import { Utils } from "../../../core/Utils";
 import { BossDownTimeMap } from "../../../core/Maps";
 import { VisStorageService } from "src/services/VisStorageService";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
+import { Subscription } from "rxjs";
 
 
 
@@ -19,6 +20,7 @@ export class MultipleDownTimeComponent implements OnInit, OnDestroy, ISidePanelC
 
   items: any[];
   holders: Holders;
+  sub: Subscription;
 
   constructor(
     private visStorage: VisStorageService,
@@ -27,6 +29,11 @@ export class MultipleDownTimeComponent implements OnInit, OnDestroy, ISidePanelC
     public data: SidepanelParams) {
     this.items = this.data.items;
     this.holders = this.visStorage.holders;
+
+    this.sub = this.data.refresh.subscribe(()=>{
+      this.refresh();
+    });
+
     this.refresh();
 
   }
@@ -60,6 +67,7 @@ export class MultipleDownTimeComponent implements OnInit, OnDestroy, ISidePanelC
   }
 
   ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
 }

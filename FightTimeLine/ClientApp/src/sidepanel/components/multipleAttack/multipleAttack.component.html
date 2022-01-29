@@ -1,27 +1,23 @@
-<nz-space nzDirection="vertical">
-  <nz-space-item>
-    Multiple attacks
-  </nz-space-item>
-  <nz-space-item>
-    <sidepanel-area header="Selection">
-      <div>
-        <nz-tag *ngFor="let ab of items" [nzColor]="getColor(ab)" nzMode="default">
-          <span>
-            <span class='abilityName'>{{ab.attack.name}}</span>
-            <i nz-icon nzType="clock-circle" theme="outline"></i>
-            <span class='abilityTime'>{{formatDate(ab.start)}}</span>
-          </span>
-        </nz-tag>
-      </div>
-    </sidepanel-area>
-  </nz-space-item>
-  <nz-space-item *ngIf="distance">
-    <nz-statistic [nzValue]="distance" [nzTitle]="'Distance'"></nz-statistic>
-  </nz-space-item>
-  <nz-space-item *ngIf="data.mode === 'default'">
-    <button nz-button nzType="primary" #copyButton (click)="copy();copyButton.nzType=null;">Copy</button>
-  </nz-space-item>
-  <nz-space-item *ngIf="data.mode === 'default'">
-    <button nz-button nzType="primary" (click)="remove()" nzDanger>Remove</button>
-  </nz-space-item>
-</nz-space>
+<div class="sidepanel-container">
+  <div class="sidepanel-full">
+    <div>Multiple attacks</div>
+    <div *ngIf="distance">
+      <nz-statistic [nzValue]="distance" [nzTitle]="'Distance'"></nz-statistic>
+    </div>
+  </div>
+  <div *ngIf="data.mode === 'default'" class="sidepanel-full">
+    <nz-button-group>
+      <button nz-button nzType="primary" #copyButton (click)="copy();copyButton.nzType=null;">Copy</button>
+      <button nz-button nzType="primary" (click)="remove()" nzDanger>Remove</button>
+    </nz-button-group>
+  </div>
+  <sidepanel-area header="Selection">
+    <nz-tag *ngFor="let ab of items" [nzColor]="getColor(ab)" nzMode="default">
+      <span>        
+        <i nz-icon nzType="clock-circle" theme="outline"></i>
+        <span class='abilityTime'>{{formatDate(ab.start)}}</span>
+        <span class='abilityName'>{{ab.attack.name}}</span>
+      </span>
+    </nz-tag>
+  </sidepanel-area>
+</div>

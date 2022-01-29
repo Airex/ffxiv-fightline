@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild, Input, OnInit, TemplateRef } from "@angular/core";
+import { Component, Inject, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { RecentActivityService } from "../../services/RecentActivitiesService"
 import { SettingsService } from "../../services/SettingsService"
@@ -17,22 +17,34 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 export class FFLogsImportDialog implements OnInit {
 
   ngOnInit(): void {
+    const importSettings = this.settingsService.load().fflogsImport;
+    this.haveFFlogsChar =
+      importSettings &&
+      importSettings.characterName &&
+      importSettings.characterRegion &&
+      importSettings.characterServer;
+
+    if (this.haveFFlogsChar) {
+      this.showSearchArea();
+    }
+
     if (this.code)
       this.reportValue = "https://www.fflogs.com/reports/" + this.code;
     this.onSearch(this.reportValue);
   }
 
   reportValue: string;
-
+  haveFFlogsChar: boolean;
   zones = [];
   parsesList = [];
   @Input() code: string;
   searchAreaDisplay = "none";
   listAreaDisplay = "none";
   dialogContentHeight = "60px";
-  recent: any;
   prevSearch: string = null;
   killsOnly: boolean = true;
+  loadingParses: boolean = false;
+  matchValue = "reports\\/([a-zA-Z0-9]{16})\\/?(?:(?:#.*fight=([^&]*))|$)"
 
 
   constructor(
@@ -42,11 +54,77 @@ export class FFLogsImportDialog implements OnInit {
     public recentService: RecentActivityService,
     public settingsService: SettingsService,
     private router: Router) {
-
   }
 
   round(v) {
     return Math.round(v);
+  }
+
+  loadByFight(code: string, fight: string) {
+    if (fight !== "last") {
+      this.dialogRef.afterClose.subscribe(() => {
+        this.router.navigateByUrl("fflogs/" + this.code + "/" + fight);
+      });
+      this.dialogRef.close();
+      return;
+    } else {
+      this.service.dataService
+        .getFight(code)
+        .then((it: ReportFightsResponse) => {
+          const id = it.fights[it.fights.length - 1].id;
+          this.onClick("" + id);
+          return;
+        });
+    }
+  }
+
+  searchByCode(code: string) {
+    this.loadingParses = true;
+    this.service.dataService
+      .getFight(code)
+      .then((it: ReportFightsResponse) => {
+        if (it.fights.length == 0) return;
+        const groupBy = key => array =>
+          array.reduce((objectsByKeyValue, obj) => {
+            const value = obj[key];
+            objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+            return objectsByKeyValue;
+          }, {});
+
+        var zones = groupBy('zoneName')(it.fights);
+        this.zones = Object.keys(zones).map((value) => ({ key: value, value: zones[value] }));
+        this.showListArea();
+      })
+      .finally(() => {
+        this.loadingParses = false;
+      });
+  }
+
+  loadParses() {
+    const settings = this.settingsService.load();
+    const importSettings = settings.fflogsImport;
+    if (this.haveFFlogsChar) {
+      this.loadingParses = true;
+      this.service.dataService
+        .getParses(
+          importSettings.characterName,
+          importSettings.characterServer,
+          importSettings.characterRegion)
+        .subscribe(
+          parses => {
+            if (parses && parses.length > 0) {
+              this.parsesList = parses.sort((a, b) => b.startTime - a.startTime);
+              this.showSearchArea();
+            }
+          },
+          error => {
+            console.error(error);
+            this.hideExtraAreas();
+          },
+          () => {
+            this.loadingParses = false;
+          })
+    }
   }
 
   onSearch(data: string): void {
@@ -56,74 +134,19 @@ export class FFLogsImportDialog implements OnInit {
       this.hideExtraAreas();
     }
     this.prevSearch = data;
-    const r = /reports\/([a-zA-Z0-9]{16})\/?(?:(?:#.*fight=([^&]*))|$)/igm;
-    const res = r.exec(data) as any;
-    if (res && res.length > 1) {
-      if (res[1]) {
-        this.code = res[1];
-        if (res[2]) {
-          if (res[2] !== "last") {
-            this.dialogRef.afterClose.subscribe(() => {
-              this.router.navigateByUrl("fflogs/" + this.code + "/" + res[2]);
-            });
-            this.dialogRef.close();
-            return;
-          } else {
-            this.service.dataService
-              .getFight(res[1])
-              .then((it: ReportFightsResponse) => {
-                const id = it.fights[it.fights.length - 1].id;
-                this.onClick("" + id);
-                return;
-              });
-          }
-        } else {
-          this.service.dataService
-            .getFight(res[1])
-            .then((it: ReportFightsResponse) => {
-              if (it.fights.length == 0) return;
-
-              const groupBy = key => array =>
-                array.reduce((objectsByKeyValue, obj) => {
-                  const value = obj[key];
-                  objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-                  return objectsByKeyValue;
-                }, {});
-
-              var zones = groupBy('zoneName')(it.fights);
-              this.zones = Object.keys(zones).map((value) => ({ key: value, value: zones[value] }));
-              this.showListArea();
-            });
-        }
+    const r = new RegExp(this.matchValue, "igm");
+    const [_, code, fight] = r.exec(data) || [];
+    if (code) {
+      this.code = code;
+      if (fight) {
+        this.loadByFight(code, fight);
+      } else {
+        this.searchByCode(code);
       }
     }
     else {
       if (!data) {
-        const settings = this.settingsService.load();
-        const importSettings = settings.fflogsImport;
-        const haveFFlogsChar =
-          importSettings.characterName &&
-          importSettings.characterRegion &&
-          importSettings.characterServer;
-
-        if (haveFFlogsChar) {
-          this.service.dataService
-            .getParses(
-              importSettings.characterName,
-              importSettings.characterServer,
-              importSettings.characterRegion)
-            .subscribe(
-              parses => {
-                if (parses && parses.length > 0) {
-                  this.parsesList = parses.sort((a, b) => b.startTime - a.startTime);
-                  console.debug(this.parsesList);
-                  this.showSearchArea();
-                }
-              },
-              error => {
-                this.hideExtraAreas();
-              })
-        }
+        this.loadParses();
       } else {
         this.hideExtraAreas();
       }
@@ -171,9 +194,6 @@ export class FFLogsImportDialog implements OnInit {
   }
 
   onParseClick(item: any) {
-    // this.dialogRef.afterClose.subscribe(() => {
-    //   this.router.navigateByUrl("fflogs/" + item.reportID + "/" + item.fightID);
-    // });
     this.dialogRef.close({
       reportId: item.reportID,
       fightId: item.fightID

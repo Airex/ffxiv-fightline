@@ -1,31 +1,34 @@
-<nz-space nzDirection="vertical">
-  <nz-space-item>
-    <span class="header">Phase</span>
-  </nz-space-item>
-  <nz-space-item>
-    <i nz-icon nzType="clock-circle" theme="outline"></i><span class="time">{{from}}-{{to}}</span>
-  </nz-space-item>
-  <nz-space-item *ngIf="data.mode=='default'">
-    <textarea nz-input
-              placeholder="Leave comment here"
-              [(ngModel)]="comment"
-              [nzAutosize]="{ minRows: 2, maxRows: 6 }" (ngModelChange)="showCommentButton = true;"></textarea>
-
-  </nz-space-item>
-  <nz-space-item *ngIf="data.mode=='table'">
-    <div> {{comment}}</div>
-  </nz-space-item>
-  <nz-space-item *ngIf="showCommentButton && data.mode === 'default'">
-    <button #commentButton nzType="primary" nz-button (click)="setComment();showCommentButton = false;">Set Comment</button>
-  </nz-space-item>
-  <nz-space-item *ngIf="data.mode ==='default'">
-    Click below to change color
-  </nz-space-item>
-  <nz-space-item>
-    <div class="color-pikcer" [cpDisabled]="data.mode!=='default'" [(colorPicker)]="color" [cpOKButton]="true" cpDialogDisplay="inline" (colorPickerSelect)="setColor($event);" [style.background]="color"></div>
-  </nz-space-item>
-  <nz-space-item *ngIf="data.mode ==='default'">
-    <button nz-button nzType="primary" (click)="remove(it)" nzDanger>Remove</button>
-  </nz-space-item>
-</nz-space>
-
+<div class="sidepanel-container">
+  <div class="sidepanel-full">
+    <div>
+      <span class="header">Phase</span>
+    </div>
+    <div>
+      <i nz-icon nzType="clock-circle" theme="outline"></i><span class="time">{{from}}-{{to}}</span>
+    </div>
+    <div *ngIf="data.mode=='default'">
+      <textarea nz-input placeholder="Leave comment here" [(ngModel)]="comment"
+        [nzAutosize]="{ minRows: 2, maxRows: 6 }" (ngModelChange)="showCommentButton = true;"></textarea>
+    </div>
+    <div *ngIf="data.mode=='table'">
+      <div> {{comment}}</div>
+    </div>
+    <div *ngIf="showCommentButton && data.mode === 'default'">
+      <button #commentButton nzType="primary" nz-button (click)="setComment();showCommentButton = false;">Set
+        Comment</button>
+    </div>
+    <div *ngIf="data.mode ==='default'">
+      <div>
+        Click below to change color
+      </div>
+    </div>
+    <div>
+      <div class="color-pikcer" [cpDisabled]="data.mode!=='default'" [(colorPicker)]="color" [cpOKButton]="true"
+        cpDialogDisplay="inline" (colorPickerSelect)="setColor($event);" [style.background]="color">
+      </div>
+    </div>
+    <div *ngIf="data.mode ==='default'">
+      <button nz-button nzType="primary" (click)="remove(it)" nzDanger>Remove</button>
+    </div>
+  </div>
+</div>

@@ -55,7 +55,7 @@ export class FightLoadDialog implements AfterViewInit {
     
   }
 
-  removevisiblechanged(el: HTMLElement, visible: boolean){
+  removevisiblechanged(el: HTMLElement, visible: any){ //todo: check passed value
     el.className =  el.className.replace("forcevisible", "");
     if (visible)
       el.className+= " forcevisible";

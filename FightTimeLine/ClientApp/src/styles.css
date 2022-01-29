@@ -642,3 +642,24 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
 .ant-tag.tableview {
   padding: 0 2px !important;
 }
+
+.sidepanel nz-space {
+  width: 100% !important;
+}
+
+.sidepanel-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.sidepanel-full {
+  margin: 3px;  
+  min-width: 150px;
+  width: 100%;
+}
+
+.sidepanel-full > * {
+  margin-bottom: 2px;    
+}

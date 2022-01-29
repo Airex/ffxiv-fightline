@@ -1,4 +1,4 @@
-import { InjectionToken } from '@angular/core/';
+import { InjectionToken } from '@angular/core';
 import { HttpClient } from "@angular/common/http"
 import { LocalStorageService } from './LocalStorageService';
 import { IGameService } from './game.service-interface';

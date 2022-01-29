@@ -129,8 +129,8 @@
                 </div>
               </div>
               <div>
-                <button nz-button [nzType]="authenticationService.authenticated?'primary':'danger'"
-                  class="action-button" (click)="load()">Load</button>
+                <button nz-button [nzDanger]="!authenticationService.authenticated" class="action-button"
+                  (click)="load()">Load</button>
               </div>
               <div>
                 <button nz-button class="action-button" (click)="bossTemplates()">Boss Templates</button>
@@ -149,6 +149,5 @@
   </div>
 </div>
 <ng-template #templatePortalContent>
-  
-</ng-template>
 
+</ng-template>

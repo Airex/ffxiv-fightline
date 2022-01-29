@@ -7,6 +7,7 @@ import { Utils } from "../../../core/Utils";
 import { BossDownTimeMap } from "../../../core/Maps";
 import { VisStorageService } from "src/services/VisStorageService";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
+import { Subscription } from "rxjs";
 
 
 
@@ -25,6 +26,7 @@ export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent
   from: string;
   to: string;
   showCommentButton = false;
+  sub: Subscription;
 
   constructor(
     @Inject("DispatcherPayloads") private dispatcher: S.DispatcherService<DispatcherPayloads>,
@@ -33,6 +35,9 @@ export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent
     public data: SidepanelParams) {
     this.items = this.data.items;
     this.holders = visStorage.holders;
+    this.sub = this.data.refresh.subscribe(()=>{
+      this.refresh();
+    });
     this.refresh();
 
   }
@@ -78,6 +83,7 @@ export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent
   }
 
   ngOnDestroy(): void {
+    this.sub.unsubscribe();
   }
 
 }

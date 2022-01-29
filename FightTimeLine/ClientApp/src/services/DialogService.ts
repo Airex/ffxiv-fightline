@@ -21,24 +21,7 @@ export class DialogService {
     return this.dialogs.openModals.some(m => m.getState() === NzModalState.OPEN);
   }
 
-  dialog: any;
-
-
-  openExportToTable(dataFn: () => any) {
-    this.dialogs.create({
-      nzWrapClassName: "vertical-center-modal",
-      nzTitle: "Export to table",
-      nzWidth: 700,
-      nzClosable: false,
-      nzKeyboard: false,
-      nzOkDisabled: true,
-      nzMaskClosable: false,
-      nzContent: D.ExportToTableDialog,
-      nzComponentParams: {
-        data: dataFn()
-      }
-    });
-  }
+  dialog: any;  
 
   openLogin() {
     const dialogRef = this.dialogs.create({

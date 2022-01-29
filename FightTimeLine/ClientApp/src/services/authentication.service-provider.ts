@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { InjectionToken, Inject } from '@angular/core/';
+import { InjectionToken, Inject } from '@angular/core';
 import { AuthenticationService } from "./authentication.service";
 import { IAuthenticationService } from "./authentication.service-interface";
 import { AuthenticationMockService } from "./authentication.service-mock";

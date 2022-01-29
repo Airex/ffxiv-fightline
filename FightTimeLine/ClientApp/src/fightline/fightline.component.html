@@ -53,7 +53,7 @@
     </nz-dropdown-menu>
   </span>
   <span style="margin-left: 10px" *ngIf="toolsManager.active">
-    <button nz-button nzType="danger" (click)="useTool(null)">{{toolsManager.active}}</button>
+    <button nz-button [nzDanger]="true" (click)="useTool(null)">{{toolsManager.active}}</button>
   </span>
   <span style="display: inline-flex; margin-left: 20px;">
     <avatarWithPing *ngFor="let user of fightHubService.users" [owner]="false" textSizeRatio="3" [name]="user.name"

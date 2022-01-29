@@ -1,11 +1,7 @@
-<div class="area">
+<div class="area">  
   <nz-collapse>
-    <nz-collapse-panel [nzHeader]="header"
-                       [nzActive]="opened"
-                       [nzExtra]="extra"
-                       (nzActiveChange)="opened = $event">
-      <div customScroll
-           [ngStyle]="{'max-height': maxHeigth || '300px', 'overflow':'overlay'}">
+    <nz-collapse-panel [nzHeader]=" header" [nzActive]="opened" [nzExtra]="extra" (nzActiveChange)="opened = $event">
+      <div customScroll [ngStyle]="{'max-height': maxHeigth || '300px', 'overflow':'overlay'}">
         <ng-content></ng-content>
       </div>
     </nz-collapse-panel>

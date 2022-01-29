@@ -1,6 +1,5 @@
 import { BossAttackDialog } from "./bossAttackDialog/bossAttackDialog.component"
 import { BossTemplatesDialog } from "./bossTemplatesDialog/bossTemplatesDialog.component"
-import { ExportToTableDialog } from "./exportToTableDialog/exportToTableDialog.component"
 import { FFLogsImportDialog } from "./ffLogsImportDialog/ffLogsImportDialog.component"
 import { FightLoadDialog } from "./fightLoadDialog/fightLoadDialog.component"
 import { FightSaveDialog } from "./fightSaveDialog/fightSaveDialog.component"
@@ -16,8 +15,7 @@ import { CharacterDialogComponent } from "./character-dialog/character-dialog.co
 
 export {
   BossAttackDialog,
-  BossTemplatesDialog,
-  ExportToTableDialog,
+  BossTemplatesDialog,  
   FFLogsImportDialog,
   FightLoadDialog,
   FightSaveDialog,
@@ -44,8 +42,7 @@ export const DialogsModuleComponents =
     LoadingDialog,
     LoginDialog,
     CharacterDialogComponent,
-    RegisterDialog,
-    ExportToTableDialog,
+    RegisterDialog,    
     TableViewDialog,
     BossTemplatesDialog,
     WhatsNewDialog    

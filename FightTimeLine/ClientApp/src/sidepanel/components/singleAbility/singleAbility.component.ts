@@ -10,6 +10,7 @@ import { SettingsEnum } from "src/core/Jobs/FFXIV/shared";
 import { FFXIVApiService } from "src/services/FFxivApiService";
 import { VisStorageService } from "src/services/VisStorageService";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "singleAbility",
@@ -26,6 +27,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
   covered: any[];
   coveredOgcds: any[];
   items: any[];
+  sub: Subscription;
 
   constructor(
 
@@ -60,6 +62,10 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     }
 
     this.form = new FormGroup(groups);
+
+    this.sub = this.data.refresh.subscribe(() => {
+      this.refresh();
+    });
 
     this.refresh();
   }
@@ -164,7 +170,6 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
         return oacc;
       }, []);
     }
-
   }
 
   ngOnInit(): void {
@@ -172,7 +177,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
   }
 
   ngOnDestroy(): void {
-
+      this.sub.unsubscribe();
   }
 
 }

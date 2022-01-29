@@ -8,6 +8,7 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { FFXIVApiService } from "src/services/FFxivApiService";
 import { VisStorageService } from "src/services/VisStorageService";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
+import { Subscription } from "rxjs";
 
 
 @Component({
@@ -21,6 +22,7 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
   compactView: boolean;
   items: any[];
   holders: Holders;
+  sub: Subscription;
 
   constructor(
     private visStorage: VisStorageService,
@@ -31,6 +33,9 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
   ) {
     this.items = this.data.items;
     this.holders = this.visStorage.holders;
+    this.sub = this.data.refresh.subscribe(()=>{
+      this.refresh();
+    });
     this.refresh();
 
   }
@@ -97,7 +102,7 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
   }
 
   ngOnDestroy(): void {
-
+    this.sub.unsubscribe();
   }
 
 }

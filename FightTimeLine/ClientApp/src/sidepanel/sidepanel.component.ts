@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, ComponentFactoryResolver, Input, Injector, ApplicationRef, ComponentRef, NgZone } from "@angular/core";
-import { ComponentPortal, DomPortalOutlet, PortalOutlet } from "@angular/cdk/portal";
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, Input, Injector, ApplicationRef, ComponentRef, NgZone } from "@angular/core";
+import { ComponentPortal, PortalOutlet,Portal } from "@angular/cdk/portal";
 import { SingleAbilityComponent } from "./components/singleAbility/singleAbility.component";
 import { SingleAttackComponent } from "./components/singleAttack/singleAttack.component";
 import { MultipleAbilityComponent } from "./components/multipleAbility/multipleAbility.component";
@@ -13,6 +13,7 @@ import * as BaseHolder from "../core/Holders/BaseHolder";
 import { Holders } from "../core/Holders";
 import { VisStorageService } from "src/services/VisStorageService";
 import { NzResizeEvent } from "ng-zorro-antd/resizable";
+import { Subject } from "rxjs";
 
 
 @Component({
@@ -25,10 +26,9 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
   sideNavOpened: boolean = false;
   items: BaseHolder.IForSidePanel[];
   holders: Holders;
-  ref: ComponentRef<ISidePanelComponent>;
-  key: string;
-  op: PortalOutlet;
-
+  selectedPortal: Portal<any>;  
+  key: string;   
+  refresher: Subject<void> = new Subject<void>();
   width = 300;  
   id = -1;
 
@@ -40,15 +40,12 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     "downtime": [DownTimeComponent, MultipleDownTimeComponent]
   }
 
-  @Input("mode") mode: SidePanelMode = "default";
-  @ViewChild("portalOutlet", { static: false })  portalOutletRef: ElementRef;  
+  @Input("mode") mode: SidePanelMode = "default";  
 
   constructor(
     private visStorage: VisStorageService,
-    private injector: Injector,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private ngZone: NgZone,
-    private appRef: ApplicationRef
+    private injector: Injector,    
+    private ngZone: NgZone    
   ) {
     this.holders = this.visStorage.holders;
   }
@@ -65,9 +62,10 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   refresh() {
-    if (this.ref) {
-      this.ref.instance.refresh();
-      return this.holders.isIn(this.items.map(t => (t as any).id))
+
+    if (this.sideNavOpened && this.refresher) {
+      this.refresher.next();
+      return false;//todo: check for ids in component return this.holders.isIn(this.items.map(t => (t as any).id))
     }
 
     if (this.sideNavOpened)
@@ -107,32 +105,29 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setItems(items: BaseHolder.IForSidePanel[], mode: SidePanelMode = "default"): void {
-    this.items = items;
+    this.items = items;   
+
     const newKey = this.calculateKey(this.items);
-    if (newKey === this.key && this.ref) {
-      this.ref.instance.refresh();
+    if (newKey === this.key) {
+      this.refresher.next();
       return;
     }
+
     this.key = newKey;
-
-    if (this.op && this.op.hasAttached()) {
-      this.op.detach();
-      this.ref.destroy();
-      this.ref = null;
-    }
-
+    
     const componentType = this.componentFactory();
 
     if (componentType) {
       const injector = this.createInjector({
         items: items,
-        mode: mode
+        mode: mode,
+        refresh: this.refresher
       });
 
-      let component = new ComponentPortal(componentType, null, injector);
+      let component = new ComponentPortal(componentType, null, injector);      
 
-      if (component) {
-        this.ref = this.op.attach(component) as ComponentRef<ISidePanelComponent>;
+      if (component) {                     
+        this.selectedPortal = component;                                
       }
     }
   }
@@ -156,16 +151,15 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    this.op = new DomPortalOutlet(this.portalOutletRef.nativeElement, this.componentFactoryResolver, this.appRef, this.injector);
+  ngAfterViewInit(): void {        
+    // this.op = new DomPortalOutlet(this.portalOutletRef.nativeElement, this.componentFactoryResolver, this.appRef, this.injector);
   }
 
   ngOnInit(): void {
 
   }
 
-  ngOnDestroy(): void {
-    this.op.dispose();
+  ngOnDestroy(): void {    
   }
 
 }

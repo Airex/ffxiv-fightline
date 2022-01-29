@@ -1,49 +1,45 @@
-<nz-space nzDirection="vertical">
-  <nz-space-item>
-    <img [src]="it.job.icon" class="icon" />
-    <span class="header abilityName">{{it.job.name}}</span>
-  </nz-space-item>
-  <nz-space-item>
-    <span class="abilityDescription">{{it.actorName}}</span>
-  </nz-space-item>
-  <nz-space-item *ngIf="hiddenAbilities.length>0">
-    <sidepanel-area header="Hidden abilities" [extra]="restoreAllTpl">
-      <div>
-        <nz-tag *ngFor="let ab of hiddenAbilities" (nzOnClose)="restore(ab)" nzMode="closeable">
-          <span>
-            <img class='abilityIcon' [src]="ab.ability.icon" />
-            <span class='abilityName'>{{ab.ability.name}}</span>
-          </span>
-        </nz-tag>
-      </div>
-    </sidepanel-area>
-    <ng-template #restoreAllTpl>
-      <a (click)="$event.stopPropagation();restoreAll()">restore all</a>
-    </ng-template>
-  </nz-space-item>
-  <nz-space-item *ngIf="data.mode === 'default'">
-    <sidepanel-area header="Filter" [extra]="resetAllTpl">
-      <nz-space nzDirection="vertical">
-        <nz-space-item *ngFor="let f of filters">
-          <label nz-checkbox (ngModelChange)="updateFilter($event, f.name)" [(ngModel)]="jobFilter[f.name]"
-            [nzIndeterminate]="jobFilter[f.name] === undefined">{{f.desc}}</label>
-          <a (click)="resetJobFilter(f.name)">reset</a>
-        </nz-space-item>
-      </nz-space>
-    </sidepanel-area>
-    <ng-template #resetAllTpl>
-      <a (click)="$event.stopPropagation();resetJobFilter()">reset</a>
-    </ng-template>
-  </nz-space-item>
-  <nz-space-item *ngIf="data.mode === 'default'">
-    <label nz-checkbox [(ngModel)]="compactView" (ngModelChange)="compact()">Compact view</label>
-  </nz-space-item>
-  <nz-space-item *ngIf="data.mode === 'default'">
-    <nz-button-group>
+<div class="sidepanel-container">
+  <div class="sidepanel-full">
+    <div>
+      <img [src]="it.job.icon" class="icon" />
+      <span class="header abilityName">{{it.job.name}}</span>
+    </div>
+    <div>
+      <span class="abilityDescription">{{it.actorName}}</span>
+    </div>
+    <nz-button-group *ngIf="data.mode === 'default'">
       <!-- <button nz-button (click)="fill(it)">Fill</button> -->
       <button nz-button nzType="primary" (click)="remove(it)" nzDanger>Remove</button>
       <button nz-button nzType="primary" (click)="stats()">Stats</button>
     </nz-button-group>
-  </nz-space-item>
-  
-</nz-space>
+  </div>
+
+  <div *ngIf="data.mode === 'default'" class="sidepanel-full">
+    <label nz-checkbox [(ngModel)]="compactView" (ngModelChange)="compact()">Compact view</label>
+  </div>
+
+  <sidepanel-area header="Hidden abilities" [extra]="restoreAllTpl" *ngIf="hiddenAbilities.length>0">
+    <div>
+      <nz-tag *ngFor="let ab of hiddenAbilities" (nzOnClose)="restore(ab)" nzMode="closeable">
+        <span>
+          <img class='abilityIcon' [src]="ab.ability.icon" />
+          <span class='abilityName'>{{ab.ability.name}}</span>
+        </span>
+      </nz-tag>
+    </div>
+  </sidepanel-area>
+  <ng-template #restoreAllTpl>
+    <a (click)="$event.stopPropagation();restoreAll()">restore all</a>
+  </ng-template>
+
+  <sidepanel-area header="Filter" [extra]="resetAllTpl" *ngIf="data.mode === 'default'">
+    <div *ngFor="let f of filters">
+      <label nz-checkbox (ngModelChange)="updateFilter($event, f.name)" [(ngModel)]="jobFilter[f.name]"
+        [nzIndeterminate]="jobFilter[f.name] === undefined">{{f.desc}}</label>
+      <a (click)="resetJobFilter(f.name)">reset</a>
+    </div>
+  </sidepanel-area>
+  <ng-template #resetAllTpl>
+    <a (click)="$event.stopPropagation();resetJobFilter()">reset</a>
+  </ng-template>
+</div>

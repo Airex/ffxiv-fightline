@@ -1,5 +1,5 @@
-<nz-space nzDirection="vertical">
-  <nz-space-item>
+<div class="sidepanel-container">
+  <div class="sidepanel-full">
     <div>
       <span class="abilityName">{{it.attack.name}}</span>
       <a *ngIf="data.mode === 'default'" class="edit" (click)="edit(it)"> <i nz-icon nzType="edit"
@@ -8,139 +8,133 @@
     <div>
       <i nz-icon nzType="clock-circle" theme="twotone"></i><span class="time">{{it.attack.offset}}</span>
       <nz-switch [ngModel]="true" nzSize="small" [ngStyle]="{marginLeft:'5px'}" nzCheckedChildren="Pinned"
-      nzUnCheckedChildren="" [ngModel]="it.pinned" (ngModelChange)="pinnedChanged($event)">></nz-switch>
+        nzUnCheckedChildren="" [ngModel]="it.pinned" (ngModelChange)="pinnedChanged($event)">></nz-switch>
     </div>
     <div>
       <nz-tag *ngIf="!!it.attack.source" nzColor="warning">{{it.attack.source}}</nz-tag>
       <nz-tag [nzColor]="getTypeColor(it.attack.type)">{{getType(it.attack.type)}}</nz-tag>
       <nz-tag *ngFor="let t of it.attack.tags" nzColor="green">{{t}}</nz-tag>
     </div>
-  </nz-space-item>
-  <nz-space-item>
     <span *ngIf="it.attack.description && it.attack.description.indexOf('\n') === -1" style="white-space: pre-line;"
       class="description">{{it.attack.description}}</span>
-    <sidepanel-area header="Description" *ngIf="it.attack.description && it.attack.description.indexOf('\n') >=0">
-      <span style="white-space: pre-line;" class="description">{{it.attack.description}}</span>
-    </sidepanel-area>
-  </nz-space-item>
-  <nz-space-item *ngIf="data.mode === 'default'">
-    <button nz-button nzType="primary" #copyButton (click)="copy(it);copyButton.nzType=null;">Copy</button>    
-  </nz-space-item>
-  <nz-space-item>
-    <sidepanel-area header="Mitigations" *ngIf="defs.length>0">
-      <div>
-        <table style="width:100%">
-          <tr>
-            <th></th>
-            <th>Mitigation</th>
-            <th>Shield</th>
-          </tr>
-          <tr *ngFor="let d of defStats" class="">
-            <td>
-              <img *ngIf="d.icon" class="abilityIcon" [src]="d.icon" />
-              <span class="abilityNameDef" style="vertical-align:middle">{{d.name}}: </span>
-            </td>
-            <td> {{(d.mitigation*100).toFixed()}}%</td>
-            <td> {{(d.shield).toFixed()}}%</td>
-          </tr>
-        </table>
-      </div>
-    </sidepanel-area>
-  </nz-space-item>
-  <nz-space-item>
-    <sidepanel-area header="Defensives" [extra]="typeSelectorTpl" *ngIf="defs.length > 0">
-      <div>
-        <div class="job" *ngFor="let d of defs">
-          <div class="jobHead">
-            <img class="jobIcon" [src]="d.job.icon" /><span class="jobName">{{d.job.name}}</span>
-          </div>
-          <ul style="padding-left: 10px">
-            <li style="list-style-type: none;" *ngFor="let ab of d.abilities | soloparty:[defSolo, defParty]">
-              <img class="abilityIcon" [src]="ab.ability.icon" />
-              <a class="defenseLink" (click)="defenseClick(it)"> <span class="abilityNameDef">{{ab.ability.name}}</span>
-              </a>
-              <span *ngIf="getTargetIcon(ab)" style="margin-left: 2px;vertical-align: middle;">
-                <span style="margin-left: 2px;">&gt;</span>
-                <img class="abilityIcon" style="margin-left: 2px;margin-top: -3px;" [src]="getTargetIcon(ab)" />
-              </span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </sidepanel-area>
-    <ng-template #typeSelectorTpl>
-      <button nz-button [nzType]="defSolo?'primary':null"
-        (click)="$event.stopPropagation();$event.preventDefault();defSolo=!defSolo" [nzSize]="'small'">
-        Solo
-      </button>
-      <button nz-button [nzType]="defParty?'primary':null"
-        (click)="$event.stopPropagation();$event.preventDefault();defParty=!defParty" [nzSize]="'small'">
-        Party
-      </button>
-    </ng-template>
-  </nz-space-item>
-  <nz-space-item>
-    <sidepanel-area header="Available Defensives" [extra]="typeSelectorAvTpl" *ngIf="availDefs.length>0">
-      <div>
-        <div class="job" *ngFor="let d of availDefs ">
-          <div class="jobHead">
-            <img class="jobIcon" [src]="d.job.icon" /><span class="jobName">{{d.job.name}}</span>
-          </div>
-          <ul style="padding-left: 10px">
-            <li style="list-style-type: none;" *ngFor="let it of d.abilities | soloparty:[defSoloAv, defPartyAv]">
-              <img class="abilityIcon" [src]="it.ability.icon" /><a class="defenseLink" (click)="defenseClick(it)">
-                <span class="abilityNameDef">{{it.ability.name}}</span></a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </sidepanel-area>
-    <ng-template #typeSelectorAvTpl>
-      <button nz-button [nzType]="defSoloAv?'primary':null"
-        (click)="$event.stopPropagation();$event.preventDefault();defSoloAv=!defSoloAv" [nzSize]="'small'">
-        Solo
-      </button>
-      <button nz-button [nzType]="defPartyAv?'primary':null"
-        (click)="$event.stopPropagation();$event.preventDefault();defPartyAv=!defPartyAv" [nzSize]="'small'">
-        Party
-      </button>
-    </ng-template>
-  </nz-space-item>
-  <nz-space-item>
-    <sidepanel-area header="Similar" [extra]="similarSelectAll" *ngIf="similar.length > 0">
+  </div>
 
-      <div class="similar">
-        <ul style="padding-left: 10px; display: block">
-          <li style="list-style-type: none; display: contents" *ngFor="let it of similar" class="similar-item">
-            <div>
-              <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink"
-                (click)="$event.stopPropagation();$event.preventDefault();similarClick(it)"><span
-                  class="">{{it.attack.offset}}</span></a>
-            </div>
+  <sidepanel-area header="Description" *ngIf="it.attack.description && it.attack.description.indexOf('\n') >=0">
+    <span style="white-space: pre-line;" class="description">{{it.attack.description}}</span>
+  </sidepanel-area>
+
+  <div class="sidepanel-full" *ngIf="data.mode === 'default'">
+    <button nz-button nzType="primary" #copyButton (click)="copy(it);copyButton.nzType=null;">Copy</button>
+  </div>
+
+  <sidepanel-area header="Mitigations" *ngIf="defs.length>0">
+    <div>
+      <table style="width:100%">
+        <tr>
+          <th></th>
+          <th style="text-align: left;">Mitigation</th>
+          <th style="text-align: left;">Shield</th>
+        </tr>
+        <tr *ngFor="let d of defStats" class="">
+          <td>
+            <img *ngIf="d.icon" class="abilityIcon" [src]="d.icon" />
+            <span class="abilityNameDef" style="vertical-align:middle">{{d.name}}: </span>
+          </td>
+          <td style="text-align: left;"> {{(d.mitigation*100).toFixed()}}%</td>
+          <td style="text-align: left;"> {{(d.shield).toFixed()}}%</td>
+        </tr>
+      </table>
+    </div>
+  </sidepanel-area>
+
+  <sidepanel-area header="Defensives" [extra]="typeSelectorTpl" *ngIf="defs.length > 0">
+    <div class="job-container">
+      <div class="job" *ngFor="let d of defs">
+        <div class="jobHead">
+          <img class="jobIcon" [src]="d.job.icon" /><span class="jobName">{{d.job.name}}</span>
+        </div>
+        <ul style="padding-left: 10px">
+          <li style="list-style-type: none;" *ngFor="let ab of d.abilities | soloparty:[defSolo, defParty]">
+            <img class="abilityIcon" [src]="ab.ability.icon" />
+            <a class="defenseLink" (click)="defenseClick(it)"> <span class="abilityNameDef">{{ab.ability.name}}</span>
+            </a>
+            <span *ngIf="getTargetIcon(ab)" style="margin-left: 2px;vertical-align: middle;">
+              <span style="margin-left: 2px;">&gt;</span>
+              <img class="abilityIcon" style="margin-left: 2px;margin-top: -3px;" [src]="getTargetIcon(ab)" />
+            </span>
           </li>
         </ul>
       </div>
-    </sidepanel-area>
-    <ng-template #similarSelectAll>
-      <a *ngIf="data.mode === 'default'" class="similarLink" (click)="similarAllClick()"><span class="">Select
-          all</span></a>
-    </ng-template>
-  </nz-space-item>
-  <nz-space-item *ngIf="ff && ff.length">
-    <sidepanel-area header="FFLogsData">
-      <div class="similar">
-        <div class="job" *ngFor="let d of ff">
-          <div class="jobHead">
-            <img class="jobIcon" [src]="d.icon" /><span class="jobName">{{d.name}}</span>
-          </div>
-          <ul style="padding-left: 10px">
-            <li style="list-style-type: none;" *ngFor="let it of d.data">
-              <span class="abilityNameDef">{{it.name}}:</span>
-              <span class="abilityNameDef">&nbsp;{{it.value}}</span>
-            </li>
-          </ul>
+    </div>
+  </sidepanel-area>
+  <ng-template #typeSelectorTpl>
+    <button nz-button [nzType]="defSolo?'primary':null"
+      (click)="$event.stopPropagation();$event.preventDefault();defSolo=!defSolo" [nzSize]="'small'">
+      Solo
+    </button>
+    <button nz-button [nzType]="defParty?'primary':null"
+      (click)="$event.stopPropagation();$event.preventDefault();defParty=!defParty" [nzSize]="'small'">
+      Party
+    </button>
+  </ng-template>
+
+  <sidepanel-area header="Available Defensives" [extra]="typeSelectorAvTpl" *ngIf="availDefs.length>0">
+    <div class="job-container">
+      <div class="job" *ngFor="let d of availDefs ">
+        <div class="jobHead">
+          <img class="jobIcon" [src]="d.job.icon" /><span class="jobName">{{d.job.name}}</span>
         </div>
+        <ul style="padding-left: 10px">
+          <li style="list-style-type: none;" *ngFor="let it of d.abilities | soloparty:[defSoloAv, defPartyAv]">
+            <img class="abilityIcon" [src]="it.ability.icon" /><a class="defenseLink" (click)="defenseClick(it)">
+              <span class="abilityNameDef">{{it.ability.name}}</span></a>
+          </li>
+        </ul>
       </div>
-    </sidepanel-area>
-  </nz-space-item>
-</nz-space>
+    </div>
+  </sidepanel-area>
+  <ng-template #typeSelectorAvTpl>
+    <button nz-button [nzType]="defSoloAv?'primary':null"
+      (click)="$event.stopPropagation();$event.preventDefault();defSoloAv=!defSoloAv" [nzSize]="'small'">
+      Solo
+    </button>
+    <button nz-button [nzType]="defPartyAv?'primary':null"
+      (click)="$event.stopPropagation();$event.preventDefault();defPartyAv=!defPartyAv" [nzSize]="'small'">
+      Party
+    </button>
+  </ng-template>
+
+  <sidepanel-area header="Similar" [extra]="similarSelectAll" *ngIf="similar.length > 0">
+    <div class="similar">
+      <ul style="padding-left: 10px; display: block">
+        <li style="list-style-type: none; display: contents" *ngFor="let it of similar" class="similar-item">
+          <div>
+            <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink"
+              (click)="$event.stopPropagation();$event.preventDefault();similarClick(it)"><span
+                class="">{{it.attack.offset}}</span></a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </sidepanel-area>
+  <ng-template #similarSelectAll>
+    <a *ngIf="data.mode === 'default'" class="similarLink" (click)="similarAllClick()"><span class="">Select
+        all</span></a>
+  </ng-template>
+
+  <sidepanel-area header="FFLogsData" *ngIf="ff && ff.length">
+    <div class="job-container">
+      <div class="job" *ngFor="let d of ff">
+        <div class="jobHead">
+          <img class="jobIcon" [src]="d.icon" /><span class="jobName">{{d.name}}</span>
+        </div>
+        <ul style="padding-left: 10px">
+          <li style="list-style-type: none;" *ngFor="let it of d.data">
+            <span class="abilityNameDef">{{it.name}}:</span>
+            <span class="abilityNameDef">&nbsp;{{it.value}}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </sidepanel-area>
+</div>

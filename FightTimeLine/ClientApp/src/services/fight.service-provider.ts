@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { InjectionToken, Inject,Injector } from '@angular/core/';
+import { InjectionToken, Inject,Injector } from '@angular/core';
 
 import { FightsService } from "./fight.service";
 import { IFightService } from "./fight.service-interface";

@@ -4,6 +4,7 @@ import { ITimelineContainer } from "src/core/Holders/BaseHolder";
 import { VisStorageService } from "src/services/VisStorageService";
 import { ClassNameBuilder } from "../../core/ClassNameBuilder"
 import { Utils } from "../../core/Utils"
+import {} from "xss"
 
 export type ActionName = "delete" | "canMove" | "move" | "selected" | "clickGroup" | "clickEmpty" | "doubleClickGroup" | "doubleClickEmpty" | "doubleClickItem" | "timeChanged" | "visibleFrameTemplate" | "itemTooltip" | "keyMove"| "groupOrderSwap";
 export type EventSource = "player" | "boss" | "user";
@@ -86,6 +87,9 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     onRemove: (item: any, callback: any) => {
       callback(null);
       this.emitAction("delete", "player", this.visTimelineService.getSelection(this.visTimeline));
+    },
+    xss: {
+      disabled: true
     },
     onMoving: (item: any, callback: any) => {
       let result;
@@ -175,6 +179,9 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     tooltip: {
       followMouse: false,
       overflowMethod: "flip"
+    },
+    xss: {
+      disabled: true
     },
     type: "box",
     multiselect: true,

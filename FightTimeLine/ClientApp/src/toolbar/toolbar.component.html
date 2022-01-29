@@ -12,7 +12,7 @@
   <nz-page-header-extra>
     <span>
       <button nz-dropdown nz-button [nzDropdownMenu]="accountMenu" nz-tooltip [nzTooltipTrigger]="'click'"
-        nzShape="circle" nzTooltipTitle="Account" [nzType]="authenticationService.authenticated?'primary':'danger'">
+        nzShape="circle" nzTooltipTitle="Account" [nzDanger]="!authenticationService.authenticated">
         <i nz-icon nzType="user" aria-label="Account"></i>
       </button>
       <nz-dropdown-menu #accountMenu="nzDropdownMenu">

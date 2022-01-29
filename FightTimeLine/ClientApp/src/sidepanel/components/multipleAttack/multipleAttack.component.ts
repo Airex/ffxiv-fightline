@@ -8,6 +8,7 @@ import { Utils } from "../../../core/Utils";
 import * as Index from "../../../core/Maps/index";
 import { VisStorageService } from "src/services/VisStorageService";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "multipleAttack",
@@ -24,6 +25,11 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
   ) {
     this.items = this.data.items.sort((a: Index.BossAttackMap, b: Index.BossAttackMap) => a.startAsNumber - b.startAsNumber);
     this.holders = this.visStorage.holders;
+
+    this.sub = this.data.refresh.subscribe(()=>{
+      this.refresh();
+    });
+
     this.refresh();
   }
 
@@ -31,6 +37,7 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
   holders: Holders;
   items: any[];
   distance: string;
+  sub: Subscription;
 
   get ability(): any {
     return this.items[0];
@@ -68,7 +75,7 @@ export class MultipleAttackComponent implements OnInit, OnDestroy, ISidePanelCom
   }
 
   ngOnDestroy(): void {
-
+    this.sub.unsubscribe();
   }
 
 }

@@ -9,9 +9,10 @@ import { SettingsEnum } from "src/core/Jobs/FFXIV/shared";
 import { VisStorageService } from "src/services/VisStorageService";
 import { IForSidePanel } from "src/core/Holders/BaseHolder";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
+import { Subscription } from "rxjs";
 
 @Component({
-  selector: "singleAttack",
+  selector: "[singleAttack]",
   templateUrl: "./singleAttack.component.html",
   styleUrls: ["./singleAttack.component.css"],
 })
@@ -29,14 +30,18 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   defParty = true;
   defSoloAv = true;
   defPartyAv = true;
+  sub:Subscription;
 
   constructor(
-    private visStorage: VisStorageService,
+    visStorage: VisStorageService,
     @Inject("DispatcherPayloads") private dispatcher: S.DispatcherService<DispatcherPayloads>,
     @Inject(SIDEPANEL_DATA) public data: SidepanelParams
   ) {
     this.items = this.data.items;
     this.holders = visStorage.holders;
+    this.sub = this.data.refresh.subscribe(()=>{
+      this.refresh();
+    });
     this.refresh();
   }
 
@@ -60,7 +65,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   }
 
   copy(value: BossAttackMap) {
-    this.dispatcher.dispatch("attackEdit", value.id);
+    this.dispatcher.dispatch("attackCopy");
   }
 
   calculateDefs(): DefsCalcResult {
@@ -128,7 +133,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   }
 
   ngOnDestroy(): void {
-
+    this.sub.unsubscribe();
   }
 
 }

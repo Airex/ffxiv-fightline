@@ -6,6 +6,7 @@ import { Holders } from "../../../core/Holders";
 import { JobMap, AbilityMap } from "../../../core/Maps/index";
 import { VisStorageService } from "src/services/VisStorageService";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "job-area",
@@ -19,6 +20,7 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
   hiddenAbilities: any[] = null;
   compactView: boolean;
   jobFilter: M.IAbilityFilter;
+  sub:Subscription;
 
 
   filters = Object.entries(<{ [name: string]: [number, string] }>{
@@ -47,6 +49,9 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
   ) {
     this.items = this.data.items;
     this.holders = visStorage.holders;
+    this.sub = this.data.refresh.subscribe(()=>{
+      this.refresh();
+    });
     this.refresh();
 
   }
@@ -117,7 +122,7 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
   }
 
   ngOnDestroy(): void {
-
+    this.sub.unsubscribe();
   }
 
 }
