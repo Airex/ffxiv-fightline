@@ -54,8 +54,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^13.2.0",
-    "@angular-devkit/build-optimizer": "0.803.23",
-    "@angular/coretesting": "~8.2.3",
+    "@angular-devkit/build-optimizer": "0.803.23",    
     "@angular/cli": "^13.2.0",
     "@angular/compiler-cli": "^13.2.0",
     "@angular/language-service": "^13.2.0",
