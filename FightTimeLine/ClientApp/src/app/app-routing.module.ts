@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { FightLineComponent } from "../fightline/fightline.component";
-import { TableViewComponent } from "../tableview/tableview.component";
-//import { BossTemplateComponent } from "../bosstemplate/bosstemplate.component";
-import { HomeComponent } from "../home/home.component";
+import { FightLineComponent } from "../pages/fightline/fightline.component";
+import { TableViewComponent } from "../pages/tableview/tableview.component";
+import { HomeComponent } from "../pages/home/home.component";
 
 const routes: Routes = [
   

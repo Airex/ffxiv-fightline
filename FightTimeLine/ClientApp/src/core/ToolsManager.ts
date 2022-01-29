@@ -1,4 +1,4 @@
-import { Action, ICustomTimeActions } from "../fightline/planArea/planArea.component"
+import { Action, ICustomTimeActions } from "../pages/fightline/planArea/planArea.component"
 import { FightTimeLineController } from "./FightTimeLineController";
 import { Guid } from "guid-typescript"
 

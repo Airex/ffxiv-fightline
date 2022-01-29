@@ -8,18 +8,18 @@ import { PortalModule } from "@angular/cdk/portal";
 import { VisModule } from "ngx-vis"
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FightLineComponent } from "../fightline/fightline.component";
-import { TableViewComponent } from "../tableview/tableview.component";
-import { CellComponent } from "../tableview/cell/cell.component";
+import { FightLineComponent } from "../pages/fightline/fightline.component";
+import { TableViewComponent } from "../pages/tableview/tableview.component";
+import { CellComponent } from "../pages/tableview/cell/cell.component";
 //import { BossTemplateComponent } from "../bosstemplate/bosstemplate.component";
-import { HomeComponent } from "../home/home.component";
-import { SidepanelComponent } from "../sidepanel/sidepanel.component";
-import { PlanAreaComponent } from "../fightline/planArea/planArea.component";
-import { FilterComponent } from "../fightline/filter/filter.component";
-import { ViewComponent } from "../fightline/view/view.component";
+import { HomeComponent } from "../pages/home/home.component";
+import { SidepanelComponent } from "../components/sidepanel/sidepanel.component";
+import { PlanAreaComponent } from "../pages/fightline/planArea/planArea.component";
+import { FilterComponent } from "../pages/fightline/filter/filter.component";
+import { ViewComponent } from "../pages/fightline/view/view.component";
 import { SettingsFilterComponent } from "../dialogs/settingsDialog/filter/settingsFilter.component";
 import { SettingsViewComponent } from "../dialogs/settingsDialog/view/settingsView.component";
-import { ToolbarComponent } from "../toolbar/toolbar.component";
+import { ToolbarComponent } from "../components/toolbar/toolbar.component";
 import { SyncSettingsComponent } from "../dialogs/bossAttackDialog/syncSettings/syncSettings.component";
 import { SyncDowntimeComponent } from "../dialogs/bossAttackDialog/syncDowntime/syncDowntime.component";
 import * as Services from "../services/index"
@@ -28,15 +28,15 @@ import { ClipboardModule } from "ngx-clipboard";
 import { NgProgressModule } from "ngx-progressbar";
 import { NgxCaptchaModule } from "ngx-captcha";
 import { DialogsModuleComponents } from "../dialogs/index";
-import { SingleAbilityComponent } from "../sidepanel/components/singleAbility/singleAbility.component";
-import { SingleAttackComponent } from "../sidepanel/components/singleAttack/singleAttack.component";
-import { MultipleAbilityComponent } from "../sidepanel/components/multipleAbility/multipleAbility.component";
-import { MultipleAttackComponent } from "../sidepanel/components/multipleAttack/multipleAttack.component";
-import { JobComponent } from "../sidepanel/components/job/job.component";
-import { JobAbilityComponent } from "../sidepanel/components/jobAbility/jobAbility.component";
-import { DownTimeComponent } from "../sidepanel/components/downtime/downtime.component";
-import { MultipleDownTimeComponent } from "../sidepanel/components/multipleDowntime/multipleDowntime.component";
-import { AreaComponent } from "../sidepanel/components/area/area.component";
+import { SingleAbilityComponent } from "../components/singleAbility/singleAbility.component";
+import { SingleAttackComponent } from "../components/singleAttack/singleAttack.component";
+import { MultipleAbilityComponent } from "../components/multipleAbility/multipleAbility.component";
+import { MultipleAttackComponent } from "../components/multipleAttack/multipleAttack.component";
+import { JobComponent } from "../components/job/job.component";
+import { JobAbilityComponent } from "../components/jobAbility/jobAbility.component";
+import { DownTimeComponent } from "../components/downtime/downtime.component";
+import { MultipleDownTimeComponent } from "../components/multipleDowntime/multipleDowntime.component";
+import { AreaComponent } from "../components/area/area.component";
 import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
 import * as SocialLogins from "angularx-social-login";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -57,14 +57,10 @@ import { DisqusModule, DISQUS_SHORTNAME } from "ngx-disqus"
 import { ColorPickerModule } from 'ngx-color-picker';
 import en from '@angular/common/locales/en'
 
-
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
-
-
-
 
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -123,7 +119,7 @@ import { SettingsDialogFflogsTab } from 'src/dialogs/settingsDialog/tabs/fflogs/
 import { SettingsDialogTableviewTab } from 'src/dialogs/settingsDialog/tabs/tableview/tableview.component';
 import { SettingsDialogTeamworkTab } from 'src/dialogs/settingsDialog/tabs/teamwork/teamwork.component';
 import { SettingsDialogPresetsTab } from 'src/dialogs/settingsDialog/tabs/presets/presets.component';
-import { AddJobComponent } from 'src/fightline/addJob/addJob.component';
+import { AddJobComponent } from '../pages/fightline/addJob/addJob.component';
 import { JobRolePipe } from 'src/heplers/JobRolePipe';
 import { TableViewOptionsComponent } from 'src/components/tableviewoptions/tableviewoptions.component';
 
