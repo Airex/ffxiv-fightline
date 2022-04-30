@@ -29,10 +29,10 @@ export class Holders {
     this.heatMaps = new BuffHeatmapHolder.BuffHeatmapHolder(mainTimeLine.items);
     this.bossTargets = new BossTargetHolder.BossTargetHolder(mainTimeLine.items, "boss");
     this.stances = new StancesHolder.StancesHolder(mainTimeLine.items);
-    this.abilityAvailability = new AbilityAvailablityHolder.AbilityAvailablityHolder(mainTimeLine.items);   
+    this.abilityAvailability = new AbilityAvailablityHolder.AbilityAvailablityHolder(mainTimeLine.items);
   }
 
-  clear(){
+  clear() {
     this.itemUsages.clear();
     this.abilities.clear();
     this.jobs.clear();
@@ -51,12 +51,12 @@ export class Holders {
       ...this.jobs.getByIds(ids),
       ...this.bossAttacks.getByIds(ids),
       ...this.bossDownTime.getByIds(ids)
-      ].length > 0;
+    ].length > 0;
   }
 
   setHighLightLoadedView(highlightLoaded: boolean): void {
     this.itemUsages.setHighlightLoaded(highlightLoaded);
     this.stances.setHighlightLoaded(highlightLoaded);
-  } 
+  }
 
 }

@@ -6,14 +6,14 @@ import {
 } from "@angular/core";
 
 
-import {DialogService} from "../services/DialogService"
+import { DialogService } from "../services/DialogService";
 
 @Directive({
   selector: "[keyHandler]"
 })
 export class KeyHandlerDirective {
 
-  @Output("onCommand") onCommand = new EventEmitter<{ name: string, data?: {} }>();
+  @Output() onCommand = new EventEmitter<{ name: string, data?: {} }>();
 
   code = null;
 

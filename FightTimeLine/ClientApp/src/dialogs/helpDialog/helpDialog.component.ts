@@ -1,4 +1,4 @@
-import { Component, Inject,OnInit, ViewChild, TemplateRef } from "@angular/core";
+import { Component } from "@angular/core";
 import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
@@ -7,18 +7,13 @@ import { NzModalRef } from "ng-zorro-antd/modal";
   styleUrls: ["./helpDialog.component.css"]
 })
 
-export class HelpDialog implements  OnInit {
-  ngOnInit(): void {
-  }
+export class HelpDialog {
 
-  
+
+
   constructor(
     public dialogRef: NzModalRef
-    ) { }
-
-  onNoClick(): void {
-    
-  }
+  ) { }
 
   showSection(section: string) {
 

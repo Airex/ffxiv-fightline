@@ -1,4 +1,4 @@
-import { ExportTemplate, ExportTemplateContext } from "../BaseExportTemplate"
+import { ExportTemplate, ExportTemplateContext } from "../BaseExportTemplate";
 import { IExportResultSet, ITableOptionSettings } from "../ExportModels";
 import { IColumnTemplate } from "../TableModels";
 
@@ -40,7 +40,7 @@ export class EachRowOneSecondTemplate extends ExportTemplate<number> {
       filterByFirstEntry: true,
       rows: [],
       title: this.name
-    }
+    };
   }
 
   getColumns(context: ExportTemplateContext): IColumnTemplate<number>[] {

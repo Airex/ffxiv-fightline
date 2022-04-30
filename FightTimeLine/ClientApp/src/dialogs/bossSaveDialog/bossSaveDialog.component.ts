@@ -1,5 +1,5 @@
-import { Component, Inject, Input, TemplateRef, ViewChild, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
+import { Component, Input } from "@angular/core";
+import { FormControl } from "@angular/forms";
 import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
@@ -8,14 +8,10 @@ import { NzModalRef } from "ng-zorro-antd/modal";
   styleUrls: ["./bossSaveDialog.component.css"]
 })
 
-export class BossSaveDialog implements OnInit {
-  ngOnInit(): void {
-    
-  }
-
+export class BossSaveDialog {
   fightNameControl = new FormControl();
-  @Input("data") data: string;
-  submitted = false;  
+  @Input() data: string;
+  submitted = false;
 
   constructor(
     public dialogRef: NzModalRef
@@ -32,7 +28,7 @@ export class BossSaveDialog implements OnInit {
 
     this.dialogRef.destroy(this.data);
   }
-  
+
   onNoClick(): void {
     this.dialogRef.destroy();
   }

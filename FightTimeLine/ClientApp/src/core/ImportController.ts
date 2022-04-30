@@ -7,7 +7,7 @@ import * as Models from "./Models";
 
 import * as Jobregistryserviceinterface from "../services/jobregistry.service-interface";
 import * as Parser from "./Parser";
-import {Holders} from "./Holders";
+import { Holders } from "./Holders";
 import { RemoveBossAttackCommand } from "./Commands";
 
 export class ImportController {
@@ -19,7 +19,13 @@ export class ImportController {
 
   }
 
-  private addJob(id: string, name: string, actorName?: string, pet?: string, collapsed: boolean = false, doUpdates: boolean = true): UndoRedo.Command {
+  private addJob(
+    id: string,
+    name: string,
+    actorName?: string,
+    pet?: string,
+    collapsed: boolean = false,
+    doUpdates: boolean = true): UndoRedo.Command {
     return new Commands.AddJobCommand(id, name, actorName, this.holders.bossTargets.initialBossTarget, doUpdates, pet, collapsed);
   }
 
@@ -36,12 +42,12 @@ export class ImportController {
       });
 
       const context: FFLogsCollectors.ICollectorContext = {
-        parser: parser,
+        parser,
         jobRegistry: this.jobRegistry,
-        commands: commands,
-        settings: settings,
+        commands,
+        settings,
         idgen: this.idgen
-      }
+      };
 
       const collectors = [
         new FFLogsCollectors.AbilityUsagesCollector(context),
@@ -49,7 +55,7 @@ export class ImportController {
       ];
 
       parser.processCollectors(collectors);
-      
+
 
       return new Commands.CombinedCommand(commands);
 
@@ -60,26 +66,26 @@ export class ImportController {
 
   buildImportBossAttacksCommand(settings: SettingsService.ISettings, parser: Parser.Parser, startDate: Date, ): UndoRedo.Command {
     try {
-      const commands: UndoRedo.Command[] = [];     
+      const commands: UndoRedo.Command[] = [];
 
       this.holders.bossAttacks.getAll().forEach(it => {
         commands.push(new RemoveBossAttackCommand(it.id, false));
       });
 
       const context: FFLogsCollectors.ICollectorContext = {
-        parser: parser,
+        parser,
         jobRegistry: this.jobRegistry,
-        commands: commands,
-        settings: settings,
+        commands,
+        settings,
         idgen: this.idgen
-      }
+      };
 
-      const collectors = [        
+      const collectors = [
         new FFLogsCollectors.BossAttacksCollector(context),
       ];
 
       parser.processCollectors(collectors);
-      
+
 
       return new Commands.CombinedCommand(commands);
 
@@ -87,5 +93,5 @@ export class ImportController {
       console.error(e);
     }
   }
-  
+
 }

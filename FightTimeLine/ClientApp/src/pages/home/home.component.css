@@ -75,38 +75,12 @@
   color: #3f51b5;
 }
 
-.pin {  
-  margin:  0 2px 0 2px;
-}
 
-nz-list-item span {
-  visibility: hidden;
-}
-
-nz-list-item span.forcevisible {
-  visibility: visible;
-}
-
-nz-list-item:hover span {
-  visibility: visible;
-}
-
-.pin:hover {
-  transform: scale(1.4)
-}
-
-.pinned {
-  transform: rotate(-45deg)
-}
-
-.pinned:hover {
-  transform: scale(1.4) rotate(-45deg)
-}
 
 
 .toolbar-title {
   font-size: 26px;
   font-weight: bold;
-  color: #3f51b5;
+  color: #095cb5;
   margin-left: 45px !important;
 }

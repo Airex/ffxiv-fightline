@@ -4,9 +4,8 @@ import { Observable } from 'rxjs';
 import { UserStorageService } from 'src/services/UserStorageService';
 
 @Injectable()
-export class JwtInterceptor implements HttpInterceptor {  
+export class JwtInterceptor implements HttpInterceptor {
   constructor(private readonly storage: UserStorageService) { }
-  
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // add authorization header with jwt token if available
@@ -20,7 +19,7 @@ export class JwtInterceptor implements HttpInterceptor {
         });
       }
     }
-    var result = next.handle(request);
+    const result = next.handle(request);
     return result;
   }
 }

@@ -2,7 +2,7 @@
   nzPopoverPlacement="bottomLeft" [nzPopoverContent]="contentTemplate">
   <span>
     <i nz-icon nzType="filter" theme="twotone"></i>
-    Filter
+    {{"fightline.toolbar.filter._" | translate}}
   </span>
 </button>
 
@@ -11,7 +11,8 @@
     <div nz-col nzSpan="12">
       <div>
         <label nz-checkbox (ngModelChange)="checkAllFunc($event)" [(ngModel)]="checkAll"
-          [nzIndeterminate]="checkAll === undefined"><strong>Ability types</strong></label>
+          [nzIndeterminate]="checkAll === undefined"><strong>{{"fightline.toolbar.filter.abilityTypes" |
+            translate}}</strong></label>
 
       </div>
       <ul nz-menu>
@@ -24,62 +25,75 @@
     <div nz-col nzSpan="12" style="padding: 5px;">
       <div>
         <div>
-          <strong>Boss Attacks Tags</strong>
+          <strong>{{"fightline.toolbar.filter.bossAttackTags" | translate}}</strong>
         </div>
         <nz-tag *ngFor="let tag of tags" nzMode="checkable" [(nzChecked)]="tag.checked"
           (nzCheckedChange)="updateFilter('boss')">{{tag.text}}</nz-tag>
       </div>
       <div>
         <div *ngIf="sources && sources.length">
-          <strong>Boss Attacks Sources</strong>
+          <strong>{{"fightline.toolbar.filter.bossAttackSources" | translate}}</strong>
         </div>
         <nz-tag *ngFor="let source of sources" nzMode="checkable" [(nzChecked)]="source.checked"
           (nzCheckedChange)="updateFilter('boss')">{{source.text}}</nz-tag>
       </div>
       <div style="margin-top: 8px;">
         <div>
-          <strong>Boss Attacks Damage Type</strong>
+          <strong>{{"fightline.toolbar.filter.bossAttackDamageType" | translate}}</strong>
         </div>
         <nz-tag nzMode="checkable" [(nzChecked)]="presenterManager.filter.attacks.isMagical"
-          (nzCheckedChange)="updateFilter('boss')">Magical</nz-tag>
+          (nzCheckedChange)="updateFilter('boss')">{{"damageType.magical" | translate}}</nz-tag>
         <nz-tag nzMode="checkable" [(nzChecked)]="presenterManager.filter.attacks.isPhysical"
-          (nzCheckedChange)="updateFilter('boss')">Physical</nz-tag>
+          (nzCheckedChange)="updateFilter('boss')">{{"damageType.physical" | translate}}</nz-tag>
         <nz-tag nzMode="checkable" [(nzChecked)]="presenterManager.filter.attacks.isUnaspected"
-          (nzCheckedChange)="updateFilter('boss')">Unaspected</nz-tag>
+          (nzCheckedChange)="updateFilter('boss')">{{"damageType.unaspected" | translate}}</nz-tag>
       </div>
       <div style="margin-top: 8px;">
         <div>
-          <strong>FFLogs Attacks Source</strong>
+          <strong>{{"fightline.toolbar.filter.fflogsAttackSource" | translate}}</strong>
         </div>
-        <nz-switch [ngModel]="true" 
-                  nzCheckedChildren="Cast" nzUnCheckedChildren="Damage" [(ngModel)]="fflogsSource"
+        <nz-switch [ngModel]="true" nzCheckedChildren="{{'attackSource.cast' | translate}}"
+          nzUnCheckedChildren="{{'attackSource.damage' | translate}}" [(ngModel)]="presenterManager.fflogsSource"
           (ngModelChange)="fflogsSourceChanged($event)">></nz-switch>
       </div>
       <div style="margin-top: 8px;">
         <div>
-          <strong>Presets</strong>
+          <strong>{{"fightline.toolbar.filter.fightLevel" | translate}}</strong>
         </div>
-        <nz-select nzShowSearch nzAllowClear [nzDropdownRender]="renderTemplate" [(ngModel)]="currentPreset"
-          (ngModelChange)="presetChanged($event)" nzPlaceHolder="Select preset">
-          <nz-option *ngFor="let item of presets" [nzLabel]="item.name" [nzValue]="item"></nz-option>
+        <nz-select [(ngModel)]="presenterManager.fightLevel" (ngModelChange)="levelChanged($event)">
+          <nz-option *ngFor="let l of levels" [nzLabel]="''+l" [nzValue]="l"></nz-option>
+        </nz-select>
+      </div>
+      <div style="margin-top: 8px;">
+        <div>
+          <strong>{{"fightline.toolbar.filter.presets" | translate}}</strong>
+        </div>
+        <nz-select nzShowSearch [nzDropdownRender]="renderTemplate" [(ngModel)]="presenterManager.selectedPreset"
+          [nzOpen]="openedSelect" (ngModelChange)="presetChanged($event)"
+          nzPlaceHolder="{{'fightline.toolbar.filter.selectPreset' | translate}}" #presetSelect>
+          <nz-option nzCustomContent *ngFor="let item of presenterManager.presets | keyvalue" [nzLabel]="item.key" [nzValue]="item.key">
+            {{item.key}}
+          </nz-option>
         </nz-select>
         <ng-template #renderTemplate>
           <nz-divider></nz-divider>
           <div class="container">
-            <input nz-input nzSize="small" required type="text" #inputElement />
-            <a class="add-item" (click)="addPreset(inputElement)">
-              Save
+            <input nz-input nzSize="small" required [value]="presenterManager.selectedPreset || ''" type="text"
+              #inputElement />
+            <a nz-button [disabled]="!inputElement.value" class="add-item"
+              (click)="savePreset(inputElement.value);openedSelect = false;">
+              <span *ngIf="!inputElement.value || presenterManager.selectedPreset !== inputElement.value">
+                {{"fightline.toolbar.filter.savePreset" | translate}}
+              </span>
+              <span *ngIf="inputElement.value && presenterManager.selectedPreset === inputElement.value">
+                {{"fightline.toolbar.filter.updatePreset" | translate}}
+              </span>
             </a>
           </div>
         </ng-template>
-      </div>
-      <div style="margin-top: 8px;">
-        <div>
-          <strong>Fight level</strong>
+        <div *ngIf="presenterManager.selectedPreset">
+          <a (click)="attachPreset()">Attach preset to timeline</a>
         </div>
-        <nz-select [(ngModel)]="currentLevel" (ngModelChange)="levelChanged($event)">
-          <nz-option *ngFor="let l of levels" [nzLabel]="''+l" [nzValue]="l"></nz-option>
-        </nz-select>
       </div>
     </div>
   </div>

@@ -1,10 +1,9 @@
-import { Injectable } from "@angular/core"
-import * as H from "../core/Holders";
+import { Injectable } from "@angular/core";
 import { LocalStorageService } from "./LocalStorageService";
 import { Observable } from "rxjs";
-import * as D from "../dialogs"
+import * as D from "../dialogs";
 import { NzModalService, NzModalState } from "ng-zorro-antd/modal";
-import { IAbility, IAbilitySetting, ISettingData, IBoss, IBossAbility, IFight, IFraction, IJobStats } from "src/core/Models";
+import { IBoss, IBossAbility, IFight, IJobStats } from "src/core/Models";
 import { PresenterManager } from "src/core/PresentationManager";
 
 @Injectable({
@@ -21,7 +20,7 @@ export class DialogService {
     return this.dialogs.openModals.some(m => m.getState() === NzModalState.OPEN);
   }
 
-  dialog: any;  
+  dialog: any;
 
   openLogin() {
     const dialogRef = this.dialogs.create({
@@ -71,7 +70,7 @@ export class DialogService {
       nzMaskClosable: false,
       nzContent: D.BossAttackDialog,
       nzComponentParams: {
-        data: bossAbility        
+        data: bossAbility
       }
     });
 
@@ -89,7 +88,7 @@ export class DialogService {
       nzMaskClosable: false,
       nzContent: D.CharacterDialogComponent,
       nzComponentParams: {
-        data: jobStats        
+        data: jobStats
       }
     });
 
@@ -145,7 +144,7 @@ export class DialogService {
       nzClosable: false,
       nzContent: D.FFLogsImportDialog,
       nzComponentParams: {
-        code: code
+        code
       }
     });
 
@@ -245,7 +244,7 @@ export class DialogService {
         nzFooter: null,
         nzMaskClosable: false,
         nzComponentParams: {
-          text: text
+          text
         }
       });
 
@@ -283,8 +282,8 @@ export class DialogService {
       nzMaskClosable: false,
       nzComponentParams: {
         data: {
-          needSave: needSave,
-          boss: boss
+          needSave,
+          boss
         }
       }
     });
@@ -306,5 +305,5 @@ export class DialogService {
       }
     });
     return this.toPromise(ref.afterClose);
-  }  
+  }
 }

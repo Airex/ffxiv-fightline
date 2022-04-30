@@ -1,15 +1,16 @@
-import { EventEmitter } from "@angular/core"
-import { IdGenerator } from "./Generators"
-import { IAbility, IPresenterData } from "./Models"
+import { EventEmitter } from "@angular/core";
+import { IdGenerator } from "./Generators";
+import { IAbility, IPresenterData } from "./Models";
 import * as Jobregistryserviceinterface from "../services/jobregistry.service-interface";
 import * as Holders from "./Holders";
 import * as Index from "./Maps/index";
+import { CombinedCommand } from "./Commands";
 
 export interface ICommandExecutionContext {
   idGen: IdGenerator;
-  holders: Holders.Holders,
+  holders: Holders.Holders;
   jobRegistry: Jobregistryserviceinterface.IJobRegistryService;
-  presenter: IPresenterData,
+  presenter: IPresenterData;
   update: (options: IUpdateOptions) => void;
   ogcdAttacksAsPoints: (ability: IAbility) => boolean;
   verticalBossAttacks: () => boolean;
@@ -49,20 +50,26 @@ export class UndoRedoController {
     this.context = context;
   }
 
-  
 
-  public execute(command: Command, fireExecuted: boolean = true) {
+
+  public execute(cmd: Command | Command[], fireExecuted: boolean = true) {
+
+    const command = Array.isArray(cmd) ? new CombinedCommand(cmd) : cmd;
+
     try {
       command.execute(this.getContext());
-      this.undoCommands.push(command);
-      delete this.redoCommands;
-      this.redoCommands = new Array<Command>();
-      this.changed.emit();
-      if (fireExecuted && this.fireExecuted)
-        this.executed.emit(command.serialize());
+      if (command.undoredo) {
+        this.undoCommands.push(command);
+        delete this.redoCommands;
+        this.redoCommands = new Array<Command>();
+        this.changed.emit();
+        if (fireExecuted && this.fireExecuted) {
+          this.executed.emit(command.serialize());
+        }
+      }
     } catch (error) {
       console.error(error);
-      //console.log("Unable to execute command " + JSON.stringify(command.serialize()));
+      // console.log("Unable to execute command " + JSON.stringify(command.serialize()));
     }
   }
 
@@ -76,7 +83,7 @@ export class UndoRedoController {
   }
 
   public undo(): void {
-    if (this.undoCommands.length === 0) return;
+    if (this.undoCommands.length === 0) { return; }
     const last = this.undoCommands.pop();
     last.reverse(this.getContext());
     this.redoCommands.push(last);
@@ -84,7 +91,7 @@ export class UndoRedoController {
   }
 
   public redo(): void {
-    if (this.redoCommands.length === 0) return;
+    if (this.redoCommands.length === 0) { return; }
     const last = this.redoCommands.pop();
     last.execute(this.getContext());
     this.undoCommands.push(last);
@@ -108,13 +115,16 @@ export interface ICommandData {
   name: string;
   params?: {
     [name: string]: any;
-  }
+  };
 }
 
 export abstract class Command {
   abstract reverse(context: ICommandExecutionContext): void;
   abstract execute(context: ICommandExecutionContext): void;
   abstract serialize(): ICommandData;
+  get undoredo(): boolean {
+    return true;
+  }
 }
 
 

@@ -2,11 +2,13 @@ import { Component, OnInit, OnDestroy, NgZone, EventEmitter, Output } from "@ang
 import { VisTimelineService, TimelineOptions, DataItem } from "ngx-vis";
 import { ITimelineContainer } from "src/core/Holders/BaseHolder";
 import { VisStorageService } from "src/services/VisStorageService";
-import { ClassNameBuilder } from "../../../core/ClassNameBuilder"
-import { Utils } from "../../../core/Utils"
-import {} from "xss"
+import { ClassNameBuilder } from "../../../core/ClassNameBuilder";
+import { Utils } from "../../../core/Utils";
+import { } from "xss";
 
-export type ActionName = "delete" | "canMove" | "move" | "selected" | "clickGroup" | "clickEmpty" | "doubleClickGroup" | "doubleClickEmpty" | "doubleClickItem" | "timeChanged" | "visibleFrameTemplate" | "itemTooltip" | "keyMove"| "groupOrderSwap";
+export type ActionName = "delete" | "canMove" | "move" | "selected" | "clickGroup" | "clickEmpty"
+  | "doubleClickGroup" | "doubleClickEmpty" | "doubleClickItem" | "timeChanged" | "visibleFrameTemplate"
+  | "itemTooltip" | "keyMove" | "groupOrderSwap";
 export type EventSource = "player" | "boss" | "user";
 export type Action = { name: ActionName, source?: EventSource, payload?: any };
 
@@ -25,29 +27,19 @@ export interface ICustomTimeActions {
 })
 export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions {
 
-  selectBossAttaks(value: any[]) {
-    this.visTimelineService.setSelectionToIds(this.visTimelineBoss, value);
-    this.setSelectionOfBossAttacks(value);
-
-    this.visTimelineService.focusOnIds(this.visTimelineBoss, value, { animation: false });
-    const w = this.visTimelineService.getWindow(this.visTimelineBoss);
-    this.visTimelineService.setWindow(this.visTimeline, w.start, w.end, { animation: false });
-  }
-
-  selectAbilities(value: any[]) {
-    this.visTimelineService.setSelectionToIds(this.visTimeline, value);
-    this.visTimelineService.setSelectionToIds(this.visTimelineBoss, value);
-    this.setSelectionOfBossAttacks([]);
-
-    this.visTimelineService.focusOnIds(this.visTimeline, value, { animation: false });
-    const w = this.visTimelineService.getWindow(this.visTimeline);
-    this.visTimelineService.setWindow(this.visTimelineBoss, w.start, w.end, { animation: false });
+  constructor(
+    private visTimelineService: VisTimelineService,
+    private visStorage: VisStorageService,
+    private ngZone: NgZone,
+  ) {
+    this.playerContainer = this.visStorage.playerContainer;
+    this.bossContainer = this.visStorage.bossContainer;
   }
 
   startDate = new Date(946677600000);
   subs: any[] = [];
-  visTimeline: string = "timeLineMain";
-  visTimelineBoss: string = "timeLineBoss";
+  visTimeline = "timeLineMain";
+  visTimelineBoss = "timeLineBoss";
   playerContainer: ITimelineContainer;
   bossContainer: ITimelineContainer;
   forAction = [];
@@ -94,7 +86,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     onMoving: (item: any, callback: any) => {
       let result;
       this.emitAction("canMove", "player", {
-        item: item,
+        item,
         selection: this.visTimelineService.getSelection(this.visTimeline),
         handler: (t) => {
           result = t;
@@ -109,7 +101,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     },
     onMove: (item: any, callback: any) => {
       callback(item);
-      this.forAction.push(item)
+      this.forAction.push(item);
       const selection = this.visTimelineService.getSelection(this.visTimeline);
       if (this.forAction.length >= selection.length) {
         this.emitAction("move", "player", this.forAction);
@@ -125,9 +117,9 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     visibleFrameTemplate: (item: any) => {
       let result;
       this.emitAction("visibleFrameTemplate", "player", {
-        item: item,
+        item,
         handler: (t) => {
-          result = t
+          result = t;
         }
       });
 
@@ -138,7 +130,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
         let result;
         this.emitAction("itemTooltip", "player",
           {
-            item: item,
+            item,
             handler: (t) => { result = t; }
           });
         return result;
@@ -146,14 +138,14 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     },
     snap: (date: Date) => date,
     groupEditable: { order: true },
-    groupOrderSwap: (a, b, groups) => {
+    groupOrderSwap: (a, b) => {
       this.emitAction("groupOrderSwap", "player",
         {
           from: a,
           to: b,
           handler: (allowSwap) => {
             if (allowSwap) {
-              var v = a.value;
+              const v = a.value;
               a.value = b.value;
               b.value = v;
             }
@@ -201,7 +193,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     onMoving: (item: any, callback: any) => {
       let result;
       this.emitAction("canMove", "boss", {
-        item: item,
+        item,
         selection: this.visTimelineService.getSelection(this.visTimelineBoss),
         handler: (t) => {
           result = t;
@@ -232,7 +224,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
         let result;
         this.emitAction("itemTooltip", "player",
           {
-            item: item,
+            item,
             handler: (t) => { result = t; }
           });
         return result;
@@ -244,21 +236,31 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     snap: (date: Date) => date
   };
 
-  constructor(
-    private visTimelineService: VisTimelineService,
-    private visStorage: VisStorageService,
-    private ngZone: NgZone,
-  ) {
-    this.playerContainer = this.visStorage.playerContainer;
-    this.bossContainer = this.visStorage.bossContainer;
+  selectBossAttaks(value: any[]) {
+    this.visTimelineService.setSelectionToIds(this.visTimelineBoss, value);
+    this.setSelectionOfBossAttacks(value);
+
+    this.visTimelineService.focusOnIds(this.visTimelineBoss, value, { animation: false });
+    const w = this.visTimelineService.getWindow(this.visTimelineBoss);
+    this.visTimelineService.setWindow(this.visTimeline, w.start, w.end, { animation: false });
+  }
+
+  selectAbilities(value: any[]) {
+    this.visTimelineService.setSelectionToIds(this.visTimeline, value);
+    this.visTimelineService.setSelectionToIds(this.visTimelineBoss, value);
+    this.setSelectionOfBossAttacks([]);
+
+    this.visTimelineService.focusOnIds(this.visTimeline, value, { animation: false });
+    const w = this.visTimelineService.getWindow(this.visTimeline);
+    this.visTimelineService.setWindow(this.visTimelineBoss, w.start, w.end, { animation: false });
   }
 
   private emitAction(name: ActionName, source: EventSource, payload: any) {
-    //console.log(`Action: ${name}, Source: ${source}`)
+    // console.log(`Action: ${name}, Source: ${source}`)
     this.action.emit({
-      name: name,
-      source: source,
-      payload: payload
+      name,
+      source,
+      payload
     });
   }
 
@@ -288,7 +290,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
   }
 
   timelineInitialized(): void {
-    //console.log("timeline initialized");
+    // console.log("timeline initialized");
     this.visTimelineService.on(this.visTimeline, "click");
     this.visTimelineService.on(this.visTimeline, "doubleClick");
     this.visTimelineService.on(this.visTimeline, "select");
@@ -334,7 +336,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     items.forEach((it: DataItem) => {
       const b = new ClassNameBuilder(it.className);
       const have = ids && ids.some(e => "bossAttack_" + e === it.id);
-      b.set({ "selected": have });
+      b.set({ selected: have });
       if (b.isChanged()) {
         it.className = b.build();
         toUpdate.push(it);
@@ -409,7 +411,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
       this.unselectGroup(this.selectedGroup);
       if (eventData[1].what === "group-label") {
         if (source === "player") {
-          this.selectedGroup = eventData[1].group
+          this.selectedGroup = eventData[1].group;
           this.selectGroup(this.selectedGroup);
           this.emitAction("selected", source,
             {
@@ -426,7 +428,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     }));
 
     this.subs.push(this.visTimelineService.doubleClick.subscribe((eventData: any[]) => {
-      if (eventData[1].event.type !== "dblclick") return;
+      if (eventData[1].event.type !== "dblclick") { return; }
       this.ngZone.run(() => {
         if (eventData[1].what === "background" || eventData[1].what == null) {
           this.emitAction("doubleClickEmpty", this.getSource(eventData), eventData[1]);
@@ -440,8 +442,6 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     }));
 
     this.subs.push(this.visTimelineService.itemover.subscribe((eventData: any[]) => {
-      console.debug(eventData);
-
     }));
   }
 

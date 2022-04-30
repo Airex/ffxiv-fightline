@@ -13,7 +13,7 @@ export class MitigationsTemplate extends AttackRowExportTemplate {
    }
 
    constructor() {
-      super()
+      super();
    }
 
    getColumns(context: ExportTemplateContext): IColumnTemplate<ExportAttack>[] {
@@ -40,7 +40,7 @@ export class MitigationsTemplate extends AttackRowExportTemplate {
 
 class MitigationColumn extends BaseColumnTemplate implements IColumnTemplate<ExportAttack>{
    constructor(private it: ExportJob, private holders: Holders) {
-      super()
+      super();
    }
    buildHeader(data: ExportData): IExportColumn {
       return {
@@ -49,11 +49,11 @@ class MitigationColumn extends BaseColumnTemplate implements IColumnTemplate<Exp
          icon: this.it.icon,
          refId: this.it.id,
          width: "auto"
-      } as IExportColumn
+      } as IExportColumn;
    }
    buildCell(data: ExportData, attack: ExportAttack): IExportCell {
       const defs = calculateDefsForAttack(this.holders, attack.id);
-      const mts = calculateMitigationForAttack(this.holders, defs, attack)
+      const mts = calculateMitigationForAttack(this.holders, defs, attack);
       return this.createJobCell(mts, this.it.id);
    }
 

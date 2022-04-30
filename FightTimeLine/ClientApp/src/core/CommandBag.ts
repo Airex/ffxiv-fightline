@@ -1,5 +1,5 @@
-import { Command, UndoRedoController } from "./UndoRedo"
-import { CombinedCommand } from "./Commands"
+import { Command, UndoRedoController } from "./UndoRedo";
+import { CombinedCommand } from "./Commands";
 
 export class CommandBag {
   private commandsBag: Command[] = [];

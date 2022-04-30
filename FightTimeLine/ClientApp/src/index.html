@@ -2,10 +2,17 @@
 <html lang="en">
 
 <head>
+  <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-PK63478');</script>
+  <!-- End Google Tag Manager -->
   <meta charset="utf-8">
   <title>Fight Time Line</title>
   <base href="/">
-
+  <meta name="description" content="Timeline based tool to analyze and plan cooldowns for popular MMO game Final Fantasy 14 online.">
   <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0, user-scalable=0">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <script defer src="https://apis.google.com/js/platform.js"></script>
@@ -13,6 +20,10 @@
 
 
 <body class="">
+  <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PK63478"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
   <app-root>
     <div id="ffxivlogo"
       style="min-width: 100%; min-height: 100%; width: 100%; height: 100%; align-content: center; vertical-align: center">
@@ -20,31 +31,15 @@
         src="https://steamuserimages-a.akamaihd.net/ugc/392172445566630190/BA527FCCFABD5B172995F1FE9FA88FE36E838BCC/" />
     </div>
   </app-root>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-96549107-2"></script>
-  <script>
-    var user = localStorage.getItem("currentUser");
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({ 'user_id': user && JSON.parse(user).username || "anonynous" })
-
-    function gtag() { dataLayer.push(arguments); }
-
-    gtag('js', new Date());
-
-    gtag('config', 'UA-96549107-2');
-
-    gtag('set', { 'user_id': user && JSON.parse(user).username || "anonymous" });
-    gtag()
-  </script>
   <script>
     function changeTheme(theme) {
-      if (theme === 'dark') {        
+      if (theme === 'dark') {
         const style = document.createElement('link');
         style.type = 'text/css';
         style.rel = 'stylesheet';
         style.id = 'dark-theme';
         style.href = 'assets/ng-zorro-antd.dark.css';
-        document.body.appendChild(style);        
+        document.body.appendChild(style);
       } else {
         const dom = document.getElementById('dark-theme');
         if (dom) {

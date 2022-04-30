@@ -1,5 +1,5 @@
 import { Component, Inject, EventEmitter, ViewChild, Output } from "@angular/core";
-import { IFilter, DefaultTags } from "../../../core/Models"
+import { IFilter, DefaultTags } from "../../../core/Models";
 
 @Component({
   selector: "settingsFilter",
@@ -32,7 +32,7 @@ export class SettingsFilterComponent {
     this.healing = filter.abilities.healing;
     this.healingBuff = filter.abilities.healing;
     this.utility = filter.abilities.utility;
-    this.enmity = filter.abilities.enmity;    
+    this.enmity = filter.abilities.enmity;
     this.unused = filter.abilities.unused;
     this.isMagical = filter.attacks.isMagical;
     this.isPhysical = filter.attacks.isPhysical;
@@ -42,7 +42,7 @@ export class SettingsFilterComponent {
 
 
   public get(): IFilter {
-    return <IFilter>{
+    return  {
       abilities: {
         selfDefence: this.selfDefensive,
         partyDefence: this.partyDefensive,
@@ -53,7 +53,7 @@ export class SettingsFilterComponent {
         healing: this.healing,
         healingBuff: this.healingBuff,
         utility: this.utility,
-        enmity: this.enmity,        
+        enmity: this.enmity,
         unused: this.unused
       },
       attacks: {
@@ -64,7 +64,7 @@ export class SettingsFilterComponent {
         isUnaspected: this.isUnaspected,
         keywords: []
       }
-    };
+    } as IFilter;
   }
 }
 

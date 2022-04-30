@@ -2,7 +2,7 @@
   <div class="sidepanel-full">
     <div>
       <img [src]="ability.icon" class="icon" />
-      <span class="abilityName">{{ability.name}}</span>
+      <span class="abilityName">{{it.ability.translated}}</span>
     </div>
     <div>
       <i nz-icon nzType="clock-circle" theme="twotone"></i><span class="time">{{formatTime(it.start)}}</span>
@@ -10,9 +10,9 @@
     <div class="abilityDescriptionContainer">
       <span class="abilityDescription" [innerHtml]="description"></span>
     </div>
-  </div>  
+  </div>
 
-  <sidepanel-area header="Used on" *ngIf="!!ptyMemUsages">
+  <sidepanel-area header="{{'component.singleAbility.usedOn' | translate}}" *ngIf="!!ptyMemUsages">
     <div *ngFor="let ab of ptyMemUsages">
       <i nz-icon nzType="clock-circle" theme="outline"></i>
       <a class="similarLink" (click)="similarClick(ab)">
@@ -23,14 +23,14 @@
     </div>
   </sidepanel-area>
 
-  <sidepanel-area header="Covered" *ngIf="covered && covered.length > 0">
+  <sidepanel-area header="{{'component.singleAbility.covered' | translate}}" *ngIf="covered && covered.length > 0">
     <div *ngFor="let ab of covered">
       <i nz-icon nzType="clock-circle" theme="outline"></i><a class="similarLink" (click)="similarClick(ab)"><span
           class="usedTime">{{ab.offset}}</span></a> <span class="usedTarget">{{ab.attack.name}}</span>
     </div>
   </sidepanel-area>
 
-  <sidepanel-area header="Settings" [extra]="saveSettingsTpl"
+  <sidepanel-area header="{{'component.singleAbility.settings' | translate}}" [extra]="saveSettingsTpl"
     *ngIf="it.ability.ability.settings && it.ability.ability.settings.length > 0">
     <form nz-form [formGroup]="form" nzLayout="vertical">
       <nz-form-item *ngFor="let setting of it.ability.ability.settings">
@@ -79,10 +79,10 @@
 
   <ng-template #saveSettingsTpl>
     <button nz-button *ngIf="modified" [nzSize]="'small'" nzType="primary"
-      (click)="$event.stopPropagation();$event.preventDefault();saveSettings();">Save</button>
+      (click)="$event.stopPropagation();$event.preventDefault();saveSettings();">{{'component.singleAbility.save' | translate}}</button>
   </ng-template>
 
-  <sidepanel-area header="Covered OGCDs" *ngIf="coveredOgcds">
+  <sidepanel-area header="{{'component.singleAbility.coveredOgcds' | translate}}" *ngIf="coveredOgcds">
     <div>
       <div class="job" *ngFor="let j of coveredOgcds">
         <div class="jobHead">

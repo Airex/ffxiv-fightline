@@ -1,5 +1,10 @@
 <toolbar>
   <span class="toolbar-title">Fight Time Line</span>
+  <span pre-right style="margin-right: 3px;">
+    <a href="https://www.patreon.com/bePatron?u=70993733" data-patreon-widget-type="become-patron-button">Become a
+      Patron!</a>
+    <script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+  </span>
 </toolbar>
 <div class="main-content noselect"
   style="text-align: center; height: calc(100% - 54px); max-height: calc(100% - 54px); overflow: auto" customScroll>
@@ -8,146 +13,58 @@
       <nz-card [nzTitle]="header">
         <ng-template #header>
           <div class="home-card">
-            What would you like to do?
+            {{"home.whatWouldYouLikeToDo" | translate}}
           </div>
         </ng-template>
         <div nz-row rowHeight="90%">
           <div nz-col nzSpan="16">
             <div class="home-column">
               <div class="card-subtitle">
-                Open recent
+                {{"home.openRecent" | translate}}
               </div>
               <div customScroll class="recentList">
-                <nz-list [nzDataSource]="container.pinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'"
-                  *ngIf="container.pinned.length>0">
-                  <nz-list-header>Pinned</nz-list-header>
-                  <ng-template #item let-item>
-                    <nz-list-item [nzActions]="[pinAction]">
-                      <ng-template #pinAction>
-                        <span #lstitem>
-                          <a nz-dropdown nzTooltipTrigger="click" nzTooltipTrigger="hover" [nzDropdownMenu]="menu"
-                            (nzVisibleChange)="listopentablevisiblechange(lstitem, $event)" nz-tooltip
-                            nzTooltipTitle="Open as table"><i class="pin" nz-icon nzType="hdd"
-                              nzTheme="twotone"></i></a>
-                          <a nz-tooltip nzTooltipTitle="Unpin" (click)="unpin($event, item)"><i class="pin pinned"
-                              nz-icon nzType="pushpin" nzTheme="twotone"></i></a>
-                          <a nz-tooltip nzTooltipTitle="Remove" nz-popconfirm nzPopconfirmTitle="Are you sure?"
-                            (nzOnConfirm)="delete(item)"><i class="pin" nz-icon nzType="delete"
-                              nzTheme="twotone"></i></a>
-                        </span>
-                      </ng-template>
-                      <nz-dropdown-menu #menu="nzDropdownMenu">
-                        <ul nz-menu>
-                          <li nz-menu-item (click)="onOpenTable(item,'defence')">Defensives</li>
-                          <li nz-menu-item (click)="onOpenTable(item,'descriptive')">Timeline</li>
-                          <li nz-menu-item (click)="onOpenTable(item,'mitigations')">Mitigations</li>
-                        </ul>
-                      </nz-dropdown-menu>
-                      <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription"
-                        (click)="onClick(item.url)">
-                        <ng-template #nzTitle>
-                          {{item.name}}
-                        </ng-template>
-                        <ng-template #nzAvatar>
-                          <div [ngSwitch]="item.source">
-                            <img *ngSwitchCase="0" width="48px" height="48px"
-                              src="https://assets.rpglogs.com/img/ff/favicon.png" alt="">
-                            <img *ngSwitchDefault width="48px" height="48px" src="https://xivapi.com/c/BNpcName.png"
-                              alt="">
-                          </div>
-                        </ng-template>
-                        <ng-template #nzDescription>
-                          {{ item.timestamp | date:'short' }}
-                        </ng-template>
-                      </nz-list-item-meta>
-                    </nz-list-item>
-                  </ng-template>
-                </nz-list>
-                <nz-list [nzDataSource]="container.nonpinned" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
-                  <nz-list-header>Activities</nz-list-header>
-                  <ng-template #item let-item>
-                    <nz-list-item [nzActions]="[unpinAction]">
-                      <ng-template #unpinAction>
-                        <span #lstitem>
-                          <a nz-dropdown nzTooltipTrigger="click" nzTooltipTrigger="hover" [nzDropdownMenu]="menu1"
-                            (nzVisibleChange)="listopentablevisiblechange(lstitem, $event)" nz-tooltip
-                            nzTooltipTitle="Open as table"><i class="pin" nz-icon nzType="hdd"
-                              nzTheme="twotone"></i></a>
-                          <a nz-tooltip nzTooltipTitle="Pin" (click)="pin($event, item)"><i class="pin" nz-icon
-                              nzType="pushpin" nzTheme="twotone"></i></a>
-                          <a nz-tooltip nzTooltipTitle="Remove" nz-popconfirm nzPopconfirmTitle="Are you sure?"
-                            (nzOnConfirm)="delete(item)"><i class="pin" nz-icon nzType="delete"
-                              nzTheme="twotone"></i></a>
-                        </span>
-                      </ng-template>
-                      <nz-dropdown-menu #menu1="nzDropdownMenu">
-                        <ul nz-menu>
-                          <ul nz-menu>
-                            <li nz-menu-item (click)="onOpenTable(item,'defence')">Defensives</li>
-                            <li nz-menu-item (click)="onOpenTable(item,'descriptive')">Timeline</li>
-                            <li nz-menu-item (click)="onOpenTable(item,'mitigations')">Mitigations</li>
-                          </ul>
-                        </ul>
-                      </nz-dropdown-menu>
-                      <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription"
-                        (click)="onClick(item.url)">
-                        <ng-template #nzTitle>
-                          {{item.name}}
-                        </ng-template>
-                        <ng-template #nzAvatar>
-                          <div [ngSwitch]="item.source">
-                            <img *ngSwitchCase="0" width="48px" height="48px"
-                              src="https://assets.rpglogs.com/img/ff/favicon.png" alt="">
-                            <img *ngSwitchDefault width="48px" height="48px" src="https://xivapi.com/c/BNpcName.png"
-                              alt="">
-                          </div>
-                        </ng-template>
-                        <ng-template #nzDescription>
-                          {{ item.timestamp | date:'short' }}
-                        </ng-template>
-                      </nz-list-item-meta>
-                    </nz-list-item>
-                  </ng-template>
-                </nz-list>
+                <app-recent-list header="{{ 'home.pinned' | translate}}" [data]="container.pinned" (pinChanged)="pinChanged($event)"
+                  (deleted)="delete($event)"></app-recent-list>
+                <app-recent-list header="{{'home.activities' | translate}}" [data]="container.nonpinned" (pinChanged)="pinChanged($event)"
+                  (deleted)="delete($event)"></app-recent-list>
               </div>
             </div>
           </div>
           <div nz-col nzSpan="8" class="home-actions">
             <div class="home-column">
               <div class="card-subtitle">
-                Get started
+                {{"home.getStarted" | translate}}
               </div>
               <div>
-                <button nz-button class="action-button" (click)="showHelp()">Open Help</button>
+                <button nz-button class="action-button" (click)="showHelp()">{{"home.openHelp" | translate}}</button>
               </div>
               <div *ngIf="gameService.showImport">
-                <button nz-button color="primary" class="action-button" (click)="importFromFFLogs()">Import From
-                  FFLogs</button>
+                <button nz-button color="primary" class="action-button"
+                  (click)="importFromFFLogs()">{{"home.importFFLogs" | translate}}</button>
                 <div style="text-align: right;margin-top: 3px;margin-right: 23px;">
-                  <a target="_blank" [href]="'https://www.fflogs.com/'+ fflogsExtraPath"
-                    style="border-bottom-style: dotted;border-bottom-width: thin;">Open FFLogs</a>
+                  <a target="_blank" rel="noopener" [href]="'https://www.fflogs.com/'+ fflogsExtraPath"
+                    style="border-bottom-style: dotted;border-bottom-width: thin;">{{"home.openFFLogs" | translate}}</a>
                 </div>
               </div>
               <div>
                 <button nz-button [nzDanger]="!authenticationService.authenticated" class="action-button"
-                  (click)="load()">Load</button>
+                  (click)="load()">{{"home.load" | translate}}</button>
               </div>
               <div>
-                <button nz-button class="action-button" (click)="bossTemplates()">Boss Templates</button>
+                <button nz-button class="action-button" (click)="bossTemplates()">{{"home.bossTemplates" |
+                  translate}}</button>
               </div>
               <div>
-                <button nz-button color="primary" class="action-button" (click)="new()">Start New</button>
+                <button nz-button color="primary" class="action-button" i18n (click)="new()">{{"home.startNew" |
+                  translate}}</button>
               </div>
             </div>
           </div>
         </div>
       </nz-card>
     </div>
-    <div style="width: 90%; min-width: 800px; max-width: 1400px; margin-top: 15px; display: inline-block">
+    <!-- <div style="width: 90%; min-width: 800px; max-width: 1400px; margin-top: 15px; display: inline-block">
       <disqus [identifier]="'/'"></disqus>
-    </div>
+    </div> -->
   </div>
 </div>
-<ng-template #templatePortalContent>
-
-</ng-template>

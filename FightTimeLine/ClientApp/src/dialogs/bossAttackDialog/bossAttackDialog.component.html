@@ -2,75 +2,80 @@
   <nz-tabset [nzSelectedIndex]="1">
     <nz-tab [nzDisabled]="true" [nzTitle]="header">
       <ng-template #header>
-        <h3 class="header" nz-typography>Boss Attack</h3>
+        <h3 class="header" nz-typography>{{'dialog.bossAttack.header' | translate}}</h3>
       </ng-template>
     </nz-tab>
     <nz-tab [nzTitle]="mainHeader">
       <ng-template #mainHeader>
         <nz-badge [nzDot]="submitted && editForm.invalid">
-          Main
+          {{'dialog.bossAttack.main.header' | translate}}
         </nz-badge>
       </ng-template>
       <form nz-form [formGroup]="editForm">
         <nz-form-item>
           <nz-form-control nzSpan="12" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.bossAttackName.errors?'error':'success'" nzErrorTip="You must enter a value">
-            <input nz-input formControlName="bossAttackName" placeholder="Attack name">
+            <input nz-input formControlName="bossAttackName" placeholder="{{'dialog.bossAttack.attackName' | translate}}">
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-control nzSpan="12" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.damageType.errors?'error':'success'" nzErrorTip="You must select a value">
-            <nz-radio-group formControlName="damageType" nzPlaceHolder="Damage type" [nzButtonStyle]="'solid'">
-              <label nz-radio-button [nzValue]="0" nzLabel="Unaspected">Unaspected</label>
-              <label nz-radio-button [nzValue]="1" nzLabel="Physical">Physical</label>
-              <label nz-radio-button [nzValue]="2" nzLabel="Magical">Magical</label>
+            <nz-radio-group formControlName="damageType" [nzButtonStyle]="'solid'">
+              <label nz-radio-button [nzValue]="0" nzLabel="Unaspected">{{'damageType.unaspected' | translate}}</label>
+              <label nz-radio-button [nzValue]="1" nzLabel="Physical">{{'damageType.physical' | translate}}</label>
+              <label nz-radio-button [nzValue]="2" nzLabel="Magical">{{'damageType.magical' | translate}}</label>
             </nz-radio-group>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-control nzSpan="6" [nzHasFeedback]="submitted" [nzValidateStatus]="submitted && f.bossAttackTime.errors?'error':'success'" [nzErrorTip]="combineTpl">
-            <input nz-input wheelOn formControlName="bossAttackTime" placeholder="Time" [ngClass]="{ 'is-invalid': submitted && f.bossAttackTime.errors}">
+            <input nz-input wheelOn formControlName="bossAttackTime" placeholder="{{'dialog.bossAttack.time' | translate}}" [ngClass]="{ 'is-invalid': submitted && f.bossAttackTime.errors}">
             <ng-template #combineTpl let-control>
               <ng-container *ngIf="submitted && f.bossAttackTime.errors && f.bossAttackTime.errors.time">You must enter a value in format mm:ss</ng-container>
               <ng-container *ngIf="submitted && f.bossAttackTime.errors && f.bossAttackTime.errors.required">Input is required</ng-container>
             </ng-template>
           </nz-form-control>
-          <nz-form-control>
+          <nz-form-control nzSpan="2">
             <i nz-icon nzType="info-circle" theme="twotone" style="margin-left: 8px" nz-tooltip nzTooltipTitle="Use mouse wheel to add/sub seconds, hold Ctrl for minutes, hold Shift for 10 seconds"></i>
+          </nz-form-control>
+          <nz-form-control nzSpan="4">
+            <nz-select formControlName="color" nzPlaceHolder="{{'dialog.bossAttack.color' | translate}}" nzAllowClear>
+              <nz-option *ngFor="let option of colors" [nzLabel]="option" [nzValue]="option"></nz-option>
+            </nz-select>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-control>
-            <nz-select formControlName="tags" nzMode="tags" [nzTokenSeparators]="[',']" nzPlaceHolder="Tags">
+            <nz-select formControlName="tags" nzMode="tags" [nzTokenSeparators]="[',']" nzPlaceHolder="{{'dialog.bossAttack.tags' | translate}}">
               <nz-option *ngFor="let option of defaultTags" [nzLabel]="option.text" [nzValue]="option.text"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-control nzSpan="6">
-            <input nz-input formControlName="bossAttackSource" placeholder="Attack source"/>
+            <input nz-input formControlName="bossAttackSource" placeholder="{{'dialog.bossAttack.attackSource' | translate}}"/>
           </nz-form-control>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="rawDamage">Raw Damage</nz-form-label>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="rawDamage">{{'dialog.bossAttack.rawDamage' | translate}}</nz-form-label>
           <nz-form-control nzSpan="6">
-            <nz-input-number [nzMin]="0" formControlName="rawDamage" placeholder="Raw Damage"></nz-input-number>
+            <nz-input-number [nzMin]="0" formControlName="rawDamage"></nz-input-number>
           </nz-form-control>
         </nz-form-item>
         <nz-form-item>
           <nz-form-control>
-            <textarea nz-input placeholder="Description" formControlName="description" [nzAutosize]="{ minRows: 2, maxRows: 4 }"></textarea>
+            <textarea nz-input placeholder="{{'dialog.bossAttack.description' | translate}}" formControlName="description" [nzAutosize]="{ minRows: 2, maxRows: 4 }"></textarea>
           </nz-form-control>
         </nz-form-item>
       </form>
     </nz-tab>
-    <nz-tab nzTitle="FFLogs Sync" *ngIf="gameService.showImport">
+    <nz-tab nzTitle="{{'dialog.bossAttack.fflogsSync' | translate}}" *ngIf="gameService.showImport">
       <syncSettings #syncSettings [data]="data"></syncSettings>
     </nz-tab>
-    <nz-tab nzTitle="Phases Sync" *ngIf="gameService.showImport">
+    <nz-tab nzTitle="{{'dialog.bossAttack.phasesSync' | translate}}" *ngIf="gameService.showImport">
       <syncDowntime #syncDowntime [data]="data"></syncDowntime>
     </nz-tab>
   </nz-tabset>
   <div *nzModalFooter>
-    <button nz-button (click)="onSaveClick()">Ok</button>
-    <button nz-button *ngIf="!newAttack" (click)="onSaveAllClick()">Ok for All with same name</button>
-    <button nz-button nzType="primary" (click)="dialogRef.destroy()">Cancel</button>
+    <button nz-button (click)="onSaveClick()">{{'dialog.ok' | translate}}</button>
+    <button nz-button *ngIf="!newAttack" (click)="onSaveAllClick()">{{'dialog.okForAll' | translate}}</button>
+    <button nz-button nzType="primary" (click)="dialogRef.destroy()">{{'dialog.cancel' | translate}}</button>
   </div>
 </div>

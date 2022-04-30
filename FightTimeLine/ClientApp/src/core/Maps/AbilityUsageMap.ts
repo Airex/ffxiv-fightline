@@ -1,4 +1,4 @@
-import { DataItem } from "vis-timeline"
+import { DataItem } from "vis-timeline";
 import { BaseMap, IOverlapCheckData } from "./BaseMap";
 import { IMoveable, IForSidePanel } from "../Holders/BaseHolder";
 import { Utils } from "../Utils";
@@ -16,13 +16,13 @@ export interface IAbilityUsageMapData {
 }
 
 export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapData> implements IMoveable, IForSidePanel {
-  sidePanelComponentName: string = "ability";
 
-  onDataUpdate(data: IAbilityUsageMapData): void {
-    this.setItem(this.createAbilityUsage(this.id, this.ability, data));
-  }
-
-  constructor(presenter: Models.IPresenterData, id: string, ability: AbilityMap, settings: Models.ISettingData[], data: IAbilityUsageMapData) {
+  constructor(
+    presenter: Models.IPresenterData,
+    id: string,
+    ability: AbilityMap,
+    settings: Models.ISettingData[],
+    data: IAbilityUsageMapData) {
     super(presenter, id);
     this.ability = ability;
     this.calculatedDuration = calculateDuration(ability.ability); // fix duration calculation
@@ -30,10 +30,6 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
 
     this.applyData(Object.assign({ ogcdAsPoints: false, loaded: false, showLoaded: false }, data));
   }
-
-  ability: AbilityMap;
-  calculatedDuration: number;
-  settings: Models.ISettingData[];
 
 
   get start(): Date {
@@ -46,7 +42,7 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
 
   get end(): Date {
     return this.item.end as Date;
-  }    
+  }
 
   get startAsNumber(): number {
     return this.item.start.valueOf() as number;
@@ -54,6 +50,23 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
 
   get endAsNumber(): number {
     return this.item.end.valueOf() as number;
+  }
+
+  get loaded(): boolean {
+    return this.data.loaded;
+  }
+
+  get hasNote(): boolean {
+    return !!this.getSettingData("note")?.value;
+  }
+  sidePanelComponentName = "ability";
+
+  ability: AbilityMap;
+  calculatedDuration: number;
+  settings: Models.ISettingData[];
+
+  onDataUpdate(data: IAbilityUsageMapData): void {
+    this.setItem(this.createAbilityUsage(this.id, this.ability, data));
   }
 
   getSettingData(name: string): Models.ISettingData {
@@ -64,44 +77,42 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
     return this.ability.ability.settings && this.ability.ability.settings.find(it => it.name === name);
   }
 
-  checkCoversDate(date: Date) : boolean {
-    return this.start <= date && new Date(this.startAsNumber + calculateDuration(this.ability.ability) * 1000)>= date;
+  checkCoversDate(date: Date): boolean {
+    return this.start <= date && new Date(this.startAsNumber + calculateDuration(this.ability.ability) * 1000) >= date;
   }
 
   createAbilityUsage(id: string, ability: AbilityMap, data: IAbilityUsageMapData): DataItem {
     const start = data.start;
-    const cd = data.cooldown || ability.ability.cooldown
-    const end = new Date(start.valueOf() as number + cd * 1000);    
+    const cd = data.cooldown || ability.ability.cooldown;
+    const end = new Date(start.valueOf() as number + cd * 1000);
 
     let title = `<div><img class='tooltipAbilityIcon' src='${ability.ability.icon}'/><span>${Utils.formatTime(start)} - ${Utils.formatTime(end)}</span><span></span></div>`;
     const note = this.getSettingData("note");
     if (note && note.value) {
-      title+= `<div>${note.value}</div>`
+      title += `<div>${note.value}</div>`;
     }
 
-    let item = <DataItem>{
-      id: id,
+    const ogcdPoint = data.ogcdAsPoints && !ability.isDef;
+
+    const item = {
+      id,
       start,
       end,
+      title,
       group: ability.id,
       className: this.buildClass({
         ability: true,
         compact: ability.isCompact || ability.job.isCompact || this.presenter.view.compactView,
         loaded: data.showLoaded && data.loaded
       }),
-      content: "",      
+      content: "",
       subgroup: "sg" + ability.id,
       selectable: true,
-      type: data.ogcdAsPoints || (!!ability.ability.charges && !ability.isDef) ? "point" : "range",
-      title
-    };
+      type: ogcdPoint ? "point" : "range"
+    } as DataItem;
 
-    (item as any).limitSize=false;
+    (item as any).limitSize = false;
     return item;
-  }
-
-  get loaded(): boolean {
-    return this.data.loaded;
   }
 
   move(delta: number): boolean {
@@ -110,13 +121,10 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
     return true;
   }
 
-  get hasNote(): boolean{
-    return !!this.getSettingData("note")?.value;
-  }
-
   canMove(overlapData: IOverlapCheckData): boolean {
-    const doNotAllowResize = overlapData.end.valueOf() - overlapData.start.valueOf() === this.ability.ability.cooldown * 1000;
-    const windowStartCheck = overlapData.start >= new Date(overlapData.globalStart.valueOf() - ((this.ability.ability.requiresBossTarget ? 0 : 1) * 30 * 1000));
+    const doNotAllowResize = (overlapData.end.valueOf() - overlapData.start.valueOf()) === this.ability.ability.cooldown * 1000;
+    const diff = new Date(overlapData.globalStart.valueOf() - ((this.ability.ability.requiresBossTarget ? 0 : 1) * 30 * 1000));
+    const windowStartCheck = overlapData.start >= diff;
     const overlapCheck = this.ability.ability.overlapStrategy.check({ ...overlapData, ability: this.ability.ability });
 
     return doNotAllowResize && windowStartCheck && !overlapCheck;

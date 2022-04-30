@@ -6,8 +6,7 @@ ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 
 # install NodeJS 13.x
 # see https://github.com/nodesource/distributions/blob/master/README.md#deb
-RUN apt-get update -yq 
-RUN apt-get install curl gnupg -yq 
+RUN apt-get update -yq && apt-get install curl gnupg -yq 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt-get install -y nodejs
 

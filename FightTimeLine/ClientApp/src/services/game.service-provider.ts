@@ -1,18 +1,18 @@
 import { InjectionToken } from '@angular/core';
-import { HttpClient } from "@angular/common/http"
+import { HttpClient } from "@angular/common/http";
 import { LocalStorageService } from './LocalStorageService';
 import { IGameService } from './game.service-interface';
 import { FFXIVGameService } from './game-ffxiv.service';
+import { SettingsService } from './SettingsService';
 
-let gameServiceFactory = (
+const gameServiceFactory = (
   httpClient: HttpClient,
-  //@Inject("FFLogs_URL")
   fflogsUrl: string,
-  //@Inject("FFLogs_API_KEY")
   apiKey: string,
+  settings: SettingsService,
   storage: LocalStorageService) => {
-  var serviceToReturn: IGameService;
-  serviceToReturn = new FFXIVGameService(httpClient, fflogsUrl, apiKey, storage);
+  let serviceToReturn: IGameService;
+  serviceToReturn = new FFXIVGameService(httpClient, fflogsUrl, apiKey, settings, storage);
 
   return serviceToReturn;
 };
@@ -23,5 +23,5 @@ export const gameServiceProvider =
 {
   provide: gameServiceToken,
   useFactory: gameServiceFactory,
-  deps: [HttpClient, "FFLogs_URL", "FFLogs_API_KEY", LocalStorageService]
+  deps: [HttpClient, "FFLogs_URL", "FFLogs_API_KEY", SettingsService, LocalStorageService]
 };

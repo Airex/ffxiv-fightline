@@ -1,4 +1,4 @@
-import { IFraction } from "../core/Models"
+import { IFraction } from "../core/Models";
 import * as Jobregistryserviceinterface from "./jobregistry.service-interface";
 import * as Dataserviceinterface from "./data.service-interface";
 
@@ -8,7 +8,7 @@ export interface IGameService {
   dataService: Dataserviceinterface.IDataService;
   showImport: boolean;
   fractions: IFraction[];
-  extractFraction(game: string) : IFraction;
+  extractFraction(game: string): IFraction;
 }
 
 

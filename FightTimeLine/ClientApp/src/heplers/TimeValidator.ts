@@ -11,12 +11,12 @@ export function time(controlName: string) {
       return;
     }
 
-    var r = new RegExp("^[0-2]\\d:[0-5]\\d$");
+    const r = new RegExp("^[0-2]\\d:[0-5]\\d$");
     // set error on matchingControl if validation fails
     if (!r.test(control.value )) {
       control.setErrors({ time: true });
     } else {
       control.setErrors(null);
     }
-  }
+  };
 }

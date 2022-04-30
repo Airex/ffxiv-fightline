@@ -1,61 +1,51 @@
-<form [formGroup]="fflogsForm"
-      class="settings-tab">
+<form [formGroup]="fflogsForm" class="settings-tab">
   <div class="settings-container">
     <div class="settings-title">
-      Source for Boss attacks:
+      {{'dialog.settings.tabs.fflogs.bossAttackSource' | translate}}:
     </div>
     <div class="settings-body">
-      <nz-radio-group class="example-radio-group"
-                      formControlName="bossAttacksSource">
-        <label nz-radio
-               class="example-radio-button"
-               nzValue="cast">Cast</label>
-        <label nz-radio
-               class="example-radio-button"
-               nzValue="damage">Damage</label>
+      <nz-radio-group class="example-radio-group" formControlName="bossAttacksSource">
+        <label nz-radio class="example-radio-button" nzValue="cast">{{'attackSource.cast' | translate}}</label>
+        <label nz-radio class="example-radio-button" nzValue="damage">{{'attackSource.damage' | translate}}</label>
       </nz-radio-group>
     </div>
     <div class="settings-title">
-      Sort order after import
+      {{'dialog.settings.tabs.fflogs.sortOrderAfterImport' | translate}}
     </div>
     <div class="settings-body">
-      <div class="example-list"
-           cdkDropList
-           (cdkDropListDropped)="drop($event)">
-        <div class="example-box"
-             cdkDrag
-             *ngFor="let movie of container.classes">
-          <div class="example-custom-placeholder"
-               *cdkDragPlaceholder></div>
-          <img [src]="movie.icon"
-               style="margin-right: 10px" /> {{movie.name}}
+      <div class="example-list" cdkDropList (cdkDropListDropped)="drop($event)">
+        <div class="example-box" cdkDrag *ngFor="let movie of container.classes">
+          <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+          <img [src]="movie.icon" style="margin-right: 10px" /> {{movie.name}}
         </div>
       </div>
     </div>
   </div>
   <div class="settings-container">
     <div class="settings-title">
-      Character:
+      {{'dialog.settings.tabs.fflogs.character' | translate}}:
     </div>
     <div class="settings-body">
       <nz-form-item>
-        <input nz-input
-               formControlName="characterName"
-               placeholder="Your character name here" />
+        <input nz-input formControlName="characterName" placeholder="{{'dialog.settings.tabs.fflogs.yourCharacterName' | translate}}" />
       </nz-form-item>
       <nz-form-item>
-        <nz-select style="width: 235px"
-                   nzShowSearch
-                   nzAllowClear
-                   formControlName="characterServer"
-                   nzPlaceHolder="Select server">
-          <nz-option-group *ngFor="let dc of datacenters | keyvalue"
-                           [nzLabel]="dc.key">
-            <nz-option *ngFor="let s of dc.value"
-                       [nzLabel]="s.server"
-                       [nzValue]="s.server+'|'+s.region"></nz-option>
+        <nz-select style="width: 235px" nzShowSearch nzAllowClear formControlName="characterServer"
+          nzPlaceHolder="{{'dialog.settings.tabs.fflogs.selectServer' | translate}}">
+          <nz-option-group *ngFor="let dc of datacenters | keyvalue" [nzLabel]="dc.key">
+            <nz-option *ngFor="let s of dc.value" [nzLabel]="s.server" [nzValue]="s.server+'|'+s.region"></nz-option>
           </nz-option-group>
         </nz-select>
+      </nz-form-item>
+    </div>
+  </div>
+  <div class="settings-container">
+    <div class="settings-title">
+      {{'dialog.settings.tabs.fflogs.import' | translate}}:
+    </div>
+    <div class="settings-body">
+      <nz-form-item>
+        <label nz-checkbox formControlName="translate">{{'dialog.settings.tabs.fflogs.translate' | translate}}</label>
       </nz-form-item>
     </div>
   </div>

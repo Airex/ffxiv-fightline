@@ -1,13 +1,13 @@
-import { 
-  DRK, GNB, PLD, WAR,  
+import {
+  DRK, GNB, PLD, WAR,
   AST, SCH, SGE, WHM,
-  BRD,  DNC, MCH,
-  DRG, MNK,  NIN, RPR, SAM,
-  BLM, RDM, SMN,  
-  } from "../core/Jobs/FFXIV/index"
+  BRD, DNC, MCH,
+  DRG, MNK, NIN, RPR, SAM,
+  BLM, RDM, SMN
+} from "../Jobs/FFXIV/index";
 import * as Jobregistryserviceinterface from "./jobregistry.service-interface";
 import * as Models from "../core/Models";
-import * as Shared from "../core/Jobs/FFXIV/shared";
+import * as Shared from "../Jobs/FFXIV/shared";
 import { BaseOverlapStrategy } from "src/core/Overlap";
 import { byName } from "src/core/AbilityDetectors";
 
@@ -33,12 +33,12 @@ export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJob
       ...job,
       icon: this.getIcon(job.fullName, "_job"),
       pets: job.pets && job.pets.map((p) => {
-        return { ...p, icon: this.getIcon(job.fullName, p.name) }
+        return { ...p, icon: this.getIcon(job.fullName, p.name) };
       }),
       stances: job.stances && job.stances.map(s => {
         return {
           ability: this.buildAbility(job.fullName, s.ability)
-        }
+        };
       }),
       abilities: job.abilities.map(a => this.buildAbility(job.fullName, a)).sort(Shared.abilitySortFn)
     };
@@ -51,11 +51,13 @@ export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJob
   private buildAbility(prefix: string, a: Models.IAbility): Models.IAbility {
     return {
       ...a,
-      icon:  a.icon ?  `/assets/images/ffhqicons/${a.icon}${a.icon.endsWith(".jpg") ? "" : ".png"}` : this.getIcon(a.iconPrefix || prefix, (a.iconPrefix ||"pve") + "_"+ escape(a.name.replace(": ","_"))),
+      icon: a.icon
+        ? `/assets/images/ffhqicons/${a.icon}${a.icon.endsWith(".jpg") ? "" : ".png"}`
+        : this.getIcon(a.iconPrefix || prefix, (a.iconPrefix || "pve") + "_" + encodeURIComponent(a.name.replace(": ", "_"))),
       detectStrategy: a.detectStrategy || byName([a.xivDbId], [a.name]),
       overlapStrategy: a.overlapStrategy || new BaseOverlapStrategy(),
-      settings: [Shared.settings.note, ...(a.settings || [])]
-    }
+      settings: [Models.settings.note, ...(a.settings || [])]
+    };
   }
 
   getJob(jobName: string): Models.IJob {

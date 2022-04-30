@@ -6,19 +6,19 @@
           <input nz-input name="reportSearch" [(ngModel)]="reportValue" placeholder="https://www.fflogs.com/reports/..."
             (ngModelChange)="onSearch($event)" fflogs
             [matcher]="matchValue" (onMatch)="onMatch($event)"/>
-            
+
         </nz-input-group>
         <ng-template #suffixIcon>
-          <i nz-icon nzType="search"></i>          
+          <i nz-icon nzType="search"></i>
         </ng-template>
-        
+
       </nz-form-control>
       <nz-form-control nzSpan="4" style="align-items: end;" *ngIf="code">
-        <nz-switch name="asdf" nzCheckedChildren="Kills Only" nzUnCheckedChildren="All"
+        <nz-switch name="asdf" nzCheckedChildren="{{'dialog.fflogsImport.killsOnly' | translate}}" nzUnCheckedChildren="All"
           [ngStyle]="{'visibility': code ? '' : 'hidden', 'margin-left':'5px'}" [(ngModel)]="killsOnly" #showKills>
         </nz-switch>
       </nz-form-control>
-    </nz-form-item>    
+    </nz-form-item>
     <div [style.display]="searchAreaDisplay">
       <hr style="margin-top: 5px; margin-bottom: 5px;" />
       <nz-spin [nzSpinning]="loadingParses">
@@ -39,7 +39,7 @@
       </nz-spin>
     </div>
     <div [style.display]="listAreaDisplay">
-      <h4>Your latest parses</h4>
+      <h4>"{{'dialog.fflogsImport.yourLatestParses' | translate}}"</h4>
       <hr style="margin-top: 5px; margin-bottom: 5px;" />
       <nz-spin [nzSpinning]="loadingParses">
         <div class="importDialogList" customScroll>
@@ -68,6 +68,6 @@
     </div>
   </form>
   <div *nzModalFooter>
-    <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">Cancel</button>
+    <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">{{'dialog.cancel' | translate}}</button>
   </div>
 </div>

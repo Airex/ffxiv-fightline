@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { IView } from "../../../core/Models"
+import { IView } from "../../../core/Models";
 
 
 @Component({
@@ -32,7 +32,7 @@ export class SettingsViewComponent {
 
 
   public get(): IView {
-    return <IView>{
+    return  {
       buffmap: this.buffmap,
       ogcdAsPoints: this.ogcdAsPoints,
       showDowntimesInPartyArea: this.showDowntimesInPartyArea,
@@ -41,7 +41,7 @@ export class SettingsViewComponent {
       highlightLoaded: this.highlightLoaded,
       showAbilityAvailablity: this.abilityAvailablity,
       colorfulDurations: this.colorfulDurations
-    };
+    } as IView;
   }
 }
 

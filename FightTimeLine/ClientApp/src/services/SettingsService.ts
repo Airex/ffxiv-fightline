@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core"
-import { IView, IFilter,DefaultTags, AbilityType } from "../core/Models"
-import { LocalStorageService } from "./LocalStorageService"
+import { Injectable } from "@angular/core";
+import { IView, IFilter, DefaultTags, AbilityType } from "../core/Models";
+import { LocalStorageService } from "./LocalStorageService";
 
 @Injectable()
 export class SettingsService {
@@ -10,7 +10,8 @@ export class SettingsService {
       sortOrderAfterImport: ["Tank", "Heal", "DD"],
       characterName: "",
       characterRegion: "",
-      characterServer: ""
+      characterServer: "",
+      translate: true
     },
     main: {
       defaultFilter: {
@@ -20,7 +21,7 @@ export class SettingsService {
           healingBuff: true,
           partyDamageBuff: true,
           partyDefence: true,
-          enmity: true,          
+          enmity: true,
           selfDamageBuff: true,
           selfDefence: true,
           unused: true,
@@ -60,7 +61,7 @@ export class SettingsService {
       SelfDamageBuff: "#e74b81",
       SelfDefense: "#4083f2",
       TargetDefense: "#4083f2",
-      Utility:""
+      Utility: ""
     }
   };
   private storageKey = "settings";
@@ -91,7 +92,7 @@ export enum FFLogsImportBossAttacksSource {
 }
 
 export interface IMainSettings {
-  defaultView?: IView,
+  defaultView?: IView;
   defaultFilter?: IFilter;
 }
 
@@ -102,8 +103,8 @@ export interface ITableViewSettings {
 
 
 export type IColorsSettings = {
-  [t in keyof typeof AbilityType]?: string;  
-}
+  [t in keyof typeof AbilityType]?: string;
+};
 
 export interface ITeamworkSettings {
   displayName?: string;
@@ -115,4 +116,5 @@ export interface IFFlogsImportSettings {
   characterName;
   characterServer;
   characterRegion;
+  translate?: boolean;
 }

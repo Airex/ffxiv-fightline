@@ -34,7 +34,7 @@ namespace FightTimeLine.Controllers
                _logger = logger;
           }
 
-          [HttpGet("[action]/{reference}/{game}/{value?}")]
+          [HttpGet("[action]/{reference:long}/{game}/{value?}")]
           [AllowAnonymous]
           public async Task<IEnumerable<BossSearchResult>> Bosses([FromRoute]long reference, [FromRoute]string value, [FromQuery]bool privateOnly, [FromRoute]string game)
           {

@@ -1,13 +1,11 @@
-<form [formGroup]="teamworkForm"
-      class="settings-tab">
+<form [formGroup]="teamworkForm" class="settings-tab">
   <div class="settings-container">
     <div class="settings-title">
-      Display name:
+      {{'dialog.settings.tabs.teamwork.displayName' | translate}}:
     </div>
     <div class="settings-body">
-      <input nz-input
-             formControlName="displayName"
-             placeholder="Your preffered name here" />
+      <input nz-input formControlName="displayName"
+        placeholder="{{'dialog.settings.tabs.main.nameHere' | translate}}" />
     </div>
   </div>
 </form>

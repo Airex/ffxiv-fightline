@@ -3,6 +3,7 @@ import { ChangeNotesService } from 'src/services/changeNotes.service';
 import { DialogService } from 'src/services/DialogService';
 import { LocalStorageService } from 'src/services/LocalStorageService';
 import { environment } from "../environments/environment";
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +12,17 @@ import { environment } from "../environments/environment";
 })
 export class AppComponent implements OnInit {
 
+  title = 'ClientApp';
+  version = environment.version;
+
   constructor(
     private storage: LocalStorageService,
     private changeNotesService: ChangeNotesService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private translate: TranslateService
   ) {
+    this.translate.setDefaultLang("en");
+    this.translate.use((localStorage.getItem("lang") || "en").replace("jp", "ja"));
   }
 
   ngOnInit(): void {
@@ -53,6 +60,5 @@ export class AppComponent implements OnInit {
 
 
 
-  title = 'ClientApp';
-  version = environment.version;
+
 }

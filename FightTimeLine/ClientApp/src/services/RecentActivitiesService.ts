@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core"
-import { LocalStorageService } from "./LocalStorageService"
+import { Injectable } from "@angular/core";
+import { LocalStorageService } from "./LocalStorageService";
 
 @Injectable()
 export class RecentActivityService {
@@ -28,10 +28,12 @@ export class RecentActivityService {
     input = { pinned: false, timestamp: new Date(), ...input };
 
     const found = storage.activities.find(t => t.id === input.id);
-    if (found)
+    if (found) {
       storage.activities.push({ ...found });
-    else
+    }
+    else {
       storage.activities.push(input);
+    }
 
     let result = new Array<Partial<IRecentActivity>>();
     const map = {};
@@ -60,7 +62,7 @@ export enum ActivitySource {
 }
 
 export interface IRecentStorage {
-  activities: Partial<IRecentActivity>[]
+  activities: Partial<IRecentActivity>[];
 
 }
 
@@ -75,5 +77,5 @@ export interface IRecentActivity {
 
 export interface IFFLogsActivity extends  IRecentActivity {
   source: ActivitySource.FFLogs;
-  url : string;
+  url: string;
 }

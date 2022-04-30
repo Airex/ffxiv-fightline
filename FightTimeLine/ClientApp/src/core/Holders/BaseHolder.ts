@@ -16,7 +16,7 @@ export interface IForSidePanel {
 }
 
 export interface IMoveable {
-  move(delta):boolean;
+  move(delta): boolean;
 }
 
 export interface ITimelineContainer {
@@ -25,9 +25,9 @@ export interface ITimelineContainer {
 }
 
 
-export class BaseHolder<TK, TI, T extends IBaseHolderItem<TK>> {  
+export class BaseHolder<TK, TI, T extends IBaseHolderItem<TK>> {
   protected items: { [id: string]: T } = {};
-  add(i: T): void {     
+  add(i: T): void {
     this.items[i.id as any] = i;
   }
 
@@ -44,11 +44,11 @@ export class BaseHolder<TK, TI, T extends IBaseHolderItem<TK>> {
   }
 
   protected itemsOf(items: T[]): TI[] {
-    return items.map((it) => (<IItemHolder<TI>><any>it).item);
+    return items.map((it) => (it as any as IItemHolder<TI>).item);
   }
 
   protected itemOf(item: T): TI {
-    return (<IItemHolder<TI>><any>item).item;
+    return (item as any as IItemHolder<TI>).item;
   }
 
   filter(predicate: (it: T) => boolean): T[] {
@@ -73,7 +73,7 @@ export class BaseHolder<TK, TI, T extends IBaseHolderItem<TK>> {
   }
 
   getByIds(ids: (string | number)[]): T[] {
-    if (!ids || ids.length == 0) return [];
+    if (!ids || ids.length === 0) { return []; }
     return ids.map(it => this.items[it]).filter(it => !!it);
   }
 

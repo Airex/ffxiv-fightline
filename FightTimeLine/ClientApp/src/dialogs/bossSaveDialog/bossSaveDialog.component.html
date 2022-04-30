@@ -2,12 +2,12 @@
   <form nz-form>
     <nz-form-item>
       <nz-form-control nzHasFeedback="submitted" [nzValidateStatus]="submitted && fightNameControl.errors && fightNameControl.errors.required?'error':'success'" nzErrorTip="You must enter a value">
-        <input name="fightName"  required nz-input placeholder="Fight name" [formControl]="fightNameControl" [(ngModel)]="data"/>
+        <input name="fightName"  required nz-input placeholder="{{'dialog.bossSave.fightName' | translate}}" [formControl]="fightNameControl" [(ngModel)]="data"/>
       </nz-form-control>
     </nz-form-item>
   </form>
 </div>
 <div *nzModalFooter>
-  <button nz-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
-  <button nz-button nzType="primary" (click)="onNoClick()">Cancel</button>
+  <button nz-button (click)="onSaveClick()" cdkFocusInitial>{{'dialog.save' | translate}}</button>
+  <button nz-button nzType="primary" (click)="onNoClick()">{{'dialog.cancel' | translate}}</button>
 </div>

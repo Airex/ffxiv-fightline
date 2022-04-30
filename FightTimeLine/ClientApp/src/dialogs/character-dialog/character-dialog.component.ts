@@ -12,11 +12,11 @@ import { gameServiceToken } from 'src/services/game.service-provider';
 })
 export class CharacterDialogComponent implements OnInit {
 
-  @Input("data") data: IJobStats;
+  @Input() data: IJobStats;
   editForm: FormGroup;
   submitted = false;
 
-  constructor(    
+  constructor(
     private formBuilder: FormBuilder,
     @Inject(gameServiceToken)
     public gameService: IGameService,
@@ -39,8 +39,10 @@ export class CharacterDialogComponent implements OnInit {
 
   submitForm(): void {
     for (const i in this.editForm.controls) {
-      this.editForm.controls[i].markAsDirty();
-      this.editForm.controls[i].updateValueAndValidity();
+      if (this.editForm.controls.hasOwnProperty(i)) {
+        this.editForm.controls[i].markAsDirty();
+        this.editForm.controls[i].updateValueAndValidity();
+      }
     }
   }
 
@@ -57,16 +59,16 @@ export class CharacterDialogComponent implements OnInit {
     this.updateResult();
 
     this.dialogRef.close({ data: this.data });
-  };
+  }
 
   updateResult(): void {
-    this.data.weaponDamage = this.f.weaponDamage.value;    
+    this.data.weaponDamage = this.f.weaponDamage.value;
     this.data.mainStat = this.f.mainStat.value;
     this.data.criticalHit = this.f.criticalHit.value;
     this.data.determination = this.f.determination.value;
     this.data.directHit = this.f.directHit.value;
-    this.data.speed = this.f.speed.value;    
-    this.data.hp = this.f.hp.value;    
+    this.data.speed = this.f.speed.value;
+    this.data.hp = this.f.hp.value;
   }
 
 }

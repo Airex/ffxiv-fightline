@@ -1,4 +1,4 @@
-import { IJob, IAbility } from "../core/Models"
+import { IJob, IAbility } from "../core/Models";
 
 export interface IJobRegistryService {
 

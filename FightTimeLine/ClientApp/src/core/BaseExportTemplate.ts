@@ -1,4 +1,4 @@
-import { Utils } from "./Utils"
+import { Utils } from "./Utils";
 import { ExportAttack, ExportData, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings } from "./ExportModels";
 import { PresenterManager } from "./PresentationManager";
 import { Holders } from "./Holders";
@@ -11,7 +11,7 @@ export type ExportTemplateContext = {
   jobRegistry: IJobRegistryService,
   options?: ITableOptions,
   holders?: Holders
-}
+};
 
 export abstract class ExportTemplate<RowType = any> {
   public abstract get name(): string;
@@ -34,19 +34,19 @@ export abstract class AttackRowExportTemplate extends ExportTemplate<ExportAttac
     const cols = this.getColumns(context);
     const rows = context.data.data.boss.attacks
       .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
-      .map(attack => <IExportRow>{
+      .map(attack => ({
         cells: cols.map(t => t.buildCell(context.data, attack)),
         filterData: attack
-      });
+      }));
 
     const columns = cols.map(t => t.buildHeader(context.data));
 
-    return <IExportResultSet>{
+    return {
       columns,
       rows,
       title: this.name,
       filterByFirstEntry: true
-    };
+    } as IExportResultSet;
   }
 }
 

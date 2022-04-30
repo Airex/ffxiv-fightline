@@ -1,0 +1,42 @@
+<nz-list [nzDataSource]="data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'" *ngIf="data.length>0">
+    <nz-list-header>{{header}}</nz-list-header>
+    <ng-template #item let-item>
+        <nz-list-item [nzActions]="[pinAction]">
+            <ng-template #pinAction>
+                <span #lstitem>
+                    <a nz-dropdown nzTooltipTrigger="click" nzTooltipTrigger="hover" [nzDropdownMenu]="menu"
+                        (nzVisibleChange)="listopentablevisiblechange(lstitem, $event)" nz-tooltip
+                        nzTooltipTitle="{{'component.recentList.openAsTable' | translate}}"><i class="pin" nz-icon nzType="hdd" nzTheme="twotone"></i></a>
+                    <a nz-tooltip [nzTooltipTitle]="item.pinned?'Unpin':'Pin'" (click)="unpin($event, item)"><i
+                            class="pin" [ngClass]="{pinned:item.pinned}" nz-icon nzType="pushpin"
+                            nzTheme="twotone"></i></a>
+                    <a nz-tooltip nzTooltipTitle="{{'component.recentList.remove' | translate}}" nz-popconfirm nzPopconfirmTitle="{{'component.recentList.areYouSure' | translate}}"
+                        (nzOnConfirm)="delete(item)"><i class="pin" nz-icon nzType="delete" nzTheme="twotone"></i></a>
+                </span>
+            </ng-template>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                    <li nz-menu-item (click)="onOpenTable(item,'defence')">{{'tables.defensive' | translate}}</li>
+                    <li nz-menu-item (click)="onOpenTable(item,'descriptive')">{{'tables.timeline' | translate}}</li>
+                    <li nz-menu-item (click)="onOpenTable(item,'mitigations')">{{'tables.mitigations' | translate}}</li>
+                </ul>
+            </nz-dropdown-menu>
+            <nz-list-item-meta [nzTitle]="nzTitle" [nzAvatar]="nzAvatar" [nzDescription]="nzDescription"
+                (click)="onClick(item.url)">
+                <ng-template #nzTitle>
+                    {{item.name}}
+                </ng-template>
+                <ng-template #nzAvatar>
+                    <div [ngSwitch]="item.source">
+                        <img *ngSwitchCase="0" width="48px" height="48px"
+                            src="https://assets.rpglogs.com/img/ff/favicon.png" alt="">
+                        <img *ngSwitchDefault width="48px" height="48px" src="https://xivapi.com/c/BNpcName.png" alt="">
+                    </div>
+                </ng-template>
+                <ng-template #nzDescription>
+                    {{ item.timestamp | date:'short' }}
+                </ng-template>
+            </nz-list-item-meta>
+        </nz-list-item>
+    </ng-template>
+</nz-list>

@@ -1,5 +1,5 @@
-<div class="sidepanel-container">  
-  <sidepanel-area header="Phases">
+<div class="sidepanel-container">
+  <sidepanel-area header="{{'component.multiplePhases.header' | translate}}">
     <nz-list #parses [nzDataSource]="its" [nzRenderItem]="item" nzSize="small">
       <ng-template #item let-item>
         <nz-list-item (click)="onSelectClick(item)" [ngClass]="{downtime:true}"

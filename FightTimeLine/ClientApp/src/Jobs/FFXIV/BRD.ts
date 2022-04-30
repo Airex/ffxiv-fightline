@@ -1,0 +1,223 @@
+import { byName } from "src/core/AbilityDetectors";
+import Effects from "src/core/Effects";
+import { IJob, Role, AbilityType, MapStatuses, IAbility, settings } from "../../core/Models";
+import { getAbilitiesFrom, rangeSharedAbilities, medicine } from "./shared";
+
+const statuses = MapStatuses({
+    ragingStrikes: {
+        duration: 20
+    },
+    barrage: {
+        duration: 10
+    },
+    magesBallad: {
+        duration: 45
+    },
+    armysPaeon: {
+        duration: 45
+    },
+    theWanderersMinuet: {
+        duration: 45
+    },
+    battleVoice: {
+        duration: 15
+    },
+    troubadour: {
+        duration: 15,
+        shareGroup: "rangeDef",
+        effects: [Effects.mitigation.party(10)]
+    },
+    naturesMinne: {
+        duration: 15
+    },
+    radiantFinale: {
+        duration: 15
+    }
+});
+
+const abilities: IAbility[] = [
+    {
+        name: "Raging Strikes",
+        translation: {
+          de: "W\u00FCtende Attacke",
+          jp: "\u731B\u8005\u306E\u6483",
+          en: "Raging Strikes",
+          fr: "Tir furieux"
+        },
+        cooldown: 120,
+        statuses: [statuses.ragingStrikes],
+        xivDbId: "101",
+        abilityType: AbilityType.SelfDamageBuff,
+        levelAcquired: 4
+    },
+    {
+        name: "Barrage",
+        translation: {
+          de: "Sperrfeuer",
+          jp: "\u4E71\u308C\u6483\u3061",
+          en: "Barrage",
+          fr: "Rafale de coups"
+        },
+        cooldown: 120,
+        xivDbId: "107",
+        statuses: [statuses.barrage],
+        abilityType: AbilityType.SelfDamageBuff,
+        levelAcquired: 38
+    },
+    {
+        name: "Mage's Ballad",
+        translation: {
+          de: "Ballade des Weisen",
+          jp: "\u8CE2\u4EBA\u306E\u30D0\u30E9\u30FC\u30C9",
+          en: "Mage\u0027s Ballad",
+          fr: "Ballade du mage"
+        },
+        cooldown: 120,
+        xivDbId: "114",
+        requiresBossTarget: true,
+        statuses: [statuses.magesBallad],
+        abilityType: AbilityType.Damage,
+        relatedAbilities: {
+            affects: ["Army's Paeon", "The Wanderer's Minuet"],
+            affectedBy: ["Army's Paeon", "The Wanderer's Minuet"],
+            parentOnly: true
+        },
+        levelAcquired: 30
+    },
+    {
+        name: "Army's Paeon",
+        translation: {
+          de: "Hymne der Krieger",
+          jp: "\u8ECD\u795E\u306E\u30D1\u30A4\u30AA\u30F3",
+          en: "Army\u0027s Paeon",
+          fr: "P\u00E9an martial"
+        },
+        cooldown: 120,
+        xivDbId: "116",
+        requiresBossTarget: true,
+        statuses: [statuses.armysPaeon],
+        abilityType: AbilityType.Damage,
+        relatedAbilities: {
+            affects: ["Mage's Ballad", "The Wanderer's Minuet"],
+            affectedBy: ["Mage's Ballad", "The Wanderer's Minuet"],
+            parentOnly: true
+        },
+        levelAcquired: 40
+    },
+    {
+        name: "Battle Voice",
+        translation: {
+          de: "Ode an die Seele",
+          jp: "\u30D0\u30C8\u30EB\u30DC\u30A4\u30B9",
+          en: "Battle Voice",
+          fr: "Voix de combat"
+        },
+        cooldown: 120,
+        requiresBossTarget: true,
+        xivDbId: "118",
+        statuses: [statuses.battleVoice],
+        abilityType: AbilityType.PartyDamageBuff,
+        levelAcquired: 50
+    },
+    {
+        name: "The Wanderer's Minuet",
+        translation: {
+          de: "Menuett des Wanderers",
+          jp: "\u65C5\u795E\u306E\u30E1\u30CC\u30A8\u30C3\u30C8",
+          en: "the Wanderer\u0027s Minuet",
+          fr: "Menuet du Vagabond"
+        },
+        cooldown: 120,
+        xivDbId: "3559",
+        statuses: [statuses.theWanderersMinuet],
+        abilityType: AbilityType.Damage,
+        relatedAbilities: {
+            affects: ["Mage's Ballad", "Army's Paeon"],
+            affectedBy: ["Mage's Ballad", "Army's Paeon"],
+            parentOnly: true
+        },
+        detectStrategy: byName(["3559"], ["The Wanderer's Minuet", "the Wanderer's Minuet"]),
+        levelAcquired: 52
+    },
+    {
+        name: "Sidewinder",
+        translation: {
+          de: "Seitenschneider",
+          jp: "\u30B5\u30A4\u30C9\u30EF\u30A4\u30F3\u30C0\u30FC",
+          en: "Sidewinder",
+          fr: "Vent venimeux"
+        },
+        cooldown: 60,
+        xivDbId: "3562",
+        requiresBossTarget: true,
+        abilityType: AbilityType.Damage,
+        levelAcquired: 60
+    },
+    {
+        name: "Troubadour",
+        translation: {
+          de: "Troubadour",
+          jp: "\u30C8\u30EB\u30D0\u30C9\u30A5\u30FC\u30EB",
+          en: "Troubadour",
+          fr: "Troubadour"
+        },
+        cooldown: 90,
+        requiresBossTarget: true,
+        xivDbId: "7405",
+        statuses: [statuses.troubadour],
+        abilityType: AbilityType.PartyDefense,
+        levelAcquired: 62
+    },
+    {
+        name: "Nature's Minne",
+        translation: {
+          de: "Nophicas Minne",
+          jp: "\u5730\u795E\u306E\u30DF\u30F3\u30CD",
+          en: "Nature\u0027s Minne",
+          fr: "Minne de la nature"
+        },
+        cooldown: 90,
+        xivDbId: "7408",
+        statuses: [statuses.naturesMinne],
+        abilityType: AbilityType.HealingBuff,
+        settings: [settings.target],
+        levelAcquired: 66
+    },
+    {
+        name: "Radiant Finale",
+        translation: {
+          de: "Lumin\u00F6ses Finale",
+          jp: "\u5149\u795E\u306E\u30D5\u30A3\u30CA\u30FC\u30EC",
+          en: "Radiant Finale",
+          fr: "Final radieux"
+        },
+        cooldown: 110,
+        xivDbId: "25785",
+        abilityType: AbilityType.PartyDamageBuff,
+        statuses: [statuses.radiantFinale],
+        levelAcquired: 90
+    },
+    ...getAbilitiesFrom(rangeSharedAbilities),
+    medicine.Dexterity
+];
+
+export const BRD: IJob = {
+    name: "BRD",
+    translation: {
+      de: "BRD",
+      jp: "BRD",
+      en: "BRD",
+      fr: "BRD"
+    },
+    fullName: "Bard",
+    fullNameTranslation: {
+      de: "Barde",
+      jp: "\u541F\u904A\u8A69\u4EBA",
+      en: "Bard",
+      fr: "Barde"
+    },
+    role: Role.Range,
+    abilities
+};
+
+

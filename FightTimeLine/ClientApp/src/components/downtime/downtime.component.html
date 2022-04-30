@@ -1,25 +1,25 @@
 <div class="sidepanel-container">
   <div class="sidepanel-full">
     <div>
-      <span class="header">Phase</span>
+      <span class="header">{{"component.downtime.phase" | translate}}</span>
     </div>
     <div>
       <i nz-icon nzType="clock-circle" theme="outline"></i><span class="time">{{from}}-{{to}}</span>
     </div>
-    <div *ngIf="data.mode=='default'">
-      <textarea nz-input placeholder="Leave comment here" [(ngModel)]="comment"
+    <div *ngIf="data.mode==='default'">
+      <textarea nz-input placeholder="{{'component.downtime.leaveCommentHere' | translate}}" [(ngModel)]="comment"
         [nzAutosize]="{ minRows: 2, maxRows: 6 }" (ngModelChange)="showCommentButton = true;"></textarea>
     </div>
-    <div *ngIf="data.mode=='table'">
+    <div *ngIf="data.mode==='table'">
       <div> {{comment}}</div>
     </div>
     <div *ngIf="showCommentButton && data.mode === 'default'">
       <button #commentButton nzType="primary" nz-button (click)="setComment();showCommentButton = false;">Set
-        Comment</button>
+        {{'component.downtime.comment' | translate}}</button>
     </div>
     <div *ngIf="data.mode ==='default'">
       <div>
-        Click below to change color
+        {{'component.downtime.clickToChangeColor' | translate}}
       </div>
     </div>
     <div>
@@ -28,7 +28,7 @@
       </div>
     </div>
     <div *ngIf="data.mode ==='default'">
-      <button nz-button nzType="primary" (click)="remove(it)" nzDanger>Remove</button>
+      <button nz-button nzType="primary" (click)="remove(it)" nzDanger>{{'component.downtime.remove' | translate}}</button>
     </div>
   </div>
 </div>

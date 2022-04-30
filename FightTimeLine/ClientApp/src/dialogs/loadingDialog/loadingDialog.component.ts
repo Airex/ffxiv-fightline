@@ -1,5 +1,4 @@
-import { Component, Inject } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
+import { Component } from "@angular/core";
 import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
@@ -9,7 +8,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 })
 export class LoadingDialog {
 
-    public text: string = "Loading...";
+    public text = "Loading...";
 
     constructor(
         public dialogRef: NzModalRef

@@ -2,44 +2,44 @@
   <div class="sidepanel-full">
     <div>
       <img [src]="it.job.icon" class="icon" />
-      <span class="header abilityName">{{it.job.name}}</span>
+      <span class="header abilityName">{{it.translated}}</span>
     </div>
     <div>
       <span class="abilityDescription">{{it.actorName}}</span>
     </div>
     <nz-button-group *ngIf="data.mode === 'default'">
       <!-- <button nz-button (click)="fill(it)">Fill</button> -->
-      <button nz-button nzType="primary" (click)="remove(it)" nzDanger>Remove</button>
-      <button nz-button nzType="primary" (click)="stats()">Stats</button>
+      <button nz-button nzType="primary" (click)="remove(it)" nzDanger>{{'component.job.remove' | translate}}</button>
+      <button nz-button nzType="primary" (click)="stats()">{{'component.job.stats' | translate}}</button>
     </nz-button-group>
   </div>
 
   <div *ngIf="data.mode === 'default'" class="sidepanel-full">
-    <label nz-checkbox [(ngModel)]="compactView" (ngModelChange)="compact()">Compact view</label>
+    <label nz-checkbox [(ngModel)]="compactView" (ngModelChange)="compact()">{{'component.job.compactView' | translate}}</label>
   </div>
 
-  <sidepanel-area header="Hidden abilities" [extra]="restoreAllTpl" *ngIf="hiddenAbilities.length>0">
+  <sidepanel-area header="{{'component.job.hiddenAbilities' | translate}}" [extra]="restoreAllTpl" *ngIf="hiddenAbilities.length>0">
     <div>
       <nz-tag *ngFor="let ab of hiddenAbilities" (nzOnClose)="restore(ab)" nzMode="closeable">
         <span>
           <img class='abilityIcon' [src]="ab.ability.icon" />
-          <span class='abilityName'>{{ab.ability.name}}</span>
+          <span class='abilityName'>{{ab.translated}}</span>
         </span>
       </nz-tag>
     </div>
   </sidepanel-area>
   <ng-template #restoreAllTpl>
-    <a (click)="$event.stopPropagation();restoreAll()">restore all</a>
+    <a (click)="$event.stopPropagation();restoreAll()">{{'component.job.restoreAll' | translate}}</a>
   </ng-template>
 
-  <sidepanel-area header="Filter" [extra]="resetAllTpl" *ngIf="data.mode === 'default'">
+  <sidepanel-area header="{{'component.job.filter' | translate}}" [extra]="resetAllTpl" *ngIf="data.mode === 'default'">
     <div *ngFor="let f of filters">
       <label nz-checkbox (ngModelChange)="updateFilter($event, f.name)" [(ngModel)]="jobFilter[f.name]"
         [nzIndeterminate]="jobFilter[f.name] === undefined">{{f.desc}}</label>
-      <a (click)="resetJobFilter(f.name)">reset</a>
+      <a (click)="resetJobFilter(f.name)">{{'component.job.reset' | translate}}</a>
     </div>
   </sidepanel-area>
   <ng-template #resetAllTpl>
-    <a (click)="$event.stopPropagation();resetJobFilter()">reset</a>
+    <a (click)="$event.stopPropagation();resetJobFilter()">{{'component.job.reset' | translate}}</a>
   </ng-template>
 </div>

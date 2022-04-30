@@ -9,6 +9,20 @@
       "projectType": "application",
       "prefix": "app",
       "schematics": {},
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "fr": {
+            "translation": "src/locales/fr/messages.xlf"
+          },
+          "de": {
+            "translation": "src/locales/de/messages.xlf"
+          },
+          "ja": {
+            "translation": "src/locales/ja/messages.xlf"
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -21,6 +35,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/assets/i18n",
               {
                 "glob": "**/*",
                 "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
@@ -64,6 +79,7 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
+              "aot": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -112,9 +128,21 @@
               "src/assets"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
-  "defaultProject": "ClientApp"
+  "defaultProject": "ClientApp",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }

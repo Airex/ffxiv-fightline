@@ -1,10 +1,15 @@
-<toolbar #toolbar [showHome]="true">
+<toolbar #toolbar [showHome]="true" (langChanged)="langChanged()">
   <span style="margin-left: 10px;">
     <tableviewoptions [settings]="options" (changed)="optionsChanged($event)"></tableviewoptions>
   </span>
   <span style="display: inline-flex; margin-left: 20px;">
     <avatarWithPing *ngFor="let user of fightHubService.users" [owner]="false" textSizeRatio="3" [name]="user.name"
       [id]="user.id" [ngStyle]="{'margin-right':'2px'}"></avatarWithPing>
+  </span>
+  <span pre-right style="margin-right: 3px;">
+    <a href="https://www.patreon.com/bePatron?u=70993733" data-patreon-widget-type="become-patron-button">Become a
+      Patron!</a>
+    <script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
   </span>
 </toolbar>
 <div class="content noselect" (click)="select(null, $event)">

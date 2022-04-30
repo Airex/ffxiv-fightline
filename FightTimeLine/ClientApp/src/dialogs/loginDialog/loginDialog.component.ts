@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { first } from 'rxjs/operators';
-import { IAuthenticationService } from "../../services/authentication.service-interface"
-import { authenticationServiceToken } from "../../services/authentication.service-provider"
-import { ScreenNotificationsService } from "../../services/ScreenNotificationsService"
+import { IAuthenticationService } from "../../services/authentication.service-interface";
+import { authenticationServiceToken } from "../../services/authentication.service-provider";
+import { ScreenNotificationsService } from "../../services/ScreenNotificationsService";
 
 @Component({
   selector: "loginDialog",

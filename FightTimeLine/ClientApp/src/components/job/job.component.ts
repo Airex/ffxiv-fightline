@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
-import * as M from "../../core/Models"
-import * as S from "../../services/index"
+import * as M from "../../core/Models";
+import * as S from "../../services/index";
 import { Holders } from "../../core/Holders";
 import { JobMap, AbilityMap } from "../../core/Maps/index";
 import { VisStorageService } from "src/services/VisStorageService";
@@ -20,10 +20,10 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
   hiddenAbilities: any[] = null;
   compactView: boolean;
   jobFilter: M.IAbilityFilter;
-  sub:Subscription;
+  sub: Subscription;
 
 
-  filters = Object.entries(<{ [name: string]: [number, string] }>{
+  filters = Object.entries( {
     selfDefence: [0, "Self Defense"],
     partyDefence: [1, "Party Defense"],
     selfDamageBuff: [2, "Self Damage Buff"],
@@ -35,7 +35,7 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
     enmity: [8, "Enmity"],
     unused: [10, "Show Unused"],
     pet: [9, null],
-  })
+  } as { [name: string]: [number, string] })
     .filter(f => f[1][1])
     .sort((a, b) => a[1][0] - b[1][0])
     .map(a => ({ name: a[0], desc: a[1][1] }));
@@ -49,7 +49,7 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
   ) {
     this.items = this.data.items;
     this.holders = visStorage.holders;
-    this.sub = this.data.refresh.subscribe(()=>{
+    this.sub = this.data.refresh.subscribe(() => {
       this.refresh();
     });
     this.refresh();
@@ -69,7 +69,7 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
         this.dispatcher.dispatch("changeJobStats", {
           id: this.it.id,
           data: value.data
-        })
+        });
       }
     });
   }

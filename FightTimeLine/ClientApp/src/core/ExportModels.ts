@@ -7,6 +7,7 @@ export interface ExportAttack {
   offset: TimeOffset;
   tags: string[];
   desc: string;
+  color: string;
 }
 
 export interface ExportDowntime {
@@ -51,7 +52,7 @@ export interface ExportAbility {
 export interface ExportDataData {
   boss: ExportBoss;
   initialTarget: string;
-  bossTargets: ExportBossTarget[],
+  bossTargets: ExportBossTarget[];
   jobs: ExportJob[];
   abilities: ExportAbility[];
 }
@@ -78,13 +79,13 @@ export interface IExportColumn {
   refId?: string;
   cursor?: string;
   listOfFilter?: { text: string; value: any; byDefault?: boolean }[];
-  filterFn?: (a: any, data: IExportRow, c?:IExportColumn) => boolean;
+  filterFn?: (a: any, data: IExportRow, c?: IExportColumn) => boolean;
   name?: string;
-  width?: string | null
+  width?: string | null;
 }
 
 export interface IExportRow {
-  cells: IExportCell[]
+  cells: IExportCell[];
   filterData?: any;
 }
 
@@ -94,7 +95,7 @@ export interface IExportCell {
   disableUnique?: boolean;
   colorFn?: (data) => string;
   bgRefIdFn?: (data) => string;
-  noTag?: boolean;  
+  noTag?: boolean;
 }
 
 export interface IExportItem {
@@ -105,47 +106,56 @@ export interface IExportItem {
   visible?: boolean;
   targetIcon?: string;
   usageOffset?: string;
-  clone?: boolean;  
+  clone?: boolean;
   tooltip?: string;
   fullwidth?: boolean;
-  ignoreIconScale?:boolean;
-  ignoreShowIcon?:boolean;
-  ignoreShowText?:boolean;
+  ignoreIconScale?: boolean;
+  ignoreShowIcon?: boolean;
+  ignoreShowText?: boolean;
   allowIconsOnly?: boolean;
-  filterFn?:(a:string[]) => boolean;
+  filterFn?: (a: string[]) => boolean;
 }
 
 export enum TableOptionSettingType {
   Boolean,
   NumberRange,
-  Tags
+  Tags,
+  LimitedNumberRange
 }
 
 
 export interface ITableOptionsSetting<TOptions = any> {
   name: string;
-  type: TableOptionSettingType;
+  kind: TableOptionSettingType;
   description?: string;
   defaultValue?: any;
-  initialValue?:any;
+  initialValue?: any;
   displayName: string;
-  options?: TOptions;  
+  visible: boolean;
+  options?: TOptions;
+  onChange?: (value) => void;
 }
 
 export interface BooleanOptionsSetting extends ITableOptionsSetting<undefined> {
-  type: TableOptionSettingType.Boolean
+  kind: TableOptionSettingType.Boolean;
 }
 
 export interface NumberRangeOptionsSetting extends ITableOptionsSetting<{min: number, max: number}> {
-  type: TableOptionSettingType.NumberRange
+  kind: TableOptionSettingType.NumberRange;
 }
 
-export interface TagsOptionsSetting extends ITableOptionsSetting<{items: { id: string, checked: boolean, text?: string, icon?: string }[]}> {
-  type: TableOptionSettingType.Tags
+export interface LimitedNumberRangeOptionsSetting extends ITableOptionsSetting<{min: number, max: number, marks?: any }> {
+  kind: TableOptionSettingType.LimitedNumberRange;
+}
+
+export type TableOptionsSettingItem = { id: string, checked: boolean, text?: string, icon?: string };
+
+export interface TagsOptionsSetting extends ITableOptionsSetting<{items: TableOptionsSettingItem[]}> {
+  kind: TableOptionSettingType.Tags;
 }
 
 export type ITableOptionSettings = ITableOptionsSetting[];
 
 export interface ITableOptions{
-  [name: string] : any
+  [name: string]: any;
 }

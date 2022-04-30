@@ -1,9 +1,9 @@
-import { ICustomTimeActions } from "../fightline/planArea/planArea.component"
-import { FightTimeLineController } from "./FightTimeLineController"
-import { Guid } from "guid-typescript"
+import { ICustomTimeActions } from "../pages/fightline/planArea/planArea.component";
+import { FightTimeLineController } from "./FightTimeLineController";
+import { Guid } from "guid-typescript";
 
 export class DownTimesController {
-  private downTimeData = { start: <Date>null, startId: <string>null };
+  private downTimeData = { start: null as Date, startId: null as string };
   private downtimeMarkers = new Array<string>();
   public isInBossDownTimeMode = false;
 
@@ -22,7 +22,13 @@ export class DownTimesController {
       this.planArea.addBossCustomTime(id, date);
     } else {
       this.planArea.addBossCustomTime(id, date);
-      this.fightLineController.addDownTime({ start: this.downTimeData.start, startId: this.downTimeData.startId, end: date, endId: id }, null);
+      this.fightLineController.addDownTime({
+        start: this.downTimeData.start,
+        startId: this.downTimeData.startId,
+        end: date,
+        endId: id
+      },
+        null);
       this.downTimeData = { start: null, startId: null };
     }
   }
@@ -32,7 +38,7 @@ export class DownTimesController {
     this.downtimeMarkers = [];
     const data = this.fightLineController.getBossDownTimeMarkers();
     if (isInBossDownTimeMode) {
-      for (let d of data) {
+      for (const d of data) {
         this.downtimeMarkers.push(d.map.startId, d.map.endId);
         this.planArea.addBossCustomTime(d.map.startId, d.start);
         this.planArea.addBossCustomTime(d.map.endId, d.end);
@@ -43,7 +49,7 @@ export class DownTimesController {
   toggle(isInBossDownTimeMode: boolean): void {
     const data = this.fightLineController.getBossDownTimeMarkers();
     if (isInBossDownTimeMode) {
-      for (let d of data) {
+      for (const d of data) {
         this.downtimeMarkers.push(d.map.startId, d.map.endId);
         this.planArea.addBossCustomTime(d.map.startId, d.start);
         this.planArea.addBossCustomTime(d.map.endId, d.end);

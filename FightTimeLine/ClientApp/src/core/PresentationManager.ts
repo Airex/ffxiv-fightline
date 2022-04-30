@@ -1,5 +1,5 @@
 import * as Models from "./Models";
-import * as _ from "lodash"
+import * as _ from "lodash";
 import { FFLogsImportBossAttacksSource, ISettings } from "src/services/SettingsService";
 import { IPresetTemplate, JobFilters } from "./Models";
 import { Holders } from "./Holders";
@@ -7,36 +7,6 @@ import { Utils } from "./Utils";
 
 export class PresenterManager implements Models.IPresenterData {
 
-  loadTemplate(template: Models.IPresetTemplate, holders: Holders) {
-    this.filter = template.filter;
-    this.view = template.view;
-    this.jobFilters = holders.jobs.getAll().reduce((acc, j) => {
-      return { ...acc, [j.id]: template.jobFilters[j.job.name] || {} };
-    }, {});
-
-  }
-
-  tags: string[] = Models.DefaultTags;
-  sources: string[] = [];
-  filter: Models.IFilter = Models.defaultFilter();
-  view: Models.IView = Models.defaultView();
-  fightLevel: number = 90;
-  private jobFilters: JobFilters = {}
-
-  reset() {
-    this.tags = Models.DefaultTags;
-    this.fightLevel = 90;
-    this.sources = [];
-    this.filter = Models.defaultFilter();
-    this.view = Models.defaultView();
-    this.jobFilters = {}
-
-  }
-
-  jobFilter(jobId: string): Models.JobFilter {
-    this.jobFilters[jobId] ||= { abilityCompact: [], abilityHidden: [], filter: {} };
-    return this.jobFilters[jobId];
-  }
 
   public get activeTags(): { text: string, checked: boolean }[] {
     return this.tags.concat("Other").map(t => ({
@@ -50,6 +20,51 @@ export class PresenterManager implements Models.IPresenterData {
       text: t,
       checked: this.filter?.attacks?.sources?.includes(t) || false
     }));
+  }
+
+  tags: string[] = Models.DefaultTags;
+  sources: string[] = [];
+  filter: Models.IFilter = Models.defaultFilter();
+  view: Models.IView = Models.defaultView();
+  fightLevel = 90;
+  private jobFilters: JobFilters = {};
+  language: Models.SupportedLanguages = Models.SupportedLanguages[localStorage.getItem("lang") || "en"];
+  selectedPreset: string = undefined;
+  presets: { [name: string]: IPresetTemplate } = {};
+  fflogsSource = true;
+
+  setLang(lang: string) {
+    this.language = Models.SupportedLanguages[lang];
+    localStorage.setItem("lang", lang);
+  }
+
+  loadTemplate(template: Models.IPresetTemplate, holders: Holders) {
+    this.filter = template.filter;
+    this.view = template.view;
+    this.jobFilters = holders.jobs.getAll().reduce((acc, j) => ({
+      ...acc,
+      [j.id]: template.jobFilters[j.job.name] || {}
+    }), {});
+
+  }
+
+  reset() {
+    this.tags = Models.DefaultTags;
+    this.fightLevel = 90;
+    this.sources = [];
+    this.filter = Models.defaultFilter();
+    this.view = Models.defaultView();
+    this.jobFilters = {};
+
+  }
+
+  jobFilter(jobId: string): Models.JobFilter {
+    this.jobFilters[jobId] ||= {
+      abilityCompact: [],
+      abilityHidden: [],
+      filter: {}
+    };
+    return this.jobFilters[jobId];
   }
 
   addTags(t: string[]) {
@@ -84,14 +99,14 @@ export class PresenterManager implements Models.IPresenterData {
       hidden.push(ability);
     }
     if (!value && index >= 0) {
-      hidden.splice(index, 1)
+      hidden.splice(index, 1);
     }
   }
 
   setAbilityCompact(jobId: string, ability: string, value: boolean) {
-    let f = this.jobFilter(jobId);
+    const f = this.jobFilter(jobId);
     f.abilityCompact ||= [];
-    
+
     const compact = f.abilityCompact;
 
     const index = compact.indexOf(ability);
@@ -99,7 +114,7 @@ export class PresenterManager implements Models.IPresenterData {
       compact.push(ability);
     }
     if (!value && index >= 0) {
-      compact.splice(index, 1)
+      compact.splice(index, 1);
     }
   }
 
@@ -108,19 +123,24 @@ export class PresenterManager implements Models.IPresenterData {
   }
 
   setFflogsSource(arg0: "cast" | "damage") {
-    if (this.filter.attacks)
+    if (this.filter.attacks) {
       this.filter.attacks.fflogsSource = arg0;
+    }
   }
 
 
   setSettings(iSettings: ISettings) {
-    if (iSettings.main.defaultFilter)
+    if (iSettings.main.defaultFilter) {
       this.filter = iSettings.main.defaultFilter;
-    if (iSettings.main.defaultView)
+    }
+    if (iSettings.main.defaultView) {
       this.view = iSettings.main.defaultView;
+    }
 
-    if (this.filter && this.filter.attacks)
-      this.filter.attacks.fflogsSource = iSettings.fflogsImport.bossAttacksSource == FFLogsImportBossAttacksSource.Cast ? "cast" : "damage";
+    if (this.filter && this.filter.attacks) {
+      this.filter.attacks.fflogsSource =
+        iSettings.fflogsImport.bossAttacksSource === FFLogsImportBossAttacksSource.Cast ? "cast" : "damage";
+    }
   }
 
   save(storage: Models.IStorage, id: string) {
@@ -128,31 +148,46 @@ export class PresenterManager implements Models.IPresenterData {
       filter: this.filter,
       view: this.view,
       jobFilters: this.jobFilters,
-    })
+    });
   }
 
   load(storage: Models.IStorage, id: string): boolean {
+    this.selectedPreset = id;
     const data = storage.getObject<any>("presenter_" + id);
     if (data) {
-      if (data.filter)
+      if (data.filter) {
         this.filter = data.filter;
-      if (data.view)
+      }
+      if (data.view) {
         this.view = data.view;
-      if (data.jobFilters)
+      }
+      if (data.jobFilters) {
         this.jobFilters = data.jobFilters;
-      if (data.fightLevel)
+      }
+      if (data.fightLevel) {
         this.fightLevel = data.fightLevel;
+      }
     }
     return !!data;
   }
 
-  generatePresetTemplate(holders: Holders) {
+  addPreset(id: string, preset: Models.IPresetTemplate) {
+    const presetName = id?.trim();
+    if (presetName) {
+      this.presets[presetName] = preset;
+    }
+  }
+
+  generatePresetTemplate(holders: Holders): IPresetTemplate {
     const template: IPresetTemplate = Utils.clone({
-      filter: this.filter,
-      view: this.view,
+      filter: Utils.clone(this.filter),
+      view: Utils.clone(this.view),
       jobFilters: Object.entries(this.jobFilters).reduce((acc, v) => {
         const jobMap = holders.jobs.get(v[0]);
-        return { ...acc, [jobMap.job.name]: v[1] }
+        if (jobMap) {
+          acc[jobMap.job.name] = Utils.clone(v[1]);
+        }
+        return acc;
       }, {})
     });
     return template;

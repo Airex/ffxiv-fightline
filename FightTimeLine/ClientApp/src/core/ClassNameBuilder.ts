@@ -1,13 +1,13 @@
 export class ClassNameBuilder {
     private classes: Array<string>;
-    private changed: boolean = false;
+    private changed = false;
 
     constructor(input: string) {
         this.classes = (input || "").split(" ");
     }
 
     add(input: string[]): ClassNameBuilder {
-        for (let s of input) {
+        for (const s of input) {
             if (this.classes.indexOf(s) < 0) {
                 this.classes.push(s);
                 this.changed = true;
@@ -17,7 +17,7 @@ export class ClassNameBuilder {
     }
 
     remove(input: string[]): ClassNameBuilder {
-        for (let s of input) {
+        for (const s of input) {
             const index = this.classes.indexOf(s);
             if (index >= 0) {
                 this.classes.splice(index, 1);
@@ -28,12 +28,14 @@ export class ClassNameBuilder {
     }
 
     toggle(input: string[]): ClassNameBuilder {
-        for (let s of input) {
+        for (const s of input) {
             const index = this.classes.indexOf(s);
-            if (index >= 0)
+            if (index >= 0) {
                 this.classes.splice(index, 1);
-            else
+            }
+            else {
                 this.classes.push(s);
+            }
 
             this.changed = true;
         }
@@ -41,7 +43,7 @@ export class ClassNameBuilder {
     }
 
     set(input: { [value: string]: boolean }): ClassNameBuilder {
-        for (let s in input) {
+        for (const s in input) {
             if (input.hasOwnProperty(s)) {
                 if (input[s]) {
                     this.add([s]);

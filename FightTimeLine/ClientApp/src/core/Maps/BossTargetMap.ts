@@ -8,6 +8,9 @@ export interface IBossTargetMapData {
 }
 
 export class BossTargetMap extends BaseMap<string, DataItem, IBossTargetMapData> {
+
+  target: string;
+
   onDataUpdate(data: IBossTargetMapData): void {
     this.setItem(this.createBossTarget(this.id, data.start, data.end, this.target));
   }
@@ -17,7 +20,7 @@ export class BossTargetMap extends BaseMap<string, DataItem, IBossTargetMapData>
     this.target = target;
     this.applyData(data);
   }
-  target: string;
+
 
   get start(): Date {
     return this.item.start as Date;
@@ -37,13 +40,13 @@ export class BossTargetMap extends BaseMap<string, DataItem, IBossTargetMapData>
 
   createBossTarget(id: string, start: Date, end: Date, target: string): DataItem {
     return {
-      id: id,
-      start: start,
-      end: end,
+      id,
+      start,
+      end,
       group: target,
       className: "targets",
       type: "background",
       content: "",
-    }
+    };
   }
 }

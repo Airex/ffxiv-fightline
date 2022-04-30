@@ -1,8 +1,8 @@
 import { DataItem } from "vis-timeline"
 import * as BaseHolder from "./BaseHolder";
-//import { AbilitySelectionMap } from "../Maps/AbilitySelectionMap";1
+// import { AbilitySelectionMap } from "../Maps/AbilitySelectionMap";
 
-//export class AbilitySelectionHolder extends BaseHolder.BaseHolder<string, DataItem, AbilitySelectionMap> {
+// export class AbilitySelectionHolder extends BaseHolder.BaseHolder<string, DataItem, AbilitySelectionMap> {
 //  updateDate(id: string, time: Date): void {
 //    const found = this.items[id];
 //    if (found === null || found === undefined) {
@@ -15,4 +15,4 @@ import * as BaseHolder from "./BaseHolder";
 //  get length(): number {
 //    return this.values.length;
 //  }
-//}
+// }

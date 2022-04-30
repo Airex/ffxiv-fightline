@@ -1,14 +1,10 @@
 import {
   Directive,
-  EventEmitter,
   ElementRef,
   HostListener,
-  Input,
-  Output
+  Input
 } from "@angular/core";
-
-
-import { Utils } from "../core/Utils"
+import { Utils } from "../core/Utils";
 
 
 enum WheelOperator {
@@ -27,8 +23,8 @@ export class OffsetWheelDirective {
       Utils.formatTime(new Date(Math.max(Math.min(this.handleParse(a).valueOf() - b * 1000, this.getMax()), this.getMin())))
   };
 
-  @Input("min") min: string = "0:0";
-  @Input("max") max: string = "30:0";
+  @Input() min = "0:0";
+  @Input() max = "30:0";
 
   private getMin(): number {
     return this.handleParse(this.min).valueOf() as number;
@@ -46,7 +42,7 @@ export class OffsetWheelDirective {
       (this.el.nativeElement as HTMLInputElement).value = this.handleOperation(
         nativeValue,
         WheelOperator.INCREASE,
-        event.ctrlKey ? 60 : (event.shiftKey? 10 : 1)
+        event.ctrlKey ? 60 : (event.shiftKey ? 10 : 1)
       );
     } else {
       (this.el.nativeElement as HTMLInputElement).value = this.handleOperation(
@@ -55,8 +51,8 @@ export class OffsetWheelDirective {
         event.ctrlKey ? 60 : (event.shiftKey ? 10 : 1)
       );
     }
-    
-    //propagate ngModel changes
+
+    // propagate ngModel changes
     this.el.nativeElement.dispatchEvent(new Event("input"));
     return false;
   }
@@ -75,14 +71,16 @@ export class OffsetWheelDirective {
   }
 
   handleParse(value: string): Date {
-    if (value)
+    if (value) {
       return Utils.getDateFromOffset(value, new Date(946677600000));
-    else
+    }
+    else {
       return new Date(946677600000);
+    }
   }
 
   constructor(private el: ElementRef) {
-    //el.nativeElement.value = this.handleParse(el.nativeElement.value);
+    // el.nativeElement.value = this.handleParse(el.nativeElement.value);
     el.nativeElement.step = 1;
   }
 }

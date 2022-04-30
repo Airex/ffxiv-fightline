@@ -32,6 +32,9 @@ export class SettingsDialogFflogsTab implements OnInit, ISettingTab {
     EU: {
       Chaos: ["Cerberus", "Louisoix", "Moogle", "Omega", "Ragnarok", "Sprigan"],
       Light: ["Lich", "Odin", "Phoenix", "Shiva", "Twintania", "Zodiark"]
+    },
+    OC: {
+      Materia: ["Bismarck", "Ravana", "Sephirot", "Sophia", "Zurvan"]
     }
   }
 
@@ -47,9 +50,9 @@ export class SettingsDialogFflogsTab implements OnInit, ISettingTab {
     ]
   }
 
-  constructor(    
+  constructor(
     private formBuilder: FormBuilder,
-    private settingsService: SettingsService,    
+    private settingsService: SettingsService,
     @Inject(gameServiceToken) public gameService: IGameService) {
 
     Object.keys(this.servers).forEach(r => {
@@ -73,11 +76,12 @@ export class SettingsDialogFflogsTab implements OnInit, ISettingTab {
       bossAttacksSource: new FormControl(settings.fflogsImport.bossAttacksSource),
       characterName: new FormControl(settings.fflogsImport.characterName || ""),
       characterServer: new FormControl(settings.fflogsImport.characterRegion && settings.fflogsImport.characterServer ? (settings.fflogsImport.characterServer + "|" + settings.fflogsImport.characterRegion) : ""),
+      translate: new FormControl(settings.fflogsImport.translate),
     }, {});
   }
-    
+
   get ff() { return this.fflogsForm.controls; }
-  
+
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.container.classes, event.previousIndex, event.currentIndex);
   }
@@ -86,6 +90,7 @@ export class SettingsDialogFflogsTab implements OnInit, ISettingTab {
     settings.fflogsImport.bossAttacksSource = this.ff.bossAttacksSource.value;
     settings.fflogsImport.sortOrderAfterImport = this.container.classes.map(it => it.name);
     settings.fflogsImport.characterName = this.ff.characterName.value;
+    settings.fflogsImport.translate = this.ff.translate.value;
 
     if (this.ff.characterServer.value) {
       const parts = this.ff.characterServer.value.split("|");

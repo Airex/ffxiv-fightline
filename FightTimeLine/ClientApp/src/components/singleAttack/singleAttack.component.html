@@ -19,21 +19,21 @@
       class="description">{{it.attack.description}}</span>
   </div>
 
-  <sidepanel-area header="Description" *ngIf="it.attack.description && it.attack.description.indexOf('\n') >=0">
+  <sidepanel-area header="{{'component.singleAttack.description' | translate}}" *ngIf="it.attack.description && it.attack.description.indexOf('\n') >=0">
     <span style="white-space: pre-line;" class="description">{{it.attack.description}}</span>
   </sidepanel-area>
 
   <div class="sidepanel-full" *ngIf="data.mode === 'default'">
-    <button nz-button nzType="primary" #copyButton (click)="copy(it);copyButton.nzType=null;">Copy</button>
+    <button nz-button nzType="primary" #copyButton (click)="copy(it);copyButton.nzType=null;">{{'component.singleAttack.copy' | translate}}</button>
   </div>
 
-  <sidepanel-area header="Mitigations" *ngIf="defs.length>0">
+  <sidepanel-area header="{{'component.singleAttack.mitigations' | translate}}" *ngIf="defs.length>0">
     <div>
       <table style="width:100%">
         <tr>
           <th></th>
-          <th style="text-align: left;">Mitigation</th>
-          <th style="text-align: left;">Shield</th>
+          <th style="text-align: left;">{{'component.singleAttack.mitigation' | translate}}</th>
+          <th style="text-align: left;">{{'component.singleAttack.shield' | translate}}</th>
         </tr>
         <tr *ngFor="let d of defStats" class="">
           <td>
@@ -47,7 +47,7 @@
     </div>
   </sidepanel-area>
 
-  <sidepanel-area header="Defensives" [extra]="typeSelectorTpl" *ngIf="defs.length > 0">
+  <sidepanel-area header="{{'component.singleAttack.defensives' | translate}}" [extra]="typeSelectorTpl" *ngIf="defs.length > 0">
     <div class="job-container">
       <div class="job" *ngFor="let d of defs">
         <div class="jobHead">
@@ -70,15 +70,15 @@
   <ng-template #typeSelectorTpl>
     <button nz-button [nzType]="defSolo?'primary':null"
       (click)="$event.stopPropagation();$event.preventDefault();defSolo=!defSolo" [nzSize]="'small'">
-      Solo
+      {{'component.singleAttack.solo' | translate}}
     </button>
     <button nz-button [nzType]="defParty?'primary':null"
       (click)="$event.stopPropagation();$event.preventDefault();defParty=!defParty" [nzSize]="'small'">
-      Party
+      {{'component.singleAttack.party' | translate}}
     </button>
   </ng-template>
 
-  <sidepanel-area header="Available Defensives" [extra]="typeSelectorAvTpl" *ngIf="availDefs.length>0">
+  <sidepanel-area header="{{'component.singleAttack.availableDefensives' | translate}}" [extra]="typeSelectorAvTpl" *ngIf="availDefs.length>0">
     <div class="job-container">
       <div class="job" *ngFor="let d of availDefs ">
         <div class="jobHead">
@@ -96,15 +96,15 @@
   <ng-template #typeSelectorAvTpl>
     <button nz-button [nzType]="defSoloAv?'primary':null"
       (click)="$event.stopPropagation();$event.preventDefault();defSoloAv=!defSoloAv" [nzSize]="'small'">
-      Solo
+      {{'component.singleAttack.solo' | translate}}
     </button>
     <button nz-button [nzType]="defPartyAv?'primary':null"
       (click)="$event.stopPropagation();$event.preventDefault();defPartyAv=!defPartyAv" [nzSize]="'small'">
-      Party
+      {{'component.singleAttack.party' | translate}}
     </button>
   </ng-template>
 
-  <sidepanel-area header="Similar" [extra]="similarSelectAll" *ngIf="similar.length > 0">
+  <sidepanel-area header="{{'component.singleAttack.similar' | translate}}" [extra]="similarSelectAll" *ngIf="similar.length > 0">
     <div class="similar">
       <ul style="padding-left: 10px; display: block">
         <li style="list-style-type: none; display: contents" *ngFor="let it of similar" class="similar-item">
@@ -118,11 +118,10 @@
     </div>
   </sidepanel-area>
   <ng-template #similarSelectAll>
-    <a *ngIf="data.mode === 'default'" class="similarLink" (click)="similarAllClick()"><span class="">Select
-        all</span></a>
+    <a *ngIf="data.mode === 'default'" class="similarLink" (click)="similarAllClick()"><span class="">{{'component.singleAttack.selectAll' | translate}}</span></a>
   </ng-template>
 
-  <sidepanel-area header="FFLogsData" *ngIf="ff && ff.length">
+  <sidepanel-area header="{{'component.singleAttack.fflogsData' | translate}}" *ngIf="ff && ff.length">
     <div class="job-container">
       <div class="job" *ngFor="let d of ff">
         <div class="jobHead">

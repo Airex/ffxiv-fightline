@@ -14,7 +14,7 @@ export class DescriptiveTemplate extends AttackRowExportTemplate {
     return "Descriptive";
   }
 
-  getColumns(context:ExportTemplateContext): IColumnTemplate<ExportAttack>[] {
+  getColumns(context: ExportTemplateContext): IColumnTemplate<ExportAttack>[] {
     return [
       new TimeColumn(),
       new AttackNameColumn(context.presenter),

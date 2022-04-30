@@ -1,9 +1,21 @@
 import * as BaseHolder from "./BaseHolder";
-import { DataSetDataGroup, DataGroup } from "vis-timeline"
+import { DataSetDataGroup, DataGroup } from "vis-timeline";
 import { AbilityMap } from "../Maps/AbilityMap";
 import * as Models from "../Models";
 import { JobMap } from "../Maps/JobMap";
-import { settings } from "../Jobs/FFXIV/shared";
+
+const filterMap: { [ab in keyof Models.IAbilityFilter]: Models.AbilityType | Models.AbilityType[] } =
+{
+  selfDefence: [Models.AbilityType.SelfDefense, Models.AbilityType.SelfShield],
+  partyDefence: [Models.AbilityType.PartyDefense, Models.AbilityType.PartyShield, Models.AbilityType.TargetDefense],
+  selfDamageBuff: Models.AbilityType.SelfDamageBuff,
+  partyDamageBuff: Models.AbilityType.PartyDamageBuff,
+  damage: Models.AbilityType.Damage,
+  healingBuff: Models.AbilityType.HealingBuff,
+  healing: Models.AbilityType.Healing,
+  utility: Models.AbilityType.Utility,
+  enmity: Models.AbilityType.Enmity,
+};
 
 export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup, AbilityMap> {
 
@@ -35,7 +47,7 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
     return this.values.some((b: AbilityMap) =>
       group === b.id &&
       b.ability.settings &&
-      b.ability.settings.some(s => s.name === settings.changesTarget.name) &&
+      b.ability.settings.some(s => s.name === Models.settings.changesTarget.name) &&
       b.job.id !== "boss");
   }
 
@@ -69,50 +81,60 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
     this.values.forEach(value => {
       const jobMap = value.job;
       const jobFilter = jobMap.presenter.jobFilter(jobMap.id);
-      const visible = this.abilityFilter(value, jobMap.presenter.filter?.abilities, jobFilter?.filter, jobMap, used, jobMap.presenter.fightLevel);
+      const visible = this.abilityFilter(
+        value,
+        jobMap.presenter.filter?.abilities,
+        jobFilter?.filter,
+        used,
+        jobMap.presenter.fightLevel);
       value.applyData({ filtered: !visible });
     });
     this.update(this.values);
   }
 
-  private abilityFilter(value: AbilityMap, filter: Models.IAbilityFilter, jobFilter: Models.IAbilityFilter, jobMap: JobMap, used: (a) => boolean, fightLevel: number): boolean {
-    const filterUnit = (aType: Models.AbilityType | Models.AbilityType[], gf: boolean, jf: boolean) => {
-      let visible = false;
-      const valueArray = Array.isArray(aType) ? aType : [aType];
-      if (valueArray.some(it => value.hasValue(it))) {
-        visible = gf;
-        if (jf !== undefined)
-          visible = jf;
-      }
-      return visible;
-    };
-    let visible: boolean;
-    jobFilter = jobFilter || {};
+  private abilityFilter(
+    value: AbilityMap,
+    filter: Models.IAbilityFilter,
+    jobFilter: Models.IAbilityFilter,
+    used: (a: string) => boolean,
+    fightLevel: number): boolean {
+    const filterUnit = (f: Models.IAbilityFilter, jf: Models.IAbilityFilter) =>
+      (aType: Models.AbilityType | Models.AbilityType[], key: keyof Models.IAbilityFilter) => {
+        let v = false;
+        const valueArray = Array.isArray(aType) ? aType : [aType];
+        if (valueArray.some(it => value.hasValue(it))) {
+          v = f[key];
+          if (jf[key] !== undefined) {
+            v = jf[key];
+          }
+        }
+        return v;
+      };
+
     if (!filter || !value.ability) {
-      visible = true;
-    } else {
-      if (value.ability.levelAcquired > fightLevel)
-        return false;
-
-      visible = filterUnit([Models.AbilityType.SelfDefense, Models.AbilityType.SelfShield], filter.selfDefence, jobFilter.selfDefence);
-      visible ||= filterUnit([Models.AbilityType.PartyDefense, Models.AbilityType.PartyShield, Models.AbilityType.TargetDefense], filter.partyDefence, jobFilter.partyDefence);
-      visible ||= filterUnit(Models.AbilityType.SelfDamageBuff, filter.selfDamageBuff, jobFilter.selfDamageBuff);
-      visible ||= filterUnit(Models.AbilityType.PartyDamageBuff, filter.partyDamageBuff, jobFilter.partyDamageBuff);
-      visible ||= filterUnit(Models.AbilityType.Damage, filter.damage, jobFilter.damage);
-      visible ||= filterUnit(Models.AbilityType.HealingBuff, filter.healingBuff, jobFilter.healingBuff);
-      visible ||= filterUnit(Models.AbilityType.Healing, filter.healing, jobFilter.healing);      
-      visible ||= filterUnit(Models.AbilityType.Utility, filter.utility, jobFilter.utility);
-      visible ||= filterUnit(Models.AbilityType.Enmity, filter.enmity, jobFilter.enmity);
-
-      if (!filter.unused ||
-        (jobFilter.unused !== undefined && !jobFilter.unused)) {
-        if (!jobFilter.unused)
-          visible = visible && used(value.id);
-      }
-
+      return true;
     }
 
-    // visible = visible && !value.hidden;
+    if (value.ability.levelAcquired > fightLevel) {
+      return false;
+    }
+
+    jobFilter = jobFilter || {};
+    const filterFn = filterUnit(filter, jobFilter);
+
+    let visible = false;
+
+    for (const fm of Object.keys(filterMap)) {
+      visible ||= filterFn(filterMap[fm], fm as keyof Models.IAbilityFilter);
+      if (visible) { break; }
+    }
+
+    if (!filter.unused ||
+      (jobFilter.unused !== undefined && !jobFilter.unused)) {
+      if (!jobFilter.unused) {
+        visible = visible && used(value.id);
+      }
+    }
 
     return visible;
   }

@@ -1,54 +1,51 @@
 <div class="filter-container">
   <div class="settings-filter">
     <div class="settings-header">
-      Ability types:
+      {{"settings.filter.header.abilityTypes" | translate}}:
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="selfDefensive">Self Defense</label>
+      <label nz-checkbox [(ngModel)]="selfDefensive">{{"abilityFilter.selfDefence" | translate}}</label>
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="partyDefensive">Party Defense</label>
+      <label nz-checkbox [(ngModel)]="partyDefensive">{{"abilityFilter.partyDefence" | translate}}</label>
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="selfDamageBuff">Self Damage Buff</label>
+      <label nz-checkbox [(ngModel)]="selfDamageBuff">{{"abilityFilter.selfDamageBuff" | translate}}</label>
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="partyDamageBuff">Party Damage Buff</label>
+      <label nz-checkbox [(ngModel)]="partyDamageBuff">{{"abilityFilter.partyDamageBuff" | translate}}</label>
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="damage">OGCD Damage</label>
+      <label nz-checkbox [(ngModel)]="damage">{{"abilityFilter.ogcdDamage" | translate}}</label>
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="healing">Healing</label>
+      <label nz-checkbox [(ngModel)]="healing">{{"abilityFilter.healing" | translate}}</label>
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="healingBuff">Healing Buff</label>
+      <label nz-checkbox [(ngModel)]="healingBuff">{{"abilityFilter.healingBuff" | translate}}</label>
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="utility">Utility</label>
+      <label nz-checkbox [(ngModel)]="utility">{{"abilityFilter.utility" | translate}}</label>
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="enmity">Enmity</label>
+      <label nz-checkbox [(ngModel)]="enmity">{{"abilityFilter.enmity" | translate}}</label>
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="pet">Pets</label>
-    </div>
-    <div>
-      <label nz-checkbox [(ngModel)]="unused">Show unused</label>
+      <label nz-checkbox [(ngModel)]="unused">{{"abilityFilter.showUnused" | translate}}</label>
     </div>
   </div>
   <div class="settings-filter">
     <div class="settings-header">
-      Boss attack types:
+      {{"settings.filter.header.bossAttackTypes" | translate}}:
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="isMagical">Magical damage</label>
+      <label nz-checkbox [(ngModel)]="isMagical">{{"damageType.magical" | translate}}</label>
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="isPhysical">Physical damage</label>
+      <label nz-checkbox [(ngModel)]="isPhysical">{{"damageType.physical" | translate}}</label>
     </div>
     <div>
-      <label nz-checkbox [(ngModel)]="isUnaspected">Unaspected damage</label>
+      <label nz-checkbox [(ngModel)]="isUnaspected">{{"damageType.unaspected" | translate}}</label>
     </div>
   </div>
 </div>
