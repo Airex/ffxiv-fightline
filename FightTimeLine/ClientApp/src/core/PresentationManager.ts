@@ -148,6 +148,7 @@ export class PresenterManager implements Models.IPresenterData {
       filter: this.filter,
       view: this.view,
       jobFilters: this.jobFilters,
+      name: this.selectedPreset
     });
   }
 
@@ -167,6 +168,9 @@ export class PresenterManager implements Models.IPresenterData {
       if (data.fightLevel) {
         this.fightLevel = data.fightLevel;
       }
+      if (data.name){
+        this.selectedPreset = data.name;
+      }
     }
     return !!data;
   }
@@ -180,12 +184,12 @@ export class PresenterManager implements Models.IPresenterData {
 
   generatePresetTemplate(holders: Holders): IPresetTemplate {
     const template: IPresetTemplate = Utils.clone({
-      filter: Utils.clone(this.filter),
-      view: Utils.clone(this.view),
+      filter: this.filter,
+      view: this.view,
       jobFilters: Object.entries(this.jobFilters).reduce((acc, v) => {
         const jobMap = holders.jobs.get(v[0]);
         if (jobMap) {
-          acc[jobMap.job.name] = Utils.clone(v[1]);
+          acc[jobMap.job.name] = v[1];
         }
         return acc;
       }, {})

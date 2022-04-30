@@ -59,6 +59,10 @@ export class FilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.presenterManager.presets = this.storage.getObject("presets") || {};
+    if (Array.isArray(this.presenterManager.presets)) {
+      // lets fixupold format
+      this.presenterManager.presets = {};
+    }
   }
 
 
