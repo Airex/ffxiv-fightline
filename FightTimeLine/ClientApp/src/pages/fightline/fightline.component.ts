@@ -715,13 +715,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   attachPreset(data: { name: string, preset: M.IPresetTemplate }) {
-    this.fightLineController.execute({
-      name: "attachPreset",
-      params: {
-        id: data.name,
-        preset: data.preset
-      }
-    });
+    this.fightLineController.attachPreset(data.name, data.preset);
   }
 
   exportData(format) {

@@ -22,7 +22,6 @@ import { IOverlapCheckData } from "./Maps/BaseMap";
 import { calculateDuration, calculateOffset } from "./Durations";
 
 export class FightTimeLineController {
-
   constructor(
     private startDate: Date,
     private idgen: IdGenerator,
@@ -149,6 +148,10 @@ export class FightTimeLineController {
   redo() {
     this.commandStorage.redo();
     this.applyFilter();
+  }
+
+  attachPreset(name, preset) {
+    this.commandStorage.execute(new C.AttachPresetCommand(name, preset));
   }
 
   addJob(
