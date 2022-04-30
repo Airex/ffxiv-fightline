@@ -14,7 +14,8 @@ FROM  node as build
 WORKDIR /app
 
 COPY . .
-RUN dotnet publish ./FightTimeLine.csproj -c Release -o /webhost
+
+RUN dotnet publish ./FightTimeLine/FightTimeLine.csproj -c Release -o /webhost
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app
