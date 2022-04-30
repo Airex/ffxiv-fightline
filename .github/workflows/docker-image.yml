@@ -24,4 +24,4 @@ jobs:
         with:
           push: true
           tags: skachkovsky/ftl:latest
-          file: "{context}/FightTimeLine/Dockerfile"
+          file: "FightTimeLine/Dockerfile"
