@@ -63,9 +63,9 @@ export class UndoRedoController {
         delete this.redoCommands;
         this.redoCommands = new Array<Command>();
         this.changed.emit();
-        if (fireExecuted && this.fireExecuted) {
-          this.executed.emit(command.serialize());
-        }
+      }
+      if (fireExecuted && this.fireExecuted) {
+        this.executed.emit(command.serialize());
       }
     } catch (error) {
       console.error(error);
