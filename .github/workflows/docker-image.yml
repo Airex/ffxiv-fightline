@@ -1,9 +1,5 @@
 name: Docker Image CI
 
-defaults:
-  run:
-    working-directory: ./FightTimeLine
-
 on:
   push:
     branches:
@@ -28,4 +24,4 @@ jobs:
         with:
           push: true
           tags: skachkovsky/ftl:latest
-          file: "Dockerfile"
+          file: FightTimeLine/Dockerfile
