@@ -345,11 +345,11 @@ export interface ISyncSetting {
 export type Combined = ISyncSetting | ISyncSettingGroup;
 
 export const isSetting = (c: Combined): c is ISyncSetting => {
-  return !!( c as ISyncSetting).type;
+  return !!(c as ISyncSetting).type;
 };
 
 export const isSettingGroup = (c: Combined): c is ISyncSettingGroup => {
-  return !!( c as ISyncSettingGroup).operation;
+  return !!(c as ISyncSettingGroup).operation;
 };
 
 export enum SyncOperation {
@@ -393,6 +393,9 @@ export interface JobFilter {
   isCompact?: boolean;
   abilityCompact?: string[];
   abilityHidden?: string[];
+  abilityOrder?: {
+    [abilityName: string]: number
+  };
 }
 
 export type JobFilters = {

@@ -186,10 +186,10 @@ export class PresenterManager implements Models.IPresenterData {
     const template: IPresetTemplate = Utils.clone({
       filter: this.filter,
       view: this.view,
-      jobFilters: Object.entries(this.jobFilters).reduce((acc, v) => {
-        const jobMap = holders.jobs.get(v[0]);
+      jobFilters: Object.entries(this.jobFilters).reduce((acc, [id, filter]) => {
+        const jobMap = holders.jobs.get(id);
         if (jobMap) {
-          acc[jobMap.job.name] = v[1];
+          acc[jobMap.job.name] = filter;
         }
         return acc;
       }, {})

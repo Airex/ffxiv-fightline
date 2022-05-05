@@ -25,6 +25,7 @@ export class FilterComponent implements OnInit {
   @Output() public changed: EventEmitter<string> = new EventEmitter();
   @Output() public attachPresetEvent: EventEmitter<{ name: string, preset: IPresetTemplate }> = new EventEmitter();
   @Input() public fromFFlogs = false;
+  @Input() public fightId: string;
 
   constructor(
     private visStorage: VisStorageService,
@@ -58,9 +59,10 @@ export class FilterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // todo: fix this initilization
     this.presenterManager.presets = this.storage.getObject("presets") || {};
     if (Array.isArray(this.presenterManager.presets)) {
-      // lets fixupold format
+      // lets fixup old format
       this.presenterManager.presets = {};
     }
   }
@@ -93,7 +95,7 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  attachPreset(){
+  attachPreset() {
     this.attachPresetEvent.emit({
       name: this.presenterManager.selectedPreset,
       preset: this.presenterManager.generatePresetTemplate(this.visStorage.holders)
@@ -151,6 +153,8 @@ export class FilterComponent implements OnInit {
       this.visStorage.holders.abilities.update(abs.map(ab => { ab.applyData(); return ab; }));
       this.visStorage.holders.jobs.update(jobs.map(j => { j.applyData(); return j; }));
       this.visStorage.holders.itemUsages.update(items.map(i => { i.applyData(); return i; }));
+
+      this.presenterManager.save(this.storage, this.fightId);
     }
   }
 }

@@ -28,9 +28,16 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     this.job = job;
     this.ability = ability;
     this.isStance = isStance;
-    this.index = this.job.order + (++AbilityMap.abilityIndex) / 10000;
+    this.index = this.job.order + this.getOrder(presenter, job, ability, (++AbilityMap.abilityIndex) / 10000);
 
     this.applyData(Object.assign({}, data) as IAbilityMapData);
+  }
+
+  private getOrder(presenter, job, ability, def) {
+    const jf = presenter.jobFilter(job.id);
+    const abOrder = jf?.abilityOrder;
+    const order = abOrder && abOrder[ability.name];
+    return order || def;
   }
 
   public get isDef(): boolean {
@@ -142,7 +149,7 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
       className: this.buildClass({ compact: this.isCompact || this.job.isCompact || this.presenter.view.compactView }),
       visible: !(this.hidden || data.filtered || this.job.collapsed),
       content: el,
-      value: this.index
+      value: this.job.order + this.getOrder(this.presenter, this.job, this.ability, this.index - Math.trunc(this.index))
     } as DataGroup;
   }
 

@@ -137,10 +137,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
       if (fromJob) {
         const toJob = this.visStorage.holders.jobs.get(to.id);
         if (toJob) {
-          event.handler(true);
+          event.handler(false);
           const fromAbs = this.visStorage.holders.abilities.getByParentId(fromJob.id);
           fromAbs.forEach(ab => {
-            ab.applyData
           });
         }
       }
@@ -151,6 +150,11 @@ export class FightLineComponent implements OnInit, OnDestroy {
           const ind = abFrom.index;
           abFrom.index = abTo.index;
           abTo.index = ind;
+          const jf = this.presenterManager.jobFilter(abTo.job.id);
+          jf.abilityOrder ||= {};
+          jf.abilityOrder[abTo.ability.name] = abTo.index - Math.trunc(abTo.index);
+          jf.abilityOrder[abFrom.ability.name] = abFrom.index - Math.trunc(abFrom.index);
+          this.presenterManager.save(this.storage, this.fightId);
           event.handler(true);
         }
       }

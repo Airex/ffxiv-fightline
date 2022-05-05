@@ -43,7 +43,7 @@
     </nz-button-group>
   </span>
   <span style="margin-left: 10px">
-    <abilityFilter #filter [fromFFlogs]="!!fflogsCode" (changed)="updateFilter($event)" (attachPresetEvent)="attachPreset($event)"></abilityFilter>
+    <abilityFilter #filter [fightId]="fightId" [fromFFlogs]="!!fflogsCode" (changed)="updateFilter($event)" (attachPresetEvent)="attachPreset($event)"></abilityFilter>
   </span>
   <span style="margin-left: 10px">
     <viewMenu #view (changed)="updateView($event)"></viewMenu>
