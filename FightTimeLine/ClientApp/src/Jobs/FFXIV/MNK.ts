@@ -1,5 +1,5 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, MapStatuses } from "../../core/Models";
+import { IJob, Role, AbilityType, MapStatuses, IJobTemplate } from "../../core/Models";
 import { getAbilitiesFrom, medicine, meleeSharedAbilities } from "./shared";
 
 
@@ -152,15 +152,15 @@ const abilities = [
     ...getAbilitiesFrom(meleeSharedAbilities),
     medicine.Strength
 ];
-export const MNK: IJob = {
-    name: "MNK",
+export const MNK: IJobTemplate = {
+
     translation: {
       de: "M\u00D6N",
       jp: "MNK",
       en: "MNK",
       fr: "MOI"
     },
-    fullName: "Monk",
+
     fullNameTranslation: {
       de: "M\u00F6nch",
       jp: "\u30E2\u30F3\u30AF",

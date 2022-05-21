@@ -33,6 +33,10 @@ export const getAbilitiesFrom = (arr: IAbilities): IAbility[] => {
   return Object.values(arr);
 };
 
+export function toAbilities(abs: IAbility[]) {
+  return abs.reduce((acc, c) => ({ ...acc, [c.name]: c }), {});
+}
+
 export const tankSharedAbilities: IAbilities = {
   Rampart: {
     name: "Rampart",

@@ -52,4 +52,8 @@ export abstract class BaseMap<TKey, TItem extends { className?: string }, TData>
       Object.assign(this.item, item);
     }
   }
+
+  refresh(){
+    this.applyData({} as TData);
+  }
 }

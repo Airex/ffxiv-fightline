@@ -138,7 +138,7 @@ export class FilterComponent implements OnInit {
   levelChanged(l: number) {
     this.presenterManager.setFightLevel(l);
     setTimeout(() => {
-      this.changed.emit();
+      this.changed.emit("level");
     });
   }
 

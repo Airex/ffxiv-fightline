@@ -84,7 +84,8 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
   createAbilityUsage(id: string, ability: AbilityMap, data: IAbilityUsageMapData): DataItem {
     const start = data.start;
     const cd = data.cooldown || ability.ability.cooldown;
-    const end = new Date(start.valueOf() as number + cd * 1000);
+    const duration = calculateDuration(ability.ability);
+    const end = new Date(start.valueOf() as number + Math.max(cd, duration) * 1000);
 
     let title = `<div><img class='tooltipAbilityIcon' src='${ability.ability.icon}'/><span>${Utils.formatTime(start)} - ${Utils.formatTime(end)}</span><span></span></div>`;
     const note = this.getSettingData("note");

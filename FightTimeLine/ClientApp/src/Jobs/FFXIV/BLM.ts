@@ -1,6 +1,6 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, IAbility, DamageType, JobStatuses, MapStatuses } from "../../core/Models";
-import { getAbilitiesFrom, casterSharedAbilities, medicine } from "./shared";
+import { IJob, Role, AbilityType, IAbility, DamageType, JobStatuses, MapStatuses, IJobTemplate } from "../../core/Models";
+import { getAbilitiesFrom, casterSharedAbilities, medicine, toAbilities } from "./shared";
 
 
 const statuses = MapStatuses({
@@ -19,7 +19,7 @@ const statuses = MapStatuses({
   }
 });
 
-const abilities =  [
+const abilities = [
   {
     name: "Transpose",
     translation: {
@@ -127,15 +127,15 @@ const abilities =  [
   ...getAbilitiesFrom(casterSharedAbilities),
   medicine.Intelligence
 ] as IAbility[];
-export const BLM: IJob = {
-  name: "BLM",
+export const BLM: IJobTemplate = {
+
   translation: {
     de: "SMA",
     jp: "BLM",
     en: "BLM",
     fr: "MNO"
   },
-  fullName: "Black Mage",
+
   fullNameTranslation: {
     de: "Schwarzmagier",
     jp: "\u9ED2\u9B54\u9053\u58EB",

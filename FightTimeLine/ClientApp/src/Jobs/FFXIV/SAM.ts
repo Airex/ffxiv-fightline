@@ -1,5 +1,5 @@
 import { SharedOverlapStrategy } from "src/core/Overlap";
-import { IJob, Role, AbilityType, MapStatuses } from "../../core/Models";
+import { IJob, Role, AbilityType, MapStatuses, IJobTemplate } from "../../core/Models";
 import { getAbilitiesFrom, meleeSharedAbilities, medicine } from "./shared";
 
 const statuses = MapStatuses({
@@ -127,15 +127,15 @@ const abilities = [
   ...getAbilitiesFrom(meleeSharedAbilities),
   medicine.Strength
 ];
-export const SAM: IJob = {
-  name: "SAM",
+export const SAM: IJobTemplate = {
+
   translation: {
     de: "SAM",
     jp: "SAM",
     en: "SAM",
     fr: "SAM"
   },
-  fullName: "Samurai",
+
   fullNameTranslation: {
     de: "Samurai",
     jp: "\u4F8D",

@@ -1,5 +1,5 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, DamageType, MapStatuses } from "../../core/Models";
+import { IJob, Role, AbilityType, DamageType, MapStatuses, IJobTemplate } from "../../core/Models";
 import { getAbilitiesFrom, casterSharedAbilities, medicine } from "./shared";
 
 const statuses = MapStatuses({
@@ -109,19 +109,19 @@ const abilities = [
     ...getAbilitiesFrom(casterSharedAbilities),
     medicine.Intelligence
 ];
-export const RDM: IJob = {
-    name: "RDM",
+export const RDM: IJobTemplate = {
+
     translation: {
       de: "RMA",
       jp: "RDM",
       en: "RDM",
       fr: "MRG"
     },
-    fullName: "Red Mage",
+
     fullNameTranslation: {
       de: "Rotmagier",
       jp: "\u8D64\u9B54\u9053\u58EB",
-      en: "red mage",
+      en: "Red Mage",
       fr: "mage rouge"
     },
     role: Role.Caster,

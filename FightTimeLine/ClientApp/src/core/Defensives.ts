@@ -193,7 +193,9 @@ export type MitigationForAttack = { name: string; id: string; mitigation: number
 export function calculateMitigationForAttack(
   holders: H.Holders,
   defs: DefsCalcResult,
-  attack: { offset: string, type?: M.DamageType | number }): MitigationForAttack[] {
+  attack: { offset: string, type?: M.DamageType | number }
+): MitigationForAttack[] {
+
   const abs: DefsCalcResultAbility[] = defs.reduce((ac, j) => {
     return [...ac, ...j.abilities];
   }, []);

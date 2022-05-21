@@ -25,14 +25,30 @@ export interface IJob {
   fullName?: string;
   fullNameTranslation?: Translation;
   icon?: string;
-  abilities: IAbility[];
+  abilities: { [name: string]: IAbility };
   role: Role;
-  baseClass?: string;
   pets?: IPet[];
   defaultPet?: string;
   stances?: IStance[];
-  fraction?: IFraction;
-  settings?: IAbilitySetting[];
+}
+
+export interface IJobTemplate {
+  translation?: Translation;
+  fullNameTranslation?: Translation;
+  abilities: IAbility[];
+  role: Role;
+  pets?: IPet[];
+  defaultPet?: string;
+  stances?: IStance[];
+  traits?: ITrait[];
+}
+
+export type TraitFunction = (job: IJob) => void;
+
+export interface ITrait {
+  level: number;
+  name: string;
+  apply: TraitFunction;
 }
 
 export interface IJobStats {

@@ -825,7 +825,14 @@ export class FightTimeLineController {
       this.presenterManager.filter = input;
     }
 
-    if (!source || source === 'ability') {
+    if (source === "level") {
+      this.gameService.jobRegistry.setLevel(this.presenterManager.fightLevel);
+      this.holders.jobs.getAll().forEach(j => {
+        j.job = this.gameService.jobRegistry.getJob(j.job.name);
+      });
+    }
+
+    if (!source || source === 'ability' || source === "level") {
       if (this.presenterManager.filter?.abilities) {
         this.holders.abilities.applyFilter(
           (val) => this.holders.itemUsages.getAll().some((item) => item.ability.id === val)
@@ -833,11 +840,16 @@ export class FightTimeLineController {
       }
     }
 
-    if (!source || source === 'boss') {
-      if (this.presenterManager.filter && this.presenterManager.filter.attacks) {
+    if (!source || source === 'boss' || source === "level") {
+      if (this.presenterManager.filter?.attacks) {
         this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
       }
     }
+
+    if (source === "level") {
+      this.holders.itemUsages.refresh();
+    }
+
     this.updateBuffHeatmap(this.presenterManager.view.buffmap, null);
   }
 

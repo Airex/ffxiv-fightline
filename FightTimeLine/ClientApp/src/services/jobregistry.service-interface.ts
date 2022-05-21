@@ -9,6 +9,8 @@ export interface IJobRegistryService {
   getAbilityForJob(jobName: string, abilityName: string): IAbility;
 
   getStanceAbilityForJob(jobName: string, abilityName: string): IAbility;
+
+  setLevel(level: number);
 }
 
 

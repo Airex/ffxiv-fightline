@@ -1,6 +1,7 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, IAbility, MapStatuses, IMitigator, MitigationVisitorContext, settings } from "../../core/Models";
-import { getAbilitiesFrom, rangeSharedAbilities, medicine } from "./shared";
+import { IJob, Role, AbilityType, IAbility, MapStatuses, IMitigator, MitigationVisitorContext, settings, IJobTemplate, ITrait } from "../../core/Models";
+import { getAbilitiesFrom, rangeSharedAbilities, medicine, toAbilities } from "./shared";
+import { abilityTrait } from "./traits";
 
 class ImprovisationFinishModifier implements IMitigator {
   constructor(private value: number) {
@@ -55,7 +56,7 @@ const abilities: IAbility[] = [
       en: "Shield Samba",
       fr: "Samba protectrice"
     },
-    cooldown: 90,
+    cooldown: 120,
     xivDbId: "16012",
     statuses: [statuses.shieldSamba],
     abilityType: AbilityType.PartyDefense,
@@ -174,15 +175,25 @@ const abilities: IAbility[] = [
   ...getAbilitiesFrom(rangeSharedAbilities),
   medicine.Dexterity
 ];
-export const DNC: IJob = {
-  name: "DNC",
+
+const traits: ITrait[]  = [
+  {
+    level: 88,
+    name: "Enhanced Shield Samba",
+    apply: abilityTrait("Shield Samba", ab => ab.cooldown = 90)
+  }
+];
+
+
+export const DNC: IJobTemplate = {
+
   translation: {
     de: "T\u00C4N",
     jp: "DNC",
     en: "DNC",
     fr: "DNS"
   },
-  fullName: "Dancer",
+
   fullNameTranslation: {
     de: "T\u00E4nzer",
     jp: "\u8E0A\u308A\u5B50",
@@ -190,7 +201,8 @@ export const DNC: IJob = {
     fr: "Danseur"
   },
   role: Role.Range,
-  abilities
+  abilities,
+  traits
 };
 
 

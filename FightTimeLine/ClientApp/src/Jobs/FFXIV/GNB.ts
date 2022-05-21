@@ -1,6 +1,7 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, DamageType, IAbility, MapStatuses, settings } from "../../core/Models";
-import { getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
+import { IJob, Role, AbilityType, DamageType, IAbility, MapStatuses, settings, IJobTemplate, ITrait } from "../../core/Models";
+import { getAbilitiesFrom, tankSharedAbilities, medicine, toAbilities } from "./shared";
+import { abilityRemovedTrait } from "./traits";
 
 const statuses = MapStatuses({
   noMercy: {
@@ -176,8 +177,7 @@ const abilities = [
     statuses: [statuses.heartOfStone],
     abilityType: AbilityType.TargetDefense,
     settings: [settings.target],
-    levelAcquired: 68,
-    levelRemoved: 82
+    levelAcquired: 68
   },
   {
     name: "Heart of Corundum",
@@ -218,7 +218,6 @@ const abilities = [
     cooldown: 30,
     xivDbId: "16144",
     abilityType: AbilityType.Damage,
-    levelRemoved: 80,
     levelAcquired: 18
   },
   {
@@ -237,15 +236,30 @@ const abilities = [
   ...getAbilitiesFrom(tankSharedAbilities),
   medicine.Strength
 ] as IAbility[];
-export const GNB: IJob = {
-  name: "GNB",
+
+const traits: ITrait[] = [
+  {
+    name: "Danger Zone Mastery",
+    level: 80,
+    apply: abilityRemovedTrait("Danger Zone", 80)
+  },
+  {
+    name: "Heart of Stone Mastery",
+    level: 82,
+    apply: abilityRemovedTrait("Heart of Stone", 82)
+  },
+
+];
+
+export const GNB: IJobTemplate = {
+
   translation: {
     de: "REV",
     jp: "GNB",
     en: "GNB",
     fr: "PSB"
   },
-  fullName: "Gunbreaker",
+
   fullNameTranslation: {
     de: "Revolverklinge",
     jp: "\u30AC\u30F3\u30D6\u30EC\u30A4\u30AB\u30FC",
@@ -253,7 +267,8 @@ export const GNB: IJob = {
     fr: "Pistosabreur"
   },
   role: Role.Tank,
-  abilities
+  abilities,
+  traits
 };
 
 

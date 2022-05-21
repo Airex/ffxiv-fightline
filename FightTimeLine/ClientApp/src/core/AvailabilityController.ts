@@ -69,7 +69,7 @@ export class AvailabilityController {
   }
 
   private splitRange(ranges: Range[], atIndex: number, splitter: Range): Range[] {
-    const newItem =  { start: splitter.end, end: ranges[atIndex].end } as Range;
+    const newItem = { start: splitter.end, end: ranges[atIndex].end } as Range;
     ranges[atIndex].end = splitter.start;
     ranges.push(newItem);
     return ranges;
@@ -121,7 +121,7 @@ export class AvailabilityController {
 
     const result = ranges.map((value) => {
       const id = this.idgen.getNextId(M.EntryType.AbilityAvailability);
-      const iAbilityAvailabilityMapData =  (({
+      const iAbilityAvailabilityMapData = (({
         start: value.start,
         end: value.end,
         available: false
@@ -138,7 +138,10 @@ export class AvailabilityController {
       ...this.getDependencies(deps, it.job),
       ...this.holders.itemUsages.getByAbility(it.id),
       {
-        startAsNumber: this.startDate.valueOf() + 30 * 60 * 1000 + it.ability.cooldown * 1000 + calculateDuration(it.ability) * 1000
+        startAsNumber:
+          this.startDate.valueOf() + 30 * 60 * 1000 +
+          it.ability.cooldown * 1000 +
+          calculateDuration(it.ability) * 1000
       }
     ].sort((a, b) => (a.startAsNumber) - (b.startAsNumber));
     this.holders.abilityAvailability.removeForAbility(it.id);

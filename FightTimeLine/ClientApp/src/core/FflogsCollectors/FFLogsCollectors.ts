@@ -38,7 +38,7 @@ export class AbilityUsagesCollector extends BaseCollector {
   jobs: { [name: string]: M.IJob } = {};
 
   detectAbility(job: M.IJob, event: any): { offset: number, name: string } {
-    const data = job.abilities.map(a => a.detectStrategy.process(event)).filter(a => !!a);
+    const data = Object.values(job.abilities).map(a => a.detectStrategy.process(event)).filter(a => !!a);
     if (data.length > 1) {
       throw Error("More then 1 ability");
     }

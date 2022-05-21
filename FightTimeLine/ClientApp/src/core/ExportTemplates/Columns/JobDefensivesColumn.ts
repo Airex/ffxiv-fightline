@@ -18,9 +18,7 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
   buildHeader(data: ExportData): IExportColumn {
     const filters = !this.afFilter
       ? this.createSoloPartFilter()
-      : this.jobRegistry
-        .getJob(this.it.name)
-        .abilities
+      : Object.values(this.jobRegistry.getJob(this.it.name).abilities)
         .filter(jab => this.isValidForColumn(jab.abilityType))
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(jab => ({
@@ -58,7 +56,7 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
         return acc;
       }
 
-      const result =  {
+      const result = {
         text: ability.ability,
         icon: ability.icon,
         refId: ability.id,

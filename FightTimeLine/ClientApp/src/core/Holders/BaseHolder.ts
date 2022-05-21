@@ -4,6 +4,7 @@ import { IPresenterData } from "../Models";
 export interface IBaseHolderItem<TKey> {
   id: TKey;
   presenter: IPresenterData;
+  refresh(): void;
 }
 
 export interface IItemHolder<TI> {
@@ -62,6 +63,12 @@ export class BaseHolder<TK, TI, T extends IBaseHolderItem<TK>> {
       }
     });
 
+  }
+
+  refresh() {
+    const all = this.getAll();
+    all.forEach(a => a.refresh());
+    this.update(all);
   }
 
   getAll(): T[] {

@@ -5,43 +5,57 @@ import {
   DRG, MNK, NIN, RPR, SAM,
   BLM, RDM, SMN
 } from "../Jobs/FFXIV/index";
-import * as Jobregistryserviceinterface from "./jobregistry.service-interface";
 import * as Models from "../core/Models";
 import * as Shared from "../Jobs/FFXIV/shared";
 import { BaseOverlapStrategy } from "src/core/Overlap";
 import { byName } from "src/core/AbilityDetectors";
+import { IJobRegistryService } from "./jobregistry.service-interface";
 
-export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJobRegistryService {
+export class FFXIVJobRegistryService implements IJobRegistryService {
   private jobs: { [name: string]: Models.IJob };
 
   constructor() {
+    this.setLevel(90);
+  }
+
+  setLevel(level: number) {
     this.jobs = [
       WAR, PLD, DRK, GNB,
       AST, SCH, SGE, WHM,
       BRD, DNC, MCH,
       DRG, MNK, NIN, RPR, SAM,
       BLM, RDM, SMN
-    ].reduce((acc, j) => ({ ...acc, [j.name]: this.build(j) }), {});
+    ].reduce((acc, j) => ({ ...acc, [j.translation.en]: this.build(j, level) }), {});
   }
 
   public getJobs(): Models.IJob[] {
     return Object.values(this.jobs);
   }
 
-  private build(job: Models.IJob): Models.IJob {
-    return {
+  private build(job: Models.IJobTemplate, level: number): Models.IJob {
+    const j: Models.IJob = {
       ...job,
-      icon: this.getIcon(job.fullName, "_job"),
+      name: job.translation.en,
+      fullName: job.fullNameTranslation.en,
+      icon: this.getIcon(job.fullNameTranslation.en, "_job"),
       pets: job.pets && job.pets.map((p) => {
-        return { ...p, icon: this.getIcon(job.fullName, p.name) };
+        return { ...p, icon: this.getIcon(job.fullNameTranslation.en, p.name) };
       }),
       stances: job.stances && job.stances.map(s => {
         return {
-          ability: this.buildAbility(job.fullName, s.ability)
+          ability: this.buildAbility(job.fullNameTranslation.en, s.ability)
         };
       }),
-      abilities: job.abilities.map(a => this.buildAbility(job.fullName, a)).sort(Shared.abilitySortFn)
+      abilities: Shared.toAbilities(job.abilities.map(a => this.buildAbility(job.fullNameTranslation.en, a)).sort(Shared.abilitySortFn))
     };
+
+    job.traits?.sort((a, b) => a.level - b.level)
+      .filter(t => t.level <= level)
+      .forEach(t => {
+        t.apply(j);
+      });
+
+    return j;
   }
 
   private getIcon(prefix: string, id: string) {
@@ -67,7 +81,7 @@ export class FFXIVJobRegistryService implements Jobregistryserviceinterface.IJob
 
   getAbilityForJob(jobName: string, abilityName: string): Models.IAbility {
     const job = this.getJob(jobName);
-    return job.abilities.find((a: Models.IAbility) => a.name === abilityName) as Models.IAbility;
+    return job.abilities[abilityName];
   }
 
   getStanceAbilityForJob(jobName: string, abilityName: string): Models.IAbility {

@@ -1,6 +1,6 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, IAbility, MapStatuses, settings } from "../../core/Models";
-import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
+import { IJob, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate } from "../../core/Models";
+import { getAbilitiesFrom, healerSharedAbilities, medicine, toAbilities } from "./shared";
 
 const statuses = MapStatuses({
   lightSpeed: {
@@ -236,7 +236,7 @@ const abilities = [
     levelAcquired: 86,
     settings: [settings.target],
     statuses: [statuses.exaltation]
-  } as IAbility,
+  },
   {
     name: "Macrocosmos",
     translation: {
@@ -250,19 +250,18 @@ const abilities = [
     abilityType: AbilityType.Healing | AbilityType.Damage,
     levelAcquired: 90,
     statuses: [statuses.macrocosmos]
-  } as IAbility,
+  },
   ...getAbilitiesFrom(healerSharedAbilities),
   medicine.Mind
 ] as IAbility[];
-export const AST: IJob = {
-  name: "AST",
+
+export const AST: IJobTemplate = {
   translation: {
     de: "AST",
     jp: "AST",
     en: "AST",
     fr: "AST"
   },
-  fullName: "Astrologian",
   fullNameTranslation: {
     de: "Astrologe",
     jp: "\u5360\u661F\u8853\u5E2B",

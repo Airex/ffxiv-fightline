@@ -1,7 +1,7 @@
 import { DataGroup } from "vis-timeline";
 import { BaseEventFields } from "../FFLogs";
 import { IForSidePanel } from "../Holders/BaseHolder";
-import { IAbilityFilter, IAbilitySetting, IJob, IJobStats, IPresenterData, ISettingData } from "../Models";
+import { IAbilityFilter, IJob, IJobStats, IPresenterData } from "../Models";
 import { BaseMap } from "./BaseMap";
 
 export interface IJobMapData {
@@ -11,12 +11,13 @@ export interface IJobMapData {
 
 export class JobMap extends BaseMap<string, DataGroup, IJobMapData> implements IForSidePanel {
 
-  constructor(presenter: IPresenterData, id: string, job: IJob, data: IJobMapData, pet?: string) {
+  constructor(presenter: IPresenterData, id: string, public job: IJob, data: IJobMapData, public pet?: string) {
     super(presenter, id);
-    this.job = job;
     this.pet = pet || job.defaultPet;
     this.applyData(data);
   }
+
+
 
   get isCompact(): boolean {
     return this.presenter.jobFilter(this.id).isCompact;
@@ -51,9 +52,7 @@ export class JobMap extends BaseMap<string, DataGroup, IJobMapData> implements I
   static jobIndex = 0;
   sidePanelComponentName = "job";
   public index: number | undefined = JobMap.jobIndex += 100;
-  job: IJob;
-  pet: string;
-  settings: ISettingData[];
+  // settings: ISettingData[];
 
 
   onDataUpdate(data: IJobMapData): void {
@@ -72,13 +71,13 @@ export class JobMap extends BaseMap<string, DataGroup, IJobMapData> implements I
     return div;
   }
 
-  getSettingData(name: string): ISettingData {
-    return this.settings && this.settings.find && this.settings.find(it => it.name === name);
-  }
+  // getSettingData(name: string): ISettingData {
+  //   return this.settings && this.settings.find && this.settings.find(it => it.name === name);
+  // }
 
-  getSetting(name: string): IAbilitySetting {
-    return this.job.settings?.find(it => it.name === name);
-  }
+  // getSetting(name: string): IAbilitySetting {
+  //   return this.job.settings?.find(it => it.name === name);
+  // }
 
   public get translated() {
     const name = this.job.translation ? this.job.translation[this.presenter.language] : this.job.name;
@@ -101,7 +100,7 @@ export class JobMap extends BaseMap<string, DataGroup, IJobMapData> implements I
   }
 
   detectAbility(event: BaseEventFields): { offset: number; name: string } {
-    const data = this.job.abilities.map(a => a.detectStrategy.process(event)).filter(a => !!a);
+    const data = Object.values(this.job.abilities).map(a => a.detectStrategy.process(event)).filter(a => !!a);
     if (data.length > 1) {
       throw Error("More then 1 ability");
     }

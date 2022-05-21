@@ -12,25 +12,24 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
 
   static abilityIndex = 0;
   sidePanelComponentName = "jobAbility";
-  job: JobMap.JobMap;
-  ability: Models.IAbility;
-  isStance: boolean;
   index: number | undefined;
 
   constructor(
     presenter: Models.IPresenterData,
     id: string,
-    job: JobMap.JobMap,
-    ability: Models.IAbility,
-    isStance: boolean,
+    public job: JobMap.JobMap,
+    private abilityName: string,
+    public isStance: boolean,
     data?: IAbilityMapData) {
     super(presenter, id);
-    this.job = job;
-    this.ability = ability;
     this.isStance = isStance;
-    this.index = this.job.order + this.getOrder(presenter, job, ability, (++AbilityMap.abilityIndex) / 10000);
+    this.index = this.job.order + this.getOrder(presenter, job, this.ability, (++AbilityMap.abilityIndex) / 10000);
 
     this.applyData(Object.assign({}, data) as IAbilityMapData);
+  }
+
+  get ability(){
+    return this.job.job.abilities[this.abilityName];
   }
 
   private getOrder(presenter, job, ability, def) {

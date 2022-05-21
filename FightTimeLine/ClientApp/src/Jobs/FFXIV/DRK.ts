@@ -1,7 +1,8 @@
 import Effects from "src/core/Effects";
 import { ChargesBasedOverlapStrategy, SharedOverlapStrategy } from "src/core/Overlap";
-import { IJob, DamageType, Role, AbilityType, IAbility, MapStatuses, settings } from "../../core/Models";
-import { abilitySortFn, getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
+import { DamageType, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate, ITrait } from "../../core/Models";
+import { getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
+import { abilityTrait, combineTraits } from "./traits";
 
 const statuses = MapStatuses({
   bloodWeapon: {
@@ -34,7 +35,8 @@ const statuses = MapStatuses({
     effects: [Effects.mitigation.party(10, DamageType.Magical)]
   },
   livingShadow: {
-    duration: 24
+    duration: 18,
+    effects: [Effects.delay(6)]
   },
   oblation: {
     duration: 10,
@@ -42,7 +44,7 @@ const statuses = MapStatuses({
   }
 });
 
-const abilities =  [
+const abilities = [
   {
     name: "Blood Weapon",
     translation: {
@@ -69,8 +71,7 @@ const abilities =  [
     xivDbId: "16466",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 30,
-    levelRemoved: 74
+    levelAcquired: 30
   },
   {
     name: "Edge of Darkness",
@@ -84,8 +85,7 @@ const abilities =  [
     xivDbId: "16467",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 40,
-    levelRemoved: 74
+    levelAcquired: 40
   },
   {
     name: "Flood of Shadow",
@@ -317,17 +317,27 @@ const abilities =  [
   },
   ...getAbilitiesFrom(tankSharedAbilities),
   medicine.Strength
-].sort(abilitySortFn) as IAbility[];
+] as IAbility[];
 
-export const DRK: IJob = {
-  name: "DRK",
+const traits: ITrait[] = [
+  {
+    level: 74,
+    name: "Darkside Mastery",
+    apply: combineTraits([
+      abilityTrait("Flood of Darkness", ab => ab.levelRemoved = 74),
+      abilityTrait("Edge of Darkness", ab => ab.levelRemoved = 74)
+    ])
+  }
+];
+export const DRK: IJobTemplate = {
+
   translation: {
     de: "DKR",
     jp: "DRK",
     en: "DRK",
     fr: "CHN"
   },
-  fullName: "Dark Knight",
+
   fullNameTranslation: {
     de: "Dunkelritter",
     jp: "\u6697\u9ED2\u9A0E\u58EB",
@@ -336,7 +346,7 @@ export const DRK: IJob = {
   },
   role: Role.Tank,
   abilities,
-
+  traits
 };
 
 

@@ -1,7 +1,8 @@
 import { byName } from "src/core/AbilityDetectors";
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, MapStatuses, IAbility, settings } from "../../core/Models";
-import { getAbilitiesFrom, rangeSharedAbilities, medicine } from "./shared";
+import { IJob, Role, AbilityType, MapStatuses, IAbility, settings, ITrait, IJobTemplate } from "../../core/Models";
+import { getAbilitiesFrom, rangeSharedAbilities, medicine, toAbilities } from "./shared";
+import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
     ragingStrikes: {
@@ -34,6 +35,15 @@ const statuses = MapStatuses({
         duration: 15
     }
 });
+
+const traits = [
+  {
+    level: 88,
+    name: "Enhanced Troubadour",
+    apply: abilityTrait("Troubadour", ab => ab.cooldown = 90)
+  }
+] as ITrait[];
+
 
 const abilities: IAbility[] = [
     {
@@ -161,7 +171,7 @@ const abilities: IAbility[] = [
           en: "Troubadour",
           fr: "Troubadour"
         },
-        cooldown: 90,
+        cooldown: 120,
         requiresBossTarget: true,
         xivDbId: "7405",
         statuses: [statuses.troubadour],
@@ -201,15 +211,15 @@ const abilities: IAbility[] = [
     medicine.Dexterity
 ];
 
-export const BRD: IJob = {
-    name: "BRD",
+export const BRD: IJobTemplate = {
+
     translation: {
       de: "BRD",
       jp: "BRD",
       en: "BRD",
       fr: "BRD"
     },
-    fullName: "Bard",
+
     fullNameTranslation: {
       de: "Barde",
       jp: "\u541F\u904A\u8A69\u4EBA",
@@ -217,6 +227,7 @@ export const BRD: IJob = {
       fr: "Barde"
     },
     role: Role.Range,
+    traits,
     abilities
 };
 

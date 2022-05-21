@@ -1,5 +1,5 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, MapStatuses, IAbility, settings } from "../../core/Models";
+import { IJob, Role, AbilityType, MapStatuses, IAbility, settings, IJobTemplate } from "../../core/Models";
 import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
 
 const statuses = MapStatuses({
@@ -226,15 +226,15 @@ const abilities: IAbility[] = [
     ...getAbilitiesFrom(healerSharedAbilities),
     medicine.Mind
 ];
-export const WHM: IJob = {
-    name: "WHM",
+export const WHM: IJobTemplate = {
+
     translation: {
       de: "WMA",
       jp: "WHM",
       en: "WHM",
       fr: "MBL"
     },
-    fullName: "White Mage",
+
     fullNameTranslation: {
       de: "Wei\u00DFmagier",
       jp: "\u767D\u9B54\u9053\u58EB",

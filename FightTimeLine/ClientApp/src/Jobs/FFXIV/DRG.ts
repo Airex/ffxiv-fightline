@@ -1,6 +1,6 @@
 import { byBuffApply } from "src/core/AbilityDetectors";
-import { IJob, Role, AbilityType, IAbility, MapStatuses, settings } from "../../core/Models";
-import { getAbilitiesFrom, medicine, meleeSharedAbilities } from "./shared";
+import { IJob, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate } from "../../core/Models";
+import { getAbilitiesFrom, medicine, meleeSharedAbilities, toAbilities } from "./shared";
 
 
 const statuses = MapStatuses({
@@ -172,15 +172,16 @@ const abilities =  [
     ...getAbilitiesFrom(meleeSharedAbilities),
     medicine.Strength
 ] as IAbility[];
-export const DRG: IJob = {
-    name: "DRG",
+
+export const DRG: IJobTemplate = {
+
     translation: {
       de: "DRG",
       jp: "DRG",
       en: "DRG",
       fr: "DRG"
     },
-    fullName: "Dragoon",
+
     fullNameTranslation: {
       de: "Dragoon",
       jp: "\u7ADC\u9A0E\u58EB",

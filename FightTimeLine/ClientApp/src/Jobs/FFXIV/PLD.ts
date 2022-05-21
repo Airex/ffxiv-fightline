@@ -1,9 +1,10 @@
 import Effects from "src/core/Effects";
 import {
-  IJob, Role, AbilityType, IAbility, MapStatuses, IMitigator,
-  MitigationVisitorContext, DamageType, SettingsEnum, settings
+  Role, AbilityType, IAbility, MapStatuses, IMitigator,
+  MitigationVisitorContext, DamageType, SettingsEnum, settings, IJobTemplate, ITrait
 } from "../../core/Models";
 import { getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
+import { abilityRemovedTrait, abilityTrait } from "./traits";
 
 class InterventionMitigationModifier implements IMitigator {
   constructor(private value: number, private damagetType: DamageType) {
@@ -75,6 +76,10 @@ const statuses = MapStatuses({
     effects: [Effects.mitigation.solo(100).withModifier(CoverMitigationModifier)]
   },
   sheltron: {
+    duration: 4,
+    effects: [Effects.mitigation.solo(18)]
+  },
+  sheltron74Plus: {
     duration: 6,
     effects: [Effects.mitigation.solo(18)]
   },
@@ -85,6 +90,10 @@ const statuses = MapStatuses({
   holySheltronResolve: {
     duration: 4,
     effects: [Effects.mitigation.solo(15)]
+  },
+  interventionPre74: {
+    duration: 6,
+    effects: [Effects.mitigation.solo(10).withModifier(InterventionMitigationModifier)]
   },
   intervention: {
     duration: 8,
@@ -221,13 +230,12 @@ const abilities: IAbility[] = [
       en: "Sheltron",
       fr: "Schiltron"
     },
-    cooldown: 8,
+    cooldown: 6,
     xivDbId: "3542",
     requiresBossTarget: true,
     statuses: [statuses.sheltron],
     abilityType: AbilityType.SelfDefense,
     levelAcquired: 35,
-    levelRemoved: 82,
     charges: {
       count: 2,
       cooldown: 30
@@ -263,7 +271,7 @@ const abilities: IAbility[] = [
     cooldown: 10,
     xivDbId: "7382",
     requiresBossTarget: true,
-    statuses: [statuses.intervention, statuses.interventionResolve],
+    statuses: [statuses.interventionPre74],
     abilityType: AbilityType.TargetDefense,
     settings: [settings.target],
     levelAcquired: 62
@@ -311,20 +319,48 @@ const abilities: IAbility[] = [
     xivDbId: "29",
     abilityType: AbilityType.Damage,
     levelAcquired: 30,
-    levelRemoved: 86
   },
   ...getAbilitiesFrom(tankSharedAbilities),
   medicine.Strength
 ];
-export const PLD: IJob = {
-  name: "PLD",
+
+const traits: ITrait[] = [
+  {
+    name: "Enhanced Sheltron",
+    level: 74,
+    apply: abilityTrait("Sheltron", ab => {
+      ab.statuses = [statuses.sheltron74Plus];
+      ab.cooldown = 6;
+    })
+  },
+  {
+    name: "Sheltron Mastery",
+    level: 74,
+    apply: abilityRemovedTrait("Sheltron", 82)
+  },
+  {
+    name: "Enhanced Intervention",
+    level: 82,
+    apply: abilityTrait("Intervention", ab => {
+      ab.statuses = [statuses.intervention, statuses.interventionResolve];
+    })
+  },
+  {
+    name: "Spirits Within Mastery",
+    level: 86,
+    apply: abilityRemovedTrait("Spirits Within", 86)
+  }
+];
+
+export const PLD: IJobTemplate = {
+
   translation: {
     de: "PLD",
     jp: "PLD",
     en: "PLD",
     fr: "PLD"
   },
-  fullName: "Paladin",
+
   fullNameTranslation: {
     de: "Paladin",
     jp: "\u30CA\u30A4\u30C8",
@@ -332,5 +368,6 @@ export const PLD: IJob = {
     fr: "Paladin"
   },
   role: Role.Tank,
-  abilities
+  abilities,
+  traits
 };

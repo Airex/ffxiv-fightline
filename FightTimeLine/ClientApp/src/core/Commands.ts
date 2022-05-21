@@ -78,8 +78,8 @@ export class AddJobCommand extends Command {
     if (!this.id) {
       this.id = context.idGen.getNextId(EntryType.Job);
     }
-    const job = context.jobRegistry.getJobs().find(it => it.name === this.jobName);
-    const abilityIds = new Array<AbilityMap>();
+    const job = context.jobRegistry.getJob(this.jobName);
+    const abilityIds = [];
     let index = 0;
 
     const map = {
@@ -105,10 +105,9 @@ export class AddJobCommand extends Command {
       index++;
     }
 
-    for (const a of job.abilities) {
+    for (const a of Object.keys(job.abilities)) {
       const nextId = this.id + "_" + index;
-      abilityIds.push(new AbilityMap(context.presenter,
-        nextId, jobMap, a, false, {}));
+      abilityIds.push(new AbilityMap(context.presenter, nextId, jobMap, a, false, {}));
       index++;
     }
 
@@ -371,9 +370,10 @@ export class MoveCommand extends Command {
     const item = context.holders.itemUsages.get(this.id);
     if (item === undefined || item === null) { return; }
 
+    const duration = calculateDuration(this.ability);
     const affectedAttacks = [
-      ...context.holders.bossAttacks.getAffectedAttacks(item.start as Date, calculateDuration(this.ability)),
-      ...context.holders.bossAttacks.getAffectedAttacks(this.moveTo as Date, calculateDuration(this.ability))
+      ...context.holders.bossAttacks.getAffectedAttacks(item.start as Date, duration),
+      ...context.holders.bossAttacks.getAffectedAttacks(this.moveTo as Date, duration)
     ];
 
     if (item.start !== this.moveFrom) {
@@ -398,9 +398,10 @@ export class MoveCommand extends Command {
     this.ability = context.holders.itemUsages.get(this.id).ability.ability;
     //    console.log(`Moving to ${this.moveTo.toString()} from ${this.moveFrom.toString()}`);
 
+    const duration = calculateDuration(this.ability);
     const affectedAttacks = [
-      ...context.holders.bossAttacks.getAffectedAttacks(item.start as Date, calculateDuration(this.ability)),
-      ...context.holders.bossAttacks.getAffectedAttacks(this.moveTo as Date, calculateDuration(this.ability))
+      ...context.holders.bossAttacks.getAffectedAttacks(item.start as Date, duration),
+      ...context.holders.bossAttacks.getAffectedAttacks(this.moveTo as Date, duration)
     ];
     if (item.start !== this.moveTo) {
       item.applyData({
@@ -535,7 +536,7 @@ export class AddAbilityCommand extends Command {
     private time: Date,
     private loaded: boolean,
     private settings: ISettingData[]) {
-      super();
+    super();
   }
 
   serialize(): ICommandData {
@@ -560,7 +561,9 @@ export class AddAbilityCommand extends Command {
     if (item) {
       context.update({
         abilityChanged: item.ability,
-        updateBossAttacks: context.holders.bossAttacks.getAffectedAttacks(this.time, calculateDuration(item.ability.ability))
+        updateBossAttacks: context.holders.bossAttacks.getAffectedAttacks(
+          this.time,
+          calculateDuration(item.ability.ability))
       });
     }
   }
@@ -605,7 +608,9 @@ export class AddAbilityCommand extends Command {
 
     context.update({
       abilityChanged: item.ability,
-      updateBossAttacks: context.holders.bossAttacks.getAffectedAttacks(this.time, calculateDuration(abilityMap.ability))
+      updateBossAttacks: context.holders.bossAttacks.getAffectedAttacks(
+        this.time,
+        calculateDuration(abilityMap.ability))
     });
   }
 }
@@ -644,7 +649,9 @@ export class RemoveAbilityCommand extends Command {
       }));
     context.update({
       abilityChanged: amap,
-      updateBossAttacks: context.holders.bossAttacks.getAffectedAttacks(this.time as Date, calculateDuration(this.ability))
+      updateBossAttacks: context.holders.bossAttacks.getAffectedAttacks(
+        this.time as Date,
+        calculateDuration(this.ability))
     });
   }
 
@@ -1022,7 +1029,7 @@ export class AddStanceCommand extends Command {
     private start: Date,
     private end: Date,
     private loaded: boolean) {
-      super();
+    super();
   }
 
   reverse(context: ICommandExecutionContext): void {
@@ -1172,7 +1179,7 @@ export class AttachPresetCommand extends Command {
   }
 
   get undoredo(): boolean {
-      return false;
+    return false;
   }
 
   reverse(context: ICommandExecutionContext): void {

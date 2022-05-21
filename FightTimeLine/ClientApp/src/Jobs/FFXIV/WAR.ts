@@ -1,7 +1,8 @@
 import Effects from "src/core/Effects";
 import { SharedOverlapStrategy } from "src/core/Overlap";
-import { IJob, Role, AbilityType, IAbility, IMitigator, MitigationVisitorContext, MapStatuses, settings } from "../../core/Models";
-import { abilitySortFn, getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
+import { Role, AbilityType, IAbility, IMitigator, MitigationVisitorContext, MapStatuses, settings, IJobTemplate, ITrait } from "../../core/Models";
+import { getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
+import { abilityRemovedTrait, abilityTrait } from "./traits";
 
 class ShakeItOffMitigationModifier implements IMitigator {
 
@@ -26,6 +27,9 @@ class ShakeItOffMitigationModifier implements IMitigator {
 }
 
 const statuses = MapStatuses({
+  berserk: {
+    duration: 15
+  },
   innerRelease: {
     duration: 15
   },
@@ -57,18 +61,24 @@ const statuses = MapStatuses({
     duration: 4,
     effects: [Effects.mitigation.solo(10)],
   },
+  nascentFlashPre82: {
+    duration: 6,
+    effects: [Effects.mitigation.solo(10)]
+  },
   nascentFlash: {
+    levelAcquired: 82,
     duration: 8,
     effects: [Effects.mitigation.solo(10)]
   },
   nascentFlashStem: {
+    levelAcquired: 82,
     duration: 4,
     effects: [Effects.mitigation.solo(10)]
   }
 
 });
 
-const abilities: IAbility[] =  [
+const abilities: IAbility[] = [
   {
     name: "Infuriate",
     translation: {
@@ -88,6 +98,21 @@ const abilities: IAbility[] =  [
     levelAcquired: 50
   },
   {
+    name: "Berserk",
+    translation: {
+      de: "Tollwut",
+      en: "Berserk",
+      fr: "Berserk",
+      jp: "バーサク"
+    },
+    cooldown: 60,
+    requiresBossTarget: true,
+    statuses: [statuses.berserk],
+    xivDbId: "38",
+    abilityType: AbilityType.SelfDamageBuff,
+    levelAcquired: 6
+  },
+  {
     name: "Inner Release",
     translation: {
       de: "Urbefreiung",
@@ -95,7 +120,7 @@ const abilities: IAbility[] =  [
       en: "Inner Release",
       fr: "Rel\u00E2chement bestial"
     },
-    cooldown: 90,
+    cooldown: 60,
     requiresBossTarget: true,
     statuses: [statuses.innerRelease],
     xivDbId: "7389",
@@ -209,6 +234,7 @@ const abilities: IAbility[] =  [
     },
     cooldown: 90,
     xivDbId: "40",
+    statuses: [statuses.thrillOfBattle],
     abilityType: AbilityType.SelfDefense,
     relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },
     levelAcquired: 30
@@ -226,8 +252,7 @@ const abilities: IAbility[] =  [
     statuses: [statuses.rawIntuition],
     abilityType: AbilityType.SelfDefense,
     overlapStrategy: new SharedOverlapStrategy(["Nascent Flash"]),
-    levelAcquired: 56,
-    levelRemoved: 82
+    levelAcquired: 56
   },
   {
     name: "Bloodwhetting",
@@ -268,25 +293,44 @@ const abilities: IAbility[] =  [
     },
     cooldown: 25,
     xivDbId: "16464",
-    statuses: [statuses.nascentFlash, statuses.nascentFlashStem],
+    statuses: [statuses.nascentFlashPre82],
     abilityType: AbilityType.TargetDefense,
     settings: [settings.target],
-    overlapStrategy: new SharedOverlapStrategy(["Bloodwhetting"]),
+    overlapStrategy: new SharedOverlapStrategy(["Bloodwhetting", "Raw Intuition"]),
     levelAcquired: 76
   },
   medicine.Strength,
   ...getAbilitiesFrom(tankSharedAbilities),
-].sort(abilitySortFn) as IAbility[];
+] as IAbility[];
 
-export const WAR: IJob = {
-  name: "WAR",
+const traits: ITrait[] = [
+  {
+    name: "Berserk Mastery",
+    level: 70,
+    apply: abilityRemovedTrait("Berserk", 70)
+  },
+  {
+    name: "Raw Intuition Mastery",
+    level: 82,
+    apply: abilityRemovedTrait("Raw Intuition", 82)
+  },
+  {
+    name: "Enhanced Nascent Flash",
+    level: 82,
+    apply: abilityTrait("Nascent Flash", ab =>
+      ab.statuses = [statuses.nascentFlash, statuses.nascentFlashStem])
+  }
+];
+
+export const WAR: IJobTemplate = {
+
   translation: {
     de: "KRG",
     jp: "WAR",
     en: "WAR",
     fr: "GUE"
   },
-  fullName: "Warrior",
+
   fullNameTranslation: {
     de: "Krieger",
     jp: "\u6226\u58EB",
@@ -294,5 +338,6 @@ export const WAR: IJob = {
     fr: "Guerrier"
   },
   role: Role.Tank,
-  abilities
+  abilities,
+  traits
 };

@@ -83,10 +83,13 @@ export class Parser {
 
     const js = jobRegistry.getJobs().filter(j => this.players.some(j1 => j1.job === j.name));
 
-    const abilityIds = _.uniq(_.flattenDeep(_.concat([], js.map(j => j.abilities.map(a => a.detectStrategy.deps.abilities)))))
-      .filter(a => !!a)
-      .join();
-    const abilityByBuffIds = _.concat([], js.map(j => j.abilities.map(a => a.detectStrategy.deps.buffs)));
+    const abilityIds =
+      _.uniq(
+        _.flattenDeep(
+          _.concat([], js.map(j => Object.values(j.abilities).map(a => a.detectStrategy.deps.abilities)))))
+        .filter(a => !!a)
+        .join();
+    const abilityByBuffIds = _.concat([], js.map(j => Object.values(j.abilities).map(a => a.detectStrategy.deps.buffs)));
     const stances = _.concat([], js.map(j => j.stances && j.stances.map(a => a.ability.detectStrategy.deps.buffs)));
     const buffs = _.uniq(_.flattenDeep(_.concat(stances, abilityByBuffIds))).filter(a => !!a).join();
     const partyIds = _.concat(this.players.map(j => j.guid), _.flattenDeep(this.players.map(p => p.petguids))).join();
