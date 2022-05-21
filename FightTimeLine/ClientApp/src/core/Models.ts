@@ -185,6 +185,7 @@ export interface IAbility {
   overlapStrategy?: IOverlapStrategy;
   charges?: IAbilityCharges;
   levelAcquired: number;
+  levelRemoved?: number;
   statuses?: IAbilityStatus[] | null;
   isOgcd?: boolean;
   translation?: Translation;
@@ -387,19 +388,20 @@ export interface IBossAttackFilter {
   keywords: string[];
 }
 
-export interface JobFilter {
+export interface JobPreset {
   filter?: IAbilityFilter;
   isCollapsed?: boolean;
   isCompact?: boolean;
   abilityCompact?: string[];
   abilityHidden?: string[];
+  order?: number;
   abilityOrder?: {
     [abilityName: string]: number
   };
 }
 
-export type JobFilters = {
-  [id: string]: JobFilter
+export type JobPresets = {
+  [id: string]: JobPreset
 };
 
 export interface IFilter {
@@ -485,7 +487,7 @@ export interface IPresenterData {
   filter: IFilter;
   fightLevel: number;
   view: IView;
-  jobFilter(jobId: string): JobFilter;
+  jobFilter(jobId: string): JobPreset;
 
   addPreset(id: string, preset: IPresetTemplate);
 }
@@ -493,7 +495,7 @@ export interface IPresenterData {
 export interface IPresetTemplate {
   filter: IFilter;
   view: IView;
-  jobFilters: { [job: string]: JobFilter };
+  jobFilters: { [job: string]: JobPreset };
 }
 
 

@@ -1,18 +1,17 @@
 import { DataGroup } from "vis-timeline";
-import * as BaseMap from "./BaseMap";
-import * as BaseHolder from "../Holders/BaseHolder";
-import * as Models from "../Models";
 import { BaseEventFields } from "../FFLogs";
-import { IJobStats } from "../Models";
+import { IForSidePanel } from "../Holders/BaseHolder";
+import { IAbilityFilter, IAbilitySetting, IJob, IJobStats, IPresenterData, ISettingData } from "../Models";
+import { BaseMap } from "./BaseMap";
 
 export interface IJobMapData {
   actorName?: string;
   stats?: IJobStats;
 }
 
-export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> implements BaseHolder.IForSidePanel {
+export class JobMap extends BaseMap<string, DataGroup, IJobMapData> implements IForSidePanel {
 
-  constructor(presenter: Models.IPresenterData, id: string, job: Models.IJob, data: IJobMapData, pet?: string) {
+  constructor(presenter: IPresenterData, id: string, job: IJob, data: IJobMapData, pet?: string) {
     super(presenter, id);
     this.job = job;
     this.pet = pet || job.defaultPet;
@@ -24,7 +23,7 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
   }
 
 
-  get filter(): Models.IAbilityFilter {
+  get filter(): IAbilityFilter {
     const jf = this.presenter.jobFilter(this.id);
     jf.filter ||= {};
     return jf.filter;
@@ -40,7 +39,7 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
   }
 
   get collapsed(): boolean {
-    return this.presenter.jobFilter(this.id).isCollapsed  || false;
+    return this.presenter.jobFilter(this.id).isCollapsed || false;
   }
 
   get showNested() { return this.item.showNested; }
@@ -51,10 +50,10 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
 
   static jobIndex = 0;
   sidePanelComponentName = "job";
-  private index: number | undefined = JobMap.jobIndex++;
-  job: Models.IJob;
+  public index: number | undefined = JobMap.jobIndex += 100;
+  job: IJob;
   pet: string;
-  settings: Models.ISettingData[];
+  settings: ISettingData[];
 
 
   onDataUpdate(data: IJobMapData): void {
@@ -73,11 +72,11 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
     return div;
   }
 
-  getSettingData(name: string): Models.ISettingData {
+  getSettingData(name: string): ISettingData {
     return this.settings && this.settings.find && this.settings.find(it => it.name === name);
   }
 
-  getSetting(name: string): Models.IAbilitySetting {
+  getSetting(name: string): IAbilitySetting {
     return this.job.settings?.find(it => it.name === name);
   }
 
@@ -86,13 +85,13 @@ export class JobMap extends BaseMap.BaseMap<string, DataGroup, IJobMapData> impl
     return name;
   }
 
-  createJob(job: Models.IJob, id: string, data: IJobMapData): DataGroup {
+  createJob(job: IJob, id: string, data: IJobMapData): DataGroup {
 
     const name = this.translated;
     const el = this.createElementFromHtml(
       `<span class="expand-sign">${this.collapsed ? "►" : "▼"}</span><img class='abilityIcon' src='${job.icon}'/><span class='jobName'>${name}<span>`);
 
-    return  {
+    return {
       id,
       content: el,
       className: this.buildClass({ job: true }),

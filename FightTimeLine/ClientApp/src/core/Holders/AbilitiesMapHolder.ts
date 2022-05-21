@@ -2,7 +2,6 @@ import * as BaseHolder from "./BaseHolder";
 import { DataSetDataGroup, DataGroup } from "vis-timeline";
 import { AbilityMap } from "../Maps/AbilityMap";
 import * as Models from "../Models";
-import { JobMap } from "../Maps/JobMap";
 
 const filterMap: { [ab in keyof Models.IAbilityFilter]: Models.AbilityType | Models.AbilityType[] } =
 {
@@ -116,6 +115,10 @@ export class AbilitiesMapHolder extends BaseHolder.BaseHolder<string, DataGroup,
     }
 
     if (value.ability.levelAcquired > fightLevel) {
+      return false;
+    }
+
+    if (value.ability.levelRemoved <= fightLevel) {
       return false;
     }
 

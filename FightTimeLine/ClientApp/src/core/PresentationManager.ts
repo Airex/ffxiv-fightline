@@ -1,7 +1,7 @@
 import * as Models from "./Models";
 import * as _ from "lodash";
 import { FFLogsImportBossAttacksSource, ISettings } from "src/services/SettingsService";
-import { IPresetTemplate, JobFilters } from "./Models";
+import { IPresetTemplate, JobPresets } from "./Models";
 import { Holders } from "./Holders";
 import { Utils } from "./Utils";
 
@@ -27,7 +27,7 @@ export class PresenterManager implements Models.IPresenterData {
   filter: Models.IFilter = Models.defaultFilter();
   view: Models.IView = Models.defaultView();
   fightLevel = 90;
-  private jobFilters: JobFilters = {};
+  private jobFilters: JobPresets = {};
   language: Models.SupportedLanguages = Models.SupportedLanguages[localStorage.getItem("lang") || "en"];
   selectedPreset: string = undefined;
   presets: { [name: string]: IPresetTemplate } = {};
@@ -58,7 +58,7 @@ export class PresenterManager implements Models.IPresenterData {
 
   }
 
-  jobFilter(jobId: string): Models.JobFilter {
+  jobFilter(jobId: string): Models.JobPreset {
     this.jobFilters[jobId] ||= {
       abilityCompact: [],
       abilityHidden: [],

@@ -58,6 +58,36 @@ const abilities =  [
     statuses: [statuses.bloodWeapon]
   },
   {
+    name: "Flood of Darkness",
+    translation: {
+      de: "Finstere Flut",
+      en: "Flood of Darkness",
+      fr: "Déluge de ténèbres",
+      jp: "暗黒の波動"
+    },
+    cooldown: 1,
+    xivDbId: "16466",
+    requiresBossTarget: true,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 30,
+    levelRemoved: 74
+  },
+  {
+    name: "Edge of Darkness",
+    translation: {
+      de: "Finstere Klinge",
+      en: "Edge of Darkness",
+      fr: "Tranchant de ténèbres",
+      jp: "暗黒の剣"
+    },
+    cooldown: 1,
+    xivDbId: "16467",
+    requiresBossTarget: true,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 40,
+    levelRemoved: 74
+  },
+  {
     name: "Flood of Shadow",
     translation: {
       de: "Schattenflut",

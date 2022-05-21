@@ -6,7 +6,7 @@ export class UserService {
   constructor(private http: HttpClient, @Inject("BASE_URL") private basePath: string) { }
 
     isUserNameRegistered(userName: string) {
-        return this.http.get(this.basePath + 'api/users/exists?username=' + userName);
+        return this.http.get(this.basePath + 'api/users/exists?username=' + encodeURIComponent(userName));
     }
 
     createUser(userName: string, password: string, captchaData: string) {

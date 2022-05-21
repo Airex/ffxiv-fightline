@@ -74,6 +74,10 @@ const statuses = MapStatuses({
     duration: 12,
     effects: [Effects.mitigation.solo(100).withModifier(CoverMitigationModifier)]
   },
+  sheltron: {
+    duration: 6,
+    effects: [Effects.mitigation.solo(18)]
+  },
   holySheltron: {
     duration: 8,
     effects: [Effects.mitigation.solo(18)]
@@ -210,6 +214,26 @@ const abilities: IAbility[] = [
     levelAcquired: 45
   },
   {
+    name: "Sheltron",
+    translation: {
+      de: "Schiltron",
+      jp: "シェルトロン",
+      en: "Sheltron",
+      fr: "Schiltron"
+    },
+    cooldown: 8,
+    xivDbId: "3542",
+    requiresBossTarget: true,
+    statuses: [statuses.sheltron],
+    abilityType: AbilityType.SelfDefense,
+    levelAcquired: 35,
+    levelRemoved: 82,
+    charges: {
+      count: 2,
+      cooldown: 30
+    }
+  },
+  {
     name: "Holy Sheltron",
     translation: {
       de: "Heiliges Schiltron",
@@ -222,7 +246,7 @@ const abilities: IAbility[] = [
     requiresBossTarget: true,
     statuses: [statuses.holySheltron, statuses.holySheltronResolve],
     abilityType: AbilityType.SelfDefense,
-    levelAcquired: 35,
+    levelAcquired: 82,
     charges: {
       count: 2,
       cooldown: 30
@@ -273,7 +297,21 @@ const abilities: IAbility[] = [
     cooldown: 30,
     xivDbId: "25747",
     abilityType: AbilityType.Damage,
-    levelAcquired: 50
+    levelAcquired: 86
+  },
+  {
+    name: "Spirits Within",
+    translation: {
+      de: "Selbsterhaltungstrieb",
+      jp: "スピリッツウィズイン",
+      en: "Spirits Within",
+      fr: "Esprits intérieurs"
+    },
+    cooldown: 30,
+    xivDbId: "29",
+    abilityType: AbilityType.Damage,
+    levelAcquired: 30,
+    levelRemoved: 86
   },
   ...getAbilitiesFrom(tankSharedAbilities),
   medicine.Strength

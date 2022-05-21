@@ -45,6 +45,10 @@ const statuses = MapStatuses({
     duration: 10,
     effects: [Effects.shield.solo(20)]
   },
+  rawIntuition: {
+    duration: 6,
+    effects: [Effects.mitigation.solo(10)]
+  },
   bloodwhetting: {
     duration: 8,
     effects: [Effects.mitigation.solo(10)],
@@ -210,6 +214,22 @@ const abilities: IAbility[] =  [
     levelAcquired: 30
   },
   {
+    name: "Raw Intuition",
+    translation: {
+      de: "Urinstinkt",
+      jp: "原初の直感",
+      en: "Raw Intuition",
+      fr: "Intuition pure"
+    },
+    cooldown: 25,
+    xivDbId: "3551",
+    statuses: [statuses.rawIntuition],
+    abilityType: AbilityType.SelfDefense,
+    overlapStrategy: new SharedOverlapStrategy(["Nascent Flash"]),
+    levelAcquired: 56,
+    levelRemoved: 82
+  },
+  {
     name: "Bloodwhetting",
     translation: {
       de: "Urimpuls",
@@ -223,7 +243,7 @@ const abilities: IAbility[] =  [
     abilityType: AbilityType.SelfDefense,
     relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },
     overlapStrategy: new SharedOverlapStrategy(["Nascent Flash"]),
-    levelAcquired: 56
+    levelAcquired: 82
   },
   {
     name: "Equilibrium",

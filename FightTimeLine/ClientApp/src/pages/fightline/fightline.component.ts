@@ -137,10 +137,21 @@ export class FightLineComponent implements OnInit, OnDestroy {
       if (fromJob) {
         const toJob = this.visStorage.holders.jobs.get(to.id);
         if (toJob) {
-          event.handler(false);
+          const ind = fromJob.index;
+          fromJob.index = toJob.index;
+          toJob.index = ind;
+
+          event.handler(true);
           const fromAbs = this.visStorage.holders.abilities.getByParentId(fromJob.id);
           fromAbs.forEach(ab => {
+            ab.applyData({});
           });
+          const toAbs = this.visStorage.holders.abilities.getByParentId(toJob.id);
+          toAbs.forEach(ab => {
+            ab.applyData({});
+          });
+
+          this.visStorage.holders.abilities.update([...fromAbs, ...toAbs]);
         }
       }
       else {

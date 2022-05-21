@@ -149,7 +149,7 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
       className: this.buildClass({ compact: this.isCompact || this.job.isCompact || this.presenter.view.compactView }),
       visible: !(this.hidden || data.filtered || this.job.collapsed),
       content: el,
-      value: this.job.order + this.getOrder(this.presenter, this.job, this.ability, this.index - Math.trunc(this.index))
+      value: this.job.index + this.getOrder(this.presenter, this.job, this.ability, this.index - Math.trunc(this.index))
     } as DataGroup;
   }
 
