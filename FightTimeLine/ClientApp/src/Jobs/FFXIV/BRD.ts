@@ -79,7 +79,7 @@ const abilities: IAbility[] = [
         translation: {
           de: "Ballade des Weisen",
           jp: "\u8CE2\u4EBA\u306E\u30D0\u30E9\u30FC\u30C9",
-          en: "Mage\u0027s Ballad",
+          en: "Mage's Ballad",
           fr: "Ballade du mage"
         },
         cooldown: 120,
@@ -99,7 +99,7 @@ const abilities: IAbility[] = [
         translation: {
           de: "Hymne der Krieger",
           jp: "\u8ECD\u795E\u306E\u30D1\u30A4\u30AA\u30F3",
-          en: "Army\u0027s Paeon",
+          en: "Army's Paeon",
           fr: "P\u00E9an martial"
         },
         cooldown: 120,
@@ -134,7 +134,7 @@ const abilities: IAbility[] = [
         translation: {
           de: "Menuett des Wanderers",
           jp: "\u65C5\u795E\u306E\u30E1\u30CC\u30A8\u30C3\u30C8",
-          en: "the Wanderer\u0027s Minuet",
+          en: "The Wanderer's Minuet",
           fr: "Menuet du Vagabond"
         },
         cooldown: 120,
@@ -183,7 +183,7 @@ const abilities: IAbility[] = [
         translation: {
           de: "Nophicas Minne",
           jp: "\u5730\u795E\u306E\u30DF\u30F3\u30CD",
-          en: "Nature\u0027s Minne",
+          en: "Nature's Minne",
           fr: "Minne de la nature"
         },
         cooldown: 90,

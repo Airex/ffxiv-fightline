@@ -139,7 +139,7 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     const name = this.truncate(this.translated, truncLen);
 
     const el = ability.icon
-      ? this.createElementFromHtml(`<span><img class='abilityIcon' src='${ability.icon}'/><span class='abilityName'>${name}</span></span>`)
+      ? this.createElementFromHtml(`<span><img class='abilityIcon' src="${ability.icon}"/><span class='abilityName'>${name}</span></span>`)
       : this.createElementFromHtml(`<span>${name}</span>`);
 
     // console.log(this.job.id+" "+this.ability.name+" "+this.job.isCompact)
