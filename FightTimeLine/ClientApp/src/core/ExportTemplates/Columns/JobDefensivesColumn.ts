@@ -1,24 +1,29 @@
-import { ExportAbility, ExportAttack, ExportData, ExportJob, IExportCell, IExportColumn, IExportItem } from "src/core/ExportModels";
+import { IExportCell, IExportColumn, IExportItem } from "src/core/ExportModels";
+import { Holders } from "src/core/Holders";
+import { JobsMapHolder } from "src/core/Holders/JobsMapHolder";
+import { AbilityUsageMap, BossAttackMap, JobMap } from "src/core/Maps";
 import { AbilityType, SettingsEnum } from "src/core/Models";
 import { BaseColumnTemplate, IColumnTemplate } from "src/core/TableModels";
 import { Utils } from "src/core/Utils";
 import { IJobRegistryService } from "src/services/jobregistry.service-interface";
 
-export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTemplate<ExportAttack> {
+export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap> {
   constructor(
-    private it: ExportJob,
+    private it: JobMap,
     private jobRegistry: IJobRegistryService,
     private afFilter: boolean,
     private coverAll: boolean,
     private showHealing: boolean,
-    private healingRange: [number, number]) {
+    private healingRange: [number, number],
+    private level: number) {
     super();
   }
   used = new Set<string>();
-  buildHeader(data: ExportData): IExportColumn {
+
+  buildHeader(data: Holders): IExportColumn {
     const filters = !this.afFilter
       ? this.createSoloPartFilter()
-      : Object.values(this.jobRegistry.getJob(this.it.name).abilities)
+      : Object.values(this.jobRegistry.getJob(this.it.job.name).abilities)
         .filter(jab => this.isValidForColumn(jab.abilityType))
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(jab => ({
@@ -28,28 +33,33 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
         }));
 
     return {
-      text: this.it.name,
+      text: this.it.translated,
       name: this.it.id,
-      icon: this.it.icon,
+      icon: this.it.job.icon,
       refId: this.it.id,
       cursor: 'pointer',
       width: "auto",
       listOfFilter: filters
     };
   }
-  buildCell(data: ExportData, attack: ExportAttack): IExportCell {
-    const jobs = data.data.jobs.sort((a, b) => a.role - b.role);
-    const items = data.data.abilities.reduce((acc, ability) => {
 
-      const isDefence = this.isDefence(ability.type);
-      const isHealing = this.isHealing(ability.type);
+  buildCell(data: Holders, attack: BossAttackMap): IExportCell {
+    const jobs = data.jobs;
+    const items = data.itemUsages.getAll().reduce((acc, usage) => {
 
-      const condition = (this.coverAll || !this.used.has(ability.id)) &&
-        ability.job === this.it.id &&
-        this.isValidForColumn(ability.type) &&
+      const isDefence = this.isDefence(usage.ability.ability.abilityType);
+      const isHealing = this.isHealing(usage.ability.ability.abilityType);
+
+      const condition =
+        this.isLevelInRange([usage.ability.ability.levelAcquired, usage.ability.ability.levelRemoved], this.level) &&
+        (this.coverAll || !this.used.has(usage.id)) &&
+        usage.ability.job.id === this.it.id &&
+        this.isValidForColumn(usage.ability.ability.abilityType) &&
         (
-          isDefence && this.isOffsetInRange(attack.offset, ability.start, this.offsetFromDuration(ability.start, ability.duration)) ||
-          this.showHealing && isHealing && this.isOffsetNear(attack.offset, ability.start, this.healingRange || [-5, 5])
+          isDefence && this.isOffsetInRange(attack.attack.offset, Utils.formatTime(usage.start),
+            this.offsetFromDuration(Utils.formatTime(usage.start), usage.calculatedDuration)) ||
+          this.showHealing && isHealing &&
+          this.isOffsetNear(attack.attack.offset, Utils.formatTime(usage.start), this.healingRange || [-5, 5])
         );
 
       if (!condition) {
@@ -57,37 +67,37 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
       }
 
       const result = {
-        text: ability.ability,
-        icon: ability.icon,
-        refId: ability.id,
-        tooltip: ability.ability,
+        text: usage.ability.translated,
+        icon: usage.ability.ability.icon,
+        refId: usage.id,
+        tooltip: usage.ability.translated,
         color: isHealing ? "green" : undefined,
-        targetIcon: this.buildTargetIcon(ability, jobs),
-        usageOffset: Utils.offsetDiff(ability.start, attack.offset),
-        clone: this.used.has(ability.id),
+        targetIcon: this.buildTargetIcon(usage, jobs),
+        usageOffset: Utils.offsetDiff(Utils.formatTime(usage.start), Utils.formatTime(attack.start)),
+        clone: this.used.has(usage.id),
         filterFn: (a) => {
           if (!this.afFilter) {
             const solo = (
-              (ability.type & AbilityType.SelfDefense) === AbilityType.SelfDefense ||
-              (ability.type & AbilityType.TargetDefense) === AbilityType.TargetDefense ||
-              (ability.type & AbilityType.SelfShield) === AbilityType.SelfShield
+              (usage.ability.ability.abilityType & AbilityType.SelfDefense) === AbilityType.SelfDefense ||
+              (usage.ability.ability.abilityType & AbilityType.TargetDefense) === AbilityType.TargetDefense ||
+              (usage.ability.ability.abilityType & AbilityType.SelfShield) === AbilityType.SelfShield
             ) && a.indexOf("solo") >= 0;
             const party = (
-              (ability.type & AbilityType.PartyDefense) === AbilityType.PartyDefense ||
-              (ability.type & AbilityType.PartyShield) === AbilityType.PartyShield
+              (usage.ability.ability.abilityType & AbilityType.PartyDefense) === AbilityType.PartyDefense ||
+              (usage.ability.ability.abilityType & AbilityType.PartyShield) === AbilityType.PartyShield
             ) && a.indexOf("party") >= 0;
 
             return solo || party;
 
           }
           else {
-            return a.indexOf(ability.ability) >= 0;
+            return a.indexOf(usage.ability.ability.name) >= 0;
           }
         }
       } as IExportItem;
 
-      if (!this.used.has(ability.id)) {
-        this.used.add(ability.id);
+      if (!this.used.has(usage.id)) {
+        this.used.add(usage.id);
       }
 
       acc.push(result);
@@ -95,6 +105,13 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
       return acc;
     }, []);
     return this.items(items, { disableUnique: this.coverAll });
+  }
+  isLevelInRange(abilityLevel: [number, number?], level: number): boolean {
+    if (!abilityLevel) { return true; }
+    const [from, to] = abilityLevel;
+    if (from < level) { return true; }
+    if (to && to >= level) { return true; }
+    return false;
   }
 
   private isValidForColumn(type: AbilityType) {
@@ -114,10 +131,10 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
       ((type & AbilityType.Healing) === AbilityType.Healing);
   }
 
-  private buildTargetIcon(ability: ExportAbility, jobs: ExportJob[]): string {
-    const target = ability.settings?.find(s => s.name === SettingsEnum.Target)?.value;
-    const job = target && jobs?.find(j => j.id === target);
-    return job?.icon;
+  private buildTargetIcon(ability: AbilityUsageMap, jobs: JobsMapHolder): string {
+    const target = ability.getSettingData(SettingsEnum.Target)?.value;
+    const job = target && jobs.get(target);
+    return job?.job?.icon;
   }
 
   private createSoloPartFilter() {

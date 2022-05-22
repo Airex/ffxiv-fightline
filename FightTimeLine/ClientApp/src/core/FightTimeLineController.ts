@@ -758,7 +758,7 @@ export class FightTimeLineController {
       if (loadedData?.abilities) {
         for (const a of loadedData.abilities) {
           if (a) {
-            const abilityMap = this.holders.abilities.getByParentAndAbility(a.job, a.ability);
+            const abilityMap = this.holders.abilities.getByParentAndAbility(a.job, a.name);
             if (abilityMap) {
               this.addClassAbility(a.id,
                 abilityMap,
@@ -1067,8 +1067,7 @@ export class FightTimeLineController {
       this.gameService.name,
       this.fraction,
       this.data,
-      this.presenterManager.filter,
-      this.presenterManager.view);
+      this.presenterManager);
     return ctr;
   }
 

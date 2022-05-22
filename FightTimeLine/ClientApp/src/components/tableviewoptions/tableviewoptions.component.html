@@ -28,7 +28,7 @@
                   </nz-switch>
                 </div>
                 <div *ngSwitchCase="1">
-                  <nz-slider [nzMin]="setting.options?.min" [nzMax]="setting.options?.max"
+                  <nz-slider [nzMin]="setting.options?.min" [nzMax]="setting.options?.max" [nzStep]="setting.options?.step"
                     [formControlName]="setting.name" (ngModelChange)="change(setting.name, $event)" [id]="setting.name">
                   </nz-slider>
                 </div>

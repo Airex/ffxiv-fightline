@@ -722,7 +722,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   showAsTable() {
-    this.dialogService.openTable(() => this.fightLineController.createSerializer().serializeForExport());
+    this.dialogService.openTable();
   }
 
   openBossTemplates() {

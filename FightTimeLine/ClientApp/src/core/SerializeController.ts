@@ -1,13 +1,21 @@
-import { IFightData, IFilter, IView, IFight, IBoss, IBossAbility, IAbilityFilter, DamageType } from "./Models";
+import { IFightData, IFilter, IView, IFight, IBoss, IBossAbility, IAbilityFilter, DamageType, IPresenterData } from "./Models";
 import { Utils } from "./Utils";
 import * as Holders from "./Holders";
 import { JobMap, BossAttackMap, AbilityUsageMap } from "./Maps";
-import { ExportData } from "./ExportModels";
-import { valueFunctionProp } from "ng-zorro-antd/core/util";
+import { ExportAbility, ExportData, ExportDataData } from "./ExportModels";
 
 export class SerializeController {
+  constructor(
+    private holders: Holders.Holders,
+    private gameName: string,
+    private fraction,
+    private data: IFightData,
+    private presener: IPresenterData
+  ) {
 
-  serializeForDownload() {
+  }
+
+  public serializeForDownload() {
 
     const attacks = this.holders.bossAttacks.getAll();
     const abs = this.holders.itemUsages.getAll();
@@ -15,13 +23,13 @@ export class SerializeController {
 
     const getTarget = (ab: AbilityUsageMap) => {
       const value = ab.getSettingData("target")?.value;
-      if (value){
+      if (value) {
         return this.holders.jobs.get(value).order;
       }
-    }
+    };
 
     return {
-      party: jobs.map(m=>({
+      party: jobs.map(m => ({
         name: m.job.name,
         id: m.order
       })),
@@ -43,17 +51,7 @@ export class SerializeController {
           offset: ab.offset
         }))
       ]
-    }
-  }
-
-  constructor(
-    private holders: Holders.Holders,
-    private gameName: string,
-    private fraction,
-    private data: IFightData,
-    private filter: IFilter,
-    private view: IView) {
-
+    };
   }
 
   serializeFight(): IFight {
@@ -75,7 +73,7 @@ export class SerializeController {
           return {
             id: value.id,
             job: a.job.id,
-            ability: a.translated,
+            name: a.translated,
             start: Utils.formatTime(value.start),
             settings: JSON.stringify(value.settings),
           } as IAbilityUsageData;
@@ -103,9 +101,9 @@ export class SerializeController {
     const fightData = {
       boss: this.serializeBoss(),
       initialTarget: this.holders.bossTargets.initialBossTarget,
-      filter: this.filter,
+      filter: this.presener.filter,
       importedFrom: this.data.importedFrom,
-      view: this.view,
+      view: this.presener.view,
       jobs: this.serializeJobs(),
       abilityMaps: abilitymaps,
       abilities,
@@ -162,7 +160,6 @@ export class SerializeController {
     } as IBoss;
   }
 
-
   serializeJobs(): IJobSerializeData[] {
     const map = this.holders.jobs.getAll()
       .map((value: JobMap) => ({
@@ -177,7 +174,7 @@ export class SerializeController {
     return map;
   }
 
-  serializeForExport(): ExportData {
+  public serializeForExport(): ExportData {
 
     const attacks = this.holders.bossAttacks.getAll()
       .filter(ab => ab.visible)
@@ -230,13 +227,14 @@ export class SerializeController {
         return {
           id: value.id,
           job: a.job.id,
-          ability: a.translated,
+          name: a.translated,
           type: a.ability.abilityType,
           duration: value.calculatedDuration,
           start: Utils.formatTime(value.start),
           settings: value.settings,
-          icon: value.ability.ability.icon
-        };
+          icon: value.ability.ability.icon,
+          level: [value.ability.ability.levelAcquired, value.ability.ability.levelRemoved]
+        } as ExportAbility;
       });
 
     const data = {
@@ -245,7 +243,7 @@ export class SerializeController {
       initialTarget: this.holders.bossTargets.initialBossTarget,
       jobs,
       abilities
-    };
+    } as ExportDataData;
 
     return {
       name: this.data.fight && this.data.fight.name || "",
@@ -294,7 +292,7 @@ export interface IJobSerializeData {
 export interface IAbilityUsageData {
   id: string;
   job: string;
-  ability: string;
+  name: string;
   start: string;
   settings: string;
 }

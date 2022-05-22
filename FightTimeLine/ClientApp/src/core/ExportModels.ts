@@ -41,12 +41,13 @@ export interface ExportJob {
 export interface ExportAbility {
   id: string;
   job: string;
-  ability: string;
+  name: string;
   type: AbilityType;
   duration: number;
   start: TimeOffset;
   icon: string;
   settings: ISettingData[];
+  level?: [number, number?];
 }
 
 export interface ExportDataData {
@@ -57,7 +58,7 @@ export interface ExportDataData {
   abilities: ExportAbility[];
 }
 
-export class ExportData {
+export class  ExportData {
   name: string;
   userName: string;
   data: ExportDataData;
@@ -140,22 +141,22 @@ export interface BooleanOptionsSetting extends ITableOptionsSetting<undefined> {
   kind: TableOptionSettingType.Boolean;
 }
 
-export interface NumberRangeOptionsSetting extends ITableOptionsSetting<{min: number, max: number}> {
+export interface NumberRangeOptionsSetting extends ITableOptionsSetting<{ min: number, max: number, step?: number }> {
   kind: TableOptionSettingType.NumberRange;
 }
 
-export interface LimitedNumberRangeOptionsSetting extends ITableOptionsSetting<{min: number, max: number, marks?: any }> {
+export interface LimitedNumberRangeOptionsSetting extends ITableOptionsSetting<{ min: number, max: number, marks?: any }> {
   kind: TableOptionSettingType.LimitedNumberRange;
 }
 
 export type TableOptionsSettingItem = { id: string, checked: boolean, text?: string, icon?: string };
 
-export interface TagsOptionsSetting extends ITableOptionsSetting<{items: TableOptionsSettingItem[]}> {
+export interface TagsOptionsSetting extends ITableOptionsSetting<{ items: TableOptionsSettingItem[] }> {
   kind: TableOptionSettingType.Tags;
 }
 
 export type ITableOptionSettings = ITableOptionsSetting[];
 
-export interface ITableOptions{
+export interface ITableOptions {
   [name: string]: any;
 }

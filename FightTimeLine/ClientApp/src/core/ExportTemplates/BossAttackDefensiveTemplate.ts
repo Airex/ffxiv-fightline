@@ -1,8 +1,10 @@
 import { AttackRowExportTemplate, ExportTemplateContext } from "../BaseExportTemplate";
 import {
-  BooleanOptionsSetting, ExportAttack, ExportData, ITableOptions, ITableOptionSettings, LimitedNumberRangeOptionsSetting,
+  BooleanOptionsSetting, ITableOptions, ITableOptionSettings, LimitedNumberRangeOptionsSetting,
   TableOptionSettingType, TagsOptionsSetting
 } from "../ExportModels";
+import { Holders } from "../Holders";
+import { BossAttackMap } from "../Maps";
 import { AttackNameColumn, BossTargetColumn, IColumnTemplate, TimeColumn } from "../TableModels";
 import { JobDefensivesColumn } from "./Columns/JobDefensivesColumn";
 import { MitigationsCombinedColumn } from "./Columns/MitigationsCombinedColumn";
@@ -10,7 +12,7 @@ import { MitigationsCombinedColumn } from "./Columns/MitigationsCombinedColumn";
 type OptionsType = [boolean, boolean, boolean, [number, number], string[], string[], boolean];
 
 export class BossAttackDefensiveTemplateV2 extends AttackRowExportTemplate {
-  public loadOptions(data: ExportData): ITableOptionSettings {
+  public loadOptions(data: Holders): ITableOptionSettings {
     const cover: BooleanOptionsSetting = {
       name: "c",
       defaultValue: false,
@@ -83,12 +85,12 @@ export class BossAttackDefensiveTemplateV2 extends AttackRowExportTemplate {
 
     const jobsFilter: TagsOptionsSetting = {
       name: "jf",
-      defaultValue: data.data.jobs.map(j => j.order.toString()),
+      defaultValue: data.jobs.getAll().map(j => j.order.toString()),
       displayName: "Jobs Filter",
       kind: TableOptionSettingType.Tags,
       visible: true,
       options: {
-        items: data.data.jobs.map(j => ({ checked: true, icon: j.icon, id: j.order.toString() }))
+        items: data.jobs.getAll().map(j => ({ checked: true, icon: j.job.icon, id: j.order.toString() }))
       }
     };
     return [
@@ -114,25 +116,27 @@ export class BossAttackDefensiveTemplateV2 extends AttackRowExportTemplate {
     return result as any;
   }
 
-  getColumns(context: ExportTemplateContext): IColumnTemplate<ExportAttack>[] {
+  getColumns(context: ExportTemplateContext): IColumnTemplate<BossAttackMap>[] {
 
-    const options = this.getOptions(context.options, ["c", "af", "h", "hr", "cf", "jf", "atc"]);
+    const options = this.getOptions(context.options, ["c", "af", "h", "hr", "cf", "jf", "atc", "l"]);
     const [coverAll, afFilter, showHealing, healingRange, columnsFilter, jobsFilter, attackColor]
-      = options || this.loadOptions(context.data).map(o => o.defaultValue) as OptionsType;
+      = options || this.loadOptions(context.holders).map(o => o.defaultValue) as OptionsType;
 
     const sortedHealingRange = healingRange.sort();
 
-    const jobs = context.data.data.jobs.sort((a, b) => a.role - b.role);
+    const jobs = context.holders.jobs.getAll().sort((a, b) => a.job.role - b.job.role);
     const columnPresent = (columName: string, columnFunc) => !columnsFilter || columnsFilter.indexOf(columName) >= 0 ? columnFunc() : null;
 
-    const colTemplates: IColumnTemplate<ExportAttack>[] = [
+    const colTemplates: IColumnTemplate<BossAttackMap>[] = [
       columnPresent("time", () => new TimeColumn()),
       columnPresent("attack", () => new AttackNameColumn(context.presenter, attackColor)),
       columnPresent("target", () => new BossTargetColumn()),
       columnPresent("mitigations", () => new MitigationsCombinedColumn(context.holders)),
       ...jobs
         .filter(j => !jobsFilter || jobsFilter.indexOf(j.order.toString()) >= 0)
-        .map(j => new JobDefensivesColumn(j, context.jobRegistry, afFilter, coverAll, showHealing, sortedHealingRange))
+        .map(j => new JobDefensivesColumn(
+          j, context.jobRegistry, afFilter, coverAll, showHealing,
+          sortedHealingRange, context.options.l || context.presenter.fightLevel))
     ].filter(a => !!a);
 
     return colTemplates;

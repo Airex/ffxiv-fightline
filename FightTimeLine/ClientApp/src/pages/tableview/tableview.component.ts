@@ -7,7 +7,7 @@ import { NgProgressComponent } from "ngx-progressbar";
 
 import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate";
 import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate";
-import { ExportTemplate } from "../../core/BaseExportTemplate";
+import { TableViewTemplate, ExportTemplateContext } from "../../core/BaseExportTemplate";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
 
@@ -54,10 +54,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   filtered: ExportModels.IExportRow[] = [];
   pagesize = Number.MAX_VALUE;
-  exported: ExportModels.ExportData;
-  tpl: ExportTemplate;
+  tpl: TableViewTemplate;
 
-  templates: { [name: string]: ExportTemplate } = {
+  templates: { [name: string]: TableViewTemplate } = {
     defence: new BossAttackDefensiveTemplateV2(),
     onesecond: new EachRowOneSecondTemplate(),
     descriptive: new DescriptiveTemplate(),
@@ -166,6 +165,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.visStorage.clear();
+    this.gameService.jobRegistry.setLevel(90);
     this.fightLineController = new FightTimeLineController.FightTimeLineController(
       this.startDate,
       this.idgen,
@@ -177,6 +177,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
       this.settingsService,
       this.visStorage.presenter
     );
+
+    this.fightLineController.applyFilter(null, "level");
 
     this.subscribeToDispatcher(this.dispatcher);
 
@@ -205,7 +207,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
-
   load(id) {
     this.dialogService.executeWithLoading("Loading...", ref => {
       this.fightService.getFight(id).subscribe((fight: M.IFight) => {
@@ -215,8 +216,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
             this.fightLineController.loadFight(fight, loadedData, value.map(cmd => JSON.parse(cmd.data)));
             this.connectToSession()
               .finally(() => {
-                const serializer = this.fightLineController.createSerializer();
-                this.exported = serializer.serializeForExport();
+                this.gameService.jobRegistry.setLevel(90);
                 this.tpl = this.templates[this.template.toLowerCase()];
                 this.loadTable();
                 ref.close();
@@ -271,11 +271,26 @@ export class TableViewComponent implements OnInit, OnDestroy {
         description: "Changes size of icons",
         options: {
           min: 16,
-          max: 48
+          max: 48,
+          step: 1
         }
       };
 
-      this.options = [...(this.tpl.loadOptions(this.exported) || []), cellOptions, iconSize];
+      const level: ExportModels.NumberRangeOptionsSetting = {
+        name: "l",
+        defaultValue: 90,
+        displayName: "Fight Level",
+        visible: true,
+        kind: ExportModels.TableOptionSettingType.NumberRange,
+        description: "Set level of fight",
+        options: {
+          min: 50,
+          max: 90,
+          step: 10
+        }
+      };
+
+      this.options = [level, ...(this.tpl.loadOptions(this.visStorage.holders) || []), cellOptions, iconSize];
 
       const [_, search] = this.location.path().split("?");
       const params = new URLSearchParams(search);
@@ -297,13 +312,17 @@ export class TableViewComponent implements OnInit, OnDestroy {
       }, {});
 
     }
+
+    const lvl = this.currentOptions.l;
+    this.gameService.jobRegistry.setLevel(lvl);
+    this.fightLineController.applyFilter(null, "level");
+
     const context = {
-      data: this.exported,
       presenter: this.visStorage.presenter,
       jobRegistry: this.gameService.jobRegistry,
       options: this.currentOptions,
       holders: this.visStorage.holders
-    };
+    } as ExportTemplateContext;
     this.set = this.tpl.buildTable(context);
 
     this.filterChange(null, null);
@@ -374,13 +393,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
   }
 
   langChanged() {
-    const serializer = this.fightLineController.createSerializer();
-    this.exported = serializer.serializeForExport();
     this.loadTable();
   }
 }
-
-
 
 function parseOptions(type: ExportModels.TableOptionSettingType, p: string): any {
   switch (type) {

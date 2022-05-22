@@ -1,13 +1,14 @@
 import { calculateDefsForAttack, calculateMitigationForAttack } from "src/core/Defensives";
-import { ExportAttack, ExportData, IExportColumn, IExportCell } from "src/core/ExportModels";
+import { IExportColumn, IExportCell } from "src/core/ExportModels";
 import { Holders } from "src/core/Holders";
+import { BossAttackMap } from "src/core/Maps";
 import { BaseColumnTemplate, IColumnTemplate } from "src/core/TableModels";
 
-export class MitigationsCombinedColumn extends BaseColumnTemplate implements IColumnTemplate<ExportAttack>{
+export class MitigationsCombinedColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap>{
   constructor(private holders: Holders) {
     super();
   }
-  buildHeader(data: ExportData): IExportColumn {
+  buildHeader(data: Holders): IExportColumn {
     return {
       text: "Mitigations",
       name: "mitigations",
@@ -15,7 +16,7 @@ export class MitigationsCombinedColumn extends BaseColumnTemplate implements ICo
       width: "130px"
     } as IExportColumn;
   }
-  buildCell(data: ExportData, attack: ExportAttack): IExportCell {
+  buildCell(data: Holders, attack: BossAttackMap): IExportCell {
     const defs = calculateDefsForAttack(this.holders, attack.id);
     const mts = calculateMitigationForAttack(this.holders, defs, attack);
     return this.createJobCell(mts);

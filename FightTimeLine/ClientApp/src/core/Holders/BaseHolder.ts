@@ -55,6 +55,11 @@ export class BaseHolder<TK, TI, T extends IBaseHolderItem<TK>> {
   filter(predicate: (it: T) => boolean): T[] {
     return this.values.filter(predicate);
   }
+
+  first(predicate: (it: T) => boolean): T | undefined {
+    return this.filter(predicate)[0];
+  }
+
   remove(ids: TK[]): void {
     ids.forEach(x => {
       const index = this.items[x as any];

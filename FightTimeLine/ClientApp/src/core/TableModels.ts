@@ -1,11 +1,13 @@
-import { ExportAttack, ExportData, IExportCell, IExportColumn, IExportItem, ITableOptions } from "./ExportModels";
+import { IExportCell, IExportColumn, IExportItem, ITableOptions } from "./ExportModels";
+import { Holders } from "./Holders";
+import { BossAttackMap } from "./Maps";
 import { TimeOffset } from "./Models";
 import { PresenterManager } from "./PresentationManager";
 import { Utils } from "./Utils";
 
 export interface IColumnTemplate<RowData> {
-  buildHeader(data: ExportData): IExportColumn;
-  buildCell(data: ExportData, attack: RowData, options?: ITableOptions): IExportCell;
+  buildHeader(data: Holders): IExportColumn;
+  buildCell(data: Holders, attack: RowData, options?: ITableOptions): IExportCell;
 }
 
 
@@ -53,15 +55,15 @@ export abstract class BaseColumnTemplate {
   }
 }
 
-export class TimeColumn extends BaseColumnTemplate implements IColumnTemplate<ExportAttack> {
-  buildHeader(data: ExportData): IExportColumn {
+export class TimeColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap> {
+  buildHeader(data: Holders): IExportColumn {
     return {
       text: "Time",
       name: "time",
       width: "50px",
       align: "center",
-      listOfFilter: data.data.boss.downTimes
-        .sort((a, b) => this.offsetCompareFn(a.start, b.start))
+      listOfFilter: data.bossDownTime.getAll()
+        .sort((a, b) => this.offsetCompareFn(Utils.formatTime(a.start), Utils.formatTime(b.start)))
         .map(d => ({ text: d.comment, value: d, byDefault: true }))
         .concat({ text: "Other", value: { comment: "Other" } as any, byDefault: true }),
       filterFn: (d, row, col) => {
@@ -76,19 +78,20 @@ export class TimeColumn extends BaseColumnTemplate implements IColumnTemplate<Ex
     };
   }
 
-  buildCell(data: ExportData, attack: ExportAttack): IExportCell {
+  buildCell(data: Holders, attack: BossAttackMap): IExportCell {
     return this.text({
       text: attack.offset,
       align: "center",
       ignoreShowText: true,
-      refId: (data.data.boss.downTimes.find(d => Utils.inRange(d.start, d.end, attack.offset)) || { id: null }).id,
+      refId: (data.bossDownTime.first(d =>
+        Utils.inRange(Utils.formatTime(d.start), Utils.formatTime(d.end), attack.offset)) || { id: null }).id,
       disableUnique: true,
       colorFn: (a) => {
-        const dt = data.data.boss.downTimes.find(d => Utils.inRange(d.start, d.end, a.offset));
+        const dt = data.bossDownTime.first(d => Utils.inRange(Utils.formatTime(d.start), Utils.formatTime(d.end), a.offset));
         return dt && dt.color || "";
       },
       bgRefIdFn: (a) => {
-        const dt = data.data.boss.downTimes.find(d => Utils.inRange(d.start, d.end, attack.offset));
+        const dt = data.bossDownTime.first(d => Utils.inRange(Utils.formatTime(d.start), Utils.formatTime(d.end), attack.offset));
         return dt && dt.id;
       }
     });
@@ -96,11 +99,11 @@ export class TimeColumn extends BaseColumnTemplate implements IColumnTemplate<Ex
 
 }
 
-export class AttackNameColumn extends BaseColumnTemplate implements IColumnTemplate<ExportAttack> {
+export class AttackNameColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap> {
   constructor(private presenter: PresenterManager, private useAttackColor?: boolean) {
     super();
   }
-  buildHeader(data: ExportData): IExportColumn {
+  buildHeader(data: Holders): IExportColumn {
     return {
       name: "boss",
       text: "Attack",
@@ -113,16 +116,16 @@ export class AttackNameColumn extends BaseColumnTemplate implements IColumnTempl
       }
     };
   }
-  buildCell(data: ExportData, attack: ExportAttack, options?: ITableOptions): IExportCell {
+  buildCell(data: Holders, attack: BossAttackMap, options?: ITableOptions): IExportCell {
 
-    const color = this.useAttackColor ? attack.color : this.getColor(attack);
+    const color = this.useAttackColor ? attack.attack.color : this.getColor(attack);
 
     return this.text({
-      text: attack.name,
+      text: attack.attack.name,
       ignoreShowText: true,
       color,
       refId: attack.id,
-      tooltip: attack.desc,
+      tooltip: attack.attack.description,
       fullwidth: true,
       align: "center"
     });
@@ -130,11 +133,11 @@ export class AttackNameColumn extends BaseColumnTemplate implements IColumnTempl
 
 }
 
-export class BossTargetColumn extends BaseColumnTemplate implements IColumnTemplate<ExportAttack> {
+export class BossTargetColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap> {
   constructor() {
     super();
   }
-  buildHeader(data: ExportData): IExportColumn {
+  buildHeader(data: Holders): IExportColumn {
     return {
       name: "target",
       text: "Target",
@@ -142,14 +145,14 @@ export class BossTargetColumn extends BaseColumnTemplate implements IColumnTempl
       width: "65px"
     };
   }
-  buildCell(data: ExportData, attack: ExportAttack): IExportCell {
-    const jobs = data.data.jobs.sort((a, b) => a.role - b.role);
+  buildCell(data: Holders, attack: BossAttackMap): IExportCell {
+    const jobs = data.jobs.getAll().sort((a, b) => a.job.role - b.job.role);
     return this.items(
-      data.data.bossTargets
-        .filter(bt => this.isOffsetInRange(attack.offset, bt.start, bt.end))
+      data.bossTargets
+        .filter(bt => this.isOffsetInRange(Utils.formatTime(attack.start), Utils.formatTime(bt.start), Utils.formatTime(bt.end)))
         .map(bt => jobs.find(j => j.id === bt.target))
         .filter(p => !!p)
-        .map(p => ({ text: p.name, icon: p.icon, refId: p.id, ignoreShowIcon: true })),
+        .map(p => ({ text: p.translated, icon: p.job.icon, refId: p.id, ignoreShowIcon: true })),
       {
         align: "center",
         disableUnique: true,

@@ -1,5 +1,7 @@
 import { AttackRowExportTemplate, ExportTemplateContext } from "../BaseExportTemplate"
-import { ExportAttack, ExportData, IExportCell, IExportColumn, ITableOptionSettings } from "../ExportModels";
+import { IExportCell, IExportColumn, ITableOptionSettings } from "../ExportModels";
+import { Holders } from "../Holders";
+import { BossAttackMap } from "../Maps";
 import { AttackNameColumn, BaseColumnTemplate, IColumnTemplate, TimeColumn } from "../TableModels";
 
 export class DescriptiveTemplate extends AttackRowExportTemplate {
@@ -14,7 +16,7 @@ export class DescriptiveTemplate extends AttackRowExportTemplate {
     return "Descriptive";
   }
 
-  getColumns(context: ExportTemplateContext): IColumnTemplate<ExportAttack>[] {
+  getColumns(context: ExportTemplateContext): IColumnTemplate<BossAttackMap>[] {
     return [
       new TimeColumn(),
       new AttackNameColumn(context.presenter),
@@ -24,30 +26,30 @@ export class DescriptiveTemplate extends AttackRowExportTemplate {
   }
 }
 
-class AttackDescriptionColumn extends BaseColumnTemplate implements IColumnTemplate<ExportAttack>{
-  buildHeader(data: ExportData): IExportColumn {
+class AttackDescriptionColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap>{
+  buildHeader(data: Holders): IExportColumn {
     return {
       name: "desc",
       text: "Description",
     };
   }
-  buildCell(data: ExportData, attack: ExportAttack): IExportCell {
+  buildCell(data: Holders, attack: BossAttackMap): IExportCell {
     return this.text({
-      text: attack.desc,
+      text: attack.attack.description,
       ignoreShowText: true
-    })
+    });
   }
 }
 
-class AttackTagsColumn extends BaseColumnTemplate implements IColumnTemplate<ExportAttack>{
-  buildHeader(data: ExportData): IExportColumn {
+class AttackTagsColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap>{
+  buildHeader(data: Holders): IExportColumn {
     return {
       name: "tags",
       text: "Tags",
     };
   }
-  buildCell(data: ExportData, attack: ExportAttack): IExportCell {
-    return this.items(attack.tags?.map(t => ({ text: t, ignoreShowText: true })) || [], {});
+  buildCell(data: Holders, attack: BossAttackMap): IExportCell {
+    return this.items(attack.attack.tags?.map(t => ({ text: t, ignoreShowText: true })) || [], {});
   }
 }
 

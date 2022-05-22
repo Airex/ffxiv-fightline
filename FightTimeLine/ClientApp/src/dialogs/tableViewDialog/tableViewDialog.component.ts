@@ -1,11 +1,11 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
 import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate";
 import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate";
-import { ExportTemplate } from "../../core/BaseExportTemplate";
+import { TableViewTemplate } from "../../core/BaseExportTemplate";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
 import {
-  ExportData, IExportCell, IExportColumn, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings,
+  IExportCell, IExportColumn, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings,
   NumberRangeOptionsSetting, TableOptionSettingType, TagsOptionsSetting
 } from "src/core/ExportModels";
 import { PresenterManager } from "src/core/PresentationManager";
@@ -52,10 +52,6 @@ export class TableViewDialog implements OnInit {
 
   pagesize = Number.MAX_VALUE;
 
-  @Input()
-  data: ExportData;
-  presenterManager = new PresenterManager();
-
   selectedValue = null;
 
   set: IExportResultSet = {
@@ -65,7 +61,7 @@ export class TableViewDialog implements OnInit {
     filterByFirstEntry: false
   };
   loading = false;
-  templates: ExportTemplate<any>[] = [
+  templates: TableViewTemplate<any>[] = [
     new EachRowOneSecondTemplate(),
     new BossAttackDefensiveTemplateV2(),
     new DescriptiveTemplate(),
@@ -76,7 +72,6 @@ export class TableViewDialog implements OnInit {
   currentOptions: ITableOptions;
 
   filtered: IExportRow[] = [];
-
   filterData = {};
   ngOnInit() {
   }
@@ -88,8 +83,7 @@ export class TableViewDialog implements OnInit {
 
     setTimeout(() => {
 
-      const tpl = this.templates
-        .find(it => it.name === this.selectedValue);
+      const tpl = this.templates.find(it => it.name === this.selectedValue);
 
       if (!tpl) { return; }
 
@@ -120,11 +114,12 @@ export class TableViewDialog implements OnInit {
           description: "Changes size of icons",
           options: {
             min: 16,
-            max: 48
+            max: 48,
+            step: 1
           }
         };
 
-        this.options = [...(tpl.loadOptions(this.data) || []), cellOptions, iconSize];
+        this.options = [...(tpl.loadOptions(this.visStorage.holders) || []), cellOptions, iconSize];
         this.currentOptions = this.options.reduce((acc, c) => {
           acc[c.name] = c.defaultValue;
           return acc;
@@ -132,8 +127,7 @@ export class TableViewDialog implements OnInit {
       }
 
       const context = {
-        data: this.data,
-        presenter: this.presenterManager,
+        presenter: this.visStorage.presenter,
         jobRegistry: this.gameService.jobRegistry,
         options: this.currentOptions,
         holders: this.visStorage.holders
@@ -150,7 +144,6 @@ export class TableViewDialog implements OnInit {
 
   optionsChanged(values: ITableOptions) {
     this.currentOptions = values;
-
     // console.debug(filtered);
     this.show(true);
   }

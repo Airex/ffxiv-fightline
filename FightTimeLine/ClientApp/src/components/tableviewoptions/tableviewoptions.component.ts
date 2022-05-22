@@ -16,18 +16,18 @@ export class TableViewOptionsComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   options: ITableOptions = {};
-  private _settings: ITableOptionSettings;
+  private settingsInternal: ITableOptionSettings;
   subject = new Subject();
   subscription: Subscription;
 
   get settings(): ITableOptionSettings {
-    return this._settings;
+    return this.settingsInternal;
   }
 
   @Input() set settings(value: ITableOptionSettings) {
-    this._settings = value;
-    this.options = this._settings?.reduce((acc, s) => { acc[s.name] = s.initialValue || s.defaultValue; return acc; }, {});
-    this.createForm(this._settings);
+    this.settingsInternal = value;
+    this.options = this.settingsInternal?.reduce((acc, s) => { acc[s.name] = s.initialValue || s.defaultValue; return acc; }, {});
+    this.createForm(this.settingsInternal);
   }
 
   @Output() changed: EventEmitter<ITableOptions> = new EventEmitter<ITableOptions>();
@@ -70,7 +70,7 @@ export class TableViewOptionsComponent implements OnInit, OnDestroy {
   change(name, value) {
     this.options[name] = value;
 
-    const change = this._settings.find(s => s.name === name)?.onChange;
+    const change = this.settingsInternal.find(s => s.name === name)?.onChange;
     if (change) {
       change(value);
     }

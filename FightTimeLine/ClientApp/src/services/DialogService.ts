@@ -254,7 +254,7 @@ export class DialogService {
     });
   }
 
-  openTable(dataFn: () => any) {
+  openTable() {
     this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzContent: D.TableViewDialog,
@@ -265,7 +265,6 @@ export class DialogService {
       nzOkDisabled: true,
       nzMaskClosable: false,
       nzComponentParams: {
-        data: dataFn()
       }
     });
   }
