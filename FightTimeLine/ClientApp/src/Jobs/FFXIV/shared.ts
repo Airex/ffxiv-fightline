@@ -103,6 +103,7 @@ export const tankSharedAbilities: IAbilities = {
     cooldown: 120,
     xivDbId: "7537",
     iconPrefix: "tank",
+    settings: [settings.target],
     abilityType: AbilityType.Enmity
   }
 };
