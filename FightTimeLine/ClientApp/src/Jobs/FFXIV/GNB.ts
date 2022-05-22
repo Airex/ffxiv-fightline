@@ -173,7 +173,7 @@ const abilities = [
       jp: "ハート・オブ・ストーン"
     },
     cooldown: 25,
-    xivDbId: "20778",
+    xivDbId: "16161",
     statuses: [statuses.heartOfStone],
     abilityType: AbilityType.TargetDefense,
     settings: [settings.target],

@@ -227,6 +227,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   updateFilter(source?: string): void {
     this.fightLineController.applyFilter(null, source);
+    this.sidepanel.refresh();
     this.presenterManager.save(this.storage, this.fightId);
   }
 
