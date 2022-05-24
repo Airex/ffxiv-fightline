@@ -13,7 +13,7 @@ export class JobRolePipe implements PipeTransform {
     }
     const result = items.filter(item => item.role === filter);
     // filter items array, items which match and return true will be
-    // kept, false will be filtered out    
+    // kept, false will be filtered out
     return result;
   }
 }

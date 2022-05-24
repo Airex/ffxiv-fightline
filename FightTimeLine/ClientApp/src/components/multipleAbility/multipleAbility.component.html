@@ -1,18 +1,18 @@
 <div class="sidepanel-container">
   <div class="sidepanel-full">
-    <div>Multiple actions</div>
+    <div>{{'component.multipleAbility.header' | translate}}</div>
     <div *ngIf="data.mode === 'default'">
       <nz-button-group>
-        <button nz-button nzType="primary" (click)="remove()" nzDanger>Remove</button>
+        <button nz-button nzType="primary" (click)="remove()" nzDanger>{{'component.multipleAbility.remove' | translate}}</button>
       </nz-button-group>
     </div>
   </div>
-  <sidepanel-area header="Selection">
+  <sidepanel-area header="{{'component.multipleAbility.selection' | translate}}">
     <div>
       <nz-tag *ngFor="let ab of items" nzMode="default">
         <span>
           <img class='abilityIcon' [src]="ab.ability.ability.icon" />
-          <span class='abilityName'>{{ab.ability.ability.name}}</span>
+          <span class='abilityName'>{{ab.ability.translated}}</span>
           <i nz-icon nzType="clock-circle" theme="outline"></i>
           <span class='abilityTime'>{{formatDate(ab.start)}}</span>
         </span>

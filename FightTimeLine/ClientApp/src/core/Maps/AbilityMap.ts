@@ -1,4 +1,4 @@
-import { DataGroup } from "vis-timeline"
+import { DataGroup } from "vis-timeline";
 import * as BaseMap from "./BaseMap";
 import * as BaseHolder from "../Holders/BaseHolder";
 import * as Models from "../Models";
@@ -10,39 +10,33 @@ export interface IAbilityMapData {
 
 export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapData> implements BaseHolder.IForSidePanel {
 
-  sidePanelComponentName: string = "jobAbility";
-
-  onDataUpdate(data: IAbilityMapData): void {
-    this.setItem(this.isStance ? this.createStances(this.id, data) : this.createJobAbility(this.ability, this.id, data));
-  }
-
-  constructor(presenter: Models.IPresenterData, id: string, job: JobMap.JobMap, ability: Models.IAbility, isStance: boolean, data?: IAbilityMapData) {
-    super(presenter, id);
-    this.job = job;
-    this.ability = ability;
-    this.isStance = isStance;
-    this.index = this.job.order + (++AbilityMap.abilityIndex)/10000;
-
-    this.applyData(Object.assign({ }, data) as IAbilityMapData);
-  }
-
   static abilityIndex = 0;
-  job: JobMap.JobMap;
-  ability: Models.IAbility;
-  isStance: boolean;
+  sidePanelComponentName = "jobAbility";
   index: number | undefined;
 
+  constructor(
+    presenter: Models.IPresenterData,
+    id: string,
+    public job: JobMap.JobMap,
+    private abilityName: string,
+    public isStance: boolean,
+    data?: IAbilityMapData) {
+    super(presenter, id);
+    this.isStance = isStance;
+    this.index = this.job.order + this.getOrder(presenter, job, this.ability, (++AbilityMap.abilityIndex) / 10000);
 
-  public getSettingOfType(type: string): Models.IAbilitySetting {
-    return this.ability.settings && this.ability.settings.find(it => it.type === type);
+    this.applyData(Object.assign({}, data) as IAbilityMapData);
   }
 
-  public hasValue(toCheck: Models.AbilityType): boolean {
-    return (this.ability.abilityType & toCheck) === toCheck;
+  get ability(){
+    return this.job.job.abilities[this.abilityName];
   }
 
-  public hasAnyValue(...toCheck: Models.AbilityType[]): boolean {
-    return toCheck.some(it => this.hasValue(it));
+  private getOrder(presenter, job, ability, def) {
+    const jf = presenter.jobFilter(job.id);
+    const abOrder = jf?.abilityOrder;
+    const order = abOrder && abOrder[ability.name];
+    return order || def;
   }
 
   public get isDef(): boolean {
@@ -50,7 +44,9 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
   }
 
   public get isSelfDef(): boolean {
-    return this.hasValue(Models.AbilityType.SelfDefense) || this.hasValue(Models.AbilityType.SelfShield) || this.hasValue(Models.AbilityType.TargetDefense);
+    return this.hasValue(Models.AbilityType.SelfDefense)
+      || this.hasValue(Models.AbilityType.SelfShield)
+      || this.hasValue(Models.AbilityType.TargetDefense);
   }
 
   public get isOgcd(): boolean {
@@ -77,42 +73,9 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     return this.hasValue(Models.AbilityType.PartyDamageBuff);
   }
 
-  createStances(id: string, data: IAbilityMapData): DataGroup {
-    const key: any = { sgDummy: true };
-    key[`sg${id}`] = false;
-
-    return <DataGroup>{
-      id: id,
-      visible: !this.hidden,
-      subgroupStack: key,
-      content: "Stance",
-
-    }
-  }
-
-
-  createElementFromHtml(htmlString): HTMLElement {
-    const div = document.createElement('div');
-    div.innerHTML = htmlString.trim();
-    return div;
-  }
-
-  createJobAbility(ability: Models.IAbility, id: string, data: IAbilityMapData): DataGroup {
-    const key: any = { sgDummy: true };
-    key[`sg${id}`] = false;
-
-    const el = ability.icon
-      ? this.createElementFromHtml(`<span><img class='abilityIcon' src='${ability.icon}'/><span class='abilityName'>${ability.name}</span></span>`)
-      : this.createElementFromHtml(`<span>${ability.name}</span>`);
-
-    // console.log(this.job.id+" "+this.ability.name+" "+this.job.isCompact) 
-    return {
-      id: id,
-      className: this.buildClass({ compact: this.isCompact || this.job.isCompact || this.presenter.view.compactView }),
-      visible: !(this.hidden || data.filtered || this.job.collapsed),
-      content: el,
-      value: this.index
-    } as DataGroup;
+  public get translated() {
+    const name = this.ability.translation ? this.ability.translation[this.presenter.language] : this.ability.name;
+    return name;
   }
 
   get hidden(): boolean {
@@ -127,7 +90,69 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     return this.presenter.jobFilter(this.job.id).abilityCompact?.indexOf(this.ability.name) >= 0 || false;
   }
 
-  
+
+  truncate = (input, len) => input.length > len ? `${input.substring(0, len)}...` : input;
+
+
+  onDataUpdate(data: IAbilityMapData): void {
+    this.setItem(this.isStance ? this.createStances(this.id, data) : this.createJobAbility(this.ability, this.id, data));
+  }
+
+
+  public getSettingOfType(type: string): Models.IAbilitySetting {
+    return this.ability.settings && this.ability.settings.find(it => it.type === type);
+  }
+
+  public hasValue(toCheck: Models.AbilityType): boolean {
+    return (this.ability.abilityType & toCheck) === toCheck;
+  }
+
+  public hasAnyValue(...toCheck: Models.AbilityType[]): boolean {
+    return toCheck.some(it => this.hasValue(it));
+  }
+
+  createStances(id: string, data: IAbilityMapData): DataGroup {
+    const key: any = { sgDummy: true };
+    key[`sg${id}`] = false;
+
+    return {
+      id,
+      visible: !this.hidden,
+      subgroupStack: key,
+      content: "Stance",
+    } as DataGroup;
+  }
+
+
+  createElementFromHtml(htmlString): HTMLElement {
+    const div = document.createElement('div');
+    div.innerHTML = htmlString.trim();
+    return div;
+  }
+
+  createJobAbility(ability: Models.IAbility, id: string, data: IAbilityMapData): DataGroup {
+    const key: any = { sgDummy: true };
+    key[`sg${id}`] = false;
+
+
+    const truncLen = this.presenter.language === Models.SupportedLanguages.jp ? 10 : 22;
+    const name = this.truncate(this.translated, truncLen);
+
+    const el = ability.icon
+      ? this.createElementFromHtml(`<span><img class='abilityIcon' src="${ability.icon}"/><span class='abilityName'>${name}</span></span>`)
+      : this.createElementFromHtml(`<span>${name}</span>`);
+
+    // console.log(this.job.id+" "+this.ability.name+" "+this.job.isCompact)
+    return {
+      id,
+      className: this.buildClass({ compact: this.isCompact || this.job.isCompact || this.presenter.view.compactView }),
+      visible: !(this.hidden || data.filtered || this.job.collapsed),
+      content: el,
+      value: this.job.index + this.getOrder(this.presenter, this.job, this.ability, this.index - Math.trunc(this.index))
+    } as DataGroup;
+  }
+
+
 
 
 }

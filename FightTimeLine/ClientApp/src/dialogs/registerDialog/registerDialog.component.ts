@@ -1,5 +1,5 @@
-import { Component, Inject } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl, FormControl } from "@angular/forms"
+import { Component } from "@angular/core";
+import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { first } from 'rxjs/operators';
 import { UserService } from "../../services/UserService";
@@ -28,19 +28,19 @@ export class RegisterDialog {
 
   buildForm() {
     this.form = this.fb.group({
-      "username": [
+      username: [
         "",
         [Validators.required],
         this.isUserNameUnique.bind(this)],
-      "password": [
+      password: [
         "",
         [Validators.required]
       ],
-      "repeatPassword": [
+      repeatPassword: [
         "",
         [Validators.required, this.matchOtherValidator("password")]
       ],
-      "recaptcha": ['', Validators.required]
+      recaptcha: ['', Validators.required]
     });
   }
 
@@ -52,12 +52,13 @@ export class RegisterDialog {
       setTimeout(() => {
         this.userService.isUserNameRegistered(control.value).subscribe((val) => {
           this.checkingUser = false;
-          if (val)
-            resolve({ 'isUserNameUnique': !val });
-          else resolve(null);
+          if (val) {
+            resolve({ isUserNameUnique: !val });
+          }
+          else { resolve(null); }
         }, () => {
           this.checkingUser = false;
-            resolve({ 'isUserNameUnique': true });
+          resolve({ isUserNameUnique: true });
         });
       });
     });
@@ -141,7 +142,7 @@ export class RegisterDialog {
 
       return null;
 
-    }
+    };
 
   }
 }

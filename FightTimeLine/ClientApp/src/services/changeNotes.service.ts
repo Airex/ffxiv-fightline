@@ -1,15 +1,15 @@
-import { Injectable } from "@angular/core"
+import { Injectable } from "@angular/core";
 import * as LocalStorageService from "./LocalStorageService";
-import data from "../changeNotes"
+import data from "../changeNotes";
 
 @Injectable()
 export class ChangeNotesService {
-  constructor(    
+  constructor(
     private storage: LocalStorageService.LocalStorageService,
   ) {
   }
 
-  load(ignoreRevision?: boolean): Promise<IChahgeNote[]> {    
+  load(ignoreRevision?: boolean): Promise<IChahgeNote[]> {
     const promise = new Promise<IChahgeNote[]>((resolve, reject) => {
       if (data) {
         const changes = data.sort((a, b) => b.revision - a.revision);
@@ -17,7 +17,7 @@ export class ChangeNotesService {
         const shown = this.storage.getString("whatsnew_shown") || "0";
 
         this.storage.setString("whatsnew_shown", latestRev.revision.toString());
-        if (Number.parseInt(shown) < latestRev.revision || ignoreRevision) {
+        if (+shown < latestRev.revision || ignoreRevision) {
           resolve(data);
         } else {
           reject();
@@ -25,7 +25,7 @@ export class ChangeNotesService {
       } else {
         reject();
       }
-      
+
     });
 
     return promise;

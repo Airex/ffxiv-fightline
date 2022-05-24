@@ -11,11 +11,11 @@ import * as M from "../../../core/Models";
 
 export class SyncSettingsComponent implements OnInit {
 
-  @Input("data") data: M.IBossAbility;
+  @Input() data: M.IBossAbility;
   @ViewChild("tree", { static: true }) tree: NzTreeComponent;
   settings: NzTreeNodeOptions[];
-  offset: string = "00:00";
-  uniqueIndex: number = 0;
+  offset = "00:00";
+  uniqueIndex = 0;
   expression: string;
 
   formatterPercent = (value: number) => `${value || 0} %`;
@@ -23,53 +23,57 @@ export class SyncSettingsComponent implements OnInit {
 
   get selected(): NzTreeNodeOptions {
     const s = this.tree.getSelectedNodeList();
-    if (s)
+    if (s) {
       return s[0];
-    else
+    }
+    else {
       return null;
+    }
   }
 
   convertToNodes(data: M.Combined): NzTreeNodeOptions {
-    if (!data) return <NzTreeNodeOptions>{
+    if (!data) { return  {
       title: "AND",
       key: (this.uniqueIndex++).toString(),
       children: [],
       isLeaf: false,
-      data: <M.ISyncSettingGroup>{
+      data:  {
         operation: M.SyncOperation.And
-      },
+      } as M.ISyncSettingGroup,
       expanded: true
-    };
+    } as NzTreeNodeOptions;
+    }
     if (M.isSettingGroup(data)) {
-      return <NzTreeNodeOptions>{
+      return  {
         title: data.operation.toString().toUpperCase(),
         key: (this.uniqueIndex++).toString(),
         children: data.operands.map(d => this.convertToNodes(d)),
         isLeaf: false,
-        data: data,
+        data,
         expanded: true
-      };
+      } as NzTreeNodeOptions;
     }
     if (M.isSetting(data)) {
-      return <NzTreeNodeOptions>{
+      return  {
         title: data.description,
         key: (this.uniqueIndex++).toString(),
         isLeaf: true,
-        data: data,
+        data,
         expanded: true
-      };
+      } as NzTreeNodeOptions;
     }
     return null;
   }
 
   formatExpression(input: NzTreeNodeOptions): string {
-    let result: string = "";
+    let result = "";
     if (input) {
-      
+
       if (!input.isLeaf) {
         const nodes = input.children as NzTreeNodeOptions[];
-        if (!nodes || nodes.length === 0)
+        if (!nodes || nodes.length === 0) {
           result = "";
+        }
         else {
           result = nodes.map(c => this.formatExpression(c)).filter(a => !!a).join(" " + input.title + " ");
           if (input.children.length > 1) {
@@ -97,23 +101,23 @@ export class SyncSettingsComponent implements OnInit {
   updateResult(): void {
 
     this.data.syncSettings = JSON.stringify(this.buildSyncSettings());
-    //console.log(this.data.syncSettings);
+    // console.log(this.data.syncSettings);
   }
 
   addAnd() {
     const selected = this.selected;
     if (selected) {
       const index = this.uniqueIndex++;
-      selected.addChildren([<NzTreeNodeOptions>{
+      selected.addChildren([ {
         title: "AND",
         key: (index).toString(),
         isLeaf: false,
-        data: <M.ISyncSettingGroup>{
+        data:  {
           operation: M.SyncOperation.And,
           operands: []
-        },
+        } as M.ISyncSettingGroup,
         expanded: true
-      }]);
+      } as NzTreeNodeOptions]);
       this.updateExpression();
     }
   }
@@ -122,16 +126,16 @@ export class SyncSettingsComponent implements OnInit {
     const selected = this.selected;
     if (selected) {
       const index = this.uniqueIndex++;
-      selected.addChildren([<NzTreeNodeOptions>{
+      selected.addChildren([ {
         title: "OR",
         key: (index).toString(),
         isLeaf: false,
-        data: <M.ISyncSettingGroup>{
+        data:  {
           operation: M.SyncOperation.Or,
           operands: []
-        },
+        } as M.ISyncSettingGroup,
         expanded: true
-      }]);
+      } as NzTreeNodeOptions]);
       this.updateExpression();
     }
   }
@@ -140,19 +144,19 @@ export class SyncSettingsComponent implements OnInit {
     const selected = this.selected;
     if (selected) {
       const index = this.uniqueIndex++;
-      selected.addChildren([<NzTreeNodeOptions>{
+      selected.addChildren([ {
         title: "Condition " + index,
         key: (index).toString(),
         isLeaf: true,
-        data: <M.ISyncSetting>{
+        data:  {
           description: "Condition " + index,
           type: "name",
           payload: {
 
           }
-        },
+        } as M.ISyncSetting,
         expanded: true
-      }]);
+      } as NzTreeNodeOptions]);
       this.updateExpression();
     }
   }
@@ -170,8 +174,9 @@ export class SyncSettingsComponent implements OnInit {
   }
 
   beforeDrop(arg: NzFormatBeforeDropEvent): Observable<boolean> {
-    if (!arg.node.getParentNode() && (arg.pos === -1 || arg.pos === 1))
+    if (!arg.node.getParentNode() && (arg.pos === -1 || arg.pos === 1)) {
       return of(false);
+    }
     return of(true);
   }
 
@@ -186,14 +191,15 @@ export class SyncSettingsComponent implements OnInit {
 
   buildSyncSettings(): string {
     const root = this.tree.getTreeNodes()[0];
-    if (root.children.length === 0)
+    if (root.children.length === 0) {
       return null;
-    return JSON.stringify(<M.ISyncData>{
+    }
+    return JSON.stringify( {
       condition: this.build(root),
       offset: this.offset
-    });
+    } as M.ISyncData);
   }
-  
+
 
   build(node: NzTreeNodeOptions): M.Combined {
     if (node.isLeaf) {
@@ -209,8 +215,9 @@ export class SyncSettingsComponent implements OnInit {
 
   simplify() {
     const root = this.tree.getTreeNodes()[0];
-    if (root.children.length === 0)
+    if (root.children.length === 0) {
       return null;
+    }
     this.simplifyNode(root, null);
   }
 
@@ -223,7 +230,7 @@ export class SyncSettingsComponent implements OnInit {
           parent.children.push(n);
         });
       }
-      
+
       return r;
     }
   }

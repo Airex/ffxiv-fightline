@@ -1,17 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, ErrorHandler, Injectable } from '@angular/core';
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { NgModule, ErrorHandler, Injectable, LOCALE_ID } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS, HttpClient } from "@angular/common/http";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { PortalModule } from "@angular/cdk/portal";
-import { VisModule } from "ngx-vis"
+import { VisModule } from "ngx-vis";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FightLineComponent } from "../pages/fightline/fightline.component";
 import { TableViewComponent } from "../pages/tableview/tableview.component";
 import { CellComponent } from "../pages/tableview/cell/cell.component";
-//import { BossTemplateComponent } from "../bosstemplate/bosstemplate.component";
 import { HomeComponent } from "../pages/home/home.component";
 import { SidepanelComponent } from "../components/sidepanel/sidepanel.component";
 import { PlanAreaComponent } from "../pages/fightline/planArea/planArea.component";
@@ -22,8 +21,8 @@ import { SettingsViewComponent } from "../dialogs/settingsDialog/view/settingsVi
 import { ToolbarComponent } from "../components/toolbar/toolbar.component";
 import { SyncSettingsComponent } from "../dialogs/bossAttackDialog/syncSettings/syncSettings.component";
 import { SyncDowntimeComponent } from "../dialogs/bossAttackDialog/syncDowntime/syncDowntime.component";
-import * as Services from "../services/index"
-import { JwtInterceptor } from "../interceptors/jwtInterceptor"
+import * as Services from "../services/index";
+import { JwtInterceptor } from "../interceptors/jwtInterceptor";
 import { ClipboardModule } from "ngx-clipboard";
 import { NgProgressModule } from "ngx-progressbar";
 import { NgxCaptchaModule } from "ngx-captcha";
@@ -37,25 +36,21 @@ import { JobAbilityComponent } from "../components/jobAbility/jobAbility.compone
 import { DownTimeComponent } from "../components/downtime/downtime.component";
 import { MultipleDownTimeComponent } from "../components/multipleDowntime/multipleDowntime.component";
 import { AreaComponent } from "../components/area/area.component";
-import { SocialLoginModule, AuthServiceConfig } from "angularx-social-login";
-import * as SocialLogins from "angularx-social-login";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { OffsetWheelDirective } from "../heplers/OffsetWheelDirective"
-import { FFLogsMatcherDirective } from "../heplers/FFLogsMatchDirective"
-import { CustomScrollDirective } from "../heplers/customScroll.directive"
-import { KeyHandlerDirective } from "../heplers/keyHandler.directive"
-import { KillsOnlyPipe } from "../heplers/KillsPipe"
-import { NoDraftsPipe } from "../heplers/NoDraftsPipe"
+import { OffsetWheelDirective } from "../heplers/OffsetWheelDirective";
+import { FFLogsMatcherDirective } from "../heplers/FFLogsMatchDirective";
+import { CustomScrollDirective } from "../heplers/customScroll.directive";
+import { KeyHandlerDirective } from "../heplers/keyHandler.directive";
+import { KillsOnlyPipe } from "../heplers/KillsPipe";
+import { NoDraftsPipe } from "../heplers/NoDraftsPipe";
 import { PingComponent } from "../components/ping/ping.component";
 import * as Sentry from "@sentry/browser";
 import { AngularSplitModule } from 'angular-split';
-import { environment } from "../environments/environment"
+import { environment } from "../environments/environment";
 import { XivapiClientModule } from "@xivapi/angular-client";
 
 import { registerLocaleData } from '@angular/common';
-import { DisqusModule, DISQUS_SHORTNAME } from "ngx-disqus"
 import { ColorPickerModule } from 'ngx-color-picker';
-import en from '@angular/common/locales/en'
 
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 
@@ -79,7 +74,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzGridModule } from 'ng-zorro-antd/grid';
-import { en_US, NzI18nModule, NZ_I18N } from 'ng-zorro-antd/i18n';
+import { en_US, NzI18nModule, NZ_I18N, fr_FR, de_DE, ja_JP } from 'ng-zorro-antd/i18n';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
@@ -122,6 +117,10 @@ import { SettingsDialogPresetsTab } from 'src/dialogs/settingsDialog/tabs/preset
 import { AddJobComponent } from '../pages/fightline/addJob/addJob.component';
 import { JobRolePipe } from 'src/heplers/JobRolePipe';
 import { TableViewOptionsComponent } from 'src/components/tableviewoptions/tableviewoptions.component';
+import { RecentListComponent } from 'src/components/recent-list/recent-list.component';
+
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 const zorroModules = [
   NzAlertModule,
@@ -176,13 +175,9 @@ const zorroModules = [
   NzTreeSelectModule,
   NzWaveModule,
   NzResizableModule
-
 ];
 
-
-registerLocaleData(en);
-
-Sentry.init(<Object>{
+Sentry.init({
   dsn: "https://aa772d49f3bb4a33851f765d5d5f2d86@sentry.io/1407389",
   enabled: environment.production
 });
@@ -195,113 +190,115 @@ export class SentryErrorHandler implements ErrorHandler {
   }
 }
 
-
-
-const googleLoginOptions: SocialLogins.LoginOpt = {
-  scope: "https://www.googleapis.com/auth/spreadsheets"
-};
-
-let config = new AuthServiceConfig([
-  {
-    id: SocialLogins.GoogleLoginProvider.PROVIDER_ID,
-    provider: new SocialLogins.GoogleLoginProvider("1081155249988-uqcf81fhlvbbbllakefqbtmjcja9sva8.apps.googleusercontent.com", googleLoginOptions)
-  }
-]);
-
-export function provideConfig() {
-  return config;
-}
-
 export function getBaseUrl() {
   return environment.baseUrl;
 }
 
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http, "assets/i18n/lang_");
+}
 
 
 
 @NgModule({
-    declarations: [
-        //    BossTemplateComponent,
-        AddJobComponent,
-        AppComponent,
-        AreaComponent,
-        CellComponent,
-        CustomScrollDirective,
-        DownTimeComponent,
-        FFLogsMatcherDirective,
-        FightLineComponent,
-        FilterComponent,
-        FilterComponent,
-        HomeComponent,
-        JobAbilityComponent,
-        JobComponent,
-        JobRolePipe,
-        KeyHandlerDirective,
-        KillsOnlyPipe,
-        MultipleAbilityComponent,
-        MultipleAttackComponent,
-        MultipleDownTimeComponent,
-        NoDraftsPipe,
-        OffsetWheelDirective,
-        PingComponent,
-        PlanAreaComponent,
-        SettingsDialogColorTab,
-        SettingsDialogFflogsTab,
-        SettingsDialogMainTab,
-        SettingsDialogPresetsTab,
-        SettingsDialogTableviewTab,
-        SettingsDialogTeamworkTab,
-        SettingsFilterComponent,
-        SettingsViewComponent,
-        SidepanelComponent,
-        SingleAbilityComponent,
-        SingleAttackComponent,
-        SoloPartyPipe,
-        SyncDowntimeComponent,
-        SyncSettingsComponent,
-        TableViewComponent,
-        TableViewOptionsComponent,
-        ToolbarComponent,
-        ViewComponent,
-        ViewComponent,
-        ...DialogsModuleComponents
-    ],
-    imports: [
-        AngularSplitModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        BrowserModule,
-        ClipboardModule,
-        ColorPickerModule,
-        CommonModule,
-        DisqusModule,
-        DragDropModule,
-        FormsModule,
-        HttpClientModule,
-        NgProgressModule,
-        NgxCaptchaModule,
-        PortalModule,
-        ReactiveFormsModule,
-        SocialLoginModule,
-        VisModule,
-        XivapiClientModule.forRoot(),
-        ...zorroModules
-    ],
-    providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: "BASE_URL", useFactory: getBaseUrl },
-        { provide: "FFLogs_URL", useValue: "https://www.fflogs.com:443/" },
-        { provide: "FFLogs_API_KEY", useValue: "66bfc666827c9b668f4daa87d019e714" },
-        { provide: "GOOGLE_API_CLIENT_KEY", useValue: "1081155249988-uqcf81fhlvbbbllakefqbtmjcja9sva8.apps.googleusercontent.com" },
-        { provide: "GOOGLE_API_SPREADSHEETS_URL", useValue: "https://sheets.googleapis.com/v4/spreadsheets" },
-        { provide: ErrorHandler, useClass: SentryErrorHandler },
-        { provide: AuthServiceConfig, useFactory: provideConfig },
-        { provide: NZ_I18N, useValue: en_US },
-        { provide: DISQUS_SHORTNAME, useValue: "ffxiv-fightline" },
-        ...Services.ServicesModuleComponents,
-        VisStorageService
-    ],
-    bootstrap: [AppComponent]
+  declarations: [
+    //    BossTemplateComponent,
+    AddJobComponent,
+    AppComponent,
+    AreaComponent,
+    CellComponent,
+    CustomScrollDirective,
+    DownTimeComponent,
+    FFLogsMatcherDirective,
+    FightLineComponent,
+    FilterComponent,
+    FilterComponent,
+    HomeComponent,
+    JobAbilityComponent,
+    JobComponent,
+    JobRolePipe,
+    KeyHandlerDirective,
+    KillsOnlyPipe,
+    MultipleAbilityComponent,
+    MultipleAttackComponent,
+    MultipleDownTimeComponent,
+    NoDraftsPipe,
+    OffsetWheelDirective,
+    PingComponent,
+    PlanAreaComponent,
+    SettingsDialogColorTab,
+    SettingsDialogFflogsTab,
+    SettingsDialogMainTab,
+    SettingsDialogPresetsTab,
+    SettingsDialogTableviewTab,
+    SettingsDialogTeamworkTab,
+    SettingsFilterComponent,
+    SettingsViewComponent,
+    SidepanelComponent,
+    SingleAbilityComponent,
+    SingleAttackComponent,
+    RecentListComponent,
+    SoloPartyPipe,
+    SyncDowntimeComponent,
+    SyncSettingsComponent,
+    TableViewComponent,
+    TableViewOptionsComponent,
+    ToolbarComponent,
+    ViewComponent,
+    ViewComponent,
+    ...DialogsModuleComponents
+  ],
+  imports: [
+    AngularSplitModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    ClipboardModule,
+    ColorPickerModule,
+    CommonModule,
+    DragDropModule,
+    FormsModule,
+    HttpClientModule,
+    NgProgressModule,
+    NgxCaptchaModule,
+    PortalModule,
+    ReactiveFormsModule,
+    VisModule,
+    XivapiClientModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
+    ...zorroModules
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: "BASE_URL", useFactory: getBaseUrl },
+    { provide: "FFLogs_URL", useValue: "https://www.fflogs.com:443/" },
+    { provide: "FFLogs_API_KEY", useValue: "66bfc666827c9b668f4daa87d019e714" },
+    { provide: ErrorHandler, useClass: SentryErrorHandler },
+    {
+      provide: NZ_I18N,
+      useFactory: () => {
+        switch (localStorage.getItem("lang")) {
+          case 'fr':
+            return fr_FR;
+          case 'de':
+            return de_DE;
+          case 'ja':
+            return ja_JP;
+          default:
+            return en_US;
+        }
+      }
+    },
+    ...Services.ServicesModuleComponents,
+    VisStorageService
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
 

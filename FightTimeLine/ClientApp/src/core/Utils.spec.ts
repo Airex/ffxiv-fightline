@@ -1,17 +1,17 @@
-import { Utils, startOffset } from "./Utils";
+import { Utils, startOffsetConst } from "./Utils";
 
 describe('Utils.time', () => {
 
-    const zeroTestDate = new Date(startOffset);
-    const negativeTestDate = new Date(startOffset - (3 * 60 + 12) * 1000);
-    const testDate = new Date(startOffset + (3 * 60 + 12) * 1000);
-    const testDateBefore = new Date(startOffset + (2 * 60 + 10) * 1000);
-    const testDateAfter = new Date(startOffset + (5 * 60 + 20) * 1000);
+    const zeroTestDate = new Date(startOffsetConst);
+    const negativeTestDate = new Date(startOffsetConst - (3 * 60 + 12) * 1000);
+    const testDate = new Date(startOffsetConst + (3 * 60 + 12) * 1000);
+    const testDateBefore = new Date(startOffsetConst + (2 * 60 + 10) * 1000);
+    const testDateAfter = new Date(startOffsetConst + (5 * 60 + 20) * 1000);
 
     beforeEach(() => {
 
     });
-    
+
     it("f1", async () => {
         expect(Utils.formatTime(testDate)).toEqual("03:12");
     });

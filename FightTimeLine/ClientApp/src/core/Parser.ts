@@ -1,4 +1,4 @@
-import * as _ from "lodash"
+import * as _ from "lodash";
 
 import * as FFLogs from "./FFLogs";
 import * as Jobregistryserviceinterface from "../services/jobregistry.service-interface";
@@ -20,15 +20,15 @@ export class Parser {
       .filter((it) => it.fights.some(((it1) => it1.id === this.instance) as any))
       .map((it) => {
         const ji = this.mapJob(it.type);
-        return <IJobInfo>{
+        return {
           id: it.id,
           petids: fight.friendlyPets.filter((it1) => it1.petOwner === it.id).map((it1) => it1.id),
-          job: ji && ji.jobName,
+          job: ji?.jobName,
           actorName: it.name.substring(0, 16),
-          role: ji && ji.order,
+          role: ji?.order,
           guid: it.guid,
           petguids: fight.friendlyPets.filter((it1) => it1.petOwner === it.id).map((it1) => it1.guid)
-        };
+        } as IJobInfo;
       })
       .filter((it) => it.job != null);
   }
@@ -83,8 +83,13 @@ export class Parser {
 
     const js = jobRegistry.getJobs().filter(j => this.players.some(j1 => j1.job === j.name));
 
-    const abilityIds = _.uniq(_.flattenDeep(_.concat([], js.map(j => j.abilities.map(a => a.detectStrategy.deps.abilities))))).filter(a => !!a).join();
-    const abilityByBuffIds = _.concat([], js.map(j => j.abilities.map(a => a.detectStrategy.deps.buffs)));
+    const abilityIds =
+      _.uniq(
+        _.flattenDeep(
+          _.concat([], js.map(j => Object.values(j.abilities).map(a => a.detectStrategy.deps.abilities)))))
+        .filter(a => !!a)
+        .join();
+    const abilityByBuffIds = _.concat([], js.map(j => Object.values(j.abilities).map(a => a.detectStrategy.deps.buffs)));
     const stances = _.concat([], js.map(j => j.stances && j.stances.map(a => a.ability.detectStrategy.deps.buffs)));
     const buffs = _.uniq(_.flattenDeep(_.concat(stances, abilityByBuffIds))).filter(a => !!a).join();
     const partyIds = _.concat(this.players.map(j => j.guid), _.flattenDeep(this.players.map(p => p.petguids))).join();
@@ -93,12 +98,12 @@ export class Parser {
       "1478,1479,1480,1481,6631,6882,6910,7319,7351,8535,8645,8938,9202,9375,9441,9442,9448,9654,9895,9908,9936,9989,10236,10237,10238,10239,10433,11070";
 
     if (bossOnly) {
-      const filter = `
-    (      
-        type in ('cast', 'damage') and source.id in (${enemyIds})	    
+      const result = `
+    (
+        type in ('cast', 'damage') and source.id in (${enemyIds})
     ) and ability.id not in (${bossAutoAttacks})`;
 
-      return filter;
+      return result;
     }
 
     const filter = `
@@ -119,22 +124,22 @@ export class Parser {
   processCollectors(collectors: FFLogsCollectors.IFFLogsCollector[]) {
     for (const event of this.events) {
       collectors.forEach(c => {
-        c.collect(event)
+        c.collect(event);
       });
     }
     collectors.forEach(c => {
-      c.process()
+      c.process();
     });
   }
 
   *iterateEvents(): IterableIterator<FFLogs.BaseEventFields> {
     const iterator = this.events[Symbol.iterator]();
 
-    let obj
+    let obj;
     // eslint-disable-next-line no-cond-assign
     while (!(obj = iterator.next()).done) {
       // Iterate over the actual event first
-      yield obj.value
+      yield obj.value;
 
       // Iterate over any fabrications arising from the event and clear the queue
     }

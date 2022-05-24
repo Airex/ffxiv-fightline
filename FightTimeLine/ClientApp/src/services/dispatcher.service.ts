@@ -4,7 +4,7 @@ import { IBoss, IJobStats } from 'src/core/Models';
 
 export type DialogClose = {
   close: () => void
-}
+};
 
 export type DispatcherPayloads = {
   updateSettings: void,
@@ -59,12 +59,12 @@ export type DispatcherPayloads = {
   attacksRemove: string[],
   downtimeRemove: string,
   selectDowntimes: string
-}
+};
 
 // // oh boy don't do this
 // type UnionToIntersection<U> =
-//   (U extends any 
-//     ? (k: U) => void 
+//   (U extends any
+//     ? (k: U) => void
 //     : never) extends ((k: infer I) => void) ? I : never
 
 // type LastOf<T> =
@@ -107,8 +107,9 @@ export class DispatcherService<T> {
   on<U extends keyof T>(name: U): Observable<T[U]> {
     const result = new Subject<T[U]>();
     this.dispatcher.subscribe(cmd => {
-      if (cmd.name === name)
+      if (cmd.name === name) {
         result.next(cmd.payload);
+      }
     });
     this.subs.push(result);
 

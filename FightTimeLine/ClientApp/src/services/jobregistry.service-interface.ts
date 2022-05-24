@@ -1,4 +1,4 @@
-import { IJob, IAbility } from "../core/Models"
+import { IJob, IAbility } from "../core/Models";
 
 export interface IJobRegistryService {
 
@@ -9,6 +9,8 @@ export interface IJobRegistryService {
   getAbilityForJob(jobName: string, abilityName: string): IAbility;
 
   getStanceAbilityForJob(jobName: string, abilityName: string): IAbility;
+
+  setLevel(level: number);
 }
 
 

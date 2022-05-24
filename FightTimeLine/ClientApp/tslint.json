@@ -70,8 +70,9 @@
     ],
     "object-literal-sort-keys": false,
     "ordered-imports": false,
+    "no-bitwise": false,
     "quotemark": [
-      true,
+      false,
       "single"
     ],
     "trailing-comma": false,
@@ -116,6 +117,7 @@
       ]
     },
     "component-class-suffix": true,
+    "compnent-selector":false,
     "directive-class-suffix": true,
     "variable-name": {
       "options": [

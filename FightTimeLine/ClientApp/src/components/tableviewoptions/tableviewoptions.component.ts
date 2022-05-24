@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { Subject, Subscription } from "rxjs"
+import { Subject, Subscription } from "rxjs";
 import { debounceTime } from "rxjs/operators";
 
 
@@ -16,29 +16,29 @@ export class TableViewOptionsComponent implements OnInit, OnDestroy {
 
   form: FormGroup;
   options: ITableOptions = {};
-  _settings: ITableOptionSettings;
+  private settingsInternal: ITableOptionSettings;
   subject = new Subject();
   subscription: Subscription;
 
   get settings(): ITableOptionSettings {
-    return this._settings;
+    return this.settingsInternal;
   }
 
-  @Input("settings") set settings(value: ITableOptionSettings) {
-    this._settings = value;
-    this.options = this._settings?.reduce((acc, s) => { acc[s.name] = s.initialValue || s.defaultValue; return acc }, {});
-    this.createForm(this._settings);    
-  }  
+  @Input() set settings(value: ITableOptionSettings) {
+    this.settingsInternal = value;
+    this.options = this.settingsInternal?.reduce((acc, s) => { acc[s.name] = s.initialValue || s.defaultValue; return acc; }, {});
+    this.createForm(this.settingsInternal);
+  }
 
-  @Output("changed") changed: EventEmitter<ITableOptions> = new EventEmitter<ITableOptions>();
+  @Output() changed: EventEmitter<ITableOptions> = new EventEmitter<ITableOptions>();
 
   private createForm(opts: ITableOptionSettings) {
     const groups = {};
 
     if (opts) {
-      for (let d of opts) {
+      for (const d of opts) {
         const value = d.initialValue || d.defaultValue;
-        groups[d.name] = new FormControl(value)
+        groups[d.name] = new FormControl(value);
       }
     }
 
@@ -54,7 +54,7 @@ export class TableViewOptionsComponent implements OnInit, OnDestroy {
       debounceTime(400)
     ).subscribe(value => {
       this.changed.emit(value);
-    })
+    });
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
@@ -69,6 +69,12 @@ export class TableViewOptionsComponent implements OnInit, OnDestroy {
 
   change(name, value) {
     this.options[name] = value;
+
+    const change = this.settingsInternal.find(s => s.name === name)?.onChange;
+    if (change) {
+      change(value);
+    }
+
     this.subject.next(this.options);
   }
 }

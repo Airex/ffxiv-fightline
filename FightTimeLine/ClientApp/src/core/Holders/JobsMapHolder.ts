@@ -33,7 +33,7 @@ export class JobsMapHolder extends BaseHolder.BaseHolder<string, DataGroup, JobM
   }
 
   update(items: JobMap[]): void {
-    // console.log("update JobMap")   
+    // console.log("update JobMap")
     this.visItems.update(this.itemsOf(items));
   }
 
@@ -56,7 +56,8 @@ export class JobsMapHolder extends BaseHolder.BaseHolder<string, DataGroup, JobM
   }
 
   private removeEmpty(): void {
-    if (this.values.length > 0)
+    if (this.values.length > 0) {
       this.visItems.remove(0);
+    }
   }
 }

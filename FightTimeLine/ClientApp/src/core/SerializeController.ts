@@ -1,16 +1,60 @@
-import * as Models from "./Models";
+import { IFightData, IFilter, IView, IFight, IBoss, IBossAbility, IAbilityFilter, DamageType, IPresenterData } from "./Models";
 import { Utils } from "./Utils";
 import * as Holders from "./Holders";
-import { JobMap, BossAttackMap } from "./Maps";
-import { ExportData } from "./ExportModels";
+import { JobMap, BossAttackMap, AbilityUsageMap } from "./Maps";
+import { ExportAbility, ExportData, ExportDataData } from "./ExportModels";
 
 export class SerializeController {
-
-  constructor(private holders: Holders.Holders, private gameName: string, private fraction, private data: Models.IFightData, private filter: Models.IFilter, private view: Models.IView) {
+  constructor(
+    private holders: Holders.Holders,
+    private gameName: string,
+    private fraction,
+    private data: IFightData,
+    private presener: IPresenterData
+  ) {
 
   }
 
-  serializeFight(): Models.IFight {
+  public serializeForDownload() {
+
+    const attacks = this.holders.bossAttacks.getAll();
+    const abs = this.holders.itemUsages.getAll();
+    const jobs = this.holders.jobs.getAll();
+
+    const getTarget = (ab: AbilityUsageMap) => {
+      const value = ab.getSettingData("target")?.value;
+      if (value) {
+        return this.holders.jobs.get(value).order;
+      }
+    };
+
+    return {
+      party: jobs.map(m => ({
+        name: m.job.name,
+        id: m.order
+      })),
+      events: [
+        ...attacks.map(at => ({
+          source: "boss",
+          name: at.attack.name,
+          offset: at.offset,
+          tags: at.attack.tags,
+          desription: at.attack.description,
+          damageType: DamageType[at.attack.type]
+        })),
+        ...abs.map(ab => ({
+          source: ab.ability.job.order,
+          guid: +ab.ability.ability.xivDbId,
+          name: ab.ability.ability.name,
+          target: getTarget(ab),
+          note: ab.getSettingData("note")?.value,
+          offset: ab.offset
+        }))
+      ]
+    };
+  }
+
+  serializeFight(): IFight {
     const abilitymaps = this.holders.abilities
       .getNonStancesAbilities()
       .map((it) => {
@@ -26,13 +70,13 @@ export class SerializeController {
       .map((value) => {
         const a = value.ability;
         if (a) {
-          return <IAbilityUsageData>{
+          return {
             id: value.id,
             job: a.job.id,
-            ability: a.ability.name,
+            name: a.translated,
             start: Utils.formatTime(value.start),
             settings: JSON.stringify(value.settings),
-          };
+          } as IAbilityUsageData;
         }
         return null;
       });
@@ -54,36 +98,36 @@ export class SerializeController {
 
     const fractionPart = this.fraction ? ":" + this.fraction.name : "";
 
-    const fightData = <IFightSerializeData>{
+    const fightData = {
       boss: this.serializeBoss(),
       initialTarget: this.holders.bossTargets.initialBossTarget,
-      filter: this.filter,
+      filter: this.presener.filter,
       importedFrom: this.data.importedFrom,
-      view: this.view,
+      view: this.presener.view,
       jobs: this.serializeJobs(),
       abilityMaps: abilitymaps,
-      abilities: abilities,
-      stances: stances,
+      abilities,
+      stances,
       encounter: ""
-    };
-    return <Models.IFight>{
+    } as IFightSerializeData;
+    return {
       id: this.data.fight && this.data.fight.id || "",
       name: this.data.fight && this.data.fight.name || "",
       userName: this.data.fight && this.data.fight.userName || "",
       game: this.gameName + fractionPart,
       isPrivate: false,
       data: JSON.stringify(fightData)
-    };
+    } as IFight;
   }
 
-  serializeBoss(): Models.IBoss {
+  serializeBoss(): IBoss {
 
-    var attacks = this.holders.bossAttacks.getAll()
+    const attacks = this.holders.bossAttacks.getAll()
       .filter(ab => ab.visible)
       .map(ab => {
-        return <IBossAbilityUsageData>{
+        return {
           id: ab.id,
-          ability: <Models.IBossAbility>{
+          ability: {
             name: ab.attack.name,
             type: ab.attack.type,
             tags: ab.attack.tags,
@@ -93,66 +137,66 @@ export class SerializeController {
             syncDowntime: ab.attack.syncDowntime,
             syncPreDowntime: ab.attack.syncPreDowntime,
             description: ab.attack.description
-          }
-        };
-      })
+          } as IBossAbility
+        } as IBossAbilityUsageData;
+      });
 
-    return <Models.IBoss>{
+    return {
       id: this.data.boss && this.data.boss.id || "",
       name: this.data.boss && this.data.boss.name || "",
       userName: this.data.boss && this.data.boss.userName || "",
       isPrivate: this.data.boss && this.data.boss.isPrivate || false,
       ref: this.data.boss && this.data.boss.ref || "",
-      data: JSON.stringify(<IBossSerializeData>{
+      data: JSON.stringify({
         attacks,
-        downTimes: this.holders.bossDownTime.getAll().map((it) => <IDowntimeSerializeData>{
+        downTimes: this.holders.bossDownTime.getAll().map((it) => ({
           id: it.id,
           start: Utils.formatTime(it.start),
           end: Utils.formatTime(it.end),
           color: it.color,
           comment: it.comment
-        })
+        }))
       })
-    };
+    } as IBoss;
   }
-
 
   serializeJobs(): IJobSerializeData[] {
     const map = this.holders.jobs.getAll()
-      .map((value: JobMap) => <any>{
+      .map((value: JobMap) => ({
         id: value.id,
-        name: value.job.name,
+        name: value.translated,
         order: value.order,
         pet: value.pet,
         // filter: value.filter,
         compact: value.isCompact,
         collapsed: value.collapsed
-      });
+      }) as IJobSerializeData);
     return map;
   }
 
-  serializeForExport(): ExportData {
+  public serializeForExport(): ExportData {
 
     const attacks = this.holders.bossAttacks.getAll()
-      .filter(ab=>ab.visible)
+      .filter(ab => ab.visible)
       .map((ab: BossAttackMap) => ({
         id: ab.id,
         name: ab.attack.name,
         type: ab.attack.type,
         tags: ab.attack.tags,
         offset: ab.offset,
-        desc: ab.attack.description
+        desc: ab.attack.description,
+        color: ab.attack.color
       }));
 
 
     const downTimes = this.holders.bossDownTime.getAll()
-      .map((it) => <any>{
+      .map((it) => ({
         id: it.id,
         start: it.start < it.end ? Utils.formatTime(it.start) : Utils.formatTime(it.end),
         end: it.start > it.end ? Utils.formatTime(it.start) : Utils.formatTime(it.end),
         comment: it.comment,
         color: it.color
-      });
+      }));
 
     const boss = {
       attacks,
@@ -168,14 +212,14 @@ export class SerializeController {
       }));
 
     const jobs = this.holders.jobs.getAll()
-      .map((value: JobMap, index: number) => <any>{
+      .map((value: JobMap, index: number) => ({
         id: value.id,
-        name: value.job.name,
+        name: value.translated,
         role: value.job.role,
         order: index,
         pet: value.pet,
         icon: value.job.icon
-      });
+      }));
 
     const abilities = this.holders.itemUsages.getAll()
       .map((value) => {
@@ -183,13 +227,14 @@ export class SerializeController {
         return {
           id: value.id,
           job: a.job.id,
-          ability: a.ability.name,
+          name: a.translated,
           type: a.ability.abilityType,
           duration: value.calculatedDuration,
           start: Utils.formatTime(value.start),
           settings: value.settings,
-          icon: value.ability.ability.icon
-        };
+          icon: value.ability.ability.icon,
+          level: [value.ability.ability.levelAcquired, value.ability.ability.levelRemoved]
+        } as ExportAbility;
       });
 
     const data = {
@@ -198,13 +243,13 @@ export class SerializeController {
       initialTarget: this.holders.bossTargets.initialBossTarget,
       jobs,
       abilities
-    }
+    } as ExportDataData;
 
-    return <ExportData>{
+    return {
       name: this.data.fight && this.data.fight.name || "",
       userName: this.data.fight && this.data.fight.userName || "",
-      data: data
-    };
+      data
+    } as ExportData;
   }
 }
 
@@ -216,13 +261,13 @@ export interface IFightSerializeData {
   abilities: IAbilityUsageData[];
   stances: IStanceUsageData[];
   abilityMaps: IAbilityMapData[];
-  boss: Models.IBoss;
-  filter: Models.IFilter;
-  view: Models.IView;
+  boss: IBoss;
+  filter: IFilter;
+  view: IView;
 }
 
 export interface IBossSerializeData {
-  attacks: IBossAbilityUsageData[],
+  attacks: IBossAbilityUsageData[];
   downTimes: IDowntimeSerializeData[];
 }
 
@@ -239,7 +284,7 @@ export interface IJobSerializeData {
   name: string;
   order: number;
   pet: string;
-  filter: Models.IAbilityFilter;
+  filter: IAbilityFilter;
   compact: boolean;
   collapsed: boolean;
 }
@@ -247,7 +292,7 @@ export interface IJobSerializeData {
 export interface IAbilityUsageData {
   id: string;
   job: string;
-  ability: string;
+  name: string;
   start: string;
   settings: string;
 }
@@ -268,6 +313,6 @@ export interface IAbilityMapData {
 }
 
 export interface IBossAbilityUsageData {
-  id: string,
-  ability: Models.IBossAbility;
+  id: string;
+  ability: IBossAbility;
 }

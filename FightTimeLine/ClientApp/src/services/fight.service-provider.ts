@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { InjectionToken, Inject,Injector } from '@angular/core';
+import { InjectionToken, Inject, Injector } from '@angular/core';
 
 import { FightsService } from "./fight.service";
 import { IFightService } from "./fight.service-interface";
@@ -9,8 +9,8 @@ import { environment } from "../environments/environment";
 import * as Gameserviceprovider from "./game.service-provider";
 import * as Gameserviceinterface from "./game.service-interface";
 
-let fightServiceFactory = (http: HttpClient, path: string, gameService: Gameserviceinterface.IGameService) => {
-  var serviceToReturn: IFightService;
+const fightServiceFactory = (http: HttpClient, path: string, gameService: Gameserviceinterface.IGameService) => {
+  let serviceToReturn: IFightService;
   if (environment.production) {
     serviceToReturn = new FightsService(gameService, http, path);
   } else {
@@ -26,6 +26,6 @@ export let fightServiceProvider =
   provide: fightServiceToken,
   useFactory: fightServiceFactory,
   deps: [
-    HttpClient,"BASE_URL", Gameserviceprovider.gameServiceToken
+    HttpClient, "BASE_URL", Gameserviceprovider.gameServiceToken
   ]
 };

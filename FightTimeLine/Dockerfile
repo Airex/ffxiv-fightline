@@ -6,8 +6,7 @@ ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 
 # install NodeJS 13.x
 # see https://github.com/nodesource/distributions/blob/master/README.md#deb
-RUN apt-get update -yq 
-RUN apt-get install curl gnupg -yq 
+RUN apt-get update -yq && apt-get install curl gnupg -yq 
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt-get install -y nodejs
 
@@ -15,7 +14,8 @@ FROM  node as build
 WORKDIR /app
 
 COPY . .
-RUN dotnet publish ./FightTimeLine.csproj -c Release -o /webhost
+
+RUN dotnet publish ./FightTimeLine/FightTimeLine.csproj -c Release -o /webhost
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
 WORKDIR /app

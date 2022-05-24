@@ -1,4 +1,4 @@
-import { DataItem, DataSetDataItem } from "vis-timeline"
+import { DataItem, DataSetDataItem } from "vis-timeline";
 import { BaseHolder } from "./BaseHolder";
 import { AbilityAvailabilityMap } from "../Maps/index";
 
@@ -28,7 +28,7 @@ export class AbilityAvailablityHolder extends BaseHolder<string, DataItem, Abili
   }
 
   update(items: AbilityAvailabilityMap[]) {
-    // console.log("update AbilityAvailabilityMap")   
+    // console.log("update AbilityAvailabilityMap");
     this.visItems.update(this.itemsOf(items));
   }
 

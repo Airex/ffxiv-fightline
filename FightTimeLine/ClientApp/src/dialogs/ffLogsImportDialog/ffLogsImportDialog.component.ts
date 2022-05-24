@@ -1,9 +1,9 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { RecentActivityService } from "../../services/RecentActivitiesService"
-import { SettingsService } from "../../services/SettingsService"
-import { Utils } from "../../core/Utils"
-import { ReportFightsResponse } from "../../core/FFLogs"
+import { RecentActivityService } from "../../services/RecentActivitiesService";
+import { SettingsService } from "../../services/SettingsService";
+import { Utils } from "../../core/Utils";
+import { ReportFightsResponse } from "../../core/FFLogs";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
 import { NzModalRef } from "ng-zorro-antd/modal";
@@ -15,6 +15,29 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 })
 
 export class FFLogsImportDialog implements OnInit {
+
+
+  constructor(
+    public dialogRef: NzModalRef,
+    @Inject(Gameserviceprovider.gameServiceToken)
+    public service: Gameserviceinterface.IGameService,
+    public recentService: RecentActivityService,
+    public settingsService: SettingsService,
+    private router: Router) {
+  }
+
+  reportValue: string;
+  haveFFlogsChar: boolean;
+  zones = [];
+  parsesList = [];
+  @Input() code: string;
+  searchAreaDisplay = "none";
+  listAreaDisplay = "none";
+  dialogContentHeight = "60px";
+  prevSearch: string = null;
+  killsOnly = true;
+  loadingParses = false;
+  matchValue = "reports\\/([a-zA-Z0-9]{16})\\/?(?:(?:#.*fight=([^&]*))|$)";
 
   ngOnInit(): void {
     const importSettings = this.settingsService.load().fflogsImport;
@@ -28,32 +51,10 @@ export class FFLogsImportDialog implements OnInit {
       this.showSearchArea();
     }
 
-    if (this.code)
+    if (this.code) {
       this.reportValue = "https://www.fflogs.com/reports/" + this.code;
+    }
     this.onSearch(this.reportValue);
-  }
-
-  reportValue: string;
-  haveFFlogsChar: boolean;
-  zones = [];
-  parsesList = [];
-  @Input() code: string;
-  searchAreaDisplay = "none";
-  listAreaDisplay = "none";
-  dialogContentHeight = "60px";
-  prevSearch: string = null;
-  killsOnly: boolean = true;
-  loadingParses: boolean = false;
-  matchValue = "reports\\/([a-zA-Z0-9]{16})\\/?(?:(?:#.*fight=([^&]*))|$)"
-
-
-  constructor(
-    public dialogRef: NzModalRef,
-    @Inject(Gameserviceprovider.gameServiceToken)
-    public service: Gameserviceinterface.IGameService,
-    public recentService: RecentActivityService,
-    public settingsService: SettingsService,
-    private router: Router) {
   }
 
   round(v) {
@@ -83,7 +84,7 @@ export class FFLogsImportDialog implements OnInit {
     this.service.dataService
       .getFight(code)
       .then((it: ReportFightsResponse) => {
-        if (it.fights.length == 0) return;
+        if (it.fights.length === 0) { return; }
         const groupBy = key => array =>
           array.reduce((objectsByKeyValue, obj) => {
             const value = obj[key];
@@ -91,7 +92,7 @@ export class FFLogsImportDialog implements OnInit {
             return objectsByKeyValue;
           }, {});
 
-        var zones = groupBy('zoneName')(it.fights);
+        const zones = groupBy('zoneName')(it.fights);
         this.zones = Object.keys(zones).map((value) => ({ key: value, value: zones[value] }));
         this.showListArea();
       })
@@ -123,12 +124,12 @@ export class FFLogsImportDialog implements OnInit {
           },
           () => {
             this.loadingParses = false;
-          })
+          });
     }
   }
 
   onSearch(data: string): void {
-    if (this.prevSearch === data) return;
+    if (this.prevSearch === data) { return; }
     if (data === "") {
       this.code = "";
       this.hideExtraAreas();
@@ -156,7 +157,7 @@ export class FFLogsImportDialog implements OnInit {
   private hideExtraAreas() {
     this.dialogContentHeight = "60px";
     this.searchAreaDisplay = "none";
-    this.listAreaDisplay = "none"
+    this.listAreaDisplay = "none";
   }
 
   private showSearchArea() {

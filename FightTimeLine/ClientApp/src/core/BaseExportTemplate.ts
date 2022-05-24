@@ -1,26 +1,26 @@
-import { Utils } from "./Utils"
-import { ExportAttack, ExportData, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings } from "./ExportModels";
+import { Utils } from "./Utils";
+import { IExportResultSet,  ITableOptions, ITableOptionSettings } from "./ExportModels";
 import { PresenterManager } from "./PresentationManager";
 import { Holders } from "./Holders";
 import { IJobRegistryService } from "src/services/jobregistry.service-interface";
 import { IColumnTemplate } from "./TableModels";
+import { BossAttackMap } from "./Maps";
 
 export type ExportTemplateContext = {
-  data: ExportData,
   presenter: PresenterManager,
   jobRegistry: IJobRegistryService,
   options?: ITableOptions,
   holders?: Holders
-}
+};
 
-export abstract class ExportTemplate<RowType = any> {
+export abstract class TableViewTemplate<RowType = any> {
   public abstract get name(): string;
 
   abstract getColumns(context: ExportTemplateContext): IColumnTemplate<RowType>[];
 
   abstract buildTable(context: ExportTemplateContext): IExportResultSet;
 
-  public abstract loadOptions(data?: ExportData): ITableOptionSettings | null;
+  public abstract loadOptions(holders?: Holders): ITableOptionSettings | null;
 
   offsetCompareFn(a: string, b: string): number {
     const d = new Date();
@@ -28,25 +28,25 @@ export abstract class ExportTemplate<RowType = any> {
   }
 }
 
-export abstract class AttackRowExportTemplate extends ExportTemplate<ExportAttack>{
+export abstract class AttackRowExportTemplate extends TableViewTemplate<BossAttackMap>{
   buildTable(context: ExportTemplateContext): IExportResultSet {
 
     const cols = this.getColumns(context);
-    const rows = context.data.data.boss.attacks
+    const rows = context.holders.bossAttacks.getAll()
       .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
-      .map(attack => <IExportRow>{
-        cells: cols.map(t => t.buildCell(context.data, attack)),
+      .map(attack => ({
+        cells: cols.map(t => t.buildCell(context.holders, attack)),
         filterData: attack
-      });
+      }));
 
-    const columns = cols.map(t => t.buildHeader(context.data));
+    const columns = cols.map(t => t.buildHeader(context.holders));
 
-    return <IExportResultSet>{
+    return {
       columns,
       rows,
       title: this.name,
       filterByFirstEntry: true
-    };
+    } as IExportResultSet;
   }
 }
 

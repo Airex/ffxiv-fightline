@@ -1,4 +1,4 @@
-import { DataItem, DataSetDataItem } from "vis-timeline"
+import { DataItem, DataSetDataItem } from "vis-timeline";
 import { BaseHolder } from "./BaseHolder";
 import { BossAttackMap } from "../Maps/BossAttackMap";
 import * as Models from "../Models";
@@ -30,7 +30,7 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
       end: new Date(i.startAsNumber + 10),
       type: 'background',
       content: "",
-      className: "bossAttack",
+      className: "bossAttack " + i.attack.color,
       title: i.attack.name
     });
   }
@@ -44,9 +44,9 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
         end: new Date(it.startAsNumber + 10),
         type: 'background',
         content: "",
-        className: "bossAttack",
+        className: "bossAttack " + it.attack.color,
         title: it.attack.name
-      }
+      };
     }));
   }
 
@@ -79,28 +79,43 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
   }
 
   update(itemsToUpdate: BossAttackMap[]): void {
-    // console.log("update BossAttackMap")   
     this.visBossItems.update(this.itemsOf(itemsToUpdate.filter(x => x && !!this.visBossItems.get(x.id))));
     this.visMainItems.update(itemsToUpdate.map(it => {
       const item = it && this.visMainItems.get(this.prefix + it.id);
-      if (!item) return null;
+      if (!item) { return null; }
       item.start = it.start;
+      item.className = "bossAttack " + it.attack.color;
       item.end = new Date(item.start.valueOf() + 10);
       return item;
     }).filter(x => !!x));
   }
 
-  applyFilter(filter: Models.IBossAttackFilter, attack?:BossAttackMap): void {
-    if (!filter) return;
-    const values = attack? [attack]: this.values;
+  applyFilter(filter: Models.IBossAttackFilter, attack?: BossAttackMap): void {
+    if (!filter) { return; }
+    const values = attack ? [attack] : this.values;
     values.forEach(it => {
-      let visible = !filter.tags || filter.tags.some(value => ((!it.attack.tags || it.attack.tags.length === 0) && value === "Other") || it.attack.tags && it.attack.tags.includes(value));
-      if (visible)
-        visible = visible && (!filter.sources || filter.sources.some(value => (!it.attack.source && value === "Other") || (it.attack.source && it.attack.source === value)));
-      if (visible)
-        visible = visible && (filter.isMagical && it.attack.type === Models.DamageType.Magical || filter.isPhysical && it.attack.type === Models.DamageType.Physical || filter.isUnaspected && it.attack.type === Models.DamageType.None);
-      if (visible)
-        visible = visible && (it.attack.fflogsAttackSource == undefined || filter.fflogsSource == it.attack.fflogsAttackSource || it.pinned)
+      let visible = !filter.tags
+        || filter.tags.some(value => ((!it.attack.tags || it.attack.tags.length === 0) && value === "Other")
+          || it.attack.tags && it.attack.tags.includes(value));
+      if (visible) {
+        visible = visible
+          && (!filter.sources
+            || filter.sources.some(value => (!it.attack.source && value === "Other")
+              || (it.attack.source && it.attack.source === value)));
+      }
+      if (visible) {
+        visible = visible
+          && (filter.isMagical
+            && it.attack.type === Models.DamageType.Magical || filter.isPhysical
+            && it.attack.type === Models.DamageType.Physical || filter.isUnaspected
+            && it.attack.type === Models.DamageType.None);
+      }
+      if (visible) {
+        visible = visible
+          && (it.attack.fflogsAttackSource === undefined
+            || filter.fflogsSource === it.attack.fflogsAttackSource
+            || it.pinned);
+      }
 
       const item = this.visBossItems.get(it.id);
 
@@ -111,11 +126,11 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
 
       if (visible) {
         if (!item) {
-          toAdd.push(it)
+          toAdd.push(it);
         }
       } else {
         if (item) {
-          toRemove.push(it)
+          toRemove.push(it);
         }
       }
 

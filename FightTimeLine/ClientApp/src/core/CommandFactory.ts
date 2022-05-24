@@ -1,22 +1,25 @@
-import { Command, ICommandData } from "./UndoRedo"
+import { Command, ICommandData } from "./UndoRedo";
 import {
-  AddAbilityCommand, RemoveAbilityCommand, MoveCommand, AddJobCommand, CombinedCommand, AddBossAttackCommand, RemoveBossAttackCommand, ChangeAbilitySettingsCommand,
-  SwitchTargetCommand, ChangeBossAttackCommand, RemoveJobCommand, AddDowntimeCommand, RemoveDownTimeCommand, ChangeDowntimeCommand, ChangeDowntimeColorCommand, SetJobPetCommand,
+  AddAbilityCommand, RemoveAbilityCommand, MoveCommand, AddJobCommand, CombinedCommand, AddBossAttackCommand,
+  RemoveBossAttackCommand, ChangeAbilitySettingsCommand,
+  SwitchTargetCommand, ChangeBossAttackCommand, RemoveJobCommand, AddDowntimeCommand, RemoveDownTimeCommand,
+  ChangeDowntimeCommand, ChangeDowntimeColorCommand, SetJobPetCommand,
   AddStanceCommand, RemoveStanceCommand, MoveStanceCommand,
   AddBatchUsagesCommand,
   AddBatchAttacksCommand,
   ChangeDowntimeCommentCommand,
-  ChangeJobStats
-} from "./Commands"
-import { IView, IBossAbility } from "./Models"
-import { Utils } from "./Utils"
+  ChangeJobStats,
+  AttachPresetCommand
+} from "./Commands";
+import { IView, IBossAbility } from "./Models";
+import { Utils } from "./Utils";
 
 export class CommandFactory {
   constructor(private startDate: Date) {
 
   }
   createFromData(data: ICommandData, view: IView): Command {
-    if (!data) return null;
+    if (!data) { return null; }
     switch (data.name) {
       case "useAbility":
         return new AddAbilityCommand(
@@ -94,7 +97,10 @@ export class CommandFactory {
             startId: null,
             end: Utils.getDateFromOffset(data.params.end, this.startDate),
             endId: null
-          }, data.params.color, data.params.comment);
+          },
+          data.params.color,
+          data.params.comment
+        );
       case "removeDowntime":
         return new RemoveDownTimeCommand(
           data.params.id);
@@ -102,7 +108,8 @@ export class CommandFactory {
         return new ChangeDowntimeCommand(
           data.params.id,
           Utils.getDateFromOffset(data.params.start, this.startDate),
-          Utils.getDateFromOffset(data.params.end, this.startDate));
+          Utils.getDateFromOffset(data.params.end, this.startDate)
+        );
       case "changeDowntimeColor":
         return new ChangeDowntimeColorCommand(
           data.params.id,
@@ -137,7 +144,11 @@ export class CommandFactory {
           data.params.id,
           data.params.newData
         );
-
+      case "attachPreset":
+        return new AttachPresetCommand(
+          data.params.id,
+          data.params.preset
+        );
       default:
     }
     return null;

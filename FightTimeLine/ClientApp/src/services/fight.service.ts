@@ -1,20 +1,20 @@
-import { Injectable, Inject } from "@angular/core"
-import { HttpClient } from "@angular/common/http"
-import { Observable } from "rxjs"
-import { IBoss, IFight, IBossSearchEntry,ICommandEntry } from "../core/Models"
-import { IFightService } from "./fight.service-interface"
+import { Injectable, Inject } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { IBoss, IFight, IBossSearchEntry, ICommandEntry } from "../core/Models";
+import { IFightService } from "./fight.service-interface";
 import * as Gameserviceprovider from "./game.service-provider";
 import * as Gameserviceinterface from "./game.service-interface";
 
 @Injectable()
 export class FightsService implements IFightService {
   constructor(
-    @Inject(Gameserviceprovider.gameServiceToken) private gameService : Gameserviceinterface.IGameService,
+    @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
     private httpClient: HttpClient,
     @Inject("BASE_URL") private basePath: string) { }
 
   headers = {
-    "fightService": "true"
+    fightService: "true"
   };
 
   getBosses(reference: number, searchString: string, privateOnly: boolean): Observable<IBossSearchEntry[]> {
@@ -85,11 +85,11 @@ export class FightsService implements IFightService {
   }
 
   addCommand(fight: string, data: any): Observable<{id: string}> {
-    console.log("adding commmand in fightservice.addcommand")
+    console.log("adding commmand in fightservice.addcommand");
     return this.httpClient.post<any>(this.basePath + "api/data/addCommand",
       {
-        fight: fight,
-        data: data
+        fight,
+        data
       },
       {
         headers: this.headers

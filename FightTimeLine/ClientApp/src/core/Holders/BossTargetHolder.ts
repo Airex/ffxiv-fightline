@@ -24,7 +24,7 @@ export class BossTargetHolder extends BaseHolder<string, DataItem, BossTargetMap
   }
 
   update(items: BossTargetMap[]) {
-    // console.log("update BossTargetMap")   
+    // console.log("update BossTargetMap")
     this.visItems.update(this.itemsOf(items));
   }
 

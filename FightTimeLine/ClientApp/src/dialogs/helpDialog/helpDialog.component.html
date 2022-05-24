@@ -3,13 +3,18 @@
     <nz-sider style="overflow: auto; height: 100vh;" customScroll>
       <ul nz-menu [nzMode]="'inline'">
         <li nz-menu-item [nzSelected]="true" (click)="showSection('Basics')"> Basics </li>
-        <li nz-menu-item (click)="showSection('Main menu')"> Main menu </li>
+        <!-- <li nz-menu-item (click)="showSection('Main menu')"> Main menu </li>
         <li nz-menu-item (click)="showSection('Keyboard')"> Keyboard </li>
         <li nz-menu-item (click)="showSection('Tools')"> Tools </li>
         <li nz-menu-item (click)="showSection('View')"> View </li>
-        <li nz-menu-item (click)="showSection('Context menus')"> Context menus </li>
+        <li nz-menu-item (click)="showSection('Context menus')"> Context menus </li> -->
       </ul>
     </nz-sider>
+    <html>
+    <body>
+      <div class="empty"></div>
+    </body>
+    </html>
     <nz-layout style="height: 560px">
       <nz-content style="margin:24px 2px 2px 10px;overflow: auto" customScroll>
         <div class="help-content">
@@ -37,9 +42,6 @@
               Double click on BOSS attack item to edit its properties
             </li>
             <li>
-              Double click on ability item to edit its properties (eg. Provoke)
-            </li>
-            <li>
               Double click on JOB row to set initial boss target (works for tanks only). You can switch target with Provoke ability on other Tank
             </li>
           </ul>
@@ -58,28 +60,16 @@
               You can use <b>Ctrl+Z</b>/<b>Ctrl+Y</b> for Undo/Redo
             </li>
           </ul>
-          <h3>Context menu</h3>
-          <ul>
-            <li>
-              Right click on Ability under JOB to show context menu
-            </li>
-            <li>
-              Right click on JOB to show context menu
-            </li>
-            <li>
-              Right click on Phase to show context menu
-            </li>
-          </ul>
           <h3>Load and save</h3>
           <ul>
             <li>
-              Click on Menu -> Load to load saved Boss or Fight
+              Menu -> Load to load saved Boss or Fight
             </li>
             <li>
-              Click on Menu -> Save Boss to save Boss
+              Menu -> Save Boss to save Boss
             </li>
             <li>
-              Click on Menu -> Save Fight to save Fight with current Boss. One can not save Fight if Boss is not saved.
+              Menu -> Save Fight to save Fight with current Boss. One can not save Fight if Boss is not saved.
             </li>
           </ul>
           <h3>View menu</h3>

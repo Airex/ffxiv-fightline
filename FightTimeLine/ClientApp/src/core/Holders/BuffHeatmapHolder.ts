@@ -1,6 +1,6 @@
-import { DataItem, DataSetDataItem } from "vis-timeline"
+import { DataItem, DataSetDataItem } from "vis-timeline";
 import { BaseHolder } from "./BaseHolder";
-import {HeatmapMap }from "../Maps/HeatmapMap";
+import {HeatmapMap } from "../Maps/HeatmapMap";
 
 export class BuffHeatmapHolder extends BaseHolder<string, DataItem, HeatmapMap> {
 
@@ -29,7 +29,7 @@ export class BuffHeatmapHolder extends BaseHolder<string, DataItem, HeatmapMap> 
   }
 
   update(items: HeatmapMap[]) {
-    // console.log("update HeatmapMap")   
+    // console.log("update HeatmapMap")
     this.visItems.update(this.itemsOf(items));
   }
 }

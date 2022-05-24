@@ -23,7 +23,7 @@ export class StancesHolder extends BaseHolder<string, DataItem, JobStanceMap> {
   }
 
   update(items: JobStanceMap[]) {
-    // console.log("update JobStanceMap")   
+    // console.log("update JobStanceMap")
     this.visItems.update(this.itemsOf(items));
   }
 
@@ -43,8 +43,9 @@ export class StancesHolder extends BaseHolder<string, DataItem, JobStanceMap> {
     this.values.forEach(v => {
       if (v.start > time) {
         if (minV) {
-          if (minV.start > v.start)
+          if (minV.start > v.start) {
             minV = v;
+          }
         }
         else {
           minV = v;
@@ -63,8 +64,9 @@ export class StancesHolder extends BaseHolder<string, DataItem, JobStanceMap> {
     this.values.forEach(v => {
       if (v.end < time) {
         if (maxV) {
-          if (maxV.end < v.end)
+          if (maxV.end < v.end) {
             maxV = v;
+          }
         }
         else {
           maxV = v;

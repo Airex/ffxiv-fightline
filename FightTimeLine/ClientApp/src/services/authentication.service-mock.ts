@@ -1,15 +1,14 @@
-import { Injectable, EventEmitter, Output, Directive } from '@angular/core';
+import { Injectable, EventEmitter, Output } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { IAuthenticationService } from "./authentication.service-interface";
 
-@Directive()
 @Injectable()
 export class AuthenticationMockService implements IAuthenticationService {
 
-  @Output("usernameChanged") usernameChanged = new EventEmitter<void>();
-  @Output("authenticatedChanged") authenticatedChanged = new EventEmitter<void>();
-  
-  userName:string = "Dummy";
+  @Output() usernameChanged = new EventEmitter<void>();
+  @Output() authenticatedChanged = new EventEmitter<void>();
+
+  userName = "Dummy";
 
   login(username: string, password: string): Observable<any> {
     this.userName = username;
@@ -18,7 +17,7 @@ export class AuthenticationMockService implements IAuthenticationService {
     return of(null);
   }
 
-  logout():Observable<any> {
+  logout(): Observable<any> {
     // remove user from local storage to log user out
     this.userName = null;
     this.authenticatedChanged.emit();
@@ -27,7 +26,7 @@ export class AuthenticationMockService implements IAuthenticationService {
   }
 
   get authenticated(): boolean {
-    return this.username!=null;
+    return this.username != null;
   }
   get username(): string {
     return this.userName;

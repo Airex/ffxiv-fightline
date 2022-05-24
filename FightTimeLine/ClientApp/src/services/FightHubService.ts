@@ -1,9 +1,8 @@
-import { Injectable, Output, EventEmitter, Directive, Inject } from "@angular/core";
-import { HubConnection, HubConnectionBuilder, LogLevel, HubConnectionState } from "@aspnet/signalr"
-import * as M from "../core/Models"
+import { Injectable, Output, EventEmitter, Inject } from "@angular/core";
+import { HubConnection, HubConnectionBuilder, LogLevel, HubConnectionState } from "@microsoft/signalr";
+import * as M from "../core/Models";
 import * as Environment from "../environments/environment";
 
-@Directive()
 @Injectable()
 export class FightHubService {
 
@@ -21,14 +20,14 @@ export class FightHubService {
     return this.connectedUsers;
   }
 
-  @Output("connectedChanged") connectedChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output("usersChanged") usersChanged: EventEmitter<any> = new EventEmitter<any>();
+  @Output() connectedChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() usersChanged: EventEmitter<any> = new EventEmitter<any>();
 
   sendCommand(fight: string, username: string, data: any) {
     if (this.connected) {
       const message = JSON.stringify(data);
-      //console.log(`Message length = ${message.length}`);
-      this.hubConnection.invoke("command", fight, username, message).catch((error)=>{
+      // console.log(`Message length = ${message.length}`);
+      this.hubConnection.invoke("command", fight, username, message).catch((error) => {
         console.log(error);
       });
     }
@@ -37,6 +36,7 @@ export class FightHubService {
   private createConnection(): HubConnection {
     this.hubConnection = new HubConnectionBuilder()
       .configureLogging(LogLevel.Information)
+      .withAutomaticReconnect()
       .withUrl(this.basePath + "fighthub")
       .build();
     return this.hubConnection;
@@ -55,7 +55,7 @@ export class FightHubService {
   }
 
   startSession(fight: string, username: string, handlers: IStartSessionHandlers): Promise<string> {
-    if (!Environment.environment.production || Environment.environment.skipHub ) return Promise.resolve("");
+    if (!Environment.environment.production || Environment.environment.skipHub ) { return Promise.resolve(""); }
     const connection = this.createConnection();
     this.attachHandlers(connection, handlers);
 
@@ -66,7 +66,7 @@ export class FightHubService {
           this.hubConnection
             .invoke("startSession", fight, username)
             .then((result) => {
-              //console.log(result);
+              // console.log(result);
               resolve(result);
             })
             .catch(error => {
@@ -117,25 +117,29 @@ export class FightHubService {
       (data: M.IHubUser) => {
         this.connectedUsers.push(data);
         this.usersChanged.emit();
-        if (handlers && handlers.onConnected)
+        if (handlers && handlers.onConnected) {
           handlers.onConnected(data);
+        }
       });
     connection.on("disconnected",
       (data: M.IHubUser) => {
         this.connectedUsers.splice(this.connectedUsers.findIndex((it => it.id === data.id) as any), 1);
         this.usersChanged.emit();
-        if (handlers && handlers.onDisconnected)
+        if (handlers && handlers.onDisconnected) {
           handlers.onDisconnected(data);
+        }
       });
     connection.on("command",
-      (data:M.IHubCommand) => {
-        if (handlers && handlers.onCommand)
+      (data: M.IHubCommand) => {
+        if (handlers && handlers.onCommand) {
           handlers.onCommand(data);
+        }
       });
     connection.on("activeUsers",
-      (data:M.IHubUser[]) => {
-        if (handlers && handlers.onActiveUsers)
+      (data: M.IHubUser[]) => {
+        if (handlers && handlers.onActiveUsers) {
           handlers.onActiveUsers(data);
+        }
         this.connectedUsers = data;
         this.usersChanged.emit();
       });

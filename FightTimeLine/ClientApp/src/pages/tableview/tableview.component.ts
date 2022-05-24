@@ -1,28 +1,27 @@
 import { Component, OnInit, OnDestroy, Inject, ViewChild, HostListener, QueryList, ViewChildren } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { SettingsService } from "../../services/SettingsService"
-import * as S from "../../services/index"
+import { SettingsService } from "../../services/SettingsService";
+import * as S from "../../services/index";
 import * as M from "../../core/Models";
-import { NgProgressComponent } from "ngx-progressbar"
+import { NgProgressComponent } from "ngx-progressbar";
 
-import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate"
-import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate"
-import { ExportTemplate } from "../../core/BaseExportTemplate"
+import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate";
+import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate";
+import { TableViewTemplate, ExportTemplateContext } from "../../core/BaseExportTemplate";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
 
 import * as FightTimeLineController from "../../core/FightTimeLineController";
 import * as Generators from "../../core/Generators";
-import * as PresentationManager from "../../core/PresentationManager";
 import { ICommandData } from "src/core/UndoRedo";
 import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
-import { ExportData, IExportCell, IExportColumn, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings, NumberRangeOptionsSetting, TableOptionSettingType, TagsOptionsSetting } from "src/core/ExportModels";
+import * as ExportModels from "src/core/ExportModels";
 import { VisStorageService } from "src/services/VisStorageService";
 import { IFightSerializeData } from "src/core/SerializeController";
 import { MitigationsTemplate } from "src/core/ExportTemplates/MitigationsTemplate";
 import { PingComponent } from "src/components/ping/ping.component";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
-import { Utils, startOffset } from "src/core/Utils";
+import { Utils, startOffsetConst } from "src/core/Utils";
 import { Location } from "@angular/common";
 import { SidepanelComponent } from "src/components/sidepanel/sidepanel.component";
 
@@ -32,58 +31,59 @@ import { SidepanelComponent } from "src/components/sidepanel/sidepanel.component
   styleUrls: ["./tableview.component.css"],
 })
 export class TableViewComponent implements OnInit, OnDestroy {
-  startDate = new Date(startOffset);
 
+  startDate = new Date(startOffsetConst);
   fightId: string;
   template: string;
-  tableHeight: string = (window.innerHeight - 100)+"px";
+  tableHeight: string = (window.innerHeight - 100) + "px";
   fightLineController: FightTimeLineController.FightTimeLineController;
-  private idgen = new Generators.IdGenerator();
-  presenterManager = new PresentationManager.PresenterManager();
-  options: ITableOptionSettings;
-  currentOptions: ITableOptions;
+  options: ExportModels.ITableOptionSettings;
+  currentOptions: ExportModels.ITableOptions;
   filterData: { [name: string]: string[] } = {};
 
   @ViewChild("sidepanel", { static: true }) sidepanel: SidepanelComponent;
   @ViewChild("progressBar", { static: true }) progressBar: NgProgressComponent;
   @ViewChildren(PingComponent) pings: QueryList<PingComponent>;
 
-  set: IExportResultSet = {
+  set: ExportModels.IExportResultSet = {
     columns: [],
     rows: [],
     title: "",
     filterByFirstEntry: false
   };
 
-  filtered: IExportRow[] = [];
+  filtered: ExportModels.IExportRow[] = [];
   pagesize = Number.MAX_VALUE;
+  private lvl: number;
+  tpl: TableViewTemplate;
+
+  templates: { [name: string]: TableViewTemplate } = {
+    defence: new BossAttackDefensiveTemplateV2(),
+    onesecond: new EachRowOneSecondTemplate(),
+    descriptive: new DescriptiveTemplate(),
+    mitigations: new MitigationsTemplate()
+  };
 
   get showicon(): boolean {
-    return this.currentOptions["co"].indexOf("icon") >= 0;
-  };
+    return this.currentOptions.co.indexOf("icon") >= 0;
+  }
   get showoffset(): boolean {
-    return this.currentOptions["co"].indexOf("offset") >= 0;
+    return this.currentOptions.co.indexOf("offset") >= 0;
   }
 
   get showtext(): boolean {
-    return this.currentOptions["co"].indexOf("text") >= 0;
+    return this.currentOptions.co.indexOf("text") >= 0;
   }
 
   get showtarget(): boolean {
-    return this.currentOptions["co"].indexOf("target") >= 0;
+    return this.currentOptions.co.indexOf("target") >= 0;
   }
 
   get iconSize(): number {
-    return this.currentOptions["is"];
+    return this.currentOptions.is;
   }
 
-  templates: { [name: string]: ExportTemplate } = {
-    "defence": new BossAttackDefensiveTemplateV2(),        
-    "onesecond": new EachRowOneSecondTemplate(),
-    "descriptive": new DescriptiveTemplate(),
-    "mitigations": new MitigationsTemplate()
-  };
-
+  private idgen = new Generators.IdGenerator();
 
   public constructor(
     @Inject(S.fightServiceToken) private fightService: S.IFightService,
@@ -109,13 +109,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
       $event.stopPropagation();
       $event.preventDefault();
     }
-    this.setSidePanel(id);
-  }
 
-  private setSidePanel(id: string) {
     this.sidepanel.setSidePanel({ items: [id] });
-  }
 
+  }
 
   filterChange(event: any, column: string) {
     if (column) {
@@ -124,20 +121,21 @@ export class TableViewComponent implements OnInit, OnDestroy {
     const cellFilter = this.filterCell();
     this.filtered = this.set.rows.filter(row => {
       const visible = this.set.columns.every(c => {
-        const v = !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c)
+        const v = !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c);
         return v;
       });
 
-      if (visible)
+      if (visible) {
         row.cells.forEach((cell, index) => cellFilter(cell, this.filterData[this.set.columns[index].name]));
+      }
 
       return visible;
     });
   }
 
   filterCell() {
-    let unique = new Set();
-    const fn = (cell: IExportCell, data: string[]) => {
+    const unique = new Set();
+    const fn = (cell: ExportModels.IExportCell, data: string[]) => {
       cell.items.forEach(it => {
         it.visible = true;
         if (it.filterFn && data && !it.filterFn(data)) {
@@ -145,12 +143,12 @@ export class TableViewComponent implements OnInit, OnDestroy {
           return;
         }
         else {
-          if (cell.disableUnique) return;
+          if (cell.disableUnique) { return; }
           if (it.refId && unique.has(it.refId)) {
             it.visible = false;
           } else {
             it.visible = true;
-            unique.add(it.refId)
+            unique.add(it.refId);
           }
         }
       });
@@ -160,13 +158,15 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   ping(id: string, owner: boolean): void {
     const pingComponent = this.pings.find(it => it.id === id || (owner && it.owner === owner));
-    if (pingComponent)
+    if (pingComponent) {
       pingComponent.ping();
+    }
   }
 
 
   ngOnInit(): void {
     this.visStorage.clear();
+    this.gameService.jobRegistry.setLevel(90);
     this.fightLineController = new FightTimeLineController.FightTimeLineController(
       this.startDate,
       this.idgen,
@@ -176,17 +176,16 @@ export class TableViewComponent implements OnInit, OnDestroy {
       },
       this.gameService,
       this.settingsService,
-      this.presenterManager
+      this.visStorage.presenter
     );
 
-
-    this.location.path
+    this.fightLineController.applyFilter(null, "level");
 
     this.subscribeToDispatcher(this.dispatcher);
 
     this.route.params.subscribe(r => {
-      const id = r["fightId"] as string;
-      const template = r["template"] as string;
+      const id = r.fightId as string;
+      const template = r.template as string;
       if (id && template) {
         this.template = template;
         this.fightId = id;
@@ -208,8 +207,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
       this.sidepanel.setItems(this.fightLineController.getItems([value]));
     });
   }
-  exported: ExportData;
-  tpl: ExportTemplate;
 
   load(id) {
     this.dialogService.executeWithLoading("Loading...", ref => {
@@ -220,8 +217,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
             this.fightLineController.loadFight(fight, loadedData, value.map(cmd => JSON.parse(cmd.data)));
             this.connectToSession()
               .finally(() => {
-                const serializer = this.fightLineController.createSerializer()
-                this.exported = serializer.serializeForExport();
+                this.gameService.jobRegistry.setLevel(90);
                 this.tpl = this.templates[this.template.toLowerCase()];
                 this.loadTable();
                 ref.close();
@@ -250,12 +246,13 @@ export class TableViewComponent implements OnInit, OnDestroy {
     }
 
     if (!this.options) {
-      const cellOptions: TagsOptionsSetting = {
+      const cellOptions: ExportModels.TagsOptionsSetting = {
         name: "co",
-        "defaultValue": ["icon", "text", "target"],
+        defaultValue: ["icon", "text", "target"],
         displayName: "Cell Options",
-        type: TableOptionSettingType.Tags,
+        kind: ExportModels.TableOptionSettingType.Tags,
         description: "",
+        visible: true,
         options: {
           items: [
             { id: "icon", checked: true, text: "Icon" },
@@ -266,41 +263,71 @@ export class TableViewComponent implements OnInit, OnDestroy {
         }
       };
 
-      const iconSize: NumberRangeOptionsSetting = {
+      const iconSize: ExportModels.NumberRangeOptionsSetting = {
         name: "is",
-        "defaultValue": 16,
+        defaultValue: 16,
         displayName: "Icon Size",
-        type: TableOptionSettingType.NumberRange,
+        visible: true,
+        kind: ExportModels.TableOptionSettingType.NumberRange,
         description: "Changes size of icons",
         options: {
           min: 16,
-          max: 48
+          max: 48,
+          step: 1
         }
       };
 
-      this.options = [...(this.tpl.loadOptions(this.exported) || []), cellOptions, iconSize];
+      const level: ExportModels.NumberRangeOptionsSetting = {
+        name: "l",
+        defaultValue: 90,
+        displayName: "Fight Level",
+        visible: true,
+        kind: ExportModels.TableOptionSettingType.NumberRange,
+        description: "Set level of fight",
+        options: {
+          min: 50,
+          max: 90,
+          step: 10
+        }
+      };
 
-      const [_, search] = this.location.path().split("?")
+      this.options = [level, ...(this.tpl.loadOptions(this.visStorage.holders) || []), cellOptions, iconSize];
+
+      const [_, search] = this.location.path().split("?");
       const params = new URLSearchParams(search);
       this.options.forEach(opts => {
         const p = params.get(opts.name);
         if (p != null) {
-          opts.initialValue = parseOptions(opts.type, p);
-          if (opts.type == TableOptionSettingType.Tags) {
+          opts.initialValue = parseOptions(opts.kind, p);
+          if (opts.kind === ExportModels.TableOptionSettingType.Tags) {
             opts.options.items.forEach(opt => {
-              opt.checked = opts.initialValue.indexOf(opt.id) >= 0
-            })
+              opt.checked = opts.initialValue.indexOf(opt.id) >= 0;
+            });
           }
         }
-      })
+      });
 
       this.currentOptions = this.options.reduce((acc, c) => {
         acc[c.name] = c.initialValue || c.defaultValue;
         return acc;
-      }, {})
+      }, {});
 
     }
-    const context = { data: this.exported, presenter: this.presenterManager, jobRegistry: this.gameService.jobRegistry, options: this.currentOptions, holders: this.visStorage.holders };
+
+    const lvl = this.currentOptions.l;
+    if (lvl !== this.lvl) {
+      this.visStorage.presenter.fightLevel = lvl;
+      this.gameService.jobRegistry.setLevel(lvl);
+      this.fightLineController.applyFilter(null, "level");
+      this.lvl = lvl;
+    }
+
+    const context = {
+      presenter: this.visStorage.presenter,
+      jobRegistry: this.gameService.jobRegistry,
+      options: this.currentOptions,
+      holders: this.visStorage.holders
+    } as ExportTemplateContext;
     this.set = this.tpl.buildTable(context);
 
     this.filterChange(null, null);
@@ -350,17 +377,17 @@ export class TableViewComponent implements OnInit, OnDestroy {
   }
 
   @HostListener("window:resize", ["$event"])
-  resizeHandler(event: any) {    
-    this.tableHeight = (event.target.innerHeight-100)+"px"
+  resizeHandler(event: any) {
+    this.tableHeight = (event.target.innerHeight - 100) + "px";
   }
 
-  trackByName(_: number, item: IExportColumn): string {
-    return item.text;
+  trackByName(_: number, item: ExportModels.IExportColumn): string {
+    return item.refId;
   }
 
-  optionsChanged(values: ITableOptions) {
+  optionsChanged(values: ExportModels.ITableOptions) {
     this.currentOptions = values;
-    const serialized = Utils.serializeOptions(values, this.options);    
+    const serialized = Utils.serializeOptions(values, this.options);
     const [path] = this.location.path().split("?");
     this.location.replaceState(path + "?" + serialized);
     this.loadTable();
@@ -369,14 +396,21 @@ export class TableViewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.dispatcher.destroy();
   }
+
+  langChanged() {
+    this.loadTable();
+  }
 }
-function parseOptions(type: TableOptionSettingType, p: string): any {
+
+function parseOptions(type: ExportModels.TableOptionSettingType, p: string): any {
   switch (type) {
-    case TableOptionSettingType.Boolean:
+    case ExportModels.TableOptionSettingType.Boolean:
       return p === "true";
-    case TableOptionSettingType.NumberRange:
+    case ExportModels.TableOptionSettingType.NumberRange:
       return +p;
-    case TableOptionSettingType.Tags:
+    case ExportModels.TableOptionSettingType.Tags:
       return p.split(",");
+    case ExportModels.TableOptionSettingType.LimitedNumberRange:
+      return p.split(",").map(x => +x);
   }
 }

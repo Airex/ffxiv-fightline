@@ -21,15 +21,15 @@ import { SidePanelMode, SidepanelParams, SIDEPANEL_DATA } from "./ISidePanelComp
   templateUrl: "./sidepanel.component.html",
   styleUrls: ["./sidepanel.component.css"],
 })
-export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit { 
+export class SidepanelComponent {
 
   sideNavOpened: boolean = false;
   items: BaseHolder.IForSidePanel[];
   holders: Holders;
-  selectedPortal: Portal<any>;  
-  key: string;   
+  selectedPortal: Portal<any>;
+  key: string;
   refresher: Subject<void> = new Subject<void>();
-  width = 300;  
+  width = 300;
   id = -1;
 
   componentMap = {
@@ -40,12 +40,12 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     "downtime": [DownTimeComponent, MultipleDownTimeComponent]
   }
 
-  @Input("mode") mode: SidePanelMode = "default";  
+  @Input() mode: SidePanelMode = "default";
 
   constructor(
     private visStorage: VisStorageService,
-    private injector: Injector,    
-    private ngZone: NgZone    
+    private injector: Injector,
+    private ngZone: NgZone
   ) {
     this.holders = this.visStorage.holders;
   }
@@ -105,7 +105,7 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setItems(items: BaseHolder.IForSidePanel[], mode: SidePanelMode = "default"): void {
-    this.items = items;   
+    this.items = items;
 
     const newKey = this.calculateKey(this.items);
     if (newKey === this.key) {
@@ -114,7 +114,7 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.key = newKey;
-    
+
     const componentType = this.componentFactory();
 
     if (componentType) {
@@ -124,10 +124,10 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
         refresh: this.refresher
       });
 
-      let component = new ComponentPortal(componentType, null, injector);      
+      let component = new ComponentPortal(componentType, null, injector);
 
-      if (component) {                     
-        this.selectedPortal = component;                                
+      if (component) {
+        this.selectedPortal = component;
       }
     }
   }
@@ -149,17 +149,6 @@ export class SidepanelComponent implements OnInit, OnDestroy, AfterViewInit {
       parent: this.injector,
       name: "Sidepanel injector"
     });
-  }
-
-  ngAfterViewInit(): void {        
-    // this.op = new DomPortalOutlet(this.portalOutletRef.nativeElement, this.componentFactoryResolver, this.appRef, this.injector);
-  }
-
-  ngOnInit(): void {
-
-  }
-
-  ngOnDestroy(): void {    
   }
 
 }

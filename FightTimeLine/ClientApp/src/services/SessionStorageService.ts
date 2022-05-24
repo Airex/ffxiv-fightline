@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core"
-import { IStorage } from "../core/Models"
+import { Injectable } from "@angular/core";
+import { IStorage } from "../core/Models";
 
 @Injectable()
 export class SessionStorageService implements IStorage {
@@ -43,8 +43,9 @@ export class SessionStorageService implements IStorage {
     if (sessionStorage) {
       try {
         const item = sessionStorage.getItem(key);
-        if (item)
+        if (item) {
           return JSON.parse(item) as T;
+        }
       }
       catch (err) {
 

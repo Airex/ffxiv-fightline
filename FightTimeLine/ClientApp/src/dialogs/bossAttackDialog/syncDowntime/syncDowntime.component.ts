@@ -9,14 +9,14 @@ import * as M from "../../../core/Models";
 })
 export class SyncDowntimeComponent implements OnInit {
 
-  @Input("data") data: M.IBossAbility;  
+  @Input() data: M.IBossAbility;
   downtimes: any[];
   selected: any;
   selectedPre: any;
 
   constructor(
     private visStorage: VisStorageService
-  ){
+  ) {
 
   }
 

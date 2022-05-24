@@ -1,82 +1,46 @@
-.example-radio-group {
-  display: inline-flex;
-  flex-direction: column;
+.importDialogList {
+  height: 290px;
+  overflow: auto;
+  scroll-behavior: auto;
 }
 
-.example-radio-button {
-  margin: 5px;
+:host-context(body.dark) .loadList .ant-list-item:hover {
+  background-color: #646464;
 }
 
-.example-selected-value {
-  margin: 15px 0;
+:host-context(body.dark) .loadList .ant-list-item.selected {
+  background-color: #111b26;
 }
 
-.example-list {
-  width: 250px;
-  max-width: 100%;
-  border: solid 1px #ccc;
-  min-height: 60px;
-  display: block;
-  background: white;
-  border-radius: 4px;
-  overflow: hidden;
+.loadList .ant-list-item:hover {
+  background-color: #e6f7ff;
 }
 
-.example-box {
-  padding: 10px 10px;
-  border-bottom: solid 1px #ccc;
-  color: rgba(0, 0, 0, 0.87);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  box-sizing: border-box;
-  cursor: move;
-  background: white;
-  font-size: 14px;
-  font-weight: bold;
+.loadList .ant-list-item {
+  cursor: pointer;
 }
 
-.cdk-drag-preview {
-  box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
+.action-icon{
+  margin: 0 2px 0 2px;
 }
 
-.cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+.action-icon:hover {
+  transform: scale(1.4)
 }
 
-.example-box:last-child {
-  border: none;
-}
-
-.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.example-custom-placeholder {
-  background: #ccc;
-  border: dotted 3px #999;
-  min-height: 40px;
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+.forcevisible .action-icon {
+  transform: scale(1.4)
 }
 
 
-.settings-tab {
-  display: flex;
-  width: 250px;
-
+nz-list-item span.actions {
+  visibility: hidden;
 }
 
-.settings-container {
-  padding: 8px;
-  width: 300px;
-  min-width: 250px;
+nz-list-item:hover span.actions {
+  visibility: visible;
 }
 
-.settings-title {
-  font-size: 18px;
-  border-bottom-style: double;
-  border-bottom-color: #3f51b5;
-  margin-bottom: 4px;
+nz-list-item span.actions.forcevisible {
+  visibility: visible;
 }

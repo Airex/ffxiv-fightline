@@ -1,19 +1,48 @@
 <ng-container *ngFor="let d of input.items">
-  <nz-tag [nzColor]="d.color" [nz-tooltip]="!!d.tooltip && tt" [nzTooltipPlacement]="'right'" [class.clone]="d.clone"
-    [class.tableview]="true" [style.lineHeight]="(d.ignoreIconScale?16:iconSize)+'px'" [class.fullwidth]="d.fullwidth"
-    (click)="select(d.refId, $event)" *ngIf="d.visible && (d.text || (!d.text && d.icon))">
+  <nz-tag
+    [nzColor]="d.color"
+    [nz-tooltip]="!!d.tooltip && tt"
+    [nzTooltipPlacement]="'right'"
+    [class.clone]="d.clone"
+    [class.tableview]="true"
+    [style.lineHeight]="(d.ignoreIconScale?16:iconSize)+'px'"
+    [class.fullwidth]="d.fullwidth"
+    (click)="select(d.refId, $event)"
+    *ngIf="d.visible && (d.text || (!d.text && d.icon))"
+  >
     <div style="margin: 0 2px 1px 2px; display: flex;flex-direction: row;align-items: flex-start;">
-      <div *ngIf="showicon && d.icon" style="align-self: center;">
-        <img class="abilityIcon" [style.width]="(d.ignoreIconScale?16:iconSize)+'px'"
-          [style.height]="(d.ignoreIconScale?16:iconSize)+'px'" style="margin-top: -3px; " [src]="d.icon" />
+      <div
+        *ngIf="showicon && d.icon"
+        style="align-self: center;"
+      >
+        <img
+          class="abilityIcon"
+          [style.width]="(d.ignoreIconScale?16:iconSize)+'px'"
+          [style.height]="(d.ignoreIconScale?16:iconSize)+'px'"
+          style="margin-top: -3px; "
+          [src]="d.icon"
+        />
       </div>
       <div style="line-height: 16px;align-self: flex-start;padding-left: 4px;padding-top: 2px;white-space: pre-line;">
-        <span *ngIf="(showtext || d.ignoreShowText) && d.text" style="white-space: pre-line;">{{d.text}}</span>
-        <span *ngIf="showtarget && d.targetIcon " style="margin-left: 2px;white-space: nowrap;">
+        <span
+          *ngIf="(showtext || d.ignoreShowText) && d.text"
+          style="white-space: pre-line;"
+        >{{d.text}}</span>
+        <span
+          *ngIf="showtarget && d.targetIcon "
+          style="margin-left: 2px;white-space: nowrap;"
+        >
           <span style="margin-left: 2px;">&gt;</span>
-          <img class="abilityIcon" style="margin-left: 2px;margin-top: -3px;" [src]="d.targetIcon" />
+          <img
+            class="abilityIcon"
+            style="margin-left: 2px;margin-top: -3px;"
+            [src]="d.targetIcon"
+          />
         </span>
-        <span class="usageOffset" *ngIf="showoffset && d.usageOffset && !d.clone && d.text">
+        <span
+          class="usageOffset"
+          *ngIf="showoffset && d.usageOffset && !d.clone && d.text"
+        >
           ({{d.usageOffset}})</span>
       </div>
     </div>

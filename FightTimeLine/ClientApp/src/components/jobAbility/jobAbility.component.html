@@ -1,13 +1,13 @@
 <div class="sidepanel-container">
   <div class="sidepanel-full">
     <img [src]="ability.icon" class="icon" />
-    <span class="abilityName">{{ability.name}}</span>
+    <span class="abilityName">{{it.translated}}</span>
     <div class="abilityDescriptionContainer">
       <span class="abilityDescription" [innerHtml]="description"></span>
     </div>
   </div>
   <div *ngIf="data.mode === 'default'" class="sidepanel-full">
-    <label  nz-checkbox [(ngModel)]="compactView" (ngModelChange)="compact()">Compact view</label>
+    <label  nz-checkbox [(ngModel)]="compactView" (ngModelChange)="compact()">{{'component.jobAbility.compactView' | translate}}</label>
   </div>
   <!-- <div  *ngIf="data.mode === 'default'">
       <button nz-button
@@ -15,8 +15,8 @@
   </div> -->
   <div *ngIf="data.mode === 'default'" class="sidepanel-full">
     <nz-button-group >
-      <button nz-button nzType="primary" (click)="hide(it)">Hide</button>
-      <button nz-button [nzDanger]="true" (click)="clear(it)">Clear</button>
+      <button nz-button nzType="primary" (click)="hide(it)">{{'component.jobAbility.hide' | translate}}</button>
+      <button nz-button [nzDanger]="true" (click)="clear(it)">{{'component.jobAbility.clear' | translate}}</button>
     </nz-button-group>
   </div>
 </div>

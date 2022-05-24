@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewChildren, QueryList, HostListener, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { NzMessageService } from "ng-zorro-antd/message";
 import { NzNotificationService } from "ng-zorro-antd/notification";
-import * as M from "../core/Models"
+import * as M from "../core/Models";
 @Injectable({
   providedIn: "root"
 })
@@ -47,7 +47,7 @@ export class ScreenNotificationsService {
   }
 
   public showConnectedToSession() {
-    //this.success("Connected");
+    // this.success("Connected");
   }
 
   public showConnectedToSessionError() {
@@ -60,7 +60,7 @@ export class ScreenNotificationsService {
 
 
   public showSessionStarted() {
-    //this.success("Session successfuly started");
+    // this.success("Session successfuly started");
   }
 
   public showUnableToImport() {

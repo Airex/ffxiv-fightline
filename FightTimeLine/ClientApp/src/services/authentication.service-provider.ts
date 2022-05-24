@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { InjectionToken, Inject } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 import { AuthenticationService } from "./authentication.service";
 import { IAuthenticationService } from "./authentication.service-interface";
 import { AuthenticationMockService } from "./authentication.service-mock";
@@ -7,8 +7,8 @@ import { AuthenticationMockService } from "./authentication.service-mock";
 import { environment } from "../environments/environment";
 import { UserStorageService } from "./UserStorageService";
 
-let authenticationServiceFactory = (http: HttpClient, ls: UserStorageService, basePath: string) => {
-  var serviceToReturn: IAuthenticationService;
+const authenticationServiceFactory = (http: HttpClient, ls: UserStorageService, basePath: string) => {
+  let serviceToReturn: IAuthenticationService;
   if (environment.production) {
     serviceToReturn = new AuthenticationService(http, basePath, ls);
   } else {

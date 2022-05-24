@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
-import * as M from "../../core/Models"
-import * as S from "../../services"
+import { Component, OnDestroy, Inject } from "@angular/core";
+import * as M from "../../core/Models";
+import * as S from "../../services";
 import { Holders } from "../../core/Holders";
 import { Utils } from "../../core/Utils";
 import { BossDownTimeMap } from "../../core/Maps";
@@ -16,7 +16,7 @@ import { ISidePanelComponent, SIDEPANEL_DATA, SidepanelParams } from "../sidepan
   templateUrl: "./downtime.component.html",
   styleUrls: ["./downtime.component.css"],
 })
-export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent {
+export class DownTimeComponent implements OnDestroy, ISidePanelComponent {
 
   items: any[];
   holders: Holders;
@@ -35,7 +35,7 @@ export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent
     public data: SidepanelParams) {
     this.items = this.data.items;
     this.holders = visStorage.holders;
-    this.sub = this.data.refresh.subscribe(()=>{
+    this.sub = this.data.refresh.subscribe(() => {
       this.refresh();
     });
     this.refresh();
@@ -55,7 +55,7 @@ export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent
   setColor(color) {
     this.dispatcher.dispatch("downTimeColor", {
       id: this.it.id,
-      color: color
+      color
     });
   }
 
@@ -76,10 +76,6 @@ export class DownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent
     this.from = Utils.formatTime(this.it.start);
     this.to = Utils.formatTime(this.it.end);
     this.initialComment = this.comment = this.it.comment;
-  }
-
-  ngOnInit(): void {
-
   }
 
   ngOnDestroy(): void {

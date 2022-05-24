@@ -1,16 +1,19 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
-import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate"
-import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate"
-import { ExportTemplate } from "../../core/BaseExportTemplate"
+import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate";
+import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate";
+import { TableViewTemplate } from "../../core/BaseExportTemplate";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
-import { ExportData, IExportCell, IExportColumn, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings, NumberRangeOptionsSetting, TableOptionSettingType, TagsOptionsSetting } from "src/core/ExportModels";
+import {
+  IExportCell, IExportColumn, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings,
+  NumberRangeOptionsSetting, TableOptionSettingType, TagsOptionsSetting
+} from "src/core/ExportModels";
 import { PresenterManager } from "src/core/PresentationManager";
 import { gameServiceToken } from "src/services/game.service-provider";
 import { IGameService } from "src/services/game.service-interface";
 import { MitigationsTemplate } from "src/core/ExportTemplates/MitigationsTemplate";
 import { VisStorageService } from "src/services/VisStorageService";
-import * as _ from "lodash"
+import * as _ from "lodash";
 
 
 @Component({
@@ -20,14 +23,34 @@ import * as _ from "lodash"
 })
 export class TableViewDialog implements OnInit {
 
-
-  pagesize = Number.MAX_VALUE;
-  ngOnInit() {
+  constructor(
+    public dialogRef: NzModalRef,
+    private visStorage: VisStorageService,
+    @Inject(gameServiceToken) private gameService: IGameService,
+  ) {
   }
 
-  @Input("data")
-  data: ExportData;
-  presenterManager = new PresenterManager();
+  get showicon(): boolean {
+    return this.currentOptions.cellOptions.indexOf("icon") >= 0;
+  }
+  get showoffset(): boolean {
+    return this.currentOptions.cellOptions.indexOf("offset") >= 0;
+  }
+
+  get showtext(): boolean {
+    return this.currentOptions.cellOptions.indexOf("text") >= 0;
+  }
+
+  get showtarget(): boolean {
+    return this.currentOptions.cellOptions.indexOf("target") >= 0;
+  }
+
+  get iconSize(): number {
+    return this.currentOptions.iconSize;
+  }
+
+
+  pagesize = Number.MAX_VALUE;
 
   selectedValue = null;
 
@@ -38,7 +61,7 @@ export class TableViewDialog implements OnInit {
     filterByFirstEntry: false
   };
   loading = false;
-  templates: ExportTemplate<any>[] = [
+  templates: TableViewTemplate<any>[] = [
     new EachRowOneSecondTemplate(),
     new BossAttackDefensiveTemplateV2(),
     new DescriptiveTemplate(),
@@ -48,51 +71,30 @@ export class TableViewDialog implements OnInit {
   options: ITableOptionSettings;
   currentOptions: ITableOptions;
 
-  constructor(
-    public dialogRef: NzModalRef,
-    private visStorage: VisStorageService,
-    @Inject(gameServiceToken) private gameService: IGameService,
-  ) {
-  }
-
-  get showicon(): boolean {
-    return this.currentOptions["cellOptions"].indexOf("icon") >= 0;
-  };
-  get showoffset(): boolean {
-    return this.currentOptions["cellOptions"].indexOf("offset") >= 0;
-  }
-
-  get showtext(): boolean {
-    return this.currentOptions["cellOptions"].indexOf("text") >= 0;
-  }
-
-  get showtarget(): boolean {
-    return this.currentOptions["cellOptions"].indexOf("target") >= 0;
-  }
-
-  get iconSize(): number {
-    return this.currentOptions["iconSize"];
+  filtered: IExportRow[] = [];
+  filterData = {};
+  ngOnInit() {
   }
 
   show(fromOptionsChange?: boolean) {
-    if (!this.selectedValue) return;
+    if (!this.selectedValue) { return; }
 
     this.loading = true;
 
     setTimeout(() => {
 
-      const tpl = this.templates
-        .find(it => it.name === this.selectedValue);
+      const tpl = this.templates.find(it => it.name === this.selectedValue);
 
-      if (!tpl) return;
+      if (!tpl) { return; }
 
       if (!fromOptionsChange) {
         const cellOptions: TagsOptionsSetting = {
           name: "cellOptions",
-          "defaultValue": ["icon", "text", "target"],
+          defaultValue: ["icon", "text", "target"],
           displayName: "Cell Options",
-          type: TableOptionSettingType.Tags,
+          kind: TableOptionSettingType.Tags,
           description: "",
+          visible: true,
           options: {
             items: [
               { id: "icon", checked: true, text: "Icon" },
@@ -105,44 +107,46 @@ export class TableViewDialog implements OnInit {
 
         const iconSize: NumberRangeOptionsSetting = {
           name: "iconSize",
-          "defaultValue": 16,
+          defaultValue: 16,
           displayName: "Icon Size",
-          type: TableOptionSettingType.NumberRange,
+          kind: TableOptionSettingType.NumberRange,
+          visible: true,
           description: "Changes size of icons",
           options: {
             min: 16,
-            max: 48
+            max: 48,
+            step: 1
           }
         };
 
-        this.options = [...(tpl.loadOptions(this.data) || []), cellOptions, iconSize];
+        this.options = [...(tpl.loadOptions(this.visStorage.holders) || []), cellOptions, iconSize];
         this.currentOptions = this.options.reduce((acc, c) => {
           acc[c.name] = c.defaultValue;
           return acc;
-        }, {})
+        }, {});
       }
 
-      const context = { data: this.data, presenter: this.presenterManager, jobRegistry: this.gameService.jobRegistry, options: this.currentOptions, holders: this.visStorage.holders };
+      const context = {
+        presenter: this.visStorage.presenter,
+        jobRegistry: this.gameService.jobRegistry,
+        options: this.currentOptions,
+        holders: this.visStorage.holders
+      };
 
       const d = tpl.buildTable(context);
 
       this.set = d;
       this.filterChange(null, null);
       this.loading = false;
-    })
+    });
 
   }
 
   optionsChanged(values: ITableOptions) {
     this.currentOptions = values;
-   
     // console.debug(filtered);
     this.show(true);
   }
-
-  filtered: IExportRow[] = [];
-
-  filterData = {};
 
   filterChange(event: any, column: string) {
     if (column) {
@@ -151,34 +155,35 @@ export class TableViewDialog implements OnInit {
     const cellFilter = this.filterCell();
     this.filtered = this.set.rows.filter(row => {
       const visible = this.set.columns.every(c => {
-        const v = !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c)
+        const v = !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c);
         return v;
       });
 
-      if (visible)
+      if (visible) {
         row.cells.forEach((cell, index) => cellFilter(cell, this.filterData[this.set.columns[index].name]));
+      }
 
       return visible;
     });
   }
 
   filterCell() {
-    let unique = new Set();
+    const unique = new Set();
     const fn = (cell: IExportCell, data: string[]) => {
       cell.items.forEach(it => {
-        it.visible = true
+        it.visible = true;
         if (it.filterFn && data && !it.filterFn(data)) {
           it.visible = false;
           return;
         }
         else {
-          if (cell.disableUnique) return;
-          if (!it.refId) return;
+          if (cell.disableUnique) { return; }
+          if (!it.refId) { return; }
           if (unique.has(it.refId)) {
             it.visible = false;
           } else {
             it.visible = true;
-            unique.add(it.refId)
+            unique.add(it.refId);
           }
         }
       });
@@ -186,7 +191,7 @@ export class TableViewDialog implements OnInit {
     return fn;
   }
 
-  trackByName(_: number, item: IExportColumn): string {
+  trackByName(__: number, item: IExportColumn): string {
     return item.text;
   }
 

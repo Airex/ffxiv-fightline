@@ -1,4 +1,4 @@
-import { IBoss, IFight, IBossSearchEntry, ICommandEntry } from "../core/Models"
+import { IBoss, IFight, IBossSearchEntry, ICommandEntry } from "../core/Models";
 import { Observable } from "rxjs";
 
 export interface IFightService {

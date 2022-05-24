@@ -1,13 +1,13 @@
 <button nz-button
         nz-popover
-        nzType="primary"        
+        nzType="primary"
         (nzPopoverVisibleChange)="change($event)"
         nzPopoverTrigger="click"
         nzPopoverPlacement="bottomLeft"
         [nzPopoverVisible]="visible"
         [nzPopoverContent]="contentTemplate">
   <span>
-    Add Job
+    {{"fightline.toolbar.addjob" | translate}}
   </span>
 </button>
 
@@ -24,7 +24,7 @@
             (click)="onAddJob(c.name)">
           <img [src]="c.icon"
                style="height: 30px; margin-right: 6px; width: 30px;" />
-          <span style="font-weight: bold">{{c.name}}</span>
+          <span style="font-weight: bold">{{getJobName(c)}}</span>
         </li>
       </ul>
     </div>

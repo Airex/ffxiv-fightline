@@ -7,26 +7,29 @@ import { IExportCell } from "src/core/ExportModels";
   templateUrl: "./cell.component.html",
   styleUrls: ["./cell.component.css"],
 })
-export class CellComponent  {
+export class CellComponent {
 
 
-  @Input("input") input: IExportCell;
-  @Input("showoffset") showoffset: boolean = false;
-  @Input("showicon") showicon: boolean = true;
-  @Input("showtext") showtext: boolean = true;
-  @Input("showtarget") showtarget: boolean = true;
+  @Input() input: IExportCell;
+  @Input() showoffset = false;
+  @Input() showicon = true;
+  @Input() showtext = true;
+  @Input() showtarget = true;
 
-  @Input("iconSize") iconSize: number = 16;  
-  @Output("selected") selected = new EventEmitter<string>();
+  @Input() iconSize = 16;
+  @Output() selected = new EventEmitter<string>();
 
   public constructor() {
-  }  
+  }
 
-  select(id:string , $event?: any) {    
+  select(id: string, $event?: any) {
     if ($event) {
       $event.stopPropagation();
       $event.preventDefault();
     }
-    this.selected && this.selected.emit(id);
+
+    if (this.selected) {
+      this.selected.emit(id);
+    }
   }
 }

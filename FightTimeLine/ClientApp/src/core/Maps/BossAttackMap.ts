@@ -1,4 +1,4 @@
-import { DataItem } from "vis-timeline"
+import { DataItem } from "vis-timeline";
 import { BaseMap, IOverlapCheckData } from "./BaseMap";
 import { Utils } from "../Utils";
 import * as Models from "../Models";
@@ -6,18 +6,19 @@ import { IForSidePanel, IMoveable } from "../Holders/BaseHolder";
 import * as _ from "lodash";
 
 export interface IBossAttackMapData {
-  vertical?: boolean;  
+  vertical?: boolean;
   attack?: Models.IBossAbility;
 }
 
 export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData> implements IMoveable, IForSidePanel {
-  sidePanelComponentName: string = "bossAbility";
+  sidePanelComponentName = "bossAbility";
 
-  public visible: boolean = true;
+  public visible = true;
 
   onDataUpdate(data: IBossAttackMapData, originalData: IBossAttackMapData): void {
-    if (originalData && originalData.attack)
+    if (originalData && originalData.attack) {
       this.attack.tags = originalData.attack.tags;
+    }
     this.setItem(this.createBossAttack(this.id, data.attack, data.vertical));
   }
 
@@ -47,20 +48,25 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
   }
 
   get fromFFLogs(): boolean {
-    return !!this.attack.fflogsAttackSource
+    return !!this.attack.fflogsAttackSource;
   }
 
-  get fflogsDataString(){
+  get fflogsDataString() {
     return JSON.stringify(this.data.attack.fflogsData);
   }
 
   createBossAttack(id: string, attack: Models.IBossAbility, vertical: boolean): DataItem {
-    const cls = { bossAttack: true, vertical: vertical };
+    const cls = { bossAttack: true, vertical };
     Object.keys(Models.DamageType).forEach((value) => {
       cls[value] = attack.type === Models.DamageType[value];
     });
-    return <DataItem>{
-      id: id,
+
+    ["red", "blue", "pink", "purple", "green", "orange", "silver"].forEach(c => {
+      cls[c] = attack.color === c;
+    });
+
+    return  {
+      id,
       content: this.createBossAttackElement(attack),
       start: Utils.getDateFromOffset(attack.offset),
       group: "boss",
@@ -68,7 +74,7 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
       className: this.buildClass(cls),
       selectable: true,
       title: attack.offset
-    }
+    } as DataItem;
   }
 
   private createBossAttackElement(ability: Models.IBossAbility): string {

@@ -7,13 +7,10 @@ import { IFraction } from "../core/Models";
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from './LocalStorageService';
 import { FFLogsService } from './FFLogs-data.service';
+import { SettingsService } from './SettingsService';
 
 @Injectable()
 export class FFXIVGameService implements Gameserviceinterface.IGameService {
-  extractFraction(game: string): IFraction {
-    return null;
-  }
-
   private readonly dataServiceValue: IDataService;
   private readonly jobRegistryValue: IJobRegistryService;
 
@@ -22,6 +19,7 @@ export class FFXIVGameService implements Gameserviceinterface.IGameService {
     private httpClient: HttpClient,
     @Inject("FFLogs_URL") private fflogsUrl: string,
     @Inject("FFLogs_API_KEY") private apiKey: string,
+    private settings: SettingsService,
     private storage: LocalStorageService) {
 
     this.jobRegistryValue = new Jobregistryffxivservice.FFXIVJobRegistryService();
@@ -30,8 +28,13 @@ export class FFXIVGameService implements Gameserviceinterface.IGameService {
       this.httpClient,
       this.fflogsUrl,
       this.apiKey,
+      this.settings,
       this.storage);
-    
+
+  }
+
+  extractFraction(game: string): IFraction {
+    return null;
   }
 
   get fractions(): IFraction[] {

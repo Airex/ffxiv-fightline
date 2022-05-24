@@ -6,7 +6,7 @@ type Input = {
   jobName: string;
   ability: IAbility;
   id: string;
-}[]
+}[];
 
 @Pipe({
   name: 'soloparty',
@@ -23,7 +23,7 @@ export class SoloPartyPipe implements PipeTransform {
     return items.filter(item => (!item.ability ||
       (item.ability.abilityType & AbilityType.PartyDefense) === AbilityType.PartyDefense && party ||
       (item.ability.abilityType & AbilityType.PartyShield) === AbilityType.PartyShield && party ||
-      (item.ability.abilityType & AbilityType.SelfDefense) === AbilityType.SelfDefense && solo ||      
+      (item.ability.abilityType & AbilityType.SelfDefense) === AbilityType.SelfDefense && solo ||
       (item.ability.abilityType & AbilityType.SelfShield) === AbilityType.SelfShield && solo ||
       (item.ability.abilityType & AbilityType.TargetDefense) === AbilityType.TargetDefense && solo
     ));

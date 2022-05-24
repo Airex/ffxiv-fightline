@@ -10,9 +10,6 @@ export interface IAbilityAvailabilityMapData {
 }
 
 export class AbilityAvailabilityMap extends BaseMap<string, DataItem, IAbilityAvailabilityMapData> {
-  onDataUpdate(data: IAbilityAvailabilityMapData): void {
-    this.setItem(this.createAbilityAvailability(this.id, this.ability.id, data));
-  }
 
   constructor(presenter: IPresenterData, id: string, ability: AbilityMap, data?: IAbilityAvailabilityMapData) {
     super(presenter, id);
@@ -21,17 +18,20 @@ export class AbilityAvailabilityMap extends BaseMap<string, DataItem, IAbilityAv
   }
 
   ability: AbilityMap;
+  onDataUpdate(data: IAbilityAvailabilityMapData): void {
+    this.setItem(this.createAbilityAvailability(this.id, this.ability.id, data));
+  }
 
   createAbilityAvailability(id: string, abilityId: string, data: IAbilityAvailabilityMapData): DataItem {
     return {
       start: data.start,
       end: data.end,
-      id: id,
+      id,
       content: "",
       group: abilityId,
       editable: false,
       type: "background",
       className: "availability " + (data.available ? "available" : "not-available")
-    }
+    };
   }
 }

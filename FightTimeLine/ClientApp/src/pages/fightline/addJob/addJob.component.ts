@@ -3,7 +3,7 @@ import { IJob, Role } from "src/core/Models";
 import { IGameService } from "src/services/game.service-interface";
 import { gameServiceToken } from "src/services/game.service-provider";
 import { VisStorageService } from "src/services/VisStorageService";
-import { PresenterManager } from "../../../core/PresentationManager"
+import { PresenterManager } from "../../../core/PresentationManager";
 
 
 @Component({
@@ -11,8 +11,8 @@ import { PresenterManager } from "../../../core/PresentationManager"
   templateUrl: "./addJob.component.html",
   styleUrls: ["./addJob.component.css"]
 })
-export class AddJobComponent implements OnInit {
-  public presenterManager: PresenterManager;  
+export class AddJobComponent {
+  public presenterManager: PresenterManager;
   roles: Role[];
   jobs: IJob[];
   visible: boolean;
@@ -22,13 +22,10 @@ export class AddJobComponent implements OnInit {
   constructor(
     private visStorage: VisStorageService,
     @Inject(gameServiceToken) public gameService: IGameService
-  ) {    
-    this.presenterManager = this.visStorage.presenter;    
+  ) {
+    this.presenterManager = this.visStorage.presenter;
     this.roles = [Role.Tank, Role.Healer, Role.Melee, Role.Range, Role.Caster];
     this.jobs = this.gameService.jobRegistry.getJobs();
-  }
-  ngOnInit(): void {
-    
   }
 
   change(ev) {
@@ -38,6 +35,10 @@ export class AddJobComponent implements OnInit {
   onAddJob(name: string) {
     this.added.emit(name);
     this.visible = false;
+  }
+
+  getJobName(job: IJob){
+    return job.translation ? job.translation[this.presenterManager.language] : job.name;
   }
 
 

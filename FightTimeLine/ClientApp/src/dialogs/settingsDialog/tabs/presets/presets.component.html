@@ -1,3 +1,25 @@
-<div>
-      Presets
+<div style="height: 360px;overflow: auto" customScroll>
+  <nz-list #fights [nzDataSource]="presets" [nzRenderItem]="item" nzSize="small"
+    [ngClass]="{loadList:true}">
+    <ng-template #item let-item>
+      <nz-list-item [nzActions]="[removeAction]">
+        <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="nzDescription">
+          <ng-template #nzTitle>
+            {{ item[0] }}
+          </ng-template>
+          <ng-template #nzDescription>
+
+          </ng-template>
+        </nz-list-item-meta>
+        <ng-template #removeAction>
+          <span class="actions" #actionItem>
+            <a nz-popconfirm nzPopconfirmTitle="{{'dialog.settings.presets.youSureDeletePreset' | translate}}"
+              (nzPopconfirmVisibleChange)="removevisiblechanged(actionItem, $event)" (nzOnConfirm)="remove(item)">
+              <i nz-icon nzType="delete" class="action-icon" nzTheme="twotone"></i>
+            </a>
+          </span>
+        </ng-template>
+      </nz-list-item>
+    </ng-template>
+  </nz-list>
 </div>

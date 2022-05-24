@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
-import * as S from "../../services/index"
+import * as S from "../../services/index";
 import { Holders } from "../../core/Holders";
 import { Utils } from "../../core/Utils";
 import { VisStorageService } from "src/services/VisStorageService";
@@ -23,7 +23,7 @@ export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelCo
   ) {
     this.items = this.data.items.sort((a: any, b: any) => a.start - b.start);
     this.holders = this.visStorage.holders;
-    this.sub = this.data.refresh.subscribe(()=>{
+    this.sub = this.data.refresh.subscribe(() => {
       this.refresh();
     });
     this.refresh();
@@ -33,12 +33,12 @@ export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelCo
   isSameGroup: boolean;
   holders: Holders;
   items: any[];
-  sub:Subscription;
+  sub: Subscription;
 
   refresh() {
     const distinct = (value, index, self) => {
       return self.indexOf(value) === index;
-    }
+    };
     this.isSameGroup = this.items.map((value) => value.item.group).filter(distinct).length <= 1;
   }
 

@@ -17,7 +17,7 @@ import { ISettingTab } from "../tabs";
 
 export class SettingsDialogMainTab implements OnInit, ISettingTab {
 
-  mainForm: FormGroup;      
+  mainForm: FormGroup;
 
   @ViewChild("filter", { static: true })
   filter: SettingsFilterComponent;
@@ -26,36 +26,36 @@ export class SettingsDialogMainTab implements OnInit, ISettingTab {
 
   colors: any[];
 
-  constructor(    
+  constructor(
     private formBuilder: FormBuilder,
-    private settingsService: SettingsService,    
+    private settingsService: SettingsService,
     @Inject(gameServiceToken) public gameService: IGameService,
     private notifications: ScreenNotificationsService) {
   }
 
   ngOnInit() {
-    const settings = this.settingsService.load();   
-    
+    const settings = this.settingsService.load();
+
     this.filter.set(settings.main.defaultFilter);
     this.view.set(settings.main.defaultView);
     this.colors = Object.keys(settings.colors).map(it => {
       return {
         name: it,
         color: settings.colors[it]
-      }
+      };
     });
 
-    this.mainForm = this.formBuilder.group({}, {});    
+    this.mainForm = this.formBuilder.group({}, {});
   }
 
-  get mf() { return this.mainForm.controls; }    
-  
-  updateResult(settings: ISettings): void {    
+  get mf() { return this.mainForm.controls; }
+
+  updateResult(settings: ISettings): void {
 
     settings.main.defaultView = this.view.get();
-    settings.main.defaultFilter = this.filter.get();    
+    settings.main.defaultFilter = this.filter.get();
   }
-  
+
 
   onClearCachesClick(): void {
     localStorage.removeItem("events_cache");

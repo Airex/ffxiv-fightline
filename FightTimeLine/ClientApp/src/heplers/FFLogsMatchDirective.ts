@@ -12,8 +12,8 @@ import {
   selector: "[fflogs]"
 })
 export class FFLogsMatcherDirective {
-  @Output("onMatch") onMatch: EventEmitter<string> = new EventEmitter<string>();
-  @Input("matcher") matcher: string;
+  @Output() onMatch: EventEmitter<string> = new EventEmitter<string>();
+  @Input() matcher: string;
   @HostListener("change", ["$event"])
   @HostListener("input", ["$event"])
   onEvent(event) {
@@ -30,7 +30,7 @@ export class FFLogsMatcherDirective {
       this.onMatch.emit(data);
     }
   }
-  
+
   constructor(private el: ElementRef) {
   }
 }

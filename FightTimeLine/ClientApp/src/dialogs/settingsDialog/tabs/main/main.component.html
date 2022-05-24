@@ -2,7 +2,7 @@
       class="settings-tab">
   <div class="settings-container">
     <div class="settings-title">
-      Default filters
+      {{'dialog.settings.tabs.main.defaultFilters' | translate}}
     </div>
     <div class="settings-body">
       <settingsFilter #filter></settingsFilter>
@@ -10,7 +10,7 @@
   </div>
   <div class="settings-container">
     <div class="settings-title">
-      Default view
+      {{'dialog.settings.tabs.main.defaultView' | translate}}
     </div>
     <div class="settings-body">
       <settingsView #view></settingsView>
@@ -18,12 +18,12 @@
   </div>
   <div class="settings-container">
     <div class="settings-title">
-      Caches
+      {{'dialog.settings.tabs.main.caches' | translate}}
     </div>
     <div class="settings-body">
       <button nz-button
-              [nzDanger]="true"              
-              (click)="onClearCachesClick()">Clear Caches</button>
+              [nzDanger]="true"
+              (click)="onClearCachesClick()">{{'dialog.settings.tabs.main.clearCaches' | translate}}</button>
     </div>
   </div>
 </form>

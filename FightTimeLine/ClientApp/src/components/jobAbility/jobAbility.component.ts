@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
-import * as M from "../../core/Models"
-import * as S from "../../services/index"
+import { Component, OnDestroy, Inject } from "@angular/core";
+import * as M from "../../core/Models";
+import * as S from "../../services/index";
 import { Holders } from "../../core/Holders";
 import { AbilityMap } from "../../core/Maps/index";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -16,7 +16,7 @@ import { ISidePanelComponent, SIDEPANEL_DATA, SidepanelParams } from "../sidepan
   templateUrl: "./jobAbility.component.html",
   styleUrls: ["./jobAbility.component.css"],
 })
-export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelComponent {
+export class JobAbilityComponent implements OnDestroy, ISidePanelComponent {
 
   description: any = "";
   compactView: boolean;
@@ -33,7 +33,7 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
   ) {
     this.items = this.data.items;
     this.holders = this.visStorage.holders;
-    this.sub = this.data.refresh.subscribe(()=>{
+    this.sub = this.data.refresh.subscribe(() => {
       this.refresh();
     });
     this.refresh();
@@ -53,10 +53,6 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     return M.DamageType[id];
   }
 
-
-
-
-
   compact() {
     setTimeout(() => {
       this.dispatcher.dispatch("toggleJobAbilityCompactView", this.it.id);
@@ -75,14 +71,32 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
     this.dispatcher.dispatch("fillJobAbility", ab.id);
   }
 
+  getTranslationProperty(lang: M.SupportedLanguages) {
+    switch (lang) {
+      case M.SupportedLanguages.en:
+        return "Description_en";
+      case M.SupportedLanguages.de:
+        return "Description_de";
+      case M.SupportedLanguages.fr:
+        return "Description_fr";
+      case M.SupportedLanguages.jp:
+        return "Description_ja";
+      default:
+        return "Description";
+    }
+  }
+
   refresh() {
     this.compactView = this.it.isCompact;
 
     if (this.ability.xivDbId) {
       this.xivapi.loadDescription(this.ability.xivDbType, this.ability.xivDbId)
         .subscribe(a => {
-          if (a?.Description) {
-            const trimmed = a.Description.replace(new RegExp("\\n+", "g"), "<br />").replace(new RegExp("(<br />)+", "g"), "<br/>");
+          if (!a) { return; }
+          const propName = this.getTranslationProperty(this.visStorage.presenter.language);
+          const description = a[propName];
+          if (description) {
+            const trimmed = description.replace(new RegExp("\\n+", "g"), "<br />").replace(new RegExp("(<br />)+", "g"), "<br/>");
             this.description = this.sanitizer.bypassSecurityTrustHtml(trimmed);
           } else {
             this.description = "";
@@ -92,13 +106,6 @@ export class JobAbilityComponent implements OnInit, OnDestroy, ISidePanelCompone
   }
 
   calculateDefs() {
-    //const usages = this.holders.itemUsages.getByAbility(this.it.id);
-    //calculateDefsForAttack(this.holders, this.it.id);
-  }
-
-
-  ngOnInit(): void {
-
   }
 
   ngOnDestroy(): void {

@@ -426,6 +426,82 @@ planarea .vis-label.boss .vis-inner {
   font-size: 12px;
 }
 
+/* "red", "blue", "pink","purple","green" */
+
+.vis-item.vis-selected {
+  border-color: #ffc200 !important;
+  background-color: #fff785 !important;
+  z-index: 2;
+}
+
+.vis-item.bossAttack.pink {
+  background-color: pink;
+  border-color: palevioletred;
+}
+.vis-item.vis-background.bossAttack.pink {
+  background-color: palevioletred;
+  border-color: palevioletred;
+}
+
+.vis-item.bossAttack.red {
+  background-color: rgb(255 106 106);
+  border-color: rgb(255 0 0);
+}
+.vis-item.vis-background.bossAttack.red {
+  background-color: rgb(255 0 0);
+  border-color: rgb(255 0 0);
+}
+
+.vis-item.bossAttack.blue {
+  background-color: rgb(146, 181, 255);
+  border-color: rgb(53, 56, 255);
+}
+.vis-item.vis-background.bossAttack.blue {
+  background-color:  rgb(53, 56, 255);
+  border-color: rgb(53, 56, 255);
+}
+
+.vis-item.bossAttack.purple {
+  background-color: rgb(234 165 255);
+  border-color: rgb(231 0 220);
+}
+
+.vis-item.vis-background.bossAttack.purple {
+  background-color: rgb(231 0 220);
+  border-color: rgb(231 0 220);
+}
+
+
+.vis-item.bossAttack.green {
+  background-color: rgb(75, 255, 68);
+  border-color: rgb(0, 112, 9);
+}
+
+.vis-item.vis-background.bossAttack.green {
+  background-color: rgb(0, 112, 9);
+  border-color: rgb(0, 112, 9);
+}
+
+.vis-item.bossAttack.orange {
+  background-color: rgb(255, 166, 0);
+  border-color: rgb(165, 78, 8);
+}
+
+.vis-item.vis-background.bossAttack.orange {
+  background-color:  rgb(165, 78, 8);
+  border-color: rgb(165, 78, 8);
+}
+
+.vis-item.bossAttack.silver {
+  background-color: rgb(168, 168, 168);
+  border-color: rgb(119, 118, 118);
+}
+
+.vis-item.vis-background.bossAttack.silver {
+  background-color:  rgb(119, 118, 118);
+  border-color: rgb(119, 118, 118);
+}
+
 .vis-item .vis-delete {
   top: -7px;
 }
@@ -455,7 +531,7 @@ planarea .vis-label.boss .vis-inner {
 .vis-item.vis-point.vis-selected .vis-item.vis-dot.ability {
   top: -13px !important;
   border-color: #ffc200;
-  
+
 }
 
 .vis-item.vis-point.compact-view-ability .vis-item-content {
@@ -469,7 +545,7 @@ planarea .vis-label.boss .vis-inner {
 }
 
   .vis-item.vis-background.bossAttack.selected {
-    background-color: #ffc200;
+    background-color: #ffc200 !important;
     z-index: 2;
   }
 
@@ -569,7 +645,7 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
     height: 18px !important;
 }
 
-.compact .availability.available {  
+.compact .availability.available {
     margin-top: 3px !important;
     height: 5px !important;
 }
@@ -655,11 +731,11 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
 }
 
 .sidepanel-full {
-  margin: 3px;  
+  margin: 3px;
   min-width: 150px;
   width: 100%;
 }
 
 .sidepanel-full > * {
-  margin-bottom: 2px;    
+  margin-bottom: 2px;
 }

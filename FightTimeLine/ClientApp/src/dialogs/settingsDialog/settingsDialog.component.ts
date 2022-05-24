@@ -27,16 +27,13 @@ export class SettingsDialog {
     @Inject(Gameserviceprovider.gameServiceToken) public gameService: Gameserviceinterface.IGameService) {
   }
 
-  @ViewChild(SettingsDialogColorTab) tab1:  ISettingTab;
+  @ViewChild(SettingsDialogColorTab) tab1: ISettingTab;
   @ViewChild(SettingsDialogFflogsTab) tab2: ISettingTab;
   @ViewChild(SettingsDialogMainTab) tab3: ISettingTab;
   @ViewChild(SettingsDialogPresetsTab) tab4: ISettingTab;
   @ViewChild(SettingsDialogTableviewTab) tab5: ISettingTab;
   @ViewChild(SettingsDialogTeamworkTab) tab6: ISettingTab;
 
-  ngOnInit() {
-
-  }
 
   onYesClick() {
 

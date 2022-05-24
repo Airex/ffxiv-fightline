@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
-import * as M from "../../core/Models"
-import * as S from "../../services/index"
+import * as M from "../../core/Models";
+import * as S from "../../services/index";
 import { Holders } from "../../core/Holders";
 import { BossAttackMap } from "../../core/Maps/index";
 import { calculateAvailDefsForAttack, calculateDefsForAttack, calculateMitigationForAttack, DefsCalcResult, MitigationForAttack } from "src/core/Defensives";
-import { SettingsEnum } from "src/core/Jobs/FFXIV/shared";
 import { VisStorageService } from "src/services/VisStorageService";
 import { IForSidePanel } from "src/core/Holders/BaseHolder";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
@@ -30,7 +29,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   defParty = true;
   defSoloAv = true;
   defPartyAv = true;
-  sub:Subscription;
+  sub: Subscription;
 
   constructor(
     visStorage: VisStorageService,
@@ -39,7 +38,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   ) {
     this.items = this.data.items;
     this.holders = visStorage.holders;
-    this.sub = this.data.refresh.subscribe(()=>{
+    this.sub = this.data.refresh.subscribe(() => {
       this.refresh();
     });
     this.refresh();
@@ -65,7 +64,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   }
 
   copy(value: BossAttackMap) {
-    this.dispatcher.dispatch("attackCopy");
+    this.dispatcher.dispatch("attackCopy", [value.id]);
   }
 
   calculateDefs(): DefsCalcResult {
@@ -94,12 +93,12 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   }
 
   pinnedChanged(val: boolean) {
-    this.dispatcher.dispatch("toggleAttackPin", this.it.id);    
+    this.dispatcher.dispatch("toggleAttackPin", this.it.id);
   }
 
   getTargetIcon(ab): string {
     const us = this.holders.itemUsages.get(ab.id);
-    const target = us?.getSettingData(SettingsEnum.Target);
+    const target = us?.getSettingData(M.SettingsEnum.Target);
     if (target) {
       const jobMap = this.holders.jobs.get(target.value);
       return jobMap?.job?.icon;
@@ -113,7 +112,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
     this.similar = this.holders.bossAttacks
       .filter(it => it.attack.name === this.it.attack.name && it.id !== this.it.id)
       .sort((a, b) => a.startAsNumber - b.startAsNumber);
-    this.defStats = calculateMitigationForAttack(this.holders, this.defs, this.it.attack)
+    this.defStats = calculateMitigationForAttack(this.holders, this.defs, this.it.attack);
     this.ff = Object.keys(this.it.attack.fflogsData || {}).map(k =>
     ({
       icon: this.holders.jobs.get(k)?.job?.icon || "",
@@ -125,7 +124,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
           name: t,
           value: this.it.attack.fflogsData[k][t]
         }))
-    }))
+    }));
   }
 
   ngOnInit(): void {

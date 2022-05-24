@@ -1,4 +1,4 @@
-import { DataItem } from "vis-timeline"
+import { DataItem } from "vis-timeline";
 import { BaseMap } from "./BaseMap";
 import { Utils } from "../Utils";
 import * as BaseHolder from "../Holders/BaseHolder";
@@ -12,14 +12,6 @@ export interface IBossDownTimeMapData {
 }
 
 export class BossDownTimeMap extends BaseMap<string, DataItem, IBossDownTimeMapData> implements BaseHolder.IForSidePanel {
-  sidePanelComponentName: string = "downtime";
-
-  onDataUpdate(data: IBossDownTimeMapData): void {
-    this.setItem(this.createDownTime(this.id, data.start, data.end, data.color));
-  }
-
-  startId: string;
-  endId: string;
 
   get start(): Date {
     return this.data.start as Date;
@@ -48,18 +40,6 @@ export class BossDownTimeMap extends BaseMap<string, DataItem, IBossDownTimeMapD
     this.applyData(data);
   }
 
-  createDownTime(id: string, start: Date, end: Date, color: string): DataItem {
-    return {
-      start: start < end ? start : end,
-      end: end < start ? start : end,
-      id: id,
-      content: this.data.comment || "",
-      type: "background",
-      style: "background-color:" + color,
-      className: "downtime"
-    }
-  }
-
   get color(): string {
     return this.data.color;
   }
@@ -67,8 +47,28 @@ export class BossDownTimeMap extends BaseMap<string, DataItem, IBossDownTimeMapD
   get comment() {
     return this.data.comment;
   }
+  sidePanelComponentName = "downtime";
+
+  startId: string;
+  endId: string;
+
+  onDataUpdate(data: IBossDownTimeMapData): void {
+    this.setItem(this.createDownTime(this.id, data.start, data.end, data.color));
+  }
+
+  createDownTime(id: string, start: Date, end: Date, color: string): DataItem {
+    return {
+      start: start < end ? start : end,
+      end: end < start ? start : end,
+      id,
+      content: this.data.comment || "",
+      type: "background",
+      style: "background-color:" + color,
+      className: "downtime"
+    };
+  }
 
   checkTime(time: Date): boolean {
-    return time >= (this.start < this.end ? this.start : this.end) && time <= (this.start > this.end ? this.start : this.end)
+    return time >= (this.start < this.end ? this.start : this.end) && time <= (this.start > this.end ? this.start : this.end);
   }
 }

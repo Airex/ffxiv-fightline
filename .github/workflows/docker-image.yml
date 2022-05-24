@@ -8,6 +8,7 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    environment: prod    
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -19,8 +20,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Build and push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v2        
         with:
           push: true
           tags: skachkovsky/ftl:latest
-          file: "{context}/FightTimeLine/Dockerfile"
+          file: FightTimeLine/Dockerfile

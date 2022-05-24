@@ -1,12 +1,11 @@
 import { Component, Input, OnInit, ViewChild, Inject } from "@angular/core";
-import { SyncSettingsComponent } from "./syncSettings/syncSettings.component"
-import { SyncDowntimeComponent } from "./syncDowntime/syncDowntime.component"
-import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms"
+import { SyncSettingsComponent } from "./syncSettings/syncSettings.component";
+import { SyncDowntimeComponent } from "./syncDowntime/syncDowntime.component";
+import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import * as M from "../../core/Models";
 import { time } from "../../heplers/TimeValidator";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
-import * as PresentationManager from "../../core/PresentationManager";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { VisStorageService } from "src/services/VisStorageService";
 
@@ -17,21 +16,23 @@ import { VisStorageService } from "src/services/VisStorageService";
 })
 export class BossAttackDialog implements OnInit {
 
-  @Input("data") data: M.IBossAbility;  
+  @Input() data: M.IBossAbility;
   @ViewChild("syncSettings") syncSettings: SyncSettingsComponent;
   @ViewChild("syncDowntime") syncDowntime: SyncDowntimeComponent;
   editForm: FormGroup;
   submitted = false;
   newAttack = true;
   settings: any;
-  uniqueIndex: number = 0;
+  uniqueIndex = 0;
   expression: string;
   defaultTags  = [];
+
+  colors = ["red", "blue", "pink", "purple", "green", "orange", "silver"];
 
   constructor(
     private visStorage: VisStorageService,
     private formBuilder: FormBuilder,
-    @Inject(Gameserviceprovider.gameServiceToken) 
+    @Inject(Gameserviceprovider.gameServiceToken)
     public gameService: Gameserviceinterface.IGameService,
     public dialogRef: NzModalRef) {
   }
@@ -46,7 +47,8 @@ export class BossAttackDialog implements OnInit {
       bossAttackSource: new FormControl(this.data.source),
       description: new FormControl(this.data.description),
       tags: new FormControl(this.data.tags),
-      rawDamage: new FormControl(this.data.rawDamage)
+      rawDamage: new FormControl(this.data.rawDamage),
+      color: new FormControl(this.data.color)
     }, {
         validator: time('bossAttackTime')
       });
@@ -66,14 +68,18 @@ export class BossAttackDialog implements OnInit {
     this.data.source = this.f.bossAttackSource.value;
     this.data.description = this.f.description.value;
     this.data.tags = this.f.tags.value;
-    this.data.rawDamage = this.f.rawDamage.value
+    this.data.rawDamage = this.f.rawDamage.value;
+    this.data.color = this.f.color.value;
 
-    if (this.syncSettings)
+    if (this.syncSettings) {
       this.data.syncSettings = this.syncSettings.buildSyncSettings();
-    if (this.syncDowntime)
+    }
+    if (this.syncDowntime) {
       this.data.syncDowntime = this.syncDowntime.selected;
-    if (this.syncDowntime)
+    }
+    if (this.syncDowntime) {
       this.data.syncPreDowntime = this.syncDowntime.selectedPre;
+    }
   }
 
   onSaveClick(): void {
@@ -88,7 +94,7 @@ export class BossAttackDialog implements OnInit {
     this.updateResult();
 
     this.dialogRef.close({ updateAllWithSameName: false, data: this.data });
-  };
+  }
 
   onSaveAllClick(): void {
     this.submitted = true;
@@ -103,7 +109,7 @@ export class BossAttackDialog implements OnInit {
     this.updateResult();
 
     this.dialogRef.close({ updateAllWithSameName: true, data: this.data });
-  };
+  }
 
 }
 

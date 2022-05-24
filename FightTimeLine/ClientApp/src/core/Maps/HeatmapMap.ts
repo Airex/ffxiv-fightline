@@ -1,6 +1,6 @@
-import { DataItem } from "vis-timeline"
+import { DataItem } from "vis-timeline";
 import { IPresenterData } from "../Models";
-import {BaseMap} from "./BaseMap";
+import { BaseMap } from "./BaseMap";
 
 export interface IHeatmapMapData {
   start?: Date;
@@ -8,9 +8,8 @@ export interface IHeatmapMapData {
 }
 
 export class HeatmapMap extends BaseMap<string, DataItem, IHeatmapMapData> {
-  onDataUpdate(data: IHeatmapMapData): void {
-    this.setItem(this.createHeatMap(data.start, data.end, this.id, this.target));
-  }
+
+  target: string;
 
   constructor(presenter: IPresenterData, id: string, target: string, data: IHeatmapMapData) {
     super(presenter, id);
@@ -34,17 +33,21 @@ export class HeatmapMap extends BaseMap<string, DataItem, IHeatmapMapData> {
     this.item.end = v;
   }
 
-  target: string;
+
+  onDataUpdate(data: IHeatmapMapData): void {
+    this.setItem(this.createHeatMap(data.start, data.end, this.id, this.target));
+  }
 
   createHeatMap(start: Date, end: Date, id: string, group?: string) {
-    const result = <DataItem>{
-      start: start,
-      end: end,
-      id: id,
+    const result = {
+      start,
+      end,
+      id,
       content: "",
       type: "background",
       className: "buffMap",
-    };
+    } as DataItem;
+
     if (group) {
       result.group = group;
     }

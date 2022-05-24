@@ -2,7 +2,7 @@
   [nzPopoverContent]="contentTemplate">
   <span>
     <i nz-icon nzType="setting" theme="twotone"></i>
-    Options
+    {{'component.tableOptions.options' | translate}}
   </span>
 </button>
 
@@ -11,33 +11,41 @@
     <div nz-col nzSpan="24">
       <form nz-form [formGroup]="form" nzLayout="horizontal">
         <nz-form-item *ngFor="let setting of settings">
-          <nz-form-label [nzFor]="setting.name">
-            <span>
-              {{setting.displayName}}
-            </span>
-            <i nz-icon nzType="info-circle" theme="twotone" style="margin-left: 8px" nz-tooltip
-              *ngIf="setting.description" [nzTooltipTitle]="setting.description">
-            </i>
-          </nz-form-label>
-          <nz-form-control>
-            <div [ngSwitch]="setting.type">
-              <div *ngSwitchCase="0">
-                <nz-switch [nzDisabled]="false" [nzSize]="'small'" [formControlName]="setting.name"
-                  style="margin-left: 15px" [id]="setting.name" (ngModelChange)="change(setting.name, $event)">
-                </nz-switch>
+          <ng-container *ngIf="setting.visible">
+            <nz-form-label [nzFor]="setting.name">
+              <span>
+                {{setting.displayName}}
+              </span>
+              <i nz-icon nzType="info-circle" theme="twotone" style="margin-left: 8px" nz-tooltip
+                *ngIf="setting.description" [nzTooltipTitle]="setting.description">
+              </i>
+            </nz-form-label>
+            <nz-form-control>
+              <div [ngSwitch]="setting.kind">
+                <div *ngSwitchCase="0">
+                  <nz-switch [nzDisabled]="false" [nzSize]="'small'" [formControlName]="setting.name"
+                    style="margin-left: 15px" [id]="setting.name" (ngModelChange)="change(setting.name, $event)">
+                  </nz-switch>
+                </div>
+                <div *ngSwitchCase="1">
+                  <nz-slider [nzMin]="setting.options?.min" [nzMax]="setting.options?.max" [nzStep]="setting.options?.step"
+                    [formControlName]="setting.name" (ngModelChange)="change(setting.name, $event)" [id]="setting.name">
+                  </nz-slider>
+                </div>
+                <div *ngSwitchCase="2">
+                  <nz-tag *ngFor="let tag of setting.options.items" nzMode="checkable" [(nzChecked)]="tag.checked"
+                    (nzCheckedChange)="changeTagOptions(setting)"><img style="margin-top: -5px;" *ngIf="tag.icon"
+                      width="16" height="16" [src]="tag.icon">{{tag.text}}</nz-tag>
+                </div>
+                <div *ngSwitchCase="3">
+                  <nz-slider [nzMin]="setting.options?.min" [nzMax]="setting.options?.max" nzRange
+                    [nzMarks]="setting.options.marks" [formControlName]="setting.name"
+                    (ngModelChange)="change(setting.name, $event)" [id]="setting.name">
+                  </nz-slider>
+                </div>
               </div>
-              <div *ngSwitchCase="1">
-                <nz-slider [nzMin]="setting.options?.min" [nzMax]="setting.options?.max"
-                  [formControlName]="setting.name" (ngModelChange)="change(setting.name, $event)" [id]="setting.name">
-                </nz-slider>
-              </div>
-              <div *ngSwitchCase="2">
-                <nz-tag *ngFor="let tag of setting.options.items" nzMode="checkable" [(nzChecked)]="tag.checked"
-                  (nzCheckedChange)="changeTagOptions(setting)"><img style="margin-top: -5px;" *ngIf="tag.icon"
-                    width="16" height="16" [src]="tag.icon">{{tag.text}}</nz-tag>
-              </div>
-            </div>
-          </nz-form-control>
+            </nz-form-control>
+          </ng-container>
         </nz-form-item>
       </form>
     </div>

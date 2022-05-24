@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core"
-import { IStorage } from "../core/Models"
+import { Injectable } from "@angular/core";
+import { IStorage } from "../core/Models";
 
 @Injectable()
 export class LocalStorageService implements IStorage {
@@ -43,8 +43,9 @@ export class LocalStorageService implements IStorage {
     if (localStorage) {
       try {
         const item = localStorage.getItem(key);
-        if (item)
+        if (item) {
           return JSON.parse(item) as T;
+        }
       }
       catch (err) {
 

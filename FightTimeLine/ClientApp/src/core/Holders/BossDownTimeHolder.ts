@@ -1,4 +1,4 @@
-import { DataItem, DataSetDataItem } from "vis-timeline"
+import { DataItem, DataSetDataItem } from "vis-timeline";
 import { BaseHolder } from "./BaseHolder";
 import {BossDownTimeMap} from "../Maps/BossDownTimeMap";
 
@@ -22,30 +22,34 @@ export class BossDownTimeHolder extends BaseHolder<string, DataItem, BossDownTim
     super.add(i);
     const item = this.itemOf(i);
     this.visBossItems.add(item);
-    if (this.showInPartyArea)
+    if (this.showInPartyArea) {
       this.visPartyItems.add(item);
+    }
   }
 
   remove(ids: string[]): void {
     super.remove(ids);
     this.visBossItems.remove(ids);
-    if (this.showInPartyArea)
+    if (this.showInPartyArea) {
       this.visPartyItems.remove(ids);
+    }
   }
 
   clear(): void {
     this.visBossItems.remove(this.getIds());
-    if (this.showInPartyArea)
+    if (this.showInPartyArea) {
       this.visPartyItems.remove(this.getIds());
+    }
     super.clear();
   }
 
   update(items: BossDownTimeMap[]): void {
-    // console.log("update BossDownTimeMap")   
+    // console.log("update BossDownTimeMap")
     const tu = this.itemsOf(items);
     this.visBossItems.update(tu);
-    if (this.showInPartyArea)
+    if (this.showInPartyArea) {
       this.visPartyItems.update(tu);
+    }
   }
 
   getById(id: string): BossDownTimeMap {
