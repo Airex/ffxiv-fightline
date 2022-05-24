@@ -13,19 +13,22 @@ import { IJobRegistryService } from "./jobregistry.service-interface";
 
 export class FFXIVJobRegistryService implements IJobRegistryService {
   private jobs: { [name: string]: Models.IJob };
+  private level: number;
 
   constructor() {
     this.setLevel(90);
   }
 
   setLevel(level: number) {
-    this.jobs = [
-      WAR, PLD, DRK, GNB,
-      AST, SCH, SGE, WHM,
-      BRD, DNC, MCH,
-      DRG, MNK, NIN, RPR, SAM,
-      BLM, RDM, SMN
-    ].reduce((acc, j) => ({ ...acc, [j.translation.en]: this.build(j, level) }), {});
+    if (!this.jobs || this.level !== level) {
+      this.jobs = [
+        WAR, PLD, DRK, GNB,
+        AST, SCH, SGE, WHM,
+        BRD, DNC, MCH,
+        DRG, MNK, NIN, RPR, SAM,
+        BLM, RDM, SMN
+      ].reduce((acc, j) => ({ ...acc, [j.translation.en]: this.build(j, level) }), {});
+    }
   }
 
   public getJobs(): Models.IJob[] {

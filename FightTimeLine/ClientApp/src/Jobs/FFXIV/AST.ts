@@ -1,6 +1,6 @@
 import Effects from "src/core/Effects";
 import { IJob, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate } from "../../core/Models";
-import { getAbilitiesFrom, healerSharedAbilities, medicine, toAbilities } from "./shared";
+import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
 
 const statuses = MapStatuses({
   lightSpeed: {
@@ -16,7 +16,8 @@ const statuses = MapStatuses({
     duration: 15
   },
   collectiveUnconscious: {
-    duration: 18
+    duration: 18,
+    effects: [Effects.mitigation.party(10)]
   },
   celestialOpposition: {
     duration: 15

@@ -9,7 +9,7 @@ import { IJobRegistryService } from "src/services/jobregistry.service-interface"
 
 export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap> {
   constructor(
-    private it: JobMap,
+    private job: JobMap,
     private jobRegistry: IJobRegistryService,
     private afFilter: boolean,
     private coverAll: boolean,
@@ -19,11 +19,12 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
     super();
   }
   used = new Set<string>();
+  private jobAbilities: AbilityUsageMap[];
 
   buildHeader(data: Holders): IExportColumn {
     const filters = !this.afFilter
       ? this.createSoloPartFilter()
-      : Object.values(this.jobRegistry.getJob(this.it.job.name).abilities)
+      : Object.values(this.jobRegistry.getJob(this.job.job.name).abilities)
         .filter(jab => this.isValidForColumn(jab.abilityType))
         .sort((a, b) => a.name.localeCompare(b.name))
         .map(jab => ({
@@ -33,10 +34,10 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
         }));
 
     return {
-      text: this.it.translated,
-      name: this.it.id,
-      icon: this.it.job.icon,
-      refId: this.it.id,
+      text: this.job.translated,
+      name: this.job.id,
+      icon: this.job.job.icon,
+      refId: this.job.id,
       cursor: 'pointer',
       width: "auto",
       listOfFilter: filters
@@ -45,7 +46,13 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
 
   buildCell(data: Holders, attack: BossAttackMap): IExportCell {
     const jobs = data.jobs;
-    const items = data.itemUsages.getAll().reduce((acc, usage) => {
+
+    if (!this.jobAbilities) {
+      this.jobAbilities = data.itemUsages.filter(i => i.ability.job.id === this.job.id);
+    }
+
+
+    const items = this.jobAbilities.reduce((acc, usage) => {
 
       const isDefence = this.isDefence(usage.ability.ability.abilityType);
       const isHealing = this.isHealing(usage.ability.ability.abilityType);
@@ -53,7 +60,7 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
       const condition =
         this.isLevelInRange([usage.ability.ability.levelAcquired, usage.ability.ability.levelRemoved], this.level) &&
         (this.coverAll || !this.used.has(usage.id)) &&
-        usage.ability.job.id === this.it.id &&
+        usage.ability.job.id === this.job.id &&
         this.isValidForColumn(usage.ability.ability.abilityType) &&
         (
           isDefence && this.isOffsetInRange(attack.attack.offset, Utils.formatTime(usage.start),

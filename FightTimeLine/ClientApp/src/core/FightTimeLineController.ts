@@ -838,6 +838,7 @@ export class FightTimeLineController {
           (val) => this.holders.itemUsages.getAll().some((item) => item.ability.id === val)
         );
       }
+
     }
 
     if (!source || source === 'boss' || source === "level") {

@@ -199,7 +199,7 @@ export const casterSharedAbilities: IAbilities = {
     levelAcquired: 8,
     statuses: [{
       duration: 10,
-      effects: [Effects.mitigation.party(10, DamageType.Magical), Effects.mitigation.solo(5, DamageType.Physical)]
+      effects: [Effects.mitigation.party(10, DamageType.Magical), Effects.mitigation.party(5, DamageType.Physical)]
     }]
   },
   ...magicSharedAbilities

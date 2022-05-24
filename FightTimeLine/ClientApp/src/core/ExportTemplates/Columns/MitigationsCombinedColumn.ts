@@ -1,11 +1,11 @@
-import { calculateDefsForAttack, calculateMitigationForAttack } from "src/core/Defensives";
+import { calculateDefsForAttack, calculateMitigationForAttack, MitigationForAttack } from "src/core/Defensives";
 import { IExportColumn, IExportCell } from "src/core/ExportModels";
 import { Holders } from "src/core/Holders";
 import { BossAttackMap } from "src/core/Maps";
 import { BaseColumnTemplate, IColumnTemplate } from "src/core/TableModels";
 
 export class MitigationsCombinedColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap>{
-  constructor(private holders: Holders) {
+  constructor() {
     super();
   }
   buildHeader(data: Holders): IExportColumn {
@@ -17,12 +17,12 @@ export class MitigationsCombinedColumn extends BaseColumnTemplate implements ICo
     } as IExportColumn;
   }
   buildCell(data: Holders, attack: BossAttackMap): IExportCell {
-    const defs = calculateDefsForAttack(this.holders, attack.id);
-    const mts = calculateMitigationForAttack(this.holders, defs, attack);
+    const defs = calculateDefsForAttack(data, attack.id);
+    const mts = calculateMitigationForAttack(data, defs, attack.attack);
     return this.createJobCell(mts);
   }
 
-  private createJobCell(mts: { name: string; id: string; mitigation: number; shield: number; icon: string; }[]) {
+  private createJobCell(mts: MitigationForAttack[]) {
     const tags = this.items(mts
       .filter(m => m.mitigation > 0 || m.shield > 0)
       .map(m => {

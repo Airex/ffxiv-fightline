@@ -17,8 +17,6 @@ export class JobMap extends BaseMap<string, DataGroup, IJobMapData> implements I
     this.applyData(data);
   }
 
-
-
   get isCompact(): boolean {
     return this.presenter.jobFilter(this.id).isCompact;
   }

@@ -54,6 +54,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   filtered: ExportModels.IExportRow[] = [];
   pagesize = Number.MAX_VALUE;
+  private lvl: number;
   tpl: TableViewTemplate;
 
   templates: { [name: string]: TableViewTemplate } = {
@@ -314,8 +315,12 @@ export class TableViewComponent implements OnInit, OnDestroy {
     }
 
     const lvl = this.currentOptions.l;
-    this.gameService.jobRegistry.setLevel(lvl);
-    this.fightLineController.applyFilter(null, "level");
+    if (lvl !== this.lvl) {
+      this.visStorage.presenter.fightLevel = lvl;
+      this.gameService.jobRegistry.setLevel(lvl);
+      this.fightLineController.applyFilter(null, "level");
+      this.lvl = lvl;
+    }
 
     const context = {
       presenter: this.visStorage.presenter,
@@ -377,7 +382,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   }
 
   trackByName(_: number, item: ExportModels.IExportColumn): string {
-    return item.text;
+    return item.refId;
   }
 
   optionsChanged(values: ExportModels.ITableOptions) {

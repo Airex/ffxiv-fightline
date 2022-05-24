@@ -131,7 +131,7 @@ export class BossAttackDefensiveTemplateV2 extends AttackRowExportTemplate {
       columnPresent("time", () => new TimeColumn()),
       columnPresent("attack", () => new AttackNameColumn(context.presenter, attackColor)),
       columnPresent("target", () => new BossTargetColumn()),
-      columnPresent("mitigations", () => new MitigationsCombinedColumn(context.holders)),
+      columnPresent("mitigations", () => new MitigationsCombinedColumn()),
       ...jobs
         .filter(j => !jobsFilter || jobsFilter.indexOf(j.order.toString()) >= 0)
         .map(j => new JobDefensivesColumn(

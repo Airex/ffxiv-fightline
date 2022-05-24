@@ -1,43 +1,103 @@
-<toolbar #toolbar [showHome]="true" (langChanged)="langChanged()">
+<toolbar
+  #toolbar
+  [showHome]="true"
+  (langChanged)="langChanged()"
+>
   <span style="margin-left: 10px;">
-    <tableviewoptions [settings]="options" (changed)="optionsChanged($event)"></tableviewoptions>
+    <tableviewoptions
+      [settings]="options"
+      (changed)="optionsChanged($event)"
+    ></tableviewoptions>
   </span>
   <span style="display: inline-flex; margin-left: 20px;">
-    <avatarWithPing *ngFor="let user of fightHubService.users" [owner]="false" textSizeRatio="3" [name]="user.name"
-      [id]="user.id" [ngStyle]="{'margin-right':'2px'}"></avatarWithPing>
+    <avatarWithPing
+      *ngFor="let user of fightHubService.users"
+      [owner]="false"
+      textSizeRatio="3"
+      [name]="user.name"
+      [id]="user.id"
+      [ngStyle]="{'margin-right':'2px'}"
+    ></avatarWithPing>
   </span>
-  <span pre-right style="margin-right: 3px;">
-    <a href="https://www.patreon.com/bePatron?u=70993733" data-patreon-widget-type="become-patron-button">Become a
-      Patron!</a>
-    <script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+  <span
+    pre-right
+    style="margin-right: 3px;"
+  >
+    <a
+      href="https://www.patreon.com/bePatron?u=70993733"
+      data-patreon-widget-type="become-patron-button"
+    >Become a Patron!</a>
+    <script
+      async
+      src="https://c6.patreon.com/becomePatronButton.bundle.js"
+    ></script>
   </span>
 </toolbar>
-<div class="content noselect" (click)="select(null, $event)">
-  <nz-table #table [nzData]="set.rows" [nzBordered]="true" [nzShowPagination]="false" [nzPageSize]="pagesize"
-    [ngStyle]="{width:'99.5%'}" [nzScroll]="{ y: tableHeight }" nzSize="small">
+<div
+  class="content noselect"
+  (click)="select(null, $event)"
+>
+  <nz-table
+    #table
+    [nzData]="set.rows"
+    [nzBordered]="true"
+    [nzShowPagination]="false"
+    [nzPageSize]="pagesize"
+    [ngStyle]="{width:'99.0%'}"
+    [nzScroll]="{ y: tableHeight }"
+    nzSize="small"
+  >
     <thead>
       <tr>
-        <th *ngFor="let column of set.columns; trackBy: trackByName" [nzAlign]="column.align || 'center'"
-          [nzFilterMultiple]="true" [nzFilters]="column.listOfFilter" [nzWidth]="column.width"
-          [ngStyle]="{ 'cursor': column.cursor }" (click)="select(column.refId, $event)"
-          (nzFilterChange)="filterChange($event, column.name)">
-          <img *ngIf="column.icon" class="abilityIcon" style="margin-right: 2px;margin-top: -3px;"
-            [src]="column.icon" />
+        <th
+          *ngFor="let column of set.columns; trackBy: trackByName"
+          [nzAlign]="column.align || 'center'"
+          [nzFilterMultiple]="true"
+          [nzFilters]="column.listOfFilter"
+          [nzWidth]="column.width"
+          [ngStyle]="{ 'cursor': column.cursor }"
+          (click)="select(column.refId, $event)"
+          (nzFilterChange)="filterChange($event, column.name)"
+        >
+          <img
+            *ngIf="column.icon"
+            class="abilityIcon"
+            style="margin-right: 2px;margin-top: -3px;"
+            [src]="column.icon"
+          />
           <span *ngIf="!column.icon || column.icon && showtext">{{column.text}}</span>
         </th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let row of filtered">
-        <td *ngFor="let cell of row.cells" [nzAlign]="cell.align || 'left'"
+        <td
+          *ngFor="let cell of row.cells"
+          [nzAlign]="cell.align || 'left'"
           [ngStyle]="{'background-color': cell.colorFn && cell.colorFn(row.filterData) || ''}"
-          (click)="select(cell.bgRefIdFn && cell.bgRefIdFn(row.filterData) || '', $event)">
-          <cell [input]="cell" [showtext]="showtext" [showicon]="showicon" [showoffset]="showoffset"
-            [showtarget]="showtarget" [iconSize]="iconSize" (selected)="select($event)"></cell>
+          (click)="select(cell.bgRefIdFn && cell.bgRefIdFn(row.filterData) || '', $event)"
+        >
+          <cell
+            [input]="cell"
+            [showtext]="showtext"
+            [showicon]="showicon"
+            [showoffset]="showoffset"
+            [showtarget]="showtarget"
+            [iconSize]="iconSize"
+            (selected)="select($event)"
+          ></cell>
         </td>
       </tr>
     </tbody>
   </nz-table>
 </div>
-<sidepanel #sidepanel mode="table"></sidepanel>
-<ng-progress #progressBar [speed]="500" [trickleSpeed]="30000" [spinner]="false"></ng-progress>
+<sidepanel
+  #sidepanel
+  mode="table"
+></sidepanel>
+<ng-progress
+  #progressBar
+  [speed]="500"
+  [trickleSpeed]="30000"
+  [spinner]="false"
+></ng-progress>
