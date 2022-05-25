@@ -192,20 +192,21 @@ export class FightTimeLineController {
         ability: map.ability,
         globalStart: this.startDate,
         holders: this.holders,
-        group: map.id,
-        id,
+        jobAbilityId: map.id,
+        itemUsageId: id,
         start: time,
         end: new Date(time.valueOf() as number + map.ability.cooldown * 1000)
       });
 
       if (!overlap) {
-        this.commandStorage.execute(new C.AddAbilityCommand(id || this.idgen.getNextId(M.EntryType.AbilityUsage),
-          null,
-          map.job.id,
-          map.ability.name,
-          time,
-          loaded,
-          JSON.parse(settings))
+        this.commandStorage.execute(
+          new C.AddAbilityCommand(id || this.idgen.getNextId(M.EntryType.AbilityUsage),
+            null,
+            map.job.id,
+            map.ability.name,
+            time,
+            loaded,
+            JSON.parse(settings))
         );
       }
     }
@@ -356,8 +357,8 @@ export class FightTimeLineController {
 
     const overlapCheckData: IOverlapCheckData = {
       holders: this.holders,
-      id: item.id.toString(),
-      group: item.group,
+      itemUsageId: item.id.toString(),
+      jobAbilityId: item.group,
       start: new Date(item.start),
       end: new Date(item.end),
       globalStart: this.startDate,
@@ -366,11 +367,11 @@ export class FightTimeLineController {
 
     switch (type) {
       case M.EntryType.AbilityUsage: {
-        const ability = this.holders.itemUsages.get(overlapCheckData.id);
+        const ability = this.holders.itemUsages.get(overlapCheckData.itemUsageId);
         return ability.canMove(overlapCheckData);
       }
       case M.EntryType.BossAttack: {
-        const ability = this.holders.bossAttacks.get(overlapCheckData.id);
+        const ability = this.holders.bossAttacks.get(overlapCheckData.itemUsageId);
         return ability.canMove(overlapCheckData);
       }
     }

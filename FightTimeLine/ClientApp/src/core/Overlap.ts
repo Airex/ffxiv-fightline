@@ -12,7 +12,7 @@ export class BaseOverlapStrategy implements IOverlapStrategy {
         if (chargesBased) { return false; }
 
         const result = context.holders.itemUsages
-            .getByAbility(context.group)
+            .getByAbility(context.jobAbilityId)
             .filter(x => !context.selectionRegistry || context.selectionRegistry.indexOf(x.id) === -1)
             .some((x: AbilityUsageMap) => {
                 const timeCheck = x.start < context.end && x.end > context.start;
@@ -34,8 +34,8 @@ export class SharedOverlapStrategy implements IOverlapStrategy {
         const chargesBased = !!context.ability.charges;
         if (chargesBased) { return false; }
 
-        const map = context.holders.abilities.get(context.group);
-        const items = context.holders.itemUsages.getByAbility(context.group);
+        const map = context.holders.abilities.get(context.jobAbilityId);
+        const items = context.holders.itemUsages.getByAbility(context.jobAbilityId);
         // todo: possible multiple shares
         const sharedAbility = context.holders.abilities.getByParentAndAbility(map.job.id, this.sharesWith[0]);
         const sharedItems = context.holders.itemUsages.getByAbility(sharedAbility.id);

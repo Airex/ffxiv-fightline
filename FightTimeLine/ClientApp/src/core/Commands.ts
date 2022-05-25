@@ -595,8 +595,8 @@ export class AddAbilityCommand extends Command {
     if (abilityMap.ability.overlapStrategy.check({
       ability: abilityMap.ability,
       holders: context.holders,
-      id: this.id,
-      group: abilityMap.id,
+      itemUsageId: this.id,
+      jobAbilityId: abilityMap.id,
       start: item.start,
       end: item.end,
       selectionRegistry: null
