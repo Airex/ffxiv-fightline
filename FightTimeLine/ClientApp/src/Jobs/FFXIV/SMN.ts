@@ -1,6 +1,7 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, MapStatuses, IAbility, IJobTemplate } from "../../core/Models";
+import { IJob, Role, AbilityType, MapStatuses, IAbility, IJobTemplate, ITrait } from "../../core/Models";
 import { getAbilitiesFrom, casterSharedAbilities, medicine } from "./shared";
+import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   searingLight: {
@@ -90,9 +91,36 @@ const abilities = [
     abilityType: AbilityType.Damage,
     levelAcquired: 18
   },
+  {
+    name: "Fester",
+    translation: {
+      de: "Schwäre",
+      en: "Fester",
+      fr: "Suppuration",
+      jp: "ミアズマバースト"
+    },
+    cooldown: 1,
+    xivDbId: "181",
+    abilityType: AbilityType.Damage,
+    levelAcquired: 10
+  },
   ...getAbilitiesFrom(casterSharedAbilities),
   medicine.Intelligence
 ] as IAbility[];
+
+const traits: ITrait[] = [
+  {
+    name: "Enhanced Radiant Aegis",
+    level: 84,
+    apply: abilityTrait("Radiant Aegis", ab => {
+      ab.charges = {
+        initialCount: 2,
+        count: 2,
+        cooldown: 60
+      };
+    })
+  }
+];
 
 
 export const SMN: IJobTemplate = {
@@ -110,7 +138,8 @@ export const SMN: IJobTemplate = {
     fr: "Invocateur"
   },
   role: Role.Caster,
-  abilities
+  abilities,
+  traits
 };
 
 

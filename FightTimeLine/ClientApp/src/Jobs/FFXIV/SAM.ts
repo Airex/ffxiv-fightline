@@ -1,6 +1,7 @@
 import { SharedOverlapStrategy } from "src/core/Overlap";
-import { IJob, Role, AbilityType, MapStatuses, IJobTemplate } from "../../core/Models";
+import { Role, AbilityType, MapStatuses, IJobTemplate, ITrait, IAbility } from "../../core/Models";
 import { getAbilitiesFrom, meleeSharedAbilities, medicine } from "./shared";
+import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   meikyoShisui: {
@@ -21,11 +22,7 @@ const abilities = [
     xivDbId: "7499",
     statuses: [statuses.meikyoShisui],
     abilityType: AbilityType.Utility,
-    levelAcquired: 50,
-    charges: {
-      count: 2,
-      cooldown: 55
-    }
+    levelAcquired: 50
   },
   {
     name: "Ikishoten",
@@ -48,6 +45,7 @@ const abilities = [
       en: "Hissatsu: Guren",
       fr: "Hissatsu : Guren"
     },
+    overlapStrategy: new SharedOverlapStrategy(["Hissatsu: Senei"]),
     cooldown: 120,
     xivDbId: "7496",
     abilityType: AbilityType.Damage,
@@ -61,6 +59,7 @@ const abilities = [
       en: "Hissatsu: Senei",
       fr: "Hissatsu : Sen\u0027ei"
     },
+    overlapStrategy: new SharedOverlapStrategy(["Hissatsu: Guren"]),
     cooldown: 120,
     xivDbId: "16481",
     abilityType: AbilityType.Damage,
@@ -126,16 +125,39 @@ const abilities = [
 
   ...getAbilitiesFrom(meleeSharedAbilities),
   medicine.Strength
-];
-export const SAM: IJobTemplate = {
+] as IAbility[];
 
+const traits: ITrait[] = [
+  {
+    name: "Enhanced Meikyo Shisui",
+    level: 88,
+    apply: abilityTrait("Meikyo Shisui", {
+      charges: {
+        count: 2,
+        cooldown: 55
+      }
+    })
+  },
+  {
+    name: "Enhanced Tsubame-gaeshi",
+    level: 84,
+    apply: abilityTrait("Tsubame-gaeshi", {
+      charges: {
+        count: 2,
+        cooldown: 60
+      }
+    })
+  }
+
+];
+
+export const SAM: IJobTemplate = {
   translation: {
     de: "SAM",
     jp: "SAM",
     en: "SAM",
     fr: "SAM"
   },
-
   fullNameTranslation: {
     de: "Samurai",
     jp: "\u4F8D",
@@ -143,7 +165,8 @@ export const SAM: IJobTemplate = {
     fr: "Samoura\u00EF"
   },
   role: Role.Melee,
-  abilities
+  abilities,
+  traits
 };
 
 

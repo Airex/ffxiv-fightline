@@ -1,10 +1,15 @@
 import { IAbility, IJob, TraitFunction } from "src/core/Models";
 
-export function abilityTrait(abilityName: string, func: (abiility: IAbility) => void): TraitFunction {
+export function abilityTrait(abilityName: string, func: ((abiility: IAbility) => void) | Partial<IAbility>): TraitFunction {
   return (job: IJob) => {
     const ability = job.abilities[abilityName];
     if (ability) {
-      func(ability);
+      if (typeof func === "function") {
+        func(ability);
+      }
+      else{
+        Object.assign(ability, func);
+      }
     }
   };
 }

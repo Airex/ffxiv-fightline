@@ -1,6 +1,7 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, IAbility, DamageType, JobStatuses, MapStatuses, IJobTemplate } from "../../core/Models";
+import { IJob, Role, AbilityType, IAbility, DamageType, JobStatuses, MapStatuses, IJobTemplate, ITrait } from "../../core/Models";
 import { getAbilitiesFrom, casterSharedAbilities, medicine, toAbilities } from "./shared";
+import { abilityTrait } from "./traits";
 
 
 const statuses = MapStatuses({
@@ -56,7 +57,7 @@ const abilities = [
       en: "Manafont",
       fr: "Vasque de mana"
     },
-    cooldown: 120,
+    cooldown: 180,
     xivDbId: "158",
     abilityType: AbilityType.Utility,
     levelAcquired: 30
@@ -101,15 +102,11 @@ const abilities = [
       en: "Sharpcast",
       fr: "Dynamisation"
     },
-    cooldown: 30,
+    cooldown: 120,
     xivDbId: "3574",
     statuses: [statuses.sharpCast],
     abilityType: AbilityType.Utility,
-    levelAcquired: 54,
-    charges: {
-      count: 2,
-      cooldown: 30
-    }
+    levelAcquired: 54
   },
   {
     name: "Amplifier",
@@ -127,6 +124,35 @@ const abilities = [
   ...getAbilitiesFrom(casterSharedAbilities),
   medicine.Intelligence
 ] as IAbility[];
+
+const traits: ITrait[] = [
+  {
+    name: "Enhanced Manafont",
+    level: 84,
+    apply: abilityTrait("Manafont", {
+      cooldown: 120
+    })
+  },
+  {
+    name: "Enhanced Sharpcast",
+    level: 74,
+    apply: abilityTrait("Sharpcast", {
+      cooldown: 30
+    })
+  },
+  {
+    name: "Enhanced Sharpcast II",
+    level: 88,
+    apply: abilityTrait("Sharpcast", {
+      charges: {
+        count: 2,
+        cooldown: 30
+      }
+    })
+  }
+];
+
+
 export const BLM: IJobTemplate = {
 
   translation: {
@@ -143,5 +169,6 @@ export const BLM: IJobTemplate = {
     fr: "Mage Noir"
   },
   role: Role.Caster,
-  abilities
+  abilities,
+  traits
 };
