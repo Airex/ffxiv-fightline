@@ -1,8 +1,27 @@
 import Effects from "src/core/Effects";
-import { ChargesBasedOverlapStrategy, SharedOverlapStrategy } from "src/core/Overlap";
-import { DamageType, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate, ITrait } from "../../core/Models";
+import { BaseOverlapStrategy, ChargesBasedOverlapStrategy, SharedOverlapStrategy } from "src/core/Overlap";
+import { Utils } from "src/core/Utils";
+import { DamageType, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate, ITrait, IOverlapStrategy, IOverlapCheckContext } from "../../core/Models";
 import { getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
 import { abilityTrait, combineTraits } from "./traits";
+
+class SaltAndDarknessOverlapStrategy extends BaseOverlapStrategy implements IOverlapStrategy {
+
+  override check(context: IOverlapCheckContext): boolean {
+
+    const abilityMap = context.holders.abilities.get(context.jobAbilityId);
+    const saltedEarth = context.holders.abilities.getByParentAndAbility(abilityMap.job.id, "Salted Earth");
+    const usages = context.holders.itemUsages.getByAbility(saltedEarth.id);
+
+    const durations = usages.map(u => [u.start, new Date(u.startAsNumber + 15 * 1000)]);
+
+    return !durations.some(d => Utils.inRangeDates(d[0], d[1], context.start)) || super.check(context);
+  }
+  override getDependencies(): string[] {
+    return ["Salted Earth"];
+  }
+
+}
 
 const statuses = MapStatuses({
   bloodWeapon: {
@@ -312,8 +331,28 @@ const abilities = [
     cooldown: 20,
     xivDbId: "25755",
     requiresBossTarget: true,
+    overlapStrategy: new SaltAndDarknessOverlapStrategy(),
     abilityType: AbilityType.Damage,
     levelAcquired: 86,
+  },
+  {
+    name: "Shadowbringer",
+    translation: {
+      de: "Schattenbringer",
+      en: "Shadowbringer",
+      fr: "Porteur d'ombre",
+      jp: "シャドウブリンガー"
+    },
+    cooldown: 60,
+    xivDbId: "25757",
+    requiresBossTarget: true,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 90,
+    charges: {
+      count: 2,
+      initialCount: 2,
+      cooldown: 60
+    }
   },
   ...getAbilitiesFrom(tankSharedAbilities),
   medicine.Strength
