@@ -5,7 +5,6 @@ import * as S from "../../services/index";
 import * as M from "../../core/Models";
 import { NgProgressComponent } from "ngx-progressbar";
 
-import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate";
 import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate";
 import { TableViewTemplate, ExportTemplateContext } from "../../core/BaseExportTemplate";
 import * as Gameserviceprovider from "../../services/game.service-provider";
@@ -59,7 +58,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   templates: { [name: string]: TableViewTemplate } = {
     defence: new BossAttackDefensiveTemplateV2(),
-    onesecond: new EachRowOneSecondTemplate(),
     descriptive: new DescriptiveTemplate(),
     mitigations: new MitigationsTemplate()
   };

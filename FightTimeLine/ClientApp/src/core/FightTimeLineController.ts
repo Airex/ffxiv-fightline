@@ -22,6 +22,26 @@ import { IOverlapCheckData } from "./Maps/BaseMap";
 import { calculateDuration, calculateOffset } from "./Durations";
 
 export class FightTimeLineController {
+
+  data: M.IFightData = {};
+  private bossGroup = "boss";
+  private commandStorage: UndoRedoController;
+  private commandBag: CommandBag;
+  private loading = false;
+  private commandFactory = new CommandFactory(this.startDate);
+  private availabilityController: AvailabilityController;
+  hasChanges = false;
+  fraction: M.IFraction;
+  colorSettings: IColorsSettings;
+  viewCopy: M.IView;
+
+  downtimeChanged = new EventEmitter<void>();
+  commandExecuted = new EventEmitter<ICommandData>();
+
+  canUndoChanged = new EventEmitter<void>();
+
+  canRedoChanged = new EventEmitter<void>();
+
   constructor(
     private startDate: Date,
     private idgen: IdGenerator,
@@ -83,24 +103,19 @@ export class FightTimeLineController {
     return this.commandStorage.canRedo();
   }
 
-  data: M.IFightData = {};
-  private bossGroup = "boss";
-  private commandStorage: UndoRedoController;
-  private commandBag: CommandBag;
-  private loading = false;
-  private commandFactory = new CommandFactory(this.startDate);
-  private availabilityController: AvailabilityController;
-  hasChanges = false;
-  fraction: M.IFraction;
-  colorSettings: IColorsSettings;
-  viewCopy: M.IView;
-
-  downtimeChanged = new EventEmitter<void>();
-  commandExecuted = new EventEmitter<ICommandData>();
-
-  canUndoChanged = new EventEmitter<void>();
-
-  canRedoChanged = new EventEmitter<void>();
+  loadPreset(preset: string) {
+    const template = this.presenterManager.presets[preset];
+    if (template) {
+      this.presenterManager.selectedPreset = preset;
+      this.presenterManager.loadTemplate(template, this.holders);
+      const items = this.holders.itemUsages.getAll();
+      this.holders.abilities.applyFilter((id) => items.some(ab => ab.ability.id === id));
+      this.holders.abilities.refresh();
+      this.holders.jobs.refresh();
+      this.holders.itemUsages.refresh();
+      this.presenterManager.save(this.data.fight.id);
+    }
+  }
 
   loadBoss(boss: M.IBoss): void {
     this.data.boss = boss;

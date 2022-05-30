@@ -7,6 +7,20 @@ import { Utils } from "./Utils";
 
 export class PresenterManager implements Models.IPresenterData {
 
+  tags: string[] = Models.DefaultTags;
+  sources: string[] = [];
+  filter: Models.IFilter = Models.defaultFilter();
+  view: Models.IView = Models.defaultView();
+  fightLevel = 90;
+  private jobFilters: JobPresets = {};
+  language: Models.SupportedLanguages = Models.SupportedLanguages[localStorage.getItem("lang") || "en"];
+  selectedPreset: string = undefined;
+  presets: { [name: string]: IPresetTemplate } = {};
+  fflogsSource = true;
+
+  constructor(private storage: Models.IStorage) {
+
+  }
 
   public get activeTags(): { text: string, checked: boolean }[] {
     return this.tags.concat("Other").map(t => ({
@@ -21,17 +35,6 @@ export class PresenterManager implements Models.IPresenterData {
       checked: this.filter?.attacks?.sources?.includes(t) || false
     }));
   }
-
-  tags: string[] = Models.DefaultTags;
-  sources: string[] = [];
-  filter: Models.IFilter = Models.defaultFilter();
-  view: Models.IView = Models.defaultView();
-  fightLevel = 90;
-  private jobFilters: JobPresets = {};
-  language: Models.SupportedLanguages = Models.SupportedLanguages[localStorage.getItem("lang") || "en"];
-  selectedPreset: string = undefined;
-  presets: { [name: string]: IPresetTemplate } = {};
-  fflogsSource = true;
 
   setLang(lang: string) {
     this.language = Models.SupportedLanguages[lang];
@@ -143,8 +146,8 @@ export class PresenterManager implements Models.IPresenterData {
     }
   }
 
-  save(storage: Models.IStorage, id: string) {
-    storage.setObject("presenter_" + id, {
+  save(id: string) {
+    this.storage.setObject("presenter_" + id, {
       filter: this.filter,
       view: this.view,
       jobFilters: this.jobFilters,
@@ -152,9 +155,9 @@ export class PresenterManager implements Models.IPresenterData {
     });
   }
 
-  load(storage: Models.IStorage, id: string): boolean {
+  load(id: string): boolean {
     this.selectedPreset = id;
-    const data = storage.getObject<any>("presenter_" + id);
+    const data = this.storage.getObject<any>("presenter_" + id);
     if (data) {
       if (data.filter) {
         this.filter = data.filter;
@@ -168,7 +171,7 @@ export class PresenterManager implements Models.IPresenterData {
       if (data.fightLevel) {
         this.fightLevel = data.fightLevel;
       }
-      if (data.name){
+      if (data.name) {
         this.selectedPreset = data.name;
       }
     }
