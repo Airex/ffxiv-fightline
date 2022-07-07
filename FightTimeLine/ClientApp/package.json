@@ -44,7 +44,6 @@
     "ngx-captcha": "^8.0.1",
     "ngx-clipboard": "13.0.0",
     "ngx-color-picker": "9.1.0",
-    "ngx-disqus": "2.4.3",
     "ngx-progressbar": "6.0.2",
     "ngx-vis": "3.1.1",
     "propagating-hammerjs": "^1.5.0",

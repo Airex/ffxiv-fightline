@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { Component, OnDestroy, Inject } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
 import * as M from "../../core/Models";
 import { Utils } from "../../core/Utils";
@@ -17,7 +17,7 @@ import { TranslateService } from "@ngx-translate/core";
   templateUrl: "./singleAbility.component.html",
   styleUrls: ["./singleAbility.component.css"],
 })
-export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComponent {
+export class SingleAbilityComponent implements  OnDestroy, ISidePanelComponent {
 
   form: FormGroup;
   description: any;
@@ -198,9 +198,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     }
   }
 
-  ngOnInit(): void {
 
-  }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
