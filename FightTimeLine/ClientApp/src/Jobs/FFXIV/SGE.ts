@@ -43,7 +43,7 @@ const abilities = [
     name: "Kardia",
     translation: {
       de: "Kardia",
-      jp: "\u30AB\u30EB\u30C7\u30A3\u30A2",
+      ja: "\u30AB\u30EB\u30C7\u30A3\u30A2",
       en: "Kardia",
       fr: "Kardia"
     },
@@ -56,7 +56,7 @@ const abilities = [
     name: "Physis II",
     translation: {
       de: "Physis II",
-      jp: "\u30D4\u30E5\u30B7\u30B9II",
+      ja: "\u30D4\u30E5\u30B7\u30B9II",
       en: "Physis II",
       fr: "Physis II"
     },
@@ -69,7 +69,7 @@ const abilities = [
     name: "Soteria",
     translation: {
       de: "Soteria",
-      jp: "\u30BD\u30FC\u30C6\u30EA\u30A2",
+      ja: "\u30BD\u30FC\u30C6\u30EA\u30A2",
       en: "Soteria",
       fr: "Soteria"
     },
@@ -82,7 +82,7 @@ const abilities = [
     name: "Icarus",
     translation: {
       de: "Ikarus",
-      jp: "\u30A4\u30AB\u30ED\u30B9",
+      ja: "\u30A4\u30AB\u30ED\u30B9",
       en: "Icarus",
       fr: "Ikaros"
     },
@@ -94,7 +94,7 @@ const abilities = [
     name: "Druochole",
     translation: {
       de: "Druochole",
-      jp: "\u30C9\u30EB\u30AA\u30B3\u30EC",
+      ja: "\u30C9\u30EB\u30AA\u30B3\u30EC",
       en: "Druochole",
       fr: "Druochole"
     },
@@ -106,7 +106,7 @@ const abilities = [
     name: "Kerachole",
     translation: {
       de: "Kerachole",
-      jp: "\u30B1\u30FC\u30E9\u30B3\u30EC",
+      ja: "\u30B1\u30FC\u30E9\u30B3\u30EC",
       en: "Kerachole",
       fr: "Kerachole"
     },
@@ -120,7 +120,7 @@ const abilities = [
     name: "Ixochole",
     translation: {
       de: "Ixochole",
-      jp: "\u30A4\u30C3\u30AF\u30BD\u30B3\u30EC",
+      ja: "\u30A4\u30C3\u30AF\u30BD\u30B3\u30EC",
       en: "Ixochole",
       fr: "Ixochole"
     },
@@ -133,7 +133,7 @@ const abilities = [
     name: "Zoe",
     translation: {
       de: "Zoe",
-      jp: "\u30BE\u30FC\u30A8",
+      ja: "\u30BE\u30FC\u30A8",
       en: "Zoe",
       fr: "Zoe"
     },
@@ -147,7 +147,7 @@ const abilities = [
     name: "Pepsis",
     translation: {
       de: "Pepsis",
-      jp: "\u30DA\u30D7\u30B7\u30B9",
+      ja: "\u30DA\u30D7\u30B7\u30B9",
       en: "Pepsis",
       fr: "Pepsis"
     },
@@ -160,7 +160,7 @@ const abilities = [
     name: "Taurochole",
     translation: {
       de: "Taurochole",
-      jp: "\u30BF\u30A6\u30ED\u30B3\u30EC",
+      ja: "\u30BF\u30A6\u30ED\u30B3\u30EC",
       en: "Taurochole",
       fr: "Taurochole"
     },
@@ -175,7 +175,7 @@ const abilities = [
     name: "Haima",
     translation: {
       de: "Haima",
-      jp: "\u30CF\u30A4\u30DE",
+      ja: "\u30CF\u30A4\u30DE",
       en: "Haima",
       fr: "Haima"
     },
@@ -190,7 +190,7 @@ const abilities = [
     name: "Rhizomata",
     translation: {
       de: "Rizomata",
-      jp: "\u30EA\u30BE\u30FC\u30DE\u30BF",
+      ja: "\u30EA\u30BE\u30FC\u30DE\u30BF",
       en: "Rhizomata",
       fr: "Rizomata"
     },
@@ -203,7 +203,7 @@ const abilities = [
     name: "Holos",
     translation: {
       de: "Holos",
-      jp: "\u30DB\u30FC\u30EA\u30BA\u30E0",
+      ja: "\u30DB\u30FC\u30EA\u30BA\u30E0",
       en: "Holos",
       fr: "Holos"
     },
@@ -217,7 +217,7 @@ const abilities = [
     name: "Panhaima",
     translation: {
       de: "Panhaima",
-      jp: "\u30D1\u30F3\u30CF\u30A4\u30DE",
+      ja: "\u30D1\u30F3\u30CF\u30A4\u30DE",
       en: "Panhaima",
       fr: "Panhaima"
     },
@@ -231,7 +231,7 @@ const abilities = [
     name: "Krasis",
     translation: {
       de: "Krasis",
-      jp: "\u30AF\u30E9\u30FC\u30B7\u30B9",
+      ja: "\u30AF\u30E9\u30FC\u30B7\u30B9",
       en: "Krasis",
       fr: "Krasis"
     },
@@ -246,7 +246,7 @@ const abilities = [
     name: "Pneuma",
     translation: {
       de: "Pneuma",
-      jp: "\u30D7\u30CD\u30A6\u30DE",
+      ja: "\u30D7\u30CD\u30A6\u30DE",
       en: "Pneuma",
       fr: "Pneuma"
     },
@@ -269,14 +269,14 @@ export const SGE: IJobTemplate = {
 
   translation: {
     de: "WEI",
-    jp: "SGE",
+    ja: "SGE",
     en: "SGE",
     fr: "SAG"
   },
 
   fullNameTranslation: {
     de: "Weiser",
-    jp: "\u8CE2\u8005",
+    ja: "\u8CE2\u8005",
     en: "Sage",
     fr: "Sage"
   },

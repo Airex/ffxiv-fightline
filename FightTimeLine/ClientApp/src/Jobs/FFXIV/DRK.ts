@@ -68,7 +68,7 @@ const abilities = [
     name: "Blood Weapon",
     translation: {
       de: "Blutwaffe",
-      jp: "\u30D6\u30E9\u30C3\u30C9\u30A6\u30A7\u30DD\u30F3",
+      ja: "\u30D6\u30E9\u30C3\u30C9\u30A6\u30A7\u30DD\u30F3",
       en: "Blood Weapon",
       fr: "Arme de sang"
     },
@@ -84,7 +84,7 @@ const abilities = [
       de: "Finstere Flut",
       en: "Flood of Darkness",
       fr: "Déluge de ténèbres",
-      jp: "暗黒の波動"
+      ja: "暗黒の波動"
     },
     cooldown: 1,
     xivDbId: "16466",
@@ -98,7 +98,7 @@ const abilities = [
       de: "Finstere Klinge",
       en: "Edge of Darkness",
       fr: "Tranchant de ténèbres",
-      jp: "暗黒の剣"
+      ja: "暗黒の剣"
     },
     cooldown: 1,
     xivDbId: "16467",
@@ -110,7 +110,7 @@ const abilities = [
     name: "Flood of Shadow",
     translation: {
       de: "Schattenflut",
-      jp: "\u6F06\u9ED2\u306E\u6CE2\u52D5",
+      ja: "\u6F06\u9ED2\u306E\u6CE2\u52D5",
       en: "Flood of Shadow",
       fr: "D\u00E9luge d\u0027ombre"
     },
@@ -124,7 +124,7 @@ const abilities = [
     name: "Edge of Shadow",
     translation: {
       de: "Schattenklinge",
-      jp: "\u6F06\u9ED2\u306E\u5263",
+      ja: "\u6F06\u9ED2\u306E\u5263",
       en: "Edge of Shadow",
       fr: "Tranchant d\u0027ombre"
     },
@@ -138,7 +138,7 @@ const abilities = [
     name: "Salted Earth",
     translation: {
       de: "Salzige Erde",
-      jp: "\u30BD\u30EB\u30C8\u30A2\u30FC\u30B9",
+      ja: "\u30BD\u30EB\u30C8\u30A2\u30FC\u30B9",
       en: "Salted Earth",
       fr: "Terre sal\u00E9e"
     },
@@ -153,7 +153,7 @@ const abilities = [
     name: "Abyssal Drain",
     translation: {
       de: "Abyssale Blutung",
-      jp: "\u30A2\u30D3\u30B5\u30EB\u30C9\u30EC\u30A4\u30F3",
+      ja: "\u30A2\u30D3\u30B5\u30EB\u30C9\u30EC\u30A4\u30F3",
       en: "Abyssal Drain",
       fr: "Drainage abyssal"
     },
@@ -168,7 +168,7 @@ const abilities = [
     name: "Plunge",
     translation: {
       de: "Hiebsprung",
-      jp: "\u30D7\u30E9\u30F3\u30B8\u30AB\u30C3\u30C8",
+      ja: "\u30D7\u30E9\u30F3\u30B8\u30AB\u30C3\u30C8",
       en: "Plunge",
       fr: "Coupe plongeante"
     },
@@ -186,7 +186,7 @@ const abilities = [
     name: "Carve and Spit",
     translation: {
       de: "Zweischnitt",
-      jp: "\u30AB\u30FC\u30F4\u30FB\u30A2\u30F3\u30C9\u30FB\u30B9\u30D4\u30C3\u30C8",
+      ja: "\u30AB\u30FC\u30F4\u30FB\u30A2\u30F3\u30C9\u30FB\u30B9\u30D4\u30C3\u30C8",
       en: "Carve and Spit",
       fr: "Tranchage-habillage"
     },
@@ -201,7 +201,7 @@ const abilities = [
     name: "Shadow Wall",
     translation: {
       de: "Schattenwand",
-      jp: "\u30B7\u30E3\u30C9\u30A6\u30A6\u30A9\u30FC\u30EB",
+      ja: "\u30B7\u30E3\u30C9\u30A6\u30A6\u30A9\u30FC\u30EB",
       en: "Shadow Wall",
       fr: "Mur d\u0027ombre"
     },
@@ -215,7 +215,7 @@ const abilities = [
     name: "Dark Mind",
     translation: {
       de: "Dunkler Geist",
-      jp: "\u30C0\u30FC\u30AF\u30DE\u30A4\u30F3\u30C9",
+      ja: "\u30C0\u30FC\u30AF\u30DE\u30A4\u30F3\u30C9",
       en: "Dark Mind",
       fr: "Esprit t\u00E9n\u00E9breux"
     },
@@ -229,7 +229,7 @@ const abilities = [
     name: "Living Dead",
     translation: {
       de: "Totenerweckung",
-      jp: "\u30EA\u30D3\u30F3\u30B0\u30C7\u30C3\u30C9",
+      ja: "\u30EA\u30D3\u30F3\u30B0\u30C7\u30C3\u30C9",
       en: "Living Dead",
       fr: "Mort-vivant"
     },
@@ -245,7 +245,7 @@ const abilities = [
     name: "The Blackest Night",
     translation: {
       de: "Schw\u00E4rzeste Nacht",
-      jp: "\u30D6\u30E9\u30C3\u30AF\u30CA\u30A4\u30C8",
+      ja: "\u30D6\u30E9\u30C3\u30AF\u30CA\u30A4\u30C8",
       en: "The Blackest Night",
       fr: "Nuit noirissime"
     },
@@ -260,7 +260,7 @@ const abilities = [
     name: "Delirium",
     translation: {
       de: "Blutdelirium",
-      jp: "\u30D6\u30E9\u30C3\u30C9\u30C7\u30EA\u30EA\u30A2\u30E0",
+      ja: "\u30D6\u30E9\u30C3\u30C9\u30C7\u30EA\u30EA\u30A2\u30E0",
       en: "Delirium",
       fr: "Delirium de sang"
     },
@@ -275,7 +275,7 @@ const abilities = [
     name: "Dark Missionary",
     translation: {
       de: "Dunkler Bote",
-      jp: "\u30C0\u30FC\u30AF\u30DF\u30C3\u30B7\u30E7\u30CA\u30EA\u30FC",
+      ja: "\u30C0\u30FC\u30AF\u30DF\u30C3\u30B7\u30E7\u30CA\u30EA\u30FC",
       en: "Dark Missionary",
       fr: "Missionnaire des T\u00E9n\u00E8bres"
     },
@@ -289,7 +289,7 @@ const abilities = [
     name: "Living Shadow",
     translation: {
       de: "Schattenschemen",
-      jp: "\u5F71\u8EAB\u5177\u73FE",
+      ja: "\u5F71\u8EAB\u5177\u73FE",
       en: "Living Shadow",
       fr: "Ombre vivante"
     },
@@ -304,7 +304,7 @@ const abilities = [
     name: "Oblation",
     translation: {
       de: "Opfergabe",
-      jp: "\u30AA\u30D6\u30EC\u30FC\u30B7\u30E7\u30F3",
+      ja: "\u30AA\u30D6\u30EC\u30FC\u30B7\u30E7\u30F3",
       en: "Oblation",
       fr: "Oblation"
     },
@@ -326,7 +326,7 @@ const abilities = [
       de: "Salz und Schw\u00e4rze",
       en: "Salt and Darkness",
       fr: "Sel et T\u00e9n\u00e8bres",
-      jp: "\u30bd\u30eb\u30c8\u30fb\u30a2\u30f3\u30c9\u30fb\u30c0\u30fc\u30af",
+      ja: "\u30bd\u30eb\u30c8\u30fb\u30a2\u30f3\u30c9\u30fb\u30c0\u30fc\u30af",
     },
     cooldown: 20,
     xivDbId: "25755",
@@ -341,7 +341,7 @@ const abilities = [
       de: "Schattenbringer",
       en: "Shadowbringer",
       fr: "Porteur d'ombre",
-      jp: "シャドウブリンガー"
+      ja: "シャドウブリンガー"
     },
     cooldown: 60,
     xivDbId: "25757",
@@ -372,14 +372,14 @@ export const DRK: IJobTemplate = {
 
   translation: {
     de: "DKR",
-    jp: "DRK",
+    ja: "DRK",
     en: "DRK",
     fr: "CHN"
   },
 
   fullNameTranslation: {
     de: "Dunkelritter",
-    jp: "\u6697\u9ED2\u9A0E\u58EB",
+    ja: "\u6697\u9ED2\u9A0E\u58EB",
     en: "Dark Knight",
     fr: "Chevalier Noir"
   },

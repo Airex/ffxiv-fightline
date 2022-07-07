@@ -2,7 +2,9 @@ import { AttackRowExportTemplate, ExportTemplateContext } from "../BaseExportTem
 import { IExportCell, IExportColumn, ITableOptionSettings } from "../ExportModels";
 import { Holders } from "../Holders";
 import { BossAttackMap } from "../Maps";
-import { AttackNameColumn, BaseColumnTemplate, IColumnTemplate, TimeColumn } from "../TableModels";
+import { BaseColumnTemplate, IColumnTemplate } from "../TableModels";
+import { AttackNameColumn } from "./Columns/AttackNameColumn";
+import { TimeColumn } from "./Columns/TimeColumn";
 
 export class DescriptiveTemplate extends AttackRowExportTemplate {
   public loadOptions(): ITableOptionSettings {

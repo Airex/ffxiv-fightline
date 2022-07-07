@@ -237,6 +237,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  private createOptions(){
+
+  }
+
   private loadTable() {
     if (!this.tpl) {
       this.notification.error("Table template not found");

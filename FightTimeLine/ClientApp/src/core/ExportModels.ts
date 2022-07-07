@@ -58,7 +58,7 @@ export interface ExportDataData {
   abilities: ExportAbility[];
 }
 
-export class  ExportData {
+export class ExportData {
   name: string;
   userName: string;
   data: ExportDataData;
@@ -72,15 +72,25 @@ export interface IExportResultSet {
   filterByFirstEntry: boolean;
 }
 
+export interface ColumnFilterItem {
+  text: string;
+  value: any;
+  byDefault?: boolean;
+}
+
+export type ColumnAlign = 'left' | 'right' | 'center' | null;
+
+export type ColumnFilterFunc = (a: any, data: IExportRow, c?: IExportColumn) => boolean;
+
 export interface IExportColumn {
   type?: string;
   text: string;
   icon?: string;
-  align?: 'left' | 'right' | 'center' | null;
+  align?: ColumnAlign;
   refId?: string;
   cursor?: string;
-  listOfFilter?: { text: string; value: any; byDefault?: boolean }[];
-  filterFn?: (a: any, data: IExportRow, c?: IExportColumn) => boolean;
+  listOfFilter?: ColumnFilterItem[];
+  filterFn?: ColumnFilterFunc;
   name?: string;
   width?: string | null;
 }
@@ -92,7 +102,7 @@ export interface IExportRow {
 
 export interface IExportCell {
   items: IExportItem[];
-  align?: 'left' | 'right' | 'center' | null;
+  align?: ColumnAlign;
   disableUnique?: boolean;
   colorFn?: (data) => string;
   bgRefIdFn?: (data) => string;
@@ -123,7 +133,6 @@ export enum TableOptionSettingType {
   Tags,
   LimitedNumberRange
 }
-
 
 export interface ITableOptionsSetting<TOptions = any> {
   name: string;

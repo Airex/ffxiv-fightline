@@ -111,7 +111,7 @@ const abilities: IAbility[] = [
     name: "Fight or Flight",
     translation: {
       de: "Verwegenheit",
-      jp: "\u30D5\u30A1\u30A4\u30C8\u30FB\u30AA\u30A2\u30FB\u30D5\u30E9\u30A4\u30C8",
+      ja: "\u30D5\u30A1\u30A4\u30C8\u30FB\u30AA\u30A2\u30FB\u30D5\u30E9\u30A4\u30C8",
       en: "Fight or Flight",
       fr: "Combat acharn\u00E9"
     },
@@ -125,7 +125,7 @@ const abilities: IAbility[] = [
     name: "Circle of Scorn",
     translation: {
       de: "Kreis der Verachtung",
-      jp: "\u30B5\u30FC\u30AF\u30EB\u30FB\u30AA\u30D6\u30FB\u30C9\u30A5\u30FC\u30E0",
+      ja: "\u30B5\u30FC\u30AF\u30EB\u30FB\u30AA\u30D6\u30FB\u30C9\u30A5\u30FC\u30E0",
       en: "Circle of Scorn",
       fr: "Cercle du destin"
     },
@@ -139,7 +139,7 @@ const abilities: IAbility[] = [
     name: "Requiescat",
     translation: {
       de: "Requiescat",
-      jp: "\u30EC\u30AF\u30A4\u30A8\u30B9\u30AB\u30C3\u30C8",
+      ja: "\u30EC\u30AF\u30A4\u30A8\u30B9\u30AB\u30C3\u30C8",
       en: "Requiescat",
       fr: "Requiescat"
     },
@@ -154,7 +154,7 @@ const abilities: IAbility[] = [
     name: "Sentinel",
     translation: {
       de: "Sentinel",
-      jp: "\u30BB\u30F3\u30C1\u30CD\u30EB",
+      ja: "\u30BB\u30F3\u30C1\u30CD\u30EB",
       en: "Sentinel",
       fr: "Sentinelle"
     },
@@ -168,7 +168,7 @@ const abilities: IAbility[] = [
     name: "Hallowed Ground",
     translation: {
       de: "Heiliger Boden",
-      jp: "\u30A4\u30F3\u30D3\u30F3\u30B7\u30D6\u30EB",
+      ja: "\u30A4\u30F3\u30D3\u30F3\u30B7\u30D6\u30EB",
       en: "Hallowed Ground",
       fr: "Invincible"
     },
@@ -182,7 +182,7 @@ const abilities: IAbility[] = [
     name: "Divine Veil",
     translation: {
       de: "Heiliger Quell",
-      jp: "\u30C7\u30A3\u30F4\u30A1\u30A4\u30F3\u30F4\u30A7\u30FC\u30EB",
+      ja: "\u30C7\u30A3\u30F4\u30A1\u30A4\u30F3\u30F4\u30A7\u30FC\u30EB",
       en: "Divine Veil",
       fr: "Voile divin"
     },
@@ -197,7 +197,7 @@ const abilities: IAbility[] = [
     name: "Passage of Arms",
     translation: {
       de: "Waffengang",
-      jp: "\u30D1\u30C3\u30BB\u30FC\u30B8\u30FB\u30AA\u30D6\u30FB\u30A2\u30FC\u30E0\u30BA",
+      ja: "\u30D1\u30C3\u30BB\u30FC\u30B8\u30FB\u30AA\u30D6\u30FB\u30A2\u30FC\u30E0\u30BA",
       en: "Passage of Arms",
       fr: "Passe d\u0027armes"
     },
@@ -211,7 +211,7 @@ const abilities: IAbility[] = [
     name: "Cover",
     translation: {
       de: "Deckung",
-      jp: "\u304B\u3070\u3046",
+      ja: "\u304B\u3070\u3046",
       en: "Cover",
       fr: "Couverture"
     },
@@ -226,7 +226,7 @@ const abilities: IAbility[] = [
     name: "Sheltron",
     translation: {
       de: "Schiltron",
-      jp: "シェルトロン",
+      ja: "シェルトロン",
       en: "Sheltron",
       fr: "Schiltron"
     },
@@ -245,7 +245,7 @@ const abilities: IAbility[] = [
     name: "Holy Sheltron",
     translation: {
       de: "Heiliges Schiltron",
-      jp: "\u30DB\u30FC\u30EA\u30FC\u30B7\u30A7\u30EB\u30C8\u30ED\u30F3",
+      ja: "\u30DB\u30FC\u30EA\u30FC\u30B7\u30A7\u30EB\u30C8\u30ED\u30F3",
       en: "Holy Sheltron",
       fr: "Schiltron sacr\u00E9"
     },
@@ -264,7 +264,7 @@ const abilities: IAbility[] = [
     name: "Intervention",
     translation: {
       de: "Intervention",
-      jp: "\u30A4\u30F3\u30BF\u30FC\u30D9\u30F3\u30B7\u30E7\u30F3",
+      ja: "\u30A4\u30F3\u30BF\u30FC\u30D9\u30F3\u30B7\u30E7\u30F3",
       en: "Intervention",
       fr: "Intervention"
     },
@@ -280,7 +280,7 @@ const abilities: IAbility[] = [
     name: "Intervene",
     translation: {
       de: "Einschreiten",
-      jp: "\u30A4\u30F3\u30BF\u30FC\u30F4\u30A3\u30FC\u30F3",
+      ja: "\u30A4\u30F3\u30BF\u30FC\u30F4\u30A3\u30FC\u30F3",
       en: "Intervene",
       fr: "Irruption brutale"
     },
@@ -298,7 +298,7 @@ const abilities: IAbility[] = [
     name: "Expiacion",
     translation: {
       de: "Expiacion",
-      jp: "\u30A8\u30AF\u30B9\u30D4\u30A2\u30B7\u30AA\u30F3",
+      ja: "\u30A8\u30AF\u30B9\u30D4\u30A2\u30B7\u30AA\u30F3",
       en: "Expiacion",
       fr: "Expiation"
     },
@@ -311,7 +311,7 @@ const abilities: IAbility[] = [
     name: "Spirits Within",
     translation: {
       de: "Selbsterhaltungstrieb",
-      jp: "スピリッツウィズイン",
+      ja: "スピリッツウィズイン",
       en: "Spirits Within",
       fr: "Esprits intérieurs"
     },
@@ -356,14 +356,14 @@ export const PLD: IJobTemplate = {
 
   translation: {
     de: "PLD",
-    jp: "PLD",
+    ja: "PLD",
     en: "PLD",
     fr: "PLD"
   },
 
   fullNameTranslation: {
     de: "Paladin",
-    jp: "\u30CA\u30A4\u30C8",
+    ja: "\u30CA\u30A4\u30C8",
     en: "Paladin",
     fr: "Paladin"
   },

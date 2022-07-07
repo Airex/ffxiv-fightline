@@ -79,7 +79,7 @@ export class JobAbilityComponent implements OnDestroy, ISidePanelComponent {
         return "Description_de";
       case M.SupportedLanguages.fr:
         return "Description_fr";
-      case M.SupportedLanguages.jp:
+      case M.SupportedLanguages.ja:
         return "Description_ja";
       default:
         return "Description";

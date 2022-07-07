@@ -18,7 +18,7 @@ const abilities = [
     name: "Searing Light",
     translation: {
       de: "Glei\u00DFender Schein",
-      jp: "\u30B7\u30A2\u30EA\u30F3\u30B0\u30E9\u30A4\u30C8",
+      ja: "\u30B7\u30A2\u30EA\u30F3\u30B0\u30E9\u30A4\u30C8",
       en: "Searing Light",
       fr: "\u00C9clat ardent"
     },
@@ -32,7 +32,7 @@ const abilities = [
     name: "Radiant Aegis",
     translation: {
       de: "Schimmerschild",
-      jp: "\u5B88\u308A\u306E\u5149",
+      ja: "\u5B88\u308A\u306E\u5149",
       en: "Radiant Aegis",
       fr: "\u00C9gide rayonnante"
     },
@@ -48,7 +48,7 @@ const abilities = [
       de: "Bergsprenger",
       en: "Mountain Buster",
       fr: "Casse-montagnes",
-      jp: "\u30de\u30a6\u30f3\u30c6\u30f3\u30d0\u30b9\u30bf\u30fc",
+      ja: "\u30de\u30a6\u30f3\u30c6\u30f3\u30d0\u30b9\u30bf\u30fc",
     },
     cooldown: 1,
     xivDbId: 25836,
@@ -60,7 +60,7 @@ const abilities = [
       de: "Offenbarung",
       en: "Revelation",
       fr: "R\u00e9v\u00e9lation",
-      jp: "\u30ea\u30f4\u30a1\u30ec\u30fc\u30b7\u30e7\u30f3",
+      ja: "\u30ea\u30f4\u30a1\u30ec\u30fc\u30b7\u30e7\u30f3",
     },
     cooldown: 1,
     xivDbId: 16518,
@@ -70,7 +70,7 @@ const abilities = [
     name: "Enkindle Phoenix",
     translation: {
       de: "Ph\u00F6nix-Entflammung",
-      jp: "\u30A8\u30F3\u30AD\u30F3\u30C9\u30EB\u30FB\u30D5\u30A7\u30CB\u30C3\u30AF\u30B9",
+      ja: "\u30A8\u30F3\u30AD\u30F3\u30C9\u30EB\u30FB\u30D5\u30A7\u30CB\u30C3\u30AF\u30B9",
       en: "Enkindle Phoenix",
       fr: "Galvanisation Ph\u00E9nix"
     },
@@ -82,7 +82,7 @@ const abilities = [
     name: "Energy Drain",
     translation: {
       de: "Energieentzug",
-      jp: "\u30A8\u30CA\u30B8\u30FC\u30C9\u30EC\u30A4\u30F3",
+      ja: "\u30A8\u30CA\u30B8\u30FC\u30C9\u30EC\u30A4\u30F3",
       en: "Energy Drain",
       fr: "Aspiration d\u0027\u00E9nergie"
     },
@@ -97,7 +97,7 @@ const abilities = [
       de: "Schwäre",
       en: "Fester",
       fr: "Suppuration",
-      jp: "ミアズマバースト"
+      ja: "ミアズマバースト"
     },
     cooldown: 1,
     xivDbId: "181",
@@ -127,13 +127,13 @@ export const SMN: IJobTemplate = {
 
   translation: {
     de: "BSW",
-    jp: "SMN",
+    ja: "SMN",
     en: "SMN",
     fr: "INV"
   },
   fullNameTranslation: {
     de: "Beschw\u00F6rer",
-    jp: "\u53EC\u559A\u58EB",
+    ja: "\u53EC\u559A\u58EB",
     en: "Summoner",
     fr: "Invocateur"
   },

@@ -50,7 +50,7 @@ const abilities: IAbility[] = [
         name: "Raging Strikes",
         translation: {
           de: "W\u00FCtende Attacke",
-          jp: "\u731B\u8005\u306E\u6483",
+          ja: "\u731B\u8005\u306E\u6483",
           en: "Raging Strikes",
           fr: "Tir furieux"
         },
@@ -64,7 +64,7 @@ const abilities: IAbility[] = [
         name: "Barrage",
         translation: {
           de: "Sperrfeuer",
-          jp: "\u4E71\u308C\u6483\u3061",
+          ja: "\u4E71\u308C\u6483\u3061",
           en: "Barrage",
           fr: "Rafale de coups"
         },
@@ -78,7 +78,7 @@ const abilities: IAbility[] = [
         name: "Mage's Ballad",
         translation: {
           de: "Ballade des Weisen",
-          jp: "\u8CE2\u4EBA\u306E\u30D0\u30E9\u30FC\u30C9",
+          ja: "\u8CE2\u4EBA\u306E\u30D0\u30E9\u30FC\u30C9",
           en: "Mage's Ballad",
           fr: "Ballade du mage"
         },
@@ -98,7 +98,7 @@ const abilities: IAbility[] = [
         name: "Army's Paeon",
         translation: {
           de: "Hymne der Krieger",
-          jp: "\u8ECD\u795E\u306E\u30D1\u30A4\u30AA\u30F3",
+          ja: "\u8ECD\u795E\u306E\u30D1\u30A4\u30AA\u30F3",
           en: "Army's Paeon",
           fr: "P\u00E9an martial"
         },
@@ -118,7 +118,7 @@ const abilities: IAbility[] = [
         name: "Battle Voice",
         translation: {
           de: "Ode an die Seele",
-          jp: "\u30D0\u30C8\u30EB\u30DC\u30A4\u30B9",
+          ja: "\u30D0\u30C8\u30EB\u30DC\u30A4\u30B9",
           en: "Battle Voice",
           fr: "Voix de combat"
         },
@@ -133,7 +133,7 @@ const abilities: IAbility[] = [
         name: "The Wanderer's Minuet",
         translation: {
           de: "Menuett des Wanderers",
-          jp: "\u65C5\u795E\u306E\u30E1\u30CC\u30A8\u30C3\u30C8",
+          ja: "\u65C5\u795E\u306E\u30E1\u30CC\u30A8\u30C3\u30C8",
           en: "The Wanderer's Minuet",
           fr: "Menuet du Vagabond"
         },
@@ -153,7 +153,7 @@ const abilities: IAbility[] = [
         name: "Sidewinder",
         translation: {
           de: "Seitenschneider",
-          jp: "\u30B5\u30A4\u30C9\u30EF\u30A4\u30F3\u30C0\u30FC",
+          ja: "\u30B5\u30A4\u30C9\u30EF\u30A4\u30F3\u30C0\u30FC",
           en: "Sidewinder",
           fr: "Vent venimeux"
         },
@@ -167,7 +167,7 @@ const abilities: IAbility[] = [
         name: "Troubadour",
         translation: {
           de: "Troubadour",
-          jp: "\u30C8\u30EB\u30D0\u30C9\u30A5\u30FC\u30EB",
+          ja: "\u30C8\u30EB\u30D0\u30C9\u30A5\u30FC\u30EB",
           en: "Troubadour",
           fr: "Troubadour"
         },
@@ -182,7 +182,7 @@ const abilities: IAbility[] = [
         name: "Nature's Minne",
         translation: {
           de: "Nophicas Minne",
-          jp: "\u5730\u795E\u306E\u30DF\u30F3\u30CD",
+          ja: "\u5730\u795E\u306E\u30DF\u30F3\u30CD",
           en: "Nature's Minne",
           fr: "Minne de la nature"
         },
@@ -197,7 +197,7 @@ const abilities: IAbility[] = [
         name: "Radiant Finale",
         translation: {
           de: "Lumin\u00F6ses Finale",
-          jp: "\u5149\u795E\u306E\u30D5\u30A3\u30CA\u30FC\u30EC",
+          ja: "\u5149\u795E\u306E\u30D5\u30A3\u30CA\u30FC\u30EC",
           en: "Radiant Finale",
           fr: "Final radieux"
         },
@@ -215,14 +215,14 @@ export const BRD: IJobTemplate = {
 
     translation: {
       de: "BRD",
-      jp: "BRD",
+      ja: "BRD",
       en: "BRD",
       fr: "BRD"
     },
 
     fullNameTranslation: {
       de: "Barde",
-      jp: "\u541F\u904A\u8A69\u4EBA",
+      ja: "\u541F\u904A\u8A69\u4EBA",
       en: "Bard",
       fr: "Barde"
     },

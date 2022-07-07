@@ -57,7 +57,7 @@ const abilities = [
     name: "Succor",
     translation: {
       de: "Kurieren",
-      jp: "\u58EB\u6C17\u9AD8\u63DA\u306E\u7B56",
+      ja: "\u58EB\u6C17\u9AD8\u63DA\u306E\u7B56",
       en: "Succor",
       fr: "Trait\u00E9 du soulagement"
     },
@@ -71,7 +71,7 @@ const abilities = [
     name: "Adloquium",
     translation: {
       de: "Adloquium",
-      jp: "\u9F13\u821E\u6FC0\u52B1\u306E\u7B56",
+      ja: "\u9F13\u821E\u6FC0\u52B1\u306E\u7B56",
       en: "Adloquium",
       fr: "Trait\u00E9 du r\u00E9confort"
     },
@@ -86,7 +86,7 @@ const abilities = [
     name: "Whispering Dawn",
     translation: {
       de: "Erhebendes Fl\u00FCstern",
-      jp: "\u5149\u306E\u56C1\u304D",
+      ja: "\u5149\u306E\u56C1\u304D",
       en: "Whispering Dawn",
       fr: "Murmure de l\u0027aurore"
     },
@@ -101,7 +101,7 @@ const abilities = [
     name: "Fey Illumination",
     translation: {
       de: "Illumination",
-      jp: "\u30D5\u30A7\u30A4\u30A4\u30EB\u30DF\u30CD\u30FC\u30B7\u30E7\u30F3",
+      ja: "\u30D5\u30A7\u30A4\u30A4\u30EB\u30DF\u30CD\u30FC\u30B7\u30E7\u30F3",
       en: "Fey Illumination",
       fr: "Illumination f\u00E9\u00E9rique"
     },
@@ -115,7 +115,7 @@ const abilities = [
     name: "Aetherflow",
     translation: {
       de: "\u00C4therfluss",
-      jp: "\u30A8\u30FC\u30C6\u30EB\u30D5\u30ED\u30FC",
+      ja: "\u30A8\u30FC\u30C6\u30EB\u30D5\u30ED\u30FC",
       en: "Aetherflow",
       fr: "Flux d\u0027\u00E9ther"
     },
@@ -129,7 +129,7 @@ const abilities = [
     name: "Lustrate",
     translation: {
       de: "Revitalisierung",
-      jp: "\u751F\u547D\u6D3B\u6027\u6CD5",
+      ja: "\u751F\u547D\u6D3B\u6027\u6CD5",
       en: "Lustrate",
       fr: "Loi de revivification"
     },
@@ -143,7 +143,7 @@ const abilities = [
     name: "Energy Drain",
     translation: {
       de: "Energieentzug",
-      jp: "\u30A8\u30CA\u30B8\u30FC\u30C9\u30EC\u30A4\u30F3",
+      ja: "\u30A8\u30CA\u30B8\u30FC\u30C9\u30EC\u30A4\u30F3",
       en: "Energy Drain",
       fr: "Aspiration d\u0027\u00E9nergie"
     },
@@ -156,7 +156,7 @@ const abilities = [
     name: "Sacred Soil",
     translation: {
       de: "Geweihte Erde",
-      jp: "\u91CE\u6226\u6CBB\u7642\u306E\u9663",
+      ja: "\u91CE\u6226\u6CBB\u7642\u306E\u9663",
       en: "Sacred Soil",
       fr: "Dogme de survie"
     },
@@ -169,7 +169,7 @@ const abilities = [
     name: "Indomitability",
     translation: {
       de: "Unbezwingbarkeit",
-      jp: "\u4E0D\u6493\u4E0D\u5C48\u306E\u7B56",
+      ja: "\u4E0D\u6493\u4E0D\u5C48\u306E\u7B56",
       en: "Indomitability",
       fr: "Trait\u00E9 de la pers\u00E9v\u00E9rance"
     },
@@ -182,7 +182,7 @@ const abilities = [
     name: "Deployment Tactics",
     translation: {
       de: "Dislokation",
-      jp: "\u5C55\u958B\u6226\u8853",
+      ja: "\u5C55\u958B\u6226\u8853",
       en: "Deployment Tactics",
       fr: "Stratag\u00E8me du d\u00E9ploiement"
     },
@@ -195,7 +195,7 @@ const abilities = [
     name: "Dissipation",
     translation: {
       de: "Dissipation",
-      jp: "\u8EE2\u5316",
+      ja: "\u8EE2\u5316",
       en: "Dissipation",
       fr: "Dissipation"
     },
@@ -209,7 +209,7 @@ const abilities = [
     name: "Excogitation",
     translation: {
       de: "Weise Voraussicht",
-      jp: "\u6DF1\u8B00\u9060\u616E\u306E\u7B56",
+      ja: "\u6DF1\u8B00\u9060\u616E\u306E\u7B56",
       en: "Excogitation",
       fr: "Trait\u00E9 de l\u0027excogitation"
     },
@@ -225,7 +225,7 @@ const abilities = [
     name: "Chain Stratagem",
     translation: {
       de: "Kritische Strategie",
-      jp: "\u9023\u74B0\u8A08",
+      ja: "\u9023\u74B0\u8A08",
       en: "Chain Stratagem",
       fr: "Stratag\u00E8mes entrelac\u00E9s"
     },
@@ -240,7 +240,7 @@ const abilities = [
     name: "Aetherpact",
     translation: {
       de: "\u00C4therpakt",
-      jp: "\u30A8\u30FC\u30C6\u30EB\u30D1\u30AF\u30C8",
+      ja: "\u30A8\u30FC\u30C6\u30EB\u30D1\u30AF\u30C8",
       en: "Aetherpact",
       fr: "Pacte d\u0027\u00E9ther"
     },
@@ -253,7 +253,7 @@ const abilities = [
     name: "Recitation",
     translation: {
       de: "Raffinesse",
-      jp: "\u79D8\u7B56",
+      ja: "\u79D8\u7B56",
       en: "Recitation",
       fr: "R\u00E9citation"
     },
@@ -267,7 +267,7 @@ const abilities = [
     name: "Fey Blessing",
     translation: {
       de: "Gunst der Feen",
-      jp: "\u30D5\u30A7\u30A4\u30D6\u30EC\u30C3\u30B7\u30F3\u30B0",
+      ja: "\u30D5\u30A7\u30A4\u30D6\u30EC\u30C3\u30B7\u30F3\u30B0",
       en: "Fey Blessing",
       fr: "B\u00E9n\u00E9diction f\u00E9\u00E9rique"
     },
@@ -280,7 +280,7 @@ const abilities = [
     name: "Summon Seraph",
     translation: {
       de: "Seraph-Beschw\u00F6rung",
-      jp: "\u30B5\u30E2\u30F3\u30FB\u30BB\u30E9\u30D5\u30A3\u30E0",
+      ja: "\u30B5\u30E2\u30F3\u30FB\u30BB\u30E9\u30D5\u30A3\u30E0",
       en: "Summon Seraph",
       fr: "Invocation S\u00E9raphin"
     },
@@ -295,7 +295,7 @@ const abilities = [
     name: "Consolation",
     translation: {
       de: "Seelentrost",
-      jp: "\u30B3\u30F3\u30BD\u30EC\u30A4\u30B7\u30E7\u30F3",
+      ja: "\u30B3\u30F3\u30BD\u30EC\u30A4\u30B7\u30E7\u30F3",
       en: "Consolation",
       fr: "Dictame"
     },
@@ -313,7 +313,7 @@ const abilities = [
     name: "Protraction",
     translation: {
       de: "Protraktion",
-      jp: "\u751F\u547D\u56DE\u751F\u6CD5",
+      ja: "\u751F\u547D\u56DE\u751F\u6CD5",
       en: "Protraction",
       fr: "Loi de la protraction"
     },
@@ -328,7 +328,7 @@ const abilities = [
     name: "Expedient",
     translation: {
       de: "Sturm und Drang",
-      jp: "\u75BE\u98A8\u6012\u6FE4\u306E\u8A08",
+      ja: "\u75BE\u98A8\u6012\u6FE4\u306E\u8A08",
       en: "Expedient",
       fr: "Th\u00E8se fluidique"
     },
@@ -354,13 +354,13 @@ const traits: ITrait[] = [
 export const SCH: IJobTemplate = {
   translation: {
     de: "GLT",
-    jp: "SCH",
+    ja: "SCH",
     en: "SCH",
     fr: "\u00C9RU"
   },
   fullNameTranslation: {
     de: "Gelehrter",
-    jp: "\u5B66\u8005",
+    ja: "\u5B66\u8005",
     en: "Scholar",
     fr: "\u00E9rudit"
   },

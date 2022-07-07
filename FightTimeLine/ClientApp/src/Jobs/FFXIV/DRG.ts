@@ -24,7 +24,7 @@ const abilities = [
     name: "Life Surge",
     translation: {
       de: "Vitalwallung",
-      jp: "\u30E9\u30A4\u30D5\u30B5\u30FC\u30B8",
+      ja: "\u30E9\u30A4\u30D5\u30B5\u30FC\u30B8",
       en: "Life Surge",
       fr: "Souffle de vie"
     },
@@ -38,7 +38,7 @@ const abilities = [
     name: "Lance Charge",
     translation: {
       de: "Lanzensch\u00E4rfung",
-      jp: "\u30E9\u30F3\u30B9\u30C1\u30E3\u30FC\u30B8",
+      ja: "\u30E9\u30F3\u30B9\u30C1\u30E3\u30FC\u30B8",
       en: "Lance Charge",
       fr: "Lance ac\u00E9r\u00E9e"
     },
@@ -54,7 +54,7 @@ const abilities = [
       de: "Sprung",
       en: "Jump",
       fr: "Saut",
-      jp: "ジャンプ"
+      ja: "ジャンプ"
     },
     cooldown: 30,
     xivDbId: "92",
@@ -65,7 +65,7 @@ const abilities = [
     name: "Dragon Sight",
     translation: {
       de: "Drachenblick",
-      jp: "\u30C9\u30E9\u30B4\u30F3\u30B5\u30A4\u30C8",
+      ja: "\u30C9\u30E9\u30B4\u30F3\u30B5\u30A4\u30C8",
       en: "Dragon Sight",
       fr: "Vue de dragon"
     },
@@ -81,7 +81,7 @@ const abilities = [
     name: "Battle Litany",
     translation: {
       de: "Litanei der Schlacht",
-      jp: "\u30D0\u30C8\u30EB\u30EA\u30BF\u30CB\u30FC",
+      ja: "\u30D0\u30C8\u30EB\u30EA\u30BF\u30CB\u30FC",
       en: "Battle Litany",
       fr: "Litanie combattante"
     },
@@ -95,7 +95,7 @@ const abilities = [
     name: "Dragonfire Dive",
     translation: {
       de: "Wyrmodem",
-      jp: "\u30C9\u30E9\u30B4\u30F3\u30C0\u30A4\u30D6",
+      ja: "\u30C9\u30E9\u30B4\u30F3\u30C0\u30A4\u30D6",
       en: "Dragonfire Dive",
       fr: "Piqu\u00E9 du dragon"
     },
@@ -109,7 +109,7 @@ const abilities = [
     name: "Geirskogul",
     translation: {
       de: "Geirskogul",
-      jp: "\u30B2\u30A4\u30EB\u30B9\u30B3\u30B0\u30EB",
+      ja: "\u30B2\u30A4\u30EB\u30B9\u30B3\u30B0\u30EB",
       en: "Geirskogul",
       fr: "Geirsk\u00F6gul"
     },
@@ -123,7 +123,7 @@ const abilities = [
     name: "High Jump",
     translation: {
       de: "Hochsprung",
-      jp: "\u30CF\u30A4\u30B8\u30E3\u30F3\u30D7",
+      ja: "\u30CF\u30A4\u30B8\u30E3\u30F3\u30D7",
       en: "High Jump",
       fr: "Grand saut"
     },
@@ -137,7 +137,7 @@ const abilities = [
     name: "Spineshatter Dive",
     translation: {
       de: "Wirbelsprenger",
-      jp: "\u30B9\u30D1\u30A4\u30F3\u30C0\u30A4\u30D6",
+      ja: "\u30B9\u30D1\u30A4\u30F3\u30C0\u30A4\u30D6",
       en: "Spineshatter Dive",
       fr: "Piqu\u00E9 brise-\u00E9chine"
     },
@@ -151,7 +151,7 @@ const abilities = [
     name: "Stardiver",
     translation: {
       de: "Sternensturz",
-      jp: "\u30B9\u30BF\u30FC\u30C0\u30A4\u30D0\u30FC",
+      ja: "\u30B9\u30BF\u30FC\u30C0\u30A4\u30D0\u30FC",
       en: "Stardiver",
       fr: "Plongeon c\u00E9leste"
     },
@@ -165,7 +165,7 @@ const abilities = [
     name: "Wyrmwind Thrust",
     translation: {
       de: "Zwillingswyrm",
-      jp: "\u5929\u7ADC\u70B9\u775B",
+      ja: "\u5929\u7ADC\u70B9\u775B",
       en: "Wyrmwind Thrust",
       fr: "Perc\u00E9e des dragons anciens"
     },
@@ -211,14 +211,14 @@ export const DRG: IJobTemplate = {
 
   translation: {
     de: "DRG",
-    jp: "DRG",
+    ja: "DRG",
     en: "DRG",
     fr: "DRG"
   },
 
   fullNameTranslation: {
     de: "Dragoon",
-    jp: "\u7ADC\u9A0E\u58EB",
+    ja: "\u7ADC\u9A0E\u58EB",
     en: "Dragoon",
     fr: "Chevalier Dragon"
   },

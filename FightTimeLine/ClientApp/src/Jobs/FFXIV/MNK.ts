@@ -33,7 +33,7 @@ const abilities = [
       de: "Stahlzinnen",
       en: "Steel Peak",
       fr: "Charge d'acier",
-      jp: "鉄山靠"
+      ja: "鉄山靠"
     },
     cooldown: 1,
     xivDbId: "64",
@@ -44,7 +44,7 @@ const abilities = [
     name: "Thunderclap",
     translation: {
       de: "Donnersprung",
-      jp: "\u629C\u91CD\u6B69\u6CD5",
+      ja: "\u629C\u91CD\u6B69\u6CD5",
       en: "Thunderclap",
       fr: "\u00C9lan fulgurant"
     },
@@ -63,7 +63,7 @@ const abilities = [
       de: "Heulende Faust",
       en: "Howling Fist",
       fr: "Poing hurlant",
-      jp: "空鳴拳"
+      ja: "空鳴拳"
     },
     cooldown: 1,
     xivDbId: "67",
@@ -76,7 +76,7 @@ const abilities = [
       de: "Weg zur Erleuchtung",
       en: "Enlightenment",
       fr: "Illumination",
-      jp: "万象闘気圏"
+      ja: "万象闘気圏"
     },
     cooldown: 1,
     xivDbId: "16474",
@@ -100,7 +100,7 @@ const abilities = [
     name: "Mantra",
     translation: {
       de: "Mantra",
-      jp: "\u30DE\u30F3\u30C8\u30E9",
+      ja: "\u30DE\u30F3\u30C8\u30E9",
       en: "Mantra",
       fr: "Mantra"
     },
@@ -114,7 +114,7 @@ const abilities = [
     name: "Perfect Balance",
     translation: {
       de: "Improvisation",
-      jp: "\u8E0F\u9CF4",
+      ja: "\u8E0F\u9CF4",
       en: "Perfect Balance",
       fr: "\u00C9quilibre parfait"
     },
@@ -133,7 +133,7 @@ const abilities = [
     name: "Riddle of Earth",
     translation: {
       de: "Steinernes Enigma",
-      jp: "\u91D1\u525B\u306E\u6975\u610F",
+      ja: "\u91D1\u525B\u306E\u6975\u610F",
       en: "Riddle of Earth",
       fr: "\u00C9nigme de la terre"
     },
@@ -152,7 +152,7 @@ const abilities = [
     name: "Riddle of Fire",
     translation: {
       de: "Flammendes Enigma",
-      jp: "\u7D05\u84EE\u306E\u6975\u610F",
+      ja: "\u7D05\u84EE\u306E\u6975\u610F",
       en: "Riddle of Fire",
       fr: "\u00C9nigme du feu"
     },
@@ -166,7 +166,7 @@ const abilities = [
     name: "Riddle of Wind",
     translation: {
       de: "St\u00FCrmendes Enigma",
-      jp: "\u75BE\u98A8\u306E\u6975\u610F",
+      ja: "\u75BE\u98A8\u306E\u6975\u610F",
       en: "Riddle of Wind",
       fr: "\u00C9nigme du vent"
     },
@@ -180,7 +180,7 @@ const abilities = [
     name: "Brotherhood",
     translation: {
       de: "Bruderschaft",
-      jp: "\u6843\u5712\u7D50\u7FA9",
+      ja: "\u6843\u5712\u7D50\u7FA9",
       en: "Brotherhood",
       fr: "Fraternit\u00E9"
     },
@@ -194,7 +194,7 @@ const abilities = [
     name: "Anatman",
     translation: {
       de: "Anatman",
-      jp: "\u7121\u6211",
+      ja: "\u7121\u6211",
       en: "Anatman",
       fr: "Anatman"
     },
@@ -234,14 +234,14 @@ export const MNK: IJobTemplate = {
 
   translation: {
     de: "M\u00D6N",
-    jp: "MNK",
+    ja: "MNK",
     en: "MNK",
     fr: "MOI"
   },
 
   fullNameTranslation: {
     de: "M\u00F6nch",
-    jp: "\u30E2\u30F3\u30AF",
+    ja: "\u30E2\u30F3\u30AF",
     en: "Monk",
     fr: "Moine"
   },

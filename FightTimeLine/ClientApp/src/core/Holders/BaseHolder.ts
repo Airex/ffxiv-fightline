@@ -1,4 +1,4 @@
-import { DataItem, DataGroup, DataSet } from "ngx-vis";
+import {DataSetDataGroup, DataSetDataItem } from "vis-timeline";
 import { IPresenterData } from "../Models";
 
 export interface IBaseHolderItem<TKey> {
@@ -21,8 +21,8 @@ export interface IMoveable {
 }
 
 export interface ITimelineContainer {
-  items: DataSet<DataItem>;
-  groups: DataSet<DataGroup>;
+  items: DataSetDataItem;
+  groups: DataSetDataGroup;
 }
 
 

@@ -1,16 +1,18 @@
 import { Injectable } from "@angular/core";
-import { DataItem, DataGroup, DataSet } from "ngx-vis";
+import {DataSetDataGroup, DataSetDataItem } from "vis-timeline";
 import { Holders } from "src/core/Holders";
 import { ITimelineContainer } from "src/core/Holders/BaseHolder";
 import { PresenterManager } from "src/core/PresentationManager";
 import { LocalStorageService } from "./LocalStorageService";
+import { DataGroup, DataItem } from "ngx-vis/ngx-vis";
+import { DataSet } from "vis-data";
 
 @Injectable()
 export class VisStorageService {
-  private items: DataSet<DataItem>;
-  private groups: DataSet<DataGroup>;
-  private itemsBoss: DataSet<DataItem>;
-  private groupsBoss: DataSet<DataGroup>;
+  private items: DataSetDataItem;
+  private groups: DataSetDataGroup;
+  private itemsBoss: DataSetDataItem;
+  private groupsBoss: DataSetDataGroup;
 
   public holders: Holders;
   public presenter: PresenterManager;

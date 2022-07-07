@@ -38,7 +38,7 @@ const abilities: IAbility[] = [
     name: "Assize",
     translation: {
       de: "Assise",
-      jp: "\u30A2\u30B5\u30A4\u30BA",
+      ja: "\u30A2\u30B5\u30A4\u30BA",
       en: "Assize",
       fr: "Assises"
     },
@@ -51,7 +51,7 @@ const abilities: IAbility[] = [
     name: "Tetragrammaton",
     translation: {
       de: "Tetragrammaton",
-      jp: "\u30C6\u30C8\u30E9\u30B0\u30E9\u30DE\u30C8\u30F3",
+      ja: "\u30C6\u30C8\u30E9\u30B0\u30E9\u30DE\u30C8\u30F3",
       en: "Tetragrammaton",
       fr: "T\u00E9tragramme"
     },
@@ -65,7 +65,7 @@ const abilities: IAbility[] = [
     name: "Divine Benison",
     translation: {
       de: "G\u00F6ttlicher Segen",
-      jp: "\u30C7\u30A3\u30F4\u30A1\u30A4\u30F3\u30D9\u30CB\u30BE\u30F3",
+      ja: "\u30C7\u30A3\u30F4\u30A1\u30A4\u30F3\u30D9\u30CB\u30BE\u30F3",
       en: "Divine Benison",
       fr: "Faveur divine"
     },
@@ -80,7 +80,7 @@ const abilities: IAbility[] = [
     name: "Benediction",
     translation: {
       de: "Benediktion",
-      jp: "\u30D9\u30CD\u30C7\u30A3\u30AF\u30B7\u30E7\u30F3",
+      ja: "\u30D9\u30CD\u30C7\u30A3\u30AF\u30B7\u30E7\u30F3",
       en: "Benediction",
       fr: "B\u00E9n\u00E9diction"
     },
@@ -94,7 +94,7 @@ const abilities: IAbility[] = [
     name: "Afflatus Solace",
     translation: {
       de: "Afflatus solatii",
-      jp: "\u30CF\u30FC\u30C8\u30FB\u30AA\u30D6\u30FB\u30BD\u30E9\u30B9",
+      ja: "\u30CF\u30FC\u30C8\u30FB\u30AA\u30D6\u30FB\u30BD\u30E9\u30B9",
       en: "Afflatus Solace",
       fr: "Offrande de r\u00E9confort"
     },
@@ -108,7 +108,7 @@ const abilities: IAbility[] = [
     name: "Afflatus Rapture",
     translation: {
       de: "Afflatus laetitiae",
-      jp: "\u30CF\u30FC\u30C8\u30FB\u30AA\u30D6\u30FB\u30E9\u30D7\u30C1\u30E3\u30FC",
+      ja: "\u30CF\u30FC\u30C8\u30FB\u30AA\u30D6\u30FB\u30E9\u30D7\u30C1\u30E3\u30FC",
       en: "Afflatus Rapture",
       fr: "Offrande de ravissement"
     },
@@ -121,7 +121,7 @@ const abilities: IAbility[] = [
     name: "Asylum",
     translation: {
       de: "Refugium",
-      jp: "\u30A2\u30B5\u30A4\u30E9\u30E0",
+      ja: "\u30A2\u30B5\u30A4\u30E9\u30E0",
       en: "Asylum",
       fr: "Asile"
     },
@@ -135,7 +135,7 @@ const abilities: IAbility[] = [
     name: "Plenary Indulgence",
     translation: {
       de: "Vollkommener Ablass",
-      jp: "\u30A4\u30F3\u30C9\u30A5\u30EB\u30B2\u30F3\u30C6\u30A3\u30A2",
+      ja: "\u30A4\u30F3\u30C9\u30A5\u30EB\u30B2\u30F3\u30C6\u30A3\u30A2",
       en: "Plenary Indulgence",
       fr: "Indulgence pl\u00E9ni\u00E8re"
     },
@@ -149,7 +149,7 @@ const abilities: IAbility[] = [
     name: "Temperance",
     translation: {
       de: "Linderung",
-      jp: "\u30C6\u30F3\u30D1\u30E9\u30F3\u30B9",
+      ja: "\u30C6\u30F3\u30D1\u30E9\u30F3\u30B9",
       en: "Temperance",
       fr: "Temp\u00E9rance"
     },
@@ -163,7 +163,7 @@ const abilities: IAbility[] = [
     name: "Thin Air",
     translation: {
       de: "Ex Machina",
-      jp: "\u30B7\u30F3\u30A8\u30A2\u30FC",
+      ja: "\u30B7\u30F3\u30A8\u30A2\u30FC",
       en: "Thin Air",
       fr: "Sponte"
     },
@@ -181,7 +181,7 @@ const abilities: IAbility[] = [
     name: "Presence of Mind",
     translation: {
       de: "Geistesgegenwart",
-      jp: "\u795E\u901F\u9B54",
+      ja: "\u795E\u901F\u9B54",
       en: "Presence of Mind",
       fr: "Pr\u00E9sence d\u0027esprit"
     },
@@ -195,7 +195,7 @@ const abilities: IAbility[] = [
     name: "Aquaveil",
     translation: {
       de: "Wasserschleier",
-      jp: "\u30A2\u30AF\u30A2\u30F4\u30A7\u30FC\u30EB",
+      ja: "\u30A2\u30AF\u30A2\u30F4\u30A7\u30FC\u30EB",
       en: "Aquaveil",
       fr: "Aquavoile"
     },
@@ -210,7 +210,7 @@ const abilities: IAbility[] = [
     name: "Liturgy of the Bell",
     translation: {
       de: "Glockenspiel",
-      jp: "\u30EA\u30BF\u30FC\u30B8\u30FC\u30FB\u30AA\u30D6\u30FB\u30D9\u30EB",
+      ja: "\u30EA\u30BF\u30FC\u30B8\u30FC\u30FB\u30AA\u30D6\u30FB\u30D9\u30EB",
       en: "Liturgy of the Bell",
       fr: "Tintinnabule"
     },
@@ -240,13 +240,13 @@ const traits: ITrait[] = [
 export const WHM: IJobTemplate = {
   translation: {
     de: "WMA",
-    jp: "WHM",
+    ja: "WHM",
     en: "WHM",
     fr: "MBL"
   },
   fullNameTranslation: {
     de: "Wei\u00DFmagier",
-    jp: "\u767D\u9B54\u9053\u58EB",
+    ja: "\u767D\u9B54\u9053\u58EB",
     en: "White Mage",
     fr: "Mage Blanc"
   },

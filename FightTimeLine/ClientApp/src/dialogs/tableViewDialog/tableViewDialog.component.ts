@@ -1,5 +1,4 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
-import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate";
 import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate";
 import { TableViewTemplate } from "../../core/BaseExportTemplate";
 import { NzModalRef } from "ng-zorro-antd/modal";
@@ -8,7 +7,6 @@ import {
   IExportCell, IExportColumn, IExportResultSet, IExportRow, ITableOptions, ITableOptionSettings,
   NumberRangeOptionsSetting, TableOptionSettingType, TagsOptionsSetting
 } from "src/core/ExportModels";
-import { PresenterManager } from "src/core/PresentationManager";
 import { gameServiceToken } from "src/services/game.service-provider";
 import { IGameService } from "src/services/game.service-interface";
 import { MitigationsTemplate } from "src/core/ExportTemplates/MitigationsTemplate";
@@ -21,7 +19,7 @@ import * as _ from "lodash";
   templateUrl: "./tableViewDialog.component.html",
   styleUrls: ["./tableViewDialog.component.css"]
 })
-export class TableViewDialog implements OnInit {
+export class TableViewDialog {
 
   constructor(
     public dialogRef: NzModalRef,
@@ -62,7 +60,6 @@ export class TableViewDialog implements OnInit {
   };
   loading = false;
   templates: TableViewTemplate<any>[] = [
-    new EachRowOneSecondTemplate(),
     new BossAttackDefensiveTemplateV2(),
     new DescriptiveTemplate(),
     new MitigationsTemplate()
@@ -73,8 +70,7 @@ export class TableViewDialog implements OnInit {
 
   filtered: IExportRow[] = [];
   filterData = {};
-  ngOnInit() {
-  }
+
 
   show(fromOptionsChange?: boolean) {
     if (!this.selectedValue) { return; }

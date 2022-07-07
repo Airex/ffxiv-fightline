@@ -6,7 +6,29 @@ import { IColorsSettings, SettingsService } from "../services/SettingsService";
 import { AvailabilityController } from "./AvailabilityController";
 import { CommandBag } from "./CommandBag";
 import { CommandFactory } from "./CommandFactory";
-import * as C from "./Commands";
+import * as C from "./commands/Commands";
+import * as AttachPresetCommand from "./commands/AttachPresetCommand";
+import * as MoveStanceCommand from "./commands/MoveStanceCommand";
+import * as RemoveStanceCommand from "./commands/RemoveStanceCommand";
+import * as SetJobPetCommand from "./commands/SetJobPetCommand";
+import * as RemoveDownTimeCommand from "./commands/RemoveDownTimeCommand";
+import * as ChangeDowntimeCommentCommand from "./commands/ChangeDowntimeCommentCommand";
+import * as ChangeDowntimeColorCommand from "./commands/ChangeDowntimeColorCommand";
+import * as ChangeDowntimeCommand from "./commands/ChangeDowntimeCommand";
+import * as AddDowntimeCommand from "./commands/AddDowntimeCommand";
+import * as ChangeAbilitySettingsCommand from "./commands/ChangeAbilitySettingsCommand";
+import * as ChangeJobStats from "./commands/ChangeJobStats";
+import * as SwitchTargetCommand from "./commands/SwitchTargetCommand";
+import * as RemoveAbilityCommand from "./commands/RemoveAbilityCommand";
+import * as AddAbilityCommand from "./commands/AddAbilityCommand";
+import * as AddBatchAttacksCommand from "./commands/AddBatchAttacksCommand";
+import * as MoveCommand from "./commands/MoveCommand";
+import * as ChangeBossAttackCommand from "./commands/ChangeBossAttackCommand";
+import * as RemoveBossAttackCommand from "./commands/RemoveBossAttackCommand";
+import * as AddBossAttackCommand from "./commands/AddBossAttackCommand";
+import * as RemoveJobCommand from "./commands/RemoveJobCommand";
+import * as AddJobCommand from "./commands/AddJobCommand";
+import * as CombinedCommand from "./commands/CombinedCommand";
 import { IdGenerator } from "./Generators";
 import * as ImportController from "./ImportController";
 import * as M from "./Models";
@@ -125,21 +147,21 @@ export class FightTimeLineController {
     const commands: Command[] = [];
 
     this.holders.bossAttacks.getAll().forEach(it => {
-      commands.push(new C.RemoveBossAttackCommand(it.id, false));
+      commands.push(new RemoveBossAttackCommand.RemoveBossAttackCommand(it.id, false));
     });
     this.holders.bossDownTime.getAll().forEach(it => {
-      commands.push(new C.RemoveDownTimeCommand(it.id));
+      commands.push(new RemoveDownTimeCommand.RemoveDownTimeCommand(it.id));
     });
 
-    commands.push(new C.AddBatchAttacksCommand(
-      loadData.attacks.map(it => new C.AddBossAttackCommand(
+    commands.push(new AddBatchAttacksCommand.AddBatchAttacksCommand(
+      loadData.attacks.map(it => new AddBossAttackCommand.AddBossAttackCommand(
         it.id || this.idgen.getNextId(M.EntryType.BossAttack),
         it.ability))));
 
     let index = 1;
     for (const d of loadData.downTimes) {
       const nextId = d.id || this.idgen.getNextId(M.EntryType.BossDownTime);
-      commands.push(new C.AddDowntimeCommand(nextId,
+      commands.push(new AddDowntimeCommand.AddDowntimeCommand(nextId,
         {
           start: Utils.getDateFromOffset(d.start, this.startDate),
           startId: (index++).toString(),
@@ -166,7 +188,7 @@ export class FightTimeLineController {
   }
 
   attachPreset(name, preset) {
-    this.commandStorage.execute(new C.AttachPresetCommand(name, preset));
+    this.commandStorage.execute(new AttachPresetCommand.AttachPresetCommand(name, preset));
   }
 
   addJob(
@@ -178,7 +200,7 @@ export class FightTimeLineController {
     doUpdates: boolean = true): string {
 
     const rid = id || this.idgen.getNextId(M.EntryType.Job);
-    this.commandStorage.execute(new C.AddJobCommand(rid,
+    this.commandStorage.execute(new AddJobCommand.AddJobCommand(rid,
       name,
       actorName,
       this.holders.bossTargets.initialBossTarget,
@@ -192,11 +214,11 @@ export class FightTimeLineController {
   }
 
   setJobStats(id: string, data: M.IJobStats) {
-    this.commandStorage.execute(new C.ChangeJobStats(id, data));
+    this.commandStorage.execute(new ChangeJobStats.ChangeJobStats(id, data));
   }
 
   removeJob(id: string): void {
-    this.commandStorage.execute(new C.RemoveJobCommand(id));
+    this.commandStorage.execute(new RemoveJobCommand.RemoveJobCommand(id));
   }
 
   addClassAbility(id: string, map: AbilityMap, time: Date, loaded: boolean, settings: string = null): void {
@@ -215,7 +237,7 @@ export class FightTimeLineController {
 
       if (!overlap) {
         this.commandStorage.execute(
-          new C.AddAbilityCommand(id || this.idgen.getNextId(M.EntryType.AbilityUsage),
+          new AddAbilityCommand.AddAbilityCommand(id || this.idgen.getNextId(M.EntryType.AbilityUsage),
             null,
             map.job.id,
             map.ability.name,
@@ -229,7 +251,7 @@ export class FightTimeLineController {
 
   addBossAttack(id: string, time: Date, bossAbility: M.IBossAbility): void {
     bossAbility.offset = Utils.formatTime(time);
-    this.commandStorage.execute(new C.AddBossAttackCommand(id || this.idgen.getNextId(M.EntryType.BossAttack),
+    this.commandStorage.execute(new AddBossAttackCommand.AddBossAttackCommand(id || this.idgen.getNextId(M.EntryType.BossAttack),
       bossAbility));
   }
 
@@ -249,7 +271,7 @@ export class FightTimeLineController {
     const map = this.holders.bossAttacks.get(itemid);
     this.dialogCallBacks.openBossAttackAddDialog(Utils.clone<M.IBossAbility>(map.attack), result => {
       if (result) {
-        this.commandStorage.execute(new C.ChangeBossAttackCommand(itemid, result.data, result.updateAllWithSameName));
+        this.commandStorage.execute(new ChangeBossAttackCommand.ChangeBossAttackCommand(itemid, result.data, result.updateAllWithSameName));
         this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
       }
     });
@@ -258,7 +280,7 @@ export class FightTimeLineController {
   toggleBossAttackPin(id: string) {
     const att = this.holders.bossAttacks.get(id);
     const data = { ...att.attack, pinned: !att.attack.pinned };
-    this.commandStorage.execute(new C.ChangeBossAttackCommand(id, data, false));
+    this.commandStorage.execute(new ChangeBossAttackCommand.ChangeBossAttackCommand(id, data, false));
     this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
   }
 
@@ -299,22 +321,22 @@ export class FightTimeLineController {
   private notifyRemove(id: string, updateAttacks?: boolean): void {
     // console.log(`NotifyRemove ${id}`);
     if (this.idgen.isAbilityUsage(id)) {
-      this.commandBag.push(new C.RemoveAbilityCommand(id, updateAttacks));
+      this.commandBag.push(new RemoveAbilityCommand.RemoveAbilityCommand(id, updateAttacks));
     } else if (this.idgen.isStanceUsage(id)) {
-      this.commandBag.push(new C.RemoveStanceCommand(id, updateAttacks));
+      this.commandBag.push(new RemoveStanceCommand.RemoveStanceCommand(id, updateAttacks));
     } else if (this.idgen.isBossAttack(id)) {
-      this.commandBag.push(new C.RemoveBossAttackCommand(id, updateAttacks));
+      this.commandBag.push(new RemoveBossAttackCommand.RemoveBossAttackCommand(id, updateAttacks));
     }
   }
 
   notifyMove(items: DataItem[]): void {
     items.forEach(item => {
       if (this.idgen.isAbilityUsage(item.id)) {
-        this.commandBag.push(new C.MoveCommand(item.id.toString(), item.start as Date));
+        this.commandBag.push(new MoveCommand.MoveCommand(item.id.toString(), item.start as Date));
       } else if (this.idgen.isStanceUsage(item.id)) {
-        this.commandBag.push(new C.MoveStanceCommand(item.id.toString(), item.start as Date, item.end as Date));
+        this.commandBag.push(new MoveStanceCommand.MoveStanceCommand(item.id.toString(), item.start as Date, item.end as Date));
       } else if (this.idgen.isBossAttack(item.id)) {
-        this.commandBag.push(new C.ChangeBossAttackCommand(item.id.toString(), { offset: Utils.formatTime(new Date(item.start)) }, false));
+        this.commandBag.push(new ChangeBossAttackCommand.ChangeBossAttackCommand(item.id.toString(), { offset: Utils.formatTime(new Date(item.start)) }, false));
       }
     });
 
@@ -449,7 +471,7 @@ export class FightTimeLineController {
   switchInitialBossTarget(map: JobMap, addToUndoRedo: boolean): void {
     if (map.job.role === M.Role.Tank) {
       if (addToUndoRedo && this.holders.bossTargets.initialBossTarget !== map.id) {
-        this.commandStorage.execute(new C.SwitchTargetCommand(this.holders.bossTargets.initialBossTarget, map.id));
+        this.commandStorage.execute(new SwitchTargetCommand.SwitchTargetCommand(this.holders.bossTargets.initialBossTarget, map.id));
       }
       else {
         this.holders.bossTargets.initialBossTarget = map.id;
@@ -503,19 +525,19 @@ export class FightTimeLineController {
   }
 
   removeDownTime(id: string): void {
-    this.commandStorage.execute(new C.RemoveDownTimeCommand(id));
+    this.commandStorage.execute(new RemoveDownTimeCommand.RemoveDownTimeCommand(id));
   }
 
   setDownTimeColor(id: string, color: string): void {
-    this.commandStorage.execute(new C.ChangeDowntimeColorCommand(id, color));
+    this.commandStorage.execute(new ChangeDowntimeColorCommand.ChangeDowntimeColorCommand(id, color));
   }
   setDownTimeComment(id: string, comment: string): void {
-    this.commandStorage.execute(new C.ChangeDowntimeCommentCommand(id, comment));
+    this.commandStorage.execute(new ChangeDowntimeCommentCommand.ChangeDowntimeCommentCommand(id, comment));
   }
 
 
   setPet(jobMap: JobMap, pet: string) {
-    this.commandStorage.execute(new C.SetJobPetCommand(jobMap.id, pet));
+    this.commandStorage.execute(new SetJobPetCommand.SetJobPetCommand(jobMap.id, pet));
   }
 
   moveUp(group: any) {
@@ -527,7 +549,7 @@ export class FightTimeLineController {
   }
 
   combineAndExecute(commands: Command[]): void {
-    const combined = new C.CombinedCommand(commands);
+    const combined = new CombinedCommand.CombinedCommand(commands);
     this.commandStorage.execute(combined);
   }
 
@@ -543,7 +565,7 @@ export class FightTimeLineController {
     const max = _.maxBy(usages, (it: AbilityUsageMap) => it.end) as AbilityUsageMap;
     const maxValue = max && max.end || this.startDate;
     const count = 6 * 60 / map.ability.cooldown;
-    return _.range(count).map(index => new C.AddAbilityCommand(this.idgen.getNextId(M.EntryType.AbilityUsage),
+    return _.range(count).map(index => new AddAbilityCommand.AddAbilityCommand(this.idgen.getNextId(M.EntryType.AbilityUsage),
       null,
       map.job.id,
       map.ability.name,
@@ -598,9 +620,9 @@ export class FightTimeLineController {
         const locals = copy.map(c => {
           const originalOffset = Utils.getDateFromOffset(c.offset).valueOf() - minOffset;
           c.offset = Utils.formatTime(new Date(time.valueOf() + originalOffset));
-          return new C.AddBossAttackCommand(this.idgen.getNextId(M.EntryType.BossAttack), c);
+          return new AddBossAttackCommand.AddBossAttackCommand(this.idgen.getNextId(M.EntryType.BossAttack), c);
         });
-        const cmd = new C.AddBatchAttacksCommand(locals);
+        const cmd = new AddBatchAttacksCommand.AddBatchAttacksCommand(locals);
         this.commandStorage.execute(cmd);
 
       }
@@ -806,7 +828,7 @@ export class FightTimeLineController {
   }
 
   addDownTime(window: { start: Date; startId: string, end: Date, endId: string }, color: string, comment: string = ""): void {
-    this.commandStorage.execute(new C.AddDowntimeCommand(this.idgen.getNextId(M.EntryType.BossDownTime),
+    this.commandStorage.execute(new AddDowntimeCommand.AddDowntimeCommand(this.idgen.getNextId(M.EntryType.BossDownTime),
       window,
       color, comment));
   }
@@ -821,7 +843,7 @@ export class FightTimeLineController {
       } else {
         end = date;
       }
-      this.commandStorage.execute(new C.ChangeDowntimeCommand(map.id, start as Date, end as Date));
+      this.commandStorage.execute(new ChangeDowntimeCommand.ChangeDowntimeCommand(map.id, start as Date, end as Date));
     }
 
   }
@@ -1089,7 +1111,7 @@ export class FightTimeLineController {
   }
 
   updateAbilitySettings(id: string, settings: any) {
-    this.commandStorage.execute(new C.ChangeAbilitySettingsCommand(id, settings));
+    this.commandStorage.execute(new ChangeAbilitySettingsCommand.ChangeAbilitySettingsCommand(id, settings));
   }
 }
 

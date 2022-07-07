@@ -48,7 +48,7 @@ const abilities = [
     name: "No Mercy",
     translation: {
       de: "Ohne Gnade",
-      jp: "\u30CE\u30FC\u30FB\u30DE\u30FC\u30B7\u30FC",
+      ja: "\u30CE\u30FC\u30FB\u30DE\u30FC\u30B7\u30FC",
       en: "No Mercy",
       fr: "Sans piti\u00E9"
     },
@@ -62,7 +62,7 @@ const abilities = [
     name: "Camouflage",
     translation: {
       de: "Camouflage",
-      jp: "\u30AB\u30E2\u30D5\u30E9\u30FC\u30B8\u30E5",
+      ja: "\u30AB\u30E2\u30D5\u30E9\u30FC\u30B8\u30E5",
       en: "Camouflage",
       fr: "Camouflage"
     },
@@ -76,7 +76,7 @@ const abilities = [
     name: "Nebula",
     translation: {
       de: "Nebula",
-      jp: "\u30CD\u30D3\u30E5\u30E9",
+      ja: "\u30CD\u30D3\u30E5\u30E9",
       en: "Nebula",
       fr: "N\u00E9buleuse"
     },
@@ -90,7 +90,7 @@ const abilities = [
     name: "Aurora",
     translation: {
       de: "Aurora",
-      jp: "\u30AA\u30FC\u30ED\u30E9",
+      ja: "\u30AA\u30FC\u30ED\u30E9",
       en: "Aurora",
       fr: "Aurore"
     },
@@ -109,7 +109,7 @@ const abilities = [
     name: "Superbolide",
     translation: {
       de: "Meteoritenfall",
-      jp: "\u30DC\u30FC\u30E9\u30A4\u30C9",
+      ja: "\u30DC\u30FC\u30E9\u30A4\u30C9",
       en: "Superbolide",
       fr: "Bolide"
     },
@@ -123,7 +123,7 @@ const abilities = [
     name: "Rough Divide",
     translation: {
       de: "Grobspalter",
-      jp: "\u30E9\u30D5\u30C7\u30A3\u30D0\u30A4\u30C9",
+      ja: "\u30E9\u30D5\u30C7\u30A3\u30D0\u30A4\u30C9",
       en: "Rough Divide",
       fr: "Lamineur"
     },
@@ -140,7 +140,7 @@ const abilities = [
     name: "Bow Shock",
     translation: {
       de: "Schockpatrone",
-      jp: "\u30D0\u30A6\u30B7\u30E7\u30C3\u30AF",
+      ja: "\u30D0\u30A6\u30B7\u30E7\u30C3\u30AF",
       en: "Bow Shock",
       fr: "Arc de choc"
     },
@@ -154,7 +154,7 @@ const abilities = [
     name: "Heart of Light",
     translation: {
       de: "Wackeres Herz",
-      jp: "\u30CF\u30FC\u30C8\u30FB\u30AA\u30D6\u30FB\u30E9\u30A4\u30C8",
+      ja: "\u30CF\u30FC\u30C8\u30FB\u30AA\u30D6\u30FB\u30E9\u30A4\u30C8",
       en: "Heart of Light",
       fr: "C\u0153ur de Lumi\u00E8re"
     },
@@ -170,7 +170,7 @@ const abilities = [
       de: "Steinernes Herz",
       en: "Heart of Stone",
       fr: "Cœur de pierre",
-      jp: "ハート・オブ・ストーン"
+      ja: "ハート・オブ・ストーン"
     },
     cooldown: 25,
     xivDbId: "16161",
@@ -183,7 +183,7 @@ const abilities = [
     name: "Heart of Corundum",
     translation: {
       de: "Herz des Korunds",
-      jp: "\u30CF\u30FC\u30C8\u30FB\u30AA\u30D6\u30FB\u30B3\u30E9\u30F3\u30C0\u30E0",
+      ja: "\u30CF\u30FC\u30C8\u30FB\u30AA\u30D6\u30FB\u30B3\u30E9\u30F3\u30C0\u30E0",
       en: "Heart of Corundum",
       fr: "C\u0153ur de corindon"
     },
@@ -198,7 +198,7 @@ const abilities = [
     name: "Bloodfest",
     translation: {
       de: "Blutpatronen",
-      jp: "\u30D6\u30E9\u30C3\u30C9\u30BD\u30A4\u30EB",
+      ja: "\u30D6\u30E9\u30C3\u30C9\u30BD\u30A4\u30EB",
       en: "Bloodfest",
       fr: "Cartouche de sang"
     },
@@ -213,7 +213,7 @@ const abilities = [
       de: "Sprengzone",
       en: "Danger Zone",
       fr: "Zone de danger",
-      jp: "デンジャーゾーン"
+      ja: "デンジャーゾーン"
     },
     cooldown: 30,
     xivDbId: "16144",
@@ -224,7 +224,7 @@ const abilities = [
     name: "Blasting Zone",
     translation: {
       de: "Erda-Detonation",
-      jp: "\u30D6\u30E9\u30B9\u30C6\u30A3\u30F3\u30B0\u30BE\u30FC\u30F3",
+      ja: "\u30D6\u30E9\u30B9\u30C6\u30A3\u30F3\u30B0\u30BE\u30FC\u30F3",
       en: "Blasting Zone",
       fr: "Zone de destruction"
     },
@@ -255,14 +255,14 @@ export const GNB: IJobTemplate = {
 
   translation: {
     de: "REV",
-    jp: "GNB",
+    ja: "GNB",
     en: "GNB",
     fr: "PSB"
   },
 
   fullNameTranslation: {
     de: "Revolverklinge",
-    jp: "\u30AC\u30F3\u30D6\u30EC\u30A4\u30AB\u30FC",
+    ja: "\u30AC\u30F3\u30D6\u30EC\u30A4\u30AB\u30FC",
     en: "Gunbreaker",
     fr: "Pistosabreur"
   },

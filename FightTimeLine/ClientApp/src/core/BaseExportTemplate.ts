@@ -1,5 +1,5 @@
 import { Utils } from "./Utils";
-import { IExportResultSet,  ITableOptions, ITableOptionSettings } from "./ExportModels";
+import { IExportResultSet, ITableOptions, ITableOptionSettings } from "./ExportModels";
 import { PresenterManager } from "./PresentationManager";
 import { Holders } from "./Holders";
 import { IJobRegistryService } from "src/services/jobregistry.service-interface";
@@ -32,17 +32,16 @@ export abstract class AttackRowExportTemplate extends TableViewTemplate<BossAtta
   buildTable(context: ExportTemplateContext): IExportResultSet {
 
     const cols = this.getColumns(context);
+    const headers = cols.map(t => t.buildHeader(context.holders));
     const rows = context.holders.bossAttacks.getAll()
       .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
       .map(attack => ({
-        cells: cols.map(t => t.buildCell(context.holders, attack)),
+        cells: cols.map(columnTemplate => columnTemplate.buildCell(context.holders, attack)),
         filterData: attack
       }));
 
-    const columns = cols.map(t => t.buildHeader(context.holders));
-
     return {
-      columns,
+      columns: headers,
       rows,
       title: this.name,
       filterByFirstEntry: true

@@ -29,7 +29,7 @@ const abilities = [
     name: "Reassemble",
     translation: {
       de: "Justieren",
-      jp: "\u6574\u5099",
+      ja: "\u6574\u5099",
       en: "Reassemble",
       fr: "R\u00E9assemblage"
     },
@@ -43,7 +43,7 @@ const abilities = [
     name: "Gauss Round",
     translation: {
       de: "Gau\u00DF-Geschoss",
-      jp: "\u30AC\u30A6\u30B9\u30E9\u30A6\u30F3\u30C9",
+      ja: "\u30AC\u30A6\u30B9\u30E9\u30A6\u30F3\u30C9",
       en: "Gauss Round",
       fr: "D\u00E9charge Gauss"
     },
@@ -61,7 +61,7 @@ const abilities = [
     name: "Wildfire",
     translation: {
       de: "Wildfeuer",
-      jp: "\u30EF\u30A4\u30EB\u30C9\u30D5\u30A1\u30A4\u30A2",
+      ja: "\u30EF\u30A4\u30EB\u30C9\u30D5\u30A1\u30A4\u30A2",
       en: "Wildfire",
       fr: "Flamb\u00E9e"
     },
@@ -76,7 +76,7 @@ const abilities = [
     name: "Ricochet",
     translation: {
       de: "Rikoschettschuss",
-      jp: "\u30EA\u30B3\u30B7\u30A7\u30C3\u30C8",
+      ja: "\u30EA\u30B3\u30B7\u30A7\u30C3\u30C8",
       en: "Ricochet",
       fr: "Ricochet"
     },
@@ -94,7 +94,7 @@ const abilities = [
     name: "Flamethrower",
     translation: {
       de: "Flammenwerfer",
-      jp: "\u30D5\u30EC\u30A4\u30E0\u30B9\u30ED\u30A2\u30FC",
+      ja: "\u30D5\u30EC\u30A4\u30E0\u30B9\u30ED\u30A2\u30FC",
       en: "Flamethrower",
       fr: "Lance-flammes"
     },
@@ -108,7 +108,7 @@ const abilities = [
     name: "Hypercharge",
     translation: {
       de: "Hyperladung",
-      jp: "\u30CF\u30A4\u30D1\u30FC\u30C1\u30E3\u30FC\u30B8",
+      ja: "\u30CF\u30A4\u30D1\u30FC\u30C1\u30E3\u30FC\u30B8",
       en: "Hypercharge",
       fr: "Hypercharge"
     },
@@ -122,7 +122,7 @@ const abilities = [
     name: "Tactician",
     translation: {
       de: "Taktiker",
-      jp: "\u30BF\u30AF\u30C6\u30A3\u30B7\u30E3\u30F3",
+      ja: "\u30BF\u30AF\u30C6\u30A3\u30B7\u30E3\u30F3",
       en: "Tactician",
       fr: "Tacticien"
     },
@@ -136,7 +136,7 @@ const abilities = [
     name: "Barrel Stabilizer",
     translation: {
       de: "Laufstabilisator",
-      jp: "\u30D0\u30EC\u30EB\u30D2\u30FC\u30BF\u30FC",
+      ja: "\u30D0\u30EC\u30EB\u30D2\u30FC\u30BF\u30FC",
       en: "Barrel Stabilizer",
       fr: "Stabilisateur de canon"
     },
@@ -172,14 +172,14 @@ export const MCH: IJobTemplate = {
 
   translation: {
     de: "MCH",
-    jp: "MCH",
+    ja: "MCH",
     en: "MCH",
     fr: "MCH"
   },
 
   fullNameTranslation: {
     de: "Maschinist",
-    jp: "\u6A5F\u5DE5\u58EB",
+    ja: "\u6A5F\u5DE5\u58EB",
     en: "Machinist",
     fr: "Machiniste"
   },

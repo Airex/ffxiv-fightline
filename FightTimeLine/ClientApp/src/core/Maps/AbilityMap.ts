@@ -135,7 +135,7 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     key[`sg${id}`] = false;
 
 
-    const truncLen = this.presenter.language === Models.SupportedLanguages.jp ? 10 : 22;
+    const truncLen = this.presenter.language === Models.SupportedLanguages.ja ? 10 : 22;
     const name = this.truncate(this.translated, truncLen);
 
     const el = ability.icon

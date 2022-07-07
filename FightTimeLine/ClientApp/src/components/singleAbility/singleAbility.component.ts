@@ -74,7 +74,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
         return "Description_de";
       case M.SupportedLanguages.fr:
         return "Description_fr";
-      case M.SupportedLanguages.jp:
+      case M.SupportedLanguages.ja:
         return "Description_ja";
       default:
         return "Description";

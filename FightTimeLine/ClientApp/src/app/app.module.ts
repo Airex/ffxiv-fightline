@@ -288,7 +288,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
             return fr_FR;
           case 'de':
             return de_DE;
-          case 'ja':
+          case 'jp':
             return ja_JP;
           default:
             return en_US;

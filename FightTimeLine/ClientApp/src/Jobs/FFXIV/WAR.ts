@@ -83,7 +83,7 @@ const abilities: IAbility[] = [
     name: "Infuriate",
     translation: {
       de: "Schlachtruf",
-      jp: "\u30A6\u30A9\u30FC\u30AF\u30E9\u30A4",
+      ja: "\u30A6\u30A9\u30FC\u30AF\u30E9\u30A4",
       en: "Infuriate",
       fr: "Cri de guerre"
     },
@@ -103,7 +103,7 @@ const abilities: IAbility[] = [
       de: "Tollwut",
       en: "Berserk",
       fr: "Berserk",
-      jp: "バーサク"
+      ja: "バーサク"
     },
     cooldown: 60,
     requiresBossTarget: true,
@@ -116,7 +116,7 @@ const abilities: IAbility[] = [
     name: "Inner Release",
     translation: {
       de: "Urbefreiung",
-      jp: "\u539F\u521D\u306E\u89E3\u653E",
+      ja: "\u539F\u521D\u306E\u89E3\u653E",
       en: "Inner Release",
       fr: "Rel\u00E2chement bestial"
     },
@@ -131,7 +131,7 @@ const abilities: IAbility[] = [
     name: "Onslaught",
     translation: {
       de: "Sturmlauf",
-      jp: "\u30AA\u30F3\u30B9\u30ED\u30FC\u30C8",
+      ja: "\u30AA\u30F3\u30B9\u30ED\u30FC\u30C8",
       en: "Onslaught",
       fr: "Assaut violent"
     },
@@ -149,7 +149,7 @@ const abilities: IAbility[] = [
     name: "Upheaval",
     translation: {
       de: "Umsturz",
-      jp: "\u30A2\u30C3\u30D7\u30D2\u30FC\u30D0\u30EB",
+      ja: "\u30A2\u30C3\u30D7\u30D2\u30FC\u30D0\u30EB",
       en: "Upheaval",
       fr: "R\u00E9volte"
     },
@@ -164,7 +164,7 @@ const abilities: IAbility[] = [
     name: "Orogeny",
     translation: {
       de: "Orogenese",
-      jp: "\u30AA\u30ED\u30B8\u30A7\u30CD\u30B7\u30B9",
+      ja: "\u30AA\u30ED\u30B8\u30A7\u30CD\u30B7\u30B9",
       en: "Orogeny",
       fr: "Orogen\u00E8se"
     },
@@ -179,7 +179,7 @@ const abilities: IAbility[] = [
     name: "Vengeance",
     translation: {
       de: "Rachsucht",
-      jp: "\u30F4\u30A7\u30F3\u30B8\u30A7\u30F3\u30B9",
+      ja: "\u30F4\u30A7\u30F3\u30B8\u30A7\u30F3\u30B9",
       en: "Vengeance",
       fr: "Repr\u00E9sailles"
     },
@@ -194,7 +194,7 @@ const abilities: IAbility[] = [
     name: "Holmgang",
     translation: {
       de: "Holmgang",
-      jp: "\u30DB\u30EB\u30E0\u30AE\u30E3\u30F3\u30B0",
+      ja: "\u30DB\u30EB\u30E0\u30AE\u30E3\u30F3\u30B0",
       en: "Holmgang",
       fr: "Holmgang"
     },
@@ -210,7 +210,7 @@ const abilities: IAbility[] = [
     name: "Shake It Off",
     translation: {
       de: "Absch\u00FCtteln",
-      jp: "\u30B7\u30A7\u30A4\u30AF\u30AA\u30D5",
+      ja: "\u30B7\u30A7\u30A4\u30AF\u30AA\u30D5",
       en: "Shake It Off",
       fr: "D\u00E9barrassage"
     },
@@ -228,7 +228,7 @@ const abilities: IAbility[] = [
     name: "Thrill of Battle",
     translation: {
       de: "Kampfrausch",
-      jp: "\u30B9\u30EA\u30EB\u30FB\u30AA\u30D6\u30FB\u30D0\u30C8\u30EB",
+      ja: "\u30B9\u30EA\u30EB\u30FB\u30AA\u30D6\u30FB\u30D0\u30C8\u30EB",
       en: "Thrill of Battle",
       fr: "Frisson de la bataille"
     },
@@ -243,7 +243,7 @@ const abilities: IAbility[] = [
     name: "Raw Intuition",
     translation: {
       de: "Urinstinkt",
-      jp: "原初の直感",
+      ja: "原初の直感",
       en: "Raw Intuition",
       fr: "Intuition pure"
     },
@@ -258,7 +258,7 @@ const abilities: IAbility[] = [
     name: "Bloodwhetting",
     translation: {
       de: "Urimpuls",
-      jp: "\u539F\u521D\u306E\u8840\u6C17",
+      ja: "\u539F\u521D\u306E\u8840\u6C17",
       en: "Bloodwhetting",
       fr: "Intuition fougueuse"
     },
@@ -274,7 +274,7 @@ const abilities: IAbility[] = [
     name: "Equilibrium",
     translation: {
       de: "\u00C4quilibrium",
-      jp: "\u30A8\u30AF\u30EA\u30D6\u30EA\u30A6\u30E0",
+      ja: "\u30A8\u30AF\u30EA\u30D6\u30EA\u30A6\u30E0",
       en: "Equilibrium",
       fr: "\u00C9quilibre"
     },
@@ -287,7 +287,7 @@ const abilities: IAbility[] = [
     name: "Nascent Flash",
     translation: {
       de: "Urflackern",
-      jp: "\u539F\u521D\u306E\u731B\u308A",
+      ja: "\u539F\u521D\u306E\u731B\u308A",
       en: "Nascent Flash",
       fr: "Exaltation naissante"
     },
@@ -326,14 +326,14 @@ export const WAR: IJobTemplate = {
 
   translation: {
     de: "KRG",
-    jp: "WAR",
+    ja: "WAR",
     en: "WAR",
     fr: "GUE"
   },
 
   fullNameTranslation: {
     de: "Krieger",
-    jp: "\u6226\u58EB",
+    ja: "\u6226\u58EB",
     en: "Warrior",
     fr: "Guerrier"
   },

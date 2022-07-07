@@ -177,7 +177,7 @@ export enum SupportedLanguages {
   en = "en",
   fr = "fr",
   de = "de",
-  jp = "jp"
+  ja = "ja"
 }
 
 export type Translation = {

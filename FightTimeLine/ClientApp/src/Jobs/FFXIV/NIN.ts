@@ -30,7 +30,7 @@ const abilities = [
     name: "Shade Shift",
     translation: {
       de: "Superkniff",
-      jp: "\u6B8B\u5F71",
+      ja: "\u6B8B\u5F71",
       en: "Shade Shift",
       fr: "D\u00E9calage d\u0027ombre"
     },
@@ -44,7 +44,7 @@ const abilities = [
     name: "Mug",
     translation: {
       de: "Ausrauben",
-      jp: "\u3076\u3093\u3069\u308B",
+      ja: "\u3076\u3093\u3069\u308B",
       en: "Mug",
       fr: "Rapine"
     },
@@ -61,7 +61,7 @@ const abilities = [
       de: "Meuchelsprung",
       en: "Assassinate",
       fr: "Assassinement",
-      jp: "終撃"
+      ja: "終撃"
     },
     xivDbId: "2246",
     cooldown: 60,
@@ -73,7 +73,7 @@ const abilities = [
     name: "Trick Attack",
     translation: {
       de: "Trickattacke",
-      jp: "\u3060\u307E\u3057\u8A0E\u3061",
+      ja: "\u3060\u307E\u3057\u8A0E\u3061",
       en: "Trick Attack",
       fr: "Attaque sournoise"
     },
@@ -88,7 +88,7 @@ const abilities = [
     name: "Kassatsu",
     translation: {
       de: "Kassatsu",
-      jp: "\u6D3B\u6BBA\u81EA\u5728",
+      ja: "\u6D3B\u6BBA\u81EA\u5728",
       en: "Kassatsu",
       fr: "Kassatsu"
     },
@@ -103,7 +103,7 @@ const abilities = [
     name: "Dream Within a Dream",
     translation: {
       de: "Tern\u00E4re Trance",
-      jp: "\u5922\u5E7B\u4E09\u6BB5",
+      ja: "\u5922\u5E7B\u4E09\u6BB5",
       en: "Dream Within a Dream",
       fr: "R\u00EAve dans un r\u00EAve"
     },
@@ -117,7 +117,7 @@ const abilities = [
     name: "Bhavacakra",
     translation: {
       de: "Rad des Werdens",
-      jp: "\u516D\u9053\u8F2A\u5EFB",
+      ja: "\u516D\u9053\u8F2A\u5EFB",
       en: "Bhavacakra",
       fr: "Bhavacakra"
     },
@@ -131,7 +131,7 @@ const abilities = [
     name: "Ten Chi Jin",
     translation: {
       de: "Ten Chi Jin",
-      jp: "\u5929\u5730\u4EBA",
+      ja: "\u5929\u5730\u4EBA",
       en: "Ten Chi Jin",
       fr: "Ten Chi Jin"
     },
@@ -146,7 +146,7 @@ const abilities = [
     name: "Meisui",
     translation: {
       de: "Meisui",
-      jp: "\u547D\u6C34",
+      ja: "\u547D\u6C34",
       en: "Meisui",
       fr: "Meisui"
     },
@@ -161,7 +161,7 @@ const abilities = [
     name: "Bunshin",
     translation: {
       de: "Doppeltes Ich",
-      jp: "\u5206\u8EAB\u306E\u8853",
+      ja: "\u5206\u8EAB\u306E\u8853",
       en: "Bunshin",
       fr: "Bunshin"
     },
@@ -188,14 +188,14 @@ export const NIN: IJobTemplate = {
 
   translation: {
     de: "NIN",
-    jp: "NIN",
+    ja: "NIN",
     en: "NIN",
     fr: "NIN"
   },
 
   fullNameTranslation: {
     de: "Ninja",
-    jp: "\u5FCD\u8005",
+    ja: "\u5FCD\u8005",
     en: "Ninja",
     fr: "Ninja"
   },

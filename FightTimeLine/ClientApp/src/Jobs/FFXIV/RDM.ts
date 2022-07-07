@@ -24,7 +24,7 @@ const abilities = [
     name: "Embolden",
     translation: {
       de: "Ermutigen",
-      jp: "\u30A8\u30F3\u30DC\u30EB\u30C7\u30F3",
+      ja: "\u30A8\u30F3\u30DC\u30EB\u30C7\u30F3",
       en: "Embolden",
       fr: "Enhardissement"
     },
@@ -38,7 +38,7 @@ const abilities = [
     name: "Fleche",
     translation: {
       de: "Fleche",
-      jp: "\u30D5\u30EC\u30C3\u30B7\u30E5",
+      ja: "\u30D5\u30EC\u30C3\u30B7\u30E5",
       en: "Fleche",
       fr: "Fl\u00E8che"
     },
@@ -52,7 +52,7 @@ const abilities = [
     name: "Contre Sixte",
     translation: {
       de: "Contre Sixte",
-      jp: "\u30B3\u30F3\u30C8\u30EB\u30B7\u30AF\u30B9\u30C8",
+      ja: "\u30B3\u30F3\u30C8\u30EB\u30B7\u30AF\u30B9\u30C8",
       en: "Contre Sixte",
       fr: "Contre de sixte"
     },
@@ -66,7 +66,7 @@ const abilities = [
     name: "Manafication",
     translation: {
       de: "Manafizierung",
-      jp: "\u30DE\u30CA\u30D5\u30A3\u30B1\u30FC\u30B7\u30E7\u30F3",
+      ja: "\u30DE\u30CA\u30D5\u30A3\u30B1\u30FC\u30B7\u30E7\u30F3",
       en: "Manafication",
       fr: "Manafication"
     },
@@ -81,7 +81,7 @@ const abilities = [
     name: "Acceleration",
     translation: {
       de: "Pr\u00E4paration",
-      jp: "\u30A2\u30AF\u30BB\u30E9\u30EC\u30FC\u30B7\u30E7\u30F3",
+      ja: "\u30A2\u30AF\u30BB\u30E9\u30EC\u30FC\u30B7\u30E7\u30F3",
       en: "Acceleration",
       fr: "Acc\u00E9l\u00E9ration"
     },
@@ -96,7 +96,7 @@ const abilities = [
     name: "Magick Barrier",
     translation: {
       de: "Magiebarriere",
-      jp: "\u30D0\u30DE\u30B8\u30AF",
+      ja: "\u30D0\u30DE\u30B8\u30AF",
       en: "Magick Barrier",
       fr: "Barri\u00E8re anti-magie"
     },
@@ -141,13 +141,13 @@ const traits: ITrait[] = [
 export const RDM: IJobTemplate = {
   translation: {
     de: "RMA",
-    jp: "RDM",
+    ja: "RDM",
     en: "RDM",
     fr: "MRG"
   },
   fullNameTranslation: {
     de: "Rotmagier",
-    jp: "\u8D64\u9B54\u9053\u58EB",
+    ja: "\u8D64\u9B54\u9053\u58EB",
     en: "Red Mage",
     fr: "mage rouge"
   },

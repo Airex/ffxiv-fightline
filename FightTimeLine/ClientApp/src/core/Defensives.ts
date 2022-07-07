@@ -88,22 +88,6 @@ export function calculateAvailDefsForAttack(holders: H.Holders, id: string): Def
 
 }
 
-// export function mitigationResolve(value: M.DefensiveValue, a: { start: Date }, atk: { offset: string }) {
-//     if (Array.isArray(value)) {
-//         const usedAt = (Utils.getDateFromOffset(atk.offset).valueOf() - a.start.valueOf()) / 1000;
-//         const sv = value as M.StagedDefensiveValue;
-//         let acc = 0;
-//         for (var v of sv) {
-//             if (usedAt <= acc + v.duration) return v.value || 0;
-//             acc += v.duration;
-//         }
-//     }
-//     return value as number || 0;
-// };
-
-
-
-
 class MitigationVisitor implements M.IEffectVisitor {
 
   constructor(private holders: H.Holders) {

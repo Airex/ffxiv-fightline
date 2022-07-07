@@ -52,7 +52,7 @@ const abilities: IAbility[] = [
     name: "Shield Samba",
     translation: {
       de: "Schildsamba",
-      jp: "\u5B88\u308A\u306E\u30B5\u30F3\u30D0",
+      ja: "\u5B88\u308A\u306E\u30B5\u30F3\u30D0",
       en: "Shield Samba",
       fr: "Samba protectrice"
     },
@@ -66,7 +66,7 @@ const abilities: IAbility[] = [
     name: "Improvisation",
     translation: {
       de: "Tanzimprovisation",
-      jp: "\u30A4\u30F3\u30D7\u30ED\u30D3\u30BC\u30FC\u30B7\u30E7\u30F3",
+      ja: "\u30A4\u30F3\u30D7\u30ED\u30D3\u30BC\u30FC\u30B7\u30E7\u30F3",
       en: "Improvisation",
       fr: "Improvisation"
     },
@@ -82,7 +82,7 @@ const abilities: IAbility[] = [
       de: "Improvisiertes Finale",
       en: "Improvised Finish",
       fr: "Final improvis\u00e9",
-      jp: "\u30a4\u30f3\u30d7\u30ed\u30d3\u30bc\u30fc\u30b7\u30e7\u30f3\u30fb\u30d5\u30a3\u30cb\u30c3\u30b7\u30e5",
+      ja: "\u30a4\u30f3\u30d7\u30ed\u30d3\u30bc\u30fc\u30b7\u30e7\u30f3\u30fb\u30d5\u30a3\u30cb\u30c3\u30b7\u30e5",
     },
     cooldown: 90,
     xivDbId: "25789",
@@ -94,7 +94,7 @@ const abilities: IAbility[] = [
     name: "Flourish",
     translation: {
       de: "Trance",
-      jp: "\u30D5\u30E9\u30EA\u30C3\u30B7\u30E5",
+      ja: "\u30D5\u30E9\u30EA\u30C3\u30B7\u30E5",
       en: "Flourish",
       fr: "Apoth\u00E9ose"
     },
@@ -107,7 +107,7 @@ const abilities: IAbility[] = [
     name: "Devilment",
     translation: {
       de: "Todestango",
-      jp: "\u653B\u3081\u306E\u30BF\u30F3\u30B4",
+      ja: "\u653B\u3081\u306E\u30BF\u30F3\u30B4",
       en: "Devilment",
       fr: "Tango endiabl\u00E9"
     },
@@ -121,7 +121,7 @@ const abilities: IAbility[] = [
     name: "Closed Position",
     translation: {
       de: "Tanzpartner",
-      jp: "\u30AF\u30ED\u30FC\u30BA\u30C9\u30DD\u30B8\u30B7\u30E7\u30F3",
+      ja: "\u30AF\u30ED\u30FC\u30BA\u30C9\u30DD\u30B8\u30B7\u30E7\u30F3",
       en: "Closed Position",
       fr: "Position rapproch\u00E9e"
     },
@@ -135,7 +135,7 @@ const abilities: IAbility[] = [
     name: "Curing Waltz",
     translation: {
       de: "Heilender Walzer",
-      jp: "\u7652\u3084\u3057\u306E\u30EF\u30EB\u30C4",
+      ja: "\u7652\u3084\u3057\u306E\u30EF\u30EB\u30C4",
       en: "Curing Waltz",
       fr: "Valse revigorante"
     },
@@ -148,7 +148,7 @@ const abilities: IAbility[] = [
     name: "Standard Step",
     translation: {
       de: "Einfache Choreographie",
-      jp: "\u30B9\u30BF\u30F3\u30C0\u30FC\u30C9\u30B9\u30C6\u30C3\u30D7",
+      ja: "\u30B9\u30BF\u30F3\u30C0\u30FC\u30C9\u30B9\u30C6\u30C3\u30D7",
       en: "Standard Step",
       fr: "Pas classique"
     },
@@ -162,7 +162,7 @@ const abilities: IAbility[] = [
     name: "Technical Step",
     translation: {
       de: "Komplexe Choreographie",
-      jp: "\u30C6\u30AF\u30CB\u30AB\u30EB\u30B9\u30C6\u30C3\u30D7",
+      ja: "\u30C6\u30AF\u30CB\u30AB\u30EB\u30B9\u30C6\u30C3\u30D7",
       en: "Technical Step",
       fr: "Pas technique"
     },
@@ -189,14 +189,14 @@ export const DNC: IJobTemplate = {
 
   translation: {
     de: "T\u00C4N",
-    jp: "DNC",
+    ja: "DNC",
     en: "DNC",
     fr: "DNS"
   },
 
   fullNameTranslation: {
     de: "T\u00E4nzer",
-    jp: "\u8E0A\u308A\u5B50",
+    ja: "\u8E0A\u308A\u5B50",
     en: "Dancer",
     fr: "Danseur"
   },
