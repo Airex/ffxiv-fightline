@@ -2,7 +2,7 @@
   "name": "client-app",
   "version": "0.0.0",
   "scripts": {
-    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng build",
+    "ng-high-memory": "node --max_old_space_size=8000  ./node_modules/@angular/cli/bin/ng build",
     "ng": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng",
     "start": "ng serve",
     "build": "ng build",
@@ -75,7 +75,7 @@
     "@types/node": "^12.19.15",
     "@typescript-eslint/eslint-plugin": "5.11.0",
     "@typescript-eslint/parser": "5.11.0",
-    "codelyzer": "^6.0.0",
+    "codelyzer": "^0.0.28",
     "eslint": "^8.2.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
