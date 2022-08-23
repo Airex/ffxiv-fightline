@@ -28,6 +28,10 @@ const statuses = MapStatuses({
     duration: 20,
     effects: [Effects.mitigation.party(10)]        // todo: review this value
   },
+  holosShield: {
+    duration: 30,
+    effects: [Effects.shield.party(10)]        // todo: review this value
+  },
   panhaima: {
     duration: 15,
     effects: [Effects.mitigation.party(10)]        // todo: review this value

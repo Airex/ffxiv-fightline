@@ -426,5 +426,12 @@ export default [
       "Added possibiblity to save view preset. Each Preset stores data about filters, per job filters, per job hidden and collapsed abilities, per job abilities order",
       "Added possibility to attach saved preset to timeline. In this case everyone who opens this timeline can use shared preset"
     ]
+  },
+  {
+    revision: 62,
+    date: "08/23/2022",
+    items: [
+      "6.2"
+    ]
   }
 ];

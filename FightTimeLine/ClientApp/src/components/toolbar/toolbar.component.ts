@@ -30,8 +30,7 @@ export class ToolbarComponent {
     private notification: ScreenNotificationsService,
     private changeNotesService: ChangeNotesService,
     private router: Router,
-    private visStorage: VisStorageService,
-    private translate: TranslateService
+    private visStorage: VisStorageService
   ) {
 
   }
@@ -55,7 +54,6 @@ export class ToolbarComponent {
       this.visStorage.holders.jobs.update(all);
     }
     this.langChanged.emit();
-    // this.translate.use((localStorage.getItem("lang") || "en").replace("jp", "ja"));
   }
 
   onHome() {

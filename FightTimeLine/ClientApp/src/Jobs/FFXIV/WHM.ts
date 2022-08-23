@@ -29,7 +29,7 @@ const statuses = MapStatuses({
     effects: [Effects.mitigation.solo(15)]
   },
   LiturgyOfTheBell: {
-    duration: 15
+    duration: 20
   }
 });
 
