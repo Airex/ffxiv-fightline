@@ -96,7 +96,7 @@ const abilities = [
     cooldown: 120,
     xivDbId: "16552",
     statuses: [statuses.divination],
-    abilityType: AbilityType.SelfDamageBuff,
+    abilityType: AbilityType.PartyDamageBuff,
     levelAcquired: 50
   },
   {
