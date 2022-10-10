@@ -31,9 +31,12 @@ export abstract class TableViewTemplate<RowType = any> {
 export abstract class AttackRowExportTemplate extends TableViewTemplate<BossAttackMap>{
   buildTable(context: ExportTemplateContext): IExportResultSet {
 
+    const ffSource  = context.options['fflogs']? 'cast' : 'damage';
+
     const cols = this.getColumns(context);
     const headers = cols.map(t => t.buildHeader(context.holders));
     const rows = context.holders.bossAttacks.getAll()
+      .filter(a=> a.isForFfLogs(ffSource))
       .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
       .map(attack => ({
         cells: cols.map(columnTemplate => columnTemplate.buildCell(context.holders, attack)),

@@ -41,7 +41,7 @@ export class AbilityUsagesCollector extends BaseCollector {
   jobs: { [name: string]: M.IJob } = {};
 
   detectAbility(job: M.IJob, event: any): { offset: number, name: string } {
-    const data = Object.values(job.abilities).map(a => a.detectStrategy.process(event)).filter(a => !!a);
+    const data = Object.values(job.abilities).map(a => a.detectStrategy?.process(event)).filter(a => !!a);
     if (data.length > 1) {
       throw Error("More then 1 ability");
     }
@@ -49,7 +49,7 @@ export class AbilityUsagesCollector extends BaseCollector {
   }
 
   public getSettingOfType(ability: M.IAbility, type: string): M.IAbilitySetting {
-    return ability.settings && ability.settings.find(it => it.type === type);
+    return ability.settings?.find(it => it.type === type);
   }
 
   collect(data: FF.AbilityEvent): void {

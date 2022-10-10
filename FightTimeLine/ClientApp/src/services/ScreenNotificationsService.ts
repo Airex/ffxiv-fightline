@@ -71,7 +71,7 @@ export class ScreenNotificationsService {
     this.info(`${user.name} connected`);
   }
 
-  public showUserDisonnected(user: M.IHubUser) {
+  public showUserDisconnected(user: M.IHubUser) {
     this.info(`${user.name} disconnected`);
   }
 

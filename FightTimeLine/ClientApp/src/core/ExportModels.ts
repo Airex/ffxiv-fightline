@@ -146,7 +146,7 @@ export interface ITableOptionsSetting<TOptions = any> {
   onChange?: (value) => void;
 }
 
-export interface BooleanOptionsSetting extends ITableOptionsSetting<undefined> {
+export interface BooleanOptionsSetting extends ITableOptionsSetting<{ true?: string, false?: string}> {
   kind: TableOptionSettingType.Boolean;
 }
 

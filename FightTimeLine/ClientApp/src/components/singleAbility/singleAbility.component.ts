@@ -165,9 +165,10 @@ export class SingleAbilityComponent implements  OnDestroy, ISidePanelComponent {
     }
 
     if (this.it.ability.isDef || this.it.ability.isHeal) {
-      this.covered = this.visStorage.holders.bossAttacks.getAll().filter((it) => {
-        return it.start >= this.it.start && it.start <= new Date(this.it.startAsNumber + this.it.calculatedDuration * 1000);
-      }).sort((a, b) => a.startAsNumber - b.startAsNumber);
+      this.covered = this.visStorage.holders.bossAttacks
+        .filter((it) => {
+          return it.isForFfLogs(this.visStorage.presenter.filter.attacks.fflogsSource) && it.start >= this.it.start && it.start <= new Date(this.it.startAsNumber + this.it.calculatedDuration * 1000);
+        }).sort((a, b) => a.startAsNumber - b.startAsNumber);
     }
 
     if (this.it.ability.isSelfDamage || this.it.ability.isPartyDamage) {

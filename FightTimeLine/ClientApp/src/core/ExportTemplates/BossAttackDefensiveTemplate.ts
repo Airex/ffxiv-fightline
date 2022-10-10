@@ -7,7 +7,7 @@ import { Holders } from "../Holders";
 import { BossAttackMap } from "../Maps";
 import { IColumnTemplate } from "../TableModels";
 import { AttackNameColumn } from "./Columns/AttackNameColumn";
-import { BossTargetColumn } from "./Columns/BossTargetCollumn";
+import { BossTargetColumn } from "./Columns/BossTargetColumn";
 import { JobDefensivesColumn } from "./Columns/JobDefensivesColumn";
 import { MitigationsCombinedColumn } from "./Columns/MitigationsCombinedColumn";
 import { TimeColumn } from "./Columns/TimeColumn";
@@ -23,7 +23,7 @@ export class BossAttackDefensiveTemplateV2 extends AttackRowExportTemplate {
       displayName: "Cover Attacks",
       visible: true,
       kind: TableOptionSettingType.Boolean,
-      description: "Renders ability shadows in for attacka ability covers when active"
+      description: "Renders ability shadows in for attack ability covers when active"
     };
 
     const attackColor: BooleanOptionsSetting = {

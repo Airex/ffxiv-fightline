@@ -15,7 +15,7 @@ import { ISidePanelComponent, SIDEPANEL_DATA, SidepanelParams } from "../sidepan
   templateUrl: "./singleAttack.component.html",
   styleUrls: ["./singleAttack.component.css"],
 })
-export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelComponent {
+export class SingleAttackComponent implements OnDestroy, ISidePanelComponent {
 
   defs: DefsCalcResult = null;
   availDefs: DefsCalcResult = null;
@@ -32,7 +32,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
   sub: Subscription;
 
   constructor(
-    visStorage: VisStorageService,
+    private visStorage: VisStorageService,
     @Inject("DispatcherPayloads") private dispatcher: S.DispatcherService<DispatcherPayloads>,
     @Inject(SIDEPANEL_DATA) public data: SidepanelParams
   ) {
@@ -110,7 +110,7 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
     this.defs = this.calculateDefs();
     this.availDefs = this.calculateAvailDefs();
     this.similar = this.holders.bossAttacks
-      .filter(it => it.attack.name === this.it.attack.name && it.id !== this.it.id)
+      .filter(it => it.isForFfLogs(this.visStorage.presenter.filter.attacks.fflogsSource) && it.attack.name === this.it.attack.name && it.id !== this.it.id)
       .sort((a, b) => a.startAsNumber - b.startAsNumber);
     this.defStats = calculateMitigationForAttack(this.holders, this.defs, this.it.attack);
     this.ff = Object.keys(this.it.attack.fflogsData || {}).map(k =>
@@ -125,10 +125,6 @@ export class SingleAttackComponent implements OnInit, OnDestroy, ISidePanelCompo
           value: this.it.attack.fflogsData[k][t]
         }))
     }));
-  }
-
-  ngOnInit(): void {
-
   }
 
   ngOnDestroy(): void {

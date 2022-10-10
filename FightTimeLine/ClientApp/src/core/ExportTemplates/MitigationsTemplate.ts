@@ -5,7 +5,7 @@ import { Holders } from "../Holders";
 import { BossAttackMap } from "../Maps";
 import { BaseColumnTemplate, IColumnTemplate } from "../TableModels";
 import { AttackNameColumn } from "./Columns/AttackNameColumn";
-import { BossTargetColumn } from "./Columns/BossTargetCollumn";
+import { BossTargetColumn } from "./Columns/BossTargetColumn";
 import { TimeColumn } from "./Columns/TimeColumn";
 
 export class MitigationsTemplate extends AttackRowExportTemplate {

@@ -5,8 +5,8 @@ import * as Models from "../Models";
 
 const filterMap: { [ab in keyof Models.IAbilityFilter]: Models.AbilityType | Models.AbilityType[] } =
 {
-  selfDefence: [Models.AbilityType.SelfDefense, Models.AbilityType.SelfShield],
-  partyDefence: [Models.AbilityType.PartyDefense, Models.AbilityType.PartyShield, Models.AbilityType.TargetDefense],
+  selfDefence: [Models.AbilityType.SelfDefense, Models.AbilityType.SelfShield, Models.AbilityType.TargetDefense],
+  partyDefence: [Models.AbilityType.PartyDefense, Models.AbilityType.PartyShield],
   selfDamageBuff: Models.AbilityType.SelfDamageBuff,
   partyDamageBuff: Models.AbilityType.PartyDamageBuff,
   damage: Models.AbilityType.Damage,

@@ -634,7 +634,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
       const handlers: IStartSessionHandlers = {
         onCommand: ((data: M.IHubCommand) => this.handleRemoteCommand(data.id, data.userId)).bind(this),
         onConnected: ((data: M.IHubUser) => this.notification.showUserConnected(data)).bind(this),
-        onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisonnected(data)).bind(this)
+        onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisconnected(data)).bind(this)
       };
 
       const settings = this.settingsService.load();
@@ -685,7 +685,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     const handlers: IConnectToSessionHandlers = {
       onCommand: ((data: M.IHubCommand) => this.handleRemoteCommand(data.id, data.userId)).bind(this),
       onConnected: ((data: M.IHubUser) => this.notification.showUserConnected(data)).bind(this),
-      onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisonnected(data)).bind(this)
+      onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisconnected(data)).bind(this)
     };
 
     const settings = this.settingsService.load();

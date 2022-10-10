@@ -4,7 +4,6 @@ import { FFLogsImportBossAttacksSource, ISettings } from "src/services/SettingsS
 import { IPresetTemplate, JobPresets } from "./Models";
 import { Holders } from "./Holders";
 import { Utils } from "./Utils";
-
 export class PresenterManager implements Models.IPresenterData {
 
   tags: string[] = Models.DefaultTags;
@@ -15,8 +14,8 @@ export class PresenterManager implements Models.IPresenterData {
   private jobFilters: JobPresets = {};
   language: Models.SupportedLanguages = Models.SupportedLanguages[localStorage.getItem("lang") || "en"];
   selectedPreset: string = undefined;
-  presets: { [name: string]: IPresetTemplate } = {};
-  fflogsSource = true;
+  presets: Record<string, IPresetTemplate> = {};
+  fflogsSource = false;
 
   constructor(private storage: Models.IStorage) {
 
@@ -44,10 +43,10 @@ export class PresenterManager implements Models.IPresenterData {
   loadTemplate(template: Models.IPresetTemplate, holders: Holders) {
     this.filter = template.filter;
     this.view = template.view;
-    this.jobFilters = holders.jobs.getAll().reduce((acc, j) => ({
-      ...acc,
-      [j.id]: template.jobFilters[j.job.name] || {}
-    }), {});
+    this.jobFilters = holders.jobs.getAll().reduce((acc, j) => {
+      acc[j.id] = template.jobFilters[j.job.name] || {}
+      return acc;
+    }, {});
 
   }
 
