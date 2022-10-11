@@ -68,12 +68,7 @@ const abilities = [
     xivDbId: 3614,
     abilityType: AbilityType.Healing,
     settings: [settings.target],
-    levelAcquired: 15,
-    charges: {
-      count: 2,
-      initialCount: 2,
-      cooldown: 40
-    }
+    levelAcquired: 15
   },
   {
     name: "Synastry",
@@ -192,11 +187,6 @@ const abilities = [
     defensiveStats: {
       shieldPercent: 10 // todo: review this value
     },
-    charges: {
-      count: 2,
-      initialCount: 2,
-      cooldown: 30
-    }
   } as IAbility,
   {
     name: "Horoscope",
