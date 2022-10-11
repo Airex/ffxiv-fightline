@@ -1,5 +1,5 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate, ITrait } from "../../core/Models";
+import { IJob, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate, ITrait, IAbilityCharges } from "../../core/Models";
 import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
 import { abilityTrait } from "./traits";
 
@@ -68,7 +68,12 @@ const abilities = [
     xivDbId: 3614,
     abilityType: AbilityType.Healing,
     settings: [settings.target],
-    levelAcquired: 15
+    levelAcquired: 15,
+    charges: {
+      count: 2,
+      initialCount: 2,
+      cooldown: 40
+    }
   },
   {
     name: "Synastry",
@@ -186,6 +191,11 @@ const abilities = [
     levelAcquired: 74,
     defensiveStats: {
       shieldPercent: 10 // todo: review this value
+    },
+    charges: {
+      count: 2,
+      initialCount: 2,
+      cooldown: 30
     }
   } as IAbility,
   {
