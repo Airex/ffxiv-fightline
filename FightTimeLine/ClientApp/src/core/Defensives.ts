@@ -22,7 +22,7 @@ export function calculateDefsForAttack(holders: H.Holders, attackId: string): De
 
   const defAbilities = holders.itemUsages.filter((it) => {
     const ab = it.ability;
-    return ab.isDef && !ab.filtered;
+    return ab.isDef;
   });
 
   const intersected = defAbilities.filter((it) => {
@@ -60,7 +60,7 @@ export function calculateAvailDefsForAttack(holders: H.Holders, id: string): Def
   if (!bossAttack) { return []; }
 
   const defAbilities = holders.abilities.filter((it) => {
-    return !it.filtered && it.isDef;
+    return it.isDef;
   });
 
   const intersected = defAbilities.filter((it) => {
