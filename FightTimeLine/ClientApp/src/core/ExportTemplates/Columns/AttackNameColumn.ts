@@ -23,7 +23,7 @@ export class AttackNameColumn extends BaseColumnTemplate implements IColumnTempl
   }
   buildCell(data: Holders, attack: BossAttackMap, options?: ITableOptions): IExportCell {
 
-    const color = this.useAttackColor ? attack.attack.color : this.getColor(attack);
+    const color = this.useAttackColor ? attack.attack.color : this.getColor(attack.attack);
 
     return this.text({
       text: attack.attack.name,

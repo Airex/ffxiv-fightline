@@ -1,6 +1,6 @@
 import { IExportCell, IExportColumn, IExportItem, ITableOptions } from "./ExportModels";
 import { Holders } from "./Holders";
-import { TimeOffset } from "./Models";
+import { IBossAbility, TimeOffset } from "./Models";
 import { Utils } from "./Utils";
 
 export interface IColumnTemplate<RowData> {
@@ -16,7 +16,7 @@ export abstract class BaseColumnTemplate {
     return Utils.getDateFromOffset(a, d).valueOf() - Utils.getDateFromOffset(b, d).valueOf();
   }
 
-  protected getColor(it: any) {
+  protected getColor(it: IBossAbility) {
     return (it.type === 1 ? "red" : (it.type === 2 ? "blue" : ""));
   }
 
