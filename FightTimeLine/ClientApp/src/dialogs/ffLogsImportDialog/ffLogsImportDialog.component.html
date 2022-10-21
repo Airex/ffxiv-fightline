@@ -30,7 +30,7 @@
               </nz-list-item>
               <nz-list-item *ngFor="let fight of zoneItem.value | killsonly:killsOnly" (click)="onClick(fight.id)"
                 [ngClass]="{fflogsitem:true}">
-                {{fight.name}} <span class="example-spacer"></span> {{fight.kill ? 'Kill' : 'Wipe'}} -
+                {{fight.name}} <span class="example-spacer"></span> {{(fight.bossPercentage || 10000)/100}}% {{fight.kill ? 'Kill' : 'Wipe'}} -
                 {{formatTime(fight.start_time, fight.end_time)}}
               </nz-list-item>
             </ng-template>

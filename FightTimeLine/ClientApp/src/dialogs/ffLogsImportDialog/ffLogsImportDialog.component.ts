@@ -4,8 +4,8 @@ import { RecentActivityService } from "../../services/RecentActivitiesService";
 import { SettingsService } from "../../services/SettingsService";
 import { Utils } from "../../core/Utils";
 import { ReportFightsResponse } from "../../core/FFLogs";
-import * as Gameserviceprovider from "../../services/game.service-provider";
-import * as Gameserviceinterface from "../../services/game.service-interface";
+import { gameServiceToken } from "../../services/game.service-provider";
+import { IGameService } from "../../services/game.service-interface";
 import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
@@ -19,8 +19,8 @@ export class FFLogsImportDialog implements OnInit {
 
   constructor(
     public dialogRef: NzModalRef,
-    @Inject(Gameserviceprovider.gameServiceToken)
-    public service: Gameserviceinterface.IGameService,
+    @Inject(gameServiceToken)
+    public service: IGameService,
     public recentService: RecentActivityService,
     public settingsService: SettingsService,
     private router: Router) {
