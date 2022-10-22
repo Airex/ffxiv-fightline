@@ -37,7 +37,7 @@ export class ToolbarComponent {
   }
 
   get currentLang() {
-    return this.visStorage.presenter.language.toLocaleUpperCase();
+    return (this.visStorage.presenter.language || "en").toLocaleUpperCase();
   }
 
   setLang(lang: string) {
