@@ -3,7 +3,7 @@
     <ng-template #item let-item>
         <nz-list-item [nzActions]="[pinAction]">
             <ng-template #pinAction>
-                <span #lstitem>
+                <span class="actions" #lstitem>
                     <a nz-dropdown nzTooltipTrigger="click" nzTooltipTrigger="hover" [nzDropdownMenu]="menu"
                         (nzVisibleChange)="listopentablevisiblechange(lstitem, $event)" nz-tooltip
                         nzTooltipTitle="{{'component.recentList.openAsTable' | translate}}"><i class="pin" nz-icon nzType="hdd" nzTheme="twotone"></i></a>
