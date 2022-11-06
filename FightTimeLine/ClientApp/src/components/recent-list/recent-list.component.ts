@@ -19,6 +19,9 @@ export class RecentListComponent {
     private router: Router
   ) { }
 
+  getBossIcon(id) {
+    return "https://assets.rpglogs.com/img/ff/bosses/" + id + "-icon.jpg"
+  }
 
   pin($event, item) {
     $event.stopPropagation();

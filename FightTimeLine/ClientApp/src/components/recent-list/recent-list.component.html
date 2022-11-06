@@ -28,8 +28,10 @@
                 </ng-template>
                 <ng-template #nzAvatar>
                     <div [ngSwitch]="item.source">
-                        <img *ngSwitchCase="0" width="48px" height="48px"
-                            src="https://assets.rpglogs.com/img/ff/favicon.png" alt="">
+                        <span *ngSwitchCase="0">
+                          <img *ngIf="!item.boss" width="48px" height="48px" src="https://assets.rpglogs.com/img/ff/favicon.png" alt="">
+                          <img *ngIf="item.boss" width="48px" height="48px" [src]="getBossIcon(item.boss)" alt="">
+                        </span>
                         <img *ngSwitchDefault width="48px" height="48px" src="https://xivapi.com/c/BNpcName.png" alt="">
                     </div>
                 </ng-template>

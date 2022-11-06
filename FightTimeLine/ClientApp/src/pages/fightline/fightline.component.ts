@@ -293,6 +293,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
               .then(() => {
                 this.recent.register({
                   name: parser.fight.name,
+                  boss: parser.fight.boss,
                   source: ActivitySource.FFLogs,
                   timestamp: new Date(),
                   url: "/" + value.id.toLowerCase(),
