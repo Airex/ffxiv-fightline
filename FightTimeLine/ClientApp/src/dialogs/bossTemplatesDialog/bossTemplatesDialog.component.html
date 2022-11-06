@@ -18,12 +18,15 @@
           <nz-content customScroll style="overflow: auto">
             <ul nz-menu [nzMode]="'inline'" style="min-height: 100%">
               <li nz-submenu *ngFor="let zone of filteredZones"
-                [nzOpen]="!!searchString || zone.id?.toString() == selectedZone">
+                [nzOpen]="!!searchString || zone.id?.toString() === selectedZone">
                 <span title>{{zone.name}}</span>
                 <ul>
                   <li nz-menu-item *ngFor="let encounter of filterEncounters(zone.encounters)"
-                    [nzSelected]="selectedEncounter && selectedEncounter.id == encounter.id"
-                    (click)="onEncounterSelected(zone.id, encounter)">{{encounter.name}}</li>
+                    [nzSelected]="selectedEncounter && selectedEncounter.id === encounter.id"
+                    (click)="onEncounterSelected(zone.id, encounter)">
+                    <img class="boss-icon" style="margin-right: 5px" [src]="getBossIcon(encounter.id)" />
+                    {{encounter.name}}
+                  </li>
                 </ul>
             </ul>
           </nz-content>
@@ -55,12 +58,12 @@
                   </ng-template>
                   <ng-template #item let-item>
                     <nz-list-item
-                      [class.selected]="selectedTemplate && selectedTemplate.id.toLowerCase() == item.id.toLowerCase()"
+                      [class.selected]="selectedTemplate && selectedTemplate.id.toLowerCase() === item.id.toLowerCase()"
                       [nzActions]="[removeAction]">
                       <nz-list-item-meta [nzTitle]="nzTitle" (click)="select(item)">
                         <ng-template #nzTitle>
                           <span
-                            [class.selected]="selectedTemplate && selectedTemplate.id.toLowerCase() == item.id.toLowerCase()">
+                            [class.selected]="selectedTemplate && selectedTemplate.id.toLowerCase() === item.id.toLowerCase()">
                             {{ item.name }}
                           </span>
                         </ng-template>

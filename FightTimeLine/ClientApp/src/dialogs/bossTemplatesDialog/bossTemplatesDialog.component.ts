@@ -82,6 +82,10 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
 
   }
 
+  getBossIcon(id) {
+    return "https://assets.rpglogs.com/img/ff/bosses/" + id + "-icon.jpg"
+  }
+
   ngOnInit(): void {
     this.gameService.dataService.getZones()
       .pipe(
