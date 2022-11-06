@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { RecentActivityService } from "../../services/RecentActivitiesService";
 import { SettingsService } from "../../services/SettingsService";
 import { Utils } from "../../core/Utils";
-import { ReportFightsResponse } from "../../core/FFLogs";
+import { Parse, ReportFightsResponse, Zone } from "../../core/FFLogs";
 import { gameServiceToken } from "../../services/game.service-provider";
 import { IGameService } from "../../services/game.service-interface";
 import { NzModalRef } from "ng-zorro-antd/modal";
@@ -29,7 +29,7 @@ export class FFLogsImportDialog implements OnInit {
   reportValue: string;
   haveFFlogsChar: boolean;
   zones = [];
-  parsesList = [];
+  parsesList: Parse[] = [];
   @Input() code: string;
   searchAreaDisplay = "none";
   listAreaDisplay = "none";
@@ -185,6 +185,10 @@ export class FFLogsImportDialog implements OnInit {
 
   getIcon(spec) {
     return this.service.jobRegistry.getJobs().find(j => j.fullName === spec).icon;
+  }
+
+  getBossIcon(id) {
+    return "https://assets.rpglogs.com/img/ff/bosses/" + id + "-icon.jpg"
   }
 
 

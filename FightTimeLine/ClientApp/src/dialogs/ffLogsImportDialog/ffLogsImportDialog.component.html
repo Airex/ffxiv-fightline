@@ -51,9 +51,10 @@
                     <strong>{{round(item.percentile)}}</strong>
                   </ng-template>
                   <ng-template #nzAvatar>
-                    <img class="job-icon" style="margin-left: 5px" [src]="getIcon(item.spec)" />
+                    <img class="boss-icon" style="margin-left: 5px" [src]="getBossIcon(item.encounterID)" />
                   </ng-template>
                   <ng-template #nzTitle>
+                    <img class="job-icon" style="margin-left: 5px;margin-right: 5px" [src]="getIcon(item.spec)" />
                     <strong style="font-size: large">{{item.encounterName}}</strong><span class="example-spacer"></span>
                   </ng-template>
                   <ng-template #nzDescription>

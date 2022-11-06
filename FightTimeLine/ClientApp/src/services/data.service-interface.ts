@@ -10,5 +10,5 @@ export interface IDataService {
   getFight(code: string): Promise<FFLogs.ReportFightsResponse>;
   getEvents(code: string, instance: number, options: GetEventsOptions, callBack: (percentage: number) => void): Promise<Parser.Parser>;
   getZones(): Observable<FFLogs.Zone[]>;
-  getParses(characterName: string, serverName: string, region: string): Observable<any[]>;
+  getParses(characterName: string, serverName: string, region: string): Observable<FFLogs.Parse[]>;
 }

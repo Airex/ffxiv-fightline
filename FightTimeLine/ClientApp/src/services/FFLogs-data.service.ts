@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { tap, debounceTime } from "rxjs/operators";
 import { Observable, of } from "rxjs";
 import { LocalStorageService } from "./LocalStorageService";
-import { BaseEventFields, CorrectReportEventsResponse, ReportFightsResponse, Zone } from "../core/FFLogs";
+import { BaseEventFields, CorrectReportEventsResponse, Parse, ReportFightsResponse, Zone } from "../core/FFLogs";
 import * as _ from "lodash";
 import { Parser } from "src/core/Parser";
 import { IJobRegistryService } from "./jobregistry.service-interface";
@@ -129,9 +129,9 @@ export class FFLogsService implements IDataService {
     return observable;
   }
 
-  getParses(characterName: string, serverName: string, region: string): Observable<any[]> {
+  getParses(characterName: string, serverName: string, region: string): Observable<Parse[]> {
     const url = `${this.fflogsUrl}v1/parses/character/${encodeURIComponent(characterName)}/${encodeURIComponent(serverName)}/${encodeURIComponent(region)}?api_key=${this.apiKey}`;
-    const observable = this.httpClient.get<Zone[]>(url);
+    const observable = this.httpClient.get<Parse[]>(url);
     return observable;
   }
 }
