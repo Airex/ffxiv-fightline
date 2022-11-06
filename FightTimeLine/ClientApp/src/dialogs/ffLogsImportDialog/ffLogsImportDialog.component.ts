@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { RecentActivityService } from "../../services/RecentActivitiesService";
 import { SettingsService } from "../../services/SettingsService";
 import { Utils } from "../../core/Utils";
-import { Parse, ReportFightsResponse, Zone } from "../../core/FFLogs";
+import { Fight, Parse, ReportFightsResponse, Zone } from "../../core/FFLogs";
 import { gameServiceToken } from "../../services/game.service-provider";
 import { IGameService } from "../../services/game.service-interface";
 import { NzModalRef } from "ng-zorro-antd/modal";
@@ -28,7 +28,7 @@ export class FFLogsImportDialog implements OnInit {
 
   reportValue: string;
   haveFFlogsChar: boolean;
-  zones = [];
+  zones:{ key: string, value: Fight[] }[] = [];
   parsesList: Parse[] = [];
   @Input() code: string;
   searchAreaDisplay = "none";
@@ -85,12 +85,12 @@ export class FFLogsImportDialog implements OnInit {
       .getFight(code)
       .then((it: ReportFightsResponse) => {
         if (it.fights.length === 0) { return; }
-        const groupBy = key => array =>
+        const groupBy = (key: string) => <T>(array:T[]) =>
           array.reduce((objectsByKeyValue, obj) => {
             const value = obj[key];
             objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
             return objectsByKeyValue;
-          }, {});
+          }, {} as Record<string, T[]>);
 
         const zones = groupBy('zoneName')(it.fights);
         this.zones = Object.keys(zones).map((value) => ({ key: value, value: zones[value] }));
