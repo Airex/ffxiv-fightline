@@ -19,7 +19,7 @@
             <ul nz-menu [nzMode]="'inline'" style="min-height: 100%">
               <li nz-submenu *ngFor="let zone of filteredZones"
                 [nzOpen]="!!searchString || zone.id?.toString() === selectedZone">
-                <span title>{{zone.name}}</span>
+                <span title><img class="boss-icon" style="margin-right: 5px" [src]="getZoneIcon(zone.id)" />{{zone.name}}</span>
                 <ul>
                   <li nz-menu-item *ngFor="let encounter of filterEncounters(zone.encounters)"
                     [nzSelected]="selectedEncounter && selectedEncounter.id === encounter.id"
