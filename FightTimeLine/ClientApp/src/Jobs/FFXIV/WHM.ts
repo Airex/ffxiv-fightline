@@ -29,7 +29,8 @@ const statuses = MapStatuses({
     effects: [Effects.mitigation.solo(15)]
   },
   LiturgyOfTheBell: {
-    duration: 20
+    duration: 20,
+    effects: [Effects.shield.party(7)]
   }
 });
 
@@ -217,7 +218,7 @@ const abilities: IAbility[] = [
     cooldown: 180,
     xivDbId: 25862,
     statuses: [statuses.LiturgyOfTheBell],
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.Healing | AbilityType.PartyShield,
     levelAcquired: 90
   },
   ...getAbilitiesFrom(healerSharedAbilities),
