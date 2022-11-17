@@ -162,6 +162,7 @@ const abilities = [
     },
     cooldown: 30,
     xivDbId: "188",
+    statuses: [statuses.sacredSoil],
     abilityType: AbilityType.PartyDefense,
     levelAcquired: 50
   },
