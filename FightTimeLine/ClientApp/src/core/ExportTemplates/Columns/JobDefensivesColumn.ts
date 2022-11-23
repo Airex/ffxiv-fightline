@@ -116,7 +116,7 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
   isLevelInRange(abilityLevel: [number, number?], level: number): boolean {
     if (!abilityLevel) { return true; }
     const [from, to] = abilityLevel;
-    if (from < level) { return true; }
+    if (from <= level) { return true; }
     if (to && to >= level) { return true; }
     return false;
   }

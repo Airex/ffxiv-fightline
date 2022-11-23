@@ -34,7 +34,7 @@ const statuses = MapStatuses({
   },
   panhaima: {
     duration: 15,
-    effects: [Effects.mitigation.party(10)]        // todo: review this value
+    effects: [Effects.mitigation.party(7)]        // todo: review this value
   },
   krasis: {
     duration: 10
