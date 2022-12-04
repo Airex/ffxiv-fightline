@@ -36,6 +36,7 @@ namespace FightTimeLine
                services.AddHttpClient();
                services.AddControllers().AddNewtonsoftJson();
                services.AddHealthChecks();
+               services.AddSingleton(Configuration);
 
                services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                    .AddJwtBearer(options =>
@@ -68,7 +69,7 @@ namespace FightTimeLine
 
                services.AddSignalR().AddJsonProtocol();
                var serverVersion = new MySqlServerVersion(new Version(5, 7, 0));
-               services.AddDbContext<FightTimelineDataContext>(builder =>
+               services.AddDbContextPool<FightTimelineDataContext>(builder =>
                {
                     builder.ConfigureWarnings(warnings => warnings
                          .Ignore(CoreEventId.ContextInitialized)

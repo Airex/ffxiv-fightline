@@ -363,12 +363,12 @@ namespace FightTimeLine.Controllers
       [AllowAnonymous]
       public async Task<IActionResult> GetCommand([FromRoute] string id)
       {
-         if (!long.TryParse(id, out var intid))
+         if (!int.TryParse(id, out var intid))
             return BadRequest("CommandId is not provided");
 
          var entityEntry = await _dataContext.Commands
             .AsNoTracking()
-            .SingleOrDefaultAsync(entity => entity.Id == intid)
+            .FirstOrDefaultAsync(entity => entity.Id == intid)
             .ConfigureAwait(false);
 
          return Ok(entityEntry.Body);

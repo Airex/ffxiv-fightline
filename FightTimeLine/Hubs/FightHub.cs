@@ -98,12 +98,22 @@ namespace FightTimeLine.Hubs
 
           public override async Task OnDisconnectedAsync(Exception exception)
           {
-               var fight = (Guid)Context.Items["fight"];
+               try
+               {
+                    var fight = (Guid)Context.Items["fight"];
 
-               await _usersStorage.RemoveUserAsync(fight, Context.ConnectionId).ConfigureAwait(false);
-               await Clients.OthersInGroup(fight.ToString("N")).SendAsync("disconnected", new User() { id = Context.ConnectionId, name = Context.Items["username"]?.ToString() }).ConfigureAwait(false);
-               await Groups.RemoveFromGroupAsync(Context.ConnectionId, fight.ToString("N"));
-               await base.OnDisconnectedAsync(exception);
+                    await _usersStorage.RemoveUserAsync(fight, Context.ConnectionId).ConfigureAwait(false);
+                    await Clients.OthersInGroup(fight.ToString("N")).SendAsync("disconnected",
+                              new User() { id = Context.ConnectionId, name = Context.Items["username"]?.ToString() })
+                         .ConfigureAwait(false);
+                    await Groups.RemoveFromGroupAsync(Context.ConnectionId, fight.ToString("N"));
+                    await base.OnDisconnectedAsync(exception);
+               }
+               catch
+               {
+                    await base.OnDisconnectedAsync(exception);
+               }
+               
           }
      }
 
