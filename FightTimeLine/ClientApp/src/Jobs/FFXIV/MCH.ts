@@ -17,6 +17,10 @@ const statuses = MapStatuses({
   hypercharge: {
     duration: 8
   },
+  dismantle: {
+    duration: 10,
+    effects: [Effects.mitigation.party(10)]
+  },
   tactician: {
     duration: 15,
     shareGroup: "rangeDef",
@@ -131,6 +135,20 @@ const abilities = [
     statuses: [statuses.tactician],
     abilityType: AbilityType.PartyDefense,
     levelAcquired: 56
+  },
+  {
+    name: "Dismantle",
+    translation: {
+      de: "Dismantle",
+      ja: "Dismantle",
+      en: "Dismantle",
+      fr: "Dismantle"
+    },
+    cooldown: 120,
+    xivDbId: "",
+    statuses: [statuses.dismantle],
+    abilityType: AbilityType.PartyDefense,
+    levelAcquired: 62
   },
   {
     name: "Barrel Stabilizer",

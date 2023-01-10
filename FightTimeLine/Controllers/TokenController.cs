@@ -53,7 +53,7 @@ namespace FightTimeLine.Controllers
         private Task<UserEntity> Authenticate(LoginModel login)
         {
             _logger.LogInformation("Authenticating user {User}", login.Username);
-            var found = _dataContext.Users.SingleOrDefaultAsync(entity => entity.Name == login.Username && entity.Password == login.Password);
+            var found = _dataContext.Users.FirstOrDefaultAsync(entity => entity.Name == login.Username && entity.Password == login.Password);
             _logger.LogInformation("User {User} found: {Found}", login.Username, found!=null);
             return found;
         }

@@ -29,7 +29,8 @@ const statuses = MapStatuses({
         effects: [Effects.mitigation.party(10)]
     },
     naturesMinne: {
-        duration: 15
+        duration: 15,
+        effects: [Effects.healingIncrease.party(12)]
     },
     radiantFinale: {
         duration: 15
@@ -190,7 +191,6 @@ const abilities: IAbility[] = [
         xivDbId: "7408",
         statuses: [statuses.naturesMinne],
         abilityType: AbilityType.HealingBuff,
-        settings: [settings.target],
         levelAcquired: 66
     },
     {

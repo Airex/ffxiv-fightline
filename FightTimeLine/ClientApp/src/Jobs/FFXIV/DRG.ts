@@ -28,7 +28,7 @@ const abilities = [
       en: "Life Surge",
       fr: "Souffle de vie"
     },
-    cooldown: 45,
+    cooldown: 40,
     xivDbId: "83",
     statuses: [statuses.lifeSurge],
     abilityType: AbilityType.SelfDamageBuff,

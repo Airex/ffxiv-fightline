@@ -17,12 +17,10 @@ namespace FightTimeLine.Hubs
 {
      public class FightHub : Hub
      {
-          private readonly FightTimelineDataContext _dataContext;
           private readonly IHubUsersStorage _usersStorage;
 
-          public FightHub(FightTimelineDataContext dataContext, IHubUsersStorage usersStorage)
+          public FightHub(IHubUsersStorage usersStorage)
           {
-               _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
                _usersStorage = usersStorage ?? throw new ArgumentNullException(nameof(usersStorage));
           }
 

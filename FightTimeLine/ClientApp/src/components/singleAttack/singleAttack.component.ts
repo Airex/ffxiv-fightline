@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { Component, OnDestroy, Inject } from "@angular/core";
 import * as M from "../../core/Models";
 import * as S from "../../services/index";
 import { Holders } from "../../core/Holders";

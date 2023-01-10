@@ -43,7 +43,7 @@ const abilities: IAbility[] = [
       en: "Assize",
       fr: "Assises"
     },
-    cooldown: 45,
+    cooldown: 40,
     xivDbId: "3571",
     abilityType: AbilityType.Healing,
     levelAcquired: 56

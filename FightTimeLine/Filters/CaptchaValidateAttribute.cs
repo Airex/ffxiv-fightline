@@ -1,10 +1,9 @@
-﻿using System;
+﻿using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -24,11 +23,11 @@ namespace FightTimeLine.Filters
 
             var captcha = context.HttpContext.Request.Headers["Captcha"];
             var uri = $"{configurationSection["Url"]}?secret={configurationSection["Secret"]}&response={captcha}";
-            var httpResponseMessage = await client.PostAsync(uri, new StringContent("", Encoding.UTF8, "application/json"));
+            using var httpResponseMessage = await client.PostAsync(uri, new StringContent(string.Empty, Encoding.UTF8, "application/json"));
             await using var stream = await httpResponseMessage.Content.ReadAsStreamAsync();
-            using var httpRequestStreamReader = new HttpRequestStreamReader(stream, Encoding.UTF8);
+            using var httpRequestStreamReader = new StreamReader(stream, Encoding.UTF8);
             using var jsonTextReader = new JsonTextReader(httpRequestStreamReader);
-            var deserializeObject = await JObject.LoadAsync(jsonTextReader);
+            var deserializeObject = await JToken.ReadFromAsync(jsonTextReader);
             if (deserializeObject["success"].Value<bool>())
             {
                await next();

@@ -80,6 +80,20 @@ class ShieldEffect implements IAbilityEffect, IMitigator {
   }
 }
 
+class HealingIncreaseEffect implements IAbilityEffect {
+  constructor(private value: number, private targetType: DefenceTarget = DefenceTarget.Solo) {
+
+  }
+
+
+
+  visit(visitor: IEffectVisitor) {
+
+  }
+
+
+}
+
 class DelayEffect implements IAbilityEffect {
   constructor(private value: number) {
 
@@ -100,6 +114,9 @@ export default {
   },
   damage: {
 
+  },
+  healingIncrease: {
+    party: (value: number) => new HealingIncreaseEffect(value, DefenceTarget.Party)
   },
   delay: (value: number) => new DelayEffect(value)
 };

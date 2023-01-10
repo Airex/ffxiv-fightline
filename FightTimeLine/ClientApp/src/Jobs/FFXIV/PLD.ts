@@ -47,7 +47,7 @@ class CoverMitigationModifier implements IMitigator {
 
 const statuses = MapStatuses({
   fightOrFlight: {
-    duration: 25
+    duration: 20
   },
   circleOfScorn: {
     duration: 15
@@ -75,9 +75,13 @@ const statuses = MapStatuses({
     duration: 12,
     effects: [Effects.mitigation.solo(100).withModifier(CoverMitigationModifier)]
   },
-  sheltron: {
-    duration: 4,
+  bulwark: {
+    duration: 10,
     effects: [Effects.mitigation.solo(18)]
+  },
+  sheltron: {
+    duration: 6,
+    effects: [Effects.mitigation.solo(15)]
   },
   sheltron74Plus: {
     duration: 6,
@@ -85,7 +89,7 @@ const statuses = MapStatuses({
   },
   holySheltron: {
     duration: 8,
-    effects: [Effects.mitigation.solo(18)]
+    effects: [Effects.mitigation.solo(15)]
   },
   holySheltronResolve: {
     duration: 4,
@@ -164,6 +168,21 @@ const abilities: IAbility[] = [
     abilityType: AbilityType.SelfDefense,
     levelAcquired: 38
   },
+
+  {
+    name: "Bulwark",
+    translation: {
+      de: "Bulwark",
+      ja: "Bulwark",
+      en: "Bulwark",
+      fr: "Bulwark"
+    },
+    cooldown: 90,
+    xivDbId: "",
+    statuses: [statuses.bulwark],
+    abilityType: AbilityType.SelfDefense,
+    levelAcquired: 52
+  },
   {
     name: "Hallowed Ground",
     translation: {
@@ -230,7 +249,7 @@ const abilities: IAbility[] = [
       en: "Sheltron",
       fr: "Schiltron"
     },
-    cooldown: 6,
+    cooldown: 5,
     xivDbId: "3542",
     requiresBossTarget: true,
     statuses: [statuses.sheltron],

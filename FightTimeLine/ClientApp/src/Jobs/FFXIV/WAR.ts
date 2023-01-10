@@ -42,7 +42,7 @@ const statuses = MapStatuses({
     effects: [Effects.mitigation.solo(100)]
   },
   shakeItOff: {
-    duration: 15,
+    duration: 30,
     effects: [Effects.shield.party(15).withModifier(ShakeItOffMitigationModifier)]
   },
   thrillOfBattle: {

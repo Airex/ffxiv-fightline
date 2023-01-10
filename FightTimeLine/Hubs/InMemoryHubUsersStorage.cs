@@ -7,7 +7,6 @@
 // // </copyright>
 
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,7 +54,10 @@ namespace FightTimeLine.Hubs
 
           public async Task<IEnumerable<UserContainer>> GetUsersForFightAsync(Guid fight)
           {
-               var entities = await _dataContext.Sessions.Where(entity => entity.Fight == fight && entity.LastTouched != null && EF.Functions.DateDiffHour(entity.LastTouched, DateTimeOffset.Now) < 2).ToArrayAsync();
+               var entities = await _dataContext.Sessions
+                    .AsNoTracking()    
+                    .Where(entity => entity.Fight == fight && entity.LastTouched != null && EF.Functions.DateDiffHour(entity.LastTouched, DateTimeOffset.Now) < 2)
+                    .ToArrayAsync();
                return entities.Select(entity => new UserContainer()
                {
                     Fight = entity.Fight,
@@ -66,7 +68,9 @@ namespace FightTimeLine.Hubs
 
           public async Task TouchAsync(Guid fight, string usedId)
           {
-               var entities = await _dataContext.Sessions.Where(entity => entity.Fight == fight && entity.UserId == usedId).ToArrayAsync();
+               var entities = await _dataContext.Sessions
+                    .Where(entity => entity.Fight == fight && entity.UserId == usedId)
+                    .ToArrayAsync();
                foreach (var entity in entities)
                {
                     entity.LastTouched = DateTimeOffset.UtcNow;

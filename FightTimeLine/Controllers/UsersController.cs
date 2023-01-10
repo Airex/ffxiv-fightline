@@ -6,7 +6,6 @@ using FightTimeLine.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace FightTimeLine.Controllers
@@ -15,14 +14,12 @@ namespace FightTimeLine.Controllers
    public class UsersController : Controller
    {
       private readonly FightTimelineDataContext _dataContext;
-      private readonly IConfiguration _configuration;
       ILogger<UsersController> _logger;
 
-      public UsersController(FightTimelineDataContext dataContext, IConfiguration configuration,
+      public UsersController(FightTimelineDataContext dataContext,
          ILogger<UsersController> logger)
       {
          _dataContext = dataContext;
-         _configuration = configuration;
          _logger = logger;
       }
 
@@ -31,7 +28,7 @@ namespace FightTimeLine.Controllers
       [Route("[action]")]
       public async Task<IActionResult> Exists([FromQuery] string username)
       {
-         var userEntity = await _dataContext.Users.FirstOrDefaultAsync(entity => entity.Name == username);
+         var userEntity = await _dataContext.Users.AsNoTracking().FirstOrDefaultAsync(entity => entity.Name == username);
          return Json(userEntity != null || string.Equals(username, "anonymous", StringComparison.OrdinalIgnoreCase));
       }
 
@@ -42,7 +39,7 @@ namespace FightTimeLine.Controllers
       public async Task<IActionResult> CreateUser([FromBody] RegisterUserModel model)
       {
          _logger.LogInformation("Creating user for {User}", model.Username);
-         if (await _dataContext.Users.AnyAsync(entity => entity.Name == model.Username))
+         if (await _dataContext.Users.AsNoTracking().AnyAsync(entity => entity.Name == model.Username))
          {
             _logger.LogInformation("Duplicate user found for user {User}", model.Username);
             return BadRequest();

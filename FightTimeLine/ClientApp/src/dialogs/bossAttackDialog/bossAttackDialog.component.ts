@@ -2,10 +2,10 @@ import { Component, Input, OnInit, ViewChild, Inject } from "@angular/core";
 import { SyncSettingsComponent } from "./syncSettings/syncSettings.component";
 import { SyncDowntimeComponent } from "./syncDowntime/syncDowntime.component";
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
-import * as M from "../../core/Models";
+import { IBossAbility } from "../../core/Models";
 import { time } from "../../heplers/TimeValidator";
-import * as Gameserviceprovider from "../../services/game.service-provider";
-import * as Gameserviceinterface from "../../services/game.service-interface";
+import { gameServiceToken } from "../../services/game.service-provider";
+import { IGameService } from "../../services/game.service-interface";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { VisStorageService } from "src/services/VisStorageService";
 
@@ -16,7 +16,7 @@ import { VisStorageService } from "src/services/VisStorageService";
 })
 export class BossAttackDialog implements OnInit {
 
-  @Input() data: M.IBossAbility;
+  @Input() data: IBossAbility;
   @ViewChild("syncSettings") syncSettings: SyncSettingsComponent;
   @ViewChild("syncDowntime") syncDowntime: SyncDowntimeComponent;
   editForm: FormGroup;
@@ -32,8 +32,8 @@ export class BossAttackDialog implements OnInit {
   constructor(
     private visStorage: VisStorageService,
     private formBuilder: FormBuilder,
-    @Inject(Gameserviceprovider.gameServiceToken)
-    public gameService: Gameserviceinterface.IGameService,
+    @Inject(gameServiceToken)
+    public gameService: IGameService,
     public dialogRef: NzModalRef) {
   }
 

@@ -13,7 +13,7 @@ const statuses = MapStatuses({
   },
   riddleOofEarth: {
     duration: 10,
-    effects: [Effects.shield.solo(10)]
+    effects: [Effects.shield.solo(20)]
   },
   riddleOfFire: {
     duration: 20
@@ -138,7 +138,7 @@ const abilities = [
       fr: "\u00C9nigme de la terre"
     },
     duration: 10,
-    cooldown: 30,
+    cooldown: 120,
     xivDbId: "7394",
     statuses: [statuses.riddleOofEarth],
     abilityType: AbilityType.Utility | AbilityType.SelfShield,

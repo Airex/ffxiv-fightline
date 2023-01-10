@@ -40,7 +40,7 @@ namespace FightTimeLine.Controllers
       {
          var name = CurrentUserName;
 
-         var user = await _dataContext.Users.SingleOrDefaultAsync(entity => entity.Name == name).ConfigureAwait(false);
+         var user = await _dataContext.Users.FirstOrDefaultAsync(entity => entity.Name == name).ConfigureAwait(false);
          var isAdmin = user?.IsAdmin ?? false;
          return await _dataContext.Bosses
             .AsNoTracking()
@@ -150,7 +150,7 @@ namespace FightTimeLine.Controllers
             return guid;
          }).ToArray();
 
-         var user = await _dataContext.Users.SingleOrDefaultAsync(entity => entity.Name == nameClaim)
+         var user = await _dataContext.Users.FirstOrDefaultAsync(entity => entity.Name == nameClaim)
             .ConfigureAwait(false);
          if (user == null)
             return Unauthorized();
@@ -312,7 +312,7 @@ namespace FightTimeLine.Controllers
             return guid;
          }).ToArray();
 
-         var user = await _dataContext.Users.AsNoTracking().SingleOrDefaultAsync(entity => entity.Name == nameClaim)
+         var user = await _dataContext.Users.AsNoTracking().FirstOrDefaultAsync(entity => entity.Name == nameClaim)
             .ConfigureAwait(false);
          if (user == null)
             return Unauthorized();

@@ -1,7 +1,4 @@
-<toolbar
-  #toolbar
-  [showHome]="true"
->
+<toolbar #toolbar [showHome]="true">
   <span>
     <addJob (added)="addJob($event)"></addJob>
   </span>
@@ -12,79 +9,67 @@
       nzTooltipTrigger="click"
       nz-button
       nz-tooltip
-      nzTooltipTitle="{{'fightline.toolbar.menu-tooltip' | translate}}"
+      nzTooltipTitle="{{ 'fightline.toolbar.menu-tooltip' | translate }}"
     >
-      <i
-        nz-icon
-        nzType="menu"
-      ></i>
+      <i nz-icon nzType="menu"></i>
     </button>
     <nz-dropdown-menu #mainMenu="nzDropdownMenu">
       <ul nz-menu>
-        <li
-          nz-menu-item
-          (click)="onNew()"
-        >{{"fightline.toolbar.menu.new" | translate}}</li>
-        <li
-          nz-menu-item
-          (click)="load()"
-        >{{"fightline.toolbar.menu.load" | translate}}</li>
-        <li
-          nz-menu-item
-          (click)="saveFight()"
-        >{{"fightline.toolbar.menu.save" | translate}}</li>
-        <li
-          nz-menu-item
-          (click)="openBossTemplates()"
-        >{{"fightline.toolbar.menu.bossTemplates" | translate}}</li>
-        <li
-          nz-menu-item
-          (click)="showAsTable()"
-        >{{"fightline.toolbar.menu.tableview" | translate}}</li>
+        <li nz-menu-item (click)="onNew()">
+          {{ "fightline.toolbar.menu.new" | translate }}
+        </li>
+        <li nz-menu-item (click)="load()">
+          {{ "fightline.toolbar.menu.load" | translate }}
+        </li>
+        <li nz-menu-item (click)="saveFight()">
+          {{ "fightline.toolbar.menu.save" | translate }}
+        </li>
+        <li nz-menu-item (click)="openBossTemplates()">
+          {{ "fightline.toolbar.menu.bossTemplates" | translate }}
+        </li>
+        <li nz-menu-item (click)="showAsTable()">
+          {{ "fightline.toolbar.menu.tableview" | translate }}
+        </li>
         <li
           nz-submenu
-          nzTitle="{{'fightline.toolbar.menu.openAsTable._' | translate}}"
+          nzTitle="{{ 'fightline.toolbar.menu.openAsTable._' | translate }}"
         >
           <ul>
-            <li
-              nz-menu-item
-              (click)="onTable('defence')"
-            >{{"fightline.toolbar.menu.openAsTable.defence" | translate}}</li>
-            <li
-              nz-menu-item
-              (click)="onTable('descriptive')"
-            >{{"fightline.toolbar.menu.openAsTable.timeline" | translate}}</li>
-            <li
-              nz-menu-item
-              (click)="onTable('mitigations')"
-            >{{"fightline.toolbar.menu.openAsTable.mitigations" | translate}}</li>
+            <li nz-menu-item (click)="onTable('defence')">
+              {{ "fightline.toolbar.menu.openAsTable.defence" | translate }}
+            </li>
+            <li nz-menu-item (click)="onTable('descriptive')">
+              {{ "fightline.toolbar.menu.openAsTable.timeline" | translate }}
+            </li>
+            <li nz-menu-item (click)="onTable('mitigations')">
+              {{ "fightline.toolbar.menu.openAsTable.mitigations" | translate }}
+            </li>
           </ul>
         </li>
         <li
           nz-submenu
-          nzTitle="{{'fightline.toolbar.menu.export._' | translate}}"
+          nzTitle="{{ 'fightline.toolbar.menu.export._' | translate }}"
         >
           <ul>
-            <li
-              nz-menu-item
-              (click)="exportData('json')"
-            >{{"fightline.toolbar.menu.export.json" | translate}}</li>
+            <li nz-menu-item (click)="exportData('json')">
+              {{ "fightline.toolbar.menu.export.json" | translate }}
+            </li>
           </ul>
         </li>
         <li
           nz-submenu
-          nzTitle="{{'fightline.toolbar.menu.fflogs._' | translate}}"
+          nzTitle="{{ 'fightline.toolbar.menu.fflogs._' | translate }}"
           *ngIf="gameService.showImport"
         >
           <ul>
-            <li
-              nz-menu-item
-              (click)="importFromFFLogs()"
-            >{{"fightline.toolbar.menu.fflogs.import" | translate}}</li>
-            <li
-              nz-menu-item
-              (click)="importBossAttacksFromFFLogs()"
-            >{{"fightline.toolbar.menu.fflogs.importBossAttacks" | translate}}</li>
+            <li nz-menu-item (click)="importFromFFLogs()">
+              {{ "fightline.toolbar.menu.fflogs.import" | translate }}
+            </li>
+            <li nz-menu-item (click)="importBossAttacksFromFFLogs()">
+              {{
+                "fightline.toolbar.menu.fflogs.importBossAttacks" | translate
+              }}
+            </li>
           </ul>
         </li>
       </ul>
@@ -97,19 +82,17 @@
         (click)="onUndo()"
         [disabled]="!fightLineController.canUndo"
         nzPlacement="bottom"
-      ><i
-          nz-icon
-          nzType="undo"
-        ></i>{{"fightline.toolbar.undo" | translate}}</button>
+      >
+        <i nz-icon nzType="undo"></i>{{ "fightline.toolbar.undo" | translate }}
+      </button>
       <button
         nz-button
         (click)="onRedo()"
         [disabled]="!fightLineController.canRedo"
         nzPlacement="bottom"
-      ><i
-          nz-icon
-          nzType="redo"
-        ></i>{{"fightline.toolbar.redo" | translate}}</button>
+      >
+        <i nz-icon nzType="redo"></i>{{ "fightline.toolbar.redo" | translate }}
+      </button>
     </nz-button-group>
   </span>
   <span style="margin-left: 10px">
@@ -123,56 +106,43 @@
     ></abilityFilter>
   </span>
   <span style="margin-left: 10px">
-    <viewMenu
-      #view
-      (changed)="updateView($event)"
-    ></viewMenu>
+    <viewMenu #view (changed)="updateView($event)"></viewMenu>
   </span>
-  <span
-    style="margin-left: 10px"
-    *ngIf="!toolsManager.active"
-  >
+  <span style="margin-left: 10px" *ngIf="!toolsManager.active">
     <button
       nz-dropdown
       [nzDropdownMenu]="toolMenu"
       [nzTrigger]="'click'"
       nz-button
-    ><i
-        nz-icon
-        nzType="tool"
-        theme="twotone"
-      ></i>{{"fightline.toolbar.tools" | translate}}</button>
+    >
+      <i nz-icon nzType="tool" theme="twotone"></i
+      >{{ "fightline.toolbar.tools" | translate }}
+    </button>
     <nz-dropdown-menu #toolMenu="nzDropdownMenu">
-      <ul
-        nz-menu
-        class="noselect"
-      >
+      <ul nz-menu class="noselect">
         <li
           nz-menu-item
           (click)="useTool(t)"
           *ngFor="let t of toolsManager.toolNames"
-        >{{t}}</li>
+        >
+          {{ t }}
+        </li>
       </ul>
     </nz-dropdown-menu>
   </span>
-  <span
-    style="margin-left: 10px"
-    *ngIf="toolsManager.active"
-  >
-    <button
-      nz-button
-      [nzDanger]="true"
-      (click)="useTool(null)"
-    >{{toolsManager.active}}</button>
+  <span style="margin-left: 10px" *ngIf="toolsManager.active">
+    <button nz-button [nzDanger]="true" (click)="useTool(null)">
+      {{ toolsManager.active }}
+    </button>
   </span>
-  <span style="display: inline-flex; margin-left: 20px;">
+  <span style="display: inline-flex; margin-left: 20px">
     <avatarWithPing
       *ngFor="let user of fightHubService.users"
       [owner]="false"
       textSizeRatio="3"
       [name]="user.name"
       [id]="user.id"
-      [ngStyle]="{'margin-right':'2px'}"
+      [ngStyle]="{ 'margin-right': '2px' }"
     ></avatarWithPing>
   </span>
   <span right>
@@ -181,21 +151,15 @@
       nzShape="circle"
       nzType="primary"
       nz-tooltip
-      nzTooltipTitle="{{'fightline.toolbar.refresh-tooltip' | translate}}"
+      nzTooltipTitle="{{ 'fightline.toolbar.refresh-tooltip' | translate }}"
       (click)="planArea.refresh()"
       style="margin-left: 10px"
     >
-      <i
-        nz-icon
-        nzType="sync"
-      ></i>
+      <i nz-icon nzType="sync"></i>
     </button>
   </span>
 </toolbar>
-<planArea
-  #planArea
-  (action)="onAction($event)"
-></planArea>
+<planArea #planArea (action)="onAction($event)"></planArea>
 <sidepanel #sidepanel></sidepanel>
 <ng-progress
   #progressBar

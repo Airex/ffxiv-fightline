@@ -1,21 +1,22 @@
-import * as H from "./Holders";
-import * as M from "./Models";
+import { Holders } from "./Holders";
+import { IAbility, IJob, IEffectVisitor, DamageType, IMitigator, SettingsEnum } from "./Models";
 import { Utils } from "./Utils";
 
 export type DefsCalcResultAbility = {
   jobId: string;
   start?: Date;
   jobName: string;
-  ability: M.IAbility;
+  ability: IAbility;
   id: string;
+  valid: boolean;
 };
 
 export type DefsCalcResult = {
-  job: M.IJob;
+  job: IJob;
   abilities: DefsCalcResultAbility[];
 }[];
 
-export function calculateDefsForAttack(holders: H.Holders, attackId: string): DefsCalcResult {
+export function calculateDefsForAttack(holders: Holders, attackId: string): DefsCalcResult {
   const bossAttack = holders.bossAttacks.get(attackId);
 
   if (!bossAttack) { return []; }
@@ -39,8 +40,9 @@ export function calculateDefsForAttack(holders: H.Holders, attackId: string): De
       start: it.start,
       jobName: jobMap.job.name,
       ability: it.ability.ability,
-      id: it.id
-    };
+      id: it.id,
+      valid: true
+    } as DefsCalcResultAbility;
   });
 
   const grouped = Utils.groupBy(values, x => x.jobId);
@@ -54,7 +56,7 @@ export function calculateDefsForAttack(holders: H.Holders, attackId: string): De
 
 }
 
-export function calculateAvailDefsForAttack(holders: H.Holders, id: string): DefsCalcResult {
+export function calculateAvailDefsForAttack(holders: Holders, id: string): DefsCalcResult {
   const bossAttack = holders.bossAttacks.get(id);
 
   if (!bossAttack) { return []; }
@@ -74,7 +76,7 @@ export function calculateAvailDefsForAttack(holders: H.Holders, id: string): Def
 
   const values = intersected.map((it) => {
     const jobMap = it.job;
-    return { jobId: jobMap.id, jobName: jobMap.job.name, ability: it.ability, id: it.id };
+    return { jobId: jobMap.id, jobName: jobMap.job.name, ability: it.ability, id: it.id, valid: true } as DefsCalcResultAbility;
   });
 
   const grouped = Utils.groupBy(values, x => x.jobId);
@@ -88,14 +90,14 @@ export function calculateAvailDefsForAttack(holders: H.Holders, id: string): Def
 
 }
 
-class MitigationVisitor implements M.IEffectVisitor {
+class MitigationVisitor implements IEffectVisitor {
 
-  constructor(private holders: H.Holders) {
+  constructor(private holders: Holders) {
 
   }
 
   private target: string = null;
-  private damageType: M.DamageType = M.DamageType.None;
+  private damageType: DamageType = DamageType.None;
 
   public partyMitigation = -1;
   public partyShield = 0;
@@ -106,33 +108,33 @@ class MitigationVisitor implements M.IEffectVisitor {
   delay(value: number) {
   }
 
-  setTarget(target: string, damageType: M.DamageType, abilityId: string, jobId: string) {
+  setTarget(target: string, damageType: DamageType, abilityId: string, jobId: string) {
     this.target = target;
     this.damageType = damageType;
     this.abilityId = abilityId;
     this.jobId = jobId;
   }
 
-  mitigate(mitigator: M.IMitigator) {
+  mitigate(mitigator: IMitigator) {
     const self = this;
     const context = {
       jobId: self.jobId,
       abilityId: self.abilityId,
       holders: this.holders,
-      addMitigationForTarget(value: number, damageType: M.DamageType) {
+      addMitigationForTarget(value: number, damageType: DamageType) {
         if (self.target) {
           if (!self.sums[self.target]) { self.sums[self.target] = { shield: 0, mitigation: 1 }; }
-          if (self.damageType === M.DamageType.None
-            || damageType === M.DamageType.All
+          if (self.damageType === DamageType.None
+            || damageType === DamageType.All
             || ((damageType & self.damageType) === self.damageType)) {
             self.sums[self.target].mitigation *= 1 - (value || 0) / 100;
           }
         }
       },
-      addMitigationForParty(value: number, damageType: M.DamageType) {
+      addMitigationForParty(value: number, damageType: DamageType) {
         if (self.partyMitigation === -1) { self.partyMitigation = 1; }
-        if (self.damageType === M.DamageType.None
-          || damageType === M.DamageType.All
+        if (self.damageType === DamageType.None
+          || damageType === DamageType.All
           || ((damageType & self.damageType) === self.damageType)) {
           self.partyMitigation *= 1 - value / 100;
         }
@@ -151,7 +153,7 @@ class MitigationVisitor implements M.IEffectVisitor {
     mitigator.apply(context);
   }
 
-  public build(holders: H.Holders) {
+  public build(holders: Holders) {
     const defStats = Object.keys(this.sums).map(s =>
     ({
       name: holders.jobs.get(s)?.job.name,
@@ -175,9 +177,9 @@ class MitigationVisitor implements M.IEffectVisitor {
 export type MitigationForAttack = { name: string; id: string; mitigation: number; shield: any; icon: string; };
 
 export function calculateMitigationForAttack(
-  holders: H.Holders,
+  holders: Holders,
   defs: DefsCalcResult,
-  attack: { offset: string, type?: M.DamageType | number }
+  attack: { offset: string, type?: DamageType | number }
 ): MitigationForAttack[] {
 
   const abs: DefsCalcResultAbility[] = defs.reduce((ac, j) => {
@@ -190,7 +192,7 @@ export function calculateMitigationForAttack(
 
   const used = new Set();
   abs.forEach(a => {
-    const settingData = holders.itemUsages.get(a.id).getSettingData(M.SettingsEnum.Target);
+    const settingData = holders.itemUsages.get(a.id).getSettingData(SettingsEnum.Target);
     const target = settingData?.value || a.jobId;
     mitigationVisitor.setTarget(target, attack.type, a.id, a.jobId);
 
