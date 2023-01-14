@@ -196,7 +196,7 @@ const abilities: IAbility[] = [
       fr: "Forteresse",
     },
     cooldown: 90,
-    xivDbId: "21",
+    xivDbId: "22",
     statuses: [statuses.bulwark],
     abilityType: AbilityType.SelfDefense,
     levelAcquired: 52,
