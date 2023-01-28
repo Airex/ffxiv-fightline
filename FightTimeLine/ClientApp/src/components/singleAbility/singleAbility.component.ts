@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from "@angular/core";
+import { Component, OnDestroy, Inject } from "@angular/core";
 import { FormGroup, FormControl } from "@angular/forms";
 import * as M from "../../core/Models";
 import { Utils } from "../../core/Utils";
@@ -17,7 +17,7 @@ import { TranslateService } from "@ngx-translate/core";
   templateUrl: "./singleAbility.component.html",
   styleUrls: ["./singleAbility.component.css"],
 })
-export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComponent {
+export class SingleAbilityComponent implements  OnDestroy, ISidePanelComponent {
 
   form: FormGroup;
   description: any;
@@ -74,7 +74,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
         return "Description_de";
       case M.SupportedLanguages.fr:
         return "Description_fr";
-      case M.SupportedLanguages.jp:
+      case M.SupportedLanguages.ja:
         return "Description_ja";
       default:
         return "Description";
@@ -165,9 +165,10 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     }
 
     if (this.it.ability.isDef || this.it.ability.isHeal) {
-      this.covered = this.visStorage.holders.bossAttacks.getAll().filter((it) => {
-        return it.start >= this.it.start && it.start <= new Date(this.it.startAsNumber + this.it.calculatedDuration * 1000);
-      }).sort((a, b) => a.startAsNumber - b.startAsNumber);
+      this.covered = this.visStorage.holders.bossAttacks
+        .filter((it) => {
+          return it.isForFfLogs(this.visStorage.presenter.filter.attacks.fflogsSource) && it.start >= this.it.start && it.start <= new Date(this.it.startAsNumber + this.it.calculatedDuration * 1000);
+        }).sort((a, b) => a.startAsNumber - b.startAsNumber);
     }
 
     if (this.it.ability.isSelfDamage || this.it.ability.isPartyDamage) {
@@ -198,9 +199,7 @@ export class SingleAbilityComponent implements OnInit, OnDestroy, ISidePanelComp
     }
   }
 
-  ngOnInit(): void {
 
-  }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();

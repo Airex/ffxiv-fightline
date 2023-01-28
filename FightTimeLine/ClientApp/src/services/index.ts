@@ -5,7 +5,6 @@ import { fightServiceToken, fightServiceProvider } from "./fight.service-provide
 import { DialogService } from "./DialogService";
 import { RecentActivityService } from "./RecentActivitiesService";
 import { SettingsService } from "./SettingsService";
-import { SpreadSheetsService } from "./SpreadSheetsService";
 import { UserService } from "./UserService";
 import { ScreenNotificationsService } from "./ScreenNotificationsService";
 import { LocalStorageService } from "./LocalStorageService";
@@ -24,7 +23,6 @@ export {
   IFightService,
   RecentActivityService,
   SettingsService,
-  SpreadSheetsService,
   UserService,
   ScreenNotificationsService,
   SessionStorageService,
@@ -47,7 +45,6 @@ export const ServicesModuleComponents =
     DialogService,
     RecentActivityService,
     SettingsService,
-    SpreadSheetsService,
     UserService,
     ScreenNotificationsService,
     LocalStorageService,

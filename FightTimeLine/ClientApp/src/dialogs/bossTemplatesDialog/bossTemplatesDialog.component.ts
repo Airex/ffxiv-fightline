@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, ViewChild, ElementRef, OnDestroy, Input } from "@angular/core";
 import { map, first } from "rxjs/operators/";
 import { Zone, Encounter } from "../../core/FFLogs";
-import * as M from "../../core/Models";
+import { IBoss, IBossSearchEntry, IBossAbility, DamageType } from "../../core/Models";
 import { Utils } from "../../core/Utils";
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService";
 import { DispatcherPayloads, DispatcherService } from "../../services/dispatcher.service";
@@ -9,11 +9,12 @@ import { fightServiceToken } from "../../services/fight.service-provider";
 import { IFightService } from "../../services/fight.service-interface";
 import { IAuthenticationService } from "../../services/authentication.service-interface";
 import { authenticationServiceToken } from "../../services/authentication.service-provider";
-import { VisTimelineService, DataSet } from "ngx-vis";
-import { TimelineOptions, DataGroup, DataItem } from "vis-timeline";
-import * as Gameserviceprovider from "../../services/game.service-provider";
-import * as Gameserviceinterface from "../../services/game.service-interface";
+import { gameServiceToken } from "../../services/game.service-provider";
+import { IGameService } from "../../services/game.service-interface";
 import { NzModalRef } from "ng-zorro-antd/modal";
+import {DataSetDataGroup, DataSetDataItem } from "vis-timeline";
+import { DataSet } from "vis-data";
+import { DataGroup, DataItem, TimelineOptions, VisTimelineService } from "ngx-vis";
 
 @Component({
   selector: "bossTemplatesDialog",
@@ -23,13 +24,13 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 
 export class BossTemplatesDialog implements OnInit, OnDestroy {
 
-  visItems: DataSet<DataItem, 'id'> = new DataSet<DataItem>([], {});
-  visGroups: DataSet<DataGroup, 'id'> = new DataSet<DataGroup>([], {});
+  visItems: DataSetDataItem = new DataSet<DataItem>([], {});
+  visGroups: DataSetDataGroup = new DataSet<DataGroup>([], {});
   visTimelineBoss = "visTimelinebooooosss";
   startDate = new Date(946677600000);
   @ViewChild("timeline", { static: true }) timeline: ElementRef;
   @ViewChild("listContainer", { static: true }) listContainer: ElementRef;
-  @Input() data: { needSave: boolean, boss?: M.IBoss };
+  @Input() data: { needSave: boolean, boss?: IBoss };
 
   optionsBoss = {
     width: "100%",
@@ -64,14 +65,14 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
   filteredZones: Zone[];
   selectedZone: string;
   selectedEncounter: Encounter;
-  selectedTemplate: M.IBossSearchEntry;
-  templates: M.IBossSearchEntry[] = [];
-  filteredTemplates: M.IBossSearchEntry[] = [];
+  selectedTemplate: IBossSearchEntry;
+  templates: IBossSearchEntry[] = [];
+  filteredTemplates: IBossSearchEntry[] = [];
   isTimelineLoading = false;
 
   constructor(
     public dialogRef: NzModalRef,
-    @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
+    @Inject(gameServiceToken) private gameService: IGameService,
     @Inject(fightServiceToken) private fightService: IFightService,
     private visTimelineService: VisTimelineService,
     @Inject("DispatcherPayloads") private dispatcher: DispatcherService<DispatcherPayloads>,
@@ -79,6 +80,14 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
     private notification: ScreenNotificationsService
   ) {
 
+  }
+
+  getBossIcon(id) {
+    return "https://assets.rpglogs.com/img/ff/bosses/" + id + "-icon.jpg"
+  }
+
+  getZoneIcon(id) {
+    return "https://assets.rpglogs.com/img/ff/zones/zone-" + id + ".png"
   }
 
   ngOnInit(): void {
@@ -122,7 +131,7 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
   onSearchFightChange(event: any) {
     this.filteredTemplates =
       this.templates.filter(
-        (t: M.IBossSearchEntry) => {
+        (t: IBossSearchEntry) => {
           return (!this.searchFightString || t.name.toLowerCase().indexOf(this.searchFightString.toLowerCase()) >= 0);
         }
       );
@@ -184,7 +193,7 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
     this.dialogRef.destroy();
   }
 
-  select(item: M.IBossSearchEntry, skipCheck?: boolean) {
+  select(item: IBossSearchEntry, skipCheck?: boolean) {
     if (this.data.boss && this.data.boss.ref && !skipCheck) {
       return;
     }
@@ -193,7 +202,7 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
     this.fightService.getBoss(this.selectedTemplate.id).subscribe((boss) => {
       const data = JSON.parse(boss.data);
       this.visItems.clear();
-      this.visItems.add(data.attacks.map(a => this.createBossAttack(a.id, a.ability as M.IBossAbility, false)));
+      this.visItems.add(data.attacks.map(a => this.createBossAttack(a.id, a.ability as IBossAbility, false)));
       this.visItems.add(data.downTimes.map(a => this.createDownTime(
         a.id,
         Utils.getDateFromOffset(a.start),
@@ -219,18 +228,18 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
     };
   }
 
-  createBossAttack(id: string, attack: M.IBossAbility, vertical: boolean): DataItem {
+  createBossAttack(id: string, attack: IBossAbility, vertical: boolean): DataItem {
     const data = {
       id,
       content: this.createBossAttackElement(attack),
       start: Utils.getDateFromOffset(attack.offset),
       type: "box",
-      className: "bossAttack " + M.DamageType[attack.type]
+      className: "bossAttack " + DamageType[attack.type]
     };
     return data;
   }
 
-  private createBossAttackElement(ability: M.IBossAbility): string {
+  private createBossAttackElement(ability: IBossAbility): string {
     return `<div><div class='marker'></div><div class='name'>${Utils.escapeHtml(ability.name)}</div></div>`;
   }
 

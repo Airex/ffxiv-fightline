@@ -1,16 +1,28 @@
 import { Command, ICommandData } from "./UndoRedo";
-import {
-  AddAbilityCommand, RemoveAbilityCommand, MoveCommand, AddJobCommand, CombinedCommand, AddBossAttackCommand,
-  RemoveBossAttackCommand, ChangeAbilitySettingsCommand,
-  SwitchTargetCommand, ChangeBossAttackCommand, RemoveJobCommand, AddDowntimeCommand, RemoveDownTimeCommand,
-  ChangeDowntimeCommand, ChangeDowntimeColorCommand, SetJobPetCommand,
-  AddStanceCommand, RemoveStanceCommand, MoveStanceCommand,
-  AddBatchUsagesCommand,
-  AddBatchAttacksCommand,
-  ChangeDowntimeCommentCommand,
-  ChangeJobStats,
-  AttachPresetCommand
-} from "./Commands";
+import { AttachPresetCommand } from "./commands/AttachPresetCommand";
+import { MoveStanceCommand } from "./commands/MoveStanceCommand";
+import { RemoveStanceCommand } from "./commands/RemoveStanceCommand";
+import { AddStanceCommand } from "./commands/AddStanceCommand";
+import { SetJobPetCommand } from "./commands/SetJobPetCommand";
+import { RemoveDownTimeCommand } from "./commands/RemoveDownTimeCommand";
+import { ChangeDowntimeCommentCommand } from "./commands/ChangeDowntimeCommentCommand";
+import { ChangeDowntimeColorCommand } from "./commands/ChangeDowntimeColorCommand";
+import { ChangeDowntimeCommand } from "./commands/ChangeDowntimeCommand";
+import { AddDowntimeCommand } from "./commands/AddDowntimeCommand";
+import { ChangeAbilitySettingsCommand } from "./commands/ChangeAbilitySettingsCommand";
+import { ChangeJobStats } from "./commands/ChangeJobStats";
+import { SwitchTargetCommand } from "./commands/SwitchTargetCommand";
+import { RemoveAbilityCommand } from "./commands/RemoveAbilityCommand";
+import { AddAbilityCommand } from "./commands/AddAbilityCommand";
+import { AddBatchUsagesCommand } from "./commands/AddBatchUsagesCommand";
+import { AddBatchAttacksCommand } from "./commands/AddBatchAttacksCommand";
+import { MoveCommand } from "./commands/MoveCommand";
+import { ChangeBossAttackCommand } from "./commands/ChangeBossAttackCommand";
+import { RemoveBossAttackCommand } from "./commands/RemoveBossAttackCommand";
+import { AddBossAttackCommand } from "./commands/AddBossAttackCommand";
+import { RemoveJobCommand } from "./commands/RemoveJobCommand";
+import { AddJobCommand } from "./commands/AddJobCommand";
+import { CombinedCommand } from "./commands/CombinedCommand";
 import { IView, IBossAbility } from "./Models";
 import { Utils } from "./Utils";
 

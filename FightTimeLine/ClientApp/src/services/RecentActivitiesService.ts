@@ -73,6 +73,7 @@ export interface IRecentActivity {
   url: string;
   timestamp: Date;
   pinned: boolean;
+  boss?: number;
 }
 
 export interface IFFLogsActivity extends  IRecentActivity {

@@ -68,9 +68,10 @@
         <div>
           <strong>{{"fightline.toolbar.filter.presets" | translate}}</strong>
         </div>
-        <nz-select nzShowSearch [nzDropdownRender]="renderTemplate" [(ngModel)]="presenterManager.selectedPreset"
-          [nzOpen]="openedSelect" (ngModelChange)="presetChanged($event)"
+        <nz-select nzShowSearch [nzDropdownRender]="renderTemplate" nzAllowClear [(ngModel)]="presenterManager.selectedPreset"
+          [nzOpen]="openedSelect" (ngModelChange)="onPresetChanged($event)"
           nzPlaceHolder="{{'fightline.toolbar.filter.selectPreset' | translate}}" #presetSelect>
+          <nz-option nzLabel="" nzValue=""></nz-option>
           <nz-option nzCustomContent *ngFor="let item of presenterManager.presets | keyvalue" [nzLabel]="item.key" [nzValue]="item.key">
             {{item.key}}
           </nz-option>

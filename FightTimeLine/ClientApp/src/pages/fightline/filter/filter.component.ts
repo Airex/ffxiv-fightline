@@ -22,8 +22,9 @@ export class FilterComponent implements OnInit {
   filters = this.loadFilters();
   openedSelect = false;
 
-  @Output() public changed: EventEmitter<string> = new EventEmitter();
+  @Output() public filterChanged: EventEmitter<string> = new EventEmitter();
   @Output() public attachPresetEvent: EventEmitter<{ name: string, preset: IPresetTemplate }> = new EventEmitter();
+  @Output() public presetChanged: EventEmitter<string> = new EventEmitter();
   @Input() public fromFFlogs = false;
   @Input() public fightId: string;
 
@@ -81,7 +82,7 @@ export class FilterComponent implements OnInit {
       this.presenterManager.filter.abilities[key] = value;
     });
     setTimeout(() => {
-      this.changed.emit('ability');
+      this.filterChanged.emit('ability');
     });
   }
 
@@ -113,7 +114,7 @@ export class FilterComponent implements OnInit {
     this.presenterManager.filter.attacks.tags = this.tags.filter(t => t.checked).map(t => t.text);
     this.presenterManager.filter.attacks.sources = this.sources.filter(t => t.checked).map(t => t.text);
     setTimeout(() => {
-      this.changed.emit(source);
+      this.filterChanged.emit(source);
     });
 
   }
@@ -131,30 +132,20 @@ export class FilterComponent implements OnInit {
   fflogsSourceChanged(value: boolean) {
     this.presenterManager.setFflogsSource(value ? "cast" : "damage");
     setTimeout(() => {
-      this.changed.emit();
+      this.filterChanged.emit();
     });
   }
 
   levelChanged(l: number) {
     this.presenterManager.setFightLevel(l);
     setTimeout(() => {
-      this.changed.emit("level");
+      this.filterChanged.emit("level");
     });
   }
 
-  presetChanged(ev: string) {
+  onPresetChanged(ev: string) {
     if (ev) {
-      const template = this.presenterManager.presets[ev];
-      this.presenterManager.loadTemplate(template, this.visStorage.holders);
-      const abs = this.visStorage.holders.abilities.getAll();
-      const jobs = this.visStorage.holders.jobs.getAll();
-      const items = this.visStorage.holders.itemUsages.getAll();
-      this.visStorage.holders.abilities.applyFilter((id) => items.some(ab => ab.ability.id === id));
-      this.visStorage.holders.abilities.update(abs.map(ab => { ab.applyData(); return ab; }));
-      this.visStorage.holders.jobs.update(jobs.map(j => { j.applyData(); return j; }));
-      this.visStorage.holders.itemUsages.update(items.map(i => { i.applyData(); return i; }));
-
-      this.presenterManager.save(this.storage, this.fightId);
+      this.presetChanged.emit(ev);
     }
   }
 }

@@ -69,7 +69,7 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
           this.isOffsetNear(attack.attack.offset, Utils.formatTime(usage.start), this.healingRange || [-5, 5])
         );
 
-      if (!condition) {
+      if (!condition || acc.some(a => a.text === usage.ability.translated)) {
         return acc;
       }
 
@@ -85,9 +85,9 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
         filterFn: (a) => {
           if (!this.afFilter) {
             const solo = (
-              (usage.ability.ability.abilityType & AbilityType.SelfDefense) === AbilityType.SelfDefense ||
-              (usage.ability.ability.abilityType & AbilityType.TargetDefense) === AbilityType.TargetDefense ||
-              (usage.ability.ability.abilityType & AbilityType.SelfShield) === AbilityType.SelfShield
+              usage.ability.hasValue(AbilityType.SelfDefense) ||
+              usage.ability.hasValue(AbilityType.TargetDefense) ||
+              usage.ability.hasValue(AbilityType.SelfShield)
             ) && a.indexOf("solo") >= 0;
             const party = (
               (usage.ability.ability.abilityType & AbilityType.PartyDefense) === AbilityType.PartyDefense ||
@@ -110,13 +110,13 @@ export class JobDefensivesColumn extends BaseColumnTemplate implements IColumnTe
       acc.push(result);
 
       return acc;
-    }, []);
+    }, [] as IExportItem[]);
     return this.items(items, { disableUnique: this.coverAll });
   }
   isLevelInRange(abilityLevel: [number, number?], level: number): boolean {
     if (!abilityLevel) { return true; }
     const [from, to] = abilityLevel;
-    if (from < level) { return true; }
+    if (from <= level) { return true; }
     if (to && to >= level) { return true; }
     return false;
   }

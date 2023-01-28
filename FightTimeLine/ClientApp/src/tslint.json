@@ -10,7 +10,7 @@
         "component-selector": [
             false,
             "element",
-            "app",
+            "",
             "kebab-case"
         ]
     }

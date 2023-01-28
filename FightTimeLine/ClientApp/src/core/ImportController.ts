@@ -2,13 +2,15 @@ import * as UndoRedo from "./UndoRedo";
 import * as SettingsService from "../services/SettingsService";
 import * as FFLogsCollectors from "./FflogsCollectors/FFLogsCollectors";
 import * as Generators from "./Generators";
-import * as Commands from "./Commands";
+import * as Commands from "./commands/Commands";
+import * as AddJobCommand from "./commands/AddJobCommand";
+import * as CombinedCommand from "./commands/CombinedCommand";
 import * as Models from "./Models";
 
 import * as Jobregistryserviceinterface from "../services/jobregistry.service-interface";
 import * as Parser from "./Parser";
 import { Holders } from "./Holders";
-import { RemoveBossAttackCommand } from "./Commands";
+import { RemoveBossAttackCommand } from "./commands/RemoveBossAttackCommand";
 
 export class ImportController {
 
@@ -16,7 +18,6 @@ export class ImportController {
     private idgen: Generators.IdGenerator,
     private holders: Holders,
     private jobRegistry: Jobregistryserviceinterface.IJobRegistryService) {
-
   }
 
   private addJob(
@@ -26,7 +27,7 @@ export class ImportController {
     pet?: string,
     collapsed: boolean = false,
     doUpdates: boolean = true): UndoRedo.Command {
-    return new Commands.AddJobCommand(id, name, actorName, this.holders.bossTargets.initialBossTarget, doUpdates, pet, collapsed);
+    return new AddJobCommand.AddJobCommand(id, name, actorName, this.holders.bossTargets.initialBossTarget, doUpdates, pet, collapsed);
   }
 
   buildImportCommand(settings: SettingsService.ISettings, parser: Parser.Parser, startDate: Date, ): UndoRedo.Command {
@@ -57,7 +58,7 @@ export class ImportController {
       parser.processCollectors(collectors);
 
 
-      return new Commands.CombinedCommand(commands);
+      return new CombinedCommand.CombinedCommand(commands);
 
     } catch (e) {
       console.error(e);
@@ -87,7 +88,7 @@ export class ImportController {
       parser.processCollectors(collectors);
 
 
-      return new Commands.CombinedCommand(commands);
+      return new CombinedCommand.CombinedCommand(commands);
 
     } catch (e) {
       console.error(e);

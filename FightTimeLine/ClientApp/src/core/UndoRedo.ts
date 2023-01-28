@@ -4,7 +4,7 @@ import { IAbility, IPresenterData } from "./Models";
 import * as Jobregistryserviceinterface from "../services/jobregistry.service-interface";
 import * as Holders from "./Holders";
 import * as Index from "./Maps/index";
-import { CombinedCommand } from "./Commands";
+import { CombinedCommand } from "./commands/CombinedCommand";
 
 export interface ICommandExecutionContext {
   idGen: IdGenerator;

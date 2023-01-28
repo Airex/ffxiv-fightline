@@ -30,7 +30,8 @@
               </nz-list-item>
               <nz-list-item *ngFor="let fight of zoneItem.value | killsonly:killsOnly" (click)="onClick(fight.id)"
                 [ngClass]="{fflogsitem:true}">
-                {{fight.name}} <span class="example-spacer"></span> {{fight.kill ? 'Kill' : 'Wipe'}} -
+                <img class="job-icon" style="margin-right: 5px" [src]="getBossIcon(fight.boss)" />
+                {{fight.name}} <span class="example-spacer"></span> {{(fight.bossPercentage || 10000)/100}}% {{fight.kill ? 'Kill' : 'Wipe'}} -
                 {{formatTime(fight.start_time, fight.end_time)}}
               </nz-list-item>
             </ng-template>
@@ -51,9 +52,10 @@
                     <strong>{{round(item.percentile)}}</strong>
                   </ng-template>
                   <ng-template #nzAvatar>
-                    <img class="job-icon" style="margin-left: 5px" [src]="getIcon(item.spec)" />
+                    <img class="boss-icon" style="margin-left: 5px" [src]="getBossIcon(item.encounterID)" />
                   </ng-template>
                   <ng-template #nzTitle>
+                    <img class="job-icon" style="margin-left: 5px;margin-right: 5px" [src]="getIcon(item.spec)" />
                     <strong style="font-size: large">{{item.encounterName}}</strong><span class="example-spacer"></span>
                   </ng-template>
                   <ng-template #nzDescription>

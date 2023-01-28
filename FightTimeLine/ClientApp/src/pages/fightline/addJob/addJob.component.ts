@@ -5,11 +5,10 @@ import { gameServiceToken } from "src/services/game.service-provider";
 import { VisStorageService } from "src/services/VisStorageService";
 import { PresenterManager } from "../../../core/PresentationManager";
 
-
 @Component({
   selector: "addJob",
   templateUrl: "./addJob.component.html",
-  styleUrls: ["./addJob.component.css"]
+  styleUrls: ["./addJob.component.css"],
 })
 export class AddJobComponent {
   public presenterManager: PresenterManager;
@@ -37,10 +36,9 @@ export class AddJobComponent {
     this.visible = false;
   }
 
-  getJobName(job: IJob){
-    return job.translation ? job.translation[this.presenterManager.language] : job.name;
+  getJobName(job: IJob) {
+    return job.translation
+      ? job.translation[this.presenterManager.language]
+      : job.name;
   }
-
-
 }
-

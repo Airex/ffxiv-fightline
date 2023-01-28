@@ -3,9 +3,9 @@ import { Router } from "@angular/router";
 import { RecentActivityService } from "../../services/RecentActivitiesService";
 import { SettingsService } from "../../services/SettingsService";
 import { Utils } from "../../core/Utils";
-import { ReportFightsResponse } from "../../core/FFLogs";
-import * as Gameserviceprovider from "../../services/game.service-provider";
-import * as Gameserviceinterface from "../../services/game.service-interface";
+import { Fight, Parse, ReportFightsResponse, Zone } from "../../core/FFLogs";
+import { gameServiceToken } from "../../services/game.service-provider";
+import { IGameService } from "../../services/game.service-interface";
 import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
@@ -19,8 +19,8 @@ export class FFLogsImportDialog implements OnInit {
 
   constructor(
     public dialogRef: NzModalRef,
-    @Inject(Gameserviceprovider.gameServiceToken)
-    public service: Gameserviceinterface.IGameService,
+    @Inject(gameServiceToken)
+    public service: IGameService,
     public recentService: RecentActivityService,
     public settingsService: SettingsService,
     private router: Router) {
@@ -28,8 +28,8 @@ export class FFLogsImportDialog implements OnInit {
 
   reportValue: string;
   haveFFlogsChar: boolean;
-  zones = [];
-  parsesList = [];
+  zones:{ key: string, value: Fight[] }[] = [];
+  parsesList: Parse[] = [];
   @Input() code: string;
   searchAreaDisplay = "none";
   listAreaDisplay = "none";
@@ -85,12 +85,12 @@ export class FFLogsImportDialog implements OnInit {
       .getFight(code)
       .then((it: ReportFightsResponse) => {
         if (it.fights.length === 0) { return; }
-        const groupBy = key => array =>
+        const groupBy = (key: string) => <T>(array:T[]) =>
           array.reduce((objectsByKeyValue, obj) => {
             const value = obj[key];
             objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
             return objectsByKeyValue;
-          }, {});
+          }, {} as Record<string, T[]>);
 
         const zones = groupBy('zoneName')(it.fights);
         this.zones = Object.keys(zones).map((value) => ({ key: value, value: zones[value] }));
@@ -185,6 +185,10 @@ export class FFLogsImportDialog implements OnInit {
 
   getIcon(spec) {
     return this.service.jobRegistry.getJobs().find(j => j.fullName === spec).icon;
+  }
+
+  getBossIcon(id) {
+    return "https://assets.rpglogs.com/img/ff/bosses/" + id + "-icon.jpg"
   }
 
 

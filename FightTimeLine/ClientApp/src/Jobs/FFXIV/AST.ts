@@ -1,6 +1,7 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate } from "../../core/Models";
+import { IJob, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate, ITrait, IAbilityCharges } from "../../core/Models";
 import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
+import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   lightSpeed: {
@@ -45,11 +46,11 @@ const abilities = [
     name: "Lightspeed",
     translation: {
       de: "Lichtgeschwindigkeit",
-      jp: "\u30E9\u30A4\u30C8\u30B9\u30D4\u30FC\u30C9",
+      ja: "\u30E9\u30A4\u30C8\u30B9\u30D4\u30FC\u30C9",
       en: "Lightspeed",
       fr: "Vitesse de la lumi\u00E8re"
     },
-    cooldown: 90,
+    cooldown: 120,
     xivDbId: "3606",
     statuses: [statuses.lightSpeed],
     abilityType: AbilityType.Utility,
@@ -59,7 +60,7 @@ const abilities = [
     name: "Essential Dignity",
     translation: {
       de: "Essenzielle W\u00FCrde",
-      jp: "\u30C7\u30A3\u30B0\u30CB\u30C6\u30A3",
+      ja: "\u30C7\u30A3\u30B0\u30CB\u30C6\u30A3",
       en: "Essential Dignity",
       fr: "Dignit\u00E9 essentielle"
     },
@@ -67,17 +68,13 @@ const abilities = [
     xivDbId: 3614,
     abilityType: AbilityType.Healing,
     settings: [settings.target],
-    charges: {
-      count: 2,
-      cooldown: 40
-    },
     levelAcquired: 15
   },
   {
     name: "Synastry",
     translation: {
       de: "Synastrie",
-      jp: "\u30B7\u30CA\u30B9\u30C8\u30EA\u30FC",
+      ja: "\u30B7\u30CA\u30B9\u30C8\u30EA\u30FC",
       en: "Synastry",
       fr: "Synastrie"
     },
@@ -92,21 +89,21 @@ const abilities = [
     name: "Divination",
     translation: {
       de: "Weissagung",
-      jp: "\u30C7\u30A3\u30F4\u30A3\u30CD\u30FC\u30B7\u30E7\u30F3",
+      ja: "\u30C7\u30A3\u30F4\u30A3\u30CD\u30FC\u30B7\u30E7\u30F3",
       en: "Divination",
       fr: "Divination"
     },
     cooldown: 120,
     xivDbId: "16552",
     statuses: [statuses.divination],
-    abilityType: AbilityType.SelfDamageBuff,
+    abilityType: AbilityType.PartyDamageBuff,
     levelAcquired: 50
   },
   {
     name: "Astrodyne",
     translation: {
       de: "Astrodyne",
-      jp: "\u30A2\u30B9\u30C8\u30ED\u30C0\u30A4\u30F3",
+      ja: "\u30A2\u30B9\u30C8\u30ED\u30C0\u30A4\u30F3",
       en: "Astrodyne",
       fr: "Astrodynamie"
     },
@@ -120,7 +117,7 @@ const abilities = [
     name: "Collective Unconscious",
     translation: {
       de: "Numinosum",
-      jp: "\u904B\u547D\u306E\u8F2A",
+      ja: "\u904B\u547D\u306E\u8F2A",
       en: "Collective Unconscious",
       fr: "Inconscient collectif"
     },
@@ -137,7 +134,7 @@ const abilities = [
     name: "Celestial Opposition",
     translation: {
       de: "Opposition",
-      jp: "\u661F\u5929\u5BFE\u6297",
+      ja: "\u661F\u5929\u5BFE\u6297",
       en: "Celestial Opposition",
       fr: "Opposition c\u00E9leste"
     },
@@ -151,7 +148,7 @@ const abilities = [
     name: "Earthly Star",
     translation: {
       de: "Irdischer Stern",
-      jp: "\u30A2\u30FC\u30B5\u30EA\u30FC\u30B9\u30BF\u30FC",
+      ja: "\u30A2\u30FC\u30B5\u30EA\u30FC\u30B9\u30BF\u30FC",
       en: "Earthly Star",
       fr: "\u00C9toile terrestre"
     },
@@ -165,7 +162,7 @@ const abilities = [
     name: "Minor Arcana",
     translation: {
       de: "Kleine Arkana",
-      jp: "\u30DE\u30A4\u30CA\u30FC\u30A2\u30EB\u30AB\u30CA",
+      ja: "\u30DE\u30A4\u30CA\u30FC\u30A2\u30EB\u30AB\u30CA",
       en: "Minor Arcana",
       fr: "Arcane mineur"
     },
@@ -179,7 +176,7 @@ const abilities = [
     name: "Celestial Intersection",
     translation: {
       de: "Kongruenz",
-      jp: "\u661F\u5929\u4EA4\u5DEE",
+      ja: "\u661F\u5929\u4EA4\u5DEE",
       en: "Celestial Intersection",
       fr: "Rencontre c\u00E9leste"
     },
@@ -190,16 +187,12 @@ const abilities = [
     defensiveStats: {
       shieldPercent: 10 // todo: review this value
     },
-    charges: {
-      count: 2,
-      cooldown: 30
-    }
   } as IAbility,
   {
     name: "Horoscope",
     translation: {
       de: "Horoskop",
-      jp: "\u30DB\u30ED\u30B9\u30B3\u30FC\u30D7",
+      ja: "\u30DB\u30ED\u30B9\u30B3\u30FC\u30D7",
       en: "Horoscope",
       fr: "Horoscope"
     },
@@ -213,7 +206,7 @@ const abilities = [
     name: "Neutral Sect",
     translation: {
       de: "Neutral",
-      jp: "\u30CB\u30E5\u30FC\u30C8\u30E9\u30EB\u30BB\u30AF\u30C8",
+      ja: "\u30CB\u30E5\u30FC\u30C8\u30E9\u30EB\u30BB\u30AF\u30C8",
       en: "Neutral Sect",
       fr: "Adepte de la neutralit\u00E9"
     },
@@ -227,7 +220,7 @@ const abilities = [
     name: "Exaltation",
     translation: {
       de: "Exaltation",
-      jp: "\u30A8\u30AF\u30B6\u30EB\u30C6\u30FC\u30B7\u30E7\u30F3",
+      ja: "\u30A8\u30AF\u30B6\u30EB\u30C6\u30FC\u30B7\u30E7\u30F3",
       en: "Exaltation",
       fr: "Exaltation"
     },
@@ -242,7 +235,7 @@ const abilities = [
     name: "Macrocosmos",
     translation: {
       de: "Makrokosmos",
-      jp: "\u30DE\u30AF\u30ED\u30B3\u30B9\u30E2\u30B9",
+      ja: "\u30DE\u30AF\u30ED\u30B3\u30B9\u30E2\u30B9",
       en: "Macrocosmos",
       fr: "Macrocosme"
     },
@@ -256,21 +249,50 @@ const abilities = [
   medicine.Mind
 ] as IAbility[];
 
+
+const traits: ITrait[] = [
+  {
+    name: "Hyper Lightspeed",
+    level: 68,
+    apply: abilityTrait("Lightspeed", { cooldown: 90 })
+  },
+  {
+    name: "Enhanced Essential Dignity",
+    level: 78,
+    apply: abilityTrait("Essential Dignity", {
+      charges: {
+        count: 2,
+        cooldown: 40
+      },
+    })
+  },
+  {
+    name: "Enhanced Celestial Intersection",
+    level: 88,
+    apply: abilityTrait("Celestial Intersection", {
+      charges: {
+        count: 2,
+        cooldown: 30
+      }
+    })
+  }
+];
 export const AST: IJobTemplate = {
   translation: {
     de: "AST",
-    jp: "AST",
+    ja: "AST",
     en: "AST",
     fr: "AST"
   },
   fullNameTranslation: {
     de: "Astrologe",
-    jp: "\u5360\u661F\u8853\u5E2B",
+    ja: "\u5360\u661F\u8853\u5E2B",
     en: "Astrologian",
     fr: "Astromancien"
   },
   role: Role.Healer,
-  abilities
+  abilities,
+  traits
 };
 
 

@@ -1,11 +1,11 @@
 import { InjectionToken } from "@angular/core";
 import { Observable } from "rxjs";
-import * as BaseHolder from "../../core/Holders/BaseHolder";
+import { IForSidePanel } from "src/core/Holders/BaseHolder";
 
 export type SidePanelMode = "default" | "table";
 
 export type SidepanelParams = {
-  items: BaseHolder.IForSidePanel[],
+  items: IForSidePanel[],
   mode: SidePanelMode,
   refresh: Observable<void>
 };

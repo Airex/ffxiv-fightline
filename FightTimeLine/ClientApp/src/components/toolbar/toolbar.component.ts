@@ -37,7 +37,7 @@ export class ToolbarComponent {
   }
 
   get currentLang() {
-    return this.visStorage.presenter.language.toLocaleUpperCase();
+    return (this.visStorage.presenter.language || "en").toLocaleUpperCase();
   }
 
   setLang(lang: string) {
@@ -54,8 +54,10 @@ export class ToolbarComponent {
       all.forEach(a => a.applyData({}));
       this.visStorage.holders.jobs.update(all);
     }
+
+    this.translate.use((localStorage.getItem("lang") || "en").replace("jp", "ja"));
     this.langChanged.emit();
-    // this.translate.use((localStorage.getItem("lang") || "en").replace("jp", "ja"));
+
   }
 
   onHome() {

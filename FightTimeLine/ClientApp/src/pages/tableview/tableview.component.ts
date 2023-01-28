@@ -5,11 +5,10 @@ import * as S from "../../services/index";
 import * as M from "../../core/Models";
 import { NgProgressComponent } from "ngx-progressbar";
 
-import { EachRowOneSecondTemplate } from "../../core/ExportTemplates/EachRowOneSecondTemplate";
 import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate";
 import { TableViewTemplate, ExportTemplateContext } from "../../core/BaseExportTemplate";
-import * as Gameserviceprovider from "../../services/game.service-provider";
-import * as Gameserviceinterface from "../../services/game.service-interface";
+import { gameServiceToken } from "../../services/game.service-provider";
+import { IGameService } from "../../services/game.service-interface";
 
 import * as FightTimeLineController from "../../core/FightTimeLineController";
 import * as Generators from "../../core/Generators";
@@ -59,7 +58,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   templates: { [name: string]: TableViewTemplate } = {
     defence: new BossAttackDefensiveTemplateV2(),
-    onesecond: new EachRowOneSecondTemplate(),
     descriptive: new DescriptiveTemplate(),
     mitigations: new MitigationsTemplate()
   };
@@ -88,7 +86,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   public constructor(
     @Inject(S.fightServiceToken) private fightService: S.IFightService,
     @Inject(S.authenticationServiceToken) public authenticationService: S.IAuthenticationService,
-    @Inject(Gameserviceprovider.gameServiceToken) private gameService: Gameserviceinterface.IGameService,
+    @Inject(gameServiceToken) private gameService: IGameService,
     private visStorage: VisStorageService,
     private notification: S.ScreenNotificationsService,
     private route: ActivatedRoute,
@@ -208,7 +206,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  load(id) {
+  load(id: string) {
     this.dialogService.executeWithLoading("Loading...", ref => {
       this.fightService.getFight(id).subscribe((fight: M.IFight) => {
         if (fight) {
@@ -291,7 +289,21 @@ export class TableViewComponent implements OnInit, OnDestroy {
         }
       };
 
-      this.options = [level, ...(this.tpl.loadOptions(this.visStorage.holders) || []), cellOptions, iconSize];
+      const fflogs: ExportModels.BooleanOptionsSetting = {
+        name: "ff",
+        defaultValue: 90,
+        displayName: "FFLogs Attack Source",
+        visible: this.visStorage.presenter.fflogsSource,
+        kind: ExportModels.TableOptionSettingType.Boolean,
+        description: "FFLogs Attack Source",
+        options: {
+          'true': 'Cast',
+          'false': 'Damage'
+        }
+      };
+
+      this.options = [level, fflogs, ...(this.tpl.loadOptions(this.visStorage.holders) || []), cellOptions, iconSize]
+        .filter(s => s);
 
       const [_, search] = this.location.path().split("?");
       const params = new URLSearchParams(search);
@@ -337,7 +349,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     const handlers: S.IConnectToSessionHandlers = {
       onCommand: ((data: M.IHubCommand) => this.handleRemoteCommand(data.id, data.userId)).bind(this),
       onConnected: ((data: M.IHubUser) => this.notification.showUserConnected(data)).bind(this),
-      onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisonnected(data)).bind(this)
+      onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisconnected(data)).bind(this)
     };
 
     const settings = this.settingsService.load();

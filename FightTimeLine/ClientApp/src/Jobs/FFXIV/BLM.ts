@@ -1,6 +1,7 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, IAbility, DamageType, JobStatuses, MapStatuses, IJobTemplate } from "../../core/Models";
+import { IJob, Role, AbilityType, IAbility, DamageType, JobStatuses, MapStatuses, IJobTemplate, ITrait } from "../../core/Models";
 import { getAbilitiesFrom, casterSharedAbilities, medicine, toAbilities } from "./shared";
+import { abilityTrait } from "./traits";
 
 
 const statuses = MapStatuses({
@@ -24,7 +25,7 @@ const abilities = [
     name: "Transpose",
     translation: {
       de: "Transposition",
-      jp: "\u30C8\u30E9\u30F3\u30B9",
+      ja: "\u30C8\u30E9\u30F3\u30B9",
       en: "Transpose",
       fr: "Transposition"
     },
@@ -37,7 +38,7 @@ const abilities = [
     name: "Manaward",
     translation: {
       de: "Mana-Schild",
-      jp: "\u30DE\u30D0\u30EA\u30A2",
+      ja: "\u30DE\u30D0\u30EA\u30A2",
       en: "Manaward",
       fr: "Barri\u00E8re de mana"
     },
@@ -52,11 +53,11 @@ const abilities = [
     name: "Manafont",
     translation: {
       de: "Mana-Brunnen",
-      jp: "\u30DE\u30CA\u30D5\u30A9\u30F3\u30C8",
+      ja: "\u30DE\u30CA\u30D5\u30A9\u30F3\u30C8",
       en: "Manafont",
       fr: "Vasque de mana"
     },
-    cooldown: 120,
+    cooldown: 180,
     xivDbId: "158",
     abilityType: AbilityType.Utility,
     levelAcquired: 30
@@ -65,7 +66,7 @@ const abilities = [
     name: "Ley Lines",
     translation: {
       de: "Ley-Linien",
-      jp: "\u9ED2\u9B54\u7D0B",
+      ja: "\u9ED2\u9B54\u7D0B",
       en: "Ley Lines",
       fr: "Manalignements"
     },
@@ -79,7 +80,7 @@ const abilities = [
     name: "Triplecast",
     translation: {
       de: "Tripelzauber",
-      jp: "\u4E09\u9023\u9B54",
+      ja: "\u4E09\u9023\u9B54",
       en: "Triplecast",
       fr: "Triple sort"
     },
@@ -97,25 +98,21 @@ const abilities = [
     name: "Sharpcast",
     translation: {
       de: "Augmentierung ",
-      jp: "\u6FC0\u6210\u9B54",
+      ja: "\u6FC0\u6210\u9B54",
       en: "Sharpcast",
       fr: "Dynamisation"
     },
-    cooldown: 30,
+    cooldown: 120,
     xivDbId: "3574",
     statuses: [statuses.sharpCast],
     abilityType: AbilityType.Utility,
-    levelAcquired: 54,
-    charges: {
-      count: 2,
-      cooldown: 30
-    }
+    levelAcquired: 54
   },
   {
     name: "Amplifier",
     translation: {
       de: "Verst\u00E4rker",
-      jp: "\u30A2\u30F3\u30D7\u30EA\u30D5\u30A1\u30A4\u30A2",
+      ja: "\u30A2\u30F3\u30D7\u30EA\u30D5\u30A1\u30A4\u30A2",
       en: "Amplifier",
       fr: "Amplificateur"
     },
@@ -127,21 +124,51 @@ const abilities = [
   ...getAbilitiesFrom(casterSharedAbilities),
   medicine.Intelligence
 ] as IAbility[];
+
+const traits: ITrait[] = [
+  {
+    name: "Enhanced Manafont",
+    level: 84,
+    apply: abilityTrait("Manafont", {
+      cooldown: 120
+    })
+  },
+  {
+    name: "Enhanced Sharpcast",
+    level: 74,
+    apply: abilityTrait("Sharpcast", {
+      cooldown: 30
+    })
+  },
+  {
+    name: "Enhanced Sharpcast II",
+    level: 88,
+    apply: abilityTrait("Sharpcast", {
+      charges: {
+        count: 2,
+        cooldown: 30
+      }
+    })
+  }
+];
+
+
 export const BLM: IJobTemplate = {
 
   translation: {
     de: "SMA",
-    jp: "BLM",
+    ja: "BLM",
     en: "BLM",
     fr: "MNO"
   },
 
   fullNameTranslation: {
     de: "Schwarzmagier",
-    jp: "\u9ED2\u9B54\u9053\u58EB",
+    ja: "\u9ED2\u9B54\u9053\u58EB",
     en: "Black Mage",
     fr: "Mage Noir"
   },
   role: Role.Caster,
-  abilities
+  abilities,
+  traits
 };

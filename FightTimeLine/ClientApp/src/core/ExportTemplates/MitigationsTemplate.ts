@@ -1,9 +1,12 @@
 import { AttackRowExportTemplate, ExportTemplateContext } from "../BaseExportTemplate";
 import { calculateDefsForAttack, calculateMitigationForAttack } from "../Defensives";
-import { ExportAttack, ExportData, ExportJob, IExportCell, IExportColumn, ITableOptionSettings } from "../ExportModels";
+import { IExportCell, IExportColumn, ITableOptionSettings } from "../ExportModels";
 import { Holders } from "../Holders";
-import { BossAttackMap, JobMap } from "../Maps";
-import { AttackNameColumn, BaseColumnTemplate, BossTargetColumn, IColumnTemplate, TimeColumn } from "../TableModels";
+import { BossAttackMap } from "../Maps";
+import { BaseColumnTemplate, IColumnTemplate } from "../TableModels";
+import { AttackNameColumn } from "./Columns/AttackNameColumn";
+import { BossTargetColumn } from "./Columns/BossTargetColumn";
+import { TimeColumn } from "./Columns/TimeColumn";
 
 export class MitigationsTemplate extends AttackRowExportTemplate {
   public loadOptions(): ITableOptionSettings {
@@ -21,81 +24,35 @@ export class MitigationsTemplate extends AttackRowExportTemplate {
 
     const jobs = context.holders.jobs.getAll().sort((a, b) => a.job.role - b.job.role);
 
-    const partyJob: ExportJob = {
-      name: "Party",
+    const partyJob = {
+      translated: "Party",
       id: "party",
-      icon: null,
-      order: -1,
-      pet: null,
-      role: null
+      order: -1
     };
 
     return [
       new TimeColumn(),
       new AttackNameColumn(context.presenter),
       new BossTargetColumn(),
-      ...jobs.map(j => new MitigationColumn(j, context.holders))
+      ...[partyJob, ...jobs].map(j => new MitigationColumn(j, context.holders))
     ];
   }
 }
 
-class MitigationPartyColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap>{
-  constructor(private holders: Holders) {
-    super();
-  }
-  buildHeader(data: Holders): IExportColumn {
-    return {
-      text: "Party",
-      name: "party",
-      icon: null,
-      refId: null,
-      width: "auto"
-    } as IExportColumn;
-  }
-  buildCell(data: Holders, attack: BossAttackMap): IExportCell {
-    const defs = calculateDefsForAttack(this.holders, attack.id);
-    const mts = calculateMitigationForAttack(this.holders, defs, attack);
-    return this.createJobCell(mts, "party");
-  }
-
-  private createJobCell(mts: { name: string; id: string; mitigation: number; shield: number; icon: string; }[], v: string) {
-    const mt = mts.find(m => m.id === v);
-    let cell;
-    if (mt) {
-      cell = this.items([
-        {
-          text: (mt.mitigation * 100).toFixed() + "%",
-          color: "blue",
-          tooltip: "Mitigation",
-          ignoreShowText: true
-        },
-        {
-          text: mt.shield.toFixed() + "%",
-          color: "red",
-          tooltip: "Shield",
-          ignoreShowText: true
-        }
-      ], {});
-    } else {
-      cell = this.items([], {});
-    }
-    return cell;
-  }
-}
-
 class MitigationColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap>{
-  constructor(private it: JobMap, private holders: Holders) {
+  constructor(private it: {id: string, translated: string, job?: { icon?: string }}, private holders: Holders) {
     super();
   }
   buildHeader(data: Holders): IExportColumn {
     return {
       text: this.it.translated,
       name: this.it.id,
-      icon: this.it.job.icon,
+      icon: this.it.job?.icon,
       refId: this.it.id,
       width: "auto"
     } as IExportColumn;
   }
+
   buildCell(data: Holders, attack: BossAttackMap): IExportCell {
     const defs = calculateDefsForAttack(this.holders, attack.id);
     const mts = calculateMitigationForAttack(this.holders, defs, attack);

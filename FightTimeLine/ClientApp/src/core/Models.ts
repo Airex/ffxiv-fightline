@@ -1,4 +1,4 @@
-import * as FF from "./FFLogs";
+import * as FFLogs from "./FFLogs";
 import * as FFLogsCollectors from "./FflogsCollectors/FFLogsCollectors";
 import { Holders } from "./Holders";
 import { IOverlapCheckData } from "./Maps/BaseMap";
@@ -146,7 +146,7 @@ export interface IDetectionDependencies {
 
 export interface IDetectionStrategy {
   deps: IDetectionDependencies;
-  process(ev: FF.BaseEventFields): { offset: number, name: string };
+  process(ev: FFLogs.BaseEventFields): { offset: number, name: string };
 }
 
 export type IOverlapCheckContext = IOverlapCheckData & {
@@ -177,7 +177,7 @@ export enum SupportedLanguages {
   en = "en",
   fr = "fr",
   de = "de",
-  jp = "jp"
+  ja = "ja"
 }
 
 export type Translation = {
@@ -263,13 +263,14 @@ export interface IAbilityCharges {
   sharesWith?: string[];
 }
 
+export type SettingValue = any;
 export interface IAbilitySetting {
   name: string;
   displayName: string;
   description: string;
   type: string;
   default: any;
-  process?: (context: FFLogsCollectors.ICollectorContext, data: FF.AbilityEvent) => string;
+  process?: (context: FFLogsCollectors.ICollectorContext, data: FFLogs.AbilityEvent) => SettingValue;
 }
 
 export interface ISettingData {

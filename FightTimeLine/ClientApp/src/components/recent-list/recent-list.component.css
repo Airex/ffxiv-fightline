@@ -1,27 +1,27 @@
-.pin {  
+.pin {
     margin:  0 2px 0 2px;
   }
-  
-  nz-list-item span {
+
+  nz-list-item .actions {
     visibility: hidden;
   }
-  
-  nz-list-item span.forcevisible {
+
+  nz-list-item .actions.forcevisible {
     visibility: visible;
   }
-  
-  nz-list-item:hover span {
+
+  nz-list-item:hover .actions {
     visibility: visible;
   }
-  
+
   .pin:hover {
     transform: scale(1.4)
   }
-  
+
   .pinned {
     transform: rotate(-45deg)
   }
-  
+
   .pinned:hover {
     transform: scale(1.4) rotate(-45deg)
   }

@@ -22,6 +22,27 @@ export interface Fight {
   start_time: number;
   end_time: number;
 }
+export interface Parse {
+  "encounterID": number,
+  "encounterName": string,
+  "class": string,
+  "spec": string,
+  "rank": number,
+  "outOf": number,
+  "duration": number,
+  "startTime": number,
+  "reportID": string,
+  "fightID": number,
+  "difficulty": number,
+  "size": number,
+  "characterID": number,
+  "characterName": string,
+  "server": string,
+  "percentile": number,
+  "ilvlKeyOrPatch": number,
+  "total": number,
+  "estimated": boolean
+}
 
 export interface Phase {
   boss: Fight['boss'];

@@ -2,7 +2,10 @@ import { Command } from "../UndoRedo";
 import * as M from "../Models";
 import * as S from "../../services/SettingsService";
 import { Utils } from "../Utils";
-import { AddAbilityCommand, AddBossAttackCommand, AddBatchUsagesCommand, AddBatchAttacksCommand } from "../Commands";
+import { AddAbilityCommand } from "../commands/AddAbilityCommand";
+import { AddBatchUsagesCommand } from "../commands/AddBatchUsagesCommand";
+import { AddBatchAttacksCommand } from "../commands/AddBatchAttacksCommand";
+import { AddBossAttackCommand } from "../commands/AddBossAttackCommand";
 import * as FF from "../FFLogs";
 import * as Jobregistryserviceinterface from "../../services/jobregistry.service-interface";
 import * as Parser from "../Parser";
@@ -38,7 +41,7 @@ export class AbilityUsagesCollector extends BaseCollector {
   jobs: { [name: string]: M.IJob } = {};
 
   detectAbility(job: M.IJob, event: any): { offset: number, name: string } {
-    const data = Object.values(job.abilities).map(a => a.detectStrategy.process(event)).filter(a => !!a);
+    const data = Object.values(job.abilities).map(a => a.detectStrategy?.process(event)).filter(a => !!a);
     if (data.length > 1) {
       throw Error("More then 1 ability");
     }
@@ -46,7 +49,7 @@ export class AbilityUsagesCollector extends BaseCollector {
   }
 
   public getSettingOfType(ability: M.IAbility, type: string): M.IAbilitySetting {
-    return ability.settings && ability.settings.find(it => it.type === type);
+    return ability.settings?.find(it => it.type === type);
   }
 
   collect(data: FF.AbilityEvent): void {

@@ -24,6 +24,8 @@
               <div [ngSwitch]="setting.kind">
                 <div *ngSwitchCase="0">
                   <nz-switch [nzDisabled]="false" [nzSize]="'small'" [formControlName]="setting.name"
+                    [nzCheckedChildren]="setting.options?.true"
+                    [nzUnCheckedChildren]="setting.options?.false"
                     style="margin-left: 15px" [id]="setting.name" (ngModelChange)="change(setting.name, $event)">
                   </nz-switch>
                 </div>

@@ -17,12 +17,10 @@ namespace FightTimeLine.Hubs
 {
      public class FightHub : Hub
      {
-          private readonly FightTimelineDataContext _dataContext;
           private readonly IHubUsersStorage _usersStorage;
 
-          public FightHub(FightTimelineDataContext dataContext, IHubUsersStorage usersStorage)
+          public FightHub(IHubUsersStorage usersStorage)
           {
-               _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
                _usersStorage = usersStorage ?? throw new ArgumentNullException(nameof(usersStorage));
           }
 
@@ -98,12 +96,22 @@ namespace FightTimeLine.Hubs
 
           public override async Task OnDisconnectedAsync(Exception exception)
           {
-               var fight = (Guid)Context.Items["fight"];
+               try
+               {
+                    var fight = (Guid)Context.Items["fight"];
 
-               await _usersStorage.RemoveUserAsync(fight, Context.ConnectionId).ConfigureAwait(false);
-               await Clients.OthersInGroup(fight.ToString("N")).SendAsync("disconnected", new User() { id = Context.ConnectionId, name = Context.Items["username"]?.ToString() }).ConfigureAwait(false);
-               await Groups.RemoveFromGroupAsync(Context.ConnectionId, fight.ToString("N"));
-               await base.OnDisconnectedAsync(exception);
+                    await _usersStorage.RemoveUserAsync(fight, Context.ConnectionId).ConfigureAwait(false);
+                    await Clients.OthersInGroup(fight.ToString("N")).SendAsync("disconnected",
+                              new User() { id = Context.ConnectionId, name = Context.Items["username"]?.ToString() })
+                         .ConfigureAwait(false);
+                    await Groups.RemoveFromGroupAsync(Context.ConnectionId, fight.ToString("N"));
+                    await base.OnDisconnectedAsync(exception);
+               }
+               catch
+               {
+                    await base.OnDisconnectedAsync(exception);
+               }
+               
           }
      }
 

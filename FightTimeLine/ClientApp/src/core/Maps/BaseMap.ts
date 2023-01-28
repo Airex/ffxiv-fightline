@@ -6,8 +6,8 @@ import { Holders } from "../Holders";
 
 export interface IOverlapCheckData {
   holders: Holders;
-  id: string;
-  group: string;
+  itemUsageId: string;
+  jobAbilityId: string;
   start: Date;
   end: Date;
   globalStart?: Date;

@@ -55,6 +55,14 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
     return JSON.stringify(this.data.attack.fflogsData);
   }
 
+  public isForFfLogs(source: string){
+    return (this.attack.fflogsAttackSource === undefined
+      || source === this.attack.fflogsAttackSource
+      || this.pinned)
+  }
+
+
+
   createBossAttack(id: string, attack: Models.IBossAbility, vertical: boolean): DataItem {
     const cls = { bossAttack: true, vertical };
     Object.keys(Models.DamageType).forEach((value) => {

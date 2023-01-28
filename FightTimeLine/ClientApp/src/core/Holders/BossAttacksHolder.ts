@@ -105,16 +105,12 @@ export class BossAttacksHolder extends BaseHolder<string, DataItem, BossAttackMa
       }
       if (visible) {
         visible = visible
-          && (filter.isMagical
-            && it.attack.type === Models.DamageType.Magical || filter.isPhysical
-            && it.attack.type === Models.DamageType.Physical || filter.isUnaspected
-            && it.attack.type === Models.DamageType.None);
+          && (filter.isMagical && it.attack.type === Models.DamageType.Magical
+          || filter.isPhysical && it.attack.type === Models.DamageType.Physical
+          || filter.isUnaspected && it.attack.type === Models.DamageType.None);
       }
       if (visible) {
-        visible = visible
-          && (it.attack.fflogsAttackSource === undefined
-            || filter.fflogsSource === it.attack.fflogsAttackSource
-            || it.pinned);
+        visible = visible && it.isForFfLogs(filter.fflogsSource);
       }
 
       const item = this.visBossItems.get(it.id);
