@@ -29,7 +29,8 @@ const abilities: IAbility[] = [
       de: "H\u00F6llischer Auftritt",
       ja: "\u30D8\u30EB\u30BA\u30A4\u30F3\u30B0\u30EC\u30B9",
       en: "Hell\u0027s Ingress",
-      fr: "Intrusion de l\u0027enfer"
+      fr: "Intrusion de l\u0027enfer",
+      cn: "地狱入境",
     },
     statuses: [statuses.hellsIngress],
     overlapStrategy: new SharedOverlapStrategy(["Hell's Egress"]),
@@ -44,7 +45,8 @@ const abilities: IAbility[] = [
       de: "H\u00F6llischer Abgang",
       ja: "\u30D8\u30EB\u30BA\u30A4\u30FC\u30B0\u30EC\u30B9",
       en: "Hell\u0027s Egress",
-      fr: "Retraite de l\u0027enfer"
+      fr: "Retraite de l\u0027enfer",
+      cn: "地狱出境",
     },
     statuses: [statuses.hellsEgress],
     overlapStrategy: new SharedOverlapStrategy(["Hell's Ingress"]),
@@ -59,7 +61,8 @@ const abilities: IAbility[] = [
       de: "Arkanes Wappen",
       ja: "\u30A2\u30EB\u30B1\u30A4\u30F3\u30AF\u30EC\u30B9\u30C8",
       en: "Arcane Crest",
-      fr: "Blason arcanique"
+      fr: "Blason arcanique",
+      cn: "神秘纹",
     },
     cooldown: 30,
     statuses: [statuses.arcaneCrest],
@@ -73,7 +76,8 @@ const abilities: IAbility[] = [
       de: "Knochengarbe",
       ja: "\u30B9\u30C8\u30FC\u30AF\u30B9\u30A6\u30A7\u30FC\u30BA",
       en: "Blood Stalk",
-      fr: "F\u00E9tu ensanglant\u00E9"
+      fr: "F\u00E9tu ensanglant\u00E9",
+      cn: "隐匿挥割",
     },
     cooldown: 1,
     xivDbId: 24389,
@@ -86,7 +90,8 @@ const abilities: IAbility[] = [
       de: "Nachtschwad",
       ja: "\u30B7\u30FC\u30D5\u30B9\u30A6\u30A7\u30FC\u30BA",
       en: "Grim Swathe",
-      fr: "Andain sinistre"
+      fr: "Andain sinistre",
+      cn: "束缚挥割",
     },
     cooldown: 1,
     xivDbId: 24392,
@@ -99,7 +104,8 @@ const abilities: IAbility[] = [
       de: "Richtergriff",
       ja: "\u30B8\u30D3\u30C8\u30A5\u30AF\u30ED\u30A6",
       en: "Unveiled Gibbet",
-      fr: "Gibet suppliciant"
+      fr: "Gibet suppliciant",
+      cn: "绞决爪",
     },
     xivDbId: 24390,
     cooldown: 1,
@@ -112,7 +118,8 @@ const abilities: IAbility[] = [
       de: "Galgengriff",
       ja: "\u30AE\u30E3\u30ED\u30A6\u30BA\u30AF\u30ED\u30A6",
       en: "Unveiled Gallows",
-      fr: "Potence suppliciante"
+      fr: "Potence suppliciante",
+      cn: "缢杀爪",
     },
     cooldown: 1,
     xivDbId: 24391,
@@ -125,7 +132,8 @@ const abilities: IAbility[] = [
       de: "Arkaner Kreis",
       ja: "\u30A2\u30EB\u30B1\u30A4\u30F3\u30B5\u30FC\u30AF\u30EB",
       en: "Arcane Circle",
-      fr: "Cercle arcanique"
+      fr: "Cercle arcanique",
+      cn: "神秘环",
     },
     cooldown: 120,
     xivDbId: 24405,
@@ -139,7 +147,8 @@ const abilities: IAbility[] = [
       de: "V\u00F6llerei",
       ja: "\u30B0\u30E9\u30C8\u30CB\u30FC",
       en: "Gluttony",
-      fr: "Gloutonnerie"
+      fr: "Gloutonnerie",
+      cn: "暴食",
     },
     cooldown: 60,
     xivDbId: 24393,
@@ -152,7 +161,8 @@ const abilities: IAbility[] = [
       de: "Lemurenschleier",
       ja: "\u30EC\u30E0\u30FC\u30EB\u30B7\u30E5\u30E9\u30A6\u30C9",
       en: "Enshroud",
-      fr: "Linceul du l\u00E9mure"
+      fr: "Linceul du l\u00E9mure",
+      cn: "夜游魂衣",
     },
     cooldown: 30,
     xivDbId: 24394,
@@ -166,7 +176,8 @@ const abilities: IAbility[] = [
       de: "Lemurenschlitzer",
       ja: "\u30EC\u30E0\u30FC\u30EB\u30B9\u30E9\u30A4\u30B9",
       en: "Lemure\u0027s Slice",
-      fr: "Tranchage du l\u00E9mure"
+      fr: "Tranchage du l\u00E9mure",
+      cn: "夜游魂切割",
     },
     cooldown: 1,
     xivDbId: 24399,
@@ -179,7 +190,8 @@ const abilities: IAbility[] = [
       de: "Lemurensense",
       ja: "\u30EC\u30E0\u30FC\u30EB\u30B5\u30A4\u30BA",
       en: "Lemure\u0027s Scythe",
-      fr: "Faux du l\u00E9mure"
+      fr: "Faux du l\u00E9mure",
+      cn: "夜游魂钐割",
     },
     xivDbId: 24400,
     cooldown: 1,
@@ -197,14 +209,16 @@ export const RPR: IJobTemplate = {
     de: "SNT",
     ja: "RPR",
     en: "RPR",
-    fr: "FCH"
+    fr: "FCH",
+    cn: "RPR",
   },
 
   fullNameTranslation: {
     de: "Schnitter",
     ja: "\u30EA\u30FC\u30D1\u30FC",
     en: "Reaper",
-    fr: "Faucheur"
+    fr: "Faucheur",
+    cn: "钐镰客",
   },
   role: Role.Melee,
   abilities: [

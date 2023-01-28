@@ -27,7 +27,8 @@ const abilities = [
       de: "Transposition",
       ja: "\u30C8\u30E9\u30F3\u30B9",
       en: "Transpose",
-      fr: "Transposition"
+      fr: "Transposition",
+      cn: "星灵移位"
     },
     cooldown: 5,
     xivDbId: "149",
@@ -40,7 +41,8 @@ const abilities = [
       de: "Mana-Schild",
       ja: "\u30DE\u30D0\u30EA\u30A2",
       en: "Manaward",
-      fr: "Barri\u00E8re de mana"
+      fr: "Barri\u00E8re de mana",
+      cn: "魔罩"
     },
     cooldown: 120,
     xivDbId: "157",
@@ -55,7 +57,8 @@ const abilities = [
       de: "Mana-Brunnen",
       ja: "\u30DE\u30CA\u30D5\u30A9\u30F3\u30C8",
       en: "Manafont",
-      fr: "Vasque de mana"
+      fr: "Vasque de mana",
+      cn: "魔泉"
     },
     cooldown: 180,
     xivDbId: "158",
@@ -68,7 +71,8 @@ const abilities = [
       de: "Ley-Linien",
       ja: "\u9ED2\u9B54\u7D0B",
       en: "Ley Lines",
-      fr: "Manalignements"
+      fr: "Manalignements",
+      cn: "黑魔纹"
     },
     cooldown: 120,
     xivDbId: "3573",
@@ -82,7 +86,8 @@ const abilities = [
       de: "Tripelzauber",
       ja: "\u4E09\u9023\u9B54",
       en: "Triplecast",
-      fr: "Triple sort"
+      fr: "Triple sort",
+      cn: "三连咏唱"
     },
     cooldown: 60,
     xivDbId: "7421",
@@ -100,7 +105,8 @@ const abilities = [
       de: "Augmentierung ",
       ja: "\u6FC0\u6210\u9B54",
       en: "Sharpcast",
-      fr: "Dynamisation"
+      fr: "Dynamisation",
+      cn: "激情咏唱"
     },
     cooldown: 120,
     xivDbId: "3574",
@@ -114,7 +120,8 @@ const abilities = [
       de: "Verst\u00E4rker",
       ja: "\u30A2\u30F3\u30D7\u30EA\u30D5\u30A1\u30A4\u30A2",
       en: "Amplifier",
-      fr: "Amplificateur"
+      fr: "Amplificateur",
+      cn: "详述"
     },
     cooldown: 120,
     xivDbId: "25796",
@@ -159,14 +166,16 @@ export const BLM: IJobTemplate = {
     de: "SMA",
     ja: "BLM",
     en: "BLM",
-    fr: "MNO"
+    fr: "MNO",
+    cn: "BLM"
   },
 
   fullNameTranslation: {
     de: "Schwarzmagier",
     ja: "\u9ED2\u9B54\u9053\u58EB",
     en: "Black Mage",
-    fr: "Mage Noir"
+    fr: "Mage Noir",
+    cn: "黑魔法师"
   },
   role: Role.Caster,
   abilities,

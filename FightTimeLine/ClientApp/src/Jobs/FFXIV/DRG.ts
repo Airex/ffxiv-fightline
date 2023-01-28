@@ -26,7 +26,8 @@ const abilities = [
       de: "Vitalwallung",
       ja: "\u30E9\u30A4\u30D5\u30B5\u30FC\u30B8",
       en: "Life Surge",
-      fr: "Souffle de vie"
+      fr: "Souffle de vie",
+      cn: "龙剑"
     },
     cooldown: 40,
     xivDbId: "83",
@@ -40,7 +41,8 @@ const abilities = [
       de: "Lanzensch\u00E4rfung",
       ja: "\u30E9\u30F3\u30B9\u30C1\u30E3\u30FC\u30B8",
       en: "Lance Charge",
-      fr: "Lance ac\u00E9r\u00E9e"
+      fr: "Lance ac\u00E9r\u00E9e",
+      cn: "猛枪"
     },
     cooldown: 60,
     xivDbId: "85",
@@ -54,6 +56,7 @@ const abilities = [
       de: "Sprung",
       en: "Jump",
       fr: "Saut",
+      cn: "",
       ja: "ジャンプ"
     },
     cooldown: 30,
@@ -67,7 +70,8 @@ const abilities = [
       de: "Drachenblick",
       ja: "\u30C9\u30E9\u30B4\u30F3\u30B5\u30A4\u30C8",
       en: "Dragon Sight",
-      fr: "Vue de dragon"
+      fr: "Vue de dragon",
+      cn: "巨龙视线"
     },
     cooldown: 120,
     xivDbId: "10032",
@@ -83,7 +87,8 @@ const abilities = [
       de: "Litanei der Schlacht",
       ja: "\u30D0\u30C8\u30EB\u30EA\u30BF\u30CB\u30FC",
       en: "Battle Litany",
-      fr: "Litanie combattante"
+      fr: "Litanie combattante",
+      cn: "战斗连祷"
     },
     cooldown: 120,
     xivDbId: "3557",
@@ -97,7 +102,8 @@ const abilities = [
       de: "Wyrmodem",
       ja: "\u30C9\u30E9\u30B4\u30F3\u30C0\u30A4\u30D6",
       en: "Dragonfire Dive",
-      fr: "Piqu\u00E9 du dragon"
+      fr: "Piqu\u00E9 du dragon",
+      cn: "龙炎冲"
     },
     cooldown: 120,
     xivDbId: "96",
@@ -111,7 +117,8 @@ const abilities = [
       de: "Geirskogul",
       ja: "\u30B2\u30A4\u30EB\u30B9\u30B3\u30B0\u30EB",
       en: "Geirskogul",
-      fr: "Geirsk\u00F6gul"
+      fr: "Geirsk\u00F6gul",
+      cn: "武神枪"
     },
     cooldown: 30,
     xivDbId: "3555",
@@ -125,7 +132,8 @@ const abilities = [
       de: "Hochsprung",
       ja: "\u30CF\u30A4\u30B8\u30E3\u30F3\u30D7",
       en: "High Jump",
-      fr: "Grand saut"
+      fr: "Grand saut",
+      cn: "高跳"
     },
     cooldown: 30,
     xivDbId: "16478",
@@ -139,7 +147,8 @@ const abilities = [
       de: "Wirbelsprenger",
       ja: "\u30B9\u30D1\u30A4\u30F3\u30C0\u30A4\u30D6",
       en: "Spineshatter Dive",
-      fr: "Piqu\u00E9 brise-\u00E9chine"
+      fr: "Piqu\u00E9 brise-\u00E9chine",
+      cn: "破碎冲"
     },
     cooldown: 60,
     xivDbId: "95",
@@ -153,7 +162,8 @@ const abilities = [
       de: "Sternensturz",
       ja: "\u30B9\u30BF\u30FC\u30C0\u30A4\u30D0\u30FC",
       en: "Stardiver",
-      fr: "Plongeon c\u00E9leste"
+      fr: "Plongeon c\u00E9leste",
+      cn: "坠星冲"
     },
     cooldown: 30,
     xivDbId: "16480",
@@ -167,7 +177,8 @@ const abilities = [
       de: "Zwillingswyrm",
       ja: "\u5929\u7ADC\u70B9\u775B",
       en: "Wyrmwind Thrust",
-      fr: "Perc\u00E9e des dragons anciens"
+      fr: "Perc\u00E9e des dragons anciens",
+      cn: "天龙点睛"
     },
     cooldown: 10,
     xivDbId: "25773",
@@ -213,14 +224,16 @@ export const DRG: IJobTemplate = {
     de: "DRG",
     ja: "DRG",
     en: "DRG",
-    fr: "DRG"
+    fr: "DRG",
+    cn: "DRG"
   },
 
   fullNameTranslation: {
     de: "Dragoon",
     ja: "\u7ADC\u9A0E\u58EB",
     en: "Dragoon",
-    fr: "Chevalier Dragon"
+    fr: "Chevalier Dragon",
+    cn: "龙骑士"
   },
   role: Role.Melee,
   abilities,

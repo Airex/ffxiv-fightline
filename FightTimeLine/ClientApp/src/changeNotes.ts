@@ -440,5 +440,13 @@ export default [
     items: [
       "6.3"
     ]
+  },
+  {
+    revision: 64,
+    date: "01/28/2023",
+    items: [
+      "Initial Chinese language support"
+    ]
   }
+
 ];

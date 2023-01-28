@@ -49,6 +49,7 @@ export const tankSharedAbilities: IAbilities = {
       en: "Rampart",
       fr: "Rempart",
       ja: "\u30e9\u30f3\u30d1\u30fc\u30c8",
+      cn: "铁壁"
     },
     levelAcquired: 8,
     statuses: [{
@@ -68,6 +69,7 @@ export const tankSharedAbilities: IAbilities = {
       en: "Reprisal",
       fr: "R\u00e9torsion",
       ja: "\u30ea\u30d7\u30e9\u30a4\u30b6\u30eb",
+      cn: "雪仇"
     },
     levelAcquired: 22,
     statuses: [{
@@ -82,6 +84,7 @@ export const tankSharedAbilities: IAbilities = {
       en: "Provoke",
       fr: "Provocation",
       ja: "\u6311\u767a",
+      cn: "挑衅"
     },
     levelAcquired: 15,
     cooldown: 30,
@@ -98,6 +101,7 @@ export const tankSharedAbilities: IAbilities = {
       en: "Shirk",
       fr: "D\u00e9robade",
       ja: "\u30b7\u30e3\u30fc\u30af",
+      cn: "退避"
     },
     levelAcquired: 48,
     cooldown: 120,
@@ -116,6 +120,7 @@ const magicSharedAbilities: IAbilities = {
       en: "Swiftcast",
       fr: "Magie prompte",
       ja: "\u8fc5\u901f\u9b54",
+      cn: "即刻咏唱"
     },
     levelAcquired: 18,
     cooldown: 60,
@@ -130,6 +135,7 @@ const magicSharedAbilities: IAbilities = {
       en: "Surecast",
       fr: "Sto\u00efcisme",
       ja: "\u5805\u5b9f\u9b54",
+      cn: "沉稳咏唱"
     },
     levelAcquired: 44,
     cooldown: 120,
@@ -147,6 +153,7 @@ const magicSharedAbilities: IAbilities = {
       en: "Lucid Dreaming",
       fr: "R\u00eave lucide",
       ja: "\u30eb\u30fc\u30b7\u30c3\u30c9\u30c9\u30ea\u30fc\u30e0",
+      cn: "醒梦"
     },
     levelAcquired: 24,
     cooldown: 60,
@@ -167,6 +174,7 @@ export const meleeSharedAbilities: IAbilities = {
       en: "Feint",
       fr: "Restreinte",
       ja: "\u727d\u5236",
+      cn: "牵制"
     },
     cooldown: 90,
     xivDbId: "7549",
@@ -190,6 +198,7 @@ export const casterSharedAbilities: IAbilities = {
       en: "Addle",
       fr: "Embrouillement",
       ja: "\u30a2\u30c9\u30eb",
+      cn: "昏乱"
     },
     cooldown: 90,
     xivDbId: "7560",
@@ -226,6 +235,7 @@ const medicineTemplate = {
     en: "Medicine",
     fr: "M\u00e9dicament",
     ja: "\u85ac\u54c1",
+    cn: "药品"
   },
   statuses: [medicatedStatus],
   levelAcquired: 1,

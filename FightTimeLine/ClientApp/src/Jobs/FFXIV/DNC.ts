@@ -54,7 +54,8 @@ const abilities: IAbility[] = [
       de: "Schildsamba",
       ja: "\u5B88\u308A\u306E\u30B5\u30F3\u30D0",
       en: "Shield Samba",
-      fr: "Samba protectrice"
+      fr: "Samba protectrice",
+      cn: "防守之桑巴"
     },
     cooldown: 120,
     xivDbId: "16012",
@@ -68,7 +69,8 @@ const abilities: IAbility[] = [
       de: "Tanzimprovisation",
       ja: "\u30A4\u30F3\u30D7\u30ED\u30D3\u30BC\u30FC\u30B7\u30E7\u30F3",
       en: "Improvisation",
-      fr: "Improvisation"
+      fr: "Improvisation",
+      cn: "即兴表演"
     },
     cooldown: 120,
     xivDbId: "16014",
@@ -82,6 +84,7 @@ const abilities: IAbility[] = [
       de: "Improvisiertes Finale",
       en: "Improvised Finish",
       fr: "Final improvis\u00e9",
+      cn: "即兴表演结束",
       ja: "\u30a4\u30f3\u30d7\u30ed\u30d3\u30bc\u30fc\u30b7\u30e7\u30f3\u30fb\u30d5\u30a3\u30cb\u30c3\u30b7\u30e5",
     },
     cooldown: 90,
@@ -96,7 +99,8 @@ const abilities: IAbility[] = [
       de: "Trance",
       ja: "\u30D5\u30E9\u30EA\u30C3\u30B7\u30E5",
       en: "Flourish",
-      fr: "Apoth\u00E9ose"
+      fr: "Apoth\u00E9ose",
+      cn: "百花争艳"
     },
     cooldown: 60,
     xivDbId: "16013",
@@ -109,7 +113,8 @@ const abilities: IAbility[] = [
       de: "Todestango",
       ja: "\u653B\u3081\u306E\u30BF\u30F3\u30B4",
       en: "Devilment",
-      fr: "Tango endiabl\u00E9"
+      fr: "Tango endiabl\u00E9",
+      cn: "进攻之探戈"
     },
     cooldown: 120,
     xivDbId: "16011",
@@ -123,7 +128,8 @@ const abilities: IAbility[] = [
       de: "Tanzpartner",
       ja: "\u30AF\u30ED\u30FC\u30BA\u30C9\u30DD\u30B8\u30B7\u30E7\u30F3",
       en: "Closed Position",
-      fr: "Position rapproch\u00E9e"
+      fr: "Position rapproch\u00E9e",
+      cn: "闭式舞姿"
     },
     cooldown: 30,
     xivDbId: "16006",
@@ -137,7 +143,8 @@ const abilities: IAbility[] = [
       de: "Heilender Walzer",
       ja: "\u7652\u3084\u3057\u306E\u30EF\u30EB\u30C4",
       en: "Curing Waltz",
-      fr: "Valse revigorante"
+      fr: "Valse revigorante",
+      cn: "治疗之华尔兹"
     },
     cooldown: 60,
     xivDbId: "16015",
@@ -150,7 +157,8 @@ const abilities: IAbility[] = [
       de: "Einfache Choreographie",
       ja: "\u30B9\u30BF\u30F3\u30C0\u30FC\u30C9\u30B9\u30C6\u30C3\u30D7",
       en: "Standard Step",
-      fr: "Pas classique"
+      fr: "Pas classique",
+      cn: "标准舞步"
     },
     cooldown: 30,
     xivDbId: "15997",
@@ -164,7 +172,8 @@ const abilities: IAbility[] = [
       de: "Komplexe Choreographie",
       ja: "\u30C6\u30AF\u30CB\u30AB\u30EB\u30B9\u30C6\u30C3\u30D7",
       en: "Technical Step",
-      fr: "Pas technique"
+      fr: "Pas technique",
+      cn: "技巧舞步"
     },
     cooldown: 120,
     xivDbId: "15998",
@@ -191,14 +200,16 @@ export const DNC: IJobTemplate = {
     de: "T\u00C4N",
     ja: "DNC",
     en: "DNC",
-    fr: "DNS"
+    fr: "DNS",
+    cn: ""
   },
 
   fullNameTranslation: {
     de: "T\u00E4nzer",
     ja: "\u8E0A\u308A\u5B50",
     en: "Dancer",
-    fr: "Danseur"
+    fr: "Danseur",
+    cn: "舞者"
   },
   role: Role.Range,
   abilities,

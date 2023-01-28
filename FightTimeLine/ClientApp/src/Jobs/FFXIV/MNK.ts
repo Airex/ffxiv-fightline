@@ -33,6 +33,7 @@ const abilities = [
       de: "Stahlzinnen",
       en: "Steel Peak",
       fr: "Charge d'acier",
+      cn: "铁山靠",
       ja: "鉄山靠"
     },
     cooldown: 1,
@@ -46,7 +47,8 @@ const abilities = [
       de: "Donnersprung",
       ja: "\u629C\u91CD\u6B69\u6CD5",
       en: "Thunderclap",
-      fr: "\u00C9lan fulgurant"
+      fr: "\u00C9lan fulgurant",
+      cn: "轻身步法",
     },
     cooldown: 30,
     xivDbId: "25762",
@@ -63,6 +65,7 @@ const abilities = [
       de: "Heulende Faust",
       en: "Howling Fist",
       fr: "Poing hurlant",
+      cn: "空鸣拳",
       ja: "空鳴拳"
     },
     cooldown: 1,
@@ -76,6 +79,7 @@ const abilities = [
       de: "Weg zur Erleuchtung",
       en: "Enlightenment",
       fr: "Illumination",
+      cn: "万象斗气圈",
       ja: "万象闘気圏"
     },
     cooldown: 1,
@@ -89,6 +93,7 @@ const abilities = [
       de: "Verbotenes Chakra",
       en: "the Forbidden Chakra",
       fr: "Chakra interdit",
+      cn: "阴阳斗气斩",
       ja: "陰陽闘気斬"
     },
     cooldown: 1,
@@ -102,7 +107,8 @@ const abilities = [
       de: "Mantra",
       ja: "\u30DE\u30F3\u30C8\u30E9",
       en: "Mantra",
-      fr: "Mantra"
+      fr: "Mantra",
+      cn: "真言",
     },
     cooldown: 90,
     xivDbId: "65",
@@ -116,7 +122,8 @@ const abilities = [
       de: "Improvisation",
       ja: "\u8E0F\u9CF4",
       en: "Perfect Balance",
-      fr: "\u00C9quilibre parfait"
+      fr: "\u00C9quilibre parfait",
+      cn: "震脚",
     },
     cooldown: 40,
     xivDbId: "69",
@@ -135,7 +142,8 @@ const abilities = [
       de: "Steinernes Enigma",
       ja: "\u91D1\u525B\u306E\u6975\u610F",
       en: "Riddle of Earth",
-      fr: "\u00C9nigme de la terre"
+      fr: "\u00C9nigme de la terre",
+      cn: "金刚极意",
     },
     duration: 10,
     cooldown: 120,
@@ -154,7 +162,8 @@ const abilities = [
       de: "Flammendes Enigma",
       ja: "\u7D05\u84EE\u306E\u6975\u610F",
       en: "Riddle of Fire",
-      fr: "\u00C9nigme du feu"
+      fr: "\u00C9nigme du feu",
+      cn: "红莲极意",
     },
     cooldown: 60,
     xivDbId: "7395",
@@ -168,7 +177,8 @@ const abilities = [
       de: "St\u00FCrmendes Enigma",
       ja: "\u75BE\u98A8\u306E\u6975\u610F",
       en: "Riddle of Wind",
-      fr: "\u00C9nigme du vent"
+      fr: "\u00C9nigme du vent",
+      cn: "疾风极意",
     },
     cooldown: 90,
     xivDbId: 25766,
@@ -182,7 +192,8 @@ const abilities = [
       de: "Bruderschaft",
       ja: "\u6843\u5712\u7D50\u7FA9",
       en: "Brotherhood",
-      fr: "Fraternit\u00E9"
+      fr: "Fraternit\u00E9",
+      cn: "义结金兰",
     },
     cooldown: 120,
     xivDbId: "7396",
@@ -196,7 +207,8 @@ const abilities = [
       de: "Anatman",
       ja: "\u7121\u6211",
       en: "Anatman",
-      fr: "Anatman"
+      fr: "Anatman",
+      cn: "无我",
     },
     cooldown: 60,
     xivDbId: "16475",
@@ -236,14 +248,16 @@ export const MNK: IJobTemplate = {
     de: "M\u00D6N",
     ja: "MNK",
     en: "MNK",
-    fr: "MOI"
+    fr: "MOI",
+    cn: "MNK",
   },
 
   fullNameTranslation: {
     de: "M\u00F6nch",
     ja: "\u30E2\u30F3\u30AF",
     en: "Monk",
-    fr: "Moine"
+    fr: "Moine",
+    cn: "武僧",
   },
   role: Role.Melee,
   abilities,
