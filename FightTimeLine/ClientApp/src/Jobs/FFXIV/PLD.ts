@@ -16,7 +16,7 @@ import { getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
 import { abilityRemovedTrait, abilityTrait } from "./traits";
 
 class InterventionMitigationModifier implements IMitigator {
-  constructor(private value: number, private damagetType: DamageType) {}
+  constructor(private value: number, private damageType: DamageType) {}
   apply(context: MitigationVisitorContext) {
     const original = context.holders.itemUsages.get(context.abilityId);
 
@@ -38,7 +38,7 @@ class InterventionMitigationModifier implements IMitigator {
         .some((a) => a.checkCoversDate(original.start));
       return has;
     });
-    context.addMitigationForTarget(this.value, this.damagetType);
+    context.addMitigationForTarget(this.value, this.damageType);
     if (mts) {
       context.addMitigationForTarget(10, DamageType.All);
     }
@@ -128,7 +128,7 @@ const statuses = MapStatuses({
   },
 });
 
-const abilities: IAbility[] = [
+const abilities = [
   {
     name: "Fight or Flight",
     translation: {
@@ -136,6 +136,7 @@ const abilities: IAbility[] = [
       ja: "\u30D5\u30A1\u30A4\u30C8\u30FB\u30AA\u30A2\u30FB\u30D5\u30E9\u30A4\u30C8",
       en: "Fight or Flight",
       fr: "Combat acharn\u00E9",
+      cn: "战逃反应",
     },
     statuses: [statuses.fightOrFlight],
     cooldown: 60,
@@ -150,6 +151,7 @@ const abilities: IAbility[] = [
       ja: "\u30B5\u30FC\u30AF\u30EB\u30FB\u30AA\u30D6\u30FB\u30C9\u30A5\u30FC\u30E0",
       en: "Circle of Scorn",
       fr: "Cercle du destin",
+      cn: "厄运流转",
     },
     cooldown: 30,
     xivDbId: "23",
@@ -164,6 +166,7 @@ const abilities: IAbility[] = [
       ja: "\u30EC\u30AF\u30A4\u30A8\u30B9\u30AB\u30C3\u30C8",
       en: "Requiescat",
       fr: "Requiescat",
+      cn: "安魂祈祷",
     },
     cooldown: 60,
     xivDbId: "7383",
@@ -179,6 +182,7 @@ const abilities: IAbility[] = [
       ja: "\u30BB\u30F3\u30C1\u30CD\u30EB",
       en: "Sentinel",
       fr: "Sentinelle",
+      cn: "预警",
     },
     cooldown: 120,
     xivDbId: "17",
@@ -194,6 +198,7 @@ const abilities: IAbility[] = [
       ja: "\u30D6\u30EB\u30EF\u30FC\u30AF",
       en: "Bulwark",
       fr: "Forteresse",
+      cn: "壁垒",
     },
     cooldown: 90,
     xivDbId: "22",
@@ -208,6 +213,7 @@ const abilities: IAbility[] = [
       ja: "\u30A4\u30F3\u30D3\u30F3\u30B7\u30D6\u30EB",
       en: "Hallowed Ground",
       fr: "Invincible",
+      cn: "神圣领域",
     },
     cooldown: 420,
     xivDbId: "30",
@@ -222,6 +228,7 @@ const abilities: IAbility[] = [
       ja: "\u30C7\u30A3\u30F4\u30A1\u30A4\u30F3\u30F4\u30A7\u30FC\u30EB",
       en: "Divine Veil",
       fr: "Voile divin",
+      cn: "圣光幕帘",
     },
     cooldown: 90,
     xivDbId: "3540",
@@ -237,6 +244,7 @@ const abilities: IAbility[] = [
       ja: "\u30D1\u30C3\u30BB\u30FC\u30B8\u30FB\u30AA\u30D6\u30FB\u30A2\u30FC\u30E0\u30BA",
       en: "Passage of Arms",
       fr: "Passe d\u0027armes",
+      cn: "武装戍卫",
     },
     cooldown: 120,
     xivDbId: "7385",
@@ -251,6 +259,7 @@ const abilities: IAbility[] = [
       ja: "\u304B\u3070\u3046",
       en: "Cover",
       fr: "Couverture",
+      cn: "保护",
     },
     cooldown: 120,
     xivDbId: "27",
@@ -266,6 +275,7 @@ const abilities: IAbility[] = [
       ja: "シェルトロン",
       en: "Sheltron",
       fr: "Schiltron",
+      cn: "盾阵",
     },
     cooldown: 5,
     xivDbId: "3542",
@@ -285,6 +295,7 @@ const abilities: IAbility[] = [
       ja: "\u30DB\u30FC\u30EA\u30FC\u30B7\u30A7\u30EB\u30C8\u30ED\u30F3",
       en: "Holy Sheltron",
       fr: "Schiltron sacr\u00E9",
+      cn: "圣盾阵",
     },
     cooldown: 8,
     xivDbId: "25746",
@@ -304,6 +315,7 @@ const abilities: IAbility[] = [
       ja: "\u30A4\u30F3\u30BF\u30FC\u30D9\u30F3\u30B7\u30E7\u30F3",
       en: "Intervention",
       fr: "Intervention",
+      cn: "干预",
     },
     cooldown: 10,
     xivDbId: "7382",
@@ -320,6 +332,7 @@ const abilities: IAbility[] = [
       ja: "\u30A4\u30F3\u30BF\u30FC\u30F4\u30A3\u30FC\u30F3",
       en: "Intervene",
       fr: "Irruption brutale",
+      cn: "调停",
     },
     cooldown: 0,
     xivDbId: "16461",
@@ -338,6 +351,7 @@ const abilities: IAbility[] = [
       ja: "\u30A8\u30AF\u30B9\u30D4\u30A2\u30B7\u30AA\u30F3",
       en: "Expiacion",
       fr: "Expiation",
+      cn: "偿赎剑",
     },
     cooldown: 30,
     xivDbId: "25747",
@@ -351,6 +365,7 @@ const abilities: IAbility[] = [
       ja: "スピリッツウィズイン",
       en: "Spirits Within",
       fr: "Esprits intérieurs",
+      cn: "深奥之灵",
     },
     cooldown: 30,
     xivDbId: "29",
@@ -359,7 +374,7 @@ const abilities: IAbility[] = [
   },
   ...getAbilitiesFrom(tankSharedAbilities),
   medicine.Strength,
-];
+] as IAbility[];
 
 const traits: ITrait[] = [
   {
@@ -395,6 +410,7 @@ export const PLD: IJobTemplate = {
     ja: "PLD",
     en: "PLD",
     fr: "PLD",
+    cn: "PLD"
   },
 
   fullNameTranslation: {
@@ -402,6 +418,7 @@ export const PLD: IJobTemplate = {
     ja: "\u30CA\u30A4\u30C8",
     en: "Paladin",
     fr: "Paladin",
+    cn: "\u9a91\u58eb"
   },
   role: Role.Tank,
   abilities,

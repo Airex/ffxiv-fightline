@@ -48,7 +48,8 @@ const abilities = [
       de: "Lichtgeschwindigkeit",
       ja: "\u30E9\u30A4\u30C8\u30B9\u30D4\u30FC\u30C9",
       en: "Lightspeed",
-      fr: "Vitesse de la lumi\u00E8re"
+      fr: "Vitesse de la lumi\u00E8re",
+      cn: "光速"
     },
     cooldown: 120,
     xivDbId: "3606",
@@ -62,7 +63,8 @@ const abilities = [
       de: "Essenzielle W\u00FCrde",
       ja: "\u30C7\u30A3\u30B0\u30CB\u30C6\u30A3",
       en: "Essential Dignity",
-      fr: "Dignit\u00E9 essentielle"
+      fr: "Dignit\u00E9 essentielle",
+      cn: "先天禀赋"
     },
     cooldown: 40,
     xivDbId: 3614,
@@ -76,7 +78,8 @@ const abilities = [
       de: "Synastrie",
       ja: "\u30B7\u30CA\u30B9\u30C8\u30EA\u30FC",
       en: "Synastry",
-      fr: "Synastrie"
+      fr: "Synastrie",
+      cn: "星位合图"
     },
     cooldown: 120,
     xivDbId: "3612",
@@ -91,7 +94,8 @@ const abilities = [
       de: "Weissagung",
       ja: "\u30C7\u30A3\u30F4\u30A3\u30CD\u30FC\u30B7\u30E7\u30F3",
       en: "Divination",
-      fr: "Divination"
+      fr: "Divination",
+      cn: "占卜"
     },
     cooldown: 120,
     xivDbId: "16552",
@@ -105,7 +109,8 @@ const abilities = [
       de: "Astrodyne",
       ja: "\u30A2\u30B9\u30C8\u30ED\u30C0\u30A4\u30F3",
       en: "Astrodyne",
-      fr: "Astrodynamie"
+      fr: "Astrodynamie",
+      cn: "星力"
     },
     cooldown: 30,
     xivDbId: "25870",
@@ -119,7 +124,8 @@ const abilities = [
       de: "Numinosum",
       ja: "\u904B\u547D\u306E\u8F2A",
       en: "Collective Unconscious",
-      fr: "Inconscient collectif"
+      fr: "Inconscient collectif",
+      cn: "命运之轮"
     },
     cooldown: 60,
     xivDbId: "3613",
@@ -136,7 +142,8 @@ const abilities = [
       de: "Opposition",
       ja: "\u661F\u5929\u5BFE\u6297",
       en: "Celestial Opposition",
-      fr: "Opposition c\u00E9leste"
+      fr: "Opposition c\u00E9leste",
+      cn: "天星冲日"
     },
     cooldown: 60,
     xivDbId: "16553",
@@ -150,7 +157,8 @@ const abilities = [
       de: "Irdischer Stern",
       ja: "\u30A2\u30FC\u30B5\u30EA\u30FC\u30B9\u30BF\u30FC",
       en: "Earthly Star",
-      fr: "\u00C9toile terrestre"
+      fr: "\u00C9toile terrestre",
+      cn: "地星"
     },
     cooldown: 60,
     xivDbId: "7439",
@@ -164,21 +172,23 @@ const abilities = [
       de: "Kleine Arkana",
       ja: "\u30DE\u30A4\u30CA\u30FC\u30A2\u30EB\u30AB\u30CA",
       en: "Minor Arcana",
-      fr: "Arcane mineur"
+      fr: "Arcane mineur",
+      cn: "小奥秘卡"
     },
     cooldown: 60,
     xivDbId: "7443",
     requiresBossTarget: true,
     abilityType: AbilityType.Utility,
     levelAcquired: 70
-  } as IAbility,
+  },
   {
     name: "Celestial Intersection",
     translation: {
       de: "Kongruenz",
       ja: "\u661F\u5929\u4EA4\u5DEE",
       en: "Celestial Intersection",
-      fr: "Rencontre c\u00E9leste"
+      fr: "Rencontre c\u00E9leste",
+      cn: "天星交错"
     },
     cooldown: 30,
     xivDbId: "16556",
@@ -187,14 +197,15 @@ const abilities = [
     defensiveStats: {
       shieldPercent: 10 // todo: review this value
     },
-  } as IAbility,
+  },
   {
     name: "Horoscope",
     translation: {
       de: "Horoskop",
       ja: "\u30DB\u30ED\u30B9\u30B3\u30FC\u30D7",
       en: "Horoscope",
-      fr: "Horoscope"
+      fr: "Horoscope",
+      cn: "天宫图"
     },
     cooldown: 60,
     xivDbId: "16557",
@@ -208,7 +219,8 @@ const abilities = [
       de: "Neutral",
       ja: "\u30CB\u30E5\u30FC\u30C8\u30E9\u30EB\u30BB\u30AF\u30C8",
       en: "Neutral Sect",
-      fr: "Adepte de la neutralit\u00E9"
+      fr: "Adepte de la neutralit\u00E9",
+      cn: "中间学派"
     },
     cooldown: 120,
     xivDbId: "16559",
@@ -222,7 +234,8 @@ const abilities = [
       de: "Exaltation",
       ja: "\u30A8\u30AF\u30B6\u30EB\u30C6\u30FC\u30B7\u30E7\u30F3",
       en: "Exaltation",
-      fr: "Exaltation"
+      fr: "Exaltation",
+      cn: "擢升"
     },
     cooldown: 60,
     xivDbId: "25873",
@@ -237,7 +250,8 @@ const abilities = [
       de: "Makrokosmos",
       ja: "\u30DE\u30AF\u30ED\u30B3\u30B9\u30E2\u30B9",
       en: "Macrocosmos",
-      fr: "Macrocosme"
+      fr: "Macrocosme",
+      cn: "大宇宙"
     },
     cooldown: 180,
     xivDbId: 25874,
@@ -282,13 +296,15 @@ export const AST: IJobTemplate = {
     de: "AST",
     ja: "AST",
     en: "AST",
-    fr: "AST"
+    fr: "AST",
+    cn: ""
   },
   fullNameTranslation: {
     de: "Astrologe",
     ja: "\u5360\u661F\u8853\u5E2B",
     en: "Astrologian",
-    fr: "Astromancien"
+    fr: "Astromancien",
+    cn: ""
   },
   role: Role.Healer,
   abilities,

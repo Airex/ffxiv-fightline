@@ -55,7 +55,7 @@
       </button>
     </span>
     <span>
-      <button nz-dropdown nz-button [nzDropdownMenu]="langMenu" aria-label="Languge" [nzTrigger]="'click'" nzType="dashed"
+      <button nz-dropdown nz-button [nzDropdownMenu]="langMenu" aria-label="Language" [nzTrigger]="'click'" nzType="dashed"
         nzShape="circle" style="margin-left: 10px">
         {{currentLang}}
       </button>
@@ -65,6 +65,7 @@
           <li nz-menu-item (click)="setLang('fr')">FR</li>
           <li nz-menu-item (click)="setLang('de')">DE</li>
           <li nz-menu-item (click)="setLang('ja')">JP</li>
+          <li nz-menu-item (click)="setLang('cn')">CN</li>
         </ul>
       </nz-dropdown-menu>
     </span>

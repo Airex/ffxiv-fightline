@@ -2,7 +2,7 @@ import { IAbility, IJob, TraitFunction } from "src/core/Models";
 
 export function abilityTrait(
   abilityName: string,
-  func: ((abiility: IAbility) => void) | Partial<IAbility>): TraitFunction {
+  func: ((ability: IAbility) => void) | Partial<IAbility>): TraitFunction {
 
   return (job: IJob) => {
     const ability = job.abilities[abilityName];
@@ -18,7 +18,15 @@ export function abilityTrait(
 }
 
 export function abilityRemovedTrait(abilityName: string, level: number): TraitFunction {
-  return abilityTrait(abilityName, ab => ab.levelRemoved = level);
+  return abilityTrait(abilityName, levelRemoved(level));
+}
+
+export function levelRemoved(level: number) {
+  return ab => ab.levelRemoved = level;
+}
+
+export function updateCooldown(value: number) {
+  return ab => ab.cooldown = value;
 }
 
 

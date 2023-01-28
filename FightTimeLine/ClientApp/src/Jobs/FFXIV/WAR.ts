@@ -85,7 +85,8 @@ const abilities: IAbility[] = [
       de: "Schlachtruf",
       ja: "\u30A6\u30A9\u30FC\u30AF\u30E9\u30A4",
       en: "Infuriate",
-      fr: "Cri de guerre"
+      fr: "Cri de guerre",
+      cn: "战嚎",
     },
     cooldown: 60,
     xivDbId: "52",
@@ -103,6 +104,7 @@ const abilities: IAbility[] = [
       de: "Tollwut",
       en: "Berserk",
       fr: "Berserk",
+      cn: "狂暴",
       ja: "バーサク"
     },
     cooldown: 60,
@@ -118,7 +120,8 @@ const abilities: IAbility[] = [
       de: "Urbefreiung",
       ja: "\u539F\u521D\u306E\u89E3\u653E",
       en: "Inner Release",
-      fr: "Rel\u00E2chement bestial"
+      fr: "Rel\u00E2chement bestial",
+      cn: "原初的解放",
     },
     cooldown: 60,
     requiresBossTarget: true,
@@ -133,7 +136,8 @@ const abilities: IAbility[] = [
       de: "Sturmlauf",
       ja: "\u30AA\u30F3\u30B9\u30ED\u30FC\u30C8",
       en: "Onslaught",
-      fr: "Assaut violent"
+      fr: "Assaut violent",
+      cn: "猛攻",
     },
     cooldown: 30,
     xivDbId: "7386",
@@ -151,7 +155,8 @@ const abilities: IAbility[] = [
       de: "Umsturz",
       ja: "\u30A2\u30C3\u30D7\u30D2\u30FC\u30D0\u30EB",
       en: "Upheaval",
-      fr: "R\u00E9volte"
+      fr: "R\u00E9volte",
+      cn: "动乱",
     },
     cooldown: 30,
     xivDbId: "7387",
@@ -166,7 +171,8 @@ const abilities: IAbility[] = [
       de: "Orogenese",
       ja: "\u30AA\u30ED\u30B8\u30A7\u30CD\u30B7\u30B9",
       en: "Orogeny",
-      fr: "Orogen\u00E8se"
+      fr: "Orogen\u00E8se",
+      cn: "群山隆起",
     },
     cooldown: 30,
     xivDbId: "25752",
@@ -181,7 +187,8 @@ const abilities: IAbility[] = [
       de: "Rachsucht",
       ja: "\u30F4\u30A7\u30F3\u30B8\u30A7\u30F3\u30B9",
       en: "Vengeance",
-      fr: "Repr\u00E9sailles"
+      fr: "Repr\u00E9sailles",
+      cn: "复仇",
     },
     cooldown: 120,
     xivDbId: "44",
@@ -196,7 +203,8 @@ const abilities: IAbility[] = [
       de: "Holmgang",
       ja: "\u30DB\u30EB\u30E0\u30AE\u30E3\u30F3\u30B0",
       en: "Holmgang",
-      fr: "Holmgang"
+      fr: "Holmgang",
+      cn: "死斗",
     },
     cooldown: 240,
     xivDbId: "43",
@@ -212,7 +220,8 @@ const abilities: IAbility[] = [
       de: "Absch\u00FCtteln",
       ja: "\u30B7\u30A7\u30A4\u30AF\u30AA\u30D5",
       en: "Shake It Off",
-      fr: "D\u00E9barrassage"
+      fr: "D\u00E9barrassage",
+      cn: "摆脱",
     },
     cooldown: 90,
     xivDbId: "7388",
@@ -230,7 +239,8 @@ const abilities: IAbility[] = [
       de: "Kampfrausch",
       ja: "\u30B9\u30EA\u30EB\u30FB\u30AA\u30D6\u30FB\u30D0\u30C8\u30EB",
       en: "Thrill of Battle",
-      fr: "Frisson de la bataille"
+      fr: "Frisson de la bataille",
+      cn: "战栗",
     },
     cooldown: 90,
     xivDbId: "40",
@@ -245,7 +255,8 @@ const abilities: IAbility[] = [
       de: "Urinstinkt",
       ja: "原初の直感",
       en: "Raw Intuition",
-      fr: "Intuition pure"
+      fr: "Intuition pure",
+      cn: "原初的直觉",
     },
     cooldown: 25,
     xivDbId: "3551",
@@ -260,7 +271,8 @@ const abilities: IAbility[] = [
       de: "Urimpuls",
       ja: "\u539F\u521D\u306E\u8840\u6C17",
       en: "Bloodwhetting",
-      fr: "Intuition fougueuse"
+      fr: "Intuition fougueuse",
+      cn: "原初的血气",
     },
     cooldown: 25,
     xivDbId: "25751",
@@ -276,7 +288,8 @@ const abilities: IAbility[] = [
       de: "\u00C4quilibrium",
       ja: "\u30A8\u30AF\u30EA\u30D6\u30EA\u30A6\u30E0",
       en: "Equilibrium",
-      fr: "\u00C9quilibre"
+      fr: "\u00C9quilibre",
+      cn: "泰然自若",
     },
     cooldown: 60,
     xivDbId: "3552",
@@ -289,7 +302,8 @@ const abilities: IAbility[] = [
       de: "Urflackern",
       ja: "\u539F\u521D\u306E\u731B\u308A",
       en: "Nascent Flash",
-      fr: "Exaltation naissante"
+      fr: "Exaltation naissante",
+      cn: "原初的勇猛",
     },
     cooldown: 25,
     xivDbId: "16464",
@@ -328,14 +342,16 @@ export const WAR: IJobTemplate = {
     de: "KRG",
     ja: "WAR",
     en: "WAR",
-    fr: "GUE"
+    fr: "GUE",
+    cn: "WAR",
   },
 
   fullNameTranslation: {
     de: "Krieger",
     ja: "\u6226\u58EB",
     en: "Warrior",
-    fr: "Guerrier"
+    fr: "Guerrier",
+    cn: "战士",
   },
   role: Role.Tank,
   abilities,

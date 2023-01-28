@@ -177,12 +177,11 @@ export enum SupportedLanguages {
   en = "en",
   fr = "fr",
   de = "de",
-  ja = "ja"
+  ja = "ja",
+  cn = "cn"
 }
 
-export type Translation = {
-  [s in SupportedLanguages]: string
-};
+export type Translation = Record<SupportedLanguages, string>
 
 export interface IAbility {
   name: string;

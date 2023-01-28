@@ -1,7 +1,7 @@
 import Effects from "src/core/Effects";
 import { IJob, Role, AbilityType, DamageType, MapStatuses, IJobTemplate, ITrait } from "../../core/Models";
 import { getAbilitiesFrom, casterSharedAbilities, medicine } from "./shared";
-import { abilityTrait } from "./traits";
+import { abilityTrait, updateCooldown } from "./traits";
 
 const statuses = MapStatuses({
   embolden: {
@@ -13,7 +13,7 @@ const statuses = MapStatuses({
   manafication: {
     duration: 15
   },
-  magickBarrier: {
+  magicBarrier: {
     duration: 10,
     effects: [Effects.mitigation.party(10, DamageType.Magical)]
   }
@@ -26,7 +26,8 @@ const abilities = [
       de: "Ermutigen",
       ja: "\u30A8\u30F3\u30DC\u30EB\u30C7\u30F3",
       en: "Embolden",
-      fr: "Enhardissement"
+      fr: "Enhardissement",
+      cn: "鼓励",
     },
     cooldown: 120,
     xivDbId: "7520",
@@ -40,7 +41,8 @@ const abilities = [
       de: "Fleche",
       ja: "\u30D5\u30EC\u30C3\u30B7\u30E5",
       en: "Fleche",
-      fr: "Fl\u00E8che"
+      fr: "Fl\u00E8che",
+      cn: "飞刺",
     },
     cooldown: 25,
     xivDbId: "7517",
@@ -54,7 +56,8 @@ const abilities = [
       de: "Contre Sixte",
       ja: "\u30B3\u30F3\u30C8\u30EB\u30B7\u30AF\u30B9\u30C8",
       en: "Contre Sixte",
-      fr: "Contre de sixte"
+      fr: "Contre de sixte",
+      cn: "六分反击",
     },
     cooldown: 45,
     xivDbId: "7519",
@@ -68,7 +71,8 @@ const abilities = [
       de: "Manafizierung",
       ja: "\u30DE\u30CA\u30D5\u30A3\u30B1\u30FC\u30B7\u30E7\u30F3",
       en: "Manafication",
-      fr: "Manafication"
+      fr: "Manafication",
+      cn: "魔元化",
     },
     cooldown: 120,
     xivDbId: "7521",
@@ -83,7 +87,8 @@ const abilities = [
       de: "Pr\u00E4paration",
       ja: "\u30A2\u30AF\u30BB\u30E9\u30EC\u30FC\u30B7\u30E7\u30F3",
       en: "Acceleration",
-      fr: "Acc\u00E9l\u00E9ration"
+      fr: "Acc\u00E9l\u00E9ration",
+      cn: "促进",
     },
     cooldown: 55,
     xivDbId: "7518",
@@ -98,13 +103,14 @@ const abilities = [
       de: "Magiebarriere",
       ja: "\u30D0\u30DE\u30B8\u30AF",
       en: "Magick Barrier",
-      fr: "Barri\u00E8re anti-magie"
+      fr: "Barri\u00E8re anti-magie",
+      cn: "抗死",
     },
     cooldown: 120,
     requiresBossTarget: false,
     xivDbId: 25857,
     abilityType: AbilityType.PartyDefense,
-    statuses: [statuses.magickBarrier],
+    statuses: [statuses.magicBarrier],
     levelAcquired: 86
   },
   ...getAbilitiesFrom(casterSharedAbilities),
@@ -115,16 +121,12 @@ const traits: ITrait[] = [
   {
     name: "Red Magic Mastery",
     level: 74,
-    apply: abilityTrait("Contre Sixte", ab => {
-      ab.cooldown = 35;
-    })
+    apply: abilityTrait("Contre Sixte", updateCooldown(35))
   },
   {
     name: "Enhanced Manafication",
     level: 74,
-    apply: abilityTrait("Manafication", ab => {
-      ab.cooldown = 110;
-    })
+    apply: abilityTrait("Manafication", updateCooldown(110))
   },
   {
     name: "Enhanced Acceleration",
@@ -143,13 +145,15 @@ export const RDM: IJobTemplate = {
     de: "RMA",
     ja: "RDM",
     en: "RDM",
-    fr: "MRG"
+    fr: "MRG",
+    cn: "RDM",
   },
   fullNameTranslation: {
     de: "Rotmagier",
     ja: "\u8D64\u9B54\u9053\u58EB",
     en: "Red Mage",
-    fr: "mage rouge"
+    fr: "mage rouge",
+    cn: "赤魔法师",
   },
   role: Role.Caster,
   abilities,
