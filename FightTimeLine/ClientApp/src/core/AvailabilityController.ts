@@ -27,8 +27,8 @@ export class AvailabilityController {
 
       this.holders.abilityAvailability.clear();
       const items = _.flatten(maps).map(
-        (a: { it: AbilityMap; data: IAbilityAvailabilityMapData }) =>
-          new AbilityAvailabilityMap(
+        (a) =>
+          a && new AbilityAvailabilityMap(
             this.presenter,
             this.idgen.getNextId(M.EntryType.AbilityAvailability),
             a.it,
@@ -56,7 +56,7 @@ export class AvailabilityController {
       );
       const items = _.flatten(abis).map(
         (a: { it: AbilityMap; data: IAbilityAvailabilityMapData }) =>
-          new AbilityAvailabilityMap(
+          a && new AbilityAvailabilityMap(
             this.presenter,
             this.idgen.getNextId(M.EntryType.AbilityAvailability),
             a.it,
