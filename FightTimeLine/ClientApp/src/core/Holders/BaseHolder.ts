@@ -17,7 +17,7 @@ export interface IForSidePanel {
 }
 
 export interface IMoveable {
-  move(delta): boolean;
+  move(delta: number): boolean;
 }
 
 export interface ITimelineContainer {
