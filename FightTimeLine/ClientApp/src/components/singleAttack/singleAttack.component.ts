@@ -88,7 +88,8 @@ export class SingleAttackComponent implements OnDestroy, ISidePanelComponent {
   }
 
   calculateAvailDefs(): DefsCalcResult {
-    return calculateAvailDefsForAttack(this.holders, this.it.id);
+    const abilities = calculateAvailDefsForAttack(this.holders, this.it.id);
+    return abilities;
   }
 
   edit(it) {
@@ -133,6 +134,19 @@ export class SingleAttackComponent implements OnDestroy, ISidePanelComponent {
       return jobMap?.job?.icon;
     }
     return null;
+  }
+
+  avAbilitiVisible(item: DefsCalcResultAbility[]) {
+    return item.filter((i) => {
+      if (i.ability.levelAcquired > this.visStorage.presenter.fightLevel) {
+        return false;
+      }
+
+      if (i.ability.levelRemoved <= this.visStorage.presenter.fightLevel) {
+        return false;
+      }
+      return true;
+    });
   }
 
   refresh() {

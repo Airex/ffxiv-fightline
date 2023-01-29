@@ -233,7 +233,9 @@ export function calculateAvailDefsForAttack(
     return [];
   }
 
-  const defAbilities = holders.abilities.filter((it) => it.isDef);
+  const defAbilities = holders.abilities.filter((it) => {
+    return it.isDef;
+  });
 
   const intersected = defAbilities.filter((it) => {
     const availableRanges = getAvailabilitiesForAbility(
