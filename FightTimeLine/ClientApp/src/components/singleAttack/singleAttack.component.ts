@@ -3,12 +3,23 @@ import * as M from "../../core/Models";
 import * as S from "../../services/index";
 import { Holders } from "../../core/Holders";
 import { BossAttackMap } from "../../core/Maps/index";
-import { calculateAvailDefsForAttack, calculateDefsForAttack, calculateMitigationForAttack, DefsCalcResult, MitigationForAttack } from "src/core/Defensives";
+import {
+  calculateAvailDefsForAttack,
+  calculateDefsForAttack,
+  calculateMitigationForAttack,
+  DefsCalcResult,
+  DefsCalcResultAbility,
+  MitigationForAttack,
+} from "src/core/Defensives";
 import { VisStorageService } from "src/services/VisStorageService";
 import { IForSidePanel } from "src/core/Holders/BaseHolder";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
 import { Subscription } from "rxjs";
-import { ISidePanelComponent, SIDEPANEL_DATA, SidepanelParams } from "../sidepanel/ISidePanelComponent";
+import {
+  ISidePanelComponent,
+  SIDEPANEL_DATA,
+  SidepanelParams,
+} from "../sidepanel/ISidePanelComponent";
 
 @Component({
   selector: "[singleAttack]",
@@ -16,12 +27,15 @@ import { ISidePanelComponent, SIDEPANEL_DATA, SidepanelParams } from "../sidepan
   styleUrls: ["./singleAttack.component.css"],
 })
 export class SingleAttackComponent implements OnDestroy, ISidePanelComponent {
-
   defs: DefsCalcResult = null;
   availDefs: DefsCalcResult = null;
   similar: BossAttackMap[] = null;
   defStats: MitigationForAttack[] = [];
-  ff: { icon: string, name: string, data: { name: string, value: string }[] }[] = [];
+  ff: {
+    icon: string;
+    name: string;
+    data: { name: string; value: string }[];
+  }[] = [];
 
   items: IForSidePanel[];
   holders: Holders;
@@ -33,7 +47,8 @@ export class SingleAttackComponent implements OnDestroy, ISidePanelComponent {
 
   constructor(
     private visStorage: VisStorageService,
-    @Inject("DispatcherPayloads") private dispatcher: S.DispatcherService<DispatcherPayloads>,
+    @Inject("DispatcherPayloads")
+    private dispatcher: S.DispatcherService<DispatcherPayloads>,
     @Inject(SIDEPANEL_DATA) public data: SidepanelParams
   ) {
     this.items = this.data.items;
@@ -85,11 +100,25 @@ export class SingleAttackComponent implements OnDestroy, ISidePanelComponent {
   }
 
   similarAllClick() {
-    this.dispatcher.dispatch("similarAllClick", this.similar.map(it => it.id).concat([this.it.id]));
+    this.dispatcher.dispatch(
+      "similarAllClick",
+      this.similar.map((it) => it.id).concat([this.it.id])
+    );
   }
 
   defenseClick(val: any) {
     this.dispatcher.dispatch("abilityClick", val.id);
+  }
+
+  availDefenseClick(val: DefsCalcResultAbility) {
+    const abilityMap = this.holders.abilities.getByParentAndAbility(
+      val.jobId,
+      val.ability.name
+    );
+    this.dispatcher.dispatch("availAbilityClick", {
+      abilityMap,
+      attackId: this.it.id,
+    });
   }
 
   pinnedChanged(val: boolean) {
@@ -110,25 +139,35 @@ export class SingleAttackComponent implements OnDestroy, ISidePanelComponent {
     this.defs = this.calculateDefs();
     this.availDefs = this.calculateAvailDefs();
     this.similar = this.holders.bossAttacks
-      .filter(it => it.isForFfLogs(this.visStorage.presenter.filter.attacks.fflogsSource) && it.attack.name === this.it.attack.name && it.id !== this.it.id)
+      .filter(
+        (it) =>
+          it.isForFfLogs(
+            this.visStorage.presenter.filter.attacks.fflogsSource
+          ) &&
+          it.attack.name === this.it.attack.name &&
+          it.id !== this.it.id
+      )
       .sort((a, b) => a.startAsNumber - b.startAsNumber);
-    this.defStats = calculateMitigationForAttack(this.holders, this.defs, this.it.attack);
-    this.ff = Object.keys(this.it.attack.fflogsData || {}).map(k =>
-    ({
+    this.defStats = calculateMitigationForAttack(
+      this.holders,
+      this.defs,
+      this.it.attack
+    );
+    this.ff = Object.keys(this.it.attack.fflogsData || {}).map((k) => ({
       icon: this.holders.jobs.get(k)?.job?.icon || "",
-      name: this.holders.jobs.get(k)?.actorName || this.holders.jobs.get(k)?.job?.name,
-      data: Object
-        .keys(this.it.attack.fflogsData[k])
-        .filter(t => this.it.attack.fflogsData[k][t])
-        .map(t => ({
+      name:
+        this.holders.jobs.get(k)?.actorName ||
+        this.holders.jobs.get(k)?.job?.name,
+      data: Object.keys(this.it.attack.fflogsData[k])
+        .filter((t) => this.it.attack.fflogsData[k][t])
+        .map((t) => ({
           name: t,
-          value: this.it.attack.fflogsData[k][t]
-        }))
+          value: this.it.attack.fflogsData[k][t],
+        })),
     }));
   }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
-
 }

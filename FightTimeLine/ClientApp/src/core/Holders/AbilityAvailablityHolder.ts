@@ -2,7 +2,11 @@ import { DataItem, DataSetDataItem } from "vis-timeline";
 import { BaseHolder } from "./BaseHolder";
 import { AbilityAvailabilityMap } from "../Maps/index";
 
-export class AbilityAvailablityHolder extends BaseHolder<string, DataItem, AbilityAvailabilityMap> {
+export class AbilityAvailablityHolder extends BaseHolder<
+  string,
+  DataItem,
+  AbilityAvailabilityMap
+> {
   constructor(private visItems: DataSetDataItem) {
     super();
   }
@@ -14,7 +18,6 @@ export class AbilityAvailablityHolder extends BaseHolder<string, DataItem, Abili
 
   addRange(i: AbilityAvailabilityMap[]): void {
     super.addRange(i);
-    //    this.visItems.add(this.itemsOf(i));
   }
 
   clear(): void {
@@ -28,14 +31,11 @@ export class AbilityAvailablityHolder extends BaseHolder<string, DataItem, Abili
   }
 
   update(items: AbilityAvailabilityMap[]) {
-    // console.log("update AbilityAvailabilityMap");
     this.visItems.update(this.itemsOf(items));
   }
 
   removeForAbility(id: string): void {
-    const ids = this
-      .filter(it => it.ability.id === id)
-      .map(it => it.id);
+    const ids = this.filter((it) => it.ability.id === id).map((it) => it.id);
     this.remove(ids);
   }
 }

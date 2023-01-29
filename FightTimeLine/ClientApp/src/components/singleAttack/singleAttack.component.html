@@ -86,7 +86,7 @@
         </div>
         <ul style="padding-left: 10px">
           <li style="list-style-type: none;" *ngFor="let it of d.abilities | soloparty:[defSoloAv, defPartyAv]">
-            <img class="abilityIcon" [src]="it.ability.icon" /><a class="defenseLink" (click)="defenseClick(it)">
+            <img class="abilityIcon" [src]="it.ability.icon" /><a class="defenseLink" (click)="availDefenseClick(it)">
               <span class="abilityNameDef">{{it.ability.name}}</span></a>
           </li>
         </ul>
