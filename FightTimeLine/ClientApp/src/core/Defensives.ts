@@ -134,16 +134,7 @@ export const processStandardAbility =
     ].sort((a, b) => a.startAsNumber - b.startAsNumber);
 
     if (usages.length - 1 === 0) {
-      return [
-        {
-          it,
-          data: {
-            start: startDate,
-            end: new Date(startDate.valueOf() + 30 * 60 * 1000),
-            available: true,
-          } as IAbilityAvailabilityMapData,
-        },
-      ];
+      return;
     }
 
     const minus30 = new Date((startDate.valueOf() as number) - 30 * 1000);
