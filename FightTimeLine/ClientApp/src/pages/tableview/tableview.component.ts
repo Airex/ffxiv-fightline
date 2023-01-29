@@ -23,6 +23,8 @@ import { DispatcherPayloads } from "src/services/dispatcher.service";
 import { Utils, startOffsetConst } from "src/core/Utils";
 import { Location } from "@angular/common";
 import { SidepanelComponent } from "src/components/sidepanel/sidepanel.component";
+import { Range, getAvailabilitiesForAbility, intersect } from "src/core/Defensives";
+import { calculateDuration } from "src/core/Durations";
 
 @Component({
   selector: "tableview",
@@ -176,6 +178,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
       this.settingsService,
       this.visStorage.presenter
     );
+    this.fightLineController.commandExecuted.subscribe(()=>{
+      this.loadTable();
+      this.sidepanel.refresh();
+    })
 
     this.fightLineController.applyFilter(null, "level");
 
@@ -203,6 +209,29 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
     dispatcher.on("abilityClick").subscribe(value => {
       this.sidepanel.setItems(this.fightLineController.getItems([value]));
+    });
+
+    dispatcher.on("availAbilityClick").subscribe(({ abilityMap, attackId }) => {
+      const attack = this.visStorage.holders.bossAttacks.get(attackId);
+
+      const availableRanges = getAvailabilitiesForAbility(
+        this.visStorage.holders,
+        this.startDate
+      )(abilityMap);
+      const duration = calculateDuration(abilityMap.ability);
+      const minAttack = new Date(attack.startAsNumber - duration * 1000);
+      const maxAttack = new Date(attack.startAsNumber);
+      const targetRange = { start: minAttack, end: maxAttack };
+      const firstIntersected = availableRanges?.map((r) =>
+        intersect(r.data as Range, targetRange)
+      ).filter(a=>Boolean(a))[0];
+
+      this.fightLineController.addClassAbility(
+        null,
+        abilityMap,
+        firstIntersected?.start || minAttack,
+        false
+      );
     });
   }
 
