@@ -33,7 +33,7 @@ export class BaseHolder<TK, TI, T extends IBaseHolderItem<TK>> {
   }
 
   addRange(i: T[]): void {
-    i.forEach(it => this.add(it));
+    i.forEach(it => it && this.add(it));
   }
 
   get(id: TK): T {

@@ -726,7 +726,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onCommand(data: ICommandData) {
-    console.log("adding command in fightline.onCOmmand");
+    console.log("adding command in fightline.onCommand");
     this.fightService
       .addCommand(this.fightId, JSON.stringify(data))
       .subscribe((result) => {
@@ -1123,9 +1123,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
       const minAttack = new Date(attack.startAsNumber - duration * 1000);
       const maxAttack = new Date(attack.startAsNumber);
       const targetRange = { start: minAttack, end: maxAttack };
-      const firstIntersected = availableRanges?.map((r) =>
-        intersect(r.data as Range, targetRange)
-      ).filter(a=>Boolean(a))[0];
+      const firstIntersected = availableRanges
+        ?.map((r) => intersect(r.data as Range, targetRange))
+        .filter((a) => Boolean(a))[0];
 
       this.fightLineController.addClassAbility(
         null,
