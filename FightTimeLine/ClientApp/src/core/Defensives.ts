@@ -36,7 +36,7 @@ export type DefsCalcResult = {
 export const getAvailabilitiesForAbility =
   (holders: Holders, startDate: Date) => (it: AbilityMap) => {
     if (it.isStance) {
-      return [];
+      return;
     }
     if (!it.ability.charges) {
       const deps = it.ability.overlapStrategy.getDependencies();
@@ -134,7 +134,16 @@ export const processStandardAbility =
     ].sort((a, b) => a.startAsNumber - b.startAsNumber);
 
     if (usages.length - 1 === 0) {
-      return [];
+      return [
+        {
+          it,
+          data: {
+            start: startDate,
+            end: new Date(startDate.valueOf() + 30 * 60 * 1000),
+            available: true,
+          } as IAbilityAvailabilityMapData,
+        },
+      ];
     }
 
     const minus30 = new Date((startDate.valueOf() as number) - 30 * 1000);
@@ -245,7 +254,11 @@ export function calculateAvailDefsForAttack(
     const maxAttack = new Date(bossAttack.startAsNumber);
     const targetRange = { start: minAttack, end: maxAttack } as Range;
 
-    const firstIntersected = availableRanges.find((r) => intersect(r.data as Range, targetRange));
+    if (!availableRanges) return true;
+
+    const firstIntersected = availableRanges.find((r) =>
+      intersect(r.data as Range, targetRange)
+    );
 
     return Boolean(firstIntersected);
   });

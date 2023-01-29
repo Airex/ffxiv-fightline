@@ -45,12 +45,16 @@ export class AvailabilityController {
         ...(changedAbility.overlapStrategy?.getDependencies() || []),
         changedAbility.name,
       ];
-      const maps = this.holders.abilities
-        .filter(
-          (it) => it.ability && deps && deps.some((d) => d === it.ability.name)
-        )
-        .map(getAvailabilitiesForAbility(this.holders, this.startDate));
-      const items = _.flatten(maps).map(
+      const maps = this.holders.abilities.filter(
+        (it) => it.ability && deps && deps.some((d) => d === it.ability.name)
+      );
+      maps.forEach((element) => {
+        this.holders.abilityAvailability.removeForAbility(element.id);
+      });
+      const abis = maps.map(
+        getAvailabilitiesForAbility(this.holders, this.startDate)
+      );
+      const items = _.flatten(abis).map(
         (a: { it: AbilityMap; data: IAbilityAvailabilityMapData }) =>
           new AbilityAvailabilityMap(
             this.presenter,
@@ -59,9 +63,7 @@ export class AvailabilityController {
             a.data
           )
       );
-      items.forEach((element) => {
-        this.holders.abilityAvailability.removeForAbility(element.ability.id);
-      });
+
       this.holders.abilityAvailability.addRange(items);
     }
   }
