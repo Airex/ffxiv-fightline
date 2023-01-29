@@ -1,4 +1,13 @@
-import { Component, OnInit, OnDestroy, Inject, ViewChild, HostListener, QueryList, ViewChildren } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Inject,
+  ViewChild,
+  HostListener,
+  QueryList,
+  ViewChildren,
+} from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SettingsService } from "../../services/SettingsService";
 import * as S from "../../services/index";
@@ -6,7 +15,10 @@ import * as M from "../../core/Models";
 import { NgProgressComponent } from "ngx-progressbar";
 
 import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate";
-import { TableViewTemplate, ExportTemplateContext } from "../../core/BaseExportTemplate";
+import {
+  TableViewTemplate,
+  ExportTemplateContext,
+} from "../../core/BaseExportTemplate";
 import { gameServiceToken } from "../../services/game.service-provider";
 import { IGameService } from "../../services/game.service-interface";
 
@@ -23,7 +35,11 @@ import { DispatcherPayloads } from "src/services/dispatcher.service";
 import { Utils, startOffsetConst } from "src/core/Utils";
 import { Location } from "@angular/common";
 import { SidepanelComponent } from "src/components/sidepanel/sidepanel.component";
-import { Range, getAvailabilitiesForAbility, intersect } from "src/core/Defensives";
+import {
+  Range,
+  getAvailabilitiesForAbility,
+  intersect,
+} from "src/core/Defensives";
 import { calculateDuration } from "src/core/Durations";
 
 @Component({
@@ -32,11 +48,10 @@ import { calculateDuration } from "src/core/Durations";
   styleUrls: ["./tableview.component.css"],
 })
 export class TableViewComponent implements OnInit, OnDestroy {
-
   startDate = new Date(startOffsetConst);
   fightId: string;
   template: string;
-  tableHeight: string = (window.innerHeight - 100) + "px";
+  tableHeight: string = window.innerHeight - 100 + "px";
   fightLineController: FightTimeLineController.FightTimeLineController;
   options: ExportModels.ITableOptionSettings;
   currentOptions: ExportModels.ITableOptions;
@@ -50,7 +65,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     columns: [],
     rows: [],
     title: "",
-    filterByFirstEntry: false
+    filterByFirstEntry: false,
   };
 
   filtered: ExportModels.IExportRow[] = [];
@@ -61,7 +76,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   templates: { [name: string]: TableViewTemplate } = {
     defence: new BossAttackDefensiveTemplateV2(),
     descriptive: new DescriptiveTemplate(),
-    mitigations: new MitigationsTemplate()
+    mitigations: new MitigationsTemplate(),
   };
 
   get showicon(): boolean {
@@ -87,7 +102,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   public constructor(
     @Inject(S.fightServiceToken) private fightService: S.IFightService,
-    @Inject(S.authenticationServiceToken) public authenticationService: S.IAuthenticationService,
+    @Inject(S.authenticationServiceToken)
+    public authenticationService: S.IAuthenticationService,
     @Inject(gameServiceToken) private gameService: IGameService,
     private visStorage: VisStorageService,
     private notification: S.ScreenNotificationsService,
@@ -95,10 +111,11 @@ export class TableViewComponent implements OnInit, OnDestroy {
     private dialogService: S.DialogService,
     private location: Location,
     private router: Router,
-    @Inject("DispatcherPayloads") private dispatcher: S.DispatcherService<DispatcherPayloads>,
+    @Inject("DispatcherPayloads")
+    private dispatcher: S.DispatcherService<DispatcherPayloads>,
     public fightHubService: S.FightHubService,
-    private settingsService: SettingsService) {
-  }
+    private settingsService: SettingsService
+  ) {}
 
   home() {
     this.router.navigateByUrl("/");
@@ -111,7 +128,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
     }
 
     this.sidepanel.setSidePanel({ items: [id] });
-
   }
 
   filterChange(event: any, column: string) {
@@ -119,14 +135,19 @@ export class TableViewComponent implements OnInit, OnDestroy {
       this.filterData[column] = event;
     }
     const cellFilter = this.filterCell();
-    this.filtered = this.set.rows.filter(row => {
-      const visible = this.set.columns.every(c => {
-        const v = !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c);
+    this.filtered = this.set.rows.filter((row) => {
+      const visible = this.set.columns.every((c) => {
+        const v =
+          !c.filterFn ||
+          !this.filterData[c.name] ||
+          c.filterFn(this.filterData[c.name], row, c);
         return v;
       });
 
       if (visible) {
-        row.cells.forEach((cell, index) => cellFilter(cell, this.filterData[this.set.columns[index].name]));
+        row.cells.forEach((cell, index) =>
+          cellFilter(cell, this.filterData[this.set.columns[index].name])
+        );
       }
 
       return visible;
@@ -136,14 +157,15 @@ export class TableViewComponent implements OnInit, OnDestroy {
   filterCell() {
     const unique = new Set();
     const fn = (cell: ExportModels.IExportCell, data: string[]) => {
-      cell.items.forEach(it => {
+      cell.items.forEach((it) => {
         it.visible = true;
         if (it.filterFn && data && !it.filterFn(data)) {
           it.visible = false;
           return;
-        }
-        else {
-          if (cell.disableUnique) { return; }
+        } else {
+          if (cell.disableUnique) {
+            return;
+          }
           if (it.refId && unique.has(it.refId)) {
             it.visible = false;
           } else {
@@ -157,37 +179,44 @@ export class TableViewComponent implements OnInit, OnDestroy {
   }
 
   ping(id: string, owner: boolean): void {
-    const pingComponent = this.pings.find(it => it.id === id || (owner && it.owner === owner));
+    const pingComponent = this.pings.find(
+      (it) => it.id === id || (owner && it.owner === owner)
+    );
     if (pingComponent) {
       pingComponent.ping();
     }
   }
 
-
   ngOnInit(): void {
     this.visStorage.clear();
     this.gameService.jobRegistry.setLevel(90);
-    this.fightLineController = new FightTimeLineController.FightTimeLineController(
-      this.startDate,
-      this.idgen,
-      this.visStorage.holders,
-      {
-        openBossAttackAddDialog: () => { }
-      },
-      this.gameService,
-      this.settingsService,
-      this.visStorage.presenter
-    );
-    this.fightLineController.commandExecuted.subscribe(()=>{
+    this.fightLineController =
+      new FightTimeLineController.FightTimeLineController(
+        this.startDate,
+        this.idgen,
+        this.visStorage.holders,
+        {
+          openBossAttackAddDialog: () => {},
+        },
+        this.gameService,
+        this.settingsService,
+        this.visStorage.presenter
+      );
+    this.fightLineController.commandExecuted.subscribe((data) => {
+      this.fightService
+        .addCommand(this.fightId, JSON.stringify(data))
+        .subscribe((result) => {
+          this.fightHubService.sendCommand(this.fightId, "", result.id);
+        });
       this.loadTable();
       this.sidepanel.refresh();
-    })
+    });
 
     this.fightLineController.applyFilter(null, "level");
 
     this.subscribeToDispatcher(this.dispatcher);
 
-    this.route.params.subscribe(r => {
+    this.route.params.subscribe((r) => {
       const id = r.fightId as string;
       const template = r.template as string;
       if (id && template) {
@@ -198,16 +227,18 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  private subscribeToDispatcher(dispatcher: S.DispatcherService<DispatcherPayloads>) {
-    dispatcher.on("similarClick").subscribe(value => {
+  private subscribeToDispatcher(
+    dispatcher: S.DispatcherService<DispatcherPayloads>
+  ) {
+    dispatcher.on("similarClick").subscribe((value) => {
       this.sidepanel.setItems(this.fightLineController.getItems([value]));
     });
 
-    dispatcher.on("similarAllClick").subscribe(value => {
+    dispatcher.on("similarAllClick").subscribe((value) => {
       this.sidepanel.setItems(this.fightLineController.getItems(value));
     });
 
-    dispatcher.on("abilityClick").subscribe(value => {
+    dispatcher.on("abilityClick").subscribe((value) => {
       this.sidepanel.setItems(this.fightLineController.getItems([value]));
     });
 
@@ -222,9 +253,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
       const minAttack = new Date(attack.startAsNumber - duration * 1000);
       const maxAttack = new Date(attack.startAsNumber);
       const targetRange = { start: minAttack, end: maxAttack };
-      const firstIntersected = availableRanges?.map((r) =>
-        intersect(r.data as Range, targetRange)
-      ).filter(a=>Boolean(a))[0];
+      const firstIntersected = availableRanges
+        ?.map((r) => intersect(r.data as Range, targetRange))
+        .filter((a) => Boolean(a))[0];
 
       this.fightLineController.addClassAbility(
         null,
@@ -236,33 +267,46 @@ export class TableViewComponent implements OnInit, OnDestroy {
   }
 
   load(id: string) {
-    this.dialogService.executeWithLoading("Loading...", ref => {
-      this.fightService.getFight(id).subscribe((fight: M.IFight) => {
-        if (fight) {
-          this.fightService.getCommands(id, new Date(fight.dateModified).valueOf()).subscribe(value => {
-            const loadedData = fight.data && JSON.parse(fight.data) as IFightSerializeData;
-            this.fightLineController.loadFight(fight, loadedData, value.map(cmd => JSON.parse(cmd.data)));
-            this.connectToSession()
-              .finally(() => {
-                this.gameService.jobRegistry.setLevel(90);
-                this.tpl = this.templates[this.template.toLowerCase()];
-                this.loadTable();
-                ref.close();
-              });
-          }, error => {
-            console.error(error);
+    this.dialogService.executeWithLoading("Loading...", (ref) => {
+      this.fightService.getFight(id).subscribe(
+        (fight: M.IFight) => {
+          if (fight) {
+            this.fightService
+              .getCommands(id, new Date(fight.dateModified).valueOf())
+              .subscribe(
+                (value) => {
+                  const loadedData =
+                    fight.data &&
+                    (JSON.parse(fight.data) as IFightSerializeData);
+                  this.fightLineController.loadFight(
+                    fight,
+                    loadedData,
+                    value.map((cmd) => JSON.parse(cmd.data))
+                  );
+                  this.connectToSession().finally(() => {
+                    this.gameService.jobRegistry.setLevel(90);
+                    this.tpl = this.templates[this.template.toLowerCase()];
+                    this.loadTable();
+                    ref.close();
+                  });
+                },
+                (error) => {
+                  console.error(error);
+                  ref.close();
+                  this.notification.error("Unable to load data");
+                }
+              );
+          } else {
             ref.close();
-            this.notification.error("Unable to load data");
-          });
-        } else {
+            this.notification.showUnableToLoadFight(() => {});
+          }
+        },
+        (error) => {
+          console.error(error);
+          this.notification.showUnableToLoadFight(() => {});
           ref.close();
-          this.notification.showUnableToLoadFight(() => { });
         }
-      }, (error) => {
-        console.error(error);
-        this.notification.showUnableToLoadFight(() => { });
-        ref.close();
-      });
+      );
     });
   }
 
@@ -285,9 +329,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
             { id: "icon", checked: true, text: "Icon" },
             { id: "text", checked: true, text: "Text" },
             { id: "offset", checked: false, text: "Offset" },
-            { id: "target", checked: true, text: "Target" }
-          ]
-        }
+            { id: "target", checked: true, text: "Target" },
+          ],
+        },
       };
 
       const iconSize: ExportModels.NumberRangeOptionsSetting = {
@@ -300,8 +344,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
         options: {
           min: 16,
           max: 48,
-          step: 1
-        }
+          step: 1,
+        },
       };
 
       const level: ExportModels.NumberRangeOptionsSetting = {
@@ -314,8 +358,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
         options: {
           min: 50,
           max: 90,
-          step: 10
-        }
+          step: 10,
+        },
       };
 
       const fflogs: ExportModels.BooleanOptionsSetting = {
@@ -326,22 +370,27 @@ export class TableViewComponent implements OnInit, OnDestroy {
         kind: ExportModels.TableOptionSettingType.Boolean,
         description: "FFLogs Attack Source",
         options: {
-          'true': 'Cast',
-          'false': 'Damage'
-        }
+          true: "Cast",
+          false: "Damage",
+        },
       };
 
-      this.options = [level, fflogs, ...(this.tpl.loadOptions(this.visStorage.holders) || []), cellOptions, iconSize]
-        .filter(s => s);
+      this.options = [
+        level,
+        fflogs,
+        ...(this.tpl.loadOptions(this.visStorage.holders) || []),
+        cellOptions,
+        iconSize,
+      ].filter((s) => s);
 
       const [_, search] = this.location.path().split("?");
       const params = new URLSearchParams(search);
-      this.options.forEach(opts => {
+      this.options.forEach((opts) => {
         const p = params.get(opts.name);
         if (p != null) {
           opts.initialValue = parseOptions(opts.kind, p);
           if (opts.kind === ExportModels.TableOptionSettingType.Tags) {
-            opts.options.items.forEach(opt => {
+            opts.options.items.forEach((opt) => {
               opt.checked = opts.initialValue.indexOf(opt.id) >= 0;
             });
           }
@@ -352,7 +401,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
         acc[c.name] = c.initialValue || c.defaultValue;
         return acc;
       }, {});
-
     }
 
     const lvl = this.currentOptions.l;
@@ -367,7 +415,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
       presenter: this.visStorage.presenter,
       jobRegistry: this.gameService.jobRegistry,
       options: this.currentOptions,
-      holders: this.visStorage.holders
+      holders: this.visStorage.holders,
     } as ExportTemplateContext;
     this.set = this.tpl.buildTable(context);
 
@@ -376,14 +424,21 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   connectToSession() {
     const handlers: S.IConnectToSessionHandlers = {
-      onCommand: ((data: M.IHubCommand) => this.handleRemoteCommand(data.id, data.userId)).bind(this),
-      onConnected: ((data: M.IHubUser) => this.notification.showUserConnected(data)).bind(this),
-      onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisconnected(data)).bind(this)
+      onCommand: ((data: M.IHubCommand) =>
+        this.handleRemoteCommand(data.id, data.userId)).bind(this),
+      onConnected: ((data: M.IHubUser) =>
+        this.notification.showUserConnected(data)).bind(this),
+      onDisconnected: ((data: M.IHubUser) =>
+        this.notification.showUserDisconnected(data)).bind(this),
     };
 
     const settings = this.settingsService.load();
-    const name = settings.teamwork.displayName || this.authenticationService.username || "Anonymous";
-    return this.fightHubService.connect(this.fightId, name, handlers)
+    const name =
+      settings.teamwork.displayName ||
+      this.authenticationService.username ||
+      "Anonymous";
+    return this.fightHubService
+      .connect(this.fightId, name, handlers)
       .then(() => {
         this.notification.showConnectedToSession();
       })
@@ -399,12 +454,14 @@ export class TableViewComponent implements OnInit, OnDestroy {
   handleRemoteCommand(id: string, userId: string) {
     this.ping(userId, false);
 
-    this.fightService.getCommand(+id).subscribe((data: ICommandData) => {
-      this.handleRemoteCommandData(data);
-    },
-      error => {
+    this.fightService.getCommand(+id).subscribe(
+      (data: ICommandData) => {
+        this.handleRemoteCommandData(data);
+      },
+      (error) => {
         console.log(error);
-      });
+      }
+    );
   }
 
   handleRemoteCommandData(data: ICommandData) {
@@ -419,7 +476,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   @HostListener("window:resize", ["$event"])
   resizeHandler(event: any) {
-    this.tableHeight = (event.target.innerHeight - 100) + "px";
+    this.tableHeight = event.target.innerHeight - 100 + "px";
   }
 
   trackByName(_: number, item: ExportModels.IExportColumn): string {
@@ -443,7 +500,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
   }
 }
 
-function parseOptions(type: ExportModels.TableOptionSettingType, p: string): any {
+function parseOptions(
+  type: ExportModels.TableOptionSettingType,
+  p: string
+): any {
   switch (type) {
     case ExportModels.TableOptionSettingType.Boolean:
       return p === "true";
@@ -452,6 +512,6 @@ function parseOptions(type: ExportModels.TableOptionSettingType, p: string): any
     case ExportModels.TableOptionSettingType.Tags:
       return p.split(",");
     case ExportModels.TableOptionSettingType.LimitedNumberRange:
-      return p.split(",").map(x => +x);
+      return p.split(",").map((x) => +x);
   }
 }
