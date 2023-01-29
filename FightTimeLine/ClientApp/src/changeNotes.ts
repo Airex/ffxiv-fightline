@@ -447,6 +447,15 @@ export default [
     items: [
       "Initial Chinese language support"
     ]
-  }
+  },
+  {
+    revision: 65,
+    date: "01/29/2023",
+    items: [
+      "Updated Available Defensives sections on side panel to show abilities can be used to cover selected Boss Attack",
+      "Click on ability in Available Defensives sections on side panel will add this ability to timeline as early as possible to cover selected Boss Attack",
+    ]
+  },
+
 
 ];

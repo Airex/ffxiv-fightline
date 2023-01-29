@@ -1,6 +1,20 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener, Inject, QueryList, ViewChildren } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  HostListener,
+  Inject,
+  QueryList,
+  ViewChildren,
+} from "@angular/core";
 import { Location } from "@angular/common";
-import { ActivatedRoute, ActivatedRouteSnapshot, Params, Router } from "@angular/router";
+import {
+  ActivatedRoute,
+  ActivatedRouteSnapshot,
+  Params,
+  Router,
+} from "@angular/router";
 import * as _ from "lodash";
 import { FightTimeLineController } from "../../core/FightTimeLineController";
 import * as M from "../../core/Models";
@@ -8,8 +22,16 @@ import * as FF from "../../core/FFLogs";
 import { NgProgressComponent } from "ngx-progressbar";
 import { process } from "../../core/BossAttackProcessors";
 import { SidepanelComponent } from "../../components/sidepanel/sidepanel.component";
-import { PlanAreaComponent, Action, EventSource } from "./planArea/planArea.component";
-import { ToolsManager, CopyPasteTool, DowntimeTool } from "../../core/ToolsManager";
+import {
+  PlanAreaComponent,
+  Action,
+  EventSource,
+} from "./planArea/planArea.component";
+import {
+  ToolsManager,
+  CopyPasteTool,
+  DowntimeTool,
+} from "../../core/ToolsManager";
 import { PresenterManager } from "../../core/PresentationManager";
 
 import { IdGenerator } from "../../core/Generators";
@@ -20,12 +42,34 @@ import * as SerializeController from "../../core/SerializeController";
 import * as Environment from "../../environments/environment";
 import { VisStorageService } from "src/services/VisStorageService";
 import { PingComponent } from "../../components/ping/ping.component";
-import { ActivitySource, RecentActivityService } from "src/services/RecentActivitiesService";
-import { DispatcherPayloads, DispatcherService } from "src/services/dispatcher.service";
 import {
-  fightServiceToken, IFightService, authenticationServiceToken, IAuthenticationService, ScreenNotificationsService,
-  DialogService, SettingsService, LocalStorageService, FightHubService, IStartSessionHandlers, IConnectToSessionHandlers
+  ActivitySource,
+  RecentActivityService,
+} from "src/services/RecentActivitiesService";
+import {
+  DispatcherPayloads,
+  DispatcherService,
+} from "src/services/dispatcher.service";
+import {
+  fightServiceToken,
+  IFightService,
+  authenticationServiceToken,
+  IAuthenticationService,
+  ScreenNotificationsService,
+  DialogService,
+  SettingsService,
+  LocalStorageService,
+  FightHubService,
+  IStartSessionHandlers,
+  IConnectToSessionHandlers,
 } from "src/services";
+import { AddAbilityCommand } from "src/core/commands/AddAbilityCommand";
+import {
+  Range,
+  getAvailabilitiesForAbility,
+  intersect,
+} from "src/core/Defensives";
+import { calculateDuration } from "src/core/Durations";
 
 @Component({
   selector: "fightline",
@@ -54,13 +98,15 @@ export class FightLineComponent implements OnInit, OnDestroy {
   private presenterManager: PresenterManager;
   jobs = this.gameService.jobRegistry.getJobs();
 
-
   public constructor(
     private recent: RecentActivityService,
     @Inject(fightServiceToken) private fightService: IFightService,
-    @Inject(Gameserviceprovider.gameServiceToken) public gameService: Gameserviceinterface.IGameService,
-    @Inject(authenticationServiceToken) public authenticationService: IAuthenticationService,
-    @Inject("DispatcherPayloads") private dispatcher: DispatcherService<DispatcherPayloads>,
+    @Inject(Gameserviceprovider.gameServiceToken)
+    public gameService: Gameserviceinterface.IGameService,
+    @Inject(authenticationServiceToken)
+    public authenticationService: IAuthenticationService,
+    @Inject("DispatcherPayloads")
+    private dispatcher: DispatcherService<DispatcherPayloads>,
     private notification: ScreenNotificationsService,
     private visStorage: VisStorageService,
     private route: ActivatedRoute,
@@ -75,7 +121,9 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onAction(event: Action) {
-    if (this.toolsManager.handleAction(event)) { return; }
+    if (this.toolsManager.handleAction(event)) {
+      return;
+    }
 
     const actionName = "on" + event.name[0].toUpperCase() + event.name.slice(1);
     if (this[actionName]) {
@@ -99,24 +147,38 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onClickEmpty(source: EventSource, event) {
-    const downtimesAtTime = this.fightLineController.getDowntimesAtTime(event.time);
-    if (downtimesAtTime.length > 0 && (source === "boss" || (source === "player" && this.presenterManager.view.showDowntimesInPartyArea))) {
-      event.items = downtimesAtTime.map(d => d.id);
+    const downtimesAtTime = this.fightLineController.getDowntimesAtTime(
+      event.time
+    );
+    if (
+      downtimesAtTime.length > 0 &&
+      (source === "boss" ||
+        (source === "player" &&
+          this.presenterManager.view.showDowntimesInPartyArea))
+    ) {
+      event.items = downtimesAtTime.map((d) => d.id);
       this.planArea.clearSelection();
 
       this.setSidePanel(event);
-    }
-    else {
+    } else {
       this.planArea.updateSelection(source, event);
     }
   }
 
   onDoubleClickEmpty(source: EventSource, event) {
-    this.fightLineController.notifyDoubleClick(event.item, event.group, new Date(event.time));
+    this.fightLineController.notifyDoubleClick(
+      event.item,
+      event.group,
+      new Date(event.time)
+    );
   }
 
   onDoubleClickItem(source: EventSource, event) {
-    this.fightLineController.notifyDoubleClick(event.item, event.group, new Date(event.time));
+    this.fightLineController.notifyDoubleClick(
+      event.item,
+      event.group,
+      new Date(event.time)
+    );
   }
 
   onDoubleClickGroup(source: EventSource, event) {
@@ -145,19 +207,22 @@ export class FightLineComponent implements OnInit, OnDestroy {
           toJob.index = ind;
 
           event.handler(true);
-          const fromAbs = this.visStorage.holders.abilities.getByParentId(fromJob.id);
-          fromAbs.forEach(ab => {
+          const fromAbs = this.visStorage.holders.abilities.getByParentId(
+            fromJob.id
+          );
+          fromAbs.forEach((ab) => {
             ab.applyData({});
           });
-          const toAbs = this.visStorage.holders.abilities.getByParentId(toJob.id);
-          toAbs.forEach(ab => {
+          const toAbs = this.visStorage.holders.abilities.getByParentId(
+            toJob.id
+          );
+          toAbs.forEach((ab) => {
             ab.applyData({});
           });
 
           this.visStorage.holders.abilities.update([...fromAbs, ...toAbs]);
         }
-      }
-      else {
+      } else {
         const abFrom = this.visStorage.holders.abilities.get(from.id);
         const abTo = this.visStorage.holders.abilities.get(to.id);
         if (abTo && abFrom && abTo.job.id === abFrom.job.id) {
@@ -166,8 +231,10 @@ export class FightLineComponent implements OnInit, OnDestroy {
           abTo.index = ind;
           const jf = this.presenterManager.jobFilter(abTo.job.id);
           jf.abilityOrder ||= {};
-          jf.abilityOrder[abTo.ability.name] = abTo.index - Math.trunc(abTo.index);
-          jf.abilityOrder[abFrom.ability.name] = abFrom.index - Math.trunc(abFrom.index);
+          jf.abilityOrder[abTo.ability.name] =
+            abTo.index - Math.trunc(abTo.index);
+          jf.abilityOrder[abFrom.ability.name] =
+            abFrom.index - Math.trunc(abFrom.index);
           this.presenterManager.save(this.fightId);
           event.handler(true);
         }
@@ -200,7 +267,10 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onCanMove(source: EventSource, event) {
-    const canMove = this.fightLineController.canMove(event.item, event.selection);
+    const canMove = this.fightLineController.canMove(
+      event.item,
+      event.selection
+    );
     if (canMove && source === "boss") {
       this.fightLineController.moveBossAttack(event.item);
     }
@@ -212,17 +282,19 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   onTable(temlate: string) {
-    window.open(this.router.serializeUrl(this.router.createUrlTree(["/table", this.fightId || "dummy", temlate])), "_blank");
+    window.open(
+      this.router.serializeUrl(
+        this.router.createUrlTree(["/table", this.fightId || "dummy", temlate])
+      ),
+      "_blank"
+    );
   }
 
   // private openStanceSelector(data: M.IContextMenuData[]): void {
   //   //    this.contextMenu.openStanceSelector(data);
   // }
 
-  exportToTable() {
-  }
-
-
+  exportToTable() {}
 
   private setSidePanel(eventData) {
     this.sidepanel.setSidePanel(eventData);
@@ -242,16 +314,26 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   presetChanged(preset: string): void {
     this.fightLineController.loadPreset(preset);
-    this.location.replaceState(this.location.path(false).split("?")[0], "preset=" + encodeURIComponent(preset));
+    this.location.replaceState(
+      this.location.path(false).split("?")[0],
+      "preset=" + encodeURIComponent(preset)
+    );
   }
 
-  openBossAttackAddDialog(bossAbility: M.IBossAbility, callBack: (b: any) => void): void {
-    this.dialogService.openBossAttackAddDialog(bossAbility, this.presenterManager, callBack);
+  openBossAttackAddDialog(
+    bossAbility: M.IBossAbility,
+    callBack: (b: any) => void
+  ): void {
+    this.dialogService.openBossAttackAddDialog(
+      bossAbility,
+      this.presenterManager,
+      callBack
+    );
   }
 
   load(): void {
     if (!this.authenticationService.authenticated) {
-      this.notification.showSignInRequired(() => { });
+      this.notification.showSignInRequired(() => {});
       return;
     }
 
@@ -261,66 +343,84 @@ export class FightLineComponent implements OnInit, OnDestroy {
   importFromFFLogs(code: string = null): void {
     this.dialogService
       .openImportFromFFLogs(code || this.fflogsCode)
-      .then(result => {
-        if (!result) { return; }
-        this.router.navigateByUrl("fflogs/" + result.reportId + "/" + result.fightId);
+      .then((result) => {
+        if (!result) {
+          return;
+        }
+        this.router.navigateByUrl(
+          "fflogs/" + result.reportId + "/" + result.fightId
+        );
       });
   }
 
   importBossAttacksFromFFLogs(code: string = null): void {
     this.dialogService
       .openImportFromFFLogs(code || this.fflogsCode)
-      .then(result => {
-        if (!result) { return; }
+      .then((result) => {
+        if (!result) {
+          return;
+        }
         this.replaceBossFFLogsData(result.reportId, result.fightId);
       });
   }
 
   loadFFLogsData(code: string, enc: number) {
-    const stop = (ref: { close: () => void; }) => {
+    const stop = (ref: { close: () => void }) => {
       this.progressBar.complete();
       ref.close();
     };
 
-    this.dialogService.executeWithLoading("Loading...", ref => {
+    this.dialogService.executeWithLoading("Loading...", (ref) => {
       this.progressBar.start();
-      this.gameService.dataService.getEvents(code, enc, {}, percentage => this.progressBar.set(percentage * 100))
+      this.gameService.dataService
+        .getEvents(code, enc, {}, (percentage) =>
+          this.progressBar.set(percentage * 100)
+        )
         .then((parser) => {
-          this.fightService.newFight("").subscribe(value => {
-            this.fightId = value.id;
-            this.location.replaceState("/" + value.id);
-            this.startSession()
-              .then(() => {
-                this.recent.register({
-                  name: parser.fight.name,
-                  boss: parser.fight.boss,
-                  source: ActivitySource.FFLogs,
-                  timestamp: new Date(),
-                  url: "/" + value.id.toLowerCase(),
-                  id: value.id.toLowerCase(),
-                });
-                const settings = this.settingsService.load();
+          this.fightService.newFight("").subscribe(
+            (value) => {
+              this.fightId = value.id;
+              this.location.replaceState("/" + value.id);
+              this.startSession()
+                .then(() => {
+                  this.recent.register({
+                    name: parser.fight.name,
+                    boss: parser.fight.boss,
+                    source: ActivitySource.FFLogs,
+                    timestamp: new Date(),
+                    url: "/" + value.id.toLowerCase(),
+                    id: value.id.toLowerCase(),
+                  });
+                  const settings = this.settingsService.load();
 
-                try {
-                  this.presenterManager.setSettings(settings);
-                  this.fightLineController.importFromFFLogs(code + ":" + enc, parser);
-                  this.planArea.setInitialWindow(this.fightLineController.getLatestAbilityUsageTime(), 2);
-                  this.planArea.refresh();
-                }
-                catch (error) {
-                  this.notification.error("We are unable to load this fight. Dev team is already informed about this case");
-                }
-                stop(ref);
-              })
-              .catch(() => {
-                stop(ref);
-              });
-          },
-            error => {
+                  try {
+                    this.presenterManager.setSettings(settings);
+                    this.fightLineController.importFromFFLogs(
+                      code + ":" + enc,
+                      parser
+                    );
+                    this.planArea.setInitialWindow(
+                      this.fightLineController.getLatestAbilityUsageTime(),
+                      2
+                    );
+                    this.planArea.refresh();
+                  } catch (error) {
+                    this.notification.error(
+                      "We are unable to load this fight. Dev team is already informed about this case"
+                    );
+                  }
+                  stop(ref);
+                })
+                .catch(() => {
+                  stop(ref);
+                });
+            },
+            (error) => {
               console.log(error);
               stop(ref);
               this.notification.error("Unable to start");
-            });
+            }
+          );
         })
         .catch((error) => {
           console.error(error);
@@ -331,22 +431,28 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   replaceBossFFLogsData(code: string, enc: number) {
-    const stop = (ref: { close: () => void; }) => {
+    const stop = (ref: { close: () => void }) => {
       this.progressBar.complete();
       ref.close();
     };
 
-    this.dialogService.executeWithLoading("Importing...", ref => {
+    this.dialogService.executeWithLoading("Importing...", (ref) => {
       this.progressBar.start();
-      this.gameService.dataService.getEvents(code, enc, { bossAttacksOnly: true }, percentage => this.progressBar.set(percentage * 100))
+      this.gameService.dataService
+        .getEvents(code, enc, { bossAttacksOnly: true }, (percentage) =>
+          this.progressBar.set(percentage * 100)
+        )
         .then((parser) => {
-
           try {
-            this.fightLineController.importAttacksFromFFLogs(code + ":" + enc, parser);
+            this.fightLineController.importAttacksFromFFLogs(
+              code + ":" + enc,
+              parser
+            );
             this.planArea.refresh();
-          }
-          catch (error) {
-            this.notification.error("We are unable to load this fight. Dev team is already informed about this case");
+          } catch (error) {
+            this.notification.error(
+              "We are unable to load this fight. Dev team is already informed about this case"
+            );
           }
           stop(ref);
         })
@@ -364,25 +470,28 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   saveFight(): void {
     if (!this.authenticationService.authenticated) {
-      this.notification.showSignInRequired(() => { });
+      this.notification.showSignInRequired(() => {});
       return;
     }
 
-    this.dialogService.openSaveFight(() => this.fightLineController.createSerializer().serializeFight())
-      .then(result => {
+    this.dialogService
+      .openSaveFight(() =>
+        this.fightLineController.createSerializer().serializeFight()
+      )
+      .then((result) => {
         if (result !== null && result !== undefined) {
           this.recent.register({
             name: result.name,
             url: "/" + result.id.toLowerCase(),
             source: ActivitySource.Timeline,
-            id: result.id.toLowerCase()
+            id: result.id.toLowerCase(),
           });
           this.fightLineController.updateFight(result);
           this.location.replaceState(`/${result.id}`);
           this.notification.showFightSaved();
         }
       })
-      .catch(reason => {
+      .catch((reason) => {
         console.log(reason);
         this.notification.showFightNotSaved();
       });
@@ -394,11 +503,10 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   showHelp(): Promise<void> {
     const promise = new Promise<void>((resolve) => {
-      this.dialogService.openHelp()
-        .then(() => {
-          this.storage.setString("help_shown", "yes");
-          resolve();
-        });
+      this.dialogService.openHelp().then(() => {
+        this.storage.setString("help_shown", "yes");
+        resolve();
+      });
     });
 
     return promise;
@@ -420,94 +528,116 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.onCommand({ name: "redo" });
   }
 
-
   private startNew() {
-    this.dialogService.executeWithLoading("Starting...", ref => {
+    this.dialogService.executeWithLoading("Starting...", (ref) => {
       this.presenterManager.reset();
 
       const settings = this.settingsService.load();
       this.presenterManager.setSettings(settings);
 
       this.fightService.newFight("").subscribe(
-        value => {
+        (value) => {
           this.fightId = value.id;
           this.location.replaceState("/" + value.id);
           this.recent.register({
             name: "New",
             url: "/" + value.id.toLowerCase(),
             source: ActivitySource.Timeline,
-            id: value.id.toLowerCase()
+            id: value.id.toLowerCase(),
           });
           this.startSession().finally(() => {
             ref.close();
           });
         },
-        error => {
+        (error) => {
           console.log(error);
-          this.notification.error("We are unable to connect to server. Your actions will not be stored.");
+          this.notification.error(
+            "We are unable to connect to server. Your actions will not be stored."
+          );
           ref.close();
-        });
+        }
+      );
     });
   }
 
   private loadFight(id: string, preset?: string) {
-    this.dialogService.executeWithLoading("Loading...", ref => {
+    this.dialogService.executeWithLoading("Loading...", (ref) => {
       this.presenterManager.reset();
       this.fightId = id;
-      this.fightService.getFight(id).subscribe((fight: M.IFight) => {
-        if (fight) {
-          this.recent.register({
-            id: fight.id,
-            name: fight.name,
-            source: ActivitySource.Timeline,
-            url: "/" + fight.id.toLowerCase()
-          });
-
-          const settings = this.settingsService.load();
-          this.presenterManager.setSettings(settings);
-
-          const loadedData = fight.data && JSON.parse(fight.data) as SerializeController.IFightSerializeData;
-          if (loadedData.filter) {
-            this.presenterManager.filter = loadedData.filter;
-          }
-          if (loadedData.view) {
-            this.presenterManager.view = loadedData.view;
-          }
-
-          this.presenterManager.load(fight.id);
-
-          this.fightService.getCommands(this.fightId, new Date(fight.dateModified).valueOf())
-            .subscribe(commands => {
-              this.connectToSession().then(() => {
-                this.planArea.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
-                this.planArea.refresh();
-              }).finally(() => {
-                try {
-                  this.fightLineController.loadFight(fight, loadedData, commands.map(cmd => JSON.parse(cmd.data)));
-                  if (preset) {
-                    console.log("loading preset");
-                    this.fightLineController.loadPreset(preset);
-                  }
-                }
-                catch (error) {
-                  this.notification.error("We are unable to load this fight. Dev team is already informed about this case");
-                }
-                ref.close();
-              });
-            }, error => {
-              console.log(error);
-              this.notification.error("Unable to load data");
-              ref.close();
-            }, () => {
-
+      this.fightService.getFight(id).subscribe(
+        (fight: M.IFight) => {
+          if (fight) {
+            this.recent.register({
+              id: fight.id,
+              name: fight.name,
+              source: ActivitySource.Timeline,
+              url: "/" + fight.id.toLowerCase(),
             });
-        } else {
+
+            const settings = this.settingsService.load();
+            this.presenterManager.setSettings(settings);
+
+            const loadedData =
+              fight.data &&
+              (JSON.parse(
+                fight.data
+              ) as SerializeController.IFightSerializeData);
+            if (loadedData.filter) {
+              this.presenterManager.filter = loadedData.filter;
+            }
+            if (loadedData.view) {
+              this.presenterManager.view = loadedData.view;
+            }
+
+            this.presenterManager.load(fight.id);
+
+            this.fightService
+              .getCommands(this.fightId, new Date(fight.dateModified).valueOf())
+              .subscribe(
+                (commands) => {
+                  this.connectToSession()
+                    .then(() => {
+                      this.planArea.setInitialWindow(
+                        this.fightLineController.getLatestBossAttackTime(),
+                        2
+                      );
+                      this.planArea.refresh();
+                    })
+                    .finally(() => {
+                      try {
+                        this.fightLineController.loadFight(
+                          fight,
+                          loadedData,
+                          commands.map((cmd) => JSON.parse(cmd.data))
+                        );
+                        if (preset) {
+                          console.log("loading preset");
+                          this.fightLineController.loadPreset(preset);
+                        }
+                      } catch (error) {
+                        this.notification.error(
+                          "We are unable to load this fight. Dev team is already informed about this case"
+                        );
+                      }
+                      ref.close();
+                    });
+                },
+                (error) => {
+                  console.log(error);
+                  this.notification.error("Unable to load data");
+                  ref.close();
+                },
+                () => {}
+              );
+          } else {
+            ref.close();
+          }
+        },
+        () => {
+          this.notification.showUnableToLoadFight(() => {});
           ref.close();
         }
-      }, () => {
-        this.notification.showUnableToLoadFight(() => { });
-        ref.close();
-      });
+      );
     });
   }
 
@@ -542,10 +672,10 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   loadBoss(bossId: string) {
-    this.dialogService.executeWithLoading("Loading...", ref => {
+    this.dialogService.executeWithLoading("Loading...", (ref) => {
       const func = (fraction: M.IFraction, bossData: M.IBoss) => {
-        this.fightService.newFight(fraction ? fraction.name : "")
-          .subscribe(value => {
+        this.fightService.newFight(fraction ? fraction.name : "").subscribe(
+          (value) => {
             this.fightId = value.id;
             this.location.replaceState("/" + value.id);
             this.startSession()
@@ -556,42 +686,52 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
                 this.fightLineController.fraction = fraction;
                 this.fightLineController.applyView(settings.main.defaultView);
-                this.fightLineController.applyFilter(settings.main.defaultFilter);
+                this.fightLineController.applyFilter(
+                  settings.main.defaultFilter
+                );
 
                 this.fightLineController.loadBoss(bossData);
-                this.planArea.setInitialWindow(this.fightLineController.getLatestBossAttackTime(), 2);
+                this.planArea.setInitialWindow(
+                  this.fightLineController.getLatestBossAttackTime(),
+                  2
+                );
                 this.planArea.refresh();
                 ref.close();
               })
-              .catch(error => {
-                console.log((error));
+              .catch((error) => {
+                console.log(error);
                 this.notification.error("Unable to start");
                 ref.close();
               });
           },
-            error => {
-              console.log((error));
-              this.notification.error("Unable to start fight");
-              ref.close();
-            });
+          (error) => {
+            console.log(error);
+            this.notification.error("Unable to start fight");
+            ref.close();
+          }
+        );
       };
 
-      this.fightService.getBoss(bossId).subscribe((data) => {
-        func(null, data);
-      },
-        error => {
-          console.log((error));
+      this.fightService.getBoss(bossId).subscribe(
+        (data) => {
+          func(null, data);
+        },
+        (error) => {
+          console.log(error);
           this.notification.error("Unable to start");
           ref.close();
-        });
+        }
+      );
     });
   }
 
   onCommand(data: ICommandData) {
     console.log("adding command in fightline.onCOmmand");
-    this.fightService.addCommand(this.fightId, JSON.stringify(data)).subscribe((result) => {
-      this.fightHubService.sendCommand(this.fightId, "", result.id);
-    });
+    this.fightService
+      .addCommand(this.fightId, JSON.stringify(data))
+      .subscribe((result) => {
+        this.fightHubService.sendCommand(this.fightId, "", result.id);
+      });
     this.sidepanel.refresh();
   }
 
@@ -620,10 +760,14 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     this.subscribeToDispatcher(this.dispatcher);
 
-    this.toolsManager.register(new DowntimeTool(this.planArea, this.fightLineController));
+    this.toolsManager.register(
+      new DowntimeTool(this.planArea, this.fightLineController)
+    );
     this.toolsManager.register(new CopyPasteTool(this.fightLineController));
 
-    setTimeout(() => { this.onStart(this.route.snapshot); });
+    setTimeout(() => {
+      this.onStart(this.route.snapshot);
+    });
   }
 
   startSession(): Promise<void> {
@@ -633,17 +777,22 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     const promise = new Promise<void>((resolve, reject) => {
       const handlers: IStartSessionHandlers = {
-        onCommand: ((data: M.IHubCommand) => this.handleRemoteCommand(data.id, data.userId)).bind(this),
-        onConnected: ((data: M.IHubUser) => this.notification.showUserConnected(data)).bind(this),
-        onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisconnected(data)).bind(this)
+        onCommand: ((data: M.IHubCommand) =>
+          this.handleRemoteCommand(data.id, data.userId)).bind(this),
+        onConnected: ((data: M.IHubUser) =>
+          this.notification.showUserConnected(data)).bind(this),
+        onDisconnected: ((data: M.IHubUser) =>
+          this.notification.showUserDisconnected(data)).bind(this),
       };
 
       const settings = this.settingsService.load();
-      const name = settings.teamwork.displayName ||
+      const name =
+        settings.teamwork.displayName ||
         this.authenticationService.username ||
         "Anonymous";
 
-      this.fightHubService.startSession(this.fightId, name, handlers)
+      this.fightHubService
+        .startSession(this.fightId, name, handlers)
         .then(() => {
           this.notification.showSessionStarted();
           resolve();
@@ -663,15 +812,20 @@ export class FightLineComponent implements OnInit, OnDestroy {
   handleRemoteCommand(id: string, userId: string) {
     this.ping(userId, false);
 
-    this.fightService.getCommand(+id).subscribe((data: ICommandData) => {
-      this.handleRemoteCommandData(data);
-    }, error => {
-      console.log(error);
-    });
+    this.fightService.getCommand(+id).subscribe(
+      (data: ICommandData) => {
+        this.handleRemoteCommandData(data);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   ping(id: string, owner: boolean): void {
-    const pingComponent = this.pings.find(it => it.id === id || (owner && it.owner === owner));
+    const pingComponent = this.pings.find(
+      (it) => it.id === id || (owner && it.owner === owner)
+    );
     if (pingComponent) {
       pingComponent.ping();
     }
@@ -684,14 +838,21 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   connectToSession() {
     const handlers: IConnectToSessionHandlers = {
-      onCommand: ((data: M.IHubCommand) => this.handleRemoteCommand(data.id, data.userId)).bind(this),
-      onConnected: ((data: M.IHubUser) => this.notification.showUserConnected(data)).bind(this),
-      onDisconnected: ((data: M.IHubUser) => this.notification.showUserDisconnected(data)).bind(this)
+      onCommand: ((data: M.IHubCommand) =>
+        this.handleRemoteCommand(data.id, data.userId)).bind(this),
+      onConnected: ((data: M.IHubUser) =>
+        this.notification.showUserConnected(data)).bind(this),
+      onDisconnected: ((data: M.IHubUser) =>
+        this.notification.showUserDisconnected(data)).bind(this),
     };
 
     const settings = this.settingsService.load();
-    const name = settings.teamwork.displayName || this.authenticationService.username || "Anonymous";
-    return this.fightHubService.connect(this.fightId, name, handlers)
+    const name =
+      settings.teamwork.displayName ||
+      this.authenticationService.username ||
+      "Anonymous";
+    return this.fightHubService
+      .connect(this.fightId, name, handlers)
       .then(() => {
         this.notification.showConnectedToSession();
       })
@@ -719,7 +880,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subs.forEach(s => s.unsubscribe());
+    this.subs.forEach((s) => s.unsubscribe());
     this.stopSession();
     this.dispatcher.destroy();
   }
@@ -733,7 +894,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     this.dialogService.openBossTemplates(true, boss);
   }
 
-  attachPreset(data: { name: string, preset: M.IPresetTemplate }) {
+  attachPreset(data: { name: string; preset: M.IPresetTemplate }) {
     this.fightLineController.attachPreset(data.name, data.preset);
   }
 
@@ -753,47 +914,103 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
     const serializer = this.fightLineController.createSerializer();
     const exported = serializer.serializeForDownload();
-    const blob = new Blob([JSON.stringify(exported, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(exported, null, 2)], {
+      type: "application/json",
+    });
     saveData(blob, "data.json");
   }
 
-  private subscribeToDispatcher(dispatcher: DispatcherService<DispatcherPayloads>) {
-
-    dispatcher.on("similarClick").subscribe(value => {
+  private subscribeToDispatcher(
+    dispatcher: DispatcherService<DispatcherPayloads>
+  ) {
+    dispatcher.on("similarClick").subscribe((value) => {
       this.planArea.selectBossAttaks([value]);
       this.sidepanel.setItems(this.fightLineController.getItems([value]));
     });
 
-    dispatcher.on("similarAllClick").subscribe(value => {
+    dispatcher.on("similarAllClick").subscribe((value) => {
       this.planArea.selectBossAttaks(value);
       this.sidepanel.setItems(this.fightLineController.getItems(value));
     });
 
-    dispatcher.on("abilityClick").subscribe(value => {
+    dispatcher.on("abilityClick").subscribe((value) => {
       this.planArea.selectAbilities([value]);
       this.sidepanel.setItems(this.fightLineController.getItems([value]));
     });
 
-    dispatcher.on("bossTemplateSave").subscribe(value => {
-      const bossData = this.fightLineController.createSerializer().serializeBoss();
+    dispatcher.on("bossTemplateSave").subscribe((value) => {
+      const bossData = this.fightLineController
+        .createSerializer()
+        .serializeBoss();
 
       if (bossData.id) {
-        this.fightService.saveBoss(bossData).subscribe((e) => {
-          this.notification.success("Boss saved");
-          this.fightLineController.updateBoss(e);
-          value.close();
-        },
+        this.fightService.saveBoss(bossData).subscribe(
+          (e) => {
+            this.notification.success("Boss saved");
+            this.fightLineController.updateBoss(e);
+            value.close();
+          },
           (err) => {
             console.error(err);
             this.notification.error("Boss save failed");
-          });
+          }
+        );
       } else {
-        this.dialogService.openSaveBoss(value.name + " new template").then(data => {
+        this.dialogService
+          .openSaveBoss(value.name + " new template")
+          .then((data) => {
+            if (data) {
+              bossData.name = data;
+              bossData.userName =
+                (bossData && bossData.userName) ||
+                this.authenticationService.username;
+              bossData.ref = (bossData && bossData.ref) || value.reference;
+              bossData.isPrivate =
+                (bossData && bossData.isPrivate) || value.isPrivate;
+              bossData.game = this.gameService.name;
+
+              this.fightService.saveBoss(bossData).subscribe(
+                (e) => {
+                  this.notification.success("Boss saved");
+                  this.fightLineController.updateBoss(e);
+                  value.close();
+                },
+                (err) => {
+                  console.log(err);
+                  this.notification.error("Boss save failed");
+                }
+              );
+            } else {
+              value.close();
+            }
+          });
+      }
+    });
+
+    dispatcher.on("changeJobStats").subscribe((value) => {
+      this.fightLineController.setJobStats(value.id, value.data);
+    });
+
+    dispatcher.on("toggleAttackPin").subscribe((value) => {
+      this.fightLineController.toggleBossAttackPin(value);
+    });
+
+    dispatcher.on("bossTemplateSaveAsNew").subscribe((value) => {
+      const bossData = this.fightLineController
+        .createSerializer()
+        .serializeBoss();
+      this.dialogService
+        .openSaveBoss(value.name + " new template")
+        .then((data) => {
           if (data) {
+            bossData.id = null;
             bossData.name = data;
-            bossData.userName = bossData && bossData.userName || this.authenticationService.username;
-            bossData.ref = bossData && bossData.ref || value.reference;
-            bossData.isPrivate = bossData && bossData.isPrivate || value.isPrivate;
+            bossData.userName =
+              (bossData && bossData.userName) ||
+              this.authenticationService.username;
+            bossData.ref = (bossData && bossData.ref) || value.reference;
+            bossData.isPrivate =
+              (bossData && bossData.isPrivate) || value.isPrivate;
             bossData.game = this.gameService.name;
 
             this.fightService.saveBoss(bossData).subscribe(
@@ -805,75 +1022,39 @@ export class FightLineComponent implements OnInit, OnDestroy {
               (err) => {
                 console.log(err);
                 this.notification.error("Boss save failed");
-              });
+              }
+            );
           } else {
             value.close();
           }
         });
-      }
-    });
-
-    dispatcher.on("changeJobStats").subscribe(value => {
-      this.fightLineController.setJobStats(value.id, value.data);
-    });
-
-    dispatcher.on("toggleAttackPin").subscribe(value => {
-      this.fightLineController.toggleBossAttackPin(value);
-    });
-
-    dispatcher.on("bossTemplateSaveAsNew").subscribe(value => {
-      const bossData = this.fightLineController.createSerializer().serializeBoss();
-      this.dialogService.openSaveBoss(value.name + " new template").then(data => {
-        if (data) {
-          bossData.id = null;
-          bossData.name = data;
-          bossData.userName = bossData && bossData.userName || this.authenticationService.username;
-          bossData.ref = bossData && bossData.ref || value.reference;
-          bossData.isPrivate = bossData && bossData.isPrivate || value.isPrivate;
-          bossData.game = this.gameService.name;
-
-          this.fightService.saveBoss(bossData).subscribe(
-            (e) => {
-              this.notification.success("Boss saved");
-              this.fightLineController.updateBoss(e);
-              value.close();
-            },
-            (err) => {
-              console.log(err);
-              this.notification.error("Boss save failed");
-            });
-        } else {
-          value.close();
-        }
-      });
     });
 
     dispatcher.on("updateSettings").subscribe(() => {
-      this.fightLineController.colorSettings = this.settingsService.load().colors;
+      this.fightLineController.colorSettings =
+        this.settingsService.load().colors;
       this.planArea.refresh();
     });
 
-    dispatcher.on("removeJob").subscribe(value => {
+    dispatcher.on("removeJob").subscribe((value) => {
       this.fightLineController.removeJob(value);
       this.setSidePanel(null);
     });
 
-    dispatcher.on("attackCopy").subscribe(value => {
+    dispatcher.on("attackCopy").subscribe((value) => {
       this.fightLineController.copy(value);
       this.toolsManager.setActive("Copy & Paste");
     });
 
-    dispatcher.on("attackEdit").subscribe(value => {
+    dispatcher.on("attackEdit").subscribe((value) => {
       this.fightLineController.updateBossAttack(value);
     });
 
-
-
-    dispatcher.on("updateFilter").subscribe(value => {
+    dispatcher.on("updateFilter").subscribe((value) => {
       this.updateFilter();
     });
 
-    dispatcher.on("updateView").subscribe(value => {
+    dispatcher.on("updateView").subscribe((value) => {
       this.updateView();
     });
 
@@ -881,86 +1062,115 @@ export class FightLineComponent implements OnInit, OnDestroy {
     //   this.fightLineController.editAbility(value.id);
     // });
 
-    dispatcher.on("abilitySaveSettings").subscribe(value => {
+    dispatcher.on("abilitySaveSettings").subscribe((value) => {
       this.fightLineController.updateAbilitySettings(value.id, value.settings);
     });
 
-    dispatcher.on("hideJobAbility").subscribe(value => {
+    dispatcher.on("hideJobAbility").subscribe((value) => {
       this.fightLineController.hideAbility(value);
       this.setSidePanel(null);
       this.presenterManager.save(this.fightId);
     });
 
-    dispatcher.on("clearJobAbility").subscribe(value => {
+    dispatcher.on("clearJobAbility").subscribe((value) => {
       this.fightLineController.clearAbility(value);
       this.setSidePanel(null);
     });
 
-    dispatcher.on("fillJobAbility").subscribe(value => {
-      this.fightLineController.combineAndExecute(this.fightLineController.fillAbility(value));
+    dispatcher.on("fillJobAbility").subscribe((value) => {
+      this.fightLineController.combineAndExecute(
+        this.fightLineController.fillAbility(value)
+      );
     });
 
-    dispatcher.on("fillJob").subscribe(value => {
-      this.fightLineController.combineAndExecute(this.fightLineController.fillJob(value));
+    dispatcher.on("fillJob").subscribe((value) => {
+      this.fightLineController.combineAndExecute(
+        this.fightLineController.fillJob(value)
+      );
     });
 
-    dispatcher.on("jobAbilityRestoreAll").subscribe(value => {
+    dispatcher.on("jobAbilityRestoreAll").subscribe((value) => {
       const hidden = [...this.presenterManager.jobFilter(value).abilityHidden];
-      hidden?.forEach(h => {
-        const ab = this.visStorage.holders.abilities.getByParentAndAbility(value, h);
+      hidden?.forEach((h) => {
+        const ab = this.visStorage.holders.abilities.getByParentAndAbility(
+          value,
+          h
+        );
         this.fightLineController.showAbility(ab.id);
       });
       this.presenterManager.save(this.fightId);
     });
 
-    dispatcher.on("jobAbilityRestore").subscribe(value => {
+    dispatcher.on("jobAbilityRestore").subscribe((value) => {
       this.fightLineController.showAbility(value);
       this.presenterManager.save(this.fightId);
     });
 
-
-    dispatcher.on("toggleJobCompactView").subscribe(value => {
+    dispatcher.on("toggleJobCompactView").subscribe((value) => {
       this.fightLineController.toggleJobCompactView(value);
       this.fightLineController.applyFilter();
       this.presenterManager.save(this.fightId);
     });
 
-    dispatcher.on("toggleJobAbilityCompactView").subscribe(value => {
+    dispatcher.on("availAbilityClick").subscribe(({ abilityMap, attackId }) => {
+      const attack = this.visStorage.holders.bossAttacks.get(attackId);
+
+      const availableRanges = getAvailabilitiesForAbility(
+        this.visStorage.holders,
+        this.startDate
+      )(abilityMap);
+      const duration = calculateDuration(abilityMap.ability);
+      const minAttack = new Date(attack.startAsNumber - duration * 1000);
+      const maxAttack = new Date(attack.startAsNumber);
+      const targetRange = { start: minAttack, end: maxAttack };
+      const firstIntersected = availableRanges.map((r) =>
+        intersect(r.data as Range, targetRange)
+      )[0];
+
+      this.fightLineController.addClassAbility(
+        null,
+        abilityMap,
+        firstIntersected?.start || attack.start,
+        false
+      );
+    });
+
+    dispatcher.on("toggleJobAbilityCompactView").subscribe((value) => {
       this.fightLineController.toggleCompactViewAbility(value);
       // this.fightLineController.applyFilter();
       this.presenterManager.save(this.fightId);
     });
 
-    dispatcher.on("downTimeColor").subscribe(value => {
+    dispatcher.on("downTimeColor").subscribe((value) => {
       this.fightLineController.setDownTimeColor(value.id, value.color);
     });
 
-    dispatcher.on("downtimeComment").subscribe(value => {
+    dispatcher.on("downtimeComment").subscribe((value) => {
       this.fightLineController.setDownTimeComment(value.id, value.comment);
     });
 
-    dispatcher.on("abilitiesRemove").subscribe(value => {
+    dispatcher.on("abilitiesRemove").subscribe((value) => {
       this.fightLineController.handleDelete(value);
     });
 
-    dispatcher.on("attacksRemove").subscribe(value => {
+    dispatcher.on("attacksRemove").subscribe((value) => {
       this.fightLineController.handleDelete(value);
     });
 
-    dispatcher.on("downtimeRemove").subscribe(value => {
+    dispatcher.on("downtimeRemove").subscribe((value) => {
       this.fightLineController.removeDownTime(value);
       this.setSidePanel(null);
     });
 
-    dispatcher.on("selectDowntimes").subscribe(value => {
+    dispatcher.on("selectDowntimes").subscribe((value) => {
       this.setSidePanel({
         items: [value],
       });
     });
 
-    dispatcher.on("bossTemplatesLoad").subscribe(async value => {
-      this.dialogService.executeWithLoading("Loading...", async ref => {
-        const stop = (dialog: { close: () => void; }) => {
+    dispatcher.on("bossTemplatesLoad").subscribe(async (value) => {
+      this.dialogService.executeWithLoading("Loading...", async (ref) => {
+        const stop = (dialog: { close: () => void }) => {
           value.close();
           this.progressBar.complete();
           dialog.close();
@@ -974,27 +1184,42 @@ export class FightLineComponent implements OnInit, OnDestroy {
             code,
             +fight,
             { bossAttacksOnly: true },
-            percentage => this.progressBar.set(percentage * 100));
+            (percentage) => this.progressBar.set(percentage * 100)
+          );
 
           const enemyAttacks = parser.events.filter((it: FF.AbilityEvent) => {
-            return !it.sourceIsFriendly &&
+            return (
+              !it.sourceIsFriendly &&
               it.ability &&
               it.ability.name.toLowerCase() !== "attack" &&
               it.ability.name.trim() !== "" &&
-              it.ability.name.indexOf("Unknown_") < 0;
-          }
+              it.ability.name.indexOf("Unknown_") < 0
+            );
+          });
+          const g = _.groupBy(
+            enemyAttacks as FF.AbilityEvent[],
+            (d) => d.ability.name + "_" + Math.trunc(d.timestamp / 1000)
           );
-          const g = _.groupBy(enemyAttacks as FF.AbilityEvent[], d => d.ability.name + "_" + Math.trunc(d.timestamp / 1000));
           const attacks: FF.AbilityEvent[] = Object.keys(g).map((k: string) => {
             return g[k][0];
           });
 
-          const bossData = JSON.parse(value.boss.data) as SerializeController.IBossSerializeData;
-          const result = process(attacks, parser.fight.start_time, bossData.attacks.map(it => it.ability), bossData.downTimes);
-          bossData.attacks = result.map(it => ({
-            ability: it,
-            id: this.idgen.getNextId(M.EntryType.BossAttack)
-          }) as SerializeController.IBossAbilityUsageData);
+          const bossData = JSON.parse(
+            value.boss.data
+          ) as SerializeController.IBossSerializeData;
+          const result = process(
+            attacks,
+            parser.fight.start_time,
+            bossData.attacks.map((it) => it.ability),
+            bossData.downTimes
+          );
+          bossData.attacks = result.map(
+            (it) =>
+              ({
+                ability: it,
+                id: this.idgen.getNextId(M.EntryType.BossAttack),
+              } as SerializeController.IBossAbilityUsageData)
+          );
           value.boss.data = JSON.stringify(bossData);
           this.fightLineController.loadBoss(value.boss);
           stop(ref);
@@ -1003,7 +1228,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
           stop(ref);
         }
       });
-
     });
   }
 }
