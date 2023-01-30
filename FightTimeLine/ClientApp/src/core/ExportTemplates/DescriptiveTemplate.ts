@@ -3,7 +3,7 @@ import { IExportCell, IExportColumn, ITableOptionSettings } from "../ExportModel
 import { Holders } from "../Holders";
 import { BossAttackMap } from "../Maps";
 import { BaseColumnTemplate, IColumnTemplate } from "../TableModels";
-import { AttackNameColumn } from "./Columns/AttackNameColumn";
+import { AttackNameColumn, AttackTagsColumn } from "./Columns/AttackNameColumn";
 import { TimeColumn } from "./Columns/TimeColumn";
 
 export class DescriptiveTemplate extends AttackRowExportTemplate {
@@ -43,15 +43,5 @@ class AttackDescriptionColumn extends BaseColumnTemplate implements IColumnTempl
   }
 }
 
-class AttackTagsColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap>{
-  buildHeader(data: Holders): IExportColumn {
-    return {
-      name: "tags",
-      text: "Tags",
-    };
-  }
-  buildCell(data: Holders, attack: BossAttackMap): IExportCell {
-    return this.items(attack.attack.tags?.map(t => ({ text: t, ignoreShowText: true })) || [], {});
-  }
-}
+
 

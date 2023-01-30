@@ -6,7 +6,7 @@ import {
 import { Holders } from "../Holders";
 import { BossAttackMap } from "../Maps";
 import { IColumnTemplate } from "../TableModels";
-import { AttackNameColumn } from "./Columns/AttackNameColumn";
+import { AttackNameColumn, AttackTagsColumn } from "./Columns/AttackNameColumn";
 import { BossTargetColumn } from "./Columns/BossTargetColumn";
 import { JobDefensivesColumn } from "./Columns/JobDefensivesColumn";
 import { MitigationsCombinedColumn } from "./Columns/MitigationsCombinedColumn";
@@ -83,6 +83,7 @@ export class BossAttackDefensiveTemplateV2 extends AttackRowExportTemplate {
           { id: "attack", checked: true, text: "Attack" },
           { id: "target", checked: false, text: "Target" },
           { id: "mitigations", checked: false, text: "Mitigations" },
+          { id: "tags", checked: false, text: "Tags" },
         ]
       }
     };
@@ -136,6 +137,7 @@ export class BossAttackDefensiveTemplateV2 extends AttackRowExportTemplate {
       columnPresent("attack", () => new AttackNameColumn(context.presenter, attackColor)),
       columnPresent("target", () => new BossTargetColumn()),
       columnPresent("mitigations", () => new MitigationsCombinedColumn()),
+      columnPresent("tags", () => new AttackTagsColumn()),
       ...jobs
         .filter(j => !jobsFilter || jobsFilter.indexOf(j.order.toString()) >= 0)
         .map(j => new JobDefensivesColumn(
