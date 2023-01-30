@@ -36,3 +36,15 @@ export class AttackNameColumn extends BaseColumnTemplate implements IColumnTempl
     });
   }
 }
+
+export class AttackTagsColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap>{
+  buildHeader(data: Holders): IExportColumn {
+    return {
+      name: "tags",
+      text: "Tags",
+    };
+  }
+  buildCell(data: Holders, attack: BossAttackMap): IExportCell {
+    return this.items(attack.attack.tags?.map(t => ({ text: t, ignoreShowText: true })) || [], {});
+  }
+}
