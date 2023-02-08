@@ -297,14 +297,14 @@ export const AST: IJobTemplate = {
     ja: "AST",
     en: "AST",
     fr: "AST",
-    cn: ""
+    cn: "AST"
   },
   fullNameTranslation: {
     de: "Astrologe",
     ja: "\u5360\u661F\u8853\u5E2B",
     en: "Astrologian",
     fr: "Astromancien",
-    cn: ""
+    cn: "占星术士"
   },
   role: Role.Healer,
   abilities,
