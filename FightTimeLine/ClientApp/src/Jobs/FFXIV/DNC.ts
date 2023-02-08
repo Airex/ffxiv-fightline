@@ -201,7 +201,7 @@ export const DNC: IJobTemplate = {
     ja: "DNC",
     en: "DNC",
     fr: "DNS",
-    cn: ""
+    cn: "DNC"
   },
 
   fullNameTranslation: {
