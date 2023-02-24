@@ -280,7 +280,6 @@ const abilities = [
     },
     cooldown: 60,
     xivDbId: "7390",
-    requiresBossTarget: true,
     statuses: [statuses.delirium],
     abilityType: AbilityType.SelfDamageBuff,
     levelAcquired: 68
