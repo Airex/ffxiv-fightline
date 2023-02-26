@@ -37,7 +37,9 @@ import { Location } from "@angular/common";
 import { SidepanelComponent } from "src/components/sidepanel/sidepanel.component";
 import {
   Range,
+  calculateAvailDefsForAttack,
   getAvailabilitiesForAbility,
+  getTimeGoodAbilityToUse,
   intersect,
 } from "src/core/Defensives";
 import { calculateDuration } from "src/core/Durations";
@@ -246,23 +248,12 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
     dispatcher.on("availAbilityClick").subscribe(({ abilityMap, attackId }) => {
       const attack = this.visStorage.holders.bossAttacks.get(attackId);
-
-      const availableRanges = getAvailabilitiesForAbility(
-        this.visStorage.holders,
-        this.startDate
-      )(abilityMap);
-      const duration = calculateDuration(abilityMap.ability);
-      const minAttack = new Date(attack.startAsNumber - duration * 1000);
-      const maxAttack = new Date(attack.startAsNumber);
-      const targetRange = { start: minAttack, end: maxAttack };
-      const firstIntersected = availableRanges
-        ?.map((r) => intersect(r.data as Range, targetRange))
-        .filter((a) => Boolean(a))[0];
+      const at = getTimeGoodAbilityToUse(this.visStorage.holders, this.startDate, abilityMap, attack);
 
       this.fightLineController.addClassAbility(
         null,
         abilityMap,
-        firstIntersected?.start || minAttack,
+        at,
         false
       );
     });
@@ -434,7 +425,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
       const jid = u.ability.job.id;
       if (jid === colId) {
         if (this.idgen.isBossAttack(rowId)) {
-          return true;
+          const avail = calculateAvailDefsForAttack(this.visStorage.holders, rowId, itemId);
+          return avail?.filter(a=>a.jobId === jid)?.[0]?.abilities.some(ab=>ab.ability.name === u.ability.ability.name) || false;
         }
       }
     }
@@ -456,8 +448,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
             `dropping ${u.ability.ability.name} on ${att.attack.name} at ${att.attack.offset}`
           );
 
+          const at = getTimeGoodAbilityToUse(this.visStorage.holders, this.startDate, u.ability, att, itemId);
+
           this.fightLineController.combineAndExecute([
-            new MoveCommand(itemId, new Date(att.startAsNumber - 1000))
+            new MoveCommand(itemId, at)
           ]);
         }
       } else {

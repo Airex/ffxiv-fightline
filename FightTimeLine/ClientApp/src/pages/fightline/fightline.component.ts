@@ -67,6 +67,7 @@ import { AddAbilityCommand } from "src/core/commands/AddAbilityCommand";
 import {
   Range,
   getAvailabilitiesForAbility,
+  getTimeGoodAbilityToUse,
   intersect,
 } from "src/core/Defensives";
 import { calculateDuration } from "src/core/Durations";
@@ -1113,24 +1114,14 @@ export class FightLineComponent implements OnInit, OnDestroy {
     });
 
     dispatcher.on("availAbilityClick").subscribe(({ abilityMap, attackId }) => {
-      const attack = this.visStorage.holders.bossAttacks.get(attackId);
 
-      const availableRanges = getAvailabilitiesForAbility(
-        this.visStorage.holders,
-        this.startDate
-      )(abilityMap);
-      const duration = calculateDuration(abilityMap.ability);
-      const minAttack = new Date(attack.startAsNumber - duration * 1000);
-      const maxAttack = new Date(attack.startAsNumber);
-      const targetRange = { start: minAttack, end: maxAttack };
-      const firstIntersected = availableRanges
-        ?.map((r) => intersect(r.data as Range, targetRange))
-        .filter((a) => Boolean(a))[0];
+      const attack = this.visStorage.holders.bossAttacks.get(attackId);
+      const at = getTimeGoodAbilityToUse(this.visStorage.holders, this.startDate, abilityMap, attack);
 
       this.fightLineController.addClassAbility(
         null,
         abilityMap,
-        firstIntersected?.start || minAttack,
+        at,
         false
       );
     });
