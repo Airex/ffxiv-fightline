@@ -1,37 +1,40 @@
-<div style="min-height: 560px;">
+<div style="min-height: 560px">
   <nz-tabset [nzSelectedIndex]="1">
-    <nz-tab [nzDisabled]="true"
-            [nzTitle]="header">
+    <nz-tab [nzDisabled]="true" [nzTitle]="header">
       <ng-template #header>
-        <h3 class="header" nz-typography>{{'dialog.settings.header' | translate}}</h3>
+        <h3 class="header" nz-typography>
+          {{ "dialog.settings.header" | translate }}
+        </h3>
       </ng-template>
     </nz-tab>
-    <nz-tab nzTitle="{{'dialog.settings.tabs.main._' | translate}}">
-      <settingsMainTab ></settingsMainTab>
+    <nz-tab nzTitle="{{ 'dialog.settings.tabs.main._' | translate }}">
+      <settingsMainTab></settingsMainTab>
     </nz-tab>
-    <nz-tab nzTitle="{{'dialog.settings.tabs.fflogs._' | translate}}"
-            *ngIf="gameService.showImport">
-      <settingsDialogFflogsTab ></settingsDialogFflogsTab>
+    <nz-tab
+      nzTitle="{{ 'dialog.settings.tabs.fflogs._' | translate }}"
+      *ngIf="gameService.showImport"
+    >
+      <settingsDialogFflogsTab></settingsDialogFflogsTab>
     </nz-tab>
-    <nz-tab nzTitle="{{'dialog.settings.tabs.presets._' | translate}}">
-      <settingsDialogPresetsTab ></settingsDialogPresetsTab>
+    <nz-tab nzTitle="{{ 'dialog.settings.tabs.presets._' | translate }}">
+      <settingsDialogPresetsTab></settingsDialogPresetsTab>
     </nz-tab>
-    <nz-tab nzTitle="{{'dialog.settings.tabs.teamwork._' | translate}}">
-      <settingsDialogTeamworkTab ></settingsDialogTeamworkTab>
+    <nz-tab nzTitle="{{ 'dialog.settings.tabs.teamwork._' | translate }}">
+      <settingsDialogTeamworkTab></settingsDialogTeamworkTab>
     </nz-tab>
-    <nz-tab nzTitle="{{'dialog.settings.tabs.tableview._' | translate}}">
-      <settingsDialogTableviewTab ></settingsDialogTableviewTab>
+    <nz-tab nzTitle="{{ 'dialog.settings.tabs.tableview._' | translate }}">
+      <settingsDialogTableviewTab></settingsDialogTableviewTab>
     </nz-tab>
-    <nz-tab nzTitle="{{'dialog.settings.tabs.colors._' | translate}}">
-      <settingsColorsTab ></settingsColorsTab>
+    <nz-tab nzTitle="{{ 'dialog.settings.tabs.colors._' | translate }}">
+      <settingsColorsTab></settingsColorsTab>
     </nz-tab>
   </nz-tabset>
   <div *nzModalFooter>
-    <button nz-button
-            (click)="onYesClick()"
-            cdkFocusInitial>{{'dialog.save' | translate}}</button>
-    <button nz-button
-            nzType="primary"
-            (click)="onNoClick()">{{'dialog.cancel' | translate}}</button>
+    <button nz-button (click)="onNoClick()">
+      {{ "dialog.cancel" | translate }}
+    </button>
+    <button nz-button nzType="primary" (click)="onYesClick()" cdkFocusInitial>
+      {{ "dialog.save" | translate }}
+    </button>
   </div>
 </div>

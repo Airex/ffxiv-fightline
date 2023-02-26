@@ -1,30 +1,63 @@
-<nz-spin nzTip="{{'system.loading' | translate}}" [nzSpinning]="loading">
-  <div style="height: 360px;">
-    <div *ngIf="!loading && container.fights && container.fights.length>0">
-      <div style="height: 360px;overflow: auto" customScroll>
-        <nz-list #fights [nzDataSource]="container.fights" [nzRenderItem]="item" nzSize="small"
-          [ngClass]="{loadList:true}">
+<nz-spin nzTip="{{ 'system.loading' | translate }}" [nzSpinning]="loading">
+  <div style="height: 360px">
+    <div *ngIf="!loading && container.fights && container.fights.length > 0">
+      <div style="height: 360px; overflow: auto" customScroll>
+        <nz-list
+          #fights
+          [nzDataSource]="container.fights"
+          [nzRenderItem]="item"
+          nzSize="small"
+          [ngClass]="{ loadList: true }"
+        >
           <ng-template #item let-item>
             <nz-list-item [nzActions]="[removeAction]">
-              <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="nzDescription" (click)="select(item)">
+              <nz-list-item-meta
+                [nzTitle]="nzTitle"
+                [nzDescription]="nzDescription"
+                (click)="select(item)"
+              >
                 <ng-template #nzTitle>
-                  <span *ngIf="item.isDraft">{{'dialog.fightLoad.draft' | translate}}</span> {{ item.name }}
+                  <span *ngIf="item.isDraft">{{
+                    "dialog.fightLoad.draft" | translate
+                  }}</span>
+                  {{ item.name }}
                 </ng-template>
                 <ng-template #nzDescription>
-                  <span *ngIf="!!item.dateCreated">{{'dialog.fightLoad.created' | translate}}: {{item.dateCreated |
-                    date:'medium'}}</span>
+                  <span *ngIf="!!item.dateCreated"
+                    >{{ "dialog.fightLoad.created" | translate }}:
+                    {{ item.dateCreated | date : "medium" }}</span
+                  >
                   <span
-                    *ngIf="!!item.dateModified && (item.dateCreated | date:'medium')!=(item.dateModified | date:'medium')">
-                    &nbsp;&nbsp;&nbsp;&nbsp;{{'dialog.fightLoad.lastUpdate' | translate}}: {{item.dateModified |
-                    date:'medium'}}
+                    *ngIf="
+                      !!item.dateModified &&
+                      (item.dateCreated | date : 'medium') !==
+                        (item.dateModified | date : 'medium')
+                    "
+                  >
+                    &nbsp;&nbsp;&nbsp;&nbsp;{{
+                      "dialog.fightLoad.lastUpdate" | translate
+                    }}: {{ item.dateModified | date : "medium" }}
                   </span>
                 </ng-template>
               </nz-list-item-meta>
               <ng-template #removeAction>
                 <span class="actions" #actionItem>
-                  <a nz-popconfirm nzPopconfirmTitle="{{'dialog.fightLoad.youSureDeleteFight' | translate}}"
-                    (nzPopconfirmVisibleChange)="removevisiblechanged(actionItem, $event)" (nzOnConfirm)="remove(item)">
-                    <i nz-icon nzType="delete" class="action-icon" nzTheme="twotone"></i>
+                  <a
+                    nz-popconfirm
+                    nzPopconfirmTitle="{{
+                      'dialog.fightLoad.youSureDeleteFight' | translate
+                    }}"
+                    (nzPopconfirmVisibleChange)="
+                      removevisiblechanged(actionItem, $event)
+                    "
+                    (nzOnConfirm)="remove(item)"
+                  >
+                    <i
+                      nz-icon
+                      nzType="delete"
+                      class="action-icon"
+                      nzTheme="twotone"
+                    ></i>
                   </a>
                 </span>
               </ng-template>
@@ -33,23 +66,33 @@
         </nz-list>
       </div>
     </div>
-    <div *ngIf="!loading && (!container.fights || container.fights.length==0)">
+    <div
+      *ngIf="!loading && (!container.fights || container.fights.length === 0)"
+    >
       <nz-empty></nz-empty>
     </div>
   </div>
   <div *nzModalFooter>
-    <button nz-button nzType="primary" (click)="onNoClick()" cdkFocusInitial>{{'dialog.cancel' | translate}}</button>
+    <button nz-button nzType="primary" (click)="onNoClick()" cdkFocusInitial>
+      {{ "dialog.cancel" | translate }}
+    </button>
   </div>
 </nz-spin>
-
 
 <ng-template #headerTemplate>
   <div style="display: flex !important">
     <div class="ant-modal-title">
-      <div class="ng-star-inserted">{{'dialog.fightLoad.header' | translate}}</div>
+      <div class="ng-star-inserted">
+        {{ "dialog.fightLoad.header" | translate }}
+      </div>
     </div>
     <span class="example-spacer"></span>
-    <nz-switch name="asdf" nzCheckedChildren="{{'dialog.fightLoad.showDraft' | translate}}" nzUnCheckedChildren="{{'dialog.fightLoad.doNotShowDraft' | translate}}" [ngModel]="false"
-      #showDrafts></nz-switch>
+    <nz-switch
+      name="asdf"
+      nzCheckedChildren="{{ 'dialog.fightLoad.showDraft' | translate }}"
+      nzUnCheckedChildren="{{ 'dialog.fightLoad.doNotShowDraft' | translate }}"
+      [ngModel]="false"
+      #showDrafts
+    ></nz-switch>
   </div>
 </ng-template>
