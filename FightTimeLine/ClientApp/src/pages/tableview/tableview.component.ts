@@ -41,6 +41,8 @@ import {
   intersect,
 } from "src/core/Defensives";
 import { calculateDuration } from "src/core/Durations";
+import { CdkDrag, CdkDropList } from "@angular/cdk/drag-drop";
+import { MoveCommand } from "src/core/commands/MoveCommand";
 
 @Component({
   selector: "tableview",
@@ -422,7 +424,50 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.filterChange(null, null);
   }
 
-  connectToSession() {
+  canDrop = (drag: CdkDrag, drop: CdkDropList) => {
+    // Only allow items to be dropped into the list if the list has less than 5 items.    c
+    const itemId = drag.data.refId;
+    const colId = drop.data.col.refId;
+    const rowId = drop.data.row.filterData.id;
+    if (this.idgen.isAbilityUsage(itemId)) {
+      const u = this.visStorage.holders.itemUsages.get(itemId);
+      const jid = u.ability.job.id;
+      if (jid === colId) {
+        if (this.idgen.isBossAttack(rowId)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  onDrop(ev) {
+    const { item, container } = ev;
+    const itemId = item.data.refId;
+    const colId = container.data.col.refId;
+    const rowId = container.data.row.filterData.id;
+    if (this.idgen.isAbilityUsage(itemId)) {
+      const u = this.visStorage.holders.itemUsages.get(itemId);
+      const jid = u.ability.job.id;
+      if (jid === colId) {
+        if (this.idgen.isBossAttack(rowId)) {
+          const att = this.visStorage.holders.bossAttacks.get(rowId);
+          console.log(
+            `dropping ${u.ability.ability.name} on ${att.attack.name} at ${att.attack.offset}`
+          );
+
+          this.fightLineController.combineAndExecute([
+            new MoveCommand(itemId, new Date(att.startAsNumber - 1000))
+          ]);
+        }
+      } else {
+        console.log("not same job");
+      }
+    }
+    console.log(ev);
+  }
+
+  async connectToSession() {
     const handlers: S.IConnectToSessionHandlers = {
       onCommand: ((data: M.IHubCommand) =>
         this.handleRemoteCommand(data.id, data.userId)).bind(this),
@@ -437,14 +482,12 @@ export class TableViewComponent implements OnInit, OnDestroy {
       settings.teamwork.displayName ||
       this.authenticationService.username ||
       "Anonymous";
-    return this.fightHubService
-      .connect(this.fightId, name, handlers)
-      .then(() => {
-        this.notification.showConnectedToSession();
-      })
-      .catch(() => {
-        this.notification.showConnectedToSessionError();
-      });
+    try {
+      await this.fightHubService.connect(this.fightId, name, handlers);
+      this.notification.showConnectedToSession();
+    } catch {
+      this.notification.showConnectedToSessionError();
+    }
   }
 
   stopSession() {
