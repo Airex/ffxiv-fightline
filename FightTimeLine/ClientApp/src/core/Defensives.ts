@@ -3,6 +3,7 @@ import * as _ from "lodash";
 import {
   AbilityMap,
   AbilityUsageMap,
+  BossAttackMap,
   IAbilityAvailabilityMapData,
   JobMap,
 } from "./Maps";
@@ -29,18 +30,24 @@ export type DefsCalcResultAbility = {
 export type Range = { start: Date; end: Date };
 
 export type DefsCalcResult = {
+  jobId: string;
   job: IJob;
   abilities: DefsCalcResultAbility[];
 }[];
 
 export const getAvailabilitiesForAbility =
-  (holders: Holders, startDate: Date) => (it: AbilityMap) => {
+  (
+    holders: Holders,
+    startDate: Date,
+    exceptId: string | undefined = undefined
+  ) =>
+  (it: AbilityMap) => {
     if (it.isStance) {
       return;
     }
     if (!it.ability.charges) {
       const deps = it.ability.overlapStrategy.getDependencies();
-      return processStandardAbility(holders, startDate)(it, deps);
+      return processStandardAbility(holders, startDate)(it, deps, exceptId);
     } else {
       return processChargesAbility(holders)(it);
     }
@@ -120,10 +127,13 @@ const getDependencies = (holders: Holders) => (deps: string[], job: JobMap) => {
 };
 
 export const processStandardAbility =
-  (holders: Holders, startDate: Date) => (it: AbilityMap, deps: string[]) => {
+  (holders: Holders, startDate: Date) =>
+  (it: AbilityMap, deps: string[], exceptId?: string) => {
     const usages = [
       ...getDependencies(holders)(deps, it.job),
-      ...holders.itemUsages.getByAbility(it.id),
+      ...holders.itemUsages
+        .getByAbility(it.id)
+        .filter((f) => f.id !== exceptId),
       {
         startAsNumber:
           startDate.valueOf() +
@@ -206,6 +216,7 @@ export function calculateDefsForAttack(
   return Object.keys(grouped)
     .map((value) => {
       return {
+        jobId: value,
         job: holders.jobs.get(value).job,
         abilities: grouped[value],
       };
@@ -225,7 +236,8 @@ export function intersect(a: Range, b: Range) {
 
 export function calculateAvailDefsForAttack(
   holders: Holders,
-  id: string
+  id: string,
+  exceptId?: string
 ): DefsCalcResult {
   const bossAttack = holders.bossAttacks.get(id);
 
@@ -240,7 +252,8 @@ export function calculateAvailDefsForAttack(
   const intersected = defAbilities.filter((it) => {
     const availableRanges = getAvailabilitiesForAbility(
       holders,
-      new Date(946677600000)
+      new Date(946677600000),
+      exceptId
     )(it);
     const duration = calculateDuration(it.ability);
     const minAttack = new Date(bossAttack.startAsNumber - duration * 1000);
@@ -272,11 +285,30 @@ export function calculateAvailDefsForAttack(
   return Object.keys(grouped)
     .map((value) => {
       return {
+        jobId: value,
         job: holders.jobs.get(value).job,
         abilities: grouped[value],
       };
     })
     .sort((a, b) => a.job.role - b.job.role);
+}
+
+export function getTimeGoodAbilityToUse(holders :Holders, startDate:Date, abilityMap: AbilityMap, attack: BossAttackMap, exceptId: string = null){
+  const availableRanges = getAvailabilitiesForAbility(
+    holders,
+    startDate,
+    exceptId
+  )(abilityMap);
+  const duration = calculateDuration(abilityMap.ability);
+  const minAttack = new Date(attack.startAsNumber - duration * 1000);
+  const maxAttack = new Date(attack.startAsNumber);
+  const targetRange = { start: minAttack, end: maxAttack };
+  const firstIntersected = availableRanges
+    ?.map((r) => intersect(r.data as Range, targetRange))
+    .filter((a) => Boolean(a))[0];
+
+  const at = firstIntersected?.start || minAttack;
+  return at;
 }
 
 class MitigationVisitor implements IEffectVisitor {
