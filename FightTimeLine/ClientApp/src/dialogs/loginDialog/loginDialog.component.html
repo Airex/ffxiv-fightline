@@ -2,21 +2,45 @@
   <form nz-form [formGroup]="loginForm" (ngSubmit)="onLoginClick()">
     <nz-form-item>
       <nz-form-control nzErrorTip="Username is required">
-        <input nz-input type="text" formControlName="username" placeholder="{{'dialog.login.userName' | translate}}"  />
+        <input
+          nz-input
+          type="text"
+          formControlName="username"
+          placeholder="{{ 'dialog.login.userName' | translate }}"
+        />
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
       <nz-form-control nzErrorTip="Password is required">
-        <input nz-input type="password" formControlName="password" placeholder="{{'dialog.login.password' | translate}}" />
+        <input
+          nz-input
+          type="password"
+          formControlName="password"
+          placeholder="{{ 'dialog.login.password' | translate }}"
+        />
       </nz-form-control>
     </nz-form-item>
     <div>
-      {{'dialog.login.doNotHaveAccount' | translate}} <a href="#" (click)="onSignUp()">{{'dialog.login.signUp' | translate}}</a>
+      {{ "dialog.login.doNotHaveAccount" | translate }}
+      <a href="#" (click)="onSignUp()">{{
+        "dialog.login.signUp" | translate
+      }}</a>
     </div>
     <div *nzModalFooter>
-      <button type="submit" nz-button (click)="onLoginClick()" [nzLoading]="loading" [disabled]="loading" cdkFocusInitial>{{'dialog.login.login' | translate}}</button>
-      <button nz-button (click)="onNoClick()" nzType="primary">{{'dialog.login.noThanks' | translate}}</button>
+      <button nz-button (click)="onNoClick()">
+        {{ "dialog.cancel" | translate }}
+      </button>
+      <button
+        type="submit"
+        nzType="primary"
+        nz-button
+        (click)="onLoginClick()"
+        [nzLoading]="loading"
+        [disabled]="loading"
+        cdkFocusInitial
+      >
+        {{ "dialog.login.login" | translate }}
+      </button>
     </div>
   </form>
 </div>
-

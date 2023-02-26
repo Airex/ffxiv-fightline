@@ -8,6 +8,6 @@
   </form>
 </div>
 <div *nzModalFooter>
-  <button nz-button (click)="onSaveClick()" cdkFocusInitial>{{'dialog.save' | translate}}</button>
-  <button nz-button nzType="primary" (click)="onNoClick()">{{'dialog.cancel' | translate}}</button>
+  <button nz-button (click)="onNoClick()">{{'dialog.cancel' | translate}}</button>
+  <button nz-button nzType="primary"  (click)="onSaveClick()" cdkFocusInitial>{{'dialog.save' | translate}}</button>
 </div>

@@ -1,51 +1,80 @@
-<div style="min-height: 300px;">
-    <form nz-form [formGroup]="editForm" (ngSubmit)="submitForm()">        
-        <nz-form-item>        
-            <nz-form-label [nzSpan]="12" nzFor="weaponDamage">Weapon Damage</nz-form-label>
-            <nz-form-control [nzSpan]="12">
-                <nz-input-number [nzMin]="0" formControlName="weaponDamage"></nz-input-number>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>        
-            <nz-form-label [nzSpan]="12"  nzFor="mainStat">Main Stat</nz-form-label>
-            <nz-form-control [nzSpan]="12">
-                <nz-input-number [nzMin]="0" formControlName="mainStat"></nz-input-number>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>        
-            <nz-form-label [nzSpan]="12"  nzFor="criticalHit">Critical Hit</nz-form-label>
-            <nz-form-control [nzSpan]="12">
-                <nz-input-number [nzMin]="0" formControlName="criticalHit"></nz-input-number>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>        
-            <nz-form-label [nzSpan]="12"  nzFor="determination">Determination</nz-form-label>
-            <nz-form-control [nzSpan]="12">
-                <nz-input-number [nzMin]="0" formControlName="determination"></nz-input-number>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>        
-            <nz-form-label [nzSpan]="12"  nzFor="directHit">Direct Hit Rate</nz-form-label>
-            <nz-form-control [nzSpan]="12">
-                <nz-input-number [nzMin]="0" formControlName="directHit"></nz-input-number>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>        
-            <nz-form-label [nzSpan]="12"  nzFor="speed">Skill/Spell Speed</nz-form-label>
-            <nz-form-control [nzSpan]="12">
-                <nz-input-number [nzMin]="0" formControlName="speed"></nz-input-number>
-            </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>        
-            <nz-form-label [nzSpan]="12"  nzFor="hp">HP</nz-form-label>
-            <nz-form-control [nzSpan]="12">
-                <nz-input-number [nzMin]="0" formControlName="hp"></nz-input-number>
-            </nz-form-control>
-        </nz-form-item>
-    </form>
+<div style="min-height: 300px">
+  <form nz-form [formGroup]="editForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="12" nzFor="weaponDamage"
+        >Weapon Damage</nz-form-label
+      >
+      <nz-form-control [nzSpan]="12">
+        <nz-input-number
+          [nzMin]="0"
+          formControlName="weaponDamage"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="12" nzFor="mainStat">Main Stat</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-input-number
+          [nzMin]="0"
+          formControlName="mainStat"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="12" nzFor="criticalHit"
+        >Critical Hit</nz-form-label
+      >
+      <nz-form-control [nzSpan]="12">
+        <nz-input-number
+          [nzMin]="0"
+          formControlName="criticalHit"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="12" nzFor="determination"
+        >Determination</nz-form-label
+      >
+      <nz-form-control [nzSpan]="12">
+        <nz-input-number
+          [nzMin]="0"
+          formControlName="determination"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="12" nzFor="directHit"
+        >Direct Hit Rate</nz-form-label
+      >
+      <nz-form-control [nzSpan]="12">
+        <nz-input-number
+          [nzMin]="0"
+          formControlName="directHit"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="12" nzFor="speed"
+        >Skill/Spell Speed</nz-form-label
+      >
+      <nz-form-control [nzSpan]="12">
+        <nz-input-number [nzMin]="0" formControlName="speed"></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="12" nzFor="hp">HP</nz-form-label>
+      <nz-form-control [nzSpan]="12">
+        <nz-input-number [nzMin]="0" formControlName="hp"></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
 
-    <div *nzModalFooter>
-        <button nz-button (click)="onSaveClick()">Ok</button>
-        <button nz-button nzType="primary" (click)="dialogRef.destroy()">Cancel</button>
-    </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="dialogRef.destroy()">
+      {{ "dialog.cancel" | translate }}
+    </button>
+    <button nz-button nzType="primary" (click)="onSaveClick()">
+      {{ "dialog.ok" | translate }}
+    </button>
+  </div>
 </div>

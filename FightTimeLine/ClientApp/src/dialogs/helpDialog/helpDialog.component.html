@@ -1,8 +1,10 @@
-<div style="min-height: 560px; height: 560px;overflow: hidden">
+<div style="min-height: 560px; height: 560px; overflow: hidden">
   <nz-layout>
-    <nz-sider style="overflow: auto; height: 100vh;" customScroll>
+    <nz-sider style="overflow: auto; height: 100vh" customScroll>
       <ul nz-menu [nzMode]="'inline'">
-        <li nz-menu-item [nzSelected]="true" (click)="showSection('Basics')"> Basics </li>
+        <li nz-menu-item [nzSelected]="true" (click)="showSection('Basics')">
+          Basics
+        </li>
         <!-- <li nz-menu-item (click)="showSection('Main menu')"> Main menu </li>
         <li nz-menu-item (click)="showSection('Keyboard')"> Keyboard </li>
         <li nz-menu-item (click)="showSection('Tools')"> Tools </li>
@@ -11,87 +13,82 @@
       </ul>
     </nz-sider>
     <html>
-    <body>
-      <div class="empty"></div>
-    </body>
+      <body>
+        <div class="empty"></div>
+      </body>
     </html>
     <nz-layout style="height: 560px">
-      <nz-content style="margin:24px 2px 2px 10px;overflow: auto" customScroll>
+      <nz-content
+        style="margin: 24px 2px 2px 10px; overflow: auto"
+        customScroll
+      >
         <div class="help-content">
           <h3>Scroll and zoom</h3>
           <ul>
-            <li>
-              Use mouse wheel to scroll timeline back and forth in time
-            </li>
-            <li>
-              Hold left mouse button and move to drag/scroll entire area
-            </li>
-            <li>
-              Hold Ctrl and use mouse wheel to zoom in/out
-            </li>
+            <li>Use mouse wheel to scroll timeline back and forth in time</li>
+            <li>Hold left mouse button and move to drag/scroll entire area</li>
+            <li>Hold Ctrl and use mouse wheel to zoom in/out</li>
           </ul>
           <h3>Double click</h3>
           <ul>
+            <li>Double click on BOSS row to add boss attack</li>
             <li>
-              Double click on BOSS row to add boss attack
+              Double click on ability row to use ability at place where you
+              clicked. Green area on ability bar shows active duration
             </li>
+            <li>Double click on BOSS attack item to edit its properties</li>
             <li>
-              Double click on ability row to use ability at place where you clicked. Green area on ability bar shows active duration
-            </li>
-            <li>
-              Double click on BOSS attack item to edit its properties
-            </li>
-            <li>
-              Double click on JOB row to set initial boss target (works for tanks only). You can switch target with Provoke ability on other Tank
+              Double click on JOB row to set initial boss target (works for
+              tanks only). You can switch target with Provoke ability on other
+              Tank
             </li>
           </ul>
           <h3>Items manipulation</h3>
           <ul>
             <li>
-              Click on BOSS attack or ability item to select, hold Ctrl to select multiple items
+              Click on BOSS attack or ability item to select, hold Ctrl to
+              select multiple items
             </li>
             <li>
               You can use <b>Delete</b> key button to delete selected items
             </li>
             <li>
-              Select ability or boss attack and drag it with mouse to adjust start time
+              Select ability or boss attack and drag it with mouse to adjust
+              start time
             </li>
-            <li>
-              You can use <b>Ctrl+Z</b>/<b>Ctrl+Y</b> for Undo/Redo
-            </li>
+            <li>You can use <b>Ctrl+Z</b>/<b>Ctrl+Y</b> for Undo/Redo</li>
           </ul>
           <h3>Load and save</h3>
           <ul>
+            <li>Menu -> Load to load saved Boss or Fight</li>
+            <li>Menu -> Save Boss to save Boss</li>
             <li>
-              Menu -> Load to load saved Boss or Fight
-            </li>
-            <li>
-              Menu -> Save Boss to save Boss
-            </li>
-            <li>
-              Menu -> Save Fight to save Fight with current Boss. One can not save Fight if Boss is not saved.
+              Menu -> Save Fight to save Fight with current Boss. One can not
+              save Fight if Boss is not saved.
             </li>
           </ul>
           <h3>View menu</h3>
           <ul>
             <li>
+              <p><b>Downtime mode</b>: turn on downtime mode</p>
               <p>
-                <b>Downtime mode</b>: turn on downtime mode
-              </p>
-              <p>
-                Activate Phase and double click at specific time to set start time, double click again to set end time.
-              </p>
-            </li>
-            <li>
-              <p>
-                <b>Show Buffs Heatmap</b>: activates mode where system shows party wide buffs as colored background are
-              </p>
-              <p>
-                You can right click on this are to see which buffs are active at selected time
+                Activate Phase and double click at specific time to set start
+                time, double click again to set end time.
               </p>
             </li>
             <li>
-              <b>OGCD attacks as points</b>: shows OGCD attacks with 0 duration as points in view
+              <p>
+                <b>Show Buffs Heatmap</b>: activates mode where system shows
+                party wide buffs as colored background are
+              </p>
+              <p>
+                You can right click on this are to see which buffs are active at
+                selected time
+              </p>
+            </li>
+            <li>
+              <b>OGCD attacks as points</b>: shows OGCD attacks with 0 duration
+              as points in view
             </li>
           </ul>
         </div>
@@ -99,7 +96,8 @@
     </nz-layout>
   </nz-layout>
   <div *nzModalFooter>
-    <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">Close</button>
+    <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">
+      {{ "dialog.cancel" | translate }}
+    </button>
   </div>
 </div>
-
