@@ -1,36 +1,29 @@
-<toolbar
-  #toolbar
-  [showHome]="true"
-  (langChanged)="langChanged()"
->
-  <span style="margin-left: 10px;">
+<toolbar #toolbar [showHome]="true" (langChanged)="langChanged()">
+  <span style="margin-left: 10px">
     <tableviewoptions
       [settings]="options"
       (changed)="optionsChanged($event)"
     ></tableviewoptions>
   </span>
-  <span style="display: inline-flex; margin-left: 20px;">
+  <span style="display: inline-flex; margin-left: 20px">
     <avatarWithPing
       *ngFor="let user of fightHubService.users"
       [owner]="false"
       textSizeRatio="3"
       [name]="user.name"
       [id]="user.id"
-      [ngStyle]="{'margin-right':'2px'}"
+      [ngStyle]="{ 'margin-right': '2px' }"
     ></avatarWithPing>
   </span>
 </toolbar>
-<div
-  class="content noselect"
-  (click)="select(null, $event)"
->
+<div class="content noselect" (click)="select(null, $event)">
   <nz-table
     #table
     [nzData]="set.rows"
     [nzBordered]="true"
     [nzShowPagination]="false"
     [nzPageSize]="pagesize"
-    [ngStyle]="{width:'99.0%'}"
+    [ngStyle]="{ width: '99.0%' }"
     [nzScroll]="{ y: tableHeight }"
     nzSize="small"
   >
@@ -42,30 +35,45 @@
           [nzFilterMultiple]="true"
           [nzFilters]="column.listOfFilter"
           [nzWidth]="column.width"
-          [ngStyle]="{ 'cursor': column.cursor }"
+          [ngStyle]="{ cursor: column.cursor }"
           (click)="select(column.refId, $event)"
           (nzFilterChange)="filterChange($event, column.name)"
         >
           <img
             *ngIf="column.icon"
             class="abilityIcon"
-            style="margin-right: 2px;margin-top: -3px;"
+            style="margin-right: 2px; margin-top: -3px"
             [src]="column.icon"
           />
-          <span *ngIf="!column.icon || column.icon && showtext">{{column.text}}</span>
+          <span *ngIf="!column.icon || (column.icon && showtext)">{{
+            column.text
+          }}</span>
         </th>
       </tr>
     </thead>
-    <tbody>
+    <tbody cdkDropListGroup>
       <tr *ngFor="let row of filtered">
         <td
-          *ngFor="let cell of row.cells"
-          [nzAlign]="cell.align || 'left'"
-          [ngStyle]="{'background-color': cell.colorFn && cell.colorFn(row.filterData) || ''}"
-          (click)="select(cell.bgRefIdFn && cell.bgRefIdFn(row.filterData) || '', $event)"
+          *ngFor="let col of row.cells; let i = index"
+          cdkDropList
+          [cdkDropListEnterPredicate]="canDrop"
+          [cdkDropListSortingDisabled]="true"
+          [cdkDropListData]="{row, col: set.columns[i]}"
+          [nzAlign]="col.align || 'left'"
+          [ngStyle]="{
+            'background-color':
+              (col.colorFn && col.colorFn(row.filterData)) || ''
+          }"
+          (click)="
+            select(
+              (col.bgRefIdFn && col.bgRefIdFn(row.filterData)) || '',
+              $event
+            )
+          "
+          (cdkDropListDropped)="onDrop($event)"
         >
           <cell
-            [input]="cell"
+            [input]="col"
             [showtext]="showtext"
             [showicon]="showicon"
             [showoffset]="showoffset"
@@ -78,10 +86,7 @@
     </tbody>
   </nz-table>
 </div>
-<sidepanel
-  #sidepanel
-  mode="table"
-></sidepanel>
+<sidepanel #sidepanel mode="table"></sidepanel>
 <ng-progress
   #progressBar
   [speed]="500"
