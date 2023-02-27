@@ -125,14 +125,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl("/");
   }
 
-  select(id: any, $event?: any) {
-    if ($event) {
-      $event.stopPropagation();
-      $event.preventDefault();
-    }
-
-    this.sidepanel.setSidePanel({ items: [id] });
-  }
 
   filterChange(event: any, column: string) {
     if (column) {
@@ -248,14 +240,14 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
     dispatcher.on("availAbilityClick").subscribe(({ abilityMap, attackId }) => {
       const attack = this.visStorage.holders.bossAttacks.get(attackId);
-      const at = getTimeGoodAbilityToUse(this.visStorage.holders, this.startDate, abilityMap, attack);
-
-      this.fightLineController.addClassAbility(
-        null,
+      const at = getTimeGoodAbilityToUse(
+        this.visStorage.holders,
+        this.startDate,
         abilityMap,
-        at,
-        false
+        attack
       );
+
+      this.fightLineController.addClassAbility(null, abilityMap, at, false);
     });
   }
 
@@ -415,6 +407,64 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.filterChange(null, null);
   }
 
+
+  select(id: any, $event?: any) {
+    if ($event) {
+      $event.stopPropagation();
+      $event.preventDefault();
+    }
+
+    this.sidepanel.setSidePanel({ items: [id] });
+
+    this.setDragContext(id);
+
+  }
+
+  private setDragContext(id) {
+    if (!id){
+      this.draggingContext = undefined;
+      return;
+    }
+
+    const u = this.visStorage.holders.itemUsages.get(id);
+    const p = getAvailabilitiesForAbility(
+      this.visStorage.holders,
+      this.startDate,
+      id
+    )(u.ability);
+    const ids = this.set.rows
+      .map((r) => ({
+        r,
+        m: this.visStorage.holders.bossAttacks.get(r.filterData.id),
+      }))
+      .filter((r) => {
+        if (!p) return true;
+        const start = r.m.start;
+        return p.some((d) => d.data.start <= start && d.data.end >= start);
+      })
+      .map((r) => r.m.id);
+    this.draggingContext = { a: new Set(ids), jid: u.ability.job.id };
+  }
+
+  dragStarted(id: string) {
+    this.setDragContext(id);
+  }
+  private draggingContext: { a: Set<string>; jid: string } = undefined;
+
+  isAvailableToDrop(d) {
+    if (!this.draggingContext) return false;
+
+    const colId = d.col.refId;
+    if (this.draggingContext.jid !== colId) return false;
+
+    const rowId = d.row.filterData.id;
+    if (this.idgen.isBossAttack(rowId)) {
+      if (!this.draggingContext.a) return true;
+      return this.draggingContext.a.has(rowId);
+    }
+    return false;
+  }
+
   canDrop = (drag: CdkDrag, drop: CdkDropList) => {
     // Only allow items to be dropped into the list if the list has less than 5 items.    c
     const itemId = drag.data.refId;
@@ -425,8 +475,18 @@ export class TableViewComponent implements OnInit, OnDestroy {
       const jid = u.ability.job.id;
       if (jid === colId) {
         if (this.idgen.isBossAttack(rowId)) {
-          const avail = calculateAvailDefsForAttack(this.visStorage.holders, rowId, itemId);
-          return avail?.filter(a=>a.jobId === jid)?.[0]?.abilities.some(ab=>ab.ability.name === u.ability.ability.name) || false;
+          const avail = calculateAvailDefsForAttack(
+            this.visStorage.holders,
+            rowId,
+            itemId
+          );
+          return (
+            avail
+              ?.filter((a) => a.jobId === jid)?.[0]
+              ?.abilities.some(
+                (ab) => ab.ability.name === u.ability.ability.name
+              ) || false
+          );
         }
       }
     }
@@ -434,6 +494,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
   };
 
   onDrop(ev) {
+    this.draggingContext = undefined;
+
     const { item, container } = ev;
     const itemId = item.data.refId;
     const colId = container.data.col.refId;
@@ -448,10 +510,16 @@ export class TableViewComponent implements OnInit, OnDestroy {
             `dropping ${u.ability.ability.name} on ${att.attack.name} at ${att.attack.offset}`
           );
 
-          const at = getTimeGoodAbilityToUse(this.visStorage.holders, this.startDate, u.ability, att, itemId);
+          const at = getTimeGoodAbilityToUse(
+            this.visStorage.holders,
+            this.startDate,
+            u.ability,
+            att,
+            itemId
+          );
 
           this.fightLineController.combineAndExecute([
-            new MoveCommand(itemId, at)
+            new MoveCommand(itemId, at),
           ]);
         }
       } else {

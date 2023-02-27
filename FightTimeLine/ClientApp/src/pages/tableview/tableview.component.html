@@ -61,8 +61,9 @@
           [cdkDropListData]="{row, col: set.columns[i]}"
           [nzAlign]="col.align || 'left'"
           [ngStyle]="{
-            'background-color':
-              (col.colorFn && col.colorFn(row.filterData)) || ''
+            'background-color': isAvailableToDrop({row, col: set.columns[i]})
+              ? '#1eff0024'
+              : (col.colorFn && col.colorFn(row.filterData)) || ''
           }"
           (click)="
             select(
@@ -80,6 +81,7 @@
             [showtarget]="showtarget"
             [iconSize]="iconSize"
             (selected)="select($event)"
+            (dragStarted)="dragStarted($event)"
           ></cell>
         </td>
       </tr>
