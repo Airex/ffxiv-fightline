@@ -18,6 +18,7 @@ export class CellComponent {
 
   @Input() iconSize = 16;
   @Output() selected = new EventEmitter<string>();
+  @Output() dragStarted = new EventEmitter<string>();
 
   public constructor() {
   }
@@ -30,6 +31,12 @@ export class CellComponent {
 
     if (this.selected) {
       this.selected.emit(id);
+    }
+  }
+
+  onDragStart(id: string, $event?: any){
+    if (this.dragStarted) {
+      this.dragStarted.emit(id);
     }
   }
 }

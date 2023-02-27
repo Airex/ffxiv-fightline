@@ -1,6 +1,7 @@
 <ng-container *ngFor="let d of input.items">
   <nz-tag
     cdkDrag
+    (cdkDragStarted)="onDragStart(d.refId, $event)"
     [cdkDragData]="d"
     [cdkDragDisabled]="!(showicon && d.icon)"
     [nzColor]="d.color"
