@@ -127,12 +127,20 @@ export class BossAttacksCollector extends BaseCollector {
       return;
     }
 
-    const key =
-      data.ability.name +
-      "_" +
-      data.ability.type +
-      "_" +
-      Math.trunc(data.timestamp / 1000);
+    const ability = data.ability;
+    const valid =
+      ability &&
+      ability.name.toLowerCase() !== "attack" &&
+      ability.name.trim() !== "" &&
+      ability.name.indexOf("Unknown_") < 0 &&
+      ability.name.indexOf("unknown_") < 0 &&
+      ability.name.indexOf("Combined DoTs") < 0;
+
+    if (!valid) return;
+
+    const time = Math.trunc(data.timestamp / 1000);
+    const key = `${data.ability.name}_${data.type}_${time}`;
+
     let g = this.bossAttacks[key];
     if (!g) {
       this.bossAttacks[key] = [];
@@ -162,64 +170,55 @@ export class BossAttacksCollector extends BaseCollector {
 
     Object.keys(this.bossAttacks).forEach((k: string) => {
       const attack = this.bossAttacks[k];
-      const ability = attack.find(
-        (it) =>
-          it.ability &&
-          it.ability.name.toLowerCase() !== "attack" &&
-          it.ability.name.trim() !== "" &&
-          it.ability.name.indexOf("Unknown_") < 0 &&
-          it.ability.name.indexOf("unknown_") < 0 &&
-          it.ability.name.indexOf("Combined DoTs") < 0
+      const ability = attack[0];
+
+      if (!ability) return;
+      const date = Utils.getDateFromOffset(
+        (ability.timestamp - this.context.parser.fight.start_time) / 1000
       );
+      const tags: string[] = [];
 
-      if (ability) {
-        const date = Utils.getDateFromOffset(
-          (ability.timestamp - this.context.parser.fight.start_time) / 1000
-        );
-        const tags: string[] = [];
-
-        if (attack.length > 2) {
-          tags.push(M.DefaultTags[1]);
-        }
-        if (tbs.indexOf(ability.ability.name) >= 0) {
-          tags.push(M.DefaultTags[0]);
-        }
-
-        const fflogsData: BossAttackFFlogs = {};
-        attack.forEach((at) => {
-          if (FF.isDamageEvent(at)) {
-            const foundJob = this.context.parser.players.find(
-              (it1) => it1.id === at.targetID
-            );
-            if (!foundJob) {
-              return;
-            }
-
-            fflogsData[foundJob.rid] = {
-              amount: at.amount,
-              unmitigated: at.unmitigatedAmount,
-              mitigated: at.mitigated,
-              absorbed: at.absorbed,
-              multiplier: at.multiplier,
-            };
-          }
-        });
-
-        commands.push(
-          new AddBossAttackCommand(
-            this.context.idgen.getNextId(M.EntryType.BossAttack),
-            {
-              name: ability.ability.name,
-              type: this.getAbilityType(ability),
-              offset: Utils.formatTime(date),
-              tags,
-              source: ability.source?.name,
-              fflogsAttackSource: ability.type === "cast" ? "cast" : "damage",
-              fflogsData,
-            }
-          )
-        );
+      if (attack.length > 2) {
+        tags.push(M.DefaultTags[1]);
       }
+      if (tbs.indexOf(ability.ability.name) >= 0) {
+        tags.push(M.DefaultTags[0]);
+      }
+
+      const fflogsData: BossAttackFFlogs = {};
+      attack.forEach((at) => {
+        if (FF.isDamageEvent(at)) {
+          const foundJob = this.context.parser.players.find(
+            (it1) => it1.id === at.targetID
+          );
+          if (!foundJob) {
+            return;
+          }
+
+          fflogsData[foundJob.rid] = {
+            amount: at.amount,
+            unmitigated: at.unmitigatedAmount,
+            mitigated: at.mitigated,
+            absorbed: at.absorbed,
+            multiplier: at.multiplier,
+          };
+        }
+      });
+
+      commands.push(
+        new AddBossAttackCommand(
+          this.context.idgen.getNextId(M.EntryType.BossAttack),
+          {
+            name: ability.ability.name,
+            type: this.getAbilityType(ability),
+            offset: Utils.formatTime(date),
+            tags,
+            source: ability.source?.name,
+            fflogsAttackSource: ability.type === "cast" ? "cast" : "damage",
+            fflogsData,
+          }
+        )
+      );
     });
 
     this.context.commands.push(new AddBatchAttacksCommand(commands));
