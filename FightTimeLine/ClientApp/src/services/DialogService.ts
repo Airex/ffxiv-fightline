@@ -135,7 +135,7 @@ export class DialogService {
     });
   }
 
-  openImportFromFFLogs(code: string = null): Promise<any> {
+  openImportFromFFLogs(code: string = null, noRedirect?: boolean): Promise<any> {
 
     const dialogRef = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
@@ -144,7 +144,8 @@ export class DialogService {
       nzClosable: false,
       nzContent: D.FFLogsImportDialog,
       nzComponentParams: {
-        code
+        code,
+        noRedirect
       }
     });
 
