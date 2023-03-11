@@ -13,24 +13,22 @@ import { NzModalRef } from "ng-zorro-antd/modal";
   templateUrl: "./ffLogsImportDialog.component.html",
   styleUrls: ["./ffLogsImportDialog.component.css"],
 })
-
 export class FFLogsImportDialog implements OnInit {
-
-
   constructor(
     public dialogRef: NzModalRef,
     @Inject(gameServiceToken)
     public service: IGameService,
     public recentService: RecentActivityService,
     public settingsService: SettingsService,
-    private router: Router) {
-  }
+    private router: Router
+  ) {}
 
   reportValue: string;
   haveFFlogsChar: boolean;
-  zones:{ key: string, value: Fight[] }[] = [];
+  zones: { key: string; value: Fight[] }[] = [];
   parsesList: Parse[] = [];
   @Input() code: string;
+  @Input() noRedirect?: boolean;
   searchAreaDisplay = "none";
   listAreaDisplay = "none";
   dialogContentHeight = "60px";
@@ -64,9 +62,14 @@ export class FFLogsImportDialog implements OnInit {
   loadByFight(code: string, fight: string) {
     if (fight !== "last") {
       this.dialogRef.afterClose.subscribe(() => {
-        this.router.navigateByUrl("fflogs/" + this.code + "/" + fight);
+        if (!this.noRedirect) {
+          this.router.navigateByUrl("fflogs/" + this.code + "/" + fight);
+        }
       });
-      this.dialogRef.close();
+      this.dialogRef.close({
+        reportId: this.code,
+        fightId: fight
+      });
       return;
     } else {
       this.service.dataService
@@ -84,16 +87,25 @@ export class FFLogsImportDialog implements OnInit {
     this.service.dataService
       .getFight(code)
       .then((it: ReportFightsResponse) => {
-        if (it.fights.length === 0) { return; }
-        const groupBy = (key: string) => <T>(array:T[]) =>
-          array.reduce((objectsByKeyValue, obj) => {
-            const value = obj[key];
-            objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-            return objectsByKeyValue;
-          }, {} as Record<string, T[]>);
+        if (it.fights.length === 0) {
+          return;
+        }
+        const groupBy =
+          (key: string) =>
+          <T>(array: T[]) =>
+            array.reduce((objectsByKeyValue, obj) => {
+              const value = obj[key];
+              objectsByKeyValue[value] = (
+                objectsByKeyValue[value] || []
+              ).concat(obj);
+              return objectsByKeyValue;
+            }, {} as Record<string, T[]>);
 
-        const zones = groupBy('zoneName')(it.fights);
-        this.zones = Object.keys(zones).map((value) => ({ key: value, value: zones[value] }));
+        const zones = groupBy("zoneName")(it.fights);
+        this.zones = Object.keys(zones).map((value) => ({
+          key: value,
+          value: zones[value],
+        }));
         this.showListArea();
       })
       .finally(() => {
@@ -110,26 +122,32 @@ export class FFLogsImportDialog implements OnInit {
         .getParses(
           importSettings.characterName,
           importSettings.characterServer,
-          importSettings.characterRegion)
+          importSettings.characterRegion
+        )
         .subscribe(
-          parses => {
+          (parses) => {
             if (parses && parses.length > 0) {
-              this.parsesList = parses.sort((a, b) => b.startTime - a.startTime);
+              this.parsesList = parses.sort(
+                (a, b) => b.startTime - a.startTime
+              );
               this.showSearchArea();
             }
           },
-          error => {
+          (error) => {
             console.error(error);
             this.hideExtraAreas();
           },
           () => {
             this.loadingParses = false;
-          });
+          }
+        );
     }
   }
 
   onSearch(data: string): void {
-    if (this.prevSearch === data) { return; }
+    if (this.prevSearch === data) {
+      return;
+    }
     if (data === "") {
       this.code = "";
       this.hideExtraAreas();
@@ -144,8 +162,7 @@ export class FFLogsImportDialog implements OnInit {
       } else {
         this.searchByCode(code);
       }
-    }
-    else {
+    } else {
       if (!data) {
         this.loadParses();
       } else {
@@ -174,9 +191,14 @@ export class FFLogsImportDialog implements OnInit {
 
   onClick(id: string) {
     this.dialogRef.afterClose.subscribe(() => {
-      this.router.navigateByUrl("fflogs/" + this.code + "/" + id);
+      if (!this.noRedirect) {
+        this.router.navigateByUrl("fflogs/" + this.code + "/" + id);
+      }
     });
-    this.dialogRef.close();
+    this.dialogRef.close({
+      reportId: this.code,
+      fightId: id
+    });
   }
 
   onMatch(data: string) {
@@ -184,16 +206,16 @@ export class FFLogsImportDialog implements OnInit {
   }
 
   getIcon(spec) {
-    return this.service.jobRegistry.getJobs().find(j => j.fullName === spec).icon;
+    return this.service.jobRegistry.getJobs().find((j) => j.fullName === spec)
+      .icon;
   }
 
   getBossIcon(id) {
-    return "https://assets.rpglogs.com/img/ff/bosses/" + id + "-icon.jpg"
+    return "https://assets.rpglogs.com/img/ff/bosses/" + id + "-icon.jpg";
   }
 
-
   formatTime(start: number, end: number): string {
-    const diff = (end - start);
+    const diff = end - start;
     const date = new Date(946677600000 + diff);
     return Utils.formatTime(date);
   }
@@ -201,12 +223,11 @@ export class FFLogsImportDialog implements OnInit {
   onParseClick(item: any) {
     this.dialogRef.close({
       reportId: item.reportID,
-      fightId: item.fightID
+      fightId: item.fightID,
     });
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
-
 }

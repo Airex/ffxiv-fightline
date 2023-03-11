@@ -356,12 +356,12 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   importBossAttacksFromFFLogs(code: string = null): void {
     this.dialogService
-      .openImportFromFFLogs(code || this.fflogsCode)
+      .openImportFromFFLogs(code || this.fflogsCode, true)
       .then((result) => {
         if (!result) {
           return;
         }
-        this.replaceBossFFLogsData(result.reportId, result.fightId);
+        this.replaceBossFFLogsData(result.reportId, parseInt(result.fightId));
       });
   }
 
