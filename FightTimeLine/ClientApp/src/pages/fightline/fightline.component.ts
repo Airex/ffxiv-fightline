@@ -12,7 +12,6 @@ import { Location } from "@angular/common";
 import {
   ActivatedRoute,
   ActivatedRouteSnapshot,
-  Params,
   Router,
 } from "@angular/router";
 import * as _ from "lodash";
@@ -63,14 +62,8 @@ import {
   IStartSessionHandlers,
   IConnectToSessionHandlers,
 } from "src/services";
-import { AddAbilityCommand } from "src/core/commands/AddAbilityCommand";
-import {
-  Range,
-  getAvailabilitiesForAbility,
-  getTimeGoodAbilityToUse,
-  intersect,
-} from "src/core/Defensives";
-import { calculateDuration } from "src/core/Durations";
+import { getTimeGoodAbilityToUse } from "src/core/Defensives";
+import { ChangeBossAttackCommand } from "src/core/commands/ChangeBossAttackCommand";
 
 @Component({
   selector: "fightline",
@@ -939,6 +932,19 @@ export class FightLineComponent implements OnInit, OnDestroy {
       this.sidepanel.setItems(this.fightLineController.getItems([value]));
     });
 
+    dispatcher.on("attacksSetColor").subscribe(({ ids, color }) => {
+      this.fightLineController.combineAndExecute(
+        ids.map((id) => {
+          const ba = this.visStorage.holders.bossAttacks.get(id);
+          return new ChangeBossAttackCommand(
+            id,
+            { ...ba.attack, color: color },
+            false
+          );
+        })
+      );
+    });
+
     dispatcher.on("bossTemplateSave").subscribe((value) => {
       const bossData = this.fightLineController
         .createSerializer()
@@ -1114,16 +1120,15 @@ export class FightLineComponent implements OnInit, OnDestroy {
     });
 
     dispatcher.on("availAbilityClick").subscribe(({ abilityMap, attackId }) => {
-
       const attack = this.visStorage.holders.bossAttacks.get(attackId);
-      const at = getTimeGoodAbilityToUse(this.visStorage.holders, this.startDate, abilityMap, attack);
-
-      this.fightLineController.addClassAbility(
-        null,
+      const at = getTimeGoodAbilityToUse(
+        this.visStorage.holders,
+        this.startDate,
         abilityMap,
-        at,
-        false
+        attack
       );
+
+      this.fightLineController.addClassAbility(null, abilityMap, at, false);
     });
 
     dispatcher.on("toggleJobAbilityCompactView").subscribe((value) => {
