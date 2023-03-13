@@ -29,6 +29,7 @@
 	"tables.defensive": "Defensive",
 	"tables.timeline": "Timeline",
 	"tables.mitigations": "Mitigations",
+  "component.multipleAttack.setColor": "Set Color",
 	"component.singleAbility.usedOn": "Used on",
 	"component.singleAbility.covered": "Covered",
 	"component.singleAbility.settings": "Settings",

@@ -6,7 +6,11 @@ import * as Index from "../../core/Maps/index";
 import { VisStorageService } from "src/services/VisStorageService";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
 import { Subscription } from "rxjs";
-import { ISidePanelComponent, SIDEPANEL_DATA, SidepanelParams } from "../sidepanel/ISidePanelComponent";
+import {
+  ISidePanelComponent,
+  SIDEPANEL_DATA,
+  SidepanelParams,
+} from "../sidepanel/ISidePanelComponent";
 
 @Component({
   selector: "multipleAttack",
@@ -14,14 +18,16 @@ import { ISidePanelComponent, SIDEPANEL_DATA, SidepanelParams } from "../sidepan
   styleUrls: ["./multipleAttack.component.css"],
 })
 export class MultipleAttackComponent implements OnDestroy, ISidePanelComponent {
-
-
   constructor(
     private visStorage: VisStorageService,
-    @Inject("DispatcherPayloads") private dispatcher: S.DispatcherService<DispatcherPayloads>,
+    @Inject("DispatcherPayloads")
+    private dispatcher: S.DispatcherService<DispatcherPayloads>,
     @Inject(SIDEPANEL_DATA) public data: SidepanelParams
   ) {
-    this.items = this.data.items.sort((a: Index.BossAttackMap, b: Index.BossAttackMap) => a.startAsNumber - b.startAsNumber);
+    this.items = this.data.items.sort(
+      (a: Index.BossAttackMap, b: Index.BossAttackMap) =>
+        a.startAsNumber - b.startAsNumber
+    );
     this.holders = this.visStorage.holders;
 
     this.sub = this.data.refresh.subscribe(() => {
@@ -31,6 +37,9 @@ export class MultipleAttackComponent implements OnDestroy, ISidePanelComponent {
     this.refresh();
   }
 
+  colors = ["red", "blue", "pink", "purple", "green", "orange", "silver"];
+
+  color: string;
   isSameName: boolean;
   holders: Holders;
   items: any[];
@@ -45,18 +54,30 @@ export class MultipleAttackComponent implements OnDestroy, ISidePanelComponent {
     const distinct = (value, index, self) => {
       return self.indexOf(value) === index;
     };
-    this.isSameName = this.items.map((value) => value.attack.name).filter(distinct).length <= 1;
+    this.isSameName =
+      this.items.map((value) => value.attack.name).filter(distinct).length <= 1;
     if (this.items.length === 2) {
-      this.distance = Utils.formatTime(new Date(Math.abs(this.items[0].startAsNumber - this.items[1].startAsNumber) + 946677600000));
+      this.distance = Utils.formatTime(
+        new Date(
+          Math.abs(this.items[0].startAsNumber - this.items[1].startAsNumber) +
+            946677600000
+        )
+      );
     }
   }
 
   remove() {
-    this.dispatcher.dispatch("attacksRemove", this.items.map(p => p.id));
+    this.dispatcher.dispatch(
+      "attacksRemove",
+      this.items.map((p) => p.id)
+    );
   }
 
   copy() {
-    this.dispatcher.dispatch("attackCopy", this.items.map(t => t.id));
+    this.dispatcher.dispatch(
+      "attackCopy",
+      this.items.map((t) => t.id)
+    );
   }
 
   formatDate(date: Date): string {
@@ -65,11 +86,17 @@ export class MultipleAttackComponent implements OnDestroy, ISidePanelComponent {
 
   getColor(ab: Index.BossAttackMap) {
     const it = ab.attack;
-    return (it.type === 1 ? "red" : (it.type === 2 ? "blue" : ""));
+    return it.type === 1 ? "red" : it.type === 2 ? "blue" : "";
   }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
 
+  saveColor() {
+    this.dispatcher.dispatch("attacksSetColor", {
+      ids: this.items.map((i) => i.id),
+      color: this.color,
+    });
+  }
 }

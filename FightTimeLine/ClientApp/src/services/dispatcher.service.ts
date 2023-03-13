@@ -38,6 +38,10 @@ export type DispatcherPayloads = {
   toggleAttackPin: string;
   attackCopy: string[];
   attackEdit: string;
+  attacksSetColor:{
+    ids: string[],
+    color: string
+  }
   updateFilter: void;
   updateView: void;
   abilitySaveSettings: {
