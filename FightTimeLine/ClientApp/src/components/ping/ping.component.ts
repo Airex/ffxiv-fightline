@@ -39,7 +39,7 @@ export class PingComponent implements OnInit {
   avatarColors = ["#FFB6C1", "#2c3e50", "#95a5a6", "#f39c12", "#1abc9c"];
 
   ngOnInit(): void {
-    this.compactname = this.name.split(" ").map(s => s[0].toUpperCase()).join("");
+    this.compactname = this.name.split(" ").map(s => s[0]?.toUpperCase()).join("");
   }
 
 
