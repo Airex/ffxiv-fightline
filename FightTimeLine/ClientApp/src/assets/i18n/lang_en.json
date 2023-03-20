@@ -50,7 +50,7 @@
 	"component.tableOptions.options": "Options",
 	"component.toolbar.home-tooltip": "Home",
 	"component.toolbar.account": "Account",
-	"component.toolbar.signIn": "Sing in",
+	"component.toolbar.signIn": "Sign in",
 	"component.toolbar.signUp": "Sign up",
 	"component.toolbar.loggedAs": "Logged in as ",
 	"component.toolbar.sognOut": "Sign out",
