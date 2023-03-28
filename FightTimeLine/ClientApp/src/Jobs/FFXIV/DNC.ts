@@ -30,7 +30,7 @@ const statuses = MapStatuses({
     duration: 15
   },
   improvisationFinish: {
-    duration: 15,
+    duration: 30,
     effects: [Effects.shield.party(5).withModifier(ImprovisationFinishModifier)]
   },
   devilment: {
@@ -75,7 +75,7 @@ const abilities: IAbility[] = [
     cooldown: 120,
     xivDbId: "16014",
     statuses: [statuses.improvisation],
-    abilityType: AbilityType.Utility,
+    abilityType: AbilityType.Healing,
     levelAcquired: 80
   },
   {
