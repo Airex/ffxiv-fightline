@@ -1,6 +1,5 @@
 import Effects from "src/core/Effects";
 import {
-  IJob,
   Role,
   AbilityType,
   DamageType,
@@ -12,6 +11,7 @@ import {
 } from "../../core/Models";
 import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
+import { AllowOverlapStrategy } from "src/core/Overlap";
 
 const statuses = MapStatuses({
   succor: {
@@ -76,6 +76,7 @@ const abilities = [
     xivDbId: "186",
     statuses: [statuses.succor],
     abilityType: AbilityType.PartyShield,
+    overlapStrategy: new AllowOverlapStrategy(),
     levelAcquired: 35,
   },
   {
@@ -91,6 +92,7 @@ const abilities = [
     xivDbId: "185",
     statuses: [statuses.adloquium],
     settings: [settings.target],
+    overlapStrategy: new AllowOverlapStrategy(),
     abilityType: AbilityType.SelfShield,
     levelAcquired: 30,
   },

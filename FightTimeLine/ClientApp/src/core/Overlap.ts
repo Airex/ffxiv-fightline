@@ -61,3 +61,13 @@ export class ChargesBasedOverlapStrategy implements IOverlapStrategy {
         return false;
     }
 }
+
+export class AllowOverlapStrategy implements IOverlapStrategy {
+    getDependencies(): string[] {
+        return null;
+    }
+
+    check(context: IOverlapCheckContext): boolean {
+        return false;
+    }
+}
