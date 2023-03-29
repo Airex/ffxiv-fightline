@@ -353,7 +353,7 @@ const abilities = [
     xivDbId: 25867,
     statuses: [statuses.protraction],
     settings: [settings.target],
-    abilityType: AbilityType.PartyShield | AbilityType.HealingBuff,
+    abilityType: AbilityType.HealingBuff | AbilityType.SelfDefense,
     levelAcquired: 86,
   },
   {
