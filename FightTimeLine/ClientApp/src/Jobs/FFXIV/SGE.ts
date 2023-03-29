@@ -1,46 +1,65 @@
 import Effects from "src/core/Effects";
-import { AbilityType, IAbility, IJob, IJobTemplate, ITrait, MapStatuses, Role, settings } from "../../core/Models";
+import {
+  AbilityType,
+  IAbility,
+  IJob,
+  IJobTemplate,
+  ITrait,
+  MapStatuses,
+  Role,
+  settings,
+} from "../../core/Models";
 import { getAbilitiesFrom, medicine, healerSharedAbilities } from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
+import { AllowOverlapStrategy } from "src/core/Overlap";
 
 const statuses = MapStatuses({
   physisII: {
-    duration: 15
+    duration: 15,
+  },
+  ediag: {
+    duration: 30,
+    effects: [Effects.shield.solo(10)],
+    shareGroup: "sge"
+  },
+  eprog: {
+    duration: 30,
+    effects: [Effects.shield.party(10)],
+    shareGroup: "sge"
   },
   soteria: {
-    duration: 15
+    duration: 15,
   },
   kerachole: {
     duration: 15,
-    effects: [Effects.mitigation.party(10)]
+    effects: [Effects.mitigation.party(10)],
   },
   zoe: {
-    duration: 30
+    duration: 30,
   },
   taurochole: {
-    duration: 15
+    duration: 15,
   },
   haima: {
     duration: 15,
-    effects: [Effects.shield.party(10)]        // todo: review this value
+    effects: [Effects.shield.party(10)], // todo: review this value
   },
   holos: {
     duration: 20,
-    effects: [Effects.mitigation.party(10)]        // todo: review this value
+    effects: [Effects.mitigation.party(10)], // todo: review this value
   },
   holosShield: {
     duration: 30,
-    effects: [Effects.shield.party(10)]        // todo: review this value
+    effects: [Effects.shield.party(10)], // todo: review this value
   },
   panhaima: {
     duration: 15,
-    effects: [Effects.mitigation.party(7)]        // todo: review this value
+    effects: [Effects.mitigation.party(7)], // todo: review this value
   },
   krasis: {
-    duration: 10
-  }
+    duration: 10,
+  },
 });
-
 
 const abilities = [
   {
@@ -71,6 +90,40 @@ const abilities = [
     statuses: [statuses.physisII],
     abilityType: AbilityType.Healing,
   },
+
+  {
+    name: "Eukrasian Diagnosis",
+    translation: {
+      de: "Eukratische Diagnose",
+      ja: "エウクラシア・ディアグノシス",
+      en: "Eukrasian Diagnosis",
+      fr: "Diagnosis eucrasique",
+      cn: "均衡诊断",
+    },
+    cooldown: 30,
+    xivDbId: 24291,
+    overlapStrategy: new AllowOverlapStrategy(),
+    levelAcquired: 30,
+    statuses: [statuses.ediag],
+    abilityType: AbilityType.SelfShield,
+  },
+  {
+    name: "Eukrasian Prognosis",
+    translation: {
+      de: "Eukratische Prognose",
+      ja: "エウクラシア・プログノシス",
+      en: "Eukrasian Prognosis",
+      fr: "Prognosis eucrasique",
+      cn: "均衡预后",
+    },
+    cooldown: 30,
+    overlapStrategy: new AllowOverlapStrategy(),
+    levelAcquired: 30,
+    xivDbId: 24292,
+    statuses:[statuses.eprog],
+    abilityType: AbilityType.PartyShield,
+  },
+
   {
     name: "Soteria",
     translation: {
@@ -124,7 +177,7 @@ const abilities = [
     xivDbId: 24298,
     levelAcquired: 50,
     statuses: [statuses.kerachole],
-    abilityType: AbilityType.PartyDefense
+    abilityType: AbilityType.PartyDefense,
   },
   {
     name: "Ixochole",
@@ -199,7 +252,7 @@ const abilities = [
     levelAcquired: 62,
     settings: [settings.target],
     statuses: [statuses.haima],
-    abilityType: AbilityType.SelfShield | AbilityType.PartyShield
+    abilityType: AbilityType.SelfShield | AbilityType.PartyShield,
   },
   {
     name: "Rhizomata",
@@ -213,7 +266,7 @@ const abilities = [
     cooldown: 90,
     xivDbId: 24309,
     levelAcquired: 74,
-    abilityType: AbilityType.Utility
+    abilityType: AbilityType.Utility,
   },
   {
     name: "Holos",
@@ -274,19 +327,17 @@ const abilities = [
     xivDbId: 24318,
     levelAcquired: 90,
     abilityType: AbilityType.Healing | AbilityType.Damage,
-  }
-
+  },
 ] as IAbility[];
 
 const traits: ITrait[] = [
   {
     name: "Enhanced Zoe",
     level: 88,
-    apply: abilityTrait("Zoe", updateCooldown(90))
-  }
+    apply: abilityTrait("Zoe", updateCooldown(90)),
+  },
 ];
 export const SGE: IJobTemplate = {
-
   translation: {
     de: "WEI",
     ja: "SGE",
@@ -307,9 +358,7 @@ export const SGE: IJobTemplate = {
   abilities: [
     ...abilities,
     ...getAbilitiesFrom(healerSharedAbilities),
-    medicine.Mind
+    medicine.Mind,
   ],
-  traits
+  traits,
 };
-
-
