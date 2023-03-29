@@ -42,6 +42,7 @@ import { IMoveable } from "./Holders/BaseHolder";
 import * as PresentationManager from "./PresentationManager";
 import { IOverlapCheckData } from "./Maps/BaseMap";
 import { calculateDuration, calculateOffset } from "./Durations";
+import { intersect } from "./Defensives";
 
 export class FightTimeLineController {
 
@@ -687,6 +688,7 @@ export class FightTimeLineController {
   visibleFrameTemplate(item: DataItem): string {
     if (item == null) { return ""; }
     if (!this.idgen.isAbilityUsage(item.id)) { return ""; }
+
     const map = this.holders.abilities.get(item.group);
     if (!map) { return ""; }
     const usageMap = this.holders.itemUsages.get(item.id as string);
@@ -704,6 +706,31 @@ export class FightTimeLineController {
     const color = this.colorSettings[firstAbilityType];
     const hasNote = usageMap.hasNote;
 
+    if (usageMap.ability.hasAnyValue(M.AbilityType.SelfShield, M.AbilityType.PartyShield)) {
+      const firstAttack = this.holders.bossAttacks.filter(ba => ba.start >= usageMap.start).sort((a, b) => a.startAsNumber - b.startAsNumber)[0];
+      if (firstAttack) {
+        const beforeAttack = (firstAttack.startAsNumber - usageMap.startAsNumber) / 1000;
+        const beforeAttackPercentage = (beforeAttack / ability.cooldown) * 100;
+
+        const afterAttack = duration - (firstAttack.startAsNumber - usageMap.startAsNumber) / 1000;
+        const afterAttackPercentage = (afterAttack / ability.cooldown) * 100;
+        return this.createItemUsageFrame(
+          offsetPercentage,
+          [{
+            percentage: beforeAttackPercentage,
+            color: this.presenterManager.view.colorfulDurations && color || ""
+          },
+          {
+            percentage: afterAttackPercentage,
+            color: this.presenterManager.view.colorfulDurations && color || "",
+            extraStyle: "  background-image:            linear-gradient(90deg, black 50%, transparent 50%),            linear-gradient(black 50%, transparent 50%);          background-size: 2px 2px;"
+          }
+        ],
+          hasNote
+        );
+      }
+    }
+
     return this.createItemUsageFrame(
       offsetPercentage,
       [{
@@ -714,9 +741,9 @@ export class FightTimeLineController {
     );
   }
 
-  createItemUsageFrame(offsetPercentage: number, items: { percentage: number, color: string }[], hasNote: boolean): string {
+  createItemUsageFrame(offsetPercentage: number, items: { percentage: number, color: string, extraStyle?: string }[], hasNote: boolean): string {
     const noteAttribute = hasNote ? "note" : "";
-    const parts = items.reduce((acc, it) => acc += `<div class="progress-fl" style="width:${it.percentage}%;background-color:${it.color}"> </div>`, "");
+    const parts = items.reduce((acc, it) => acc += `<div class="progress-fl" style="width:${it.percentage}%;background-color:${it.color};${it.extraStyle}"> </div>`, "");
     return `
       <div class="progress-wrapper-fl ${noteAttribute}">
         <div class="progress-fl-offset" style = "width:${offsetPercentage}%"></div>

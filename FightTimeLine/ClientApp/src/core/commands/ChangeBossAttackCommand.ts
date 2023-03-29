@@ -35,7 +35,7 @@ export class ChangeBossAttackCommand extends Command {
     });
 
     context.holders.bossAttacks.update(bossAttackMaps);
-    context.update({ updateBossAttacks: [this.id], updateBossTargets: true });
+    context.update({ updateBossAttacks: [this.id], updateBossTargets: true, updateIntersectedWithBossAttackAtDate: bossAttackMaps[0].start  });
   }
 
   execute(context: ICommandExecutionContext): void {
@@ -67,6 +67,6 @@ export class ChangeBossAttackCommand extends Command {
     });
 
     context.holders.bossAttacks.update(bossAttackMaps);
-    context.update({ updateBossAttacks: [this.id], updateBossTargets: true });
+    context.update({ updateBossAttacks: [this.id], updateBossTargets: true, updateIntersectedWithBossAttackAtDate: bossAttackMaps[0].start });
   }
 }
