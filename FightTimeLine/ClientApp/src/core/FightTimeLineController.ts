@@ -706,8 +706,11 @@ export class FightTimeLineController {
     const color = this.colorSettings[firstAbilityType];
     const hasNote = usageMap.hasNote;
 
+
     if (usageMap.ability.hasAnyValue(M.AbilityType.SelfShield, M.AbilityType.PartyShield)) {
-      const firstAttack = this.holders.bossAttacks.filter(ba => ba.start >= usageMap.start).sort((a, b) => a.startAsNumber - b.startAsNumber)[0];
+      const firstAttack = this.holders.bossAttacks
+        .filter(ba => ba.start >= usageMap.start && ((ba.attack.rawDamage || 0) > 0 || ba.attack.type !== M.DamageType.None))
+        .sort((a, b) => a.startAsNumber - b.startAsNumber)[0];
       if (firstAttack) {
         const beforeAttack = (firstAttack.startAsNumber - usageMap.startAsNumber) / 1000;
         const beforeAttackPercentage = (beforeAttack / ability.cooldown) * 100;
