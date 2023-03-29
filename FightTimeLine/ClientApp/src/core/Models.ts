@@ -334,7 +334,7 @@ export interface IBossAbility {
   syncPreDowntime?: string;
   description?: string;
   source?: string;
-  rawDamage?: number | [number, number];
+  rawDamage?: number;
   pinned?: boolean;
   color?: string;
   fflogsData?: BossAttackFFlogs;
