@@ -23,8 +23,8 @@ class MitigationEffect implements IAbilityEffect, IMitigator {
         break;
     }
   }
-  visit(visitor: IEffectVisitor) {
-    visitor.mitigate(this.modifier || this);
+  visit(visitor: IEffectVisitor, attackAt: Date) {
+    visitor.mitigate(this.modifier || this, attackAt) ;
   }
 
   withModifier<T extends IMitigator>(t: new (value: number, damageType: DamageType) => T): this {
@@ -66,8 +66,8 @@ class ShieldEffect implements IAbilityEffect, IMitigator {
   }
 
 
-  visit(visitor: IEffectVisitor) {
-    visitor.mitigate(this.modifier || this);
+  visit(visitor: IEffectVisitor, attackAt: Date) {
+    visitor.mitigate(this.modifier || this, attackAt);
   }
 
   shield(context: MitigationVisitorContext) {
@@ -87,7 +87,7 @@ class HealingIncreaseEffect implements IAbilityEffect {
 
 
 
-  visit(visitor: IEffectVisitor) {
+  visit(visitor: IEffectVisitor, attackAt: Date) {
 
   }
 
@@ -98,7 +98,7 @@ class DelayEffect implements IAbilityEffect {
   constructor(private value: number) {
 
   }
-  visit(visitor: IEffectVisitor) {
+  visit(visitor: IEffectVisitor, attackAt: Date) {
     visitor.delay(this.value);
   }
 }

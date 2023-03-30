@@ -222,6 +222,7 @@ export type MitigationVisitorContext = {
   jobId: string
   abilityId: string
   holders: Holders
+  attackAt?: Date
   original?: {
     value: number,
     damageType: DamageType
@@ -233,7 +234,7 @@ export type MitigationVisitorContext = {
 };
 
 export interface IEffectVisitor {
-  mitigate(mitigator: IMitigator);
+  mitigate(mitigator: IMitigator, attackAt?: Date);
   delay(value: number);
 }
 
@@ -244,7 +245,7 @@ export function runEffectVisitor<T extends IEffectVisitor>(t: new () => T, input
   iter.forEach(ab => {
     ab.statuses?.forEach(st => {
       st.effects?.forEach(ef => {
-        ef.visit(visitor);
+        ef.visit(visitor, undefined);
       });
     });
   });
@@ -252,7 +253,7 @@ export function runEffectVisitor<T extends IEffectVisitor>(t: new () => T, input
 }
 
 export interface IAbilityEffect {
-  visit(visitor: IEffectVisitor);
+  visit(visitor: IEffectVisitor, attackAt?: Date);
 }
 
 export interface IAbilityCharges {
