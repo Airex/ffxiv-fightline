@@ -8,10 +8,32 @@ import {
   IJobTemplate,
   IAbility,
   ITrait,
+  IMitigator,
+  MitigationVisitorContext,
 } from "../../core/Models";
 import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
 import { AllowOverlapStrategy } from "src/core/Overlap";
+
+class DeploymentTacticsModifier implements IMitigator {
+  constructor(private value: number) {}
+  apply(context: MitigationVisitorContext) {
+    const original = context.holders.itemUsages.get(context.abilityId);
+    const dtAbilityMap = context.holders.abilities.getByParentAndAbility(
+      original.ability.job.id,
+      "Deployment Tactics"
+    );
+    const dtUsages = context.holders.itemUsages.getByAbility(dtAbilityMap.id);
+    const affected = dtUsages.some(
+      (a) => a.start >= original.start && a.start < context.attackAt
+    );
+
+    if (affected)
+      return context.addShieldForParty(this.value);
+    else
+      return context.addShieldForTarget(this.value);
+  }
+}
 
 const statuses = MapStatuses({
   succor: {
@@ -20,7 +42,7 @@ const statuses = MapStatuses({
   },
   adloquium: {
     duration: 30,
-    effects: [Effects.shield.solo(15)],
+    effects: [Effects.shield.solo(15).withModifier(DeploymentTacticsModifier)],
   },
   whisperingDawn: {
     duration: 21,

@@ -337,11 +337,12 @@ class MitigationVisitor implements IEffectVisitor {
     this.jobId = jobId;
   }
 
-  mitigate(mitigator: IMitigator) {
+  mitigate(mitigator: IMitigator, attackAt?: Date) {
     const self = this;
     const context = {
       jobId: self.jobId,
       abilityId: self.abilityId,
+      attackAt,
       holders: this.holders,
       addMitigationForTarget(value: number, damageType: DamageType) {
         if (self.target) {
@@ -447,7 +448,7 @@ export function calculateMitigationForAttack(
       }
 
       st.effects?.forEach((ef) => {
-        ef.visit(mitigationVisitor);
+        ef.visit(mitigationVisitor, bossAttackStart);
       });
 
       if (st?.shareGroup) {
