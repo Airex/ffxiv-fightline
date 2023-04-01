@@ -23,6 +23,10 @@ const statuses = MapStatuses({
   celestialOpposition: {
     duration: 15
   },
+  celestialIntersection: {
+    effects: [Effects.shield.solo(10)],
+    duration: 30
+  },
   earthlyStar: {
     duration: 20
   },
@@ -192,11 +196,13 @@ const abilities = [
     },
     cooldown: 30,
     xivDbId: "16556",
-    abilityType: AbilityType.Healing | AbilityType.PartyShield,
+    abilityType: AbilityType.Healing | AbilityType.SelfShield,
     levelAcquired: 74,
-    defensiveStats: {
-      shieldPercent: 10 // todo: review this value
+    charges: {
+      count: 2,
+      cooldown: 30,
     },
+    statuses: [statuses.celestialIntersection],
   },
   {
     name: "Horoscope",
