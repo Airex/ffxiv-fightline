@@ -16,7 +16,7 @@ import { ISidePanelComponent, SIDEPANEL_DATA, SidepanelParams } from "../sidepan
   templateUrl: "./multipleDowntime.component.html",
   styleUrls: ["./multipleDowntime.component.css"],
 })
-export class MultipleDownTimeComponent implements OnInit, OnDestroy, ISidePanelComponent {
+export class MultipleDownTimeComponent implements OnDestroy, ISidePanelComponent {
 
   items: any[];
   holders: Holders;
@@ -62,9 +62,7 @@ export class MultipleDownTimeComponent implements OnInit, OnDestroy, ISidePanelC
     this.dispatcher.dispatch("selectDowntimes", item.id);
   }
 
-  ngOnInit(): void {
 
-  }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();

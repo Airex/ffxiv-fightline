@@ -6,7 +6,8 @@ import { abilityRemovedTrait, abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   mantra: {
-    duration: 15
+    duration: 15,
+    effects: [Effects.healingIncrease.party(20)]
   },
   perfectBalance: {
     duration: 20

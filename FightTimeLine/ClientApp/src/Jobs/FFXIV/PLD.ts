@@ -38,10 +38,16 @@ class InterventionMitigationModifier implements IMitigator {
         .some((a) => a.checkCoversDate(original.start));
       return has;
     });
-    context.addMitigationForTarget(this.value, this.damageType);
-    if (mts) {
-      context.addMitigationForTarget(10, DamageType.All);
-    }
+
+    const mitigation = mts ? this.value + 10 : this.value;
+    context.addMitigationForTarget(mitigation, this.damageType);
+  }
+}
+
+class DivineVeilMitigationModifier implements IMitigator {
+  constructor(private value: number) {}
+  apply(context: MitigationVisitorContext) {
+    return context.addShieldForParty(this.value, context.jobId);
   }
 }
 
@@ -78,7 +84,7 @@ const statuses = MapStatuses({
   },
   divineVeil: {
     duration: 30,
-    effects: [Effects.shield.party(10)],
+    effects: [Effects.shield.party(10).withModifier(DivineVeilMitigationModifier)],
   },
   passageOfArms: {
     duration: 18,

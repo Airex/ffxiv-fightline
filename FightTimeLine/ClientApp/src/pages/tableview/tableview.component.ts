@@ -125,7 +125,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.router.navigateByUrl("/");
   }
 
-
   filterChange(event: any, column: string) {
     if (column) {
       this.filterData[column] = event;
@@ -407,7 +406,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.filterChange(null, null);
   }
 
-
   select(id: any, $event?: any) {
     if ($event) {
       $event.stopPropagation();
@@ -417,11 +415,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.sidepanel.setSidePanel({ items: [id] });
 
     this.setDragContext(id);
-
   }
 
   private setDragContext(id) {
-    if (!id){
+    if (!id) {
       this.draggingContext = undefined;
       return;
     }
@@ -481,7 +478,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
             itemId
           );
           return (
-            avail
+            avail.defs
               ?.filter((a) => a.jobId === jid)?.[0]
               ?.abilities.some(
                 (ab) => ab.ability.name === u.ability.ability.name

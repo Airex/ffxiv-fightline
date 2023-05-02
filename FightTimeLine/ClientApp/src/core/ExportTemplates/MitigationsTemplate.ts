@@ -55,8 +55,8 @@ class MitigationColumn extends BaseColumnTemplate implements IColumnTemplate<Bos
 
   buildCell(data: Holders, attack: BossAttackMap): IExportCell {
     const defs = calculateDefsForAttack(this.holders, attack.id);
-    const mts = calculateMitigationForAttack(this.holders, defs, attack);
-    return this.createJobCell(mts, this.it.id);
+    const mts = calculateMitigationForAttack(this.holders, defs);
+    return this.createJobCell(mts.mitigations, this.it.id);
   }
 
   private createJobCell(mts: { name: string; id: string; mitigation: number; shield: number; icon: string; }[], v: string) {

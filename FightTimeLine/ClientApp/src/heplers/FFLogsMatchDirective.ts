@@ -12,14 +12,14 @@ import {
   selector: "[fflogs]"
 })
 export class FFLogsMatcherDirective {
-  @Output() onMatch: EventEmitter<string> = new EventEmitter<string>();
+  @Output() matched: EventEmitter<string> = new EventEmitter<string>();
   @Input() matcher: string;
   @HostListener("change", ["$event"])
   @HostListener("input", ["$event"])
   onEvent(event) {
     const data = this.el.nativeElement.value;
     if (new RegExp(this.matcher).test(data)) {
-      this.onMatch.emit(data);
+      this.matched.emit(data);
     }
   }
 
@@ -27,7 +27,7 @@ export class FFLogsMatcherDirective {
   onPaste(event) {
     const data = event.clipboardData.getData("text");
     if (new RegExp(this.matcher).test(data)) {
-      this.onMatch.emit(data);
+      this.matched.emit(data);
     }
   }
 

@@ -19,7 +19,7 @@ import * as _ from "lodash";
   templateUrl: "./tableViewDialog.component.html",
   styleUrls: ["./tableViewDialog.component.css"]
 })
-export class TableViewDialog {
+export class TableViewDialogComponent {
 
   constructor(
     public dialogRef: NzModalRef,

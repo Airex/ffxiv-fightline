@@ -64,6 +64,7 @@ import {
 } from "src/services";
 import { getTimeGoodAbilityToUse } from "src/core/Defensives";
 import { ChangeBossAttackCommand } from "src/core/commands/ChangeBossAttackCommand";
+import { visibleFrameTemplate } from "src/core/Frame";
 
 @Component({
   selector: "fightline",
@@ -255,7 +256,14 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
   onVisibleFrameTemplate(source: EventSource, event) {
     if (source === "player") {
-      const html = this.fightLineController.visibleFrameTemplate(event.item);
+      const html = visibleFrameTemplate(
+        this.idgen,
+        this.visStorage.holders,
+        this.settingsService.load().colors,
+        this.visStorage.presenter.view.statusesAsRows,
+        this.visStorage.presenter.view.colorfulDurations,
+        event.item
+      );
       event.handler(html);
     }
   }
@@ -275,10 +283,10 @@ export class FightLineComponent implements OnInit, OnDestroy {
     event.handler(this.fightLineController.tooltipOnItemUpdateTime(event.item));
   }
 
-  onTable(temlate: string) {
+  onTable(template: string) {
     window.open(
       this.router.serializeUrl(
-        this.router.createUrlTree(["/table", this.fightId || "dummy", temlate])
+        this.router.createUrlTree(["/table", this.fightId || "dummy", template])
       ),
       "_blank"
     );
@@ -295,6 +303,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   updateFilter(source?: string): void {
+    this.visStorage.holders.level = this.presenterManager.fightLevel;
     this.fightLineController.applyFilter(null, source);
     this.sidepanel.refresh();
     this.presenterManager.save(this.fightId);

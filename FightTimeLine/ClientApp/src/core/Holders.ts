@@ -9,6 +9,7 @@ import * as StancesHolder from "./Holders/StancesHolder";
 import * as AbilityAvailablityHolder from "./Holders/AbilityAvailablityHolder";
 
 import { ITimelineContainer } from "./Holders/BaseHolder";
+import { Warning } from "./Defensives";
 
 export class Holders {
   itemUsages: AbilityUsageHolder.AbilityUsageHolder;
@@ -20,6 +21,8 @@ export class Holders {
   bossTargets: BossTargetHolder.BossTargetHolder;
   stances: StancesHolder.StancesHolder;
   abilityAvailability: AbilityAvailablityHolder.AbilityAvailablityHolder;
+  warnings: Warning[] = [];
+  level: number = 90;
 
   constructor(mainTimeLine: ITimelineContainer, bossTimeLine: ITimelineContainer) {
     this.itemUsages = new AbilityUsageHolder.AbilityUsageHolder(mainTimeLine.items);

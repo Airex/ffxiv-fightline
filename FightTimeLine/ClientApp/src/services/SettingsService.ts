@@ -44,7 +44,8 @@ export class SettingsService {
         showAbilityAvailablity: false,
         showDowntimesInPartyArea: false,
         verticalBossAttacks: false,
-        colorfulDurations: false
+        colorfulDurations: false,
+        statusesAsRows: false
       }
     },
     tableview: {},

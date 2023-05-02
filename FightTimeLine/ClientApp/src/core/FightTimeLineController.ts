@@ -6,7 +6,6 @@ import { IColorsSettings, SettingsService } from "../services/SettingsService";
 import { AvailabilityController } from "./AvailabilityController";
 import { CommandBag } from "./CommandBag";
 import { CommandFactory } from "./CommandFactory";
-import * as C from "./commands/Commands";
 import * as AttachPresetCommand from "./commands/AttachPresetCommand";
 import * as MoveStanceCommand from "./commands/MoveStanceCommand";
 import * as RemoveStanceCommand from "./commands/RemoveStanceCommand";
@@ -55,7 +54,7 @@ import { IMoveable } from "./Holders/BaseHolder";
 import * as PresentationManager from "./PresentationManager";
 import { IOverlapCheckData } from "./Maps/BaseMap";
 import { calculateDuration, calculateOffset } from "./Durations";
-import { intersect } from "./Defensives";
+import { DefaultJobStats, DefaultRoleStats } from "src/Jobs/FFXIV/defaults";
 
 export class FightTimeLineController {
   data: M.IFightData = {};
@@ -113,9 +112,6 @@ export class FightTimeLineController {
       this.hasChanges = true;
     });
     this.commandStorage.executed.subscribe((data: ICommandData) => {
-      console.log(
-        "adding command in fightlineController.commandStorage.executed"
-      );
       this.commandExecuted.emit(data);
     });
     this.commandBag = new CommandBag(this.commandStorage);
@@ -232,7 +228,8 @@ export class FightTimeLineController {
     doUpdates: boolean = true
   ): string {
     const rid = id || this.idgen.getNextId(M.EntryType.Job);
-    this.commandStorage.execute(
+    const jobStats = DefaultJobStats[name] || DefaultRoleStats[this.gameService.jobRegistry.getJob(name).role];
+    this.commandStorage.execute([
       new AddJobCommand.AddJobCommand(
         rid,
         name,
@@ -241,8 +238,9 @@ export class FightTimeLineController {
         doUpdates,
         pet,
         collapsed
-      )
-    );
+      ),
+      jobStats && new ChangeJobStats.ChangeJobStats(rid, jobStats),
+    ]);
     if (doUpdates) {
       this.applyFilter();
     }
@@ -260,10 +258,13 @@ export class FightTimeLineController {
   addClassAbility(
     id: string,
     map: AbilityMap,
-    time: Date,
+    rawTime: Date | M.TimeOffset,
     loaded: boolean,
     settings: string = null
   ): void {
+
+    const time = (rawTime instanceof Date) ? rawTime : Utils.getDateFromOffset(rawTime, this.startDate);
+
     if (map) {
       if (map.ability.requiresBossTarget && time < this.startDate) {
         return;
@@ -295,8 +296,10 @@ export class FightTimeLineController {
     }
   }
 
-  addBossAttack(id: string, time: Date, bossAbility: M.IBossAbility): void {
-    bossAbility.offset = Utils.formatTime(time);
+  addBossAttack(
+    id: string,
+    bossAbility: M.IBossAbility
+  ): void {
     this.commandStorage.execute(
       new AddBossAttackCommand.AddBossAttackCommand(
         id || this.idgen.getNextId(M.EntryType.BossAttack),
@@ -372,7 +375,6 @@ export class FightTimeLineController {
             if (result) {
               this.addBossAttack(
                 this.idgen.getNextId(M.EntryType.BossAttack),
-                Utils.getDateFromOffset(result.data.offset, this.startDate),
                 result.data
               );
             }
@@ -872,110 +874,6 @@ export class FightTimeLineController {
       map.applyData();
       this.holders.abilities.update([map]);
     }
-  }
-
-  visibleFrameTemplate(item: DataItem): string {
-    if (item == null) {
-      return "";
-    }
-    if (!this.idgen.isAbilityUsage(item.id)) {
-      return "";
-    }
-
-    const map = this.holders.abilities.get(item.group);
-    if (!map) {
-      return "";
-    }
-    const usageMap = this.holders.itemUsages.get(item.id as string);
-    const ability = map.ability;
-
-    const offset = calculateOffset(ability) || 0;
-    const offsetPercentage = (offset / ability.cooldown) * 100;
-
-    const duration = this.calcDuration(new Date(item.start), map);
-    // TODO: recalcualte percentage based of changed cooldown
-    const percentage = (duration / ability.cooldown) * 100;
-    const firstAbilityType = Object.keys(M.AbilityType).filter(
-      (it) => (ability.abilityType & M.AbilityType[it]) === M.AbilityType[it]
-    )[0];
-    const color = this.colorSettings[firstAbilityType];
-    const hasNote = usageMap.hasNote;
-
-    if (
-      usageMap.ability.hasAnyValue(
-        M.AbilityType.SelfShield,
-        M.AbilityType.PartyShield
-      )
-    ) {
-      const forShieldCheckFilter = (ba) =>
-        ba.start >= usageMap.start &&
-        ba.start <= new Date(usageMap.startAsNumber + duration * 1000) &&
-        (!ba.fromFFLogs || ba.attack.fflogsAttackSource === "damage") &&
-        ((ba.attack.rawDamage || 0) > 0 || ba.attack.type !== M.DamageType.None);
-
-      const firstAttack = this.holders.bossAttacks
-        .filter(forShieldCheckFilter)
-        .sort((a, b) => a.startAsNumber - b.startAsNumber)[0];
-
-      if (firstAttack) {
-        const beforeAttack =
-          (firstAttack.startAsNumber - usageMap.startAsNumber) / 1000;
-        const beforeAttackPercentage = (beforeAttack / ability.cooldown) * 100;
-
-        const afterAttack =
-          duration -
-          (firstAttack.startAsNumber - usageMap.startAsNumber) / 1000;
-        const afterAttackPercentage = (afterAttack / ability.cooldown) * 100;
-        return this.createItemUsageFrame(
-          offsetPercentage,
-          [
-            {
-              percentage: beforeAttackPercentage,
-              color:
-                (this.presenterManager.view.colorfulDurations && color) || "",
-            },
-            {
-              percentage: afterAttackPercentage,
-              color:
-                (this.presenterManager.view.colorfulDurations && color) || "",
-              extraStyle:
-                "  background-image:            linear-gradient(90deg, black 50%, transparent 50%),            linear-gradient(black 50%, transparent 50%);          background-size: 2px 2px;",
-            },
-          ],
-          hasNote
-        );
-      }
-    }
-
-    return this.createItemUsageFrame(
-      offsetPercentage,
-      [
-        {
-          percentage,
-          color: (this.presenterManager.view.colorfulDurations && color) || "",
-        },
-      ],
-      hasNote
-    );
-  }
-
-  createItemUsageFrame(
-    offsetPercentage: number,
-    items: { percentage: number; color: string; extraStyle?: string }[],
-    hasNote: boolean
-  ): string {
-    const noteAttribute = hasNote ? "note" : "";
-    const parts = items.reduce(
-      (acc, it) =>
-        (acc += `<div class="progress-fl" style="width:${it.percentage}%;background-color:${it.color};${it.extraStyle}"> </div>`),
-      ""
-    );
-    return `
-      <div class="progress-wrapper-fl ${noteAttribute}">
-        <div class="progress-fl-offset" style = "width:${offsetPercentage}%"></div>
-        ${parts}
-      </div >
-    `;
   }
 
   tooltipOnItemUpdateTime(item: DataItem): string {

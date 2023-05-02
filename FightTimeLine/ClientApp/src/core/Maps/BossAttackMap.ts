@@ -43,12 +43,20 @@ export class BossAttackMap extends BaseMap<string, DataItem, IBossAttackMapData>
     return this.data.attack;
   }
 
+  get type(): Models.DamageType{
+    return this.attack.type;
+  }
+
   get pinned(): boolean {
     return !!this.attack.pinned;
   }
 
   get fromFFLogs(): boolean {
     return !!this.attack.fflogsAttackSource;
+  }
+
+  get damageValue(): number | undefined {
+    return this.attack.rawDamage;
   }
 
   get fflogsDataString() {

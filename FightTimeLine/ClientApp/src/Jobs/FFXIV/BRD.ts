@@ -30,7 +30,7 @@ const statuses = MapStatuses({
     },
     naturesMinne: {
         duration: 15,
-        effects: [Effects.healingIncrease.party(12)]
+        effects: [Effects.healingIncrease.party(15)]
     },
     radiantFinale: {
         duration: 15

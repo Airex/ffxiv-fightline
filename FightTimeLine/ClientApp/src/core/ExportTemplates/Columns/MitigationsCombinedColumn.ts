@@ -18,8 +18,8 @@ export class MitigationsCombinedColumn extends BaseColumnTemplate implements ICo
   }
   buildCell(data: Holders, attack: BossAttackMap): IExportCell {
     const defs = calculateDefsForAttack(data, attack.id);
-    const mts = calculateMitigationForAttack(data, defs, attack.attack);
-    return this.createJobCell(mts);
+    const mts = calculateMitigationForAttack(data, defs);
+    return this.createJobCell(mts.mitigations);
   }
 
   private createJobCell(mts: MitigationForAttack[]) {

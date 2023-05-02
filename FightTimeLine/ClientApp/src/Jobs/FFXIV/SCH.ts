@@ -18,20 +18,24 @@ import { AllowOverlapStrategy } from "src/core/Overlap";
 class DeploymentTacticsModifier implements IMitigator {
   constructor(private value: number) {}
   apply(context: MitigationVisitorContext) {
+    // console.log("DT Modifier");
     const original = context.holders.itemUsages.get(context.abilityId);
     const dtAbilityMap = context.holders.abilities.getByParentAndAbility(
       original.ability.job.id,
       "Deployment Tactics"
     );
     const dtUsages = context.holders.itemUsages.getByAbility(dtAbilityMap.id);
+    // console.debug(context.holders.itemUsages.getAll().map((a) => a.ability.ability.name));
     const affected = dtUsages.some(
       (a) => a.start >= original.start && a.start < context.attackAt
     );
 
-    if (affected)
-      return context.addShieldForParty(this.value);
+    if (affected){
+      // console.log("Affected by DT");
+      return context.addAbsorbFromAbilityForParty(this.value);
+    }
     else
-      return context.addShieldForTarget(this.value);
+      return context.addAbsorbFromAbilityForTarget(this.value);
   }
 }
 
@@ -42,14 +46,14 @@ const statuses = MapStatuses({
   },
   adloquium: {
     duration: 30,
-    effects: [Effects.shield.solo(15).withModifier(DeploymentTacticsModifier)],
+    effects: [Effects.shieldFromHeal.solo(180).withModifier(DeploymentTacticsModifier)],
   },
   whisperingDawn: {
     duration: 21,
   },
   feyIllumination: {
     duration: 20,
-    effects: [Effects.mitigation.party(5, DamageType.Magical)],
+    effects: [Effects.mitigation.party(5, DamageType.Magical), Effects.healingIncrease.party(10)],
   },
   sacredSoil: {
     duration: 15,
@@ -66,13 +70,14 @@ const statuses = MapStatuses({
   },
   recitation: {
     duration: 15,
+    // todo: think about crit increase
   },
   summonSeraph: {
     duration: 22,
   },
   protraction: {
     duration: 10,
-    effects: [Effects.shield.party(10)],
+    effects: [Effects.shield.solo(10), Effects.healingIncrease.solo(10)],
   },
   expedient: {
     duration: 20,
@@ -80,7 +85,8 @@ const statuses = MapStatuses({
   },
   consolation: {
     duration: 30,
-    effects: [Effects.shield.party(10)],
+    potency: 250,
+    effects: [Effects.shieldFromHeal.party(100)],
   },
 });
 
@@ -114,6 +120,7 @@ const abilities = [
     xivDbId: "185",
     statuses: [statuses.adloquium],
     settings: [settings.target],
+    potency: 300,
     overlapStrategy: new AllowOverlapStrategy(),
     abilityType: AbilityType.SelfShield,
     levelAcquired: 30,

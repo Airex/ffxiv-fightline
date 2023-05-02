@@ -8,8 +8,10 @@ export interface IAbilityMapData {
   filtered?: boolean;
 }
 
-export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapData> implements BaseHolder.IForSidePanel {
-
+export class AbilityMap
+  extends BaseMap.BaseMap<string, DataGroup, IAbilityMapData>
+  implements BaseHolder.IForSidePanel
+{
   static abilityIndex = 0;
   sidePanelComponentName = "jobAbility";
   index: number | undefined;
@@ -20,19 +22,32 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     public job: JobMap.JobMap,
     private abilityName: string,
     public isStance: boolean,
-    data?: IAbilityMapData) {
+    data?: IAbilityMapData
+  ) {
     super(presenter, id);
     this.isStance = isStance;
-    this.index = this.job.order + this.getOrder(presenter, job, this.ability, (++AbilityMap.abilityIndex) / 10000);
+    this.index =
+      this.job.order +
+      this.getOrder(
+        presenter,
+        job,
+        this.ability,
+        ++AbilityMap.abilityIndex / 10000
+      );
 
     this.applyData(Object.assign({}, data) as IAbilityMapData);
   }
 
-  get ability(){
+  get ability() {
     return this.job.job.abilities[this.abilityName];
   }
 
-  private getOrder(presenter, job, ability, def) {
+  private getOrder(
+    presenter: Models.IPresenterData,
+    job: JobMap.JobMap,
+    ability: Models.IAbility,
+    def: number
+  ) {
     const jf = presenter.jobFilter(job.id);
     const abOrder = jf?.abilityOrder;
     const order = abOrder && abOrder[ability.name];
@@ -44,9 +59,11 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
   }
 
   public get isSelfDef(): boolean {
-    return this.hasValue(Models.AbilityType.SelfDefense)
-      || this.hasValue(Models.AbilityType.SelfShield)
-      || this.hasValue(Models.AbilityType.TargetDefense);
+    return (
+      this.hasValue(Models.AbilityType.SelfDefense) ||
+      this.hasValue(Models.AbilityType.SelfShield) ||
+      this.hasValue(Models.AbilityType.TargetDefense)
+    );
   }
 
   public get isOgcd(): boolean {
@@ -54,11 +71,24 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
   }
 
   public get isPartyDef(): boolean {
-    return this.hasValue(Models.AbilityType.PartyDefense) || this.hasValue(Models.AbilityType.PartyShield);
+    return (
+      this.hasValue(Models.AbilityType.PartyDefense) ||
+      this.hasValue(Models.AbilityType.PartyShield)
+    );
   }
 
   public get isHeal(): boolean {
-    return this.hasValue(Models.AbilityType.Healing) || this.hasValue(Models.AbilityType.HealingBuff);
+    return (
+      this.hasValue(Models.AbilityType.Healing) ||
+      this.hasValue(Models.AbilityType.HealingBuff)
+    );
+  }
+
+  public get isHealBuff(): boolean {
+    return (
+      this.hasValue(Models.AbilityType.PartyHealingBuff) ||
+      this.hasValue(Models.AbilityType.HealingBuff)
+    );
   }
 
   public get isDamage(): boolean {
@@ -74,12 +104,18 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
   }
 
   public get translated() {
-    const name = this.ability.translation ? this.ability.translation[this.presenter.language] : this.ability.name;
+    const name = this.ability.translation
+      ? this.ability.translation[this.presenter.language]
+      : this.ability.name;
     return name;
   }
 
   get hidden(): boolean {
-    return this.presenter.jobFilter(this.job.id).abilityHidden?.indexOf(this.ability.name) >= 0 || false;
+    return (
+      this.presenter
+        .jobFilter(this.job.id)
+        .abilityHidden?.indexOf(this.ability.name) >= 0 || false
+    );
   }
 
   get filtered(): boolean {
@@ -87,20 +123,29 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
   }
 
   get isCompact(): boolean {
-    return this.presenter.jobFilter(this.job.id).abilityCompact?.indexOf(this.ability.name) >= 0 || false;
+    return (
+      this.presenter
+        .jobFilter(this.job.id)
+        .abilityCompact?.indexOf(this.ability.name) >= 0 || false
+    );
   }
 
-
-  truncate = (input, len) => input.length > len ? `${input.substring(0, len)}...` : input;
-
+  truncate = (input: string, len: number) =>
+    input.length > len ? `${input.substring(0, len)}...` : input;
 
   onDataUpdate(data: IAbilityMapData): void {
-    this.setItem(this.isStance ? this.createStances(this.id, data) : this.createJobAbility(this.ability, this.id, data));
+    this.setItem(
+      this.isStance
+        ? this.createStances(this.id, data)
+        : this.createJobAbility(this.ability, this.id, data)
+    );
   }
 
-
   public getSettingOfType(type: string): Models.IAbilitySetting {
-    return this.ability.settings && this.ability.settings.find(it => it.type === type);
+    return (
+      this.ability.settings &&
+      this.ability.settings.find((it) => it.type === type)
+    );
   }
 
   public hasValue(toCheck: Models.AbilityType): boolean {
@@ -108,7 +153,7 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
   }
 
   public hasAnyValue(...toCheck: Models.AbilityType[]): boolean {
-    return toCheck.some(it => this.hasValue(it));
+    return toCheck.some(this.hasValue.bind(this));
   }
 
   createStances(id: string, data: IAbilityMapData): DataGroup {
@@ -123,36 +168,49 @@ export class AbilityMap extends BaseMap.BaseMap<string, DataGroup, IAbilityMapDa
     } as DataGroup;
   }
 
-
   createElementFromHtml(htmlString): HTMLElement {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.innerHTML = htmlString.trim();
     return div;
   }
 
-  createJobAbility(ability: Models.IAbility, id: string, data: IAbilityMapData): DataGroup {
+  createJobAbility(
+    ability: Models.IAbility,
+    id: string,
+    data: IAbilityMapData
+  ): DataGroup {
     const key: any = { sgDummy: true };
     key[`sg${id}`] = false;
 
-
-    const truncLen = this.presenter.language === Models.SupportedLanguages.ja ? 10 : 22;
+    const truncLen =
+      this.presenter.language === Models.SupportedLanguages.ja ? 10 : 22;
     const name = this.truncate(this.translated, truncLen);
 
     const el = ability.icon
-      ? this.createElementFromHtml(`<span><img class='abilityIcon' src="${ability.icon}"/><span class='abilityName'>${name}</span></span>`)
+      ? this.createElementFromHtml(
+          `<span><img class='abilityIcon' src="${ability.icon}"/><span class='abilityName'>${name}</span></span>`
+        )
       : this.createElementFromHtml(`<span>${name}</span>`);
 
     // console.log(this.job.id+" "+this.ability.name+" "+this.job.isCompact)
+    const orderValue = this.getOrder(
+      this.presenter,
+      this.job,
+      this.ability,
+      this.index - Math.trunc(this.index)
+    );
+
     return {
       id,
-      className: this.buildClass({ compact: this.isCompact || this.job.isCompact || this.presenter.view.compactView }),
+      className: this.buildClass({
+        compact:
+          this.isCompact ||
+          this.job.isCompact ||
+          this.presenter.view.compactView,
+      }),
       visible: !(this.hidden || data.filtered || this.job.collapsed),
       content: el,
-      value: this.job.index + this.getOrder(this.presenter, this.job, this.ability, this.index - Math.trunc(this.index))
+      value: this.job.index + orderValue,
     } as DataGroup;
   }
-
-
-
-
 }

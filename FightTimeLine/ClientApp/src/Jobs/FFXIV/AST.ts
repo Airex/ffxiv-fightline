@@ -24,7 +24,8 @@ const statuses = MapStatuses({
     duration: 15
   },
   celestialIntersection: {
-    effects: [Effects.shield.solo(10)],
+    effects: [Effects.shieldFromHeal.solo(200)],
+    potency: 200,
     duration: 30
   },
   earthlyStar: {
@@ -34,7 +35,8 @@ const statuses = MapStatuses({
     duration: 30
   },
   neutralSect: {
-    duration: 20
+    duration: 20,
+    Effects: [Effects.healingIncrease.solo(20)]
   },
   exaltation: {
     duration: 8,

@@ -10,6 +10,7 @@ import {
   DefsCalcResult,
   DefsCalcResultAbility,
   MitigationForAttack,
+  MitigationsResult,
 } from "src/core/Defensives";
 import { VisStorageService } from "src/services/VisStorageService";
 import { IForSidePanel } from "src/core/Holders/BaseHolder";
@@ -30,7 +31,7 @@ export class SingleAttackComponent implements OnDestroy, ISidePanelComponent {
   defs: DefsCalcResult = null;
   availDefs: DefsCalcResult = null;
   similar: BossAttackMap[] = null;
-  defStats: MitigationForAttack[] = [];
+  defStats: MitigationsResult = null;
   ff: {
     icon: string;
     name: string;
@@ -164,8 +165,7 @@ export class SingleAttackComponent implements OnDestroy, ISidePanelComponent {
       .sort((a, b) => a.startAsNumber - b.startAsNumber);
     this.defStats = calculateMitigationForAttack(
       this.holders,
-      this.defs,
-      this.it.attack
+      this.defs
     );
     this.ff = Object.keys(this.it.attack.fflogsData || {}).map((k) => ({
       icon: this.holders.jobs.get(k)?.job?.icon || "",
