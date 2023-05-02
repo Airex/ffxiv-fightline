@@ -28,11 +28,11 @@ export class CharacterDialogComponent implements OnInit {
   ngOnInit(): void {
     this.editForm = this.formBuilder.group({
       weaponDamage: new FormControl(this.data.weaponDamage),
-      mainStat: new FormControl(this.data.mainStat),
+      tenacity: new FormControl(this.data.tenacity),
+      attackMagicPotency: new FormControl(this.data.attackMagicPotency),
       criticalHit: new FormControl(this.data.criticalHit),
       determination: new FormControl(this.data.determination),
       directHit: new FormControl(this.data.directHit),
-      speed: new FormControl(this.data.speed),
       hp: new FormControl(this.data.hp)
     });
   }
@@ -63,11 +63,11 @@ export class CharacterDialogComponent implements OnInit {
 
   updateResult(): void {
     this.data.weaponDamage = this.f.weaponDamage.value;
-    this.data.mainStat = this.f.mainStat.value;
+    this.data.attackMagicPotency = this.f.attackMagicPotency.value;
     this.data.criticalHit = this.f.criticalHit.value;
     this.data.determination = this.f.determination.value;
     this.data.directHit = this.f.directHit.value;
-    this.data.speed = this.f.speed.value;
+    this.data.tenacity = this.f.tenacity.value;
     this.data.hp = this.f.hp.value;
   }
 

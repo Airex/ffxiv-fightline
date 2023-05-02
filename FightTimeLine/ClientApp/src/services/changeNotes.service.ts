@@ -9,8 +9,8 @@ export class ChangeNotesService {
   ) {
   }
 
-  load(ignoreRevision?: boolean): Promise<IChahgeNote[]> {
-    const promise = new Promise<IChahgeNote[]>((resolve, reject) => {
+  load(ignoreRevision?: boolean): Promise<IChangeNote[]> {
+    const promise = new Promise<IChangeNote[]>((resolve, reject) => {
       if (data) {
         const changes = data.sort((a, b) => b.revision - a.revision);
         const latestRev = changes[0];
@@ -34,7 +34,7 @@ export class ChangeNotesService {
 
 }
 
-export interface IChahgeNote {
+export interface IChangeNote {
   revision: number;
   date: string;
   items: string[];

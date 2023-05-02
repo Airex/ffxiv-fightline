@@ -3,36 +3,61 @@
     <nz-form-item>
       <nz-form-control nzSpan="!code?24:20">
         <nz-input-group nzSize="large" [nzSuffix]="suffixIcon">
-          <input nz-input name="reportSearch" [(ngModel)]="reportValue" placeholder="https://www.fflogs.com/reports/..."
-            (ngModelChange)="onSearch($event)" fflogs
-            [matcher]="matchValue" (onMatch)="onMatch($event)"/>
-
+          <input
+            nz-input
+            name="reportSearch"
+            [(ngModel)]="reportValue"
+            placeholder="https://www.fflogs.com/reports/..."
+            (ngModelChange)="onSearch($event)"
+            fflogs
+            [matcher]="matchValue"
+            (matched)="onMatch($event)"
+          />
         </nz-input-group>
         <ng-template #suffixIcon>
           <i nz-icon nzType="search"></i>
         </ng-template>
-
       </nz-form-control>
-      <nz-form-control nzSpan="4" style="align-items: end;" *ngIf="code">
-        <nz-switch name="asdf" nzCheckedChildren="{{'dialog.fflogsImport.killsOnly' | translate}}" nzUnCheckedChildren="All"
-          [ngStyle]="{'visibility': code ? '' : 'hidden', 'margin-left':'5px'}" [(ngModel)]="killsOnly" #showKills>
+      <nz-form-control nzSpan="4" style="align-items: end" *ngIf="code">
+        <nz-switch
+          name="asdf"
+          nzCheckedChildren="{{ 'dialog.fflogsImport.killsOnly' | translate }}"
+          nzUnCheckedChildren="All"
+          [ngStyle]="{ visibility: code ? '' : 'hidden', 'margin-left': '5px' }"
+          [(ngModel)]="killsOnly"
+          #showKills
+        >
         </nz-switch>
       </nz-form-control>
     </nz-form-item>
     <div [style.display]="searchAreaDisplay">
-      <hr style="margin-top: 5px; margin-bottom: 5px;" />
+      <hr style="margin-top: 5px; margin-bottom: 5px" />
       <nz-spin [nzSpinning]="loadingParses">
         <div class="importDialogList" customScroll>
-          <nz-list #fights [nzDataSource]="zones" [nzRenderItem]="zoneItem" nzSize="small">
+          <nz-list
+            #fights
+            [nzDataSource]="zones"
+            [nzRenderItem]="zoneItem"
+            nzSize="small"
+          >
             <ng-template #zoneItem let-zoneItem>
               <nz-list-item>
-                <b>{{zoneItem.key}}</b>
+                <b>{{ zoneItem.key }}</b>
               </nz-list-item>
-              <nz-list-item *ngFor="let fight of zoneItem.value | killsonly:killsOnly" (click)="onClick(fight.id)"
-                [ngClass]="{fflogsitem:true}">
-                <img class="job-icon" style="margin-right: 5px" [src]="getBossIcon(fight.boss)" />
-                {{fight.name}} <span class="example-spacer"></span> {{(fight.bossPercentage || 10000)/100}}% {{fight.kill ? 'Kill' : 'Wipe'}} -
-                {{formatTime(fight.start_time, fight.end_time)}}
+              <nz-list-item
+                *ngFor="let fight of zoneItem.value | killsonly : killsOnly"
+                (click)="onClick(fight.id)"
+                [ngClass]="{ fflogsitem: true }"
+              >
+                <img
+                  class="job-icon"
+                  style="margin-right: 5px"
+                  [src]="getBossIcon(fight.boss)"
+                />
+                {{ fight.name }} <span class="example-spacer"></span>
+                {{ (fight.bossPercentage || 10000) / 100 }}%
+                {{ fight.kill ? "Kill" : "Wipe" }} -
+                {{ formatTime(fight.start_time, fight.end_time) }}
               </nz-list-item>
             </ng-template>
           </nz-list>
@@ -40,26 +65,50 @@
       </nz-spin>
     </div>
     <div [style.display]="listAreaDisplay">
-      <h4>"{{'dialog.fflogsImport.yourLatestParses' | translate}}"</h4>
-      <hr style="margin-top: 5px; margin-bottom: 5px;" />
+      <h4>"{{ "dialog.fflogsImport.yourLatestParses" | translate }}"</h4>
+      <hr style="margin-top: 5px; margin-bottom: 5px" />
       <nz-spin [nzSpinning]="loadingParses">
         <div class="importDialogList" customScroll>
-          <nz-list #parses [nzDataSource]="parsesList" [nzRenderItem]="item" nzSize="small">
+          <nz-list
+            #parses
+            [nzDataSource]="parsesList"
+            [nzRenderItem]="item"
+            nzSize="small"
+          >
             <ng-template #item let-item>
-              <nz-list-item (click)="onParseClick(item)" [ngClass]="{fflogsitem:true}" [nzContent]="nzPercentile">
-                <nz-list-item-meta [nzTitle]="nzTitle" [nzDescription]="nzDescription" [nzAvatar]="nzAvatar">
+              <nz-list-item
+                (click)="onParseClick(item)"
+                [ngClass]="{ fflogsitem: true }"
+                [nzContent]="nzPercentile"
+              >
+                <nz-list-item-meta
+                  [nzTitle]="nzTitle"
+                  [nzDescription]="nzDescription"
+                  [nzAvatar]="nzAvatar"
+                >
                   <ng-template #nzPercentile>
-                    <strong>{{round(item.percentile)}}</strong>
+                    <strong>{{ round(item.percentile) }}</strong>
                   </ng-template>
                   <ng-template #nzAvatar>
-                    <img class="boss-icon" style="margin-left: 5px" [src]="getBossIcon(item.encounterID)" />
+                    <img
+                      class="boss-icon"
+                      style="margin-left: 5px"
+                      [src]="getBossIcon(item.encounterID)"
+                    />
                   </ng-template>
                   <ng-template #nzTitle>
-                    <img class="job-icon" style="margin-left: 5px;margin-right: 5px" [src]="getIcon(item.spec)" />
-                    <strong style="font-size: large">{{item.encounterName}}</strong><span class="example-spacer"></span>
+                    <img
+                      class="job-icon"
+                      style="margin-left: 5px; margin-right: 5px"
+                      [src]="getIcon(item.spec)"
+                    />
+                    <strong style="font-size: large">{{
+                      item.encounterName
+                    }}</strong
+                    ><span class="example-spacer"></span>
                   </ng-template>
                   <ng-template #nzDescription>
-                    {{item.startTime | date:'short'}}
+                    {{ item.startTime | date : "short" }}
                   </ng-template>
                 </nz-list-item-meta>
               </nz-list-item>
@@ -70,6 +119,8 @@
     </div>
   </form>
   <div *nzModalFooter>
-    <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">{{'dialog.cancel' | translate}}</button>
+    <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">
+      {{ "dialog.cancel" | translate }}
+    </button>
   </div>
 </div>

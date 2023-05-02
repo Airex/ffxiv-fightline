@@ -15,17 +15,18 @@ import { AllowOverlapStrategy } from "src/core/Overlap";
 
 const statuses = MapStatuses({
   physisII: {
-    duration: 15,
+    duration: 10,
+    Effects: [Effects.healingIncrease.solo(10)],
   },
   ediag: {
     duration: 30,
-    effects: [Effects.shield.solo(10)],
-    shareGroup: "sge"
+    effects: [Effects.shieldFromHeal.solo(180)],
+    shareGroup: "sge",
   },
   eprog: {
     duration: 30,
-    effects: [Effects.shield.party(10)],
-    shareGroup: "sge"
+    effects: [Effects.shieldFromHeal.party(320)],
+    shareGroup: "sge",
   },
   soteria: {
     duration: 15,
@@ -36,28 +37,32 @@ const statuses = MapStatuses({
   },
   zoe: {
     duration: 30,
+    // todo: specify the effect
   },
   taurochole: {
     duration: 15,
+    effects: [Effects.mitigation.solo(10)],
   },
   haima: {
     duration: 15,
-    effects: [Effects.shield.party(10)], // todo: review this value
+    effects: [Effects.shieldFromHeal.solo(100)],
   },
   holos: {
     duration: 20,
-    effects: [Effects.mitigation.party(10)], // todo: review this value
+    effects: [Effects.mitigation.party(10)],
   },
   holosShield: {
     duration: 30,
-    effects: [Effects.shield.party(10)], // todo: review this value
+    potency: 300,
+    effects: [Effects.shieldFromHeal.party(100)],
   },
   panhaima: {
     duration: 15,
-    effects: [Effects.mitigation.party(7)], // todo: review this value
+    effects: [Effects.shieldFromHeal.party(100)], // todo: review this value
   },
   krasis: {
     duration: 10,
+    effects: [Effects.healingIncrease.party(20)],
   },
 });
 
@@ -88,7 +93,7 @@ const abilities = [
     cooldown: 60,
     xivDbId: 24302,
     statuses: [statuses.physisII],
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.Healing | AbilityType.HealingBuff,
   },
 
   {
@@ -104,6 +109,7 @@ const abilities = [
     xivDbId: 24291,
     overlapStrategy: new AllowOverlapStrategy(),
     levelAcquired: 30,
+    potency: 300,
     statuses: [statuses.ediag],
     abilityType: AbilityType.SelfShield,
   },
@@ -119,8 +125,9 @@ const abilities = [
     cooldown: 30,
     overlapStrategy: new AllowOverlapStrategy(),
     levelAcquired: 30,
+    potency: 100,
     xivDbId: 24292,
-    statuses:[statuses.eprog],
+    statuses: [statuses.eprog],
     abilityType: AbilityType.PartyShield,
   },
 
@@ -250,6 +257,7 @@ const abilities = [
     cooldown: 120,
     xivDbId: 24305,
     levelAcquired: 62,
+    potency: 300,
     settings: [settings.target],
     statuses: [statuses.haima],
     abilityType: AbilityType.SelfShield | AbilityType.PartyShield,
@@ -294,6 +302,7 @@ const abilities = [
     },
     cooldown: 120,
     xivDbId: 24311,
+    potency: 200,
     levelAcquired: 80,
     statuses: [statuses.panhaima],
     abilityType: AbilityType.PartyShield,

@@ -2,8 +2,11 @@ import { DataItem, DataSetDataItem } from "vis-timeline";
 import { BaseHolder } from "./BaseHolder";
 import { BossTargetMap } from "../Maps/BossTargetMap";
 
-export class BossTargetHolder extends BaseHolder<string, DataItem, BossTargetMap> {
-
+export class BossTargetHolder extends BaseHolder<
+  string,
+  DataItem,
+  BossTargetMap
+> {
   constructor(private visItems: DataSetDataItem, private initial: string) {
     super();
   }
@@ -28,7 +31,19 @@ export class BossTargetHolder extends BaseHolder<string, DataItem, BossTargetMap
     this.visItems.update(this.itemsOf(items));
   }
 
-  get initialBossTarget(): string { return this.initial; }
+  get initialBossTarget(): string {
+    return this.initial;
+  }
 
-  set initialBossTarget(v: string) { this.initial = v; }
+  set initialBossTarget(v: string) {
+    this.initial = v;
+  }
+
+  getTargetAt(start: Date): string | undefined {
+    return this.filter(
+      (i) =>
+        i.start.getTime() <= start.getTime() &&
+        i.end.getTime() >= start.getTime()
+    )[0]?.target;
+  }
 }

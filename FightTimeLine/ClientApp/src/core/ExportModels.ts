@@ -104,8 +104,8 @@ export interface IExportCell {
   items: IExportItem[];
   align?: ColumnAlign;
   disableUnique?: boolean;
-  colorFn?: (data) => string;
-  bgRefIdFn?: (data) => string;
+  colorFn?: (data: any) => string;
+  bgRefIdFn?: (data: any) => string;
   noTag?: boolean;
 }
 

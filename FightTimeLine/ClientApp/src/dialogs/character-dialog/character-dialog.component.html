@@ -1,6 +1,17 @@
 <div style="min-height: 300px">
   <form nz-form [formGroup]="editForm" (ngSubmit)="submitForm()">
     <nz-form-item>
+      <nz-form-label [nzSpan]="12" nzFor="attackMagicPotency"
+        >Attack potency</nz-form-label
+      >
+      <nz-form-control [nzSpan]="12">
+        <nz-input-number
+          [nzMin]="0"
+          formControlName="attackMagicPotency"
+        ></nz-input-number>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
       <nz-form-label [nzSpan]="12" nzFor="weaponDamage"
         >Weapon Damage</nz-form-label
       >
@@ -12,11 +23,11 @@
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
-      <nz-form-label [nzSpan]="12" nzFor="mainStat">Main Stat</nz-form-label>
+      <nz-form-label [nzSpan]="12" nzFor="tenacity">Tenacity</nz-form-label>
       <nz-form-control [nzSpan]="12">
         <nz-input-number
           [nzMin]="0"
-          formControlName="mainStat"
+          formControlName="tenacity"
         ></nz-input-number>
       </nz-form-control>
     </nz-form-item>
@@ -51,14 +62,6 @@
           [nzMin]="0"
           formControlName="directHit"
         ></nz-input-number>
-      </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-      <nz-form-label [nzSpan]="12" nzFor="speed"
-        >Skill/Spell Speed</nz-form-label
-      >
-      <nz-form-control [nzSpan]="12">
-        <nz-input-number [nzMin]="0" formControlName="speed"></nz-input-number>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>

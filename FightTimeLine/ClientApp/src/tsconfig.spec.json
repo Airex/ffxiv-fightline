@@ -11,7 +11,8 @@
     "test.ts",
     "polyfills.ts",
     "core/BossAttackProcessors.spec.ts",
-    "core/Utils.spec.ts"
+    "core/Utils.spec.ts",
+    "tests/Mitigations.spec.ts"
   ],
   "include": [
     "**/*.spec.ts",

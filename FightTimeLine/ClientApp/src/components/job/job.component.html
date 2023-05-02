@@ -10,13 +10,50 @@
     <nz-button-group *ngIf="data.mode === 'default'">
       <!-- <button nz-button (click)="fill(it)">Fill</button> -->
       <button nz-button nzType="primary" (click)="remove(it)" nzDanger>{{'component.job.remove' | translate}}</button>
-      <button nz-button nzType="primary" (click)="stats()">{{'component.job.stats' | translate}}</button>
     </nz-button-group>
   </div>
 
   <div *ngIf="data.mode === 'default'" class="sidepanel-full">
     <label nz-checkbox [(ngModel)]="compactView" (ngModelChange)="compact()">{{'component.job.compactView' | translate}}</label>
   </div>
+
+  <sidepanel-area header="{{'component.job.stats' | translate}}" [extra]="statsEditTpl">
+    <div>
+      <table style="width:100%">
+        <tr class="">
+          <td style="text-align: left;">Main attribute</td>
+          <td style="text-align: left;">{{it.stats.attackMagicPotency}}</td>
+        </tr>
+        <tr class="">
+          <td style="text-align: left;">Weapon damage</td>
+          <td style="text-align: left;">{{it.stats.weaponDamage}}</td>
+        </tr>
+        <tr class="">
+          <td style="text-align: left;">Tenacity</td>
+          <td style="text-align: left;">{{it.stats.tenacity}}</td>
+        </tr>
+        <tr class="">
+          <td style="text-align: left;">Critical Hit</td>
+          <td style="text-align: left;">{{it.stats.criticalHit}}</td>
+        </tr>
+        <tr class="">
+          <td style="text-align: left;">Determination</td>
+          <td style="text-align: left;">{{it.stats.determination}}</td>
+        </tr>
+        <tr class="">
+          <td style="text-align: left;">Direct Hit</td>
+          <td style="text-align: left;">{{it.stats.directHit}}</td>
+        </tr>
+        <tr class="">
+          <td style="text-align: left;">HP</td>
+          <td style="text-align: left;">{{it.stats.hp}}</td>
+        </tr>
+      </table>
+    </div>
+  </sidepanel-area>
+  <ng-template #statsEditTpl>
+    <a (click)="$event.stopPropagation();stats()">{{'component.job.edit' | translate}}</a>
+  </ng-template>
 
   <sidepanel-area header="{{'component.job.hiddenAbilities' | translate}}" [extra]="restoreAllTpl" *ngIf="hiddenAbilities.length>0">
     <div>

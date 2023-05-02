@@ -37,7 +37,8 @@ export class ViewComponent {
       compactView: [4, this.trans.instant(marker("view.compactView"))],  // Compact View
       highlightLoaded: [5, this.trans.instant(marker("view.highlightLoaded"))],  // Highlight Loaded
       showAbilityAvailablity: [6, this.trans.instant(marker("view.abiliesAvailability"))], // Abilities Availability Map
-      colorfulDurations: [7, this.trans.instant(marker("view.colorfullDurations"))] // Colorful Durations
+      colorfulDurations: [7, this.trans.instant(marker("view.colorfullDurations"))], // Colorful Durations
+      statusesAsRows: [8, this.trans.instant(marker("view.statusesAsRows"))] // Colorful Durations
     } as NewType)
       .filter(f => f[1][1])
       .sort((a, b) => a[1][0] - b[1][0])

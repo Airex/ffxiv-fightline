@@ -4,10 +4,12 @@ import { Holders } from "./Holders";
 import { IOverlapCheckData } from "./Maps/BaseMap";
 
 type Map<T, U> = {
-  [Prop in keyof T]: U
+  [Prop in keyof T]: U;
 };
 
-export function MapStatuses<T extends JobStatuses>(input: T): Map<T, IAbilityStatus> {
+export function MapStatuses<T extends JobStatuses>(
+  input: T
+): Map<T, IAbilityStatus> {
   return input;
 }
 
@@ -16,7 +18,7 @@ export enum Role {
   Healer,
   Melee,
   Range,
-  Caster
+  Caster,
 }
 
 export interface IJob {
@@ -25,7 +27,7 @@ export interface IJob {
   fullName?: string;
   fullNameTranslation?: Translation;
   icon?: string;
-  abilities: { [name: string]: IAbility };
+  abilities: Record<string, IAbility>;
   role: Role;
   pets?: IPet[];
   defaultPet?: string;
@@ -52,12 +54,12 @@ export interface ITrait {
 }
 
 export interface IJobStats {
+  attackMagicPotency?: number;
   weaponDamage?: number;
-  mainStat?: number;
   criticalHit?: number;
   determination?: number;
+  tenacity?: number;
   directHit?: number;
-  speed?: number;
   hp?: number;
 }
 
@@ -87,8 +89,9 @@ export enum AbilityType {
   Utility = 8,
   Damage = 16,
   HealingBuff = 32,
+  PartyHealingBuff = 8192,
   Pet = 128,
-  Enmity = 512
+  Enmity = 512,
 }
 
 export interface IBoss {
@@ -138,7 +141,6 @@ export interface IHubUser {
   name: string;
 }
 
-
 export interface IDetectionDependencies {
   abilities: number[];
   buffs: number[];
@@ -146,7 +148,7 @@ export interface IDetectionDependencies {
 
 export interface IDetectionStrategy {
   deps: IDetectionDependencies;
-  process(ev: FFLogs.BaseEventFields): { offset: number, name: string };
+  process(ev: FFLogs.BaseEventFields): { offset: number; name: string };
 }
 
 export type IOverlapCheckContext = IOverlapCheckData & {
@@ -159,7 +161,7 @@ export interface IOverlapStrategy {
 }
 
 export type JobStatuses = {
-  [name: string]: IAbilityStatus
+  [name: string]: IAbilityStatus;
 };
 
 export interface IJobInfo {
@@ -178,10 +180,10 @@ export enum SupportedLanguages {
   fr = "fr",
   de = "de",
   ja = "ja",
-  cn = "cn"
+  cn = "cn",
 }
 
-export type Translation = Record<SupportedLanguages, string>
+export type Translation = Record<SupportedLanguages, string>;
 
 export interface IAbility {
   name: string;
@@ -204,6 +206,8 @@ export interface IAbility {
   statuses?: IAbilityStatus[] | null;
   isOgcd?: boolean;
   translation?: Translation;
+  potency?: number;
+  cantUseOnSelf?: boolean;
 }
 
 export interface IAbilityStatus {
@@ -211,40 +215,54 @@ export interface IAbilityStatus {
   xivDbId?: string;
   duration: number;
   effects?: IAbilityEffect[] | null;
+  potency?: number;
   shareGroup?: string;
 }
 
 export interface IMitigator {
-  apply(context: MitigationVisitorContext);
+  apply(context: MitigationVisitorContext): void;
 }
 
 export type MitigationVisitorContext = {
-  jobId: string
-  abilityId: string
-  holders: Holders
-  attackAt?: Date
-  original?: {
-    value: number,
-    damageType: DamageType
-  }
-  addMitigationForTarget(value: number, damageType: DamageType)
-  addMitigationForParty(value: number, damageType: DamageType)
-  addShieldForTarget(value: number)
-  addShieldForParty(value: number)
+  jobId: string;
+  abilityId: string;
+  holders: Holders;
+  attackAt?: Date;
+  addMitigationForTarget(value: number, damageType: DamageType): void;
+  addMitigationForParty(value: number, damageType: DamageType): void;
+  addShieldForTarget(value: number, hpFromJob?: string): void;
+  addShieldForParty(value: number, hpFromJob?: string): void;
+  addAbsorbFromAbilityForTarget(value: number): void;
+  addAbsorbFromAbilityForParty(value: number): void;
+  addHealIncreaseForTarget(value: number): void;
+  addHealIncreaseForParty(value: number): void;
 };
 
+export type MitigationCalculateContent = {
+  target: string;
+  damageType: DamageType;
+  abilityId: string;
+  jobId: string;
+  attackAt?: Date;
+  status?: IAbilityStatus;
+  effect?: IAbilityEffect;
+  level: number;
+};
 export interface IEffectVisitor {
-  mitigate(mitigator: IMitigator, attackAt?: Date);
-  delay(value: number);
+  accept(mitigator: IMitigator, target: MitigationCalculateContent): void;
+  delay(value: number): void;
 }
 
-export function runEffectVisitor<T extends IEffectVisitor>(t: new () => T, input: IAbility | IAbility[]) {
+export function runEffectVisitor<T extends IEffectVisitor>(
+  t: new () => T,
+  input: IAbility | IAbility[]
+) : T  {
   const visitor = new t();
 
   const iter = Array.isArray(input) ? input : [input];
-  iter.forEach(ab => {
-    ab.statuses?.forEach(st => {
-      st.effects?.forEach(ef => {
+  iter.forEach((ab) => {
+    ab.statuses?.forEach((st) => {
+      st.effects?.forEach((ef) => {
         ef.visit(visitor, undefined);
       });
     });
@@ -253,7 +271,11 @@ export function runEffectVisitor<T extends IEffectVisitor>(t: new () => T, input
 }
 
 export interface IAbilityEffect {
-  visit(visitor: IEffectVisitor, attackAt?: Date);
+  potency?: number;
+  visit(
+    visitor: IEffectVisitor,
+    targetContext: MitigationCalculateContent
+  ): void;
 }
 
 export interface IAbilityCharges {
@@ -270,7 +292,10 @@ export interface IAbilitySetting {
   description: string;
   type: string;
   default: any;
-  process?: (context: FFLogsCollectors.ICollectorContext, data: FFLogs.AbilityEvent) => SettingValue;
+  process?: (
+    context: FFLogsCollectors.ICollectorContext,
+    data: FFLogs.AbilityEvent
+  ) => SettingValue;
 }
 
 export interface ISettingData {
@@ -286,23 +311,23 @@ export interface IRelatedAbilitiesOptions {
 }
 
 export enum EntryType {
-  Unknown = 'unknown',
-  BossAttack = 'b',
-  AbilityUsage = 'u',
-  BossTarget = 't',
-  BossDownTime = 'd',
-  BuffMap = 'hm',
-  CompactViewAbilityUsage = 'c',
-  Job = 'j',
-  Ability = 'a',
-  StanceUsage = 's',
-  AbilityAvailability = 'v'
+  Unknown = "unknown",
+  BossAttack = "b",
+  AbilityUsage = "u",
+  BossTarget = "t",
+  BossDownTime = "d",
+  BuffMap = "hm",
+  CompactViewAbilityUsage = "c",
+  Job = "j",
+  Ability = "a",
+  StanceUsage = "s",
+  AbilityAvailability = "v",
 }
 
 export enum DefaultTagsEnum {
   TankBuster,
   AoE,
-  ShareDamage
+  ShareDamage,
 }
 
 export const DefaultTags = ["Tank Buster", "AoE", "Share Damage"];
@@ -314,15 +339,15 @@ export interface IFightData {
 }
 
 export type BossAttackFFlogsData = {
-  amount: number,
-  unmitigated?: number,
-  mitigated?: number,
-  absorbed?: number,
-  multiplier?: number
+  amount: number;
+  unmitigated?: number;
+  mitigated?: number;
+  absorbed?: number;
+  multiplier?: number;
 };
 
 export type BossAttackFFlogs = {
-  [jobId: string]: BossAttackFFlogsData
+  [jobId: string]: BossAttackFFlogsData;
 };
 
 export interface IBossAbility {
@@ -342,7 +367,10 @@ export interface IBossAbility {
   fflogsAttackSource?: "cast" | "damage";
 }
 
-export type TimeOffset<T extends number = number, D extends number = number> = `${'+' | '-' | ''}${T}:${D}` & { minutes?: T, seconds?: D };
+export type TimeOffset<
+  T extends number = number,
+  D extends number = number
+> = `${"+" | "-" | ""}${T}:${D}` & { minutes?: T; seconds?: D };
 
 export interface ISyncData {
   offset: string;
@@ -372,14 +400,14 @@ export const isSettingGroup = (c: Combined): c is ISyncSettingGroup => {
 
 export enum SyncOperation {
   And = "and",
-  Or = "or"
+  Or = "or",
 }
 
 export enum DamageType {
   None = 0,
   Physical = 1,
   Magical = 2,
-  All = DamageType.Physical | DamageType.Magical
+  All = DamageType.Physical | DamageType.Magical,
 }
 
 export interface IAbilityFilter {
@@ -412,13 +440,11 @@ export interface JobPreset {
   abilityCompact?: string[];
   abilityHidden?: string[];
   order?: number;
-  abilityOrder?: {
-    [abilityName: string]: number
-  };
+  abilityOrder?: Record<string, number>;
 }
 
 export type JobPresets = {
-  [id: string]: JobPreset
+  [id: string]: JobPreset;
 };
 
 export interface IFilter {
@@ -446,11 +472,12 @@ export const defaultFilter: () => IFilter = () => ({
     isPhysical: true,
     isUnaspected: true,
     fflogsSource: "damage",
-    keywords: []
-  }
+    keywords: [],
+  },
 });
 
 export interface IView {
+  statusesAsRows: boolean;
   buffmap: boolean;
   ogcdAsPoints: boolean;
   showDowntimesInPartyArea: boolean;
@@ -469,7 +496,8 @@ export const defaultView: () => IView = () => ({
   compactView: false,
   highlightLoaded: false,
   showAbilityAvailablity: false,
-  colorfulDurations: false
+  colorfulDurations: false,
+  statusesAsRows: false
 });
 
 export interface ITools {
@@ -515,22 +543,20 @@ export interface IPresetTemplate {
   jobFilters: { [job: string]: JobPreset };
 }
 
-
 export interface IPresetStorage {
   [name: string]: IPresetTemplate;
 }
-
 
 export enum SettingsEnum {
   Target = "target",
   ChangesTarget = "changesTarget",
   HealShield = "healShield",
   Note = "note",
-  Activation = "activation"
+  Activation = "activation",
+  ImprovisationStacks = "improvisationStacks",
 }
 
 export type SettingsType = { [T in SettingsEnum]: IAbilitySetting };
-
 
 export const settings: SettingsType = {
   target: {
@@ -540,36 +566,45 @@ export const settings: SettingsType = {
     type: "partyMember",
     default: "",
     process: (context, data) => {
-      const target = context.parser.players.find(it1 => it1.id === data.targetID);
-      return target && target.rid || null;
-    }
+      const target = context.parser.players.find(
+        (it1) => it1.id === data.targetID
+      );
+      return (target && target.rid) || null;
+    },
   },
   changesTarget: {
     name: "changesTarget",
     displayName: "Changes target",
     description: "Determines if ability changes boss target",
     type: "boolean",
-    default: true
+    default: true,
+  } ,
+  improvisationStacks: {
+    name: "improvisationStacks",
+    displayName: "Improvisation stacks",
+    description: "Number of stacks of improvisation",
+    type: "number",
+    default: 1,
   } as IAbilitySetting,
   healShield: {
     name: "healShield",
     displayName: "Shield?",
     description: "Determines if ability applies shield",
     type: "boolean",
-    default: false
+    default: false,
   } as IAbilitySetting,
   note: {
     name: "note",
     displayName: "Note",
     description: "",
     type: "text",
-    default: ""
+    default: "",
   },
   activation: {
     name: "activation",
     displayName: "Activated in",
     description: "Sets delay of status activation in seconds",
     type: "number",
-    default: 0
-  }
-};
+    default: 0,
+  },
+} as const;

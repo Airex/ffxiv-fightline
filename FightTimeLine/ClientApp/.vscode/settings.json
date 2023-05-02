@@ -9,6 +9,7 @@
     "fflogs",
     "Gameserviceprovider",
     "idgen",
+    "Jobregistryserviceinterface",
     "Mitigations",
     "ogcd",
     "petguids",

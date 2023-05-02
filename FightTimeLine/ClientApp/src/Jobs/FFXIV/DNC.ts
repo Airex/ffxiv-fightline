@@ -89,6 +89,7 @@ const abilities: IAbility[] = [
     },
     cooldown: 90,
     xivDbId: "25789",
+    settings: [settings.improvisationStacks],
     statuses: [statuses.improvisationFinish],
     abilityType: AbilityType.PartyShield,
     levelAcquired: 80

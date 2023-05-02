@@ -1,37 +1,48 @@
 import Effects from "src/core/Effects";
-import { IJob, Role, AbilityType, MapStatuses, IAbility, settings, IJobTemplate, ITrait } from "../../core/Models";
+import {
+  IJob,
+  Role,
+  AbilityType,
+  MapStatuses,
+  IAbility,
+  settings,
+  IJobTemplate,
+  ITrait,
+} from "../../core/Models";
 import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
 import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   divineBenison: {
     duration: 15,
-    effects: [Effects.shield.solo(15)]
+    potency: 500,
+    effects: [Effects.shieldFromHeal.solo(100)],
   },
   asylum: {
-    duration: 24
+    duration: 24,
+    Effects: [Effects.healingIncrease.solo(10)],
   },
   plenaryIndulgence: {
-    duration: 10
+    duration: 10,
   },
   temperance: {
     duration: 20,
-    effects: [Effects.mitigation.party(10)]
+    effects: [Effects.mitigation.party(10), Effects.healingIncrease.solo(20)],
   },
   thinAir: {
-    duration: 12
+    duration: 12,
   },
   presenceOfMind: {
-    duration: 15
+    duration: 15,
   },
   aquaveil: {
     duration: 8,
-    effects: [Effects.mitigation.solo(15)]
+    effects: [Effects.mitigation.solo(15)],
   },
   LiturgyOfTheBell: {
     duration: 20,
-    effects: [Effects.shield.party(7)]
-  }
+    effects: [Effects.shield.party(7)],
+  },
 });
 
 const abilities: IAbility[] = [
@@ -47,7 +58,7 @@ const abilities: IAbility[] = [
     cooldown: 40,
     xivDbId: "3571",
     abilityType: AbilityType.Healing,
-    levelAcquired: 56
+    levelAcquired: 56,
   },
   {
     name: "Tetragrammaton",
@@ -62,7 +73,7 @@ const abilities: IAbility[] = [
     xivDbId: "3570",
     abilityType: AbilityType.Healing,
     settings: [settings.target],
-    levelAcquired: 60
+    levelAcquired: 60,
   },
   {
     name: "Divine Benison",
@@ -78,7 +89,7 @@ const abilities: IAbility[] = [
     abilityType: AbilityType.SelfShield,
     statuses: [statuses.divineBenison],
     settings: [settings.target],
-    levelAcquired: 66
+    levelAcquired: 66,
   },
   {
     name: "Benediction",
@@ -93,7 +104,7 @@ const abilities: IAbility[] = [
     xivDbId: "140",
     abilityType: AbilityType.Healing,
     settings: [settings.target],
-    levelAcquired: 50
+    levelAcquired: 50,
   },
   {
     name: "Afflatus Solace",
@@ -108,7 +119,7 @@ const abilities: IAbility[] = [
     xivDbId: "16531",
     abilityType: AbilityType.Healing,
     settings: [settings.target],
-    levelAcquired: 52
+    levelAcquired: 52,
   },
   {
     name: "Afflatus Rapture",
@@ -122,7 +133,7 @@ const abilities: IAbility[] = [
     cooldown: 1,
     xivDbId: "16534",
     abilityType: AbilityType.Healing,
-    levelAcquired: 76
+    levelAcquired: 76,
   },
   {
     name: "Asylum",
@@ -136,8 +147,8 @@ const abilities: IAbility[] = [
     cooldown: 90,
     xivDbId: "3569",
     statuses: [statuses.asylum],
-    abilityType: AbilityType.Healing,
-    levelAcquired: 52
+    abilityType: AbilityType.Healing |  AbilityType.HealingBuff,
+    levelAcquired: 52,
   },
   {
     name: "Plenary Indulgence",
@@ -152,7 +163,7 @@ const abilities: IAbility[] = [
     xivDbId: "7433",
     statuses: [statuses.plenaryIndulgence],
     abilityType: AbilityType.Healing,
-    levelAcquired: 70
+    levelAcquired: 70,
   },
   {
     name: "Temperance",
@@ -167,7 +178,7 @@ const abilities: IAbility[] = [
     xivDbId: "16536",
     statuses: [statuses.temperance],
     abilityType: AbilityType.HealingBuff | AbilityType.PartyDefense,
-    levelAcquired: 80
+    levelAcquired: 80,
   },
   {
     name: "Thin Air",
@@ -185,8 +196,8 @@ const abilities: IAbility[] = [
     levelAcquired: 58,
     charges: {
       count: 2,
-      cooldown: 60
-    }
+      cooldown: 60,
+    },
   },
   {
     name: "Presence of Mind",
@@ -201,7 +212,7 @@ const abilities: IAbility[] = [
     xivDbId: "136",
     statuses: [statuses.presenceOfMind],
     abilityType: AbilityType.Utility,
-    levelAcquired: 30
+    levelAcquired: 30,
   },
   {
     name: "Aquaveil",
@@ -217,7 +228,7 @@ const abilities: IAbility[] = [
     statuses: [statuses.aquaveil],
     settings: [settings.target],
     abilityType: AbilityType.SelfDefense | AbilityType.TargetDefense,
-    levelAcquired: 86
+    levelAcquired: 86,
   },
   {
     name: "Liturgy of the Bell",
@@ -232,10 +243,10 @@ const abilities: IAbility[] = [
     xivDbId: 25862,
     statuses: [statuses.LiturgyOfTheBell],
     abilityType: AbilityType.Healing | AbilityType.PartyShield,
-    levelAcquired: 90
+    levelAcquired: 90,
   },
   ...getAbilitiesFrom(healerSharedAbilities),
-  medicine.Mind
+  medicine.Mind,
 ];
 
 const traits: ITrait[] = [
@@ -245,10 +256,10 @@ const traits: ITrait[] = [
     apply: abilityTrait("Divine Benison", {
       charges: {
         count: 2,
-        cooldown: 30
-      }
-    })
-  }
+        cooldown: 30,
+      },
+    }),
+  },
 ];
 
 export const WHM: IJobTemplate = {
@@ -268,7 +279,5 @@ export const WHM: IJobTemplate = {
   },
   role: Role.Healer,
   abilities,
-  traits
+  traits,
 };
-
-

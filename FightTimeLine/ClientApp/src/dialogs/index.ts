@@ -8,14 +8,14 @@ import { LoadingDialog } from "./loadingDialog/loadingDialog.component"
 import { LoginDialog } from "./loginDialog/loginDialog.component"
 import { RegisterDialog } from "./registerDialog/registerDialog.component"
 import { SettingsDialog } from "./settingsDialog/settingsDialog.component"
-import { TableViewDialog } from "./tableViewDialog/tableViewDialog.component"
+import { TableViewDialogComponent } from "./tableViewDialog/tableViewDialog.component"
 import { WhatsNewDialog } from "./whatsNewDialog/whatsNewDialog.component"
 import { BossSaveDialog } from "./bossSaveDialog/bossSaveDialog.component"
 import { CharacterDialogComponent } from "./character-dialog/character-dialog.component"
 
 export {
   BossAttackDialog,
-  BossTemplatesDialog,  
+  BossTemplatesDialog,
   FFLogsImportDialog,
   FightLoadDialog,
   FightSaveDialog,
@@ -23,9 +23,9 @@ export {
   LoadingDialog,
   LoginDialog,
   RegisterDialog,
-  CharacterDialogComponent,  
+  CharacterDialogComponent,
   SettingsDialog,
-  TableViewDialog,
+  TableViewDialogComponent as TableViewDialog,
   WhatsNewDialog,
   BossSaveDialog,
 }
@@ -37,14 +37,14 @@ export const DialogsModuleComponents =
     FightLoadDialog,
     BossSaveDialog,
     FightSaveDialog,
-    SettingsDialog,    
+    SettingsDialog,
     FFLogsImportDialog,
     LoadingDialog,
     LoginDialog,
     CharacterDialogComponent,
-    RegisterDialog,    
-    TableViewDialog,
+    RegisterDialog,
+    TableViewDialogComponent,
     BossTemplatesDialog,
-    WhatsNewDialog    
+    WhatsNewDialog
   ];
 

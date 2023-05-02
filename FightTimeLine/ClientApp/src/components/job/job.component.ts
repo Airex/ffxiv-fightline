@@ -13,7 +13,7 @@ import { ISidePanelComponent, SIDEPANEL_DATA, SidepanelParams } from "../sidepan
   templateUrl: "./job.component.html",
   styleUrls: ["./job.component.css"],
 })
-export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
+export class JobComponent implements OnDestroy, ISidePanelComponent {
 
   items: any[];
   holders: Holders;
@@ -117,9 +117,6 @@ export class JobComponent implements OnInit, OnDestroy, ISidePanelComponent {
     this.dispatcher.dispatch("updateFilter");
   }
 
-  ngOnInit(): void {
-
-  }
 
   ngOnDestroy(): void {
     this.sub.unsubscribe();

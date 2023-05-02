@@ -85,7 +85,7 @@ export class FightsService implements IFightService {
   }
 
   addCommand(fight: string, data: any): Observable<{id: string}> {
-    console.log("adding commmand in fightservice.addcommand");
+    // console.log("adding commmand in fightservice.addcommand");
     return this.httpClient.post<any>(this.basePath + "api/data/addCommand",
       {
         fight,

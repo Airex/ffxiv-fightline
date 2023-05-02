@@ -9,7 +9,7 @@ import { UserService } from "./UserService";
 import { ScreenNotificationsService } from "./ScreenNotificationsService";
 import { LocalStorageService } from "./LocalStorageService";
 import { DispatcherPayloads, DispatcherService } from "./dispatcher.service";
-import { ChangeNotesService, IChahgeNote } from "./changeNotes.service";
+import { ChangeNotesService, IChangeNote } from "./changeNotes.service";
 import { FightHubService, IConnectToSessionHandlers, IStartSessionHandlers } from "./FightHubService";
 import * as Gameserviceprovider from "./game.service-provider";
 import { FFXIVApiService } from "./FFxivApiService";
@@ -36,7 +36,7 @@ export {
   fightServiceToken,
   FFXIVApiService,
   FightHubService,
-  IChahgeNote,
+  IChangeNote,
   ChangeNotesService
 };
 
