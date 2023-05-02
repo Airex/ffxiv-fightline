@@ -47,7 +47,7 @@ class ShieldShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilit
   }
 
   mitigate(context: MitigationVisitorContext) {
-    context.addShieldForTarget(this.value);
+    context.addAbsorbFromAbilityForTarget(this.value);
   }
 }
 
