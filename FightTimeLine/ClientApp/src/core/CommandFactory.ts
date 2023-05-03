@@ -154,7 +154,7 @@ export class CommandFactory {
       case "changeJobStats":
         return new ChangeJobStats(
           data.params.id,
-          data.params.newData
+          JSON.parse(data.params.newData)
         );
       case "attachPreset":
         return new AttachPresetCommand(
