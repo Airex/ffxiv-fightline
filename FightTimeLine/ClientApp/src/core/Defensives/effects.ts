@@ -11,6 +11,7 @@ export enum AbilityTarget {
   Solo,
   Party,
   Owner,
+  Self,
 }
 
 function asKeysIfDefined<T>(obj: T): T {
@@ -127,12 +128,13 @@ class HealingIncreaseEffect implements IAbilityEffect, IMitigator {
       case AbilityTarget.Owner:
         context.addHealIncreaseForOwner(this.value);
         break;
+      case AbilityTarget.Self:
+        context.addHealIncreaseForSelf(this.value);
+        break;
     }
   }
 
-  withModifier<T extends IMitigator>(
-    t: new (value: number) => T
-  ): this {
+  withModifier<T extends IMitigator>(t: new (value: number) => T): this {
     this.modifier = new t(this.value);
     return this;
   }
@@ -146,6 +148,31 @@ class DelayEffect implements IAbilityEffect {
   constructor(private value: number) {}
   visit(visitor: IEffectVisitor, targetContext: MitigationCalculateContext) {
     visitor.delay(this.value);
+  }
+}
+
+class HpIncreaseEffect implements IAbilityEffect, IMitigator {
+  private modifier: IMitigator;
+  constructor(private value: number, private target: AbilityTarget) {}
+  apply(context: MitigationVisitorContext): void {
+    switch (this.target) {
+      case AbilityTarget.Solo:
+        context.addHpIncreaseForTarget(this.value);
+        break;
+      case AbilityTarget.Self:
+        context.addHpIncreaseForOwner(this.value);
+        break;
+      default:
+        break;
+    }
+  }
+  withModifier<T extends IMitigator>(t: new (value: number) => T): this {
+    this.modifier = new t(this.value);
+    return this;
+  }
+
+  visit(visitor: IEffectVisitor, targetContext: MitigationCalculateContext) {
+    visitor.accept(this.modifier || this, targetContext);
   }
 }
 
@@ -170,12 +197,18 @@ export default {
   healingIncrease: {
     solo: (value: number) =>
       new HealingIncreaseEffect(value, AbilityTarget.Solo),
+    self: (value: number) =>
+      new HealingIncreaseEffect(value, AbilityTarget.Self),
     party: (value: number) =>
       new HealingIncreaseEffect(value, AbilityTarget.Party),
   },
   incomingHealingIncrease: {
     solo: (value: number) =>
       new HealingIncreaseEffect(value, AbilityTarget.Owner),
+  },
+  hpIncrease: {
+    solo: (value: number) => new HpIncreaseEffect(value, AbilityTarget.Solo),
+    self: (value: number) => new HpIncreaseEffect(value, AbilityTarget.Self),
   },
   delay: (value: number) => new DelayEffect(value),
 };

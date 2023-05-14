@@ -1,4 +1,3 @@
-import { Holders } from "../Holders";
 import { IEffectVisitor, IMitigator, MitigationCalculateContext, DamageType, AbilityType } from "../Models";
 
 export class AbilityTypeVisitor implements IEffectVisitor {
@@ -37,8 +36,14 @@ export class AbilityTypeVisitor implements IEffectVisitor {
       addHealIncreaseForOwner(value) {
         self.type = AbilityType.HealingBuff;
       },
-      addHpIncreaseForOwner(value) {
+      addHealIncreaseForSelf(value) {
         self.type = AbilityType.HealingBuff;
+      },
+      addHpIncreaseForOwner(value) {
+        // self.type = AbilityType.HealingBuff;
+      },
+      addHpIncreaseForTarget(value) {
+        // self.type = AbilityType.HealingBuff;
       },
     });
   }

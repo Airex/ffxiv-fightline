@@ -17,7 +17,7 @@ import {
   SIDEPANEL_DATA,
   SidepanelParams,
 } from "../sidepanel/ISidePanelComponent";
-import { DefsCalcResult, MitigationsResult, DefsCalcResultAbility } from "src/core/Defensives/types";
+import { DefsCalcResult, MitigationsResult, DefsCalcResultAbility, MitigationForAttack } from "src/core/Defensives/types";
 
 @Component({
   selector: "[singleAttack]",
@@ -147,6 +147,10 @@ export class SingleAttackComponent implements OnDestroy, ISidePanelComponent {
     });
   }
 
+  hasHpIncrease(m:MitigationForAttack[]) {
+    return m.some(it => (it.hpIncrease || 0) > 0);
+  }
+
   refresh() {
     this.defs = this.calculateDefs();
     this.availDefs = this.calculateAvailDefs();
@@ -168,7 +172,7 @@ export class SingleAttackComponent implements OnDestroy, ISidePanelComponent {
       icon: this.holders.jobs.get(k)?.job?.icon || "",
       name:
         this.holders.jobs.get(k)?.actorName ||
-        this.holders.jobs.get(k)?.job?.name,
+        this.holders.jobs.get(k)?.translated,
       data: Object.keys(this.it.attack.fflogsData[k])
         .filter((t) => this.it.attack.fflogsData[k][t])
         .map((t) => ({

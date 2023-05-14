@@ -14,6 +14,7 @@ import {
   levelModifiers,
   traitModifiers,
 } from "./jobValues";
+import { DefsCalcResult, MitigationForAttack } from "./types";
 
 export type HealIncreaseContainer = {
   outgoingModifier?: number;
@@ -59,7 +60,11 @@ export class HealIncreaseVisitor implements IEffectVisitor {
       addHealIncreaseForOwner(value) {
         addIncomingHeal(context.targetJobId, value);
       },
+      addHealIncreaseForSelf(value) {
+        addIncomingHeal(context.sourceJobId, value);
+      },
       addHpIncreaseForOwner(value) {},
+      addHpIncreaseForTarget(value) {},
     });
   }
   delay(value: number): void {}
@@ -73,7 +78,12 @@ export class MitigationVisitor implements IEffectVisitor {
   public partyShield = 0;
   public sums: Record<
     string,
-    { absorbed: number; shield: number; mitigation: number }
+    {
+      absorbed: number;
+      shield: number;
+      mitigation: number;
+      hpIncrease?: number;
+    }
   > = {};
 
   initTarget(target: string) {
@@ -94,6 +104,11 @@ export class MitigationVisitor implements IEffectVisitor {
 
     this.initTarget(target);
     this.sums[target].shield += value || 0;
+  }
+
+  addHpIncrease(target: string, value: number) {
+    this.initTarget(target);
+    this.sums[target].hpIncrease = (this.sums[target].hpIncrease || 1) * value;
   }
 
   addMitigation(target: string, value: number) {
@@ -274,7 +289,13 @@ export class MitigationVisitor implements IEffectVisitor {
       addHealIncreaseForParty(value) {},
       addHealIncreaseForTarget(value) {},
       addHealIncreaseForOwner(value) {},
-      addHpIncreaseForOwner(value) {},
+      addHealIncreaseForSelf(value) {},
+      addHpIncreaseForOwner(value) {
+        self.addHpIncrease(context.sourceJobId, value / 100);
+      },
+      addHpIncreaseForTarget(value) {
+        self.addHpIncrease(context.targetJobId, value / 100);
+      },
     } as MitigationVisitorContext;
 
     mitigator.apply(visitorContext);
@@ -294,11 +315,10 @@ export class MitigationVisitor implements IEffectVisitor {
         id: jobMap.id,
         mitigation: Number(mitigation.toFixed(3)),
         shield: Number(shield.toFixed(3)),
+        hpIncrease: Number((agg?.hpIncrease || 0).toFixed(3)),
         icon: jobMap?.job.icon,
-      };
+      } as MitigationForAttack;
     });
     return defStats;
   }
 }
-
-

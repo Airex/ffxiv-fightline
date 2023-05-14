@@ -418,7 +418,7 @@ export function calculateMitigationForAttack(
     }
 
     const hpLeft =
-      hp * (m.shield + 1) - attack.damageValue * (1 - m.mitigation); // calculate hp left after attack
+      hp* (m.hpIncrease + 1) * (m.shield + 1) - attack.damageValue * (1 - m.mitigation); // calculate hp left after attack
     if (hpLeft <= 0) {
       const overkill = Math.abs(hpLeft).toFixed(0);
       const overkillPercent = Math.abs((hpLeft / hp) * 100).toFixed(0);

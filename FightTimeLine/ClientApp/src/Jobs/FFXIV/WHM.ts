@@ -27,7 +27,7 @@ const statuses = MapStatuses({
   },
   temperance: {
     duration: 20,
-    effects: [Effects.mitigation.party(10), Effects.healingIncrease.solo(20)],
+    effects: [Effects.mitigation.party(10), Effects.healingIncrease.self(20)],
   },
   thinAir: {
     duration: 12,

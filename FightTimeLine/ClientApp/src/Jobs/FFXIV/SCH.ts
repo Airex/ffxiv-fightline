@@ -30,12 +30,10 @@ class DeploymentTacticsModifier implements IMitigator {
       (a) => a.start >= original.start && a.start < context.attackAt
     );
 
-    if (affected){
+    if (affected) {
       // console.log("Affected by DT");
       return context.addAbsorbFromAbilityForParty(this.value);
-    }
-    else
-      return context.addAbsorbFromAbilityForTarget(this.value);
+    } else return context.addAbsorbFromAbilityForTarget(this.value);
   }
 }
 
@@ -46,14 +44,19 @@ const statuses = MapStatuses({
   },
   adloquium: {
     duration: 30,
-    effects: [Effects.shieldFromHeal.solo(180).withModifier(DeploymentTacticsModifier)],
+    effects: [
+      Effects.shieldFromHeal.solo(180).withModifier(DeploymentTacticsModifier),
+    ],
   },
   whisperingDawn: {
     duration: 21,
   },
   feyIllumination: {
     duration: 20,
-    effects: [Effects.mitigation.party(5, DamageType.Magical), Effects.healingIncrease.party(10)],
+    effects: [
+      Effects.mitigation.party(5, DamageType.Magical),
+      Effects.healingIncrease.party(10),
+    ],
   },
   sacredSoil: {
     duration: 15,
@@ -77,7 +80,7 @@ const statuses = MapStatuses({
   },
   protraction: {
     duration: 10,
-    effects: [Effects.shield.solo(10), Effects.healingIncrease.solo(10)],
+    effects: [Effects.hpIncrease.solo(10), Effects.healingIncrease.self(10)],
   },
   expedient: {
     duration: 20,
