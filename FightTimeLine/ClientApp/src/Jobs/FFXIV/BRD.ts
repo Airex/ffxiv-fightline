@@ -1,5 +1,5 @@
 import { byName } from "src/core/AbilityDetectors";
-import Effects from "src/core/Effects";
+import Effects from "src/core/Defensives/effects";
 import { IJob, Role, AbilityType, MapStatuses, IAbility, settings, ITrait, IJobTemplate } from "../../core/Models";
 import { getAbilitiesFrom, rangeSharedAbilities, medicine, toAbilities } from "./shared";
 import { abilityTrait } from "./traits";

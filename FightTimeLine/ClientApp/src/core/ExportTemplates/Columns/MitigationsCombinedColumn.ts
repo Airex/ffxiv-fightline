@@ -1,4 +1,5 @@
-import { calculateDefsForAttack, calculateMitigationForAttack, MitigationForAttack } from "src/core/Defensives";
+import { calculateDefsForAttack, calculateMitigationForAttack } from "src/core/Defensives/functions";
+import { MitigationForAttack } from "src/core/Defensives/types";
 import { IExportColumn, IExportCell } from "src/core/ExportModels";
 import { Holders } from "src/core/Holders";
 import { BossAttackMap } from "src/core/Maps";

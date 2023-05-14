@@ -53,8 +53,8 @@ import {
 import { IMoveable } from "./Holders/BaseHolder";
 import * as PresentationManager from "./PresentationManager";
 import { IOverlapCheckData } from "./Maps/BaseMap";
-import { calculateDuration, calculateOffset } from "./Durations";
 import { DefaultJobStats, DefaultRoleStats } from "src/Jobs/FFXIV/defaults";
+import { calculateDuration, calculateOffset } from "./Durations/functions";
 
 export class FightTimeLineController {
   data: M.IFightData = {};

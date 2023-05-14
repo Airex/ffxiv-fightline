@@ -7,11 +7,7 @@ import {
   calculateAvailDefsForAttack,
   calculateDefsForAttack,
   calculateMitigationForAttack,
-  DefsCalcResult,
-  DefsCalcResultAbility,
-  MitigationForAttack,
-  MitigationsResult,
-} from "src/core/Defensives";
+} from "src/core/Defensives/functions";
 import { VisStorageService } from "src/services/VisStorageService";
 import { IForSidePanel } from "src/core/Holders/BaseHolder";
 import { DispatcherPayloads } from "src/services/dispatcher.service";
@@ -21,6 +17,7 @@ import {
   SIDEPANEL_DATA,
   SidepanelParams,
 } from "../sidepanel/ISidePanelComponent";
+import { DefsCalcResult, MitigationsResult, DefsCalcResultAbility } from "src/core/Defensives/types";
 
 @Component({
   selector: "[singleAttack]",

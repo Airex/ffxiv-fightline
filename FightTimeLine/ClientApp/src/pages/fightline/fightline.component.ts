@@ -62,7 +62,7 @@ import {
   IStartSessionHandlers,
   IConnectToSessionHandlers,
 } from "src/services";
-import { getTimeGoodAbilityToUse } from "src/core/Defensives";
+import { getTimeGoodAbilityToUse } from "src/core/Defensives/functions";
 import { ChangeBossAttackCommand } from "src/core/commands/ChangeBossAttackCommand";
 import { visibleFrameTemplate } from "src/core/Frame";
 

@@ -1,4 +1,4 @@
-import Effects from "src/core/Effects";
+import Effects from "src/core/Defensives/effects";
 import { Role, AbilityType, DamageType, IAbility, MapStatuses, settings, IJobTemplate, ITrait } from "../../core/Models";
 import { getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
 import { abilityRemovedTrait } from "./traits";

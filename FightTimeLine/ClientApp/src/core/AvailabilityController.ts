@@ -3,7 +3,7 @@ import _ from "lodash";
 import { IdGenerator } from "./Generators";
 import * as Holders from "./Holders";
 import { PresenterManager } from "./PresentationManager";
-import { getAvailabilitiesForAbility } from "./Defensives";
+import { getAvailabilitiesForAbility } from "./Defensives/functions";
 import {
   AbilityAvailabilityMap,
   AbilityMap,

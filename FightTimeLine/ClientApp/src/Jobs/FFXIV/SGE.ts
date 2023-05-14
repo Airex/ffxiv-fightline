@@ -1,4 +1,4 @@
-import Effects from "src/core/Effects";
+import Effects from "src/core/Defensives/effects";
 import {
   AbilityType,
   IAbility,

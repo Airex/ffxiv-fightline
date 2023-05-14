@@ -9,7 +9,7 @@ import * as StancesHolder from "./Holders/StancesHolder";
 import * as AbilityAvailablityHolder from "./Holders/AbilityAvailablityHolder";
 
 import { ITimelineContainer } from "./Holders/BaseHolder";
-import { Warning } from "./Defensives";
+import { Warning } from "./Defensives/types";
 
 export class Holders {
   itemUsages: AbilityUsageHolder.AbilityUsageHolder;

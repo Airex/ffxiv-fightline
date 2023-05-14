@@ -1,8 +1,7 @@
 import { Command, ICommandExecutionContext, ICommandData } from "../UndoRedo";
 import { IAbility } from "../Models";
 import { AbilityUsageMap } from "../Maps/index";
-import { calculateDuration } from "../Durations";
-
+import { calculateDuration } from "../Durations/functions";
 
 export class RemoveAbilityCommand extends Command {
 

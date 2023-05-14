@@ -1,6 +1,7 @@
 import * as FFLogs from "./FFLogs";
 import * as FFLogsCollectors from "./FflogsCollectors/FFLogsCollectors";
 import { Holders } from "./Holders";
+import { AbilityUsageMap } from "./Maps";
 import { IOverlapCheckData } from "./Maps/BaseMap";
 
 type Map<T, U> = {
@@ -211,6 +212,7 @@ export interface IAbility {
 }
 
 export interface IAbilityStatus {
+  delay?: number;
   name?: string;
   xivDbId?: string;
   duration: number;
@@ -219,15 +221,18 @@ export interface IAbilityStatus {
   shareGroup?: string;
 }
 
+export interface IStatusSnapshot {
+  status: IAbilityStatus;
+  source: AbilityUsageMap;
+  start: Date;
+  target: string;
+}
+
 export interface IMitigator {
   apply(context: MitigationVisitorContext): void;
 }
 
-export type MitigationVisitorContext = {
-  jobId: string;
-  abilityId: string;
-  holders: Holders;
-  attackAt?: Date;
+export type MitigationVisitorContext = MitigationCalculateContext & {
   addMitigationForTarget(value: number, damageType: DamageType): void;
   addMitigationForParty(value: number, damageType: DamageType): void;
   addShieldForTarget(value: number, hpFromJob?: string): void;
@@ -236,26 +241,29 @@ export type MitigationVisitorContext = {
   addAbsorbFromAbilityForParty(value: number): void;
   addHealIncreaseForTarget(value: number): void;
   addHealIncreaseForParty(value: number): void;
+  addHealIncreaseForOwner(value: number): void;
+  addHpIncreaseForOwner(value: number): void;
 };
 
-export type MitigationCalculateContent = {
-  target: string;
-  damageType: DamageType;
-  abilityId: string;
-  jobId: string;
+export type MitigationCalculateContext = {
+  targetJobId: string | "party";
   attackAt?: Date;
+  attackDamageType?: DamageType;
+  sourceAbilityId: string;
+  sourceJobId: string;
   status?: IAbilityStatus;
   effect?: IAbilityEffect;
-  level: number;
+  holders: Holders;
 };
 export interface IEffectVisitor {
-  accept(mitigator: IMitigator, target: MitigationCalculateContent): void;
+  accept(mitigator: IMitigator, target: MitigationCalculateContext): void;
   delay(value: number): void;
 }
 
 export function runEffectVisitor<T extends IEffectVisitor>(
   t: new () => T,
-  input: IAbility | IAbility[]
+  input: IAbility | IAbility[],
+  context?: MitigationCalculateContext
 ) : T  {
   const visitor = new t();
 
@@ -263,7 +271,7 @@ export function runEffectVisitor<T extends IEffectVisitor>(
   iter.forEach((ab) => {
     ab.statuses?.forEach((st) => {
       st.effects?.forEach((ef) => {
-        ef.visit(visitor, undefined);
+        ef.visit(visitor, context);
       });
     });
   });
@@ -274,7 +282,7 @@ export interface IAbilityEffect {
   potency?: number;
   visit(
     visitor: IEffectVisitor,
-    targetContext: MitigationCalculateContent
+    targetContext: MitigationCalculateContext
   ): void;
 }
 

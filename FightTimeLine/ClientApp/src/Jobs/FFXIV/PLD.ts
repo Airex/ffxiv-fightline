@@ -1,4 +1,4 @@
-import Effects from "src/core/Effects";
+import Effects from "src/core/Defensives/effects";
 import {
   Role,
   AbilityType,
@@ -18,11 +18,11 @@ import { abilityRemovedTrait, abilityTrait } from "./traits";
 class InterventionMitigationModifier implements IMitigator {
   constructor(private value: number, private damageType: DamageType) {}
   apply(context: MitigationVisitorContext) {
-    const original = context.holders.itemUsages.get(context.abilityId);
+    const original = context.holders.itemUsages.get(context.sourceAbilityId);
 
     const target = original.getSettingData(SettingsEnum.Target);
 
-    if (!target || !target.value || context.jobId === target.value) {
+    if (!target || !target.value || context.sourceJobId === target.value) {
       return;
     }
 
@@ -30,7 +30,7 @@ class InterventionMitigationModifier implements IMitigator {
 
     const mts = abs.some((abName) => {
       const ab = context.holders.abilities.getByParentAndAbility(
-        context.jobId,
+        context.sourceJobId,
         abName
       );
       const has = context.holders.itemUsages
@@ -47,16 +47,16 @@ class InterventionMitigationModifier implements IMitigator {
 class DivineVeilMitigationModifier implements IMitigator {
   constructor(private value: number) {}
   apply(context: MitigationVisitorContext) {
-    return context.addShieldForParty(this.value, context.jobId);
+    return context.addShieldForParty(this.value, context.sourceJobId);
   }
 }
 
 class CoverMitigationModifier implements IMitigator {
   constructor(private value: number, private damageType: DamageType) {}
   apply(context: MitigationVisitorContext) {
-    const original = context.holders.itemUsages.get(context.abilityId);
+    const original = context.holders.itemUsages.get(context.sourceAbilityId);
     const target = original?.getSettingData(SettingsEnum.Target);
-    if (!target || !target.value || context.jobId === target.value) {
+    if (!target || !target.value || context.sourceJobId === target.value) {
       return;
     }
 
