@@ -1,12 +1,17 @@
-import {DataItem, DataSetDataItem} from "vis-timeline";
+import { DataItem, DataSetDataItem } from "vis-timeline";
 import * as BaseHolder from "./BaseHolder";
 import { AbilityUsageMap } from "../Maps/AbilityUsageMap";
+import { IAbilityStatus, IStatusSnapshot } from "../Models";
+import { AbilityMap } from "../Maps";
 
-export class AbilityUsageHolder extends BaseHolder.BaseHolder<string, DataItem, AbilityUsageMap> {
-
+export class AbilityUsageHolder extends BaseHolder.BaseHolder<
+  string,
+  DataItem,
+  AbilityUsageMap
+> {
   setHighlightLoaded(highlightLoaded: boolean) {
     const toUpdate: AbilityUsageMap[] = [];
-    this.values.forEach(it => {
+    this.values.forEach((it) => {
       if (it.loaded) {
         it.applyData({ showLoaded: highlightLoaded });
         toUpdate.push(it);
@@ -26,7 +31,7 @@ export class AbilityUsageHolder extends BaseHolder.BaseHolder<string, DataItem, 
 
   addRange(i: AbilityUsageMap[]): void {
     super.addRange(i);
-//    this.visItems.add(this.itemsOf(i));
+    //    this.visItems.add(this.itemsOf(i));
   }
 
   clear(): void {
@@ -45,18 +50,23 @@ export class AbilityUsageHolder extends BaseHolder.BaseHolder<string, DataItem, 
   }
 
   getByAbility(id: string): AbilityUsageMap[] {
-    return this.filter(it => it.ability.id === id);
+    return this.filter((it) => it.ability.id === id);
   }
 
   getSetting(id: string, name: string): any {
-    const settings = this.get(id).settings;
-    if (settings) {
-      const v = settings.find((it) => it.name === name);
-      return v;
-
-    }
-    return null;
+    return this.get(id).getSettingData(name)?.value;
   }
 
-
+  getActiveStatusesAt(
+    start: Date,
+    predicate?: (ab: AbilityMap, st: IAbilityStatus) => boolean
+  ): IStatusSnapshot[] {
+    return this.values.reduce((acc, it) => {
+      const statuses = it.getActiveStatusesAtTime(start, predicate);
+      if (statuses) {
+        acc.push(...statuses);
+      }
+      return acc;
+    }, [] as IStatusSnapshot[]);
+  }
 }

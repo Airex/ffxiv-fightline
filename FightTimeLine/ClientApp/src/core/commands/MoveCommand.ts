@@ -1,8 +1,7 @@
 import { Command, ICommandExecutionContext, ICommandData } from "../UndoRedo";
 import { IAbility } from "../Models";
 import { Utils } from "../Utils";
-import { calculateDuration } from "../Durations";
-
+import { calculateDuration } from "../Durations/functions";
 
 export class MoveCommand extends Command {
   private moveFrom: Date;

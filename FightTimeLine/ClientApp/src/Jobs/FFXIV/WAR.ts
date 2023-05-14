@@ -1,23 +1,37 @@
-import Effects from "src/core/Effects";
+import Effects from "src/core/Defensives/effects";
 import { SharedOverlapStrategy } from "src/core/Overlap";
-import { Role, AbilityType, IAbility, IMitigator, MitigationVisitorContext, MapStatuses, settings, IJobTemplate, ITrait, DamageType } from "../../core/Models";
+import {
+  Role,
+  AbilityType,
+  IAbility,
+  IMitigator,
+  MitigationVisitorContext,
+  MapStatuses,
+  settings,
+  IJobTemplate,
+  ITrait,
+  DamageType,
+} from "../../core/Models";
 import { getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
 import { abilityRemovedTrait, abilityTrait } from "./traits";
 
 class ShakeItOffMitigationModifier implements IMitigator {
-
-  constructor(private value: number) {
-  }
+  constructor(private value: number) {}
 
   apply(context: MitigationVisitorContext) {
-    const original = context.holders.itemUsages.get(context.abilityId);
-    const sum = (acc, v) => acc += v;
+    const original = context.holders.itemUsages.get(context.sourceAbilityId);
+    const sum = (acc, v) => (acc += v);
 
     const abs = ["Thrill of Battle", "Vengeance", "Bloodwhetting"];
     const total = abs
-      .map(a => {
-        const ab = context.holders.abilities.getByParentAndAbility(context.jobId, a);
-        const has = context.holders.itemUsages.getByAbility(ab.id).some(abc => abc.checkCoversDate(original.start));
+      .map((a) => {
+        const ab = context.holders.abilities.getByParentAndAbility(
+          context.sourceJobId,
+          a
+        );
+        const has = context.holders.itemUsages
+          .getByAbility(ab.id)
+          .some((abc) => abc.checkCoversDate(original.start));
         return has ? 1 : 0;
       })
       .reduce(sum, 0);
@@ -26,24 +40,31 @@ class ShakeItOffMitigationModifier implements IMitigator {
   }
 }
 
-abstract class ShakeItOffAbilityConsumedMitigationModifier implements IMitigator {
-
-    apply(context: MitigationVisitorContext) {
-      const original = context.holders.itemUsages.get(context.abilityId);
-      const ab = context.holders.abilities.getByParentAndAbility(context.jobId, "Shake It Off");
-      const found = context.holders.itemUsages.getByAbility(ab.id).filter(abc => original.checkCoversDate(abc.start));
-      if (found.length === 0 || found[0].start >= context.attackAt) {
-        this.mitigate(context);
-      }
+abstract class ShakeItOffAbilityConsumedMitigationModifier
+  implements IMitigator
+{
+  apply(context: MitigationVisitorContext) {
+    const original = context.holders.itemUsages.get(context.sourceAbilityId);
+    const ab = context.holders.abilities.getByParentAndAbility(
+      context.sourceJobId,
+      "Shake It Off"
+    );
+    const found =
+      ab &&
+      context.holders.itemUsages
+        .getByAbility(ab.id)
+        .filter((abc) => original.checkCoversDate(abc.start));
+    if (!found || found.length === 0 || found[0].start >= context.attackAt) {
+      this.mitigate(context);
     }
+  }
 
-    abstract mitigate(context: MitigationVisitorContext): void;
+  abstract mitigate(context: MitigationVisitorContext): void;
 }
 
 class ShieldShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilityConsumedMitigationModifier {
-
   constructor(private value: number) {
-    super()
+    super();
   }
 
   mitigate(context: MitigationVisitorContext) {
@@ -51,10 +72,19 @@ class ShieldShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilit
   }
 }
 
-class MitigationShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilityConsumedMitigationModifier {
+class HealIncreaseShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilityConsumedMitigationModifier {
+  constructor(private value: number) {
+    super();
+  }
 
+  mitigate(context: MitigationVisitorContext) {
+    context.addHealIncreaseForOwner(this.value);
+  }
+}
+
+class MitigationShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilityConsumedMitigationModifier {
   constructor(private value: number, private damageType: DamageType) {
-    super()
+    super();
   }
 
   mitigate(context: MitigationVisitorContext) {
@@ -64,65 +94,89 @@ class MitigationShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAb
 
 const statuses = MapStatuses({
   berserk: {
-    duration: 15
+    duration: 15,
   },
   innerRelease: {
-    duration: 15
+    duration: 15,
   },
   vengence: {
     duration: 15,
-    effects: [Effects.mitigation.solo(30).withModifier(MitigationShakeItOffAbilityConsumedMitigationModifier)],
+    effects: [
+      Effects.mitigation
+        .solo(30)
+        .withModifier(MitigationShakeItOffAbilityConsumedMitigationModifier),
+    ],
   },
   holmgang: {
     duration: 10,
-    effects: [Effects.mitigation.solo(100)]
+    effects: [Effects.mitigation.solo(100)],
   },
   shakeItOff: {
     duration: 30,
-    effects: [Effects.shield.party(15).withModifier(ShakeItOffMitigationModifier)]
+    effects: [
+      Effects.shield.party(15).withModifier(ShakeItOffMitigationModifier),
+    ],
   },
   thrillOfBattle: {
     duration: 10,
-    effects: [Effects.shield.solo(20).withModifier(ShieldShakeItOffAbilityConsumedMitigationModifier)]
+    effects: [
+      Effects.shield
+        .solo(20)
+        .withModifier(ShieldShakeItOffAbilityConsumedMitigationModifier),
+      Effects.incomingHealingIncrease
+        .solo(20)
+        .withModifier(HealIncreaseShakeItOffAbilityConsumedMitigationModifier),
+    ],
   },
   rawIntuition: {
     duration: 6,
-    effects: [Effects.mitigation.solo(10)]
+    effects: [Effects.mitigation.solo(10)],
   },
   bloodwhetting: {
     duration: 8,
-    effects: [Effects.mitigation.solo(10).withModifier(MitigationShakeItOffAbilityConsumedMitigationModifier)],
+    effects: [
+      Effects.mitigation
+        .solo(10)
+        .withModifier(MitigationShakeItOffAbilityConsumedMitigationModifier),
+    ],
   },
   bloodwhettingStem: {
     duration: 4,
-    effects: [Effects.mitigation.solo(10).withModifier(MitigationShakeItOffAbilityConsumedMitigationModifier)],
+    effects: [
+      Effects.mitigation
+        .solo(10)
+        .withModifier(MitigationShakeItOffAbilityConsumedMitigationModifier),
+    ],
   },
   bloodwhettingTide: {
     duration: 20,
-    effects: [Effects.shieldFromHeal.solo(100).withModifier(ShieldShakeItOffAbilityConsumedMitigationModifier)],
-    potency: 400
+    effects: [
+      Effects.shieldFromHeal
+        .solo(100)
+        .withModifier(ShieldShakeItOffAbilityConsumedMitigationModifier),
+    ],
+    potency: 400,
   },
   nascentFlashPre82: {
     duration: 6,
-    effects: [Effects.mitigation.solo(10)]
+    effects: [Effects.mitigation.solo(10)],
   },
   nascentFlash: {
     levelAcquired: 82,
     duration: 8,
-    effects: [Effects.mitigation.solo(10)]
+    effects: [Effects.mitigation.solo(10)],
   },
   nascentFlashStem: {
     levelAcquired: 82,
     duration: 4,
-    effects: [Effects.mitigation.solo(10)]
+    effects: [Effects.mitigation.solo(10)],
   },
   nascentFlashTide: {
     levelAcquired: 82,
     duration: 20,
     effects: [Effects.shieldFromHeal.solo(100)],
-    potency: 400
-  }
-
+    potency: 400,
+  },
 });
 
 const abilities: IAbility[] = [
@@ -141,9 +195,9 @@ const abilities: IAbility[] = [
     abilityType: AbilityType.Utility,
     charges: {
       count: 2,
-      cooldown: 60
+      cooldown: 60,
     },
-    levelAcquired: 50
+    levelAcquired: 50,
   },
   {
     name: "Berserk",
@@ -152,14 +206,14 @@ const abilities: IAbility[] = [
       en: "Berserk",
       fr: "Berserk",
       cn: "狂暴",
-      ja: "バーサク"
+      ja: "バーサク",
     },
     cooldown: 60,
     requiresBossTarget: true,
     statuses: [statuses.berserk],
     xivDbId: "38",
     abilityType: AbilityType.SelfDamageBuff,
-    levelAcquired: 6
+    levelAcquired: 6,
   },
   {
     name: "Inner Release",
@@ -175,7 +229,7 @@ const abilities: IAbility[] = [
     statuses: [statuses.innerRelease],
     xivDbId: "7389",
     abilityType: AbilityType.SelfDamageBuff,
-    levelAcquired: 70
+    levelAcquired: 70,
   },
   {
     name: "Onslaught",
@@ -193,8 +247,8 @@ const abilities: IAbility[] = [
     levelAcquired: 62,
     charges: {
       count: 3,
-      cooldown: 30
-    }
+      cooldown: 30,
+    },
   },
   {
     name: "Upheaval",
@@ -210,7 +264,7 @@ const abilities: IAbility[] = [
     overlapStrategy: new SharedOverlapStrategy(["Orogeny"]),
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 64
+    levelAcquired: 64,
   },
   {
     name: "Orogeny",
@@ -226,7 +280,7 @@ const abilities: IAbility[] = [
     requiresBossTarget: true,
     overlapStrategy: new SharedOverlapStrategy(["Upheaval"]),
     abilityType: AbilityType.Damage,
-    levelAcquired: 86
+    levelAcquired: 86,
   },
   {
     name: "Vengeance",
@@ -242,7 +296,7 @@ const abilities: IAbility[] = [
     statuses: [statuses.vengence],
     relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },
     abilityType: AbilityType.SelfDefense,
-    levelAcquired: 38
+    levelAcquired: 38,
   },
   {
     name: "Holmgang",
@@ -259,7 +313,7 @@ const abilities: IAbility[] = [
     isUltimateSave: true,
     statuses: [statuses.holmgang],
     abilityType: AbilityType.SelfDefense,
-    levelAcquired: 42
+    levelAcquired: 42,
   },
   {
     name: "Shake It Off",
@@ -276,9 +330,9 @@ const abilities: IAbility[] = [
     statuses: [statuses.shakeItOff],
     relatedAbilities: {
       affects: ["Thrill of Battle", "Vengence", "Raw Intuition"],
-      parentOnly: true
+      parentOnly: true,
     },
-    levelAcquired: 68
+    levelAcquired: 68,
   },
   {
     name: "Thrill of Battle",
@@ -292,9 +346,9 @@ const abilities: IAbility[] = [
     cooldown: 90,
     xivDbId: "40",
     statuses: [statuses.thrillOfBattle],
-    abilityType: AbilityType.SelfDefense,
+    abilityType: AbilityType.SelfDefense | AbilityType.HealingBuff,
     relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },
-    levelAcquired: 30
+    levelAcquired: 30,
   },
   {
     name: "Raw Intuition",
@@ -310,7 +364,7 @@ const abilities: IAbility[] = [
     statuses: [statuses.rawIntuition],
     abilityType: AbilityType.SelfDefense,
     overlapStrategy: new SharedOverlapStrategy(["Nascent Flash"]),
-    levelAcquired: 56
+    levelAcquired: 56,
   },
   {
     name: "Bloodwhetting",
@@ -323,11 +377,15 @@ const abilities: IAbility[] = [
     },
     cooldown: 25,
     xivDbId: "25751",
-    statuses: [statuses.bloodwhetting, statuses.bloodwhettingStem, statuses.bloodwhettingTide], // todo: check to shield status
+    statuses: [
+      statuses.bloodwhetting,
+      statuses.bloodwhettingStem,
+      statuses.bloodwhettingTide,
+    ], // todo: check to shield status
     abilityType: AbilityType.SelfDefense,
     relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },
     overlapStrategy: new SharedOverlapStrategy(["Nascent Flash"]),
-    levelAcquired: 82
+    levelAcquired: 82,
   },
   {
     name: "Equilibrium",
@@ -341,7 +399,7 @@ const abilities: IAbility[] = [
     cooldown: 60,
     xivDbId: "3552",
     abilityType: AbilityType.Healing,
-    levelAcquired: 58
+    levelAcquired: 58,
   },
   {
     name: "Nascent Flash",
@@ -357,9 +415,12 @@ const abilities: IAbility[] = [
     statuses: [statuses.nascentFlashPre82],
     abilityType: AbilityType.TargetDefense,
     settings: [settings.target],
-    overlapStrategy: new SharedOverlapStrategy(["Bloodwhetting", "Raw Intuition"]),
+    overlapStrategy: new SharedOverlapStrategy([
+      "Bloodwhetting",
+      "Raw Intuition",
+    ]),
     levelAcquired: 76,
-    cantUseOnSelf: true
+    cantUseOnSelf: true,
   },
   medicine.Strength,
   ...getAbilitiesFrom(tankSharedAbilities),
@@ -369,23 +430,29 @@ const traits: ITrait[] = [
   {
     name: "Berserk Mastery",
     level: 70,
-    apply: abilityRemovedTrait("Berserk", 70)
+    apply: abilityRemovedTrait("Berserk", 70),
   },
   {
     name: "Raw Intuition Mastery",
     level: 82,
-    apply: abilityRemovedTrait("Raw Intuition", 82)
+    apply: abilityRemovedTrait("Raw Intuition", 82),
   },
   {
     name: "Enhanced Nascent Flash",
     level: 82,
-    apply: abilityTrait("Nascent Flash", ab =>
-      ab.statuses = [statuses.nascentFlash, statuses.nascentFlashStem, statuses.nascentFlashTide])
-  }
+    apply: abilityTrait(
+      "Nascent Flash",
+      (ab) =>
+        (ab.statuses = [
+          statuses.nascentFlash,
+          statuses.nascentFlashStem,
+          statuses.nascentFlashTide,
+        ])
+    ),
+  },
 ];
 
 export const WAR: IJobTemplate = {
-
   translation: {
     de: "KRG",
     ja: "WAR",
@@ -403,5 +470,5 @@ export const WAR: IJobTemplate = {
   },
   role: Role.Tank,
   abilities,
-  traits
+  traits,
 };

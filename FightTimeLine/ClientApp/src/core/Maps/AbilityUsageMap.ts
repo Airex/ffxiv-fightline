@@ -4,7 +4,7 @@ import { IMoveable, IForSidePanel } from "../Holders/BaseHolder";
 import { Utils } from "../Utils";
 import * as Models from "../Models";
 import { AbilityMap } from "./AbilityMap";
-import { calculateDuration } from "../Durations";
+import { calculateDuration } from "../Durations/functions";
 
 export interface IAbilityUsageMapData {
   start?: Date;
@@ -15,22 +15,29 @@ export interface IAbilityUsageMapData {
   warning?: boolean;
 }
 
-export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapData> implements IMoveable, IForSidePanel {
-
+export class AbilityUsageMap
+  extends BaseMap<string, DataItem, IAbilityUsageMapData>
+  implements IMoveable, IForSidePanel
+{
   constructor(
     presenter: Models.IPresenterData,
     id: string,
     ability: AbilityMap,
     settings: Models.ISettingData[],
-    data: IAbilityUsageMapData) {
+    data: IAbilityUsageMapData
+  ) {
     super(presenter, id);
     this.ability = ability;
     this.calculatedDuration = calculateDuration(ability.ability); // fix duration calculation
     this.settings = settings;
 
-    this.applyData(Object.assign({ ogcdAsPoints: false, loaded: false, showLoaded: false }, data));
+    this.applyData(
+      Object.assign(
+        { ogcdAsPoints: false, loaded: false, showLoaded: false },
+        data
+      )
+    );
   }
-
 
   get start(): Date {
     return this.item.start as Date;
@@ -59,6 +66,11 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
   get hasNote(): boolean {
     return !!this.getSettingData("note")?.value;
   }
+
+  get target(): string {
+    return this.getSettingData("target")?.value || this.ability.job.id;
+  }
+
   sidePanelComponentName = "ability";
 
   ability: AbilityMap;
@@ -70,24 +82,46 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
   }
 
   getSettingData(name: string): Models.ISettingData {
-    return this.settings && this.settings.find && this.settings.find(it => it.name === name);
+    return (
+      this.settings &&
+      this.settings.find &&
+      this.settings.find((it) => it.name === name)
+    );
   }
 
   getSetting(name: string): Models.IAbilitySetting {
-    return this.ability.ability.settings && this.ability.ability.settings.find(it => it.name === name);
+    return (
+      this.ability.ability.settings &&
+      this.ability.ability.settings.find((it) => it.name === name)
+    );
   }
 
-  checkCoversDate(date: Date): boolean {
-    return this.start <= date && new Date(this.startAsNumber + calculateDuration(this.ability.ability) * 1000) >= date;
+  checkCoversDate(date: Date, offset?: number): boolean {
+    return (
+      this.start <= date &&
+      new Date(
+        this.startAsNumber + (offset ?? calculateDuration(this.ability.ability) * 1000)
+      ) >= date
+    );
   }
 
-  createAbilityUsage(id: string, ability: AbilityMap, data: IAbilityUsageMapData): DataItem {
+  createAbilityUsage(
+    id: string,
+    ability: AbilityMap,
+    data: IAbilityUsageMapData
+  ): DataItem {
     const start = data.start;
     const cd = data.cooldown || ability.ability.cooldown;
     const duration = calculateDuration(ability.ability);
-    const end = new Date(start.valueOf() as number + Math.max(cd, duration) * 1000);
+    const end = new Date(
+      (start.valueOf() as number) + Math.max(cd, duration) * 1000
+    );
 
-    let title = `<div><img class='tooltipAbilityIcon' src='${ability.ability.icon}'/><span>${Utils.formatTime(start)} - ${Utils.formatTime(end)}</span><span></span></div>`;
+    let title = `<div><img class='tooltipAbilityIcon' src='${
+      ability.ability.icon
+    }'/><span>${Utils.formatTime(start)} - ${Utils.formatTime(
+      end
+    )}</span><span></span></div>`;
     const note = this.getSettingData("note");
     if (note && note.value) {
       title += `<div>${note.value}</div>`;
@@ -103,13 +137,16 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
       group: ability.id,
       className: this.buildClass({
         ability: true,
-        compact: ability.isCompact || ability.job.isCompact || this.presenter.view.compactView,
-        loaded: data.showLoaded && data.loaded
+        compact:
+          ability.isCompact ||
+          ability.job.isCompact ||
+          this.presenter.view.compactView,
+        loaded: data.showLoaded && data.loaded,
       }),
       content: "",
       subgroup: "sg" + ability.id,
       selectable: true,
-      type: ogcdPoint ? "point" : "range"
+      type: ogcdPoint ? "point" : "range",
     } as DataItem;
 
     (item as any).limitSize = false;
@@ -123,11 +160,42 @@ export class AbilityUsageMap extends BaseMap<string, DataItem, IAbilityUsageMapD
   }
 
   canMove(overlapData: IOverlapCheckData): boolean {
-    const doNotAllowResize = (overlapData.end.valueOf() - overlapData.start.valueOf()) === this.ability.ability.cooldown * 1000;
-    const diff = new Date(overlapData.globalStart.valueOf() - ((this.ability.ability.requiresBossTarget ? 0 : 1) * 30 * 1000));
+    const doNotAllowResize =
+      overlapData.end.valueOf() - overlapData.start.valueOf() ===
+      this.ability.ability.cooldown * 1000;
+    const diff = new Date(
+      overlapData.globalStart.valueOf() -
+        (this.ability.ability.requiresBossTarget ? 0 : 1) * 30 * 1000
+    );
     const windowStartCheck = overlapData.start >= diff;
-    const overlapCheck = this.ability.ability.overlapStrategy.check({ ...overlapData, ability: this.ability.ability });
+    const overlapCheck = this.ability.ability.overlapStrategy.check({
+      ...overlapData,
+      ability: this.ability.ability,
+    });
 
     return doNotAllowResize && windowStartCheck && !overlapCheck;
+  }
+
+  getActiveStatusesAtTime(
+    time: Date,
+    predicate?: (ab: AbilityMap, st: Models.IAbilityStatus) => boolean
+  ): Models.IStatusSnapshot[] {
+    const statuses = this.ability?.ability?.statuses;
+    const covers = (st: Models.IAbilityStatus) => {
+      const start = this.startAsNumber + (st.delay || 0) * 1000;
+      const end = start + (st.duration || 0) * 1000;
+      return start <= time.getTime() && end >= time.getTime();
+    };
+    const activeStatuses = statuses?.filter(
+      (st) => (!predicate || predicate(this.ability, st)) && covers(st)
+    );
+    return (
+      activeStatuses?.map((st) => ({
+        start: this.start,
+        source: this,
+        target: this.target,
+        status: st,
+      })) || []
+    );
   }
 }

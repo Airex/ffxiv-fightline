@@ -36,13 +36,10 @@ import { Utils, startOffsetConst } from "src/core/Utils";
 import { Location } from "@angular/common";
 import { SidepanelComponent } from "src/components/sidepanel/sidepanel.component";
 import {
-  Range,
   calculateAvailDefsForAttack,
   getAvailabilitiesForAbility,
   getTimeGoodAbilityToUse,
-  intersect,
-} from "src/core/Defensives";
-import { calculateDuration } from "src/core/Durations";
+} from "src/core/Defensives/functions";
 import { CdkDrag, CdkDropList } from "@angular/cdk/drag-drop";
 import { MoveCommand } from "src/core/commands/MoveCommand";
 

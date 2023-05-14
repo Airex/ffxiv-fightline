@@ -1,16 +1,12 @@
 import { DataItem } from "ngx-vis/ngx-vis";
 import { AbilityUsageMap } from "./Maps/AbilityUsageMap";
-import {
-  FramePart,
-  StatusPart,
-  buildEffects as buildStatuses,
-  calculateOffset,
-} from "./Durations";
 import { AbilityType, DamageType } from "./Models";
 import { BossAttackMap } from "./Maps";
 import { IdGenerator } from "./Generators";
 import { Holders } from "./Holders";
 import { IColorsSettings } from "src/services/SettingsService";
+import { buildEffects, calculateOffset } from "./Durations/functions";
+import { StatusPart } from "./Durations/types";
 
 type FrameData = { percentage: number; color: string; extraStyle?: string };
 
@@ -71,7 +67,7 @@ export function visibleFrameTemplate(
 
   const hasNote = usageMap.hasNote;
 
-  let frames = buildStatuses(holders, usageMap, offset);
+  let frames = buildEffects(holders, usageMap, offset);
 
   let shieldBreakAt = shieldBreakOnFirstAbilityAt(holders, usageMap, frames);
 

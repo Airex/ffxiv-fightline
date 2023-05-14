@@ -1,4 +1,4 @@
-import Effects from "src/core/Effects";
+import Effects from "src/core/Defensives/effects";
 import { SharedOverlapStrategy } from "src/core/Overlap";
 import { IJob, Role, AbilityType, IAbility, MapStatuses, IJobTemplate, ITrait } from "../../core/Models";
 import { getAbilitiesFrom, medicine, meleeSharedAbilities } from "./shared";

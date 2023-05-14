@@ -1,5 +1,5 @@
 import { byBuffRemove } from "src/core/AbilityDetectors";
-import Effects from "src/core/Effects";
+import Effects from "src/core/Defensives/effects";
 import { IAbility, AbilityType, DamageType, settings } from "../../core/Models";
 
 export type IAbilities = {

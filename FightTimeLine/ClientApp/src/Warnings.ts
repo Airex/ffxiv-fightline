@@ -1,4 +1,4 @@
-import { DefsCalcResultAbility, Warning } from "./core/Defensives";
+import { DefsCalcResultAbility, Warning } from "./core/Defensives/types";
 import { Utils } from "./core/Utils";
 
 export function cantUseOnSelfWarning(a: DefsCalcResultAbility) {

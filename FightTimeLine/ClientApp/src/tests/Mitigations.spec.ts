@@ -121,14 +121,55 @@ describe("Mitigations", () => {
     expect(result.mitigations[0].shield).toBe(0.173); // Assuming the Adloquium shield value is 0.134 * 1.2
   });
 
-  it("WHM Temperance does increase SCH Adloquium shield value", async () => {
+  it("WHM Temperance does not increase SCH Adloquium shield value", async () => {
     const result = play(
       job("SCH", wd(100), main(2300), det(2300)), // SCH with 100 WD, 2300 main stat, 2300 det
       jobs.WHM("0:03", "Temperance"), // WHM uses Temperance
-      jobs.SCH("0:05", "Adloquium"), // SCH casts Adloquium on himself
+      jobs.SCH("0:05", "Adloquium", target("WHM")), // SCH casts Adloquium on himself
       boss("0:10", "test", damage(120000), aoe) // Boss attacks
     ).mitigate("test"); // Check mitigation on the boss attack named "test"
 
-    expect(result.mitigations[0].shield).toBe(0.144); // Assuming the Adloquium shield value is 0.134 * 1.2
+    expect(result.mitigations[0].name).toBe("SCH");
+    expect(result.mitigations[1].name).toBe("WHM");
+    expect(result.mitigations[0].shield).toBe(0); // Assuming the Adloquium shield value is 0.134 * 1.2
+    expect(result.mitigations[1].shield).toBe(0.144);
+  });
+
+  it("WAR Thrill Of Battle increases SCH Adloquium shield value on WAR only", async () => {
+    const result = play(
+      job("SCH", wd(100), main(2300), det(2300)), // SCH with 100 WD, 2300 main stat, 2300 det
+      job("WAR", wd(100), main(2300), det(2300)), // DRK with 100 WD, 2300 main stat, 2300 det
+      job("DRK", wd(100), main(2300), det(2300)), // DRK with 100 WD, 2300 main stat, 2300 det
+      jobs.WAR("0:03", "Thrill of Battle"), // WAR uses Thrill Of Battle
+      jobs.SCH("0:05", "Adloquium", target("WAR")), // SCH casts Adloquium on WAR
+      boss("0:10", "test", damage(120000), aoe) // Boss attacks
+    ).mitigate("test"); // Check mitigation on the boss attack named "test"
+
+    console.debug(result.warnings);
+
+    expect(result.mitigations[0].name).toBe("SCH");
+    expect(result.mitigations[0].shield).toBe(0);
+    expect(result.mitigations[2].name).toBe("DRK");
+    expect(result.mitigations[2].shield).toBe(0);
+    expect(result.mitigations[1].name).toBe("WAR");
+    expect(result.mitigations[1].shield).toBeGreaterThan(0.091);
+  });
+
+  it("WAR Thrill Of Battle does increases SCH Adloquium shield value if removed with Shake it off", async () => {
+    const result = play(
+      job("SCH", wd(100), main(2300), det(2300)), // SCH with 100 WD, 2300 main stat, 2300 det
+      job("WAR", wd(100), main(2300), det(2300)), // DRK with 100 WD, 2300 main stat, 2300 det
+      jobs.WAR("0:03", "Thrill of Battle"), // WAR uses Thrill Of Battle
+      jobs.WAR("0:05", "Shake It Off"), // WAR uses Thrill Of Battle
+      jobs.SCH("0:07", "Adloquium", target("WAR")), // SCH casts Adloquium on WAR
+      boss("0:10", "test", damage(120000), aoe) // Boss attacks
+    ).mitigate("test"); // Check mitigation on the boss attack named "test"
+
+    console.debug(result.warnings);
+
+    expect(result.mitigations[0].name).toBe("SCH");
+    expect(result.mitigations[0].shield).toBe(0.17, "SCH shield");
+    expect(result.mitigations[1].name).toBe("WAR");
+    expect(result.mitigations[1].shield).toBe(0.28, "WAR shield");
   });
 });

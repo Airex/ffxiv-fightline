@@ -1,7 +1,7 @@
 import {
   calculateDefsForAttack,
   calculateMitigationForAttack,
-} from "../core/Defensives";
+} from "../core/Defensives/functions";
 
 import { Holders } from "../core/Holders";
 import { FightTimeLineController } from "../core/FightTimeLineController";

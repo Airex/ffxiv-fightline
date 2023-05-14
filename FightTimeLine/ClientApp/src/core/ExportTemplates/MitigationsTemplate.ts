@@ -1,5 +1,5 @@
 import { AttackRowExportTemplate, ExportTemplateContext } from "../BaseExportTemplate";
-import { calculateDefsForAttack, calculateMitigationForAttack } from "../Defensives";
+import { calculateDefsForAttack, calculateMitigationForAttack } from "../Defensives/functions";
 import { IExportCell, IExportColumn, ITableOptionSettings } from "../ExportModels";
 import { Holders } from "../Holders";
 import { BossAttackMap } from "../Maps";

@@ -1,4 +1,4 @@
-import Effects from "src/core/Effects";
+import Effects from "src/core/Defensives/effects";
 import { BaseOverlapStrategy, ChargesBasedOverlapStrategy, SharedOverlapStrategy } from "src/core/Overlap";
 import { Utils } from "src/core/Utils";
 import { DamageType, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate, ITrait, IOverlapStrategy, IOverlapCheckContext } from "../../core/Models";

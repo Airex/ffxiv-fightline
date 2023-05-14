@@ -1,4 +1,4 @@
-import Effects from "src/core/Effects";
+import Effects from "src/core/Defensives/effects";
 import { IJob, Role, AbilityType, IAbility, MapStatuses, IMitigator, MitigationVisitorContext, settings, IJobTemplate, ITrait } from "../../core/Models";
 import { getAbilitiesFrom, rangeSharedAbilities, medicine, toAbilities } from "./shared";
 import { abilityTrait } from "./traits";
@@ -8,8 +8,8 @@ class ImprovisationFinishModifier implements IMitigator {
 
   }
   apply(context: MitigationVisitorContext) {
-    const current = context.holders.itemUsages.get(context.abilityId);
-    const improvisation = context.holders.abilities.getByParentAndAbility(context.jobId, "Improvisation");
+    const current = context.holders.itemUsages.get(context.sourceAbilityId);
+    const improvisation = context.holders.abilities.getByParentAndAbility(context.sourceJobId, "Improvisation");
     const improvisations = context.holders.itemUsages.getByAbility(improvisation.id);
     const found = improvisations.filter(ab => ab.start < current.start).sort((a, b) => b.startAsNumber - a.startAsNumber)[0];
     if (found) {

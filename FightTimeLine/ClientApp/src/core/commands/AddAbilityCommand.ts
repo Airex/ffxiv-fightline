@@ -2,7 +2,7 @@ import { Command, ICommandExecutionContext, ICommandData } from "../UndoRedo";
 import { ISettingData, EntryType } from "../Models";
 import { Utils } from "../Utils";
 import { AbilityUsageMap, JobMap } from "../Maps/index";
-import { calculateDuration } from "../Durations";
+import { calculateDuration } from "../Durations/functions";
 
 
 export class AddAbilityCommand extends Command {

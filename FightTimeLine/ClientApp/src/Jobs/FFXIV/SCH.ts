@@ -1,4 +1,4 @@
-import Effects from "src/core/Effects";
+import Effects from "src/core/Defensives/effects";
 import {
   Role,
   AbilityType,
@@ -19,7 +19,7 @@ class DeploymentTacticsModifier implements IMitigator {
   constructor(private value: number) {}
   apply(context: MitigationVisitorContext) {
     // console.log("DT Modifier");
-    const original = context.holders.itemUsages.get(context.abilityId);
+    const original = context.holders.itemUsages.get(context.sourceAbilityId);
     const dtAbilityMap = context.holders.abilities.getByParentAndAbility(
       original.ability.job.id,
       "Deployment Tactics"
