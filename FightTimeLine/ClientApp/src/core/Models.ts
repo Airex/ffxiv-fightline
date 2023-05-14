@@ -242,7 +242,9 @@ export type MitigationVisitorContext = MitigationCalculateContext & {
   addHealIncreaseForTarget(value: number): void;
   addHealIncreaseForParty(value: number): void;
   addHealIncreaseForOwner(value: number): void;
+  addHealIncreaseForSelf(value: number): void;
   addHpIncreaseForOwner(value: number): void;
+  addHpIncreaseForTarget(value: number): void;
 };
 
 export type MitigationCalculateContext = {

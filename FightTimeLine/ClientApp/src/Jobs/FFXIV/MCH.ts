@@ -1,6 +1,5 @@
 import Effects from "src/core/Defensives/effects";
 import {
-  IJob,
   Role,
   AbilityType,
   MapStatuses,

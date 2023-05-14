@@ -72,6 +72,16 @@ class ShieldShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilit
   }
 }
 
+class HpIncreaseShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilityConsumedMitigationModifier {
+  constructor(private value: number) {
+    super();
+  }
+
+  mitigate(context: MitigationVisitorContext) {
+    context.addHpIncreaseForOwner(this.value);
+  }
+}
+
 class HealIncreaseShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilityConsumedMitigationModifier {
   constructor(private value: number) {
     super();
@@ -99,7 +109,7 @@ const statuses = MapStatuses({
   innerRelease: {
     duration: 15,
   },
-  vengence: {
+  vengeance: {
     duration: 15,
     effects: [
       Effects.mitigation
@@ -120,9 +130,9 @@ const statuses = MapStatuses({
   thrillOfBattle: {
     duration: 10,
     effects: [
-      Effects.shield
-        .solo(20)
-        .withModifier(ShieldShakeItOffAbilityConsumedMitigationModifier),
+      Effects.hpIncrease
+        .self(20)
+        .withModifier(HpIncreaseShakeItOffAbilityConsumedMitigationModifier),
       Effects.incomingHealingIncrease
         .solo(20)
         .withModifier(HealIncreaseShakeItOffAbilityConsumedMitigationModifier),
@@ -132,7 +142,7 @@ const statuses = MapStatuses({
     duration: 6,
     effects: [Effects.mitigation.solo(10)],
   },
-  bloodwhetting: {
+  bloodWhetting: {
     duration: 8,
     effects: [
       Effects.mitigation
@@ -140,7 +150,7 @@ const statuses = MapStatuses({
         .withModifier(MitigationShakeItOffAbilityConsumedMitigationModifier),
     ],
   },
-  bloodwhettingStem: {
+  bloodWhettingStem: {
     duration: 4,
     effects: [
       Effects.mitigation
@@ -148,7 +158,7 @@ const statuses = MapStatuses({
         .withModifier(MitigationShakeItOffAbilityConsumedMitigationModifier),
     ],
   },
-  bloodwhettingTide: {
+  bloodWhettingTide: {
     duration: 20,
     effects: [
       Effects.shieldFromHeal
@@ -293,7 +303,7 @@ const abilities: IAbility[] = [
     },
     cooldown: 120,
     xivDbId: "44",
-    statuses: [statuses.vengence],
+    statuses: [statuses.vengeance],
     relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },
     abilityType: AbilityType.SelfDefense,
     levelAcquired: 38,
@@ -378,9 +388,9 @@ const abilities: IAbility[] = [
     cooldown: 25,
     xivDbId: "25751",
     statuses: [
-      statuses.bloodwhetting,
-      statuses.bloodwhettingStem,
-      statuses.bloodwhettingTide,
+      statuses.bloodWhetting,
+      statuses.bloodWhettingStem,
+      statuses.bloodWhettingTide,
     ], // todo: check to shield status
     abilityType: AbilityType.SelfDefense,
     relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },

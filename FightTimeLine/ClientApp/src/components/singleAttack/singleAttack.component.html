@@ -73,6 +73,9 @@
           <th style="text-align: left">
             {{ "component.singleAttack.shield" | translate }}
           </th>
+          <th style="text-align: left" *ngIf="hasHpIncrease(defStats.mitigations)">
+            {{ "component.singleAttack.hpIncrease" | translate }}
+          </th>
         </tr>
         <tr *ngFor="let d of defStats.mitigations" class="">
           <td>
@@ -85,13 +88,14 @@
             {{ (d.mitigation * 100).toFixed() }}%
           </td>
           <td style="text-align: left">{{ (d.shield * 100).toFixed() }}%</td>
+          <td style="text-align: left" *ngIf="hasHpIncrease(defStats.mitigations)">{{ (d.hpIncrease * 100).toFixed() }}%</td>
         </tr>
         <tr *ngIf="defStats.warnings?.length">
           <td colspan="3">
-            <div style="margin-top: 3px;">Warnings:</div>
+            <div style="margin-top: 3px">Warnings:</div>
             <div *ngFor="let w of defStats.warnings">
               <img *ngIf="w.icon" class="abilityIcon" [src]="w.icon" />
-              {{w.message}}
+              {{ w.message }}
             </div>
           </td>
         </tr>

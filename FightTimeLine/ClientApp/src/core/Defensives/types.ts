@@ -14,6 +14,7 @@ export type MitigationForAttack = {
   id: string;
   mitigation: number;
   shield: number;
+  hpIncrease: number;
   icon: string;
 };
 
