@@ -1,6 +1,7 @@
 import {
   calculateDefsForAttack,
   calculateMitigationForAttack,
+  getTimeGoodAbilityToUse,
 } from "../core/Defensives/functions";
 
 import { Holders } from "../core/Holders";
@@ -20,6 +21,7 @@ import { FFXIVGameService } from "../services/game-ffxiv.service";
 import { PresenterManager } from "../core/PresentationManager";
 import { LocalStorageService } from "../services/LocalStorageService";
 import { SettingsService } from "../services/SettingsService";
+import { Utils } from "src/core/Utils";
 
 type BossPlayData = {
   name?: string;
@@ -125,6 +127,16 @@ function playRaw(data: PlayData) {
       const defs = calculateDefsForAttack(holders, atk.id);
       const result = calculateMitigationForAttack(holders, defs);
       return result;
+    },
+    getGoodTimeForAbility(job: string, ability: string, name: string) {
+      const atk = holders.bossAttacks.getByName(name)[0];
+      const abilityMap = holders.abilities.getByParentAndAbility(job, ability);
+      const time = getTimeGoodAbilityToUse(
+        holders,
+        abilityMap,
+        atk
+      );
+      return Utils.formatTime(time);
     },
   };
 }

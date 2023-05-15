@@ -238,7 +238,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
       const attack = this.visStorage.holders.bossAttacks.get(attackId);
       const at = getTimeGoodAbilityToUse(
         this.visStorage.holders,
-        this.startDate,
         abilityMap,
         attack
       );
@@ -423,7 +422,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
     const u = this.visStorage.holders.itemUsages.get(id);
     const p = getAvailabilitiesForAbility(
       this.visStorage.holders,
-      this.startDate,
       id
     )(u.ability);
     const ids = this.set.rows
@@ -506,7 +504,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
           const at = getTimeGoodAbilityToUse(
             this.visStorage.holders,
-            this.startDate,
             u.ability,
             att,
             itemId

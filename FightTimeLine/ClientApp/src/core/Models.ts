@@ -232,6 +232,10 @@ export interface IMitigator {
   apply(context: MitigationVisitorContext): void;
 }
 
+export interface IMitigatorOverride {
+  apply(context: MitigationVisitorContext, original: IMitigator): void;
+}
+
 export type MitigationVisitorContext = MitigationCalculateContext & {
   addMitigationForTarget(value: number, damageType: DamageType): void;
   addMitigationForParty(value: number, damageType: DamageType): void;

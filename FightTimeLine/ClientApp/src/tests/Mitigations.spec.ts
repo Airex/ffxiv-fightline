@@ -109,7 +109,6 @@ describe("Mitigations", () => {
     }
   });
 
-
   it("MNK Mantra increases SCH Adloquium shield value", async () => {
     const result = play(
       job("SCH", wd(100), main(2300), det(2300)), // SCH with 100 WD, 2300 main stat, 2300 det
@@ -145,17 +144,16 @@ describe("Mitigations", () => {
       boss("0:10", "test", damage(120000), aoe) // Boss attacks
     ).mitigate("test"); // Check mitigation on the boss attack named "test"
 
-    console.debug(result.warnings);
-
     expect(result.mitigations[0].name).toBe("SCH");
     expect(result.mitigations[0].shield).toBe(0);
     expect(result.mitigations[2].name).toBe("DRK");
     expect(result.mitigations[2].shield).toBe(0);
     expect(result.mitigations[1].name).toBe("WAR");
     expect(result.mitigations[1].shield).toBeGreaterThan(0.091);
+    expect(result.mitigations[1].hpIncrease).toBe(0.2);
   });
 
-  it("WAR Thrill Of Battle does increases SCH Adloquium shield value if removed with Shake it off", async () => {
+  it("WAR Thrill Of Battle does not increases SCH Adloquium shield value if removed with Shake it off", async () => {
     const result = play(
       job("SCH", wd(100), main(2300), det(2300)), // SCH with 100 WD, 2300 main stat, 2300 det
       job("WAR", wd(100), main(2300), det(2300)), // DRK with 100 WD, 2300 main stat, 2300 det
@@ -171,5 +169,35 @@ describe("Mitigations", () => {
     expect(result.mitigations[0].shield).toBe(0.17, "SCH shield");
     expect(result.mitigations[1].name).toBe("WAR");
     expect(result.mitigations[1].shield).toBe(0.28, "WAR shield");
+    expect(result.mitigations[1].hpIncrease).toBe(0, "WAR hpIncrease");
+  });
+
+  it("System should use correct time to suggest ability", async () => {
+    const result = play(
+      job("WAR", wd(100), main(2300), det(2300)), // WAR with 100 WD, 2300 main stat, 2300 det
+      boss("02:58", "test", damage(120000), aoe) // Boss attacks
+    ).getGoodTimeForAbility("WAR", "Bloodwhetting", "test");
+
+    expect(result).toBe("02:56");
+  });
+
+  it("System should use correct time to suggest ability when other ability used after", async () => {
+    const result = play(
+      job("WAR", wd(100), main(2300), det(2300)), // WAR with 100 WD, 2300 main stat, 2300 det
+      jobs.WAR("03:17", "Bloodwhetting"), // WAR uses Thrill Of Battle
+      boss("02:58", "test", damage(120000), aoe) // Boss attacks
+    ).getGoodTimeForAbility("WAR", "Bloodwhetting", "test");
+
+    expect(result).toBe("02:52");
+  });
+
+  it("System should use correct time to suggest ability when other ability used before", async () => {
+    const result = play(
+      job("WAR", wd(100), main(2300), det(2300)), // WAR with 100 WD, 2300 main stat, 2300 det
+      jobs.WAR("02:32", "Bloodwhetting"), // WAR uses Thrill Of Battle
+      boss("02:58", "test", damage(120000), aoe) // Boss attacks
+    ).getGoodTimeForAbility("WAR", "Bloodwhetting", "test");
+
+    expect(result).toBe("02:57");
   });
 });
