@@ -3,6 +3,7 @@ import {
   IAbilityEffect,
   IEffectVisitor,
   IMitigator,
+  IMitigatorOverride,
   MitigationCalculateContext,
   MitigationVisitorContext,
 } from "../Models";
@@ -28,7 +29,7 @@ class MitigationEffect implements IAbilityEffect, IMitigator {
     private targetType: AbilityTarget = AbilityTarget.Solo
   ) {}
 
-  private modifier: IMitigator;
+  private modifier: IMitigatorOverride;
   apply(context: MitigationVisitorContext) {
     switch (this.targetType) {
       case AbilityTarget.Party:
@@ -40,10 +41,13 @@ class MitigationEffect implements IAbilityEffect, IMitigator {
     }
   }
   visit(visitor: IEffectVisitor, targetContext: MitigationCalculateContext) {
-    visitor.accept(this.modifier || this, targetContext);
+    visitor.accept(
+      new MitigatorWithOverride(this.modifier, this),
+      targetContext
+    );
   }
 
-  withModifier<T extends IMitigator>(
+  withModifier<T extends IMitigatorOverride>(
     t: new (value: number, damageType: DamageType) => T
   ): this {
     this.modifier = new t(this.value, this.damageType);
@@ -57,7 +61,7 @@ class ShieldEffect implements IAbilityEffect, IMitigator {
     private targetType: AbilityTarget = AbilityTarget.Solo
   ) {}
 
-  private modifier: IMitigator;
+  private modifier: IMitigatorOverride;
 
   apply(context: MitigationVisitorContext) {
     switch (this.targetType) {
@@ -70,13 +74,18 @@ class ShieldEffect implements IAbilityEffect, IMitigator {
     }
   }
 
-  withModifier<T extends IMitigator>(t: new (value: number) => T): this {
+  withModifier<T extends IMitigatorOverride>(
+    t: new (value: number) => T
+  ): this {
     this.modifier = new t(this.value);
     return this;
   }
 
   visit(visitor: IEffectVisitor, targetContext: MitigationCalculateContext) {
-    visitor.accept(this.modifier || this, targetContext);
+    visitor.accept(
+      new MitigatorWithOverride(this.modifier, this),
+      targetContext
+    );
   }
 }
 
@@ -86,7 +95,7 @@ class ShieldFromHealEffect implements IAbilityEffect, IMitigator {
     private targetType: AbilityTarget = AbilityTarget.Solo
   ) {}
 
-  private modifier: IMitigator;
+  private modifier: IMitigatorOverride;
 
   apply(context: MitigationVisitorContext) {
     switch (this.targetType) {
@@ -99,13 +108,18 @@ class ShieldFromHealEffect implements IAbilityEffect, IMitigator {
     }
   }
 
-  withModifier<T extends IMitigator>(t: new (value: number) => T): this {
+  withModifier<T extends IMitigatorOverride>(
+    t: new (value: number) => T
+  ): this {
     this.modifier = new t(this.value);
     return this;
   }
 
   visit(visitor: IEffectVisitor, targetContext: MitigationCalculateContext) {
-    visitor.accept(this.modifier || this, targetContext);
+    visitor.accept(
+      new MitigatorWithOverride(this.modifier, this),
+      targetContext
+    );
   }
 }
 
@@ -115,7 +129,7 @@ class HealingIncreaseEffect implements IAbilityEffect, IMitigator {
     private targetType: AbilityTarget = AbilityTarget.Solo
   ) {}
 
-  private modifier: IMitigator;
+  private modifier: IMitigatorOverride;
 
   apply(context: MitigationVisitorContext): void {
     switch (this.targetType) {
@@ -134,13 +148,18 @@ class HealingIncreaseEffect implements IAbilityEffect, IMitigator {
     }
   }
 
-  withModifier<T extends IMitigator>(t: new (value: number) => T): this {
+  withModifier<T extends IMitigatorOverride>(
+    t: new (value: number) => T
+  ): this {
     this.modifier = new t(this.value);
     return this;
   }
 
   visit(visitor: IEffectVisitor, targetContext: MitigationCalculateContext) {
-    visitor.accept(this.modifier || this, targetContext);
+    visitor.accept(
+      new MitigatorWithOverride(this.modifier, this),
+      targetContext
+    );
   }
 }
 
@@ -152,7 +171,7 @@ class DelayEffect implements IAbilityEffect {
 }
 
 class HpIncreaseEffect implements IAbilityEffect, IMitigator {
-  private modifier: IMitigator;
+  private modifier: IMitigatorOverride;
   constructor(private value: number, private target: AbilityTarget) {}
   apply(context: MitigationVisitorContext): void {
     switch (this.target) {
@@ -166,13 +185,30 @@ class HpIncreaseEffect implements IAbilityEffect, IMitigator {
         break;
     }
   }
-  withModifier<T extends IMitigator>(t: new (value: number) => T): this {
+
+  withModifier<T extends IMitigatorOverride>(
+    t: new (value: number) => T
+  ): this {
     this.modifier = new t(this.value);
     return this;
   }
 
   visit(visitor: IEffectVisitor, targetContext: MitigationCalculateContext) {
-    visitor.accept(this.modifier || this, targetContext);
+    visitor.accept(
+      new MitigatorWithOverride(this.modifier, this),
+      targetContext
+    );
+  }
+}
+
+class MitigatorWithOverride implements IMitigator {
+  constructor(private ovr: IMitigatorOverride, private original: IMitigator) {}
+  apply(context: MitigationVisitorContext): void {
+    if (this.ovr) {
+      this.ovr.apply(context, this.original);
+    } else {
+      this.original.apply(context);
+    }
   }
 }
 

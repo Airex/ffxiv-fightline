@@ -7,25 +7,28 @@ import {
   IAbilityAvailabilityMapData,
   JobMap,
 } from "../Maps";
-import {
-  SettingsEnum,
-  Role,
-  MitigationCalculateContext,
-} from "../Models";
-import { Utils } from "../Utils";
+import { SettingsEnum, Role, MitigationCalculateContext } from "../Models";
+import { Utils, startOffsetConst } from "../Utils";
 import {
   cantUseOnSelfWarning,
   deathWarning,
   duplicateMitigationWarning,
 } from "src/Warnings";
-import { DefsCalcResult, DefsCalcResultAbility, MitigationsResult, Warning, MitigationForAttack, Range, intersect } from "./types";
+import {
+  DefsCalcResult,
+  DefsCalcResultAbility,
+  MitigationsResult,
+  Warning,
+  MitigationForAttack,
+  Range,
+  intersect,
+} from "./types";
 import { MitigationVisitor } from "./visitors";
-import { calculateDuration } from "../Durations/functions";
+import { calculateDuration, getDurations } from "../Durations/functions";
 
 export const getAvailabilitiesForAbility =
   (
     holders: Holders,
-    startDate: Date,
     exceptId: string | undefined = undefined
   ) =>
   (it: AbilityMap) => {
@@ -34,7 +37,7 @@ export const getAvailabilitiesForAbility =
     }
     if (!it.ability.charges) {
       const deps = it.ability.overlapStrategy.getDependencies();
-      return processStandardAbility(holders, startDate)(it, deps, exceptId);
+      return processStandardAbility(holders)(it, deps, exceptId);
     } else {
       return processChargesAbility(holders)(it);
     }
@@ -114,10 +117,10 @@ const getDependencies = (holders: Holders) => (deps: string[], job: JobMap) => {
 };
 
 export const processStandardAbility =
-  (holders: Holders, startDate: Date) =>
+  (holders: Holders) =>
   (it: AbilityMap, deps: string[], exceptId?: string) => {
     const end =
-      startDate.valueOf() +
+      startOffsetConst +
       30 * 60 * 1000 +
       it.ability.cooldown * 1000 +
       calculateDuration(it.ability) * 1000;
@@ -135,7 +138,7 @@ export const processStandardAbility =
       return;
     }
 
-    const minus30 = new Date((startDate.valueOf() as number) - 30 * 1000);
+    const minus30 = new Date((startOffsetConst) - 30 * 1000);
 
     let prev: AbilityUsageMap = null;
     const maps = usages
@@ -144,7 +147,7 @@ export const processStandardAbility =
           prev && prev.end
             ? prev.end
             : it.ability.requiresBossTarget
-            ? startDate
+            ? startOffsetConst
             : minus30;
         const diff = (c.startAsNumber - (start.valueOf() as number)) / 1000;
         const av = diff > it.ability.cooldown;
@@ -236,7 +239,6 @@ export function calculateAvailDefsForAttack(
   const intersected = defAbilities.filter((it) => {
     const availableRanges = getAvailabilitiesForAbility(
       holders,
-      new Date(946677600000),
       exceptId
     )(it);
     const duration = calculateDuration(it.ability);
@@ -283,28 +285,43 @@ export function calculateAvailDefsForAttack(
 
 export function getTimeGoodAbilityToUse(
   holders: Holders,
-  startDate: Date,
   abilityMap: AbilityMap,
   attack: BossAttackMap,
   exceptId: string = null
 ) {
   const availableRanges = getAvailabilitiesForAbility(
     holders,
-    startDate,
     exceptId
   )(abilityMap);
-  const duration = calculateDuration(abilityMap.ability);
-  const minAttack = new Date(attack.startAsNumber - duration * 1000);
+  const prevAttackAt = holders.bossAttacks
+    .filter((x) => x.start < attack.start)
+    .sort((a, b) => b.startAsNumber - a.startAsNumber)[0]?.startAsNumber;
   const maxAttack = new Date(attack.startAsNumber);
-  const targetRange = { start: minAttack, end: maxAttack };
-  const firstIntersected = availableRanges
-    ?.map((r) => intersect(r.data as Range, targetRange))
-    .filter(Boolean)[0];
 
-  const at = firstIntersected?.start || minAttack;
-  return at;
+  const calculate = (f: boolean) => (d: number) => {
+    const minAttack = new Date(
+      Math.max(prevAttackAt + 1 || 0, attack.startAsNumber - d * 1000 + 2000)
+    );
+
+    const targetRange = { start: minAttack, end: maxAttack };
+    const firstIntersected = availableRanges
+      ?.map((r) => intersect(r.data as Range, targetRange))
+      .filter(Boolean)[0];
+
+    const at = firstIntersected?.start || (f ? minAttack : undefined);
+    return at;
+  };
+
+  return getDurations(abilityMap.ability)
+    .map(calculate(!availableRanges))
+    .find((el) => el !== undefined);
+
+  // const at =
+  //   calculate(calculateMinDuration(abilityMap.ability), false) ||
+  //   calculate(calculateDuration(abilityMap.ability), true);
+
+  // return at;
 }
-
 
 export function calculateMitigationForAttack(
   holders: Holders,
@@ -418,7 +435,8 @@ export function calculateMitigationForAttack(
     }
 
     const hpLeft =
-      hp* (m.hpIncrease + 1) * (m.shield + 1) - attack.damageValue * (1 - m.mitigation); // calculate hp left after attack
+      hp * (m.hpIncrease + 1) * (m.shield + 1) -
+      attack.damageValue * (1 - m.mitigation); // calculate hp left after attack
     if (hpLeft <= 0) {
       const overkill = Math.abs(hpLeft).toFixed(0);
       const overkillPercent = Math.abs((hpLeft / hp) * 100).toFixed(0);
@@ -431,5 +449,3 @@ export function calculateMitigationForAttack(
     warnings,
   };
 }
-export { Warning };
-

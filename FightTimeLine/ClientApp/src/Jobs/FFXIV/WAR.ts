@@ -10,7 +10,7 @@ import {
   settings,
   IJobTemplate,
   ITrait,
-  DamageType,
+  IMitigatorOverride,
 } from "../../core/Models";
 import { getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
 import { abilityRemovedTrait, abilityTrait } from "./traits";
@@ -40,11 +40,9 @@ class ShakeItOffMitigationModifier implements IMitigator {
   }
 }
 
-abstract class ShakeItOffAbilityConsumedMitigationModifier
-  implements IMitigator
-{
-  apply(context: MitigationVisitorContext) {
-    const original = context.holders.itemUsages.get(context.sourceAbilityId);
+class ShakeItOffAbilityConsumedModifier implements IMitigatorOverride {
+  apply(context: MitigationVisitorContext, original: IMitigator) {
+    const orig = context.holders.itemUsages.get(context.sourceAbilityId);
     const ab = context.holders.abilities.getByParentAndAbility(
       context.sourceJobId,
       "Shake It Off"
@@ -53,52 +51,14 @@ abstract class ShakeItOffAbilityConsumedMitigationModifier
       ab &&
       context.holders.itemUsages
         .getByAbility(ab.id)
-        .filter((abc) => original.checkCoversDate(abc.start));
+        .filter((abc) => orig.checkCoversDate(abc.start));
     if (!found || found.length === 0 || found[0].start >= context.attackAt) {
-      this.mitigate(context);
+      this.mitigate(context, original);
     }
   }
 
-  abstract mitigate(context: MitigationVisitorContext): void;
-}
-
-class ShieldShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilityConsumedMitigationModifier {
-  constructor(private value: number) {
-    super();
-  }
-
-  mitigate(context: MitigationVisitorContext) {
-    context.addAbsorbFromAbilityForTarget(this.value);
-  }
-}
-
-class HpIncreaseShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilityConsumedMitigationModifier {
-  constructor(private value: number) {
-    super();
-  }
-
-  mitigate(context: MitigationVisitorContext) {
-    context.addHpIncreaseForOwner(this.value);
-  }
-}
-
-class HealIncreaseShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilityConsumedMitigationModifier {
-  constructor(private value: number) {
-    super();
-  }
-
-  mitigate(context: MitigationVisitorContext) {
-    context.addHealIncreaseForOwner(this.value);
-  }
-}
-
-class MitigationShakeItOffAbilityConsumedMitigationModifier extends ShakeItOffAbilityConsumedMitigationModifier {
-  constructor(private value: number, private damageType: DamageType) {
-    super();
-  }
-
-  mitigate(context: MitigationVisitorContext) {
-    context.addMitigationForTarget(this.value, this.damageType);
+  mitigate(context: MitigationVisitorContext, original: IMitigator): void {
+    original.apply(context);
   }
 }
 
@@ -114,7 +74,7 @@ const statuses = MapStatuses({
     effects: [
       Effects.mitigation
         .solo(30)
-        .withModifier(MitigationShakeItOffAbilityConsumedMitigationModifier),
+        .withModifier(ShakeItOffAbilityConsumedModifier),
     ],
   },
   holmgang: {
@@ -132,10 +92,10 @@ const statuses = MapStatuses({
     effects: [
       Effects.hpIncrease
         .self(20)
-        .withModifier(HpIncreaseShakeItOffAbilityConsumedMitigationModifier),
+        .withModifier(ShakeItOffAbilityConsumedModifier),
       Effects.incomingHealingIncrease
         .solo(20)
-        .withModifier(HealIncreaseShakeItOffAbilityConsumedMitigationModifier),
+        .withModifier(ShakeItOffAbilityConsumedModifier),
     ],
   },
   rawIntuition: {
@@ -147,7 +107,7 @@ const statuses = MapStatuses({
     effects: [
       Effects.mitigation
         .solo(10)
-        .withModifier(MitigationShakeItOffAbilityConsumedMitigationModifier),
+        .withModifier(ShakeItOffAbilityConsumedModifier),
     ],
   },
   bloodWhettingStem: {
@@ -155,7 +115,7 @@ const statuses = MapStatuses({
     effects: [
       Effects.mitigation
         .solo(10)
-        .withModifier(MitigationShakeItOffAbilityConsumedMitigationModifier),
+        .withModifier(ShakeItOffAbilityConsumedModifier),
     ],
   },
   bloodWhettingTide: {
@@ -163,7 +123,7 @@ const statuses = MapStatuses({
     effects: [
       Effects.shieldFromHeal
         .solo(100)
-        .withModifier(ShieldShakeItOffAbilityConsumedMitigationModifier),
+        .withModifier(ShakeItOffAbilityConsumedModifier),
     ],
     potency: 400,
   },

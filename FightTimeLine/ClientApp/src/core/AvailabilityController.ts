@@ -23,7 +23,7 @@ export class AvailabilityController {
     if (showAbilityAvailablity) {
       const maps = this.holders.abilities
         .getAll()
-        .map(getAvailabilitiesForAbility(this.holders, this.startDate));
+        .map(getAvailabilitiesForAbility(this.holders));
 
       this.holders.abilityAvailability.clear();
       const items = _.flatten(maps).map(
@@ -52,7 +52,7 @@ export class AvailabilityController {
         this.holders.abilityAvailability.removeForAbility(element.id);
       });
       const abis = maps.map(
-        getAvailabilitiesForAbility(this.holders, this.startDate)
+        getAvailabilitiesForAbility(this.holders)
       );
       const items = _.flatten(abis).map(
         (a: { it: AbilityMap; data: IAbilityAvailabilityMapData }) =>

@@ -26,6 +26,10 @@ export function calculateDuration(ability: IAbility): number {
   );
 }
 
+export function getDurations(ability: IAbility): number[] {
+  return ability.statuses?.map((x) => x.duration).sort((a,b) => a - b);
+}
+
 export function buildEffects(
   holders: Holders,
   item: AbilityUsageMap,

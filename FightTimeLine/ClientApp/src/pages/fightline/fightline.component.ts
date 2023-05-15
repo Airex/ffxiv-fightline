@@ -1132,7 +1132,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
       const attack = this.visStorage.holders.bossAttacks.get(attackId);
       const at = getTimeGoodAbilityToUse(
         this.visStorage.holders,
-        this.startDate,
         abilityMap,
         attack
       );
