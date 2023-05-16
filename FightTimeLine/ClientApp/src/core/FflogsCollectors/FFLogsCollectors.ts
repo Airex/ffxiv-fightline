@@ -60,7 +60,7 @@ export class AbilityUsagesCollector extends BaseCollector {
 
     const foundJob = this.context.parser.players.find(
       (it1) =>
-        it1.petids.some((it2: any) => it2 === data.sourceID) ||
+        it1.petids.some((it2) => it2 === data.sourceID) ||
         it1.id === data.sourceID
     );
     if (!foundJob) {
@@ -141,11 +141,7 @@ export class BossAttacksCollector extends BaseCollector {
     const time = Math.trunc(data.timestamp / 1000);
     const key = `${data.ability.name}_${data.type}_${time}`;
 
-    let g = this.bossAttacks[key];
-    if (!g) {
-      this.bossAttacks[key] = [];
-      g = this.bossAttacks[key];
-    }
+    let g = this.bossAttacks[key] || (this.bossAttacks[key] = []);
     g.push(data);
   }
 

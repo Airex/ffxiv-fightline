@@ -180,7 +180,9 @@ describe("Mitigations", () => {
 
     expect(result).toBe("02:56");
   });
+});
 
+describe("Ability placement in availability zone", () => {
   it("System should use correct time to suggest ability when other ability used after", async () => {
     const result = play(
       job("WAR", wd(100), main(2300), det(2300)), // WAR with 100 WD, 2300 main stat, 2300 det

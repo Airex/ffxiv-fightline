@@ -45,6 +45,9 @@ export class AbilityTypeVisitor implements IEffectVisitor {
       addHpIncreaseForTarget(value) {
         // self.type = AbilityType.HealingBuff;
       },
+      addHpIncreaseForParty(value) {
+
+      },
     });
   }
 }
