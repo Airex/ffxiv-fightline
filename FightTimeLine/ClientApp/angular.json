@@ -45,6 +45,10 @@
                 "glob": "**/ng-zorro-antd.dark.css",
                 "input": "./node_modules/ng-zorro-antd/",
                 "output": "/assets/"
+              }, {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
               }
             ],
             "styles": [
@@ -61,7 +65,7 @@
             ],
             "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
+            "buildOptimizer": true,
             "sourceMap": true,
             "optimization": false,
             "namedChunks": true
