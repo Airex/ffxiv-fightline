@@ -38,7 +38,7 @@
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "ng-zorro-antd": "^15.1.0",
-    "ngx-captcha": "^8.0.1",
+    "ngx-captcha": "^13.0.0",
     "ngx-clipboard": "13.0.0",
     "ngx-color-picker": "9.1.0",
     "ngx-progressbar": "^8.0.0",
