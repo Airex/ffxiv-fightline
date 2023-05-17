@@ -37,18 +37,24 @@
               "src/assets",
               "src/assets/i18n",
               {
-                "glob": "**/*",
-                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
-                "output": "/assets/"
-              },
-              {
                 "glob": "**/ng-zorro-antd.dark.css",
                 "input": "./node_modules/ng-zorro-antd/",
                 "output": "/assets/"
-              }, {
+              },
+              {
                 "glob": "**/*",
-                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
-                "output": "/assets/"
+                "input": "./node_modules/@ant-design/icons-svg/inline-svg/filled",
+                "output": "/assets/filled"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-svg/inline-svg/outlined",
+                "output": "/assets/outline"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-svg/inline-svg/twotone",
+                "output": "/assets/twotone"
               }
             ],
             "styles": [
