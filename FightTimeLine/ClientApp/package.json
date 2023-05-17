@@ -41,7 +41,7 @@
     "ngx-captcha": "^13.0.0",
     "ngx-clipboard": "13.0.0",
     "ngx-color-picker": "9.1.0",
-    "ngx-progressbar": "^8.0.0",
+    "ngx-progressbar": "^9.0.0",
     "ngx-vis": "3.1.2-build1683917720",
     "propagating-hammerjs": "^1.5.0",
     "rxjs": "^6.6.7",
