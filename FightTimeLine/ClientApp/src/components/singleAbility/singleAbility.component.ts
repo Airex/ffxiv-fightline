@@ -1,5 +1,5 @@
 import { Component, OnDestroy, Inject } from "@angular/core";
-import { FormGroup, FormControl } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl } from "@angular/forms";
 import * as M from "../../core/Models";
 import { Utils } from "../../core/Utils";
 import { DomSanitizer } from "@angular/platform-browser";
@@ -19,7 +19,7 @@ import { TranslateService } from "@ngx-translate/core";
 })
 export class SingleAbilityComponent implements  OnDestroy, ISidePanelComponent {
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   description: any;
   ptyMemUsages: any[];
   jobs;
@@ -52,12 +52,12 @@ export class SingleAbilityComponent implements  OnDestroy, ISidePanelComponent {
     if (this.it.ability.ability.settings) {
       for (const d of this.it.ability.ability.settings) {
         const value = this.it.getSettingData(d.name);
-        groups[d.name] = new FormControl(value ? value.value : d.default);
+        groups[d.name] = new UntypedFormControl(value ? value.value : d.default);
       }
       this.jobs = this.visStorage.holders.jobs.getAll();
     }
 
-    this.form = new FormGroup(groups);
+    this.form = new UntypedFormGroup(groups);
 
     this.sub = this.data.refresh.subscribe(() => {
       this.refresh();

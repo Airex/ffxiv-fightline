@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild, Inject } from "@angular/core";
 import { SyncSettingsComponent } from "./syncSettings/syncSettings.component";
 import { SyncDowntimeComponent } from "./syncDowntime/syncDowntime.component";
-import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from "@angular/forms";
 import { IBossAbility } from "../../core/Models";
 import { time } from "../../heplers/TimeValidator";
 import { gameServiceToken } from "../../services/game.service-provider";
@@ -19,7 +19,7 @@ export class BossAttackDialog implements OnInit {
   @Input() data: IBossAbility;
   @ViewChild("syncSettings") syncSettings: SyncSettingsComponent;
   @ViewChild("syncDowntime") syncDowntime: SyncDowntimeComponent;
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
   submitted = false;
   newAttack = true;
   settings: any;
@@ -31,7 +31,7 @@ export class BossAttackDialog implements OnInit {
 
   constructor(
     private visStorage: VisStorageService,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     @Inject(gameServiceToken)
     public gameService: IGameService,
     public dialogRef: NzModalRef) {
@@ -41,14 +41,14 @@ export class BossAttackDialog implements OnInit {
     this.newAttack = !this.data.name;
     this.defaultTags = this.visStorage.presenter.activeTags.filter(t => t.text !==  "Other");
     this.editForm = this.formBuilder.group({
-      bossAttackName: new FormControl(this.data.name, Validators.required),
-      damageType: new FormControl(this.data.type || 0, Validators.required),
-      bossAttackTime: new FormControl(this.data.offset, Validators.required),
-      bossAttackSource: new FormControl(this.data.source),
-      description: new FormControl(this.data.description),
-      tags: new FormControl(this.data.tags),
-      rawDamage: new FormControl(this.data.rawDamage),
-      color: new FormControl(this.data.color)
+      bossAttackName: new UntypedFormControl(this.data.name, Validators.required),
+      damageType: new UntypedFormControl(this.data.type || 0, Validators.required),
+      bossAttackTime: new UntypedFormControl(this.data.offset, Validators.required),
+      bossAttackSource: new UntypedFormControl(this.data.source),
+      description: new UntypedFormControl(this.data.description),
+      tags: new UntypedFormControl(this.data.tags),
+      rawDamage: new UntypedFormControl(this.data.rawDamage),
+      color: new UntypedFormControl(this.data.color)
     }, {
         validator: time('bossAttackTime')
       });

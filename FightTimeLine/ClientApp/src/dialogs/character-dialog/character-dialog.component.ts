@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { IJobStats } from 'src/core/Models';
 import { IGameService } from 'src/services/game.service-interface';
@@ -13,11 +13,11 @@ import { gameServiceToken } from 'src/services/game.service-provider';
 export class CharacterDialogComponent implements OnInit {
 
   @Input() data: IJobStats;
-  editForm: FormGroup;
+  editForm: UntypedFormGroup;
   submitted = false;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     @Inject(gameServiceToken)
     public gameService: IGameService,
     public dialogRef: NzModalRef
@@ -27,13 +27,13 @@ export class CharacterDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.editForm = this.formBuilder.group({
-      weaponDamage: new FormControl(this.data.weaponDamage),
-      tenacity: new FormControl(this.data.tenacity),
-      attackMagicPotency: new FormControl(this.data.attackMagicPotency),
-      criticalHit: new FormControl(this.data.criticalHit),
-      determination: new FormControl(this.data.determination),
-      directHit: new FormControl(this.data.directHit),
-      hp: new FormControl(this.data.hp)
+      weaponDamage: new UntypedFormControl(this.data.weaponDamage),
+      tenacity: new UntypedFormControl(this.data.tenacity),
+      attackMagicPotency: new UntypedFormControl(this.data.attackMagicPotency),
+      criticalHit: new UntypedFormControl(this.data.criticalHit),
+      determination: new UntypedFormControl(this.data.determination),
+      directHit: new UntypedFormControl(this.data.directHit),
+      hp: new UntypedFormControl(this.data.hp)
     });
   }
 

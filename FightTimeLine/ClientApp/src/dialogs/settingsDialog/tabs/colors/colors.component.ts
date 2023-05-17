@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms"
+import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms"
 import { IGameService } from "src/services/game.service-interface";
 import { gameServiceToken } from "src/services/game.service-provider";
 import { ISettings, SettingsService } from "src/services/SettingsService";
@@ -14,7 +14,7 @@ import { ISettingTab } from "../tabs";
 
 export class SettingsDialogColorTab implements ISettingTab, OnInit {
 
-  colorsForm: FormGroup;
+  colorsForm: UntypedFormGroup;
 
   colorDisplayNames: { [t: string]: string } = {
     SelfShield: "Self Shield",
@@ -32,7 +32,7 @@ export class SettingsDialogColorTab implements ISettingTab, OnInit {
   colors: any[];
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private settingsService: SettingsService,
     @Inject(gameServiceToken) public gameService: IGameService) {
 

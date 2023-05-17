@@ -141,8 +141,9 @@
       }
     }
   },
-  "defaultProject": "ClientApp",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, FormControl } from "@angular/forms"
+import { UntypedFormBuilder, UntypedFormGroup, UntypedFormControl } from "@angular/forms"
 import { ISettings, SettingsService } from "src/services/SettingsService";
 import { ISettingTab } from "../tabs";
 
@@ -13,10 +13,10 @@ import { ISettingTab } from "../tabs";
 export class SettingsDialogTeamworkTab implements OnInit, ISettingTab {
 
 
-  teamworkForm: FormGroup;
+  teamworkForm: UntypedFormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private settingsService: SettingsService
   ) {
 
@@ -26,7 +26,7 @@ export class SettingsDialogTeamworkTab implements OnInit, ISettingTab {
     const settings = this.settingsService.load();
 
     this.teamworkForm = this.formBuilder.group({
-      displayName: new FormControl(settings.teamwork.displayName || "")
+      displayName: new UntypedFormControl(settings.teamwork.displayName || "")
     }, {});
   }
 

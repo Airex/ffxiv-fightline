@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms"
+import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms"
 import { IGameService } from "src/services/game.service-interface";
 import { gameServiceToken } from "src/services/game.service-provider";
 import { ISettings } from "src/services/SettingsService";
@@ -15,10 +15,10 @@ import { ISettingTab } from "../tabs";
 export class SettingsDialogTableviewTab implements OnInit, ISettingTab {
 
   
-  public tableViewForm: FormGroup;  
+  public tableViewForm: UntypedFormGroup;  
 
   constructor(    
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     @Inject(gameServiceToken) public gameService: IGameService) {
 
   }

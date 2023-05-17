@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
-import { FormBuilder, FormControl } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormControl } from "@angular/forms";
 import { IFight } from "../../core/Models";
 import { IFightService } from "../../services/fight.service-interface";
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService";
@@ -15,7 +15,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 export class FightSaveDialog implements OnInit {
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private notification: ScreenNotificationsService,
     public dialogRef: NzModalRef,
     @Inject(fightServiceToken) public service: IFightService
@@ -23,7 +23,7 @@ export class FightSaveDialog implements OnInit {
 
   }
 
-  fightNameControl = new FormControl();
+  fightNameControl = new UntypedFormControl();
   @Input() data: IFight;
   submitted = false;
   ngOnInit(): void {

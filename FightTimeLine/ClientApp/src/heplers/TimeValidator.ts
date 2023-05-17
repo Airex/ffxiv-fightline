@@ -1,9 +1,9 @@
 
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 // custom validator to check that two fields match
 export function time(controlName: string) {
-  return (formGroup: FormGroup) => {
+  return (formGroup: UntypedFormGroup) => {
     const control = formGroup.controls[controlName];
 
     if (control.errors && !control.errors.time) {
