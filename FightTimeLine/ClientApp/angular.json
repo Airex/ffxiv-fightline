@@ -67,7 +67,10 @@
               "lodash",
               "keycharm",
               "timsort",
-              "xss"
+              "xss",
+              "vis-network",
+              "vis-timeline",
+              "vis-data"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -86,7 +89,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "extractLicenses": true,
+              "extractLicenses": false,
               "vendorChunk": false,
               "buildOptimizer": true,
               "aot": true,
