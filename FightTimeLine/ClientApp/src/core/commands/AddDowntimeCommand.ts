@@ -1,6 +1,6 @@
 import { Command, ICommandExecutionContext, ICommandData } from "../UndoRedo";
 import { Utils } from "../Utils";
-import { Guid } from "guid-typescript";
+import { v4 } from "uuid";
 import { BossDownTimeMap } from "../Maps/index";
 import { DowntimeData } from "./DowntimeData";
 
@@ -33,8 +33,8 @@ export class AddDowntimeCommand extends Command {
 
 
     context.holders.bossDownTime.add(new BossDownTimeMap(context.presenter, this.id,
-      this.data.startId || Guid.create().toString(),
-      this.data.endId || Guid.create().toString(),
+      this.data.startId || v4(),
+      this.data.endId || v4(),
       {
         start: this.data.start,
         end: this.data.end,

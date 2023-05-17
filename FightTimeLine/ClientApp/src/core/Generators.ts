@@ -1,9 +1,9 @@
 ﻿import { EntryType } from "./Models";
-import { Guid } from "guid-typescript";
+import { v4 } from "uuid";
 
 export class IdGenerator {
   private itemId = 0;
-  private uniqueId = Guid.create().toString();
+  private uniqueId = v4();
 
   private getNextItemId(): string {
     return this.uniqueId + "|" + ++this.itemId;

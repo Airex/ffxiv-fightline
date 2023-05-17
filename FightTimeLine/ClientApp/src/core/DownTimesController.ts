@@ -1,6 +1,6 @@
 import { ICustomTimeActions } from "../pages/fightline/planArea/planArea.component";
 import { FightTimeLineController } from "./FightTimeLineController";
-import { Guid } from "guid-typescript";
+import { v4 } from "uuid";
 
 export class DownTimesController {
   private downTimeData = { start: null as Date, startId: null as string };
@@ -14,7 +14,7 @@ export class DownTimesController {
   }
 
   registerPoint(date: Date) {
-    const id = Guid.create().toString();
+    const id = v4();
     this.downtimeMarkers.push(id);
     if (this.downTimeData.start == null) {
       this.downTimeData.start = date;
