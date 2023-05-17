@@ -1,6 +1,6 @@
 import { Action, ICustomTimeActions } from "../pages/fightline/planArea/planArea.component";
 import { FightTimeLineController } from "./FightTimeLineController";
-import { Guid } from "guid-typescript";
+import { v4 } from "uuid";
 
 export interface ITool {
   name;
@@ -24,7 +24,7 @@ export class DowntimeTool implements ITool {
   name = "Phases";
 
   registerPoint(date: Date) {
-    const id = Guid.create().toString();
+    const id = v4();
     this.downtimeMarkers.push(id);
     if (this.downTimeData.start == null) {
       this.downTimeData.start = date;

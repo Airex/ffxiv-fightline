@@ -47,7 +47,7 @@ namespace FightTimeLine
                              ValidateAudience = false,
                              ValidateLifetime = false,
                              ValidateIssuerSigningKey = true,
-                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]!))
                         };
                    });
 
@@ -153,7 +153,7 @@ namespace FightTimeLine
                     // see https://go.microsoft.com/fwlink/?linkid=864501
                
                     spa.Options.SourcePath = "ClientApp";
-                    
+
                     if (env.IsDevelopment())
                     {
                          spa.UseAngularCliServer(npmScript: "start");

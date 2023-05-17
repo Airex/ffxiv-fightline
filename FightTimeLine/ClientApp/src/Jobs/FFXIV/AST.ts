@@ -1,5 +1,5 @@
 import Effects from "src/core/Defensives/effects";
-import { IJob, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate, ITrait, IAbilityCharges } from "../../core/Models";
+import { Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate, ITrait, IAbilityCharges } from "../../core/Models";
 import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
 import { abilityTrait } from "./traits";
 
@@ -37,6 +37,9 @@ const statuses = MapStatuses({
   neutralSect: {
     duration: 20,
     Effects: [Effects.healingIncrease.solo(20)]
+    // todo: When casting Aspected Benefic or Aspected Helios, erects a magicked barrier which nullifies damage
+    // Aspected Benefic Effect: Nullifies damage equaling 250% of the amount of HP restored
+    // Aspected Helios Effect: Nullifies damage equaling 125% of the amount of HP restored
   },
   exaltation: {
     duration: 8,

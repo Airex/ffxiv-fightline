@@ -73,6 +73,7 @@ const statuses = MapStatuses({
   },
   recitation: {
     duration: 15,
+    effects: [Effects.healingIncrease.solo(20)],
     // todo: think about crit increase
   },
   summonSeraph: {

@@ -1,5 +1,5 @@
 import { Component, ViewChild, Inject, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup } from "@angular/forms"
+import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms"
 import { IGameService } from "src/services/game.service-interface";
 import { gameServiceToken } from "src/services/game.service-provider";
 import { ScreenNotificationsService } from "src/services/ScreenNotificationsService";
@@ -17,7 +17,7 @@ import { ISettingTab } from "../tabs";
 
 export class SettingsDialogMainTab implements OnInit, ISettingTab {
 
-  mainForm: FormGroup;
+  mainForm: UntypedFormGroup;
 
   @ViewChild("filter", { static: true })
   filter: SettingsFilterComponent;
@@ -27,7 +27,7 @@ export class SettingsDialogMainTab implements OnInit, ISettingTab {
   colors: any[];
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private settingsService: SettingsService,
     @Inject(gameServiceToken) public gameService: IGameService,
     private notifications: ScreenNotificationsService) {

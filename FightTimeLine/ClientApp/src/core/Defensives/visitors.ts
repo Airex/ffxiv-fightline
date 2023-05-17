@@ -14,11 +14,17 @@ import {
   levelModifiers,
   traitModifiers,
 } from "./jobValues";
-import { DefsCalcResult, MitigationForAttack } from "./types";
+import { MitigationForAttack } from "./types";
 
 export type HealIncreaseContainer = {
   outgoingModifier?: number;
   incomingModifier?: number;
+};
+
+type MitigationSum = {
+  absorbed: number;
+  mitigation: number;
+  hpIncrease?: number;
 };
 
 export class HealIncreaseVisitor implements IEffectVisitor {
@@ -43,12 +49,6 @@ export class HealIncreaseVisitor implements IEffectVisitor {
 
     mitigator.apply({
       ...context,
-      addMitigationForTarget(value: number, damageType: DamageType): void {},
-      addMitigationForParty(value: number, damageType: DamageType): void {},
-      addShieldForTarget(value: number, hpFromJob?: string): void {},
-      addShieldForParty(value: number, hpFromJob?: string): void {},
-      addAbsorbFromAbilityForTarget(value: number): void {},
-      addAbsorbFromAbilityForParty(value: number): void {},
       addHealIncreaseForTarget(value: number): void {
         addOutgoingHeal(context.targetJobId, value);
       },
@@ -63,6 +63,13 @@ export class HealIncreaseVisitor implements IEffectVisitor {
       addHealIncreaseForSelf(value) {
         addIncomingHeal(context.sourceJobId, value);
       },
+      addMitigationForTarget(value: number, damageType: DamageType): void {},
+      addMitigationForParty(value: number, damageType: DamageType): void {},
+      addShieldForTarget(value: number, hpFromJob?: string): void {},
+      addShieldForParty(value: number, hpFromJob?: string): void {},
+      addAbsorbFromAbilityForTarget(value: number): void {},
+      addAbsorbFromAbilityForParty(value: number): void {},
+      addHpIncreaseForParty(value) {},
       addHpIncreaseForOwner(value) {},
       addHpIncreaseForTarget(value) {},
     });
@@ -73,37 +80,15 @@ export class HealIncreaseVisitor implements IEffectVisitor {
 export class MitigationVisitor implements IEffectVisitor {
   constructor(private holders: Holders) {}
 
-  public partyMitigation = -1;
-  public partyAbsorbed = 0;
-  public partyShield = 0;
-  public sums: Record<
-    string,
-    {
-      absorbed: number;
-      shield: number;
-      mitigation: number;
-      hpIncrease?: number;
-    }
-  > = {};
+  public sums: Record<string, MitigationSum> = {};
 
   initTarget(target: string) {
     if (!this.sums[target]) {
       this.sums[target] = {
         absorbed: 0,
-        shield: 0,
         mitigation: 1,
       };
     }
-  }
-
-  addShield(target: string, value: number) {
-    if (target === "party") {
-      this.partyShield += value;
-      return;
-    }
-
-    this.initTarget(target);
-    this.sums[target].shield += value || 0;
   }
 
   addHpIncrease(target: string, value: number) {
@@ -112,21 +97,11 @@ export class MitigationVisitor implements IEffectVisitor {
   }
 
   addMitigation(target: string, value: number) {
-    if (target === "party") {
-      this.partyMitigation *= 1 - value;
-      return;
-    }
-
     this.initTarget(target);
     this.sums[target].mitigation *= 1 - value;
   }
 
   addAbsorb(target: string, value: number) {
-    if (target === "party") {
-      this.partyAbsorbed += value;
-      return;
-    }
-
     this.initTarget(target);
     this.sums[target].absorbed += value || 0;
   }
@@ -224,31 +199,29 @@ export class MitigationVisitor implements IEffectVisitor {
 
   accept(mitigator: IMitigator, context: MitigationCalculateContext) {
     const self = this;
+    const validateDamageType = (damageType: DamageType) =>
+      damageType === DamageType.None ||
+      damageType === DamageType.All ||
+      (damageType & context.attackDamageType) === damageType;
+
     const visitorContext = {
       ...context,
       addMitigationForTarget(value: number, damageType: DamageType) {
         if (context.targetJobId) {
-          if (
-            damageType === DamageType.None ||
-            damageType === DamageType.All ||
-            (damageType & context.attackDamageType) === damageType
-          ) {
+          if (validateDamageType(damageType)) {
             self.addMitigation(context.targetJobId, (value || 0) / 100);
           }
         }
       },
       addMitigationForParty(value: number, damageType: DamageType) {
-        if (
-          damageType === DamageType.None ||
-          damageType === DamageType.All ||
-          (damageType & context.attackDamageType) === damageType
-        ) {
-          self.addMitigation("party", (value || 0) / 100);
+        if (validateDamageType(damageType)) {
+          self.holders.jobs.getAll().forEach((j) => {
+            self.addMitigation(j.id, (value || 0) / 100);
+          });
         }
       },
       addShieldForTarget(value: number, hpFromJob?: string) {
         if (context.targetJobId) {
-          self.addShield(context.targetJobId, value || 0);
           self.addAbsorb(
             context.targetJobId,
             self.calculateAbsorbFromTargetHp(
@@ -259,7 +232,6 @@ export class MitigationVisitor implements IEffectVisitor {
         }
       },
       addShieldForParty(value: number, hpFromJob?: string) {
-        self.addShield("party", value || 0);
         self.holders.jobs.getAll().forEach((j) => {
           self.addAbsorb(
             j.id,
@@ -286,16 +258,21 @@ export class MitigationVisitor implements IEffectVisitor {
           );
         });
       },
-      addHealIncreaseForParty(value) {},
-      addHealIncreaseForTarget(value) {},
-      addHealIncreaseForOwner(value) {},
-      addHealIncreaseForSelf(value) {},
       addHpIncreaseForOwner(value) {
         self.addHpIncrease(context.sourceJobId, value / 100);
       },
       addHpIncreaseForTarget(value) {
         self.addHpIncrease(context.targetJobId, value / 100);
       },
+      addHpIncreaseForParty(value: number) {
+        self.holders.jobs.getAll().forEach((j) => {
+          self.addHpIncrease(j.id, value / 100);
+        });
+      },
+      addHealIncreaseForParty(value) {},
+      addHealIncreaseForTarget(value) {},
+      addHealIncreaseForOwner(value) {},
+      addHealIncreaseForSelf(value) {},
     } as MitigationVisitorContext;
 
     mitigator.apply(visitorContext);
@@ -307,7 +284,7 @@ export class MitigationVisitor implements IEffectVisitor {
       const mitigationValue =
         agg?.mitigation === undefined ? 1 : agg?.mitigation;
 
-      const mitigation = 1 - Math.abs(mitigationValue * this.partyMitigation);
+      const mitigation = 1 - Math.abs(mitigationValue);
       const shield = (agg?.absorbed || 1) / jobMap?.stats.hp || 0;
 
       return {
@@ -315,6 +292,7 @@ export class MitigationVisitor implements IEffectVisitor {
         id: jobMap.id,
         mitigation: Number(mitigation.toFixed(3)),
         shield: Number(shield.toFixed(3)),
+        absorb: Number((agg?.absorbed || 0).toFixed(3)),
         hpIncrease: Number((agg?.hpIncrease || 0).toFixed(3)),
         icon: jobMap?.job.icon,
       } as MitigationForAttack;

@@ -37,14 +37,24 @@
               "src/assets",
               "src/assets/i18n",
               {
-                "glob": "**/*",
-                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
-                "output": "/assets/"
-              },
-              {
                 "glob": "**/ng-zorro-antd.dark.css",
                 "input": "./node_modules/ng-zorro-antd/",
                 "output": "/assets/"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-svg/inline-svg/filled",
+                "output": "/assets/filled"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-svg/inline-svg/outlined",
+                "output": "/assets/outline"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-svg/inline-svg/twotone",
+                "output": "/assets/twotone"
               }
             ],
             "styles": [
@@ -57,11 +67,14 @@
               "lodash",
               "keycharm",
               "timsort",
-              "xss"
+              "xss",
+              "vis-network",
+              "vis-timeline",
+              "vis-data"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
-            "buildOptimizer": false,
+            "buildOptimizer": true,
             "sourceMap": true,
             "optimization": false,
             "namedChunks": true
@@ -76,7 +89,7 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "extractLicenses": true,
+              "extractLicenses": false,
               "vendorChunk": false,
               "buildOptimizer": true,
               "aot": true,
@@ -141,8 +154,9 @@
       }
     }
   },
-  "defaultProject": "ClientApp",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

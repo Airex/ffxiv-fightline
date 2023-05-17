@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { first } from 'rxjs/operators';
 import { IAuthenticationService } from "../../services/authentication.service-interface";
@@ -12,13 +12,13 @@ import { ScreenNotificationsService } from "../../services/ScreenNotificationsSe
   styleUrls: ["./loginDialog.component.css"]
 })
 export class LoginDialog implements OnInit {
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   loading = false;
   submitted = false;
   returnUrl: string;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     @Inject(authenticationServiceToken) private authenticationService: IAuthenticationService,
     private notification: ScreenNotificationsService,
     public dialogRef: NzModalRef) {

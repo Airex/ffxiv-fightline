@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Component, OnInit, Inject } from "@angular/core";
-import { FormBuilder, FormGroup, FormControl } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, UntypedFormControl } from "@angular/forms";
 import { IGameService } from "src/services/game.service-interface";
 import { gameServiceToken } from "src/services/game.service-provider";
 import { ISettings, SettingsService } from "src/services/SettingsService";
@@ -12,7 +12,7 @@ import { ISettingTab } from "../tabs";
   styleUrls: ["./fflogs.component.css"],
 })
 export class SettingsDialogFflogsTab implements OnInit, ISettingTab {
-  fflogsForm: FormGroup;
+  fflogsForm: UntypedFormGroup;
 
   private servers: { [region: string]: { [datacenter: string]: string[] } } = {
     JP: {
@@ -130,7 +130,7 @@ export class SettingsDialogFflogsTab implements OnInit, ISettingTab {
   };
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private settingsService: SettingsService,
     @Inject(gameServiceToken) public gameService: IGameService
   ) {
@@ -154,13 +154,13 @@ export class SettingsDialogFflogsTab implements OnInit, ISettingTab {
 
     this.fflogsForm = this.formBuilder.group(
       {
-        bossAttacksSource: new FormControl(
+        bossAttacksSource: new UntypedFormControl(
           settings.fflogsImport.bossAttacksSource
         ),
-        characterName: new FormControl(
+        characterName: new UntypedFormControl(
           settings.fflogsImport.characterName || ""
         ),
-        characterServer: new FormControl(
+        characterServer: new UntypedFormControl(
           settings.fflogsImport.characterRegion &&
           settings.fflogsImport.characterServer
             ? settings.fflogsImport.characterServer +
@@ -168,7 +168,7 @@ export class SettingsDialogFflogsTab implements OnInit, ISettingTab {
               settings.fflogsImport.characterRegion
             : ""
         ),
-        translate: new FormControl(settings.fflogsImport.translate),
+        translate: new UntypedFormControl(settings.fflogsImport.translate),
       },
       {}
     );

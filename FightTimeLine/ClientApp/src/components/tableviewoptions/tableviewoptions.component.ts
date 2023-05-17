@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { UntypedFormControl, UntypedFormGroup } from "@angular/forms";
 import { Subject, Subscription } from "rxjs";
 import { debounceTime } from "rxjs/operators";
 
@@ -14,7 +14,7 @@ import { ITableOptions, ITableOptionSettings } from "src/core/ExportModels";
 export class TableViewOptionsComponent implements OnInit, OnDestroy {
 
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   options: ITableOptions = {};
   private settingsInternal: ITableOptionSettings;
   subject = new Subject();
@@ -38,11 +38,11 @@ export class TableViewOptionsComponent implements OnInit, OnDestroy {
     if (opts) {
       for (const d of opts) {
         const value = d.initialValue || d.defaultValue;
-        groups[d.name] = new FormControl(value);
+        groups[d.name] = new UntypedFormControl(value);
       }
     }
 
-    this.form = new FormGroup(groups);
+    this.form = new UntypedFormGroup(groups);
   }
 
   public constructor() {

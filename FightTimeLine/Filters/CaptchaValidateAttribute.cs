@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -15,13 +16,12 @@ namespace FightTimeLine.Filters
    {
       public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
       {
-         if (context.HttpContext.Request.Headers.ContainsKey("Captcha"))
+         if (context.HttpContext.Request.Headers.TryGetValue("Captcha", out StringValues captcha))
          {
             var configuration = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
-            var configurationSection = configuration.GetSection("Captcha");
+            IConfigurationSection configurationSection = configuration.GetSection("Captcha");
             HttpClient client = context.HttpContext.RequestServices.GetRequiredService<IHttpClientFactory>().CreateClient();
 
-            var captcha = context.HttpContext.Request.Headers["Captcha"];
             var uri = $"{configurationSection["Url"]}?secret={configurationSection["Secret"]}&response={captcha}";
             using var httpResponseMessage = await client.PostAsync(uri, new StringContent(string.Empty, Encoding.UTF8, "application/json"));
             await using var stream = await httpResponseMessage.Content.ReadAsStreamAsync();

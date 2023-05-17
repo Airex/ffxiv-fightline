@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
@@ -9,7 +9,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 })
 
 export class BossSaveDialog {
-  fightNameControl = new FormControl();
+  fightNameControl = new UntypedFormControl();
   @Input() data: string;
   submitted = false;
 

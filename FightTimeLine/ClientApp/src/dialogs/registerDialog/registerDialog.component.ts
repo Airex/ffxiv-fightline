@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from "@angular/forms";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { first } from 'rxjs/operators';
 import { UserService } from "../../services/UserService";
@@ -12,13 +12,13 @@ import { UserService } from "../../services/UserService";
 })
 export class RegisterDialog {
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     public dialogRef: NzModalRef,
     private userService: UserService) {
     this.buildForm();
   }
 
-  form: FormGroup;
+  form: UntypedFormGroup;
   submitted = false;
   loading = false;
   checkingUser = false;
@@ -46,7 +46,7 @@ export class RegisterDialog {
 
   get f() { return this.form.controls; }
 
-  isUserNameUnique(control: FormControl) {
+  isUserNameUnique(control: UntypedFormControl) {
     const q = new Promise((resolve, reject) => {
       this.checkingUser = true;
       setTimeout(() => {
@@ -109,10 +109,10 @@ export class RegisterDialog {
 
   matchOtherValidator(otherControlName: string) {
 
-    let thisControl: FormControl;
-    let otherControl: FormControl;
+    let thisControl: UntypedFormControl;
+    let otherControl: UntypedFormControl;
 
-    return function matchOtherValidate(control: FormControl) {
+    return function matchOtherValidate(control: UntypedFormControl) {
 
       if (!control.parent) {
         return null;
@@ -121,7 +121,7 @@ export class RegisterDialog {
       // Initializing the validator.
       if (!thisControl) {
         thisControl = control;
-        otherControl = control.parent.get(otherControlName) as FormControl;
+        otherControl = control.parent.get(otherControlName) as UntypedFormControl;
         if (!otherControl) {
           throw new Error('matchOtherValidator(): other control is not found in parent group');
         }

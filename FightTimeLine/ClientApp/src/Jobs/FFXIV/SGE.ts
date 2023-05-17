@@ -2,6 +2,7 @@ import Effects from "src/core/Defensives/effects";
 import {
   AbilityType,
   IAbility,
+  IAbilityStatus,
   IJob,
   IJobTemplate,
   ITrait,
@@ -33,6 +34,7 @@ const statuses = MapStatuses({
   },
   kerachole: {
     duration: 15,
+    shareGroup: "hole",
     effects: [Effects.mitigation.party(10)],
   },
   zoe: {
@@ -41,6 +43,7 @@ const statuses = MapStatuses({
   },
   taurochole: {
     duration: 15,
+    shareGroup: "hole",
     effects: [Effects.mitigation.solo(10)],
   },
   haima: {
@@ -57,12 +60,13 @@ const statuses = MapStatuses({
     effects: [Effects.shieldFromHeal.party(100)],
   },
   panhaima: {
+    potency: 500,
     duration: 15,
-    effects: [Effects.shieldFromHeal.party(100)], // todo: review this value
+    effects: [Effects.shieldFromHeal.party(200)], // todo: review this value
   },
   krasis: {
     duration: 10,
-    effects: [Effects.healingIncrease.party(20)],
+    effects: [Effects.healingIncrease.solo(20)],
   },
 });
 
