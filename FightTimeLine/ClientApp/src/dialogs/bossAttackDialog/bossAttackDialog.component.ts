@@ -14,7 +14,7 @@ import { VisStorageService } from "src/services/VisStorageService";
   templateUrl: "./bossAttackDialog.component.html",
   styleUrls: ["./bossAttackDialog.component.css"]
 })
-export class BossAttackDialog implements OnInit {
+export class BossAttackDialogComponent implements OnInit {
 
   @Input() data: IBossAbility;
   @ViewChild("syncSettings") syncSettings: SyncSettingsComponent;

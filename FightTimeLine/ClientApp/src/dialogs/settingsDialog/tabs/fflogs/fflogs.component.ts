@@ -11,7 +11,7 @@ import { ISettingTab } from "../tabs";
   templateUrl: "./fflogs.component.html",
   styleUrls: ["./fflogs.component.css"],
 })
-export class SettingsDialogFflogsTab implements OnInit, ISettingTab {
+export class SettingsDialogFflogsTabComponent implements OnInit, ISettingTab {
   fflogsForm: UntypedFormGroup;
 
   private servers: { [region: string]: { [datacenter: string]: string[] } } = {

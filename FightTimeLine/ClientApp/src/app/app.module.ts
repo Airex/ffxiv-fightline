@@ -120,12 +120,12 @@ import { NzTreeSelectModule } from "ng-zorro-antd/tree-select";
 import { NzResizableModule } from "ng-zorro-antd/resizable";
 import { SoloPartyPipe } from "src/heplers/SoloPartyPipe";
 import { VisStorageService } from "src/services/VisStorageService";
-import { SettingsDialogMainTab } from "src/dialogs/settingsDialog/tabs/main/main.component";
-import { SettingsDialogColorTab } from "src/dialogs/settingsDialog/tabs/colors/colors.component";
-import { SettingsDialogFflogsTab } from "src/dialogs/settingsDialog/tabs/fflogs/fflogs.component";
-import { SettingsDialogTableviewTab } from "src/dialogs/settingsDialog/tabs/tableview/tableview.component";
-import { SettingsDialogTeamworkTab } from "src/dialogs/settingsDialog/tabs/teamwork/teamwork.component";
-import { SettingsDialogPresetsTab } from "src/dialogs/settingsDialog/tabs/presets/presets.component";
+import { SettingsDialogMainTabComponent } from "src/dialogs/settingsDialog/tabs/main/main.component";
+import { SettingsDialogColorTabComponent } from "src/dialogs/settingsDialog/tabs/colors/colors.component";
+import { SettingsDialogFflogsTabComponent } from "src/dialogs/settingsDialog/tabs/fflogs/fflogs.component";
+import { SettingsDialogTableviewTabComponent } from "src/dialogs/settingsDialog/tabs/tableview/tableview.component";
+import { SettingsDialogTeamworkTabComponent } from "src/dialogs/settingsDialog/tabs/teamwork/teamwork.component";
+import { SettingsDialogPresetsTabComponent } from "src/dialogs/settingsDialog/tabs/presets/presets.component";
 import { AddJobComponent } from "../pages/fightline/addJob/addJob.component";
 import { JobRolePipe } from "src/heplers/JobRolePipe";
 import { TableViewOptionsComponent } from "src/components/tableviewoptions/tableviewoptions.component";
@@ -236,12 +236,12 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     OffsetWheelDirective,
     PingComponent,
     PlanAreaComponent,
-    SettingsDialogColorTab,
-    SettingsDialogFflogsTab,
-    SettingsDialogMainTab,
-    SettingsDialogPresetsTab,
-    SettingsDialogTableviewTab,
-    SettingsDialogTeamworkTab,
+    SettingsDialogColorTabComponent,
+    SettingsDialogFflogsTabComponent,
+    SettingsDialogMainTabComponent,
+    SettingsDialogPresetsTabComponent,
+    SettingsDialogTableviewTabComponent,
+    SettingsDialogTeamworkTabComponent,
     SettingsFilterComponent,
     SettingsViewComponent,
     SidepanelComponent,

@@ -11,7 +11,7 @@ import { ScreenNotificationsService } from "../../services/ScreenNotificationsSe
   templateUrl: "./loginDialog.component.html",
   styleUrls: ["./loginDialog.component.css"]
 })
-export class LoginDialog implements OnInit {
+export class LoginDialogComponent implements OnInit {
   loginForm: UntypedFormGroup;
   loading = false;
   submitted = false;

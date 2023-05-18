@@ -15,7 +15,7 @@ import { ISettingTab } from "../tabs";
   styleUrls: ["./main.component.css"]
 })
 
-export class SettingsDialogMainTab implements OnInit, ISettingTab {
+export class SettingsDialogMainTabComponent implements OnInit, ISettingTab {
 
   mainForm: UntypedFormGroup;
 

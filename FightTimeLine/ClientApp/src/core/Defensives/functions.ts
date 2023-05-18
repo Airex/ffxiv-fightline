@@ -13,7 +13,7 @@ import {
   cantUseOnSelfWarning,
   deathWarning,
   duplicateMitigationWarning,
-} from "src/Warnings";
+} from "src/core/Warnings";
 import {
   DefsCalcResult,
   DefsCalcResultAbility,
@@ -27,10 +27,7 @@ import { MitigationVisitor } from "./visitors";
 import { calculateDuration, getDurations } from "../Durations/functions";
 
 export const getAvailabilitiesForAbility =
-  (
-    holders: Holders,
-    exceptId: string | undefined = undefined
-  ) =>
+  (holders: Holders, exceptId: string | undefined = undefined) =>
   (it: AbilityMap) => {
     if (it.isStance) {
       return;
@@ -117,8 +114,7 @@ const getDependencies = (holders: Holders) => (deps: string[], job: JobMap) => {
 };
 
 export const processStandardAbility =
-  (holders: Holders) =>
-  (it: AbilityMap, deps: string[], exceptId?: string) => {
+  (holders: Holders) => (it: AbilityMap, deps: string[], exceptId?: string) => {
     const end =
       startOffsetConst +
       30 * 60 * 1000 +
@@ -138,7 +134,7 @@ export const processStandardAbility =
       return;
     }
 
-    const minus30 = new Date((startOffsetConst) - 30 * 1000);
+    const minus30 = new Date(startOffsetConst - 30 * 1000);
 
     let prev: AbilityUsageMap = null;
     const maps = usages
@@ -207,13 +203,11 @@ export function calculateDefsForAttack(
   return {
     attackId,
     defs: Object.keys(grouped)
-      .map((value) => {
-        return {
-          jobId: value,
-          job: holders.jobs.get(value).job,
-          abilities: grouped[value],
-        };
-      })
+      .map((value) => ({
+        jobId: value,
+        job: holders.jobs.get(value).job,
+        abilities: grouped[value],
+      }))
       .sort((a, b) => a.job.role - b.job.role),
   };
 }
@@ -237,10 +231,7 @@ export function calculateAvailDefsForAttack(
   });
 
   const intersected = defAbilities.filter((it) => {
-    const availableRanges = getAvailabilitiesForAbility(
-      holders,
-      exceptId
-    )(it);
+    const availableRanges = getAvailabilitiesForAbility(holders, exceptId)(it);
     const duration = calculateDuration(it.ability);
     const minAttack = new Date(bossAttack.startAsNumber - duration * 1000);
     const maxAttack = new Date(bossAttack.startAsNumber);
@@ -323,6 +314,28 @@ export function getTimeGoodAbilityToUse(
   // return at;
 }
 
+// create function of delegate below
+const getIsTargetAffected = (holders, attack) => (m: MitigationForAttack) => {
+  const tankTarget = holders.bossTargets.getTargetAt(attack.start);
+  const isTankBuster = attack.isTankBuster;
+  const isAoe = attack.isAoe;
+  const isShared = attack.isShareDamage;
+
+  if (isAoe) {
+    return true;
+  }
+  if (isShared) {
+    return holders.jobs.get(m.id)?.job?.role === Role.Tank;
+  }
+  if (isTankBuster) {
+    return m.id === tankTarget;
+  }
+  return true;
+};
+
+const statusVisitor =
+  (holders: Holders) => (context: MitigationCalculateContext) => (status) => {};
+
 export function calculateMitigationForAttack(
   holders: Holders,
   defsCalcResult: DefsCalcResult
@@ -337,18 +350,13 @@ export function calculateMitigationForAttack(
   const bossAttackStart = attack.start;
   const mitigationVisitor = new MitigationVisitor(holders);
 
-  const tankTarget = holders.bossTargets.getTargetAt(attack.start);
-  const isTankBuster = attack.isTankBuster;
-  const isAoe = attack.isAoe;
-  const isShared = attack.isShareDamage;
-
   const used = new Set();
   abs.forEach((a) => {
     const targetSetting = holders.itemUsages
       .get(a.id)
-      .getSettingData(SettingsEnum.Target);
+      .getSettingData(SettingsEnum.Target)?.value;
 
-    const target = targetSetting?.value || a.jobId;
+    const target = targetSetting || a.jobId;
     const targetContext = {
       targetJobId: target,
       sourceAbilityId: a.id,
@@ -372,7 +380,7 @@ export function calculateMitigationForAttack(
       }
 
       if (
-        used.has(a.ability.name + targetSetting?.value) ||
+        used.has(a.ability.name + targetSetting) ||
         used.has(status.shareGroup)
       ) {
         warnings.push(duplicateMitigationWarning(a));
@@ -387,7 +395,7 @@ export function calculateMitigationForAttack(
         used.add(status?.shareGroup);
       }
     });
-    used.add(a.ability.name + targetSetting?.value);
+    used.add(a.ability.name + targetSetting);
   });
 
   const mitigated = mitigationVisitor.build();
@@ -403,21 +411,9 @@ export function calculateMitigationForAttack(
     });
   }
 
-  // create function of delegate below
-  const isTargetAffected = (m: MitigationForAttack) => {
-    if (isAoe) {
-      return true;
-    }
-    if (isShared) {
-      return holders.jobs.get(m.id)?.job?.role === Role.Tank;
-    }
-    if (isTankBuster) {
-      return m.id === tankTarget;
-    }
-    return true;
-  };
-
-  const affectedTargets = mitigated.filter(isTargetAffected);
+  const affectedTargets = mitigated.filter(
+    getIsTargetAffected(holders, attack)
+  );
 
   // check if mitigation is enough for the attack for each player
   affectedTargets.forEach((m) => {

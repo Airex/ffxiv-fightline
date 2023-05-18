@@ -8,7 +8,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
   styleUrls: ["./bossSaveDialog.component.css"]
 })
 
-export class BossSaveDialog {
+export class BossSaveDialogComponent {
   fightNameControl = new UntypedFormControl();
   @Input() data: string;
   submitted = false;

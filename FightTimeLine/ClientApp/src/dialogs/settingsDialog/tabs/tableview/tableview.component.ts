@@ -12,12 +12,12 @@ import { ISettingTab } from "../tabs";
   styleUrls: ["./tableview.component.css"]
 })
 
-export class SettingsDialogTableviewTab implements OnInit, ISettingTab {
+export class SettingsDialogTableviewTabComponent implements OnInit, ISettingTab {
 
-  
-  public tableViewForm: UntypedFormGroup;  
 
-  constructor(    
+  public tableViewForm: UntypedFormGroup;
+
+  constructor(
     private formBuilder: UntypedFormBuilder,
     @Inject(gameServiceToken) public gameService: IGameService) {
 
@@ -25,16 +25,16 @@ export class SettingsDialogTableviewTab implements OnInit, ISettingTab {
 
   ngOnInit() {
 
-    
+
     this.tableViewForm = this.formBuilder.group({}, {});
-    
+
   }
 
   get tvf() { return this.tableViewForm.controls; }
 
-  
+
 
   updateResult(settings: ISettings): void {
-  
+
   }
 }

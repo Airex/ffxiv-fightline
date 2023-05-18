@@ -12,7 +12,7 @@ import { ISettingTab } from "../tabs";
   styleUrls: ["./presets.component.css"]
 })
 
-export class SettingsDialogPresetsTab implements ISettingTab {
+export class SettingsDialogPresetsTabComponent implements ISettingTab {
 
   constructor(private storage: LocalStorageService, private visStorage: VisStorageService) {
 

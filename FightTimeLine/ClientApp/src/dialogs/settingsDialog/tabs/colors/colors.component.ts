@@ -12,7 +12,7 @@ import { ISettingTab } from "../tabs";
   styleUrls: ["./colors.component.css"]
 })
 
-export class SettingsDialogColorTab implements ISettingTab, OnInit {
+export class SettingsDialogColorTabComponent implements ISettingTab, OnInit {
 
   colorsForm: UntypedFormGroup;
 

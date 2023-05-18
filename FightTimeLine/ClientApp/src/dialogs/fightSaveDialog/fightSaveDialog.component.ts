@@ -12,7 +12,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
   styleUrls: ["./fightSaveDialog.component.css"]
 })
 
-export class FightSaveDialog implements OnInit {
+export class FightSaveDialogComponent {
 
   constructor(
     private formBuilder: UntypedFormBuilder,
@@ -26,8 +26,6 @@ export class FightSaveDialog implements OnInit {
   fightNameControl = new UntypedFormControl();
   @Input() data: IFight;
   submitted = false;
-  ngOnInit(): void {
-  }
 
   onSaveClick(): void {
     this.submitted = true;

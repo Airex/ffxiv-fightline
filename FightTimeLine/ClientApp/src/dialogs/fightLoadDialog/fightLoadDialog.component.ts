@@ -14,7 +14,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
   styleUrls: ["./fightLoadDialog.component.css"]
 })
 
-export class FightLoadDialog implements AfterViewInit {
+export class FightLoadDialogComponent {
 
   constructor(
     public dialogRef: NzModalRef,
@@ -31,12 +31,6 @@ export class FightLoadDialog implements AfterViewInit {
   container: { fights: M.IFight[] } = { fights: [] };
   loading = true;
   selectedRowsChecked = [];
-  ngAfterViewInit(): void {
-    //    setTimeout(() => {
-    //        this.dialogRef.getConfig().nzTitle = this.headerTemplate;
-    //      },
-    //      0);
-  }
 
   load() {
     this.loading = true;

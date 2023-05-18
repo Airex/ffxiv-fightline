@@ -10,7 +10,7 @@ import { UserService } from "../../services/UserService";
   templateUrl: "./registerDialog.component.html",
   styleUrls: ["./registerDialog.component.css"]
 })
-export class RegisterDialog {
+export class RegisterDialogComponent {
   constructor(
     private fb: UntypedFormBuilder,
     public dialogRef: NzModalRef,

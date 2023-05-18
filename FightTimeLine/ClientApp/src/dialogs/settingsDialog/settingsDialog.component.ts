@@ -5,12 +5,12 @@ import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Dispatcherservice from "../../services/dispatcher.service";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { ISettingTab } from "./tabs/tabs";
-import { SettingsDialogColorTab } from "./tabs/colors/colors.component";
-import { SettingsDialogFflogsTab } from "./tabs/fflogs/fflogs.component";
-import { SettingsDialogMainTab } from "./tabs/main/main.component";
-import { SettingsDialogPresetsTab } from "./tabs/presets/presets.component";
-import { SettingsDialogTableviewTab } from "./tabs/tableview/tableview.component";
-import { SettingsDialogTeamworkTab } from "./tabs/teamwork/teamwork.component";
+import { SettingsDialogColorTabComponent } from "./tabs/colors/colors.component";
+import { SettingsDialogFflogsTabComponent } from "./tabs/fflogs/fflogs.component";
+import { SettingsDialogMainTabComponent } from "./tabs/main/main.component";
+import { SettingsDialogPresetsTabComponent } from "./tabs/presets/presets.component";
+import { SettingsDialogTableviewTabComponent } from "./tabs/tableview/tableview.component";
+import { SettingsDialogTeamworkTabComponent } from "./tabs/teamwork/teamwork.component";
 import { DispatcherPayloads } from "../../services/dispatcher.service";
 
 @Component({
@@ -18,7 +18,7 @@ import { DispatcherPayloads } from "../../services/dispatcher.service";
   templateUrl: "./settingsDialog.component.html",
   styleUrls: ["./settingsDialog.component.css"]
 })
-export class SettingsDialog {
+export class SettingsDialogComponent {
 
   constructor(
     private dialogRef: NzModalRef,
@@ -27,12 +27,12 @@ export class SettingsDialog {
     @Inject(Gameserviceprovider.gameServiceToken) public gameService: Gameserviceinterface.IGameService) {
   }
 
-  @ViewChild(SettingsDialogColorTab) tab1: ISettingTab;
-  @ViewChild(SettingsDialogFflogsTab) tab2: ISettingTab;
-  @ViewChild(SettingsDialogMainTab) tab3: ISettingTab;
-  @ViewChild(SettingsDialogPresetsTab) tab4: ISettingTab;
-  @ViewChild(SettingsDialogTableviewTab) tab5: ISettingTab;
-  @ViewChild(SettingsDialogTeamworkTab) tab6: ISettingTab;
+  @ViewChild(SettingsDialogColorTabComponent) tab1: ISettingTab;
+  @ViewChild(SettingsDialogFflogsTabComponent) tab2: ISettingTab;
+  @ViewChild(SettingsDialogMainTabComponent) tab3: ISettingTab;
+  @ViewChild(SettingsDialogPresetsTabComponent) tab4: ISettingTab;
+  @ViewChild(SettingsDialogTableviewTabComponent) tab5: ISettingTab;
+  @ViewChild(SettingsDialogTeamworkTabComponent) tab6: ISettingTab;
 
 
   onYesClick() {

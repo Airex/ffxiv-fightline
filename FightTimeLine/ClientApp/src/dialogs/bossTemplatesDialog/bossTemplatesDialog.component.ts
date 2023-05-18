@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit, ViewChild, ElementRef, OnDestroy, Input } from "@angular/core";
-import { map, first } from "rxjs/operators/";
+import { map, first } from "rxjs/operators";
 import { Zone, Encounter } from "../../core/FFLogs";
 import { IBoss, IBossSearchEntry, IBossAbility, DamageType } from "../../core/Models";
 import { Utils } from "../../core/Utils";
@@ -22,7 +22,7 @@ import { DataGroup, DataItem, TimelineOptions, VisTimelineService } from "ngx-vi
   styleUrls: ["./bossTemplatesDialog.component.css"]
 })
 
-export class BossTemplatesDialog implements OnInit, OnDestroy {
+export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
 
   visItems: DataSetDataItem = new DataSet<DataItem>([], {});
   visGroups: DataSetDataGroup = new DataSet<DataGroup>([], {});
