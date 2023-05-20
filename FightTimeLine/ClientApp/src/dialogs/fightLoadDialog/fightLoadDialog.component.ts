@@ -1,7 +1,7 @@
 import { Component, Inject, ViewChild, TemplateRef, Input, AfterViewInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { IFightService } from "../../services/fight.service-interface";
-import { fightServiceToken } from "../../services/fight.service-provider";
+import { IFightService } from "../../services/fight/fight.service-interface";
+import { fightServiceToken } from "../../services/fight/fight.service-provider";
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService";
 import * as M from "../../core/Models";
 import { NzSwitchComponent } from "ng-zorro-antd/switch";

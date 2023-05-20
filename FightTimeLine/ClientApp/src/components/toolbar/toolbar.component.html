@@ -11,29 +11,6 @@
   </nz-page-header-title>
   <nz-page-header-extra>
     <ng-content select="[pre-right]"></ng-content>
-    <span>
-      <button nz-dropdown nz-button aria-label="Account" [nzDropdownMenu]="accountMenu" nz-tooltip
-        [nzTooltipTrigger]="'click'" nzShape="circle" nzTooltipTitle="{{'component.toolbar.account' | translate}}"
-        [nzDanger]="!authenticationService.authenticated">
-        <i nz-icon nzType="user" aria-label="Account"></i>
-      </button>
-      <nz-dropdown-menu #accountMenu="nzDropdownMenu">
-        <ul nz-menu class="noselect">
-          <li nz-menu-item (click)="login()" *ngIf="!authenticationService.authenticated">
-            {{'component.toolbar.signIn' | translate}}
-          </li>
-          <li nz-menu-item (click)="register()" *ngIf="!authenticationService.authenticated">
-            {{'component.toolbar.signUp' | translate}}
-          </li>
-          <li nz-menu-item *ngIf="authenticationService.authenticated">
-            {{'component.toolbar.loggedAs' | translate}} {{authenticationService.username}}
-          </li>
-          <li nz-menu-item (click)="logout()" *ngIf="authenticationService.authenticated">
-            {{'component.toolbar.sognOut' | translate}}
-          </li>
-        </ul>
-      </nz-dropdown-menu>
-    </span>
     <ng-content select="[right]"></ng-content>
     <span>
       <button nz-button nzShape="circle" nzType="primary" aria-label="Settings" nz-tooltip nzTooltipTitle="{{'component.toolbar.settings-tooltip' | translate}}"
@@ -66,6 +43,29 @@
           <li nz-menu-item (click)="setLang('de')">DE</li>
           <li nz-menu-item (click)="setLang('ja')">JP</li>
           <li nz-menu-item (click)="setLang('cn')">CN</li>
+        </ul>
+      </nz-dropdown-menu>
+    </span>
+    <span>
+      <button nz-dropdown nz-button aria-label="Account" [nzDropdownMenu]="accountMenu" nz-tooltip
+        [nzTooltipTrigger]="'click'" nzShape="circle" nzTooltipTitle="{{'component.toolbar.account' | translate}}"
+        [nzDanger]="!authenticationService.authenticated">
+        <i nz-icon nzType="user" aria-label="Account"></i>
+      </button>
+      <nz-dropdown-menu #accountMenu="nzDropdownMenu">
+        <ul nz-menu class="noselect">
+          <li nz-menu-item (click)="login()" *ngIf="!authenticationService.authenticated">
+            {{'component.toolbar.signIn' | translate}}
+          </li>
+          <li nz-menu-item (click)="register()" *ngIf="!authenticationService.authenticated">
+            {{'component.toolbar.signUp' | translate}}
+          </li>
+          <li nz-menu-item *ngIf="authenticationService.authenticated">
+            {{'component.toolbar.loggedAs' | translate}} {{authenticationService.username}}
+          </li>
+          <li nz-menu-item (click)="logout()" *ngIf="authenticationService.authenticated">
+            {{'component.toolbar.sognOut' | translate}}
+          </li>
         </ul>
       </nz-dropdown-menu>
     </span>

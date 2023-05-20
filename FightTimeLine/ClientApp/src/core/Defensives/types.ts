@@ -1,4 +1,5 @@
-import { IAbility, IJob } from "../Models";
+import { IForSidePanel } from "../Holders/BaseHolder";
+import { DamageType, IAbility, IJob } from "../Models";
 
 export type DefsCalcResultAbility = {
   jobId: string;
@@ -20,6 +21,7 @@ export type MitigationForAttack = {
 };
 
 export type Warning = {
+  id: string;
   message: string;
   type: "death" | "warning";
   category?: string;
@@ -53,3 +55,19 @@ export function intersect(a: Range, b: Range) {
     return { start: new Date(os), end: new Date(oe) } as Range;
   }
 }
+
+export const emptyVisitorContextFunction = {
+  addMitigationForTarget(value: number, damageType: DamageType) {    },
+  addMitigationForParty(value: number, damageType: DamageType) {},
+  addShieldForTarget(value: number, hpFromJob?: string) {},
+  addShieldForParty(value: number, hpFromJob?: string) {},
+  addAbsorbFromAbilityForTarget(value: number) {},
+  addAbsorbFromAbilityForParty(value: number) {},
+  addHpIncreaseForOwner(value) {},
+  addHpIncreaseForTarget(value) {},
+  addHpIncreaseForParty(value: number) {},
+  addHealIncreaseForParty(value) {},
+  addHealIncreaseForTarget(value) {},
+  addHealIncreaseForOwner(value) {},
+  addHealIncreaseForSelf(value) {},
+};

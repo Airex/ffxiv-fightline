@@ -403,6 +403,7 @@ export function calculateMitigationForAttack(
   // add warning if attack damage is not set
   if (!attack.damageValue) {
     warnings.push({
+      id: `${attack.id}-damage`,
       message: `attack damage is not set`,
       category: "Mitigation",
       type: "warning",
@@ -421,6 +422,7 @@ export function calculateMitigationForAttack(
     if (hp <= 0) {
       // add warning if player hp is not set
       warnings.push({
+        id: `${m.id}-hp`,
         message: `hp is not set`,
         category: "Mitigation",
         type: "warning",

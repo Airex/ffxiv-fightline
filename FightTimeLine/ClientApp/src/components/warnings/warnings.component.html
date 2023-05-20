@@ -1,0 +1,10 @@
+<div class="sidepanel-container">
+  <div class="sidepanel-full">
+    <div *ngFor="let w of warnings" class="sidepanel-item">
+      <div class="sidepanel-item-title">
+        <img class="jobIcon" [src]="w.icon" />
+        {{ w.message }}
+      </div>
+    </div>
+  </div>
+</div>

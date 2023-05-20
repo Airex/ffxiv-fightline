@@ -1,10 +1,10 @@
 import { Injectable, Inject } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { IBoss, IFight, IBossSearchEntry, ICommandEntry } from "../core/Models";
+import { IBoss, IFight, IBossSearchEntry, ICommandEntry } from "../../core/Models";
 import { IFightService } from "./fight.service-interface";
-import * as Gameserviceprovider from "./game.service-provider";
-import * as Gameserviceinterface from "./game.service-interface";
+import * as Gameserviceprovider from "../game.service-provider";
+import * as Gameserviceinterface from "../game.service-interface";
 
 @Injectable()
 export class FightsService implements IFightService {

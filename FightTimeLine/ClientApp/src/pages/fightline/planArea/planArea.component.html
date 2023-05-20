@@ -1,22 +1,35 @@
 <div class="main-content" keyHandler (command)="onCommand($event)">
-  <as-split direction="vertical" unit="percent" [gutterSize]="5" [ngStyle]="{width:'100%', height:'100%'}" [restrictMove]="true">
+  <as-split
+    direction="vertical"
+    unit="percent"
+    [gutterSize]="5"
+    [ngStyle]="{ width: '100%', height: '100%' }"
+    [restrictMove]="true"
+  >
     <as-split-area [size]="8" [minSize]="10" [maxSize]="50">
       <div style="width: 100%; height: 100%">
-        <div class="boss-timeline" [visTimeline]="visTimelineBoss" style="width: 100%; height: 100%"
-             [visTimelineItems]="bossContainer.items"
-             [visTimelineGroups]="bossContainer.groups"
-             [visTimelineOptions]="optionsBoss"
-             (initialized)="timelineBossInitialized()"></div>
+        <div
+          class="boss-timeline"
+          [visTimeline]="visTimelineBoss"
+          style="width: 100%; height: 100%"
+          [visTimelineItems]="bossContainer.items"
+          [visTimelineGroups]="bossContainer.groups"
+          [visTimelineOptions]="optionsBoss"
+          (initialized)="timelineBossInitialized()"
+        ></div>
       </div>
     </as-split-area>
     <as-split-area [size]="92" [minSize]="50">
       <div style="width: 100%; height: 100%">
-        <div class="timeline" [visTimeline]="visTimeline" style="width: 100%; height: 100%"
-             [visTimelineItems]="playerContainer.items"
-             [visTimelineGroups]="playerContainer.groups"
-             [visTimelineOptions]="options"
-             (initialized)="timelineInitialized()">
-        </div>
+        <div
+          class="timeline"
+          [visTimeline]="visTimeline"
+          style="width: 100%; height: 100%"
+          [visTimelineItems]="playerContainer.items"
+          [visTimelineGroups]="playerContainer.groups"
+          [visTimelineOptions]="options"
+          (initialized)="timelineInitialized()"
+        ></div>
       </div>
     </as-split-area>
   </as-split>

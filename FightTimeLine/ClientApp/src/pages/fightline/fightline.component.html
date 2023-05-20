@@ -147,6 +147,18 @@
   </span>
   <span right>
     <button
+      *ngIf="isWarningsVisible()"
+      nz-button
+      nzShape="circle"
+      nzType="default"
+      nz-tooltip
+      nzTooltipTitle="{{ 'fightline.toolbar.warnings' | translate }}"
+      (click)="showWarnings()"
+      style="margin-left: 10px"
+    >
+    <span nz-icon nzType="warning" nzTheme="twotone" [nzTwotoneColor]="'red'"></span>
+    </button>
+    <button
       nz-button
       nzShape="circle"
       nzType="primary"

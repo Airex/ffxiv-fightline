@@ -1,7 +1,7 @@
-import { IAuthenticationService } from "./authentication.service-interface";
-import { authenticationServiceProvider, authenticationServiceToken } from "./authentication.service-provider";
-import { IFightService } from "./fight.service-interface";
-import { fightServiceToken, fightServiceProvider } from "./fight.service-provider";
+import { IAuthenticationService } from "./authentication/authentication.service-interface";
+import { authenticationServiceProvider, authenticationServiceToken } from "./authentication/authentication.service-provider";
+import { IFightService } from "./fight/fight.service-interface";
+import { fightServiceToken, fightServiceProvider } from "./fight/fight.service-provider";
 import { DialogService } from "./DialogService";
 import { RecentActivityService } from "./RecentActivitiesService";
 import { SettingsService } from "./SettingsService";

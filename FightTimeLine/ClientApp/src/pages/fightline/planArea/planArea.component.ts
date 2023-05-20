@@ -26,7 +26,6 @@ export interface ICustomTimeActions {
   styleUrls: ["./planArea.component.css"]
 })
 export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions {
-
   constructor(
     private visTimelineService: VisTimelineService,
     private visStorage: VisStorageService,
@@ -66,7 +65,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     type: "range",
     multiselect: true,
     multiselectPerGroup: true,
-    format: Utils.format(this.startDate),
+    format: Utils.format(),
     stack: true,
     showCurrentTime: false,
     stackSubgroups: true,

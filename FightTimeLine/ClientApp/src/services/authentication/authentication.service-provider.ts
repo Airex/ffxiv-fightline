@@ -4,8 +4,8 @@ import { AuthenticationService } from "./authentication.service";
 import { IAuthenticationService } from "./authentication.service-interface";
 import { AuthenticationMockService } from "./authentication.service-mock";
 
-import { environment } from "../environments/environment";
-import { UserStorageService } from "./UserStorageService";
+import { environment } from "../../environments/environment";
+import { UserStorageService } from "../UserStorageService";
 
 const authenticationServiceFactory = (http: HttpClient, ls: UserStorageService, basePath: string) => {
   let serviceToReturn: IAuthenticationService;

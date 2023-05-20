@@ -39,7 +39,7 @@ import {
   IUpdateOptions,
   UndoRedoController,
 } from "./UndoRedo";
-import { Utils } from "./Utils";
+import { Utils, addSeconds } from "./Utils";
 import { Holders } from "./Holders";
 import {
   AbilityMap,
@@ -55,6 +55,11 @@ import * as PresentationManager from "./PresentationManager";
 import { IOverlapCheckData } from "./Maps/BaseMap";
 import { DefaultJobStats, DefaultRoleStats } from "src/Jobs/FFXIV/defaults";
 import { calculateDuration, calculateOffset } from "./Durations/functions";
+import {
+  calculateDefsForAttack,
+  calculateMitigationForAttack,
+} from "./Defensives/functions";
+import { Warning } from "./Defensives/types";
 
 export class FightTimeLineController {
   data: M.IFightData = {};
@@ -228,7 +233,9 @@ export class FightTimeLineController {
     doUpdates: boolean = true
   ): string {
     const rid = id || this.idgen.getNextId(M.EntryType.Job);
-    const jobStats = DefaultJobStats[name] || DefaultRoleStats[this.gameService.jobRegistry.getJob(name).role];
+    const jobStats =
+      DefaultJobStats[name] ||
+      DefaultRoleStats[this.gameService.jobRegistry.getJob(name).role];
     this.commandStorage.execute([
       new AddJobCommand.AddJobCommand(
         rid,
@@ -262,8 +269,10 @@ export class FightTimeLineController {
     loaded: boolean,
     settings: string = null
   ): void {
-
-    const time = (rawTime instanceof Date) ? rawTime : Utils.getDateFromOffset(rawTime, this.startDate);
+    const time =
+      rawTime instanceof Date
+        ? rawTime
+        : Utils.getDateFromOffset(rawTime, this.startDate);
 
     if (map) {
       if (map.ability.requiresBossTarget && time < this.startDate) {
@@ -296,10 +305,7 @@ export class FightTimeLineController {
     }
   }
 
-  addBossAttack(
-    id: string,
-    bossAbility: M.IBossAbility
-  ): void {
+  addBossAttack(id: string, bossAbility: M.IBossAbility): void {
     this.commandStorage.execute(
       new AddBossAttackCommand.AddBossAttackCommand(
         id || this.idgen.getNextId(M.EntryType.BossAttack),
@@ -564,9 +570,7 @@ export class FightTimeLineController {
 
     if (
       options.updateBossTargets ||
-      options.abilityChanged?.ability?.settings?.some(
-        (s) => s.name === "changesTarget"
-      )
+      options.abilityChanged?.getSettingOfType(M.SettingsEnum.ChangesTarget)
     ) {
       this.recalculateBossTargets();
     }
@@ -574,6 +578,7 @@ export class FightTimeLineController {
     if (options.updateFilters) {
       this.applyFilter();
     }
+    // this.validateAttacks(this.holders);
   }
 
   updateBuffHeatmap(active: boolean, ability: M.IAbility): void {
@@ -583,18 +588,15 @@ export class FightTimeLineController {
       const maps = this.holders.itemUsages
         .getAll()
         .map((it) => {
-          const amap = it.ability;
-          if (amap && !amap.hidden && !amap.filtered && amap.isDamage) {
-            const start = new Date(
-              it.startAsNumber +
-                (calculateOffset(it.ability.ability) || 0) * 1000
+          const a = it.ability;
+          if (a && !a.hidden && !a.filtered && a.isDamage) {
+            const start = addSeconds(
+              it.start,
+              calculateOffset(it.ability.ability)
             );
-            const end = new Date(
-              (start.valueOf() as number) +
-                this.calcDuration(it.start, amap) * 1000
-            );
+            const end = addSeconds(start, this.calcDuration(it.start, a));
             const id = this.idgen.getNextId(M.EntryType.BuffMap) + "_" + it.id;
-            const group = amap.isPartyDamage ? null : amap.job.id;
+            const group = a.isPartyDamage ? null : a.job.id;
             return new HeatmapMap(this.presenterManager, id, group, {
               start,
               end,

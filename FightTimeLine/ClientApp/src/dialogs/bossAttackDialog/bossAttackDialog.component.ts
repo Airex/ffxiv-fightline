@@ -3,7 +3,7 @@ import { SyncSettingsComponent } from "./syncSettings/syncSettings.component";
 import { SyncDowntimeComponent } from "./syncDowntime/syncDowntime.component";
 import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from "@angular/forms";
 import { IBossAbility } from "../../core/Models";
-import { time } from "../../heplers/TimeValidator";
+import { time } from "../../helpers/TimeValidator";
 import { gameServiceToken } from "../../services/game.service-provider";
 import { IGameService } from "../../services/game.service-interface";
 import { NzModalRef } from "ng-zorro-antd/modal";

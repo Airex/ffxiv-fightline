@@ -1,9 +1,9 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormControl } from "@angular/forms";
 import { IFight } from "../../core/Models";
-import { IFightService } from "../../services/fight.service-interface";
+import { IFightService } from "../../services/fight/fight.service-interface";
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService";
-import { fightServiceToken } from "../../services/fight.service-provider";
+import { fightServiceToken } from "../../services/fight/fight.service-provider";
 import { NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({

@@ -1,4 +1,12 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, Input, Injector, NgZone } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterViewInit,
+  Input,
+  Injector,
+  NgZone,
+} from "@angular/core";
 import { ComponentPortal, Portal } from "@angular/cdk/portal";
 import { SingleAbilityComponent } from "../../components/singleAbility/singleAbility.component";
 import { SingleAttackComponent } from "../../components/singleAttack/singleAttack.component";
@@ -13,8 +21,16 @@ import { Holders } from "../../core/Holders";
 import { VisStorageService } from "src/services/VisStorageService";
 import { NzResizeEvent } from "ng-zorro-antd/resizable";
 import { Subject } from "rxjs";
-import { SidePanelMode, SidepanelParams, SIDEPANEL_DATA } from "./ISidePanelComponent";
+import {
+  SidePanelMode,
+  SidepanelParams,
+  SIDEPANEL_DATA,
+} from "./ISidePanelComponent";
+import { WarningsComponent } from "../warnings/warnings.component";
 
+export type SidePanelInput =
+  | { items: string[]; group?: string; what?: string }
+  | string;
 
 @Component({
   selector: "sidepanel",
@@ -22,7 +38,6 @@ import { SidePanelMode, SidepanelParams, SIDEPANEL_DATA } from "./ISidePanelComp
   styleUrls: ["./sidepanel.component.css"],
 })
 export class SidepanelComponent {
-
   sideNavOpened: boolean = false;
   items: BaseHolder.IForSidePanel[];
   holders: Holders;
@@ -33,12 +48,13 @@ export class SidepanelComponent {
   id = -1;
 
   componentMap = {
-    "ability": [SingleAbilityComponent, MultipleAbilityComponent],
-    "bossAbility": [SingleAttackComponent, MultipleAttackComponent],
-    "job": [Jobcomponent.JobComponent],
-    "jobAbility": [JobAbilitycomponent.JobAbilityComponent],
-    "downtime": [DownTimeComponent, MultipleDownTimeComponent]
-  }
+    ability: [SingleAbilityComponent, MultipleAbilityComponent],
+    bossAbility: [SingleAttackComponent, MultipleAttackComponent],
+    job: [Jobcomponent.JobComponent],
+    jobAbility: [JobAbilitycomponent.JobAbilityComponent],
+    downtime: [DownTimeComponent, MultipleDownTimeComponent],
+    warnings: [WarningsComponent],
+  };
 
   @Input() mode: SidePanelMode = "default";
 
@@ -62,34 +78,44 @@ export class SidepanelComponent {
   }
 
   refresh() {
-
     if (this.sideNavOpened && this.refresher) {
       this.refresher.next();
-      return false;//todo: check for ids in component return this.holders.isIn(this.items.map(t => (t as any).id))
+      return false;
+      //todo: check for ids in component return this.holders.isIn(this.items.map(t => (t as any).id))
     }
 
-    if (this.sideNavOpened)
-      this.sideNavOpened = false;
+    if (this.sideNavOpened) this.sideNavOpened = false;
 
     return false;
   }
 
-  public setSidePanel(eventData) {
+  public setSidePanel(eventData: SidePanelInput) {
     this.ngZone.run(() => {
-      if (eventData && (eventData.items && eventData.items.length > 0 || (eventData.group && eventData.what === "group-label"))) {
-        const items = this.getItems(eventData.items || [eventData.group]);
-        if (items && items.length > 0) {
-
-          this.setItems(items, this.mode);
-          if (!this.sideNavOpened) {
-            this.sideNavOpened = true;
+      if (typeof eventData === "object") {
+        if (
+          eventData &&
+          ((eventData.items && eventData.items.length > 0) ||
+            (eventData.group && eventData.what === "group-label"))
+        ) {
+          const items = this.getItems(eventData.items || [eventData.group]);
+          if (items && items.length > 0) {
+            this.setItems(items, this.mode);
+            if (!this.sideNavOpened) {
+              this.sideNavOpened = true;
+            }
+            return;
           }
-          return;
         }
       }
+      if (typeof eventData === "string") {
+        this.setItems(eventData, this.mode);
+        if (!this.sideNavOpened) {
+          this.sideNavOpened = true;
+        }
+        return;
+      }
       this.setItems([], this.mode);
-      if (this.sideNavOpened)
-        this.sideNavOpened = false;
+      if (this.sideNavOpened) this.sideNavOpened = false;
     });
   }
 
@@ -100,14 +126,26 @@ export class SidepanelComponent {
       ...this.holders.stances.getByIds(items),
       ...this.holders.jobs.getByIds(items),
       ...this.holders.abilities.getByIds(items),
-      ...this.holders.bossDownTime.getByIds(items)
+      ...this.holders.bossDownTime.getByIds(items),
     ];
   }
 
-  setItems(items: BaseHolder.IForSidePanel[], mode: SidePanelMode = "default"): void {
-    this.items = items;
+  setItems(
+    data: BaseHolder.IForSidePanel[] | string,
+    mode: SidePanelMode = "default"
+  ): void {
+    let componentName = "";
+    let newKey = "";
+    if (typeof data === "string") {
+      componentName = data;
+      this.items = [];
+      newKey = data;
+    } else {
+      componentName = data[0]?.sidePanelComponentName;
+      this.items = data;
+      newKey = this.calculateKey(this.items);
+    }
 
-    const newKey = this.calculateKey(this.items);
     if (newKey === this.key) {
       this.refresher.next();
       return;
@@ -115,13 +153,16 @@ export class SidepanelComponent {
 
     this.key = newKey;
 
-    const componentType = this.componentFactory();
+    const componentType = this.createComponent(
+      componentName,
+      this.items.length > 1
+    );
 
     if (componentType) {
       const injector = this.createInjector({
-        items: items,
+        items: this.items,
         mode: mode,
-        refresh: this.refresher
+        refresh: this.refresher,
       });
 
       let component = new ComponentPortal(componentType, null, injector);
@@ -132,14 +173,10 @@ export class SidepanelComponent {
     }
   }
 
-  componentFactory() {
-    if (this.items && this.items.length > 0) {
-      const [one, many] = this.componentMap[this.items[0].sidePanelComponentName];
-      if (this.items.length === 1) {
-        return one;
-      } else if (this.items.length > 1) {
-        return many;
-      }
+  createComponent(name: string, isMany: boolean = false) {
+    if (name) {
+      const [one, many] = this.componentMap[name];
+      return isMany ? many : one;
     }
   }
 
@@ -147,8 +184,7 @@ export class SidepanelComponent {
     return Injector.create({
       providers: [{ provide: SIDEPANEL_DATA, useValue: dataToPass }],
       parent: this.injector,
-      name: "Sidepanel injector"
+      name: "Sidepanel injector",
     });
   }
-
 }
