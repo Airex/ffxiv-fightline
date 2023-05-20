@@ -7,7 +7,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
   styleUrls: ["./helpDialog.component.css"]
 })
 
-export class HelpDialog {
+export class HelpDialogComponent {
 
 
 

@@ -3,7 +3,7 @@ import { SyncSettingsComponent } from "./syncSettings/syncSettings.component";
 import { SyncDowntimeComponent } from "./syncDowntime/syncDowntime.component";
 import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from "@angular/forms";
 import { IBossAbility } from "../../core/Models";
-import { time } from "../../heplers/TimeValidator";
+import { time } from "../../helpers/TimeValidator";
 import { gameServiceToken } from "../../services/game.service-provider";
 import { IGameService } from "../../services/game.service-interface";
 import { NzModalRef } from "ng-zorro-antd/modal";
@@ -14,7 +14,7 @@ import { VisStorageService } from "src/services/VisStorageService";
   templateUrl: "./bossAttackDialog.component.html",
   styleUrls: ["./bossAttackDialog.component.css"]
 })
-export class BossAttackDialog implements OnInit {
+export class BossAttackDialogComponent implements OnInit {
 
   @Input() data: IBossAbility;
   @ViewChild("syncSettings") syncSettings: SyncSettingsComponent;

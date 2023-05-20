@@ -13,7 +13,7 @@ import { ISidePanelComponent, SIDEPANEL_DATA, SidepanelParams } from "../sidepan
   templateUrl: "./multipleAbility.component.html",
   styleUrls: ["./multipleAbility.component.css"],
 })
-export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelComponent {
+export class MultipleAbilityComponent implements OnDestroy, ISidePanelComponent {
 
 
   constructor(
@@ -48,10 +48,6 @@ export class MultipleAbilityComponent implements OnInit, OnDestroy, ISidePanelCo
 
   formatDate(date: Date): string {
     return Utils.formatTime(date);
-  }
-
-  ngOnInit(): void {
-
   }
 
   ngOnDestroy(): void {

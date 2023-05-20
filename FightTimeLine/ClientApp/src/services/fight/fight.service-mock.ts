@@ -8,7 +8,7 @@ import {
   ISyncData,
   SyncOperation,
   ICommandEntry,
-} from "../core/Models";
+} from "../../core/Models";
 import { IFightService } from "./fight.service-interface";
 
 @Injectable()

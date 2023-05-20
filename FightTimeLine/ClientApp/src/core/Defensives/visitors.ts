@@ -14,7 +14,7 @@ import {
   levelModifiers,
   traitModifiers,
 } from "./jobValues";
-import { MitigationForAttack } from "./types";
+import { MitigationForAttack, emptyVisitorContextFunction } from "./types";
 
 export type HealIncreaseContainer = {
   outgoingModifier?: number;
@@ -38,16 +38,17 @@ export class HealIncreaseVisitor implements IEffectVisitor {
       self.Values[target] = self.Values[target] || {};
       self.Values[target].outgoingModifier =
         self.Values[target].outgoingModifier || 1;
-      self.Values[target].outgoingModifier *= value / 100;
+      self.Values[target].outgoingModifier *= 1 + value / 100;
     };
     const addIncomingHeal = (target: string, value: number) => {
       self.Values[target] = self.Values[target] || {};
       self.Values[target].incomingModifier =
         self.Values[target].incomingModifier || 1;
-      self.Values[target].incomingModifier *= value / 100;
+      self.Values[target].incomingModifier *= 1 + value / 100;
     };
 
     mitigator.apply({
+      ...emptyVisitorContextFunction,
       ...context,
       addHealIncreaseForTarget(value: number): void {
         addOutgoingHeal(context.targetJobId, value);
@@ -63,15 +64,6 @@ export class HealIncreaseVisitor implements IEffectVisitor {
       addHealIncreaseForSelf(value) {
         addIncomingHeal(context.sourceJobId, value);
       },
-      addMitigationForTarget(value: number, damageType: DamageType): void {},
-      addMitigationForParty(value: number, damageType: DamageType): void {},
-      addShieldForTarget(value: number, hpFromJob?: string): void {},
-      addShieldForParty(value: number, hpFromJob?: string): void {},
-      addAbsorbFromAbilityForTarget(value: number): void {},
-      addAbsorbFromAbilityForParty(value: number): void {},
-      addHpIncreaseForParty(value) {},
-      addHpIncreaseForOwner(value) {},
-      addHpIncreaseForTarget(value) {},
     });
   }
   delay(value: number): void {}
@@ -154,7 +146,6 @@ export class MitigationVisitor implements IEffectVisitor {
       visitor.Values[context.targetJobId]?.incomingModifier;
 
     const modifier =
-      1 +
       [outgoingModifier, incomingModifier].reduce(
         (a, b) => (b ? (a || 1) * b : a),
         0
@@ -188,7 +179,7 @@ export class MitigationVisitor implements IEffectVisitor {
     );
 
     return (
-      (Number.isNaN(modifier) ? 1 : modifier) *
+      (Number.isNaN(modifier) || !modifier ? 1 : modifier) *
       normalHeal *
       (value / 100) *
       (potency / 100)
@@ -205,6 +196,7 @@ export class MitigationVisitor implements IEffectVisitor {
       (damageType & context.attackDamageType) === damageType;
 
     const visitorContext = {
+      ...emptyVisitorContextFunction,
       ...context,
       addMitigationForTarget(value: number, damageType: DamageType) {
         if (context.targetJobId) {
@@ -269,10 +261,6 @@ export class MitigationVisitor implements IEffectVisitor {
           self.addHpIncrease(j.id, value / 100);
         });
       },
-      addHealIncreaseForParty(value) {},
-      addHealIncreaseForTarget(value) {},
-      addHealIncreaseForOwner(value) {},
-      addHealIncreaseForSelf(value) {},
     } as MitigationVisitorContext;
 
     mitigator.apply(visitorContext);

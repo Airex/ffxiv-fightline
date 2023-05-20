@@ -32,6 +32,7 @@ import { NgProgressModule } from "ngx-progressbar";
 import { NgxCaptchaModule } from "ngx-captcha";
 import { DialogsModuleComponents } from "../dialogs/index";
 import { SingleAbilityComponent } from "../components/singleAbility/singleAbility.component";
+import { WarningsComponent } from "../components/warnings/warnings.component";
 import { SingleAttackComponent } from "../components/singleAttack/singleAttack.component";
 import { MultipleAbilityComponent } from "../components/multipleAbility/multipleAbility.component";
 import { MultipleAttackComponent } from "../components/multipleAttack/multipleAttack.component";
@@ -41,19 +42,17 @@ import { DownTimeComponent } from "../components/downtime/downtime.component";
 import { MultipleDownTimeComponent } from "../components/multipleDowntime/multipleDowntime.component";
 import { AreaComponent } from "../components/area/area.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { OffsetWheelDirective } from "../heplers/OffsetWheelDirective";
-import { FFLogsMatcherDirective } from "../heplers/FFLogsMatchDirective";
-import { CustomScrollDirective } from "../heplers/customScroll.directive";
-import { KeyHandlerDirective } from "../heplers/keyHandler.directive";
-import { KillsOnlyPipe } from "../heplers/KillsPipe";
-import { NoDraftsPipe } from "../heplers/NoDraftsPipe";
+import { OffsetWheelDirective } from "../helpers/OffsetWheelDirective";
+import { FFLogsMatcherDirective } from "../helpers/FFLogsMatchDirective";
+import { CustomScrollDirective } from "../helpers/customScroll.directive";
+import { KeyHandlerDirective } from "../helpers/keyHandler.directive";
+import { KillsOnlyPipe } from "../helpers/KillsPipe";
+import { NoDraftsPipe } from "../helpers/NoDraftsPipe";
 import { PingComponent } from "../components/ping/ping.component";
 import * as Sentry from "@sentry/browser";
 import { AngularSplitModule } from "angular-split";
 import { environment } from "../environments/environment";
 import { XivapiClientModule } from "@xivapi/angular-client";
-
-import { registerLocaleData } from "@angular/common";
 import { ColorPickerModule } from "ngx-color-picker";
 
 import { NzAlertModule } from "ng-zorro-antd/alert";
@@ -118,16 +117,16 @@ import { NzToolTipModule } from "ng-zorro-antd/tooltip";
 import { NzTreeModule } from "ng-zorro-antd/tree";
 import { NzTreeSelectModule } from "ng-zorro-antd/tree-select";
 import { NzResizableModule } from "ng-zorro-antd/resizable";
-import { SoloPartyPipe } from "src/heplers/SoloPartyPipe";
+import { SoloPartyPipe } from "src/helpers/SoloPartyPipe";
 import { VisStorageService } from "src/services/VisStorageService";
-import { SettingsDialogMainTab } from "src/dialogs/settingsDialog/tabs/main/main.component";
-import { SettingsDialogColorTab } from "src/dialogs/settingsDialog/tabs/colors/colors.component";
-import { SettingsDialogFflogsTab } from "src/dialogs/settingsDialog/tabs/fflogs/fflogs.component";
-import { SettingsDialogTableviewTab } from "src/dialogs/settingsDialog/tabs/tableview/tableview.component";
-import { SettingsDialogTeamworkTab } from "src/dialogs/settingsDialog/tabs/teamwork/teamwork.component";
-import { SettingsDialogPresetsTab } from "src/dialogs/settingsDialog/tabs/presets/presets.component";
+import { SettingsDialogMainTabComponent } from "src/dialogs/settingsDialog/tabs/main/main.component";
+import { SettingsDialogColorTabComponent } from "src/dialogs/settingsDialog/tabs/colors/colors.component";
+import { SettingsDialogFflogsTabComponent } from "src/dialogs/settingsDialog/tabs/fflogs/fflogs.component";
+import { SettingsDialogTableviewTabComponent } from "src/dialogs/settingsDialog/tabs/tableview/tableview.component";
+import { SettingsDialogTeamworkTabComponent } from "src/dialogs/settingsDialog/tabs/teamwork/teamwork.component";
+import { SettingsDialogPresetsTabComponent } from "src/dialogs/settingsDialog/tabs/presets/presets.component";
 import { AddJobComponent } from "../pages/fightline/addJob/addJob.component";
-import { JobRolePipe } from "src/heplers/JobRolePipe";
+import { JobRolePipe } from "src/helpers/JobRolePipe";
 import { TableViewOptionsComponent } from "src/components/tableviewoptions/tableviewoptions.component";
 import { RecentListComponent } from "src/components/recent-list/recent-list.component";
 
@@ -232,16 +231,17 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     MultipleAbilityComponent,
     MultipleAttackComponent,
     MultipleDownTimeComponent,
+    WarningsComponent,
     NoDraftsPipe,
     OffsetWheelDirective,
     PingComponent,
     PlanAreaComponent,
-    SettingsDialogColorTab,
-    SettingsDialogFflogsTab,
-    SettingsDialogMainTab,
-    SettingsDialogPresetsTab,
-    SettingsDialogTableviewTab,
-    SettingsDialogTeamworkTab,
+    SettingsDialogColorTabComponent,
+    SettingsDialogFflogsTabComponent,
+    SettingsDialogMainTabComponent,
+    SettingsDialogPresetsTabComponent,
+    SettingsDialogTableviewTabComponent,
+    SettingsDialogTeamworkTabComponent,
     SettingsFilterComponent,
     SettingsViewComponent,
     SidepanelComponent,

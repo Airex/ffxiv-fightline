@@ -13,7 +13,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
   templateUrl: "./ffLogsImportDialog.component.html",
   styleUrls: ["./ffLogsImportDialog.component.css"],
 })
-export class FFLogsImportDialog implements OnInit {
+export class FFLogsImportDialogComponent implements OnInit {
   constructor(
     public dialogRef: NzModalRef,
     @Inject(gameServiceToken)

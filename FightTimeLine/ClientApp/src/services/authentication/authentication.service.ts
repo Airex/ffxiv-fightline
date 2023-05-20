@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable, of, } from 'rxjs';
 import { IAuthenticationService } from "./authentication.service-interface";
-import { User, UserStorageService } from './UserStorageService';
+import { User, UserStorageService } from '../UserStorageService';
 
 @Injectable()
 export class AuthenticationService implements IAuthenticationService {

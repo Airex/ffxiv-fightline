@@ -72,6 +72,7 @@ import { visibleFrameTemplate } from "src/core/Frame";
   styleUrls: ["./fightline.component.css"],
 })
 export class FightLineComponent implements OnInit, OnDestroy {
+
   startDate = new Date(946677600000);
 
   fightId: string;
@@ -126,8 +127,16 @@ export class FightLineComponent implements OnInit, OnDestroy {
     }
   }
 
+  isWarningsVisible(){
+    return Boolean(this.visStorage.holders.warnings.length);
+  }
+
   onSelected(source: EventSource, event) {
     this.setSidePanel(event.data);
+  }
+
+  showWarnings() {
+    this.setSidePanel("warnings")
   }
 
   onClickGroup(source: EventSource, event) {

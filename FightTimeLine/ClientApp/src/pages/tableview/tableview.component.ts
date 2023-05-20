@@ -402,7 +402,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.filterChange(null, null);
   }
 
-  select(id: any, $event?: any) {
+  select(id: string, $event?: any) {
     if ($event) {
       $event.stopPropagation();
       $event.preventDefault();

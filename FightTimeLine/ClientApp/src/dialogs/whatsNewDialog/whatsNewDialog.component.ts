@@ -8,7 +8,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
   styleUrls: ["./whatsNewDialog.component.css"]
 })
 
-export class WhatsNewDialog {
+export class WhatsNewDialogComponent {
 
   @Input() data: any;
   @ViewChild("timeline", { static: false }) timeline: ElementRef;

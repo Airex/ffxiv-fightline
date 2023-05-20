@@ -4,7 +4,6 @@
 
 export const environment = {
   production: false,
-  showDialogOnUnload: false,
   skipHub: true,
   baseUrl: "http://localhost:5000/",
   version: "development"

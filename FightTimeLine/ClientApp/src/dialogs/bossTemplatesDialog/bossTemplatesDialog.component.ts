@@ -1,36 +1,55 @@
-import { Component, Inject, OnInit, ViewChild, ElementRef, OnDestroy, Input } from "@angular/core";
-import { map, first } from "rxjs/operators/";
+import {
+  Component,
+  Inject,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+  Input,
+} from "@angular/core";
+import { map, first } from "rxjs/operators";
 import { Zone, Encounter } from "../../core/FFLogs";
-import { IBoss, IBossSearchEntry, IBossAbility, DamageType } from "../../core/Models";
-import { Utils } from "../../core/Utils";
+import {
+  IBoss,
+  IBossSearchEntry,
+  IBossAbility,
+  DamageType,
+} from "../../core/Models";
+import { Utils, addMinutes } from "../../core/Utils";
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService";
-import { DispatcherPayloads, DispatcherService } from "../../services/dispatcher.service";
-import { fightServiceToken } from "../../services/fight.service-provider";
-import { IFightService } from "../../services/fight.service-interface";
-import { IAuthenticationService } from "../../services/authentication.service-interface";
-import { authenticationServiceToken } from "../../services/authentication.service-provider";
+import {
+  DispatcherPayloads,
+  DispatcherService,
+} from "../../services/dispatcher.service";
+import { fightServiceToken } from "../../services/fight/fight.service-provider";
+import { IFightService } from "../../services/fight/fight.service-interface";
+import { IAuthenticationService } from "../../services/authentication/authentication.service-interface";
+import { authenticationServiceToken } from "../../services/authentication/authentication.service-provider";
 import { gameServiceToken } from "../../services/game.service-provider";
 import { IGameService } from "../../services/game.service-interface";
 import { NzModalRef } from "ng-zorro-antd/modal";
-import {DataSetDataGroup, DataSetDataItem } from "vis-timeline";
+import { DataSetDataGroup, DataSetDataItem } from "vis-timeline";
 import { DataSet } from "vis-data";
-import { DataGroup, DataItem, TimelineOptions, VisTimelineService } from "ngx-vis";
+import {
+  DataGroup,
+  DataItem,
+  TimelineOptions,
+  VisTimelineService,
+} from "ngx-vis";
 
 @Component({
   selector: "bossTemplatesDialog",
   templateUrl: "./bossTemplatesDialog.component.html",
-  styleUrls: ["./bossTemplatesDialog.component.css"]
+  styleUrls: ["./bossTemplatesDialog.component.css"],
 })
-
-export class BossTemplatesDialog implements OnInit, OnDestroy {
-
+export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
   visItems: DataSetDataItem = new DataSet<DataItem>([], {});
   visGroups: DataSetDataGroup = new DataSet<DataGroup>([], {});
   visTimelineBoss = "visTimelinebooooosss";
   startDate = new Date(946677600000);
   @ViewChild("timeline", { static: true }) timeline: ElementRef;
   @ViewChild("listContainer", { static: true }) listContainer: ElementRef;
-  @Input() data: { needSave: boolean, boss?: IBoss };
+  @Input() data: { needSave: boolean; boss?: IBoss };
 
   optionsBoss = {
     width: "100%",
@@ -38,15 +57,15 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
     minHeight: "50px",
     autoResize: true,
     start: this.startDate,
-    end: new Date(new Date(this.startDate).setMinutes(30)),
-    max: new Date(new Date(this.startDate).setMinutes(30)),
+    end: addMinutes(this.startDate, 30),
+    max: addMinutes(this.startDate, 30),
     min: new Date(this.startDate),
     zoomable: true,
     zoomMin: 3 * 60 * 1000,
     zoomMax: 30 * 60 * 1000,
     zoomKey: "ctrlKey",
     moveable: true,
-    format: Utils.format(this.startDate),
+    format: Utils.format(),
     type: "box",
     multiselect: false,
     showCurrentTime: false,
@@ -55,7 +74,7 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
     stackSubgroups: true,
     editable: { remove: false, updateTime: false, add: false },
     horizontalScroll: true,
-    margin: { item: { horizontal: 0, vertical: 5 } }
+    margin: { item: { horizontal: 0, vertical: 5 } },
   } as TimelineOptions;
   isSpinning = true;
   isListLoading = false;
@@ -75,66 +94,88 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
     @Inject(gameServiceToken) private gameService: IGameService,
     @Inject(fightServiceToken) private fightService: IFightService,
     private visTimelineService: VisTimelineService,
-    @Inject("DispatcherPayloads") private dispatcher: DispatcherService<DispatcherPayloads>,
-    @Inject(authenticationServiceToken) public authService: IAuthenticationService,
+    @Inject("DispatcherPayloads")
+    private dispatcher: DispatcherService<DispatcherPayloads>,
+    @Inject(authenticationServiceToken)
+    public authService: IAuthenticationService,
     private notification: ScreenNotificationsService
-  ) {
-
-  }
+  ) {}
 
   getBossIcon(id) {
-    return "https://assets.rpglogs.com/img/ff/bosses/" + id + "-icon.jpg"
+    return "https://assets.rpglogs.com/img/ff/bosses/" + id + "-icon.jpg";
   }
 
   getZoneIcon(id) {
-    return "https://assets.rpglogs.com/img/ff/zones/zone-" + id + ".png"
+    return "https://assets.rpglogs.com/img/ff/zones/zone-" + id + ".png";
   }
 
   ngOnInit(): void {
-    this.gameService.dataService.getZones()
+    this.gameService.dataService
+      .getZones()
       .pipe(
         map((v) => {
-          return v.filter(x => x.brackets && x.brackets.min >= 4 && x.name.indexOf("Dungeons") !== 0 && x.name.indexOf("(Story)") < 0);
+          return v.filter(
+            (x) =>
+              x.brackets &&
+              x.brackets.min >= 4 &&
+              x.name.indexOf("Dungeons") !== 0 &&
+              x.name.indexOf("(Story)") < 0
+          );
         }),
         first()
       )
-      .subscribe(val => {
-        this.zones = (val as any as Zone[]).sort((a: Zone, b: Zone) => a.name.localeCompare(b.name));
-        this.filteredZones = this.zones;
-        if (this.data && this.data.boss && this.zones) {
-          const zone = this.zones.find((z) => z.encounters.some((y => y.id === this.data.boss.ref) as any));
-          if (zone) {
-            const enc = zone.encounters.find(y => y.id === this.data.boss.ref);
-            this.onEncounterSelected(zone.id, enc, true);
-            this.onSearchChange(null);
+      .subscribe({
+        next: (val) => {
+          this.zones = (val as any as Zone[]).sort((a: Zone, b: Zone) =>
+            a.name.localeCompare(b.name)
+          );
+          this.filteredZones = this.zones;
+          if (this.data && this.data.boss && this.zones) {
+            const zone = this.zones.find((z) =>
+              z.encounters.some(((y) => y.id === this.data.boss.ref) as any)
+            );
+            if (zone) {
+              const enc = zone.encounters.find(
+                (y) => y.id === this.data.boss.ref
+              );
+              this.onEncounterSelected(zone.id, enc, true);
+              this.onSearchChange(null);
+            }
           }
-        }
-      }, null, () => {
-        this.isSpinning = false;
+        },
+        complete: () => {
+          this.isSpinning = false;
+        },
       });
-    this.visTimelineService.createWithItems(this.visTimelineBoss, this.timeline.nativeElement, this.visItems, this.optionsBoss);
-
+    this.visTimelineService.createWithItems(
+      this.visTimelineBoss,
+      this.timeline.nativeElement,
+      this.visItems,
+      this.optionsBoss
+    );
   }
 
   onSearchChange(event: any) {
-    this.filteredZones =
-      this.zones.
-        filter(
-          (zone: Zone) => {
-            return (!this.searchString
-              || zone.encounters.some((x => x.name.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0))
-              && (!this.data.boss || zone.encounters.some((x => x.id === this.data.boss.ref))));
-          }
-        );
+    this.filteredZones = this.zones.filter((zone: Zone) => {
+      return (
+        !this.searchString ||
+        (zone.encounters.some(
+          (x) =>
+            x.name.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0
+        ) &&
+          (!this.data.boss ||
+            zone.encounters.some((x) => x.id === this.data.boss.ref)))
+      );
+    });
   }
 
   onSearchFightChange(event: any) {
-    this.filteredTemplates =
-      this.templates.filter(
-        (t: IBossSearchEntry) => {
-          return (!this.searchFightString || t.name.toLowerCase().indexOf(this.searchFightString.toLowerCase()) >= 0);
-        }
+    this.filteredTemplates = this.templates.filter((t: IBossSearchEntry) => {
+      return (
+        !this.searchFightString ||
+        t.name.toLowerCase().indexOf(this.searchFightString.toLowerCase()) >= 0
       );
+    });
   }
 
   clear() {
@@ -143,10 +184,15 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
   }
 
   filterEncounters(items: any[]) {
-    if (!items) { return []; }
-    return items.filter(x => (!this.searchString || x.name.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0)
-      && (!this.data || !this.data.boss || x.id === this.data.boss.ref));
-
+    if (!items) {
+      return [];
+    }
+    return items.filter(
+      (x) =>
+        (!this.searchString ||
+          x.name.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0) &&
+        (!this.data || !this.data.boss || x.id === this.data.boss.ref)
+    );
   }
 
   onEncounterSelected(zone, enc: any, skipCheck?: boolean) {
@@ -161,32 +207,47 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
     this.isListLoading = true;
 
     this.loadBosses(enc, skipCheck);
-
   }
 
   loadBosses(enc: any, skipCheck?: boolean) {
-    this.fightService.getBosses(enc.id, this.data.boss && this.data.boss.name || "", false).subscribe((data) => {
-      if (this.data.boss) {
-        this.select({ id: this.data.boss.id, name: "", canRemove: false }, skipCheck);
-      }
-      this.templates = data.filter(x => !this.data.boss || x.id.toLowerCase() === this.data.boss.id.toLowerCase());
-      this.onSearchFightChange(null);
-    }, null,
-      () => {
-        this.isListLoading = false;
-        this.listContainer.nativeElement.scrollTop = 0;
-      });
+    this.fightService
+      .getBosses(enc.id, (this.data.boss && this.data.boss.name) || "", false)
+      .subscribe(
+        (data) => {
+          if (this.data.boss) {
+            this.select(
+              { id: this.data.boss.id, name: "", canRemove: false },
+              skipCheck
+            );
+          }
+          this.templates = data.filter(
+            (x) =>
+              !this.data.boss ||
+              x.id.toLowerCase() === this.data.boss.id.toLowerCase()
+          );
+          this.onSearchFightChange(null);
+        },
+        null,
+        () => {
+          this.isListLoading = false;
+          this.listContainer.nativeElement.scrollTop = 0;
+        }
+      );
   }
 
   remove(item: any, event: any) {
-    this.fightService.removeBosses([item.id]).subscribe(() => {
-      this.notification.success("Template has been removed.");
-      this.selectedTemplate = null;
-    }, (error) => {
-      this.notification.success("Unable to remove tempalte");
-    }, () => {
-      this.loadBosses(this.selectedEncounter, true);
-    });
+    this.fightService.removeBosses([item.id]).subscribe(
+      () => {
+        this.notification.success("Template has been removed.");
+        this.selectedTemplate = null;
+      },
+      (error) => {
+        this.notification.success("Unable to remove tempalte");
+      },
+      () => {
+        this.loadBosses(this.selectedEncounter, true);
+      }
+    );
   }
 
   onNoClick(): void {
@@ -199,21 +260,32 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
     }
     this.isTimelineLoading = true;
     this.selectedTemplate = item;
-    this.fightService.getBoss(this.selectedTemplate.id).subscribe((boss) => {
-      const data = JSON.parse(boss.data);
-      this.visItems.clear();
-      this.visItems.add(data.attacks.map(a => this.createBossAttack(a.id, a.ability as IBossAbility, false)));
-      this.visItems.add(data.downTimes.map(a => this.createDownTime(
-        a.id,
-        Utils.getDateFromOffset(a.start),
-        Utils.getDateFromOffset(a.end),
-        a.color)));
-      this.visTimelineService.fit(this.visTimelineBoss);
-    },
+    this.fightService.getBoss(this.selectedTemplate.id).subscribe(
+      (boss) => {
+        const data = JSON.parse(boss.data);
+        this.visItems.clear();
+        this.visItems.add(
+          data.attacks.map((a) =>
+            this.createBossAttack(a.id, a.ability as IBossAbility, false)
+          )
+        );
+        this.visItems.add(
+          data.downTimes.map((a) =>
+            this.createDownTime(
+              a.id,
+              Utils.getDateFromOffset(a.start),
+              Utils.getDateFromOffset(a.end),
+              a.color
+            )
+          )
+        );
+        this.visTimelineService.fit(this.visTimelineBoss);
+      },
       null,
       () => {
         this.isTimelineLoading = false;
-      });
+      }
+    );
   }
 
   createDownTime(id: string, start: Date, end: Date, color: string): DataItem {
@@ -224,23 +296,29 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
       content: "",
       type: "background",
       style: "background-color:" + color,
-      className: "downtime"
+      className: "downtime",
     };
   }
 
-  createBossAttack(id: string, attack: IBossAbility, vertical: boolean): DataItem {
+  createBossAttack(
+    id: string,
+    attack: IBossAbility,
+    vertical: boolean
+  ): DataItem {
     const data = {
       id,
       content: this.createBossAttackElement(attack),
       start: Utils.getDateFromOffset(attack.offset),
       type: "box",
-      className: "bossAttack " + DamageType[attack.type]
+      className: "bossAttack " + DamageType[attack.type],
     };
     return data;
   }
 
   private createBossAttackElement(ability: IBossAbility): string {
-    return `<div><div class='marker'></div><div class='name'>${Utils.escapeHtml(ability.name)}</div></div>`;
+    return `<div><div class='marker'></div><div class='name'>${Utils.escapeHtml(
+      ability.name
+    )}</div></div>`;
   }
 
   clearTemplates() {
@@ -253,19 +331,22 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
 
   save() {
     this.dispatcher.dispatch("bossTemplateSave", {
-      name: this.data.boss && this.data.boss.name || this.selectedEncounter && this.selectedEncounter.name || "",
-      reference: this.selectedEncounter && this.selectedEncounter.id || 0,
+      name:
+        (this.data.boss && this.data.boss.name) ||
+        (this.selectedEncounter && this.selectedEncounter.name) ||
+        "",
+      reference: (this.selectedEncounter && this.selectedEncounter.id) || 0,
       isPrivate: false,
-      close: () => this.dialogRef.destroy()
+      close: () => this.dialogRef.destroy(),
     });
   }
 
   saveAsNew() {
     this.dispatcher.dispatch("bossTemplateSaveAsNew", {
-      name: this.selectedEncounter && this.selectedEncounter.name || "",
-      reference: this.selectedEncounter && this.selectedEncounter.id || 0,
+      name: (this.selectedEncounter && this.selectedEncounter.name) || "",
+      reference: (this.selectedEncounter && this.selectedEncounter.id) || 0,
       isPrivate: false,
-      close: () => this.dialogRef.destroy()
+      close: () => this.dialogRef.destroy(),
     });
   }
 
@@ -274,10 +355,8 @@ export class BossTemplatesDialog implements OnInit, OnDestroy {
       this.dispatcher.dispatch("bossTemplatesLoad", {
         boss: data,
         encounter: this.selectedEncounter.id,
-        close: () => this.dialogRef.destroy()
-      }
-      );
+        close: () => this.dialogRef.destroy(),
+      });
     });
-
   }
 }

@@ -13,7 +13,7 @@ import { DialogService } from "../services/DialogService";
 })
 export class KeyHandlerDirective {
 
-  @Output() onCommand = new EventEmitter<{ name: string, data?: {} }>();
+  @Output() command = new EventEmitter<{ name: string, data?: {} }>();
 
   code = null;
 
@@ -29,20 +29,20 @@ export class KeyHandlerDirective {
     }
 
     if (event.key === "Delete") {
-      this.onCommand.next({ name: "delete" });
+      this.command.next({ name: "delete" });
     } else
       if (event.code === "KeyZ" && event.ctrlKey) {
-        this.onCommand.next({ name: "undo" });
+        this.command.next({ name: "undo" });
       } else
         if (event.code === "KeyY" && event.ctrlKey) {
-          this.onCommand.next({ name: "redo" });
+          this.command.next({ name: "redo" });
         } else
 
           if (event.code === "ArrowLeft") {
-            this.onCommand.next({ name: "keyMove", data: { delta: -1 * (event.ctrlKey ? 10 : 1) } });
+            this.command.next({ name: "keyMove", data: { delta: -1 * (event.ctrlKey ? 10 : 1) } });
           } else
             if (event.code === "ArrowRight") {
-              this.onCommand.next({ name: "keyMove", data: { delta: 1 * (event.ctrlKey ? 10 : 1) } });
+              this.command.next({ name: "keyMove", data: { delta: 1 * (event.ctrlKey ? 10 : 1) } });
             }
     setTimeout(() => this.handleKey(event), 500);
   }

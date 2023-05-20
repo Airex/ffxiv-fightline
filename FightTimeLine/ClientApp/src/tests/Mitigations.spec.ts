@@ -130,8 +130,8 @@ describe("Mitigations", () => {
 
     expect(result.mitigations[0].name).toBe("SCH");
     expect(result.mitigations[1].name).toBe("WHM");
-    expect(result.mitigations[0].shield).toBe(0); // Assuming the Adloquium shield value is 0.134 * 1.2
-    expect(result.mitigations[1].shield).toBe(0.144);
+    expect(result.mitigations[0].shield).toBe(0, "SCH shield");
+    expect(result.mitigations[1].shield).toBe(0.144, "WHM shield");
   });
 
   it("WAR Thrill Of Battle increases SCH Adloquium shield value on WAR only", async () => {
@@ -172,13 +172,43 @@ describe("Mitigations", () => {
     expect(result.mitigations[1].hpIncrease).toBe(0, "WAR hpIncrease");
   });
 
-  it("System should use correct time to suggest ability", async () => {
-    const result = play(
+  it("Adloquium shield value affected by Thrill of Battle and Mantra", async () => {
+    // Adloquium shield without any buffs
+    const baseShieldResult = play(
+      job("SCH", wd(100), main(2300), det(2300)), // SCH with 100 WD, 2300 main stat, 2300 det
       job("WAR", wd(100), main(2300), det(2300)), // WAR with 100 WD, 2300 main stat, 2300 det
-      boss("02:58", "test", damage(120000), aoe) // Boss attacks
-    ).getGoodTimeForAbility("WAR", "Bloodwhetting", "test");
+      jobs.SCH("0:05", "Adloquium", target("WAR")), // SCH casts Adloquium on WAR
+      boss("0:10", "test", damage(120000)) // Boss attacks
+    ).mitigate("test"); // Check mitigation on the boss attack named "test"
 
-    expect(result).toBe("02:56");
+    const baseShield = baseShieldResult.mitigations[1].shield;
+
+    // Adloquium shield with Thrill of Battle
+    const thrillShieldResult = play(
+      job("SCH", wd(100), main(2300), det(2300)), // SCH with 100 WD, 2300 main stat, 2300 det
+      job("WAR", wd(100), main(2300), det(2300)), // WAR with 100 WD, 2300 main stat, 2300 det
+      jobs.WAR("0:03", "Thrill of Battle"), // WAR uses Thrill Of Battle
+      jobs.SCH("0:05", "Adloquium", target("WAR")), // SCH casts Adloquium on WAR
+      boss("0:10", "test", damage(120000)) // Boss attacks
+    ).mitigate("test"); // Check mitigation on the boss attack named "test"
+
+    const thrillShield = thrillShieldResult.mitigations[1].shield;
+
+    // Adloquium shield with Thrill of Battle and Mantra
+    const mantraShieldResult = play(
+      job("SCH", wd(100), main(2300), det(2300)), // SCH with 100 WD, 2300 main stat, 2300 det
+      job("WAR", wd(100), main(2300), det(2300)), // WAR with 100 WD, 2300 main stat, 2300 det
+      job("MNK", wd(100), main(2300), det(2300)), // MNK with 100 WD, 2300 main stat, 2300 det
+      jobs.WAR("0:03", "Thrill of Battle"), // WAR uses Thrill Of Battle
+      jobs.MNK("0:03", "Mantra"), // MNK uses Mantra
+      jobs.SCH("0:05", "Adloquium", target("WAR")), // SCH casts Adloquium on WAR
+      boss("0:10", "test", damage(120000)) // Boss attacks
+    ).mitigate("test"); // Check mitigation on the boss attack named "test"
+
+    const mantraShield = mantraShieldResult.mitigations[1].shield;
+
+    expect(baseShield).toBeLessThan(thrillShield, "Thrill of Battle shield");
+    expect(thrillShield).toBeLessThan(mantraShield, "Mantra + Thrill of Battle shield");
   });
 });
 
@@ -191,6 +221,15 @@ describe("Ability placement in availability zone", () => {
     ).getGoodTimeForAbility("WAR", "Bloodwhetting", "test");
 
     expect(result).toBe("02:52");
+  });
+
+  it("System should use correct time to suggest ability", async () => {
+    const result = play(
+      job("WAR", wd(100), main(2300), det(2300)), // WAR with 100 WD, 2300 main stat, 2300 det
+      boss("02:58", "test", damage(120000), aoe) // Boss attacks
+    ).getGoodTimeForAbility("WAR", "Bloodwhetting", "test");
+
+    expect(result).toBe("02:56");
   });
 
   it("System should use correct time to suggest ability when other ability used before", async () => {

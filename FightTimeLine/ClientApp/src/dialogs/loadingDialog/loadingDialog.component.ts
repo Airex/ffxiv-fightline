@@ -6,7 +6,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
     templateUrl: "./loadingDialog.component.html",
     styleUrls: ["./loadingDialog.component.css"]
 })
-export class LoadingDialog {
+export class LoadingDialogComponent {
 
     public text = "Loading...";
 

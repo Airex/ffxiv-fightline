@@ -5,9 +5,9 @@ import { FightsService } from "./fight.service";
 import { IFightService } from "./fight.service-interface";
 import { FightsMockService } from "./fight.service-mock";
 
-import { environment } from "../environments/environment";
-import * as Gameserviceprovider from "./game.service-provider";
-import * as Gameserviceinterface from "./game.service-interface";
+import { environment } from "../../environments/environment";
+import * as Gameserviceprovider from "../game.service-provider";
+import * as Gameserviceinterface from "../game.service-interface";
 
 const fightServiceFactory = (http: HttpClient, path: string, gameService: Gameserviceinterface.IGameService) => {
   let serviceToReturn: IFightService;

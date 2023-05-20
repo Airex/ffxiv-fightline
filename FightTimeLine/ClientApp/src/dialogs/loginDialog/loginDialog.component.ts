@@ -2,8 +2,8 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { NzModalRef } from "ng-zorro-antd/modal";
 import { first } from 'rxjs/operators';
-import { IAuthenticationService } from "../../services/authentication.service-interface";
-import { authenticationServiceToken } from "../../services/authentication.service-provider";
+import { IAuthenticationService } from "../../services/authentication/authentication.service-interface";
+import { authenticationServiceToken } from "../../services/authentication/authentication.service-provider";
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService";
 
 @Component({
@@ -11,7 +11,7 @@ import { ScreenNotificationsService } from "../../services/ScreenNotificationsSe
   templateUrl: "./loginDialog.component.html",
   styleUrls: ["./loginDialog.component.css"]
 })
-export class LoginDialog implements OnInit {
+export class LoginDialogComponent implements OnInit {
   loginForm: UntypedFormGroup;
   loading = false;
   submitted = false;

@@ -1,7 +1,7 @@
 import { Component, Inject, ViewChild, TemplateRef, Input, AfterViewInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { IFightService } from "../../services/fight.service-interface";
-import { fightServiceToken } from "../../services/fight.service-provider";
+import { IFightService } from "../../services/fight/fight.service-interface";
+import { fightServiceToken } from "../../services/fight/fight.service-provider";
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService";
 import * as M from "../../core/Models";
 import { NzSwitchComponent } from "ng-zorro-antd/switch";
@@ -14,7 +14,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
   styleUrls: ["./fightLoadDialog.component.css"]
 })
 
-export class FightLoadDialog implements AfterViewInit {
+export class FightLoadDialogComponent {
 
   constructor(
     public dialogRef: NzModalRef,
@@ -31,12 +31,6 @@ export class FightLoadDialog implements AfterViewInit {
   container: { fights: M.IFight[] } = { fights: [] };
   loading = true;
   selectedRowsChecked = [];
-  ngAfterViewInit(): void {
-    //    setTimeout(() => {
-    //        this.dialogRef.getConfig().nzTitle = this.headerTemplate;
-    //      },
-    //      0);
-  }
 
   load() {
     this.loading = true;

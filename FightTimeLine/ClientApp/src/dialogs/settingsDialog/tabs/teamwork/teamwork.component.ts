@@ -10,7 +10,7 @@ import { ISettingTab } from "../tabs";
   styleUrls: ["./teamwork.component.css"]
 })
 
-export class SettingsDialogTeamworkTab implements OnInit, ISettingTab {
+export class SettingsDialogTeamworkTabComponent implements OnInit, ISettingTab {
 
 
   teamworkForm: UntypedFormGroup;
