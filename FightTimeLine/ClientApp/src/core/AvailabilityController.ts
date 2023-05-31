@@ -14,7 +14,6 @@ export class AvailabilityController {
   constructor(
     private presenter: PresenterManager,
     private holders: Holders.Holders,
-    private startDate: Date,
     private idgen: IdGenerator
   ) {}
 

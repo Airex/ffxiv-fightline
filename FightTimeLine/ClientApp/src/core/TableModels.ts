@@ -9,11 +9,9 @@ export interface IColumnTemplate<RowData> {
 }
 
 export abstract class BaseColumnTemplate {
-  private startDate = new Date(946677600000);
-
   protected offsetCompareFn(a: TimeOffset, b: TimeOffset): number {
     const d = new Date();
-    return Utils.getDateFromOffset(a, d).valueOf() - Utils.getDateFromOffset(b, d).valueOf();
+    return Utils.getDateFromOffset(a).valueOf() - Utils.getDateFromOffset(b).valueOf();
   }
 
   protected getColor(it: IBossAbility) {
@@ -21,19 +19,19 @@ export abstract class BaseColumnTemplate {
   }
 
   protected offsetFromDuration(start: TimeOffset, duration: number): TimeOffset {
-    return Utils.formatTime(new Date(Utils.getDateFromOffset(start, this.startDate).valueOf() + duration * 1000));
+    return Utils.formatTime(new Date(Utils.getDateFromOffset(start).valueOf() + duration * 1000));
   }
 
   protected isOffsetInRange(offset: TimeOffset, start: TimeOffset, end: TimeOffset) {
-    const point = Utils.getDateFromOffset(offset, this.startDate);
-    return Utils.getDateFromOffset(start, this.startDate) <= point &&
-      Utils.getDateFromOffset(end, this.startDate) >= point;
+    const point = Utils.getDateFromOffset(offset);
+    return Utils.getDateFromOffset(start) <= point &&
+      Utils.getDateFromOffset(end) >= point;
   }
 
   protected isOffsetNear(offset: TimeOffset, start: TimeOffset, distance: [number, number]) {
     const [min, max] = distance;
-    const point = Utils.getDateFromOffset(offset, this.startDate);
-    const value = Utils.getDateFromOffset(start, this.startDate).valueOf() - point.valueOf();
+    const point = Utils.getDateFromOffset(offset);
+    const value = Utils.getDateFromOffset(start).valueOf() - point.valueOf();
     return value >= min * 1000 && value <= max * 1000;
   }
 

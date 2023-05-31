@@ -1,13 +1,31 @@
-<div #timeline style="height: 560px; overflow: auto; padding: 4px;" customScroll>
+<div #timeline style="height: 560px; overflow: auto; padding: 4px" customScroll>
   <nz-timeline>
-    <nz-timeline-item *ngFor="let change of data; index as i; " [nzColor]="i === 0?'green':'blue'">
-      <div><b>{{change.date}}</b></div>
-      <ul *ngFor="let item of change.items" [ngStyle]="{'margin-bottom': '4px'}">
+    <nz-timeline-item
+      *ngFor="let change of data | slice:0:take; index as i"
+      [nzColor]="i === 0 ? 'green' : 'blue'"
+    >
+      <div>
+        <b>{{ change.date | date : "mediumDate" }}</b>
+      </div>
+      <!-- <ul *ngFor="let item of change.items" [ngStyle]="{'margin-bottom': '4px'}">
         <li innerHtml="{{item}}"></li>
-      </ul>
+      </ul> -->
+      <markdown [src]="'./assets/changelog/' + change.key + '.md'"> </markdown>
     </nz-timeline-item>
   </nz-timeline>
+  <div>
+    <button
+      nz-button
+      nzType="link"
+      (click)="more()"
+      *ngIf="this.take < this.data.length"
+    >
+      {{ "dialog.showMore" | translate }}
+    </button>
+  </div>
   <div *nzModalFooter>
-    <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">{{'dialog.close' | translate}}</button>
+    <button nz-button nzType="primary" (click)="this.dialogRef.destroy()">
+      {{ "dialog.close" | translate }}
+    </button>
   </div>
 </div>

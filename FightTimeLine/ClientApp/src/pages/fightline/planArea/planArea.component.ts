@@ -1,16 +1,40 @@
-import { Component, OnInit, OnDestroy, NgZone, EventEmitter, Output } from "@angular/core";
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  NgZone,
+  EventEmitter,
+  Output,
+} from "@angular/core";
 import { VisTimelineService, TimelineOptions, DataItem } from "ngx-vis";
 import { ITimelineContainer } from "src/core/Holders/BaseHolder";
 import { VisStorageService } from "src/services/VisStorageService";
 import { ClassNameBuilder } from "../../../core/ClassNameBuilder";
-import { Utils } from "../../../core/Utils";
-import { } from "xss";
+import {
+  Utils,
+  addMinutes,
+  addSeconds,
+  startOffsetConst,
+} from "../../../core/Utils";
+import {} from "xss";
 
-export type ActionName = "delete" | "canMove" | "move" | "selected" | "clickGroup" | "clickEmpty"
-  | "doubleClickGroup" | "doubleClickEmpty" | "doubleClickItem" | "timeChanged" | "visibleFrameTemplate"
-  | "itemTooltip" | "keyMove" | "groupOrderSwap";
+export type ActionName =
+  | "delete"
+  | "canMove"
+  | "move"
+  | "selected"
+  | "clickGroup"
+  | "clickEmpty"
+  | "doubleClickGroup"
+  | "doubleClickEmpty"
+  | "doubleClickItem"
+  | "timeChanged"
+  | "visibleFrameTemplate"
+  | "itemTooltip"
+  | "keyMove"
+  | "groupOrderSwap";
 export type EventSource = "player" | "boss" | "user";
-export type Action = { name: ActionName, source?: EventSource, payload?: any };
+export type Action = { name: ActionName; source?: EventSource; payload?: any };
 
 export interface ICustomTimeActions {
   addBossCustomTime(id: string, date: Date);
@@ -19,23 +43,22 @@ export interface ICustomTimeActions {
   removePlayerCustomTime(id: string);
 }
 
-
 @Component({
   selector: "planArea",
   templateUrl: "./planArea.component.html",
-  styleUrls: ["./planArea.component.css"]
+  styleUrls: ["./planArea.component.css"],
 })
-export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions {
+export class PlanAreaComponent
+  implements OnInit, OnDestroy, ICustomTimeActions
+{
   constructor(
     private visTimelineService: VisTimelineService,
     private visStorage: VisStorageService,
-    private ngZone: NgZone,
+    private ngZone: NgZone
   ) {
     this.playerContainer = this.visStorage.playerContainer;
     this.bossContainer = this.visStorage.bossContainer;
   }
-
-  startDate = new Date(946677600000);
   subs: any[] = [];
   visTimeline = "timeLineMain";
   visTimelineBoss = "timeLineBoss";
@@ -43,7 +66,6 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
   bossContainer: ITimelineContainer;
   forAction = [];
   selectedGroup: string;
-
 
   @Output()
   action = new EventEmitter<Action>();
@@ -53,10 +75,10 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     height: "100%",
     minHeight: "300px",
     autoResize: true,
-    start: this.startDate,
-    end: new Date(new Date(this.startDate).setMinutes(30)),
-    max: new Date(new Date(this.startDate).setMinutes(30)),
-    min: new Date(this.startDate.valueOf() as number - 30 * 1000),
+    start: startOffsetConst,
+    end: addMinutes(startOffsetConst, 30),
+    max: addMinutes(startOffsetConst, 30),
+    min: addSeconds(startOffsetConst, -30),
     zoomable: true,
     zoomMin: 3 * 60 * 1000,
     zoomMax: 30 * 60 * 1000,
@@ -77,10 +99,14 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     margin: { item: { horizontal: 0, vertical: 5 } },
     onRemove: (item: any, callback: any) => {
       callback(null);
-      this.emitAction("delete", "player", this.visTimelineService.getSelection(this.visTimeline));
+      this.emitAction(
+        "delete",
+        "player",
+        this.visTimelineService.getSelection(this.visTimeline)
+      );
     },
     xss: {
-      disabled: true
+      disabled: true,
     },
     onMoving: (item: any, callback: any) => {
       let result;
@@ -89,7 +115,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
         selection: this.visTimelineService.getSelection(this.visTimeline),
         handler: (t) => {
           result = t;
-        }
+        },
       });
       // console.log(result);
       if (result) {
@@ -119,7 +145,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
         item,
         handler: (t) => {
           result = t;
-        }
+        },
       });
 
       return result;
@@ -127,30 +153,29 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     tooltipOnItemUpdateTime: {
       template: (item: any) => {
         let result;
-        this.emitAction("itemTooltip", "player",
-          {
-            item,
-            handler: (t) => { result = t; }
-          });
+        this.emitAction("itemTooltip", "player", {
+          item,
+          handler: (t) => {
+            result = t;
+          },
+        });
         return result;
-      }
+      },
     },
     snap: (date: Date) => date,
     groupEditable: { order: true },
     groupOrderSwap: (a, b) => {
-      this.emitAction("groupOrderSwap", "player",
-        {
-          from: a,
-          to: b,
-          handler: (allowSwap) => {
-            if (allowSwap) {
-              const v = a.value;
-              a.value = b.value;
-              b.value = v;
-            }
+      this.emitAction("groupOrderSwap", "player", {
+        from: a,
+        to: b,
+        handler: (allowSwap) => {
+          if (allowSwap) {
+            const v = a.value;
+            a.value = b.value;
+            b.value = v;
           }
-        });
-
+        },
+      });
     },
   };
   optionsBoss: TimelineOptions = {
@@ -158,10 +183,10 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     height: "100%",
     minHeight: "50px",
     autoResize: true,
-    start: this.startDate,
-    end: new Date(new Date(this.startDate).setMinutes(30)),
-    max: new Date(new Date(this.startDate).setMinutes(30)),
-    min: new Date(this.startDate.valueOf() as number - 30 * 1000),
+    start: startOffsetConst,
+    end: addMinutes(startOffsetConst, 30),
+    max: addMinutes(startOffsetConst, 30),
+    min: addSeconds(startOffsetConst, -30),
     zoomable: true,
     zoomMin: 3 * 60 * 1000,
     zoomMax: 30 * 60 * 1000,
@@ -169,10 +194,10 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     moveable: true,
     tooltip: {
       followMouse: false,
-      overflowMethod: "flip"
+      overflowMethod: "flip",
     },
     xss: {
-      disabled: true
+      disabled: true,
     },
     type: "box",
     multiselect: true,
@@ -186,7 +211,9 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     margin: { item: { horizontal: 0, vertical: 5 } },
     onRemove: (item: any, callback: any) => {
       callback(null);
-      const selection = this.visTimelineService.getSelection(this.visTimelineBoss);
+      const selection = this.visTimelineService.getSelection(
+        this.visTimelineBoss
+      );
       this.emitAction("delete", "boss", selection);
     },
     onMoving: (item: any, callback: any) => {
@@ -196,7 +223,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
         selection: this.visTimelineService.getSelection(this.visTimelineBoss),
         handler: (t) => {
           result = t;
-        }
+        },
       });
 
       // console.log(result);
@@ -209,7 +236,9 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     onMove: (item: any, callback: any) => {
       callback(item);
       this.forAction.push(item);
-      const selection = this.visTimelineService.getSelection(this.visTimelineBoss);
+      const selection = this.visTimelineService.getSelection(
+        this.visTimelineBoss
+      );
       if (this.forAction.length >= selection.length) {
         this.emitAction("move", "boss", this.forAction);
         this.forAction = [];
@@ -221,27 +250,32 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     tooltipOnItemUpdateTime: {
       template: (item: any) => {
         let result;
-        this.emitAction("itemTooltip", "player",
-          {
-            item,
-            handler: (t) => { result = t; }
-          });
+        this.emitAction("itemTooltip", "player", {
+          item,
+          handler: (t) => {
+            result = t;
+          },
+        });
         return result;
-      }
+      },
     },
     onUpdate: (item: any, callback: any) => {
       callback(null);
     },
-    snap: (date: Date) => date
+    snap: (date: Date) => date,
   };
 
   selectBossAttaks(value: any[]) {
     this.visTimelineService.setSelectionToIds(this.visTimelineBoss, value);
     this.setSelectionOfBossAttacks(value);
 
-    this.visTimelineService.focusOnIds(this.visTimelineBoss, value, { animation: false });
+    this.visTimelineService.focusOnIds(this.visTimelineBoss, value, {
+      animation: false,
+    });
     const w = this.visTimelineService.getWindow(this.visTimelineBoss);
-    this.visTimelineService.setWindow(this.visTimeline, w.start, w.end, { animation: false });
+    this.visTimelineService.setWindow(this.visTimeline, w.start, w.end, {
+      animation: false,
+    });
   }
 
   selectAbilities(value: any[]) {
@@ -249,9 +283,13 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     this.visTimelineService.setSelectionToIds(this.visTimelineBoss, value);
     this.setSelectionOfBossAttacks([]);
 
-    this.visTimelineService.focusOnIds(this.visTimeline, value, { animation: false });
+    this.visTimelineService.focusOnIds(this.visTimeline, value, {
+      animation: false,
+    });
     const w = this.visTimelineService.getWindow(this.visTimeline);
-    this.visTimelineService.setWindow(this.visTimelineBoss, w.start, w.end, { animation: false });
+    this.visTimelineService.setWindow(this.visTimelineBoss, w.start, w.end, {
+      animation: false,
+    });
   }
 
   private emitAction(name: ActionName, source: EventSource, payload: any) {
@@ -259,7 +297,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     this.action.emit({
       name,
       source,
-      payload
+      payload,
     });
   }
 
@@ -306,25 +344,24 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     this.visTimelineService.on(this.visTimelineBoss, "rangechange");
   }
 
-
   updateSelection(source: EventSource, eventData: any): void {
     if (source === "player") {
       this.visTimelineService.setSelectionToId(this.visTimelineBoss, "");
       this.setSelectionOfBossAttacks([]);
-      this.emitAction("selected", source,
-        {
-          target: "friend",
-          data: eventData
-        });
+      this.emitAction("selected", source, {
+        target: "friend",
+        data: eventData,
+      });
     }
     if (source === "boss") {
       this.visTimelineService.setSelectionToId(this.visTimeline, "");
-      this.setSelectionOfBossAttacks(this.visTimelineService.getSelection(this.visTimelineBoss) as string[]);
-      this.emitAction("selected", source,
-        {
-          target: "boss",
-          data: eventData
-        });
+      this.setSelectionOfBossAttacks(
+        this.visTimelineService.getSelection(this.visTimelineBoss) as string[]
+      );
+      this.emitAction("selected", source, {
+        target: "boss",
+        data: eventData,
+      });
     }
   }
 
@@ -334,7 +371,7 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     const items = this.playerContainer.items.get();
     items.forEach((it: DataItem) => {
       const b = new ClassNameBuilder(it.className);
-      const have = ids && ids.some(e => "bossAttack_" + e === it.id);
+      const have = ids && ids.some((e) => "bossAttack_" + e === it.id);
       b.set({ selected: have });
       if (b.isChanged()) {
         it.className = b.build();
@@ -344,38 +381,45 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
     this.playerContainer.items.update(toUpdate);
   }
 
-
   refresh(): void {
     this.visTimelineService.redraw(this.visTimeline);
     this.visTimelineService.redraw(this.visTimelineBoss);
   }
 
   setInitialWindow(date: Date, mins: number): void {
-
-    const eDate = (date || this.startDate).getMinutes() + mins;
+    const eDate = (date || new Date(startOffsetConst)).getMinutes() + mins;
 
     setTimeout(() => {
-      const endDate = new Date(this.startDate.valueOf() as number + Math.max(eDate, 3) * 60 * 1000);
-      this.visTimelineService.setWindow(this.visTimeline, this.startDate, endDate, { animation: false });
-      this.visTimelineService.setWindow(this.visTimelineBoss, this.startDate, endDate, { animation: false });
+      const endDate = addMinutes(startOffsetConst, Math.max(eDate, 3));
+      this.visTimelineService.setWindow(
+        this.visTimeline,
+        startOffsetConst,
+        endDate,
+        { animation: false }
+      );
+      this.visTimelineService.setWindow(
+        this.visTimelineBoss,
+        startOffsetConst,
+        endDate,
+        { animation: false }
+      );
     });
   }
 
-  onCommand(command: { name: string, data?: any }) {
+  onCommand(command: { name: string; data?: any }) {
     const selected = [
       ...this.visTimelineService.getSelection(this.visTimeline),
-      ...this.visTimelineService.getSelection(this.visTimelineBoss)
+      ...this.visTimelineService.getSelection(this.visTimelineBoss),
     ];
     switch (command.name) {
       case "delete":
         this.emitAction(command.name as any, "user", selected);
         break;
       case "keyMove":
-        this.emitAction(command.name as any, "user",
-          {
-            delta: command.data.delta,
-            selection: selected
-          });
+        this.emitAction(command.name as any, "user", {
+          delta: command.data.delta,
+          selection: selected,
+        });
         break;
       default:
         this.emitAction(command.name as any, "user", command.data as any);
@@ -383,65 +427,94 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
   }
 
   ngOnInit() {
-    this.subs.push(this.visTimelineService.rangechange
-      .subscribe((eventData: any[]) => {
+    this.subs.push(
+      this.visTimelineService.rangechange.subscribe((eventData: any[]) => {
         const event: any = eventData[1];
         if (event.byUser) {
-          this.visTimelineService.setWindow(eventData[0] === this.visTimeline ? this.visTimelineBoss : this.visTimeline,
+          this.visTimelineService.setWindow(
+            eventData[0] === this.visTimeline
+              ? this.visTimelineBoss
+              : this.visTimeline,
             event.start,
             event.end,
-            { animation: false });
+            { animation: false }
+          );
         }
-      }));
+      })
+    );
 
-    this.subs.push(this.visTimelineService.select.subscribe((eventData: any[]) => {
-      this.updateSelection(this.getSource(eventData), eventData[1]);
-    }));
+    this.subs.push(
+      this.visTimelineService.select.subscribe((eventData: any[]) => {
+        this.updateSelection(this.getSource(eventData), eventData[1]);
+      })
+    );
 
-    this.subs.push(this.visTimelineService.timechanged.subscribe((eventData: any[]) => {
-      this.emitAction("timeChanged", this.getSource(eventData), {
-        id: eventData[1].id,
-        date: eventData[1].time
-      });
-    }));
+    this.subs.push(
+      this.visTimelineService.timechanged.subscribe((eventData: any[]) => {
+        this.emitAction("timeChanged", this.getSource(eventData), {
+          id: eventData[1].id,
+          date: eventData[1].time,
+        });
+      })
+    );
 
-    this.subs.push(this.visTimelineService.click.subscribe((eventData: any[]) => {
-      const source = this.getSource(eventData);
-      this.unselectGroup(this.selectedGroup);
-      if (eventData[1].what === "group-label") {
-        if (source === "player") {
-          this.selectedGroup = eventData[1].group;
-          this.selectGroup(this.selectedGroup);
-          this.emitAction("selected", source,
-            {
+    this.subs.push(
+      this.visTimelineService.click.subscribe((eventData: any[]) => {
+        const source = this.getSource(eventData);
+        this.unselectGroup(this.selectedGroup);
+        if (eventData[1].what === "group-label") {
+          if (source === "player") {
+            this.selectedGroup = eventData[1].group;
+            this.selectGroup(this.selectedGroup);
+            this.emitAction("selected", source, {
               target: "group",
-              data: eventData[1]
+              data: eventData[1],
             });
+            return;
+          }
+          this.emitAction("clickGroup", source, eventData[1]);
+        } else if (
+          eventData[1].what === "background" ||
+          eventData[1].what === null
+        ) {
+          this.emitAction("clickEmpty", source, eventData[1]);
+        }
+      })
+    );
+
+    this.subs.push(
+      this.visTimelineService.doubleClick.subscribe((eventData: any[]) => {
+        if (eventData[1].event.type !== "dblclick") {
           return;
         }
-        this.emitAction("clickGroup", source, eventData[1]);
-      }
-      else if (eventData[1].what === "background" || eventData[1].what === null) {
-        this.emitAction("clickEmpty", source, eventData[1]);
-      }
-    }));
+        this.ngZone.run(() => {
+          if (eventData[1].what === "background" || eventData[1].what == null) {
+            this.emitAction(
+              "doubleClickEmpty",
+              this.getSource(eventData),
+              eventData[1]
+            );
+          } else if (eventData[1].what === "item") {
+            this.emitAction(
+              "doubleClickItem",
+              this.getSource(eventData),
+              eventData[1]
+            );
+          } else if (eventData[1].what === "group-label") {
+            this.emitAction(
+              "doubleClickGroup",
+              this.getSource(eventData),
+              eventData[1]
+            );
+            this.selectGroup(eventData[1].group);
+          }
+        });
+      })
+    );
 
-    this.subs.push(this.visTimelineService.doubleClick.subscribe((eventData: any[]) => {
-      if (eventData[1].event.type !== "dblclick") { return; }
-      this.ngZone.run(() => {
-        if (eventData[1].what === "background" || eventData[1].what == null) {
-          this.emitAction("doubleClickEmpty", this.getSource(eventData), eventData[1]);
-        } else if (eventData[1].what === "item") {
-          this.emitAction("doubleClickItem", this.getSource(eventData), eventData[1]);
-        } else if (eventData[1].what === "group-label") {
-          this.emitAction("doubleClickGroup", this.getSource(eventData), eventData[1]);
-          this.selectGroup(eventData[1].group);
-        }
-      });
-    }));
-
-    this.subs.push(this.visTimelineService.itemover.subscribe((eventData: any[]) => {
-    }));
+    this.subs.push(
+      this.visTimelineService.itemover.subscribe((eventData: any[]) => {})
+    );
   }
 
   selectGroup(id: string) {
@@ -478,10 +551,6 @@ export class PlanAreaComponent implements OnInit, OnDestroy, ICustomTimeActions 
 
     this.visTimelineService.destroy(this.visTimeline);
     this.visTimelineService.destroy(this.visTimelineBoss);
-    this.subs.forEach(s => s.unsubscribe());
+    this.subs.forEach((s) => s.unsubscribe());
   }
-
-
-
 }
-

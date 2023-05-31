@@ -2,7 +2,7 @@ import { DataItem } from "vis-timeline";
 import { BaseMap } from "./BaseMap";
 import { IMoveable } from "../Holders/BaseHolder";
 import { AbilityMap } from "./index";
-import { Utils } from "../Utils";
+import { Utils, addSeconds } from "../Utils";
 import * as Models from "../Models";
 
 export interface IJobStanceMapData {
@@ -41,8 +41,8 @@ export class JobStanceMap extends BaseMap<string, DataItem, IJobStanceMapData> i
   stanceAbility: Models.IAbility;
   loaded: boolean;
   move(delta: number): boolean {
-    const newDateStart = new Date(this.start.valueOf() as number + delta * 1000);
-    const newDateEnd = new Date(this.end.valueOf() as number + delta * 1000);
+    const newDateStart = addSeconds(this.start, delta);
+    const newDateEnd = addSeconds(this.end, delta);
     this.applyData({
       start: newDateStart,
       end: newDateEnd

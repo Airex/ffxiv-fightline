@@ -4,7 +4,7 @@ import {
   HostListener,
   Input
 } from "@angular/core";
-import { Utils } from "../core/Utils";
+import { Utils, startOffsetConst } from "../core/Utils";
 
 
 enum WheelOperator {
@@ -72,10 +72,10 @@ export class OffsetWheelDirective {
 
   handleParse(value: string): Date {
     if (value) {
-      return Utils.getDateFromOffset(value, new Date(946677600000));
+      return Utils.getDateFromOffset(value);
     }
     else {
-      return new Date(946677600000);
+      return new Date(startOffsetConst);
     }
   }
 

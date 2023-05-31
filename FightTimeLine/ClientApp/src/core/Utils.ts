@@ -21,10 +21,9 @@ export class Utils {
   }
 
   static getDateFromOffset(
-    offset: number | string = 0,
-    startDate?: Date
+    offset: number | string = 0
   ): Date {
-    let d = new Date(startDate || startOffsetConst);
+    let d = new Date(startOffsetConst);
     if (typeof offset === "number") {
       d.setSeconds(offset);
     } else {
@@ -181,6 +180,6 @@ export function addSeconds(date: Date | number, seconds: number): Date {
 }
 
 export function addMinutes(date: Date | number, minutes: number): Date {
-  return this.addSeconds(date, minutes * 60);
+  return addSeconds(date, minutes * 60);
 }
 

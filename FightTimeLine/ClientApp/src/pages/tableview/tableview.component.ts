@@ -49,7 +49,6 @@ import { MoveCommand } from "src/core/commands/MoveCommand";
   styleUrls: ["./tableview.component.css"],
 })
 export class TableViewComponent implements OnInit, OnDestroy {
-  startDate = new Date(startOffsetConst);
   fightId: string;
   template: string;
   tableHeight: string = window.innerHeight - 100 + "px";
@@ -184,7 +183,6 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.gameService.jobRegistry.setLevel(90);
     this.fightLineController =
       new FightTimeLineController.FightTimeLineController(
-        this.startDate,
         this.idgen,
         this.visStorage.holders,
         {
@@ -253,8 +251,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
           if (fight) {
             this.fightService
               .getCommands(id, new Date(fight.dateModified).valueOf())
-              .subscribe(
-                (value) => {
+              .subscribe({
+                next: (value) => {
                   const loadedData =
                     fight.data &&
                     (JSON.parse(fight.data) as IFightSerializeData);
@@ -270,12 +268,12 @@ export class TableViewComponent implements OnInit, OnDestroy {
                     ref.close();
                   });
                 },
-                (error) => {
+                error: (error) => {
                   console.error(error);
                   ref.close();
                   this.notification.error("Unable to load data");
-                }
-              );
+                },
+              });
           } else {
             ref.close();
             this.notification.showUnableToLoadFight(() => {});

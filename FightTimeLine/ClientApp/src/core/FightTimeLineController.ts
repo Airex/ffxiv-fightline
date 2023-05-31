@@ -39,7 +39,7 @@ import {
   IUpdateOptions,
   UndoRedoController,
 } from "./UndoRedo";
-import { Utils, addSeconds } from "./Utils";
+import { Utils, addSeconds, startOffsetConst } from "./Utils";
 import { Holders } from "./Holders";
 import {
   AbilityMap,
@@ -55,11 +55,6 @@ import * as PresentationManager from "./PresentationManager";
 import { IOverlapCheckData } from "./Maps/BaseMap";
 import { DefaultJobStats, DefaultRoleStats } from "src/Jobs/FFXIV/defaults";
 import { calculateDuration, calculateOffset } from "./Durations/functions";
-import {
-  calculateDefsForAttack,
-  calculateMitigationForAttack,
-} from "./Defensives/functions";
-import { Warning } from "./Defensives/types";
 
 export class FightTimeLineController {
   data: M.IFightData = {};
@@ -67,7 +62,7 @@ export class FightTimeLineController {
   private commandStorage: UndoRedoController;
   private commandBag: CommandBag;
   private loading = false;
-  private commandFactory = new CommandFactory(this.startDate);
+  private commandFactory = new CommandFactory();
   private availabilityController: AvailabilityController;
   hasChanges = false;
   fraction: M.IFraction;
@@ -82,7 +77,6 @@ export class FightTimeLineController {
   canRedoChanged = new EventEmitter<void>();
 
   constructor(
-    private startDate: Date,
     private idgen: IdGenerator,
     private holders: Holders,
     private dialogCallBacks: IDialogs,
@@ -123,7 +117,6 @@ export class FightTimeLineController {
     this.availabilityController = new AvailabilityController(
       this.presenterManager,
       this.holders,
-      this.startDate,
       this.idgen
     );
 
@@ -191,9 +184,9 @@ export class FightTimeLineController {
         new AddDowntimeCommand.AddDowntimeCommand(
           nextId,
           {
-            start: Utils.getDateFromOffset(d.start, this.startDate),
+            start: Utils.getDateFromOffset(d.start),
             startId: (index++).toString(),
-            end: Utils.getDateFromOffset(d.end, this.startDate),
+            end: Utils.getDateFromOffset(d.end),
             endId: (index++).toString(),
           },
           d.color,
@@ -272,16 +265,16 @@ export class FightTimeLineController {
     const time =
       rawTime instanceof Date
         ? rawTime
-        : Utils.getDateFromOffset(rawTime, this.startDate);
+        : Utils.getDateFromOffset(rawTime);
 
     if (map) {
-      if (map.ability.requiresBossTarget && time < this.startDate) {
+      if (map.ability.requiresBossTarget && time < new Date(startOffsetConst)) {
         return;
       }
 
       const overlap = map.ability.overlapStrategy.check({
         ability: map.ability,
-        globalStart: this.startDate,
+        globalStart: new Date(startOffsetConst),
         holders: this.holders,
         jobAbilityId: map.id,
         itemUsageId: id,
@@ -325,7 +318,7 @@ export class FightTimeLineController {
   getLatestAbilityUsageTime(): Date | null {
     const filtered = this.holders.itemUsages.getAll();
     if (filtered.length === 0) {
-      return this.startDate;
+      return new Date(startOffsetConst);
     }
     return filtered.reduce((a, b) => (a.start < b.start ? b : a)).start as Date;
   }
@@ -374,7 +367,7 @@ export class FightTimeLineController {
     time.setMilliseconds(0);
 
     if (group === this.bossGroup || !group) {
-      if (time >= this.startDate) {
+      if (time >= new Date(startOffsetConst)) {
         this.dialogCallBacks.openBossAttackAddDialog(
           { offset: Utils.formatTime(time) },
           (result) => {
@@ -466,7 +459,7 @@ export class FightTimeLineController {
       return;
     }
 
-    const date = new Date(this.startDate);
+    const date = new Date(startOffsetConst);
     date.setMinutes(30);
     const latestBossTime = date;
 
@@ -474,7 +467,7 @@ export class FightTimeLineController {
       .filter((a) => this.holders.abilities.isBossTargetForGroup(a.ability.id))
       .sort((a, b) => a.startAsNumber - b.startAsNumber);
 
-    let start = Utils.getDateFromOffset(0, this.startDate);
+    let start = Utils.getDateFromOffset(0);
     let target = this.holders.bossTargets.initialBossTarget;
 
     for (let i = 0; i < bossTargetChangeAbilities.length + 1; i++) {
@@ -518,7 +511,7 @@ export class FightTimeLineController {
       jobAbilityId: item.group,
       start: new Date(item.start),
       end: new Date(item.end),
-      globalStart: this.startDate,
+      globalStart: new Date(startOffsetConst),
       selectionRegistry: selection,
     };
 
@@ -732,7 +725,7 @@ export class FightTimeLineController {
       usages,
       (it: AbilityUsageMap) => it.end
     ) as AbilityUsageMap;
-    const maxValue = (max && max.end) || this.startDate;
+    const maxValue = (max && max.end) || new Date(startOffsetConst);
     const count = (6 * 60) / map.ability.cooldown;
     return _.range(count).map(
       (index) =>
@@ -976,7 +969,7 @@ export class FightTimeLineController {
               this.addClassAbility(
                 a.id,
                 abilityMap,
-                Utils.getDateFromOffset(a.start, this.startDate),
+                Utils.getDateFromOffset(a.start),
                 true,
                 a.settings
               );
@@ -1100,8 +1093,7 @@ export class FightTimeLineController {
       );
       const importCommand = importController.buildImportCommand(
         settings,
-        parser,
-        this.startDate
+        parser
       );
 
       this.commandStorage.execute(importCommand);
@@ -1131,8 +1123,7 @@ export class FightTimeLineController {
       );
       const importCommand = importController.buildImportBossAttacksCommand(
         settings,
-        parser,
-        this.startDate
+        parser
       );
 
       this.commandStorage.execute(importCommand);
