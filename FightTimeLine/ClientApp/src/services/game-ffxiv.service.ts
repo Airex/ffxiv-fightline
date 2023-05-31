@@ -1,16 +1,16 @@
 import { Injectable, Inject } from '@angular/core';
-import * as Gameserviceinterface from "./game.service-interface";
 import { IJobRegistryService } from "./jobregistry.service-interface";
-import * as Jobregistryffxivservice from "./jobregistry-ffxiv.service";
 import { IDataService } from "./data.service-interface";
 import { IFraction } from "../core/Models";
 import { HttpClient } from '@angular/common/http';
 import { LocalStorageService } from './LocalStorageService';
 import { FFLogsService } from './FFLogs-data.service';
 import { SettingsService } from './SettingsService';
+import { IGameService } from './game.service-interface';
+import { FFXIVJobRegistryService } from './jobregistry-ffxiv.service';
 
 @Injectable()
-export class FFXIVGameService implements Gameserviceinterface.IGameService {
+export class FFXIVGameService implements IGameService {
   private readonly dataServiceValue: IDataService;
   private readonly jobRegistryValue: IJobRegistryService;
 
@@ -22,7 +22,7 @@ export class FFXIVGameService implements Gameserviceinterface.IGameService {
     private settings: SettingsService,
     private storage: LocalStorageService) {
 
-    this.jobRegistryValue = new Jobregistryffxivservice.FFXIVJobRegistryService();
+    this.jobRegistryValue = new FFXIVJobRegistryService();
     this.dataServiceValue = new FFLogsService(
       this.jobRegistryValue,
       this.httpClient,

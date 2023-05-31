@@ -30,7 +30,7 @@ export class ImportController {
     return new AddJobCommand.AddJobCommand(id, name, actorName, this.holders.bossTargets.initialBossTarget, doUpdates, pet, collapsed);
   }
 
-  buildImportCommand(settings: SettingsService.ISettings, parser: Parser.Parser, startDate: Date, ): UndoRedo.Command {
+  buildImportCommand(settings: SettingsService.ISettings, parser: Parser.Parser): UndoRedo.Command {
     try {
       const commands: UndoRedo.Command[] = [];
 
@@ -65,7 +65,7 @@ export class ImportController {
     }
   }
 
-  buildImportBossAttacksCommand(settings: SettingsService.ISettings, parser: Parser.Parser, startDate: Date, ): UndoRedo.Command {
+  buildImportBossAttacksCommand(settings: SettingsService.ISettings, parser: Parser.Parser): UndoRedo.Command {
     try {
       const commands: UndoRedo.Command[] = [];
 

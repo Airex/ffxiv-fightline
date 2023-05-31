@@ -24,10 +24,10 @@ import { RemoveJobCommand } from "./commands/RemoveJobCommand";
 import { AddJobCommand } from "./commands/AddJobCommand";
 import { CombinedCommand } from "./commands/CombinedCommand";
 import { IView, IBossAbility } from "./Models";
-import { Utils } from "./Utils";
+import { Utils, startOffsetConst } from "./Utils";
 
 export class CommandFactory {
-  constructor(private startDate: Date) {
+  constructor() {
 
   }
   createFromData(data: ICommandData, view: IView): Command {
@@ -39,7 +39,7 @@ export class CommandFactory {
           data.params.jobActor,
           data.params.jobGroup,
           data.params.abilityName,
-          Utils.getDateFromOffset(data.params.time, this.startDate),
+          Utils.getDateFromOffset(data.params.time),
           data.params.loaded,
           data.params.settings);
       case "useAbilityBatch":
@@ -65,7 +65,7 @@ export class CommandFactory {
       case "moveAbility":
         return new MoveCommand(
           data.params.id,
-          Utils.getDateFromOffset(data.params.moveTo, this.startDate));
+          Utils.getDateFromOffset(data.params.moveTo));
       case "changeAbilitySettings":
         return new ChangeAbilitySettingsCommand(
           data.params.id,
@@ -105,9 +105,9 @@ export class CommandFactory {
         return new AddDowntimeCommand(
           data.params.id,
           {
-            start: Utils.getDateFromOffset(data.params.start, this.startDate),
+            start: Utils.getDateFromOffset(data.params.start),
             startId: null,
-            end: Utils.getDateFromOffset(data.params.end, this.startDate),
+            end: Utils.getDateFromOffset(data.params.end),
             endId: null
           },
           data.params.color,
@@ -119,8 +119,8 @@ export class CommandFactory {
       case "changeDowntime":
         return new ChangeDowntimeCommand(
           data.params.id,
-          Utils.getDateFromOffset(data.params.start, this.startDate),
-          Utils.getDateFromOffset(data.params.end, this.startDate)
+          Utils.getDateFromOffset(data.params.start),
+          Utils.getDateFromOffset(data.params.end)
         );
       case "changeDowntimeColor":
         return new ChangeDowntimeColorCommand(
@@ -139,8 +139,8 @@ export class CommandFactory {
           data.params.id,
           data.params.jobGroup,
           data.params.abilityName,
-          Utils.getDateFromOffset(data.params.start, this.startDate),
-          Utils.getDateFromOffset(data.params.end, this.startDate),
+          Utils.getDateFromOffset(data.params.start),
+          Utils.getDateFromOffset(data.params.end),
           data.params.loaded);
       case "removeStance":
         return new RemoveStanceCommand(
@@ -149,8 +149,8 @@ export class CommandFactory {
       case "moveStance":
         return new MoveStanceCommand(
           data.params.id,
-          Utils.getDateFromOffset(data.params.moveStartTo, this.startDate),
-          Utils.getDateFromOffset(data.params.moveEndTo, this.startDate));
+          Utils.getDateFromOffset(data.params.moveStartTo),
+          Utils.getDateFromOffset(data.params.moveEndTo));
       case "changeJobStats":
         return new ChangeJobStats(
           data.params.id,

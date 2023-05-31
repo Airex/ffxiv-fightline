@@ -1,39 +1,38 @@
-import * as AbilityUsageHolder from "./Holders/AbilityUsageHolder";
-import * as AbilitiesMapHolder from "./Holders/AbilitiesMapHolder";
-import * as JobsMapHolder from "./Holders/JobsMapHolder";
-import * as BossAttacksHolder from "./Holders/BossAttacksHolder";
-import * as BossDownTimeHolder from "./Holders/BossDownTimeHolder";
-import * as BuffHeatmapHolder from "./Holders/BuffHeatmapHolder";
-import * as BossTargetHolder from "./Holders/BossTargetHolder";
-import * as StancesHolder from "./Holders/StancesHolder";
-import * as AbilityAvailablityHolder from "./Holders/AbilityAvailablityHolder";
-
 import { ITimelineContainer } from "./Holders/BaseHolder";
 import { Warning } from "./Defensives/types";
+import { AbilitiesMapHolder } from "./Holders/AbilitiesMapHolder";
+import { AbilityAvailablityHolder } from "./Holders/AbilityAvailablityHolder";
+import { AbilityUsageHolder } from "./Holders/AbilityUsageHolder";
+import { BossAttacksHolder } from "./Holders/BossAttacksHolder";
+import { BossDownTimeHolder } from "./Holders/BossDownTimeHolder";
+import { BossTargetHolder } from "./Holders/BossTargetHolder";
+import { BuffHeatmapHolder } from "./Holders/BuffHeatmapHolder";
+import { JobsMapHolder } from "./Holders/JobsMapHolder";
+import { StancesHolder } from "./Holders/StancesHolder";
 
 export class Holders {
-  itemUsages: AbilityUsageHolder.AbilityUsageHolder;
-  abilities: AbilitiesMapHolder.AbilitiesMapHolder;
-  jobs: JobsMapHolder.JobsMapHolder;
-  bossAttacks: BossAttacksHolder.BossAttacksHolder;
-  bossDownTime: BossDownTimeHolder.BossDownTimeHolder;
-  heatMaps: BuffHeatmapHolder.BuffHeatmapHolder;
-  bossTargets: BossTargetHolder.BossTargetHolder;
-  stances: StancesHolder.StancesHolder;
-  abilityAvailability: AbilityAvailablityHolder.AbilityAvailablityHolder;
+  itemUsages: AbilityUsageHolder;
+  abilities: AbilitiesMapHolder;
+  jobs: JobsMapHolder;
+  bossAttacks: BossAttacksHolder;
+  bossDownTime: BossDownTimeHolder;
+  heatMaps: BuffHeatmapHolder;
+  bossTargets: BossTargetHolder;
+  stances: StancesHolder;
+  abilityAvailability: AbilityAvailablityHolder;
   warnings: Warning[] = [];
   level: number = 90;
 
   constructor(mainTimeLine: ITimelineContainer, bossTimeLine: ITimelineContainer) {
-    this.itemUsages = new AbilityUsageHolder.AbilityUsageHolder(mainTimeLine.items);
-    this.abilities = new AbilitiesMapHolder.AbilitiesMapHolder(mainTimeLine.groups);
-    this.jobs = new JobsMapHolder.JobsMapHolder(mainTimeLine.groups);
-    this.bossAttacks = new BossAttacksHolder.BossAttacksHolder(bossTimeLine.items, mainTimeLine.items);
-    this.bossDownTime = new BossDownTimeHolder.BossDownTimeHolder(bossTimeLine.items, mainTimeLine.items);
-    this.heatMaps = new BuffHeatmapHolder.BuffHeatmapHolder(mainTimeLine.items);
-    this.bossTargets = new BossTargetHolder.BossTargetHolder(mainTimeLine.items, "boss");
-    this.stances = new StancesHolder.StancesHolder(mainTimeLine.items);
-    this.abilityAvailability = new AbilityAvailablityHolder.AbilityAvailablityHolder(mainTimeLine.items);
+    this.itemUsages = new AbilityUsageHolder(mainTimeLine.items);
+    this.abilities = new AbilitiesMapHolder(mainTimeLine.groups);
+    this.jobs = new JobsMapHolder(mainTimeLine.groups);
+    this.bossAttacks = new BossAttacksHolder(bossTimeLine.items, mainTimeLine.items);
+    this.bossDownTime = new BossDownTimeHolder(bossTimeLine.items, mainTimeLine.items);
+    this.heatMaps = new BuffHeatmapHolder(mainTimeLine.items);
+    this.bossTargets = new BossTargetHolder(mainTimeLine.items, "boss");
+    this.stances = new StancesHolder(mainTimeLine.items);
+    this.abilityAvailability = new AbilityAvailablityHolder(mainTimeLine.items);
   }
 
   clear() {

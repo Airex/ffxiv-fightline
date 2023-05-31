@@ -9,7 +9,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 
 export class HelpDialogComponent {
 
-
+  section: string = "basics";
 
   constructor(
     public dialogRef: NzModalRef

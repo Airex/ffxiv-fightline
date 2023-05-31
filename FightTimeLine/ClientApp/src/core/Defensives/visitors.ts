@@ -138,7 +138,7 @@ export class MitigationVisitor implements IEffectVisitor {
       });
     });
 
-    console.debug(visitor.Values);
+    // console.debug(visitor.Values);
 
     const outgoingModifier =
       visitor.Values[context.sourceJobId]?.outgoingModifier;

@@ -8,7 +8,7 @@ import {
   JobMap,
 } from "../Maps";
 import { SettingsEnum, Role, MitigationCalculateContext } from "../Models";
-import { Utils, startOffsetConst } from "../Utils";
+import { Utils, addSeconds, startOffsetConst } from "../Utils";
 import {
   cantUseOnSelfWarning,
   deathWarning,
@@ -63,9 +63,7 @@ export const processChargesAbility = (holders: Holders) => (it: AbilityMap) => {
     while (nextIncreaseDate && nextIncreaseDate < u.start) {
       chargesCount++;
       if (chargesCount < maxCharges) {
-        nextIncreaseDate = new Date(
-          nextIncreaseDate.valueOf() + cooldown * 1000
-        );
+        nextIncreaseDate = addSeconds(nextIncreaseDate, cooldown);
       } else {
         nextIncreaseDate = null;
       }
@@ -73,7 +71,7 @@ export const processChargesAbility = (holders: Holders) => (it: AbilityMap) => {
 
     chargesCount--;
     if (!nextIncreaseDate) {
-      nextIncreaseDate = new Date(u.start.valueOf() + cooldown * 1000);
+      nextIncreaseDate = addSeconds(u.start, cooldown);
     }
 
     if (chargesCount === 0) {

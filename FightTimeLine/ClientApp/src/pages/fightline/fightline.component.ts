@@ -72,9 +72,6 @@ import { visibleFrameTemplate } from "src/core/Frame";
   styleUrls: ["./fightline.component.css"],
 })
 export class FightLineComponent implements OnInit, OnDestroy {
-
-  startDate = new Date(946677600000);
-
   fightId: string;
   fflogsCode: string = null;
 
@@ -93,6 +90,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   toolsManager = new ToolsManager();
   private presenterManager: PresenterManager;
   jobs = this.gameService.jobRegistry.getJobs();
+  private worker: Worker;
 
   public constructor(
     private recent: RecentActivityService,
@@ -114,6 +112,26 @@ export class FightLineComponent implements OnInit, OnDestroy {
     public fightHubService: FightHubService
   ) {
     this.presenterManager = visStorage.presenter;
+
+    if (typeof Worker !== "undefined") {
+      // Create a new
+      this.worker = new Worker(
+        new URL("../../app/warnings.worker", import.meta.url)
+      );
+      this.worker.onmessage = ({ data }) => {
+        this.visStorage.holders.warnings = data.warnings;
+      };
+      this.processWarnings();
+    } else {
+      // Web workers are not supported in this environment.
+      // You should add a fallback so that your program still executes correctly.
+    }
+  }
+
+  processWarnings() {
+    if (this.worker) {
+      this.worker.postMessage({});
+    }
   }
 
   onAction(event: Action) {
@@ -127,7 +145,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
     }
   }
 
-  isWarningsVisible(){
+  isWarningsVisible() {
+    // return true;
     return Boolean(this.visStorage.holders.warnings.length);
   }
 
@@ -136,7 +155,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   }
 
   showWarnings() {
-    this.setSidePanel("warnings")
+    this.setSidePanel("warnings");
   }
 
   onClickGroup(source: EventSource, event) {
@@ -605,8 +624,8 @@ export class FightLineComponent implements OnInit, OnDestroy {
 
             this.fightService
               .getCommands(this.fightId, new Date(fight.dateModified).valueOf())
-              .subscribe(
-                (commands) => {
+              .subscribe({
+                next: (commands) => {
                   this.connectToSession()
                     .then(() => {
                       this.planArea.setInitialWindow(
@@ -634,13 +653,12 @@ export class FightLineComponent implements OnInit, OnDestroy {
                       ref.close();
                     });
                 },
-                (error) => {
+                error: (error) => {
                   console.log(error);
                   this.notification.error("Unable to load data");
                   ref.close();
                 },
-                () => {}
-              );
+              });
           } else {
             ref.close();
           }
@@ -750,7 +768,6 @@ export class FightLineComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.visStorage.clear();
     this.fightLineController = new FightTimeLineController(
-      this.startDate,
       this.idgen,
       this.visStorage.holders,
       {

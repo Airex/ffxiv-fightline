@@ -24,7 +24,7 @@ export abstract class TableViewTemplate<RowType = any> {
 
   offsetCompareFn(a: string, b: string): number {
     const d = new Date();
-    return Utils.getDateFromOffset(a, d).valueOf() - Utils.getDateFromOffset(b, d).valueOf();
+    return Utils.getDateFromOffset(a).valueOf() - Utils.getDateFromOffset(b).valueOf();
   }
 }
 

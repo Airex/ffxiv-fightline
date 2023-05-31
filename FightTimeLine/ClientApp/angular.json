@@ -36,6 +36,7 @@
               "src/favicon.ico",
               "src/assets",
               "src/assets/i18n",
+              "src/assets/changelog",
               {
                 "glob": "**/ng-zorro-antd.dark.css",
                 "input": "./node_modules/ng-zorro-antd/",
@@ -62,7 +63,9 @@
               "node_modules/ng-zorro-antd/ng-zorro-antd.css",
               "node_modules/ng-zorro-antd/resizable/style/index.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/marked/marked.min.js"
+            ],
             "allowedCommonJsDependencies": [
               "lodash",
               "keycharm",
@@ -77,7 +80,8 @@
             "buildOptimizer": true,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -139,7 +143,8 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
-            ]
+            ],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         },
         "lint": {

@@ -132,6 +132,7 @@ import { RecentListComponent } from "src/components/recent-list/recent-list.comp
 
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { MarkdownModule } from "ngx-markdown";
 
 const zorroModules = [
   NzAlertModule,
@@ -259,6 +260,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     ...DialogsModuleComponents,
   ],
   imports: [
+    MarkdownModule.forRoot(),
     AngularSplitModule,
     AppRoutingModule,
     BrowserAnimationsModule,
