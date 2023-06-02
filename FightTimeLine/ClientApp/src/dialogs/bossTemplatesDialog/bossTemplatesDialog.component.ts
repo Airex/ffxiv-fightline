@@ -310,7 +310,7 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
       content: this.createBossAttackElement(attack),
       start: Utils.getDateFromOffset(attack.offset),
       type: "box",
-      className: "bossAttack " + DamageType[attack.type],
+      className: "bossAttack " + DamageType[attack.type] + " " + attack.color,
     };
     return data;
   }
