@@ -136,7 +136,9 @@ export class SerializeController {
             source: ab.attack.source,
             syncDowntime: ab.attack.syncDowntime,
             syncPreDowntime: ab.attack.syncPreDowntime,
-            description: ab.attack.description
+            description: ab.attack.description,
+            color: ab.attack.color,
+            rawDamage: ab.attack.rawDamage,
           } as IBossAbility
         } as IBossAbilityUsageData;
       });

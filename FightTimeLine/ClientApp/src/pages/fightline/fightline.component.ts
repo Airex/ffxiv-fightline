@@ -986,17 +986,17 @@ export class FightLineComponent implements OnInit, OnDestroy {
         .serializeBoss();
 
       if (bossData.id) {
-        this.fightService.saveBoss(bossData).subscribe(
-          (e) => {
+        this.fightService.saveBoss(bossData).subscribe({
+          next: (e) => {
             this.notification.success("Boss saved");
             this.fightLineController.updateBoss(e);
             value.close();
           },
-          (err) => {
+          error: (err) => {
             console.error(err);
             this.notification.error("Boss save failed");
-          }
-        );
+          },
+        });
       } else {
         this.dialogService
           .openSaveBoss(value.name + " new template")
@@ -1011,17 +1011,17 @@ export class FightLineComponent implements OnInit, OnDestroy {
                 (bossData && bossData.isPrivate) || value.isPrivate;
               bossData.game = this.gameService.name;
 
-              this.fightService.saveBoss(bossData).subscribe(
-                (e) => {
+              this.fightService.saveBoss(bossData).subscribe({
+                next: (e) => {
                   this.notification.success("Boss saved");
                   this.fightLineController.updateBoss(e);
                   value.close();
                 },
-                (err) => {
+                error: (err) => {
                   console.log(err);
                   this.notification.error("Boss save failed");
-                }
-              );
+                },
+              });
             } else {
               value.close();
             }
@@ -1055,17 +1055,17 @@ export class FightLineComponent implements OnInit, OnDestroy {
               (bossData && bossData.isPrivate) || value.isPrivate;
             bossData.game = this.gameService.name;
 
-            this.fightService.saveBoss(bossData).subscribe(
-              (e) => {
+            this.fightService.saveBoss(bossData).subscribe({
+              next: (e) => {
                 this.notification.success("Boss saved");
                 this.fightLineController.updateBoss(e);
                 value.close();
               },
-              (err) => {
+              error: (err) => {
                 console.log(err);
                 this.notification.error("Boss save failed");
-              }
-            );
+              },
+            });
           } else {
             value.close();
           }
