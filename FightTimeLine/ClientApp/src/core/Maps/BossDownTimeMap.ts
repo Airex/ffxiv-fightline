@@ -29,7 +29,7 @@ export class BossDownTimeMap extends BaseMap<string, DataItem, IBossDownTimeMapD
     this.data.end = v;
   }
 
-  get dispayName(): string {
+  get displayName(): string {
     return Utils.formatTime(this.start) + "-" + Utils.formatTime(this.end);
   }
 

@@ -142,7 +142,7 @@ const abilities = [
     cooldown: 60,
     xivDbId: "803",
     statuses: [statuses.whisperingDawn],
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 20,
   },
   {
@@ -230,7 +230,7 @@ const abilities = [
     },
     cooldown: 30,
     xivDbId: "3583",
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 52,
   },
   {
@@ -244,7 +244,7 @@ const abilities = [
     },
     cooldown: 120,
     xivDbId: "3585",
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 56,
   },
   {
@@ -259,7 +259,7 @@ const abilities = [
     cooldown: 180,
     xivDbId: "3587",
     statuses: [statuses.dissipation],
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.HealingBuff,
     levelAcquired: 60,
   },
   {
@@ -321,7 +321,7 @@ const abilities = [
     cooldown: 90,
     xivDbId: "16542",
     statuses: [statuses.recitation],
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.HealingBuff,
     levelAcquired: 74,
   },
   {
@@ -335,7 +335,7 @@ const abilities = [
     },
     cooldown: 60,
     xivDbId: "16543",
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 75,
   },
   {
@@ -351,7 +351,7 @@ const abilities = [
     cooldown: 120,
     xivDbId: "16545",
     statuses: [statuses.summonSeraph],
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 80,
   },
   {
@@ -365,7 +365,7 @@ const abilities = [
     },
     cooldown: 30,
     xivDbId: "16546",
-    abilityType: AbilityType.Healing | AbilityType.PartyShield,
+    abilityType: AbilityType.PartyHealing | AbilityType.PartyShield,
     charges: {
       count: 2,
       cooldown: 30,

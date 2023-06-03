@@ -10,7 +10,7 @@ export class SerializeController {
     private gameName: string,
     private fraction,
     private data: IFightData,
-    private presener: IPresenterData
+    private presenter: IPresenterData
   ) {
 
   }
@@ -39,7 +39,7 @@ export class SerializeController {
           name: at.attack.name,
           offset: at.offset,
           tags: at.attack.tags,
-          desription: at.attack.description,
+          description: at.attack.description,
           damageType: DamageType[at.attack.type]
         })),
         ...abs.map(ab => ({
@@ -101,9 +101,9 @@ export class SerializeController {
     const fightData = {
       boss: this.serializeBoss(),
       initialTarget: this.holders.bossTargets.initialBossTarget,
-      filter: this.presener.filter,
+      filter: this.presenter.filter,
       importedFrom: this.data.importedFrom,
-      view: this.presener.view,
+      view: this.presenter.view,
       jobs: this.serializeJobs(),
       abilityMaps: abilitymaps,
       abilities,
@@ -139,6 +139,8 @@ export class SerializeController {
             description: ab.attack.description,
             color: ab.attack.color,
             rawDamage: ab.attack.rawDamage,
+            pinned: ab.attack.pinned,
+            fflogsAttackSource: ab.attack.fflogsAttackSource,
           } as IBossAbility
         } as IBossAbilityUsageData;
       });
@@ -187,7 +189,11 @@ export class SerializeController {
         tags: ab.attack.tags,
         offset: ab.offset,
         desc: ab.attack.description,
-        color: ab.attack.color
+        color: ab.attack.color,
+        rawDamage: ab.attack.rawDamage,
+        source: ab.attack.source,
+        pinned: ab.attack.pinned,
+        fflogsAttackSource: ab.attack.fflogsAttackSource,
       }));
 
 

@@ -57,7 +57,7 @@ const abilities: IAbility[] = [
     },
     cooldown: 40,
     xivDbId: "3571",
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing | AbilityType.Damage,
     levelAcquired: 56,
   },
   {
@@ -132,7 +132,7 @@ const abilities: IAbility[] = [
     },
     cooldown: 1,
     xivDbId: "16534",
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 76,
   },
   {
@@ -147,7 +147,7 @@ const abilities: IAbility[] = [
     cooldown: 90,
     xivDbId: "3569",
     statuses: [statuses.asylum],
-    abilityType: AbilityType.Healing |  AbilityType.HealingBuff,
+    abilityType: AbilityType.PartyHealing |  AbilityType.HealingBuff,
     levelAcquired: 52,
   },
   {
@@ -162,7 +162,7 @@ const abilities: IAbility[] = [
     cooldown: 60,
     xivDbId: "7433",
     statuses: [statuses.plenaryIndulgence],
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 70,
   },
   {
@@ -242,7 +242,7 @@ const abilities: IAbility[] = [
     cooldown: 180,
     xivDbId: 25862,
     statuses: [statuses.LiturgyOfTheBell],
-    abilityType: AbilityType.Healing | AbilityType.PartyShield,
+    abilityType: AbilityType.PartyHealing | AbilityType.PartyShield,
     levelAcquired: 90,
   },
   ...getAbilitiesFrom(healerSharedAbilities),

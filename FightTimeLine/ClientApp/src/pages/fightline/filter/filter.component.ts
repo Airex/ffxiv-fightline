@@ -48,11 +48,13 @@ export class FilterComponent implements OnInit {
       partyDamageBuff: [3, this.trans.instant(marker("abilityFilter.partyDamageBuff"))],
       damage: [4, this.trans.instant(marker("abilityFilter.ogcdDamage"))],
       healing: [5, this.trans.instant(marker("abilityFilter.healing"))],
-      healingBuff: [6, this.trans.instant(marker("abilityFilter.healingBuff"))],
-      utility: [7, this.trans.instant(marker("abilityFilter.utility"))],
-      enmity: [8, this.trans.instant(marker("abilityFilter.enmity"))],
-      unused: [10, this.trans.instant(marker("abilityFilter.showUnused"))],
-      pet: [9, null],
+      partyHealing: [6, this.trans.instant(marker("abilityFilter.partyHealing"))],
+      healingBuff: [7, this.trans.instant(marker("abilityFilter.healingBuff"))],
+      partyHealingBuff: [8, this.trans.instant(marker("abilityFilter.partyHealingBuff"))],
+      utility: [9, this.trans.instant(marker("abilityFilter.utility"))],
+      enmity: [10, this.trans.instant(marker("abilityFilter.enmity"))],
+      unused: [11, this.trans.instant(marker("abilityFilter.showUnused"))],
+      pet: [12, null],
     } as NewType)
       .filter(f => f[1][1])
       .sort((a, b) => a[1][0] - b[1][0])

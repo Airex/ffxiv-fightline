@@ -1758,7 +1758,7 @@
                                 </translations>
                             </concept_node>
                             <concept_node>
-                                <name>sognOut</name>
+                                <name>signOut</name>
                                 <definition_loaded>false</definition_loaded>
                                 <description/>
                                 <comment/>

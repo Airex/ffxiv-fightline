@@ -157,7 +157,7 @@ const abilities = [
     cooldown: 60,
     xivDbId: "16553",
     statuses: [statuses.celestialOpposition],
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 60
   },
   {
@@ -172,7 +172,7 @@ const abilities = [
     cooldown: 60,
     xivDbId: "7439",
     statuses: [statuses.earthlyStar],
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 62
   },
   {
@@ -221,7 +221,7 @@ const abilities = [
     cooldown: 60,
     xivDbId: "16557",
     statuses: [statuses.horoscope],
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 76
   },
   {
@@ -266,7 +266,7 @@ const abilities = [
     },
     cooldown: 180,
     xivDbId: 25874,
-    abilityType: AbilityType.Healing | AbilityType.Damage,
+    abilityType: AbilityType.PartyHealing | AbilityType.Damage,
     levelAcquired: 90,
     statuses: [statuses.macrocosmos]
   },

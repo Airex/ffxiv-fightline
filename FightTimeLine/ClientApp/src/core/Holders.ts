@@ -23,12 +23,21 @@ export class Holders {
   warnings: Warning[] = [];
   level: number = 90;
 
-  constructor(mainTimeLine: ITimelineContainer, bossTimeLine: ITimelineContainer) {
+  constructor(
+    mainTimeLine: ITimelineContainer,
+    bossTimeLine: ITimelineContainer
+  ) {
     this.itemUsages = new AbilityUsageHolder(mainTimeLine.items);
     this.abilities = new AbilitiesMapHolder(mainTimeLine.groups);
     this.jobs = new JobsMapHolder(mainTimeLine.groups);
-    this.bossAttacks = new BossAttacksHolder(bossTimeLine.items, mainTimeLine.items);
-    this.bossDownTime = new BossDownTimeHolder(bossTimeLine.items, mainTimeLine.items);
+    this.bossAttacks = new BossAttacksHolder(
+      bossTimeLine.items,
+      mainTimeLine.items
+    );
+    this.bossDownTime = new BossDownTimeHolder(
+      bossTimeLine.items,
+      mainTimeLine.items
+    );
     this.heatMaps = new BuffHeatmapHolder(mainTimeLine.items);
     this.bossTargets = new BossTargetHolder(mainTimeLine.items, "boss");
     this.stances = new StancesHolder(mainTimeLine.items);
@@ -49,17 +58,16 @@ export class Holders {
 
   isIn(ids: string[]) {
     return [
-      ...this.itemUsages.getByIds(ids),
-      ...this.abilities.getByIds(ids),
-      ...this.jobs.getByIds(ids),
-      ...this.bossAttacks.getByIds(ids),
-      ...this.bossDownTime.getByIds(ids)
-    ].length > 0;
+      this.itemUsages,
+      this.abilities,
+      this.jobs,
+      this.bossAttacks,
+      this.bossDownTime,
+    ].some((x) => x.getByIds(ids).length > 0);
   }
 
   setHighLightLoadedView(highlightLoaded: boolean): void {
     this.itemUsages.setHighlightLoaded(highlightLoaded);
     this.stances.setHighlightLoaded(highlightLoaded);
   }
-
 }

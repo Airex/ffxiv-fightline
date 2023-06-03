@@ -18,7 +18,9 @@ export class SettingsService {
         abilities: {
           damage: true,
           healing: true,
+          partyHealing: true,
           healingBuff: true,
+          partyHealingBuff: true,
           partyDamageBuff: true,
           partyDefence: true,
           enmity: true,

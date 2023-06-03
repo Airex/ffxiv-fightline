@@ -80,6 +80,8 @@ export class AbilityMap
   public get isHeal(): boolean {
     return (
       this.hasValue(Models.AbilityType.Healing) ||
+      this.hasValue(Models.AbilityType.PartyHealing) ||
+      this.hasValue(Models.AbilityType.PartyHealingBuff) ||
       this.hasValue(Models.AbilityType.HealingBuff)
     );
   }

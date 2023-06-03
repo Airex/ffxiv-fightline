@@ -97,7 +97,7 @@ const abilities = [
     cooldown: 60,
     xivDbId: 24302,
     statuses: [statuses.physisII],
-    abilityType: AbilityType.Healing | AbilityType.HealingBuff,
+    abilityType: AbilityType.PartyHealing | AbilityType.HealingBuff,
   },
 
   {
@@ -202,7 +202,7 @@ const abilities = [
     cooldown: 30,
     xivDbId: 24299,
     levelAcquired: 52,
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
   },
   {
     name: "Zoe",
@@ -231,7 +231,7 @@ const abilities = [
     cooldown: 30,
     xivDbId: 24301,
     levelAcquired: 58,
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
   },
   {
     name: "Taurochole",
@@ -293,7 +293,7 @@ const abilities = [
     xivDbId: 24310,
     levelAcquired: 76,
     statuses: [statuses.holos],
-    abilityType: AbilityType.PartyDefense | AbilityType.Healing,
+    abilityType: AbilityType.PartyDefense | AbilityType.PartyHealing,
   },
   {
     name: "Panhaima",
@@ -339,7 +339,7 @@ const abilities = [
     cooldown: 120,
     xivDbId: 24318,
     levelAcquired: 90,
-    abilityType: AbilityType.Healing | AbilityType.Damage,
+    abilityType: AbilityType.PartyHealing | AbilityType.Damage,
   },
 ] as IAbility[];
 
