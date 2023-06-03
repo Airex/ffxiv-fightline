@@ -97,7 +97,7 @@ const abilities = [
     cooldown: 60,
     xivDbId: 24302,
     statuses: [statuses.physisII],
-    abilityType: AbilityType.PartyHealing | AbilityType.HealingBuff,
+    abilityType: AbilityType.PartyHealing | AbilityType.PartyHealingBuff,
   },
 
   {
