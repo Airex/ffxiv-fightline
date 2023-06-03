@@ -109,7 +109,7 @@ const abilities = [
     cooldown: 120,
     requiresBossTarget: false,
     xivDbId: 25857,
-    abilityType: AbilityType.PartyDefense,
+    abilityType: AbilityType.PartyDefense | AbilityType.PartyHealingBuff,
     statuses: [statuses.magicBarrier],
     levelAcquired: 86
   },

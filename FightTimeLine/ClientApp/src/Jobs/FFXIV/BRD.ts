@@ -199,7 +199,7 @@ const abilities: IAbility[] = [
         cooldown: 90,
         xivDbId: "7408",
         statuses: [statuses.naturesMinne],
-        abilityType: AbilityType.HealingBuff,
+        abilityType: AbilityType.PartyHealingBuff,
         levelAcquired: 66
     },
     {
