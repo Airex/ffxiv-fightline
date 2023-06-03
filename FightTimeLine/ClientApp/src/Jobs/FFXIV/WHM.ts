@@ -147,7 +147,7 @@ const abilities: IAbility[] = [
     cooldown: 90,
     xivDbId: "3569",
     statuses: [statuses.asylum],
-    abilityType: AbilityType.PartyHealing |  AbilityType.HealingBuff,
+    abilityType: AbilityType.PartyHealing |  AbilityType.PartyHealingBuff,
     levelAcquired: 52,
   },
   {
