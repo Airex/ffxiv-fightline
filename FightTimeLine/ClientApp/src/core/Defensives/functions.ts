@@ -143,7 +143,7 @@ export const processStandardAbility =
             : it.ability.requiresBossTarget
             ? startOffsetConst
             : minus30;
-        const diff = (c.startAsNumber - (start.valueOf() as number)) / 1000;
+        const diff = (c.startAsNumber - start.valueOf()) / 1000;
         const av = diff > it.ability.cooldown;
         prev = c;
         if (av) {

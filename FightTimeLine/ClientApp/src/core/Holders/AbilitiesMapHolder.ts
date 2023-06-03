@@ -11,7 +11,9 @@ const filterMap: { [ab in keyof Models.IAbilityFilter]: Models.AbilityType | Mod
   partyDamageBuff: Models.AbilityType.PartyDamageBuff,
   damage: Models.AbilityType.Damage,
   healingBuff: Models.AbilityType.HealingBuff,
+  partyHealingBuff: Models.AbilityType.PartyHealingBuff,
   healing: Models.AbilityType.Healing,
+  partyHealing: Models.AbilityType.PartyHealing,
   utility: Models.AbilityType.Utility,
   enmity: Models.AbilityType.Enmity,
 };

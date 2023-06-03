@@ -87,6 +87,7 @@ export enum AbilityType {
   SelfDamageBuff = 2,
   PartyDamageBuff = 64,
   Healing = 4,
+  PartyHealing = 16384,
   Utility = 8,
   Damage = 16,
   HealingBuff = 32,
@@ -432,7 +433,9 @@ export interface IAbilityFilter {
   partyDamageBuff?: boolean;
   damage?: boolean;
   healing?: boolean;
+  partyHealing?: boolean;
   healingBuff?: boolean;
+  partyHealingBuff?: boolean;
   utility?: boolean;
   unused?: boolean;
   enmity?: boolean;

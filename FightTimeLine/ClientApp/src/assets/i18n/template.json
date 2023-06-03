@@ -53,7 +53,7 @@
 	"component.toolbar.signIn": "Sign in",
 	"component.toolbar.signUp": "Sign up",
 	"component.toolbar.loggedAs": "Logged in as ",
-	"component.toolbar.sognOut": "Sign out",
+	"component.toolbar.signOut": "Sign out",
 	"component.toolbar.settings-tooltip": "Settings",
 	"component.toolbar.contanctMeInDiscord": "Contact me in Discord",
 	"component.toolbar.leaveFeedback": "Leave feedback here.",

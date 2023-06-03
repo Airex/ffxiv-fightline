@@ -75,7 +75,7 @@ const abilities: IAbility[] = [
     cooldown: 120,
     xivDbId: "16014",
     statuses: [statuses.improvisation],
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 80
   },
   {
@@ -149,7 +149,7 @@ const abilities: IAbility[] = [
     },
     cooldown: 60,
     xivDbId: "16015",
-    abilityType: AbilityType.Healing,
+    abilityType: AbilityType.PartyHealing,
     levelAcquired: 52
   },
   {

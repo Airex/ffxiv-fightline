@@ -18,7 +18,9 @@ export const abilitySortFn = (a1: IAbility, a2: IAbility): number => {
     AbilityType.Utility,
     AbilityType.Enmity,
     AbilityType.Damage,
-    AbilityType.Healing,
+    AbilityType.PartyHealing,
+    AbilityType.Healing,    
+    AbilityType.PartyHealingBuff,
     AbilityType.HealingBuff,
     AbilityType.Pet,
   ];
