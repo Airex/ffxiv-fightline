@@ -157,7 +157,7 @@ const abilities = [
     cooldown: 120,
     xivDbId: "805",
     statuses: [statuses.feyIllumination],
-    abilityType: AbilityType.HealingBuff | AbilityType.PartyDefense,
+    abilityType: AbilityType.PartyHealingBuff | AbilityType.PartyDefense,
     levelAcquired: 40,
   },
   {
