@@ -97,7 +97,7 @@ const abilities = [
     cooldown: 60,
     xivDbId: 24302,
     statuses: [statuses.physisII],
-    abilityType: AbilityType.PartyHealing | AbilityType.HealingBuff,
+    abilityType: AbilityType.PartyHealing | AbilityType.PartyHealingBuff,
   },
 
   {
@@ -264,7 +264,7 @@ const abilities = [
     potency: 300,
     settings: [settings.target],
     statuses: [statuses.haima],
-    abilityType: AbilityType.SelfShield | AbilityType.PartyShield,
+    abilityType: AbilityType.SelfShield,
   },
   {
     name: "Rhizomata",
