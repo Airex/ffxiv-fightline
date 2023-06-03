@@ -114,7 +114,7 @@ const abilities = [
     cooldown: 90,
     xivDbId: "65",
     statuses: [statuses.mantra],
-    abilityType: AbilityType.HealingBuff,
+    abilityType: AbilityType.PartyHealingBuff,
     levelAcquired: 42
   },
   {
