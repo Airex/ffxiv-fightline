@@ -139,7 +139,7 @@ const abilities = [
     cooldown: 60,
     xivDbId: "3613",
     statuses: [statuses.collectiveUnconscious],
-    abilityType: AbilityType.PartyDefense,
+    abilityType: AbilityType.PartyDefense | AbilityType.PartyHealing,
     defensiveStats: {
       mitigationPercent: 10
     },
@@ -236,7 +236,7 @@ const abilities = [
     cooldown: 120,
     xivDbId: "16559",
     statuses: [statuses.neutralSect],
-    abilityType: AbilityType.HealingBuff,
+    abilityType: AbilityType.HealingBuff | AbilityType.PartyDefense ,
     levelAcquired: 80
   },
   {
