@@ -264,7 +264,7 @@ const abilities = [
     potency: 300,
     settings: [settings.target],
     statuses: [statuses.haima],
-    abilityType: AbilityType.SelfShield | AbilityType.PartyShield,
+    abilityType: AbilityType.SelfShield,
   },
   {
     name: "Rhizomata",
