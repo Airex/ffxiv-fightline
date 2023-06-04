@@ -36,6 +36,8 @@ import {
   TimelineOptions,
   VisTimelineService,
 } from "ngx-vis";
+import { IBossAbilityUsageData } from "src/core/SerializeController";
+import { IBossDownTimeMapData } from "src/core/Maps";
 
 @Component({
   selector: "bossTemplatesDialog",
@@ -82,7 +84,7 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
   searchFightString = "";
   zones: Zone[];
   filteredZones: Zone[];
-  selectedZone: string;
+  selectedZone: number | undefined;
   selectedEncounter: Encounter;
   selectedTemplate: IBossSearchEntry;
   templates: IBossSearchEntry[] = [];
@@ -101,11 +103,11 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
     private notification: ScreenNotificationsService
   ) {}
 
-  getBossIcon(id) {
+  getBossIcon(id: number) {
     return "https://assets.rpglogs.com/img/ff/bosses/" + id + "-icon.jpg";
   }
 
-  getZoneIcon(id) {
+  getZoneIcon(id: number) {
     return "https://assets.rpglogs.com/img/ff/zones/zone-" + id + ".png";
   }
 
@@ -126,20 +128,20 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (val) => {
-          this.zones = (val as any as Zone[]).sort((a: Zone, b: Zone) =>
+          this.zones = val.sort((a: Zone, b: Zone) =>
             a.name.localeCompare(b.name)
           );
           this.filteredZones = this.zones;
           if (this.data && this.data.boss && this.zones) {
             const zone = this.zones.find((z) =>
-              z.encounters.some(((y) => y.id === this.data.boss.ref) as any)
+              z.encounters.some((y) => y.id === this.data.boss.ref)
             );
             if (zone) {
               const enc = zone.encounters.find(
                 (y) => y.id === this.data.boss.ref
               );
               this.onEncounterSelected(zone.id, enc, true);
-              this.onSearchChange(null);
+              this.onSearchChange();
             }
           }
         },
@@ -155,65 +157,77 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
     );
   }
 
-  onSearchChange(event: any) {
-    this.filteredZones = this.zones.filter((zone: Zone) => {
-      return (
-        !this.searchString ||
-        (zone.encounters.some(
-          (x) =>
-            x.name.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0
-        ) &&
+  onSearchChange(event?: any) {
+    if (!this.searchString) {
+      this.filteredZones = this.zones;
+    } else {
+      this.filteredZones = this.zones.filter((zone: Zone) => {
+        return (
           (!this.data.boss ||
-            zone.encounters.some((x) => x.id === this.data.boss.ref)))
-      );
-    });
+            !this.data.boss.ref ||
+            zone.encounters.some((x) => x.id === this.data.boss.ref)) &&
+          zone.encounters.some((x) =>
+            x.name.toLowerCase().includes(this.searchString.toLowerCase())
+          )
+        );
+      });
+    }
   }
 
   onSearchFightChange(event: any) {
-    this.filteredTemplates = this.templates.filter((t: IBossSearchEntry) => {
-      return (
-        !this.searchFightString ||
-        t.name.toLowerCase().indexOf(this.searchFightString.toLowerCase()) >= 0
+    if (!this.searchFightString) {
+      this.filteredTemplates = this.templates;
+    } else {
+      this.filteredTemplates = this.templates.filter((t: IBossSearchEntry) =>
+        t.name.toLowerCase().includes(this.searchFightString.toLowerCase())
       );
-    });
+    }
   }
 
   clear() {
     this.searchString = "";
-    this.onSearchChange("");
+    this.onSearchChange();
   }
 
-  filterEncounters(items: any[]) {
+  filterEncounters(items: Encounter[] | undefined) {
     if (!items) {
       return [];
     }
+
     return items.filter(
       (x) =>
+        (!this.data ||
+          !this.data.boss ||
+          !this.data.boss.ref ||
+          x.id === this.data.boss.ref) &&
         (!this.searchString ||
-          x.name.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0) &&
-        (!this.data || !this.data.boss || x.id === this.data.boss.ref)
+          x.name.toLowerCase().includes(this.searchString.toLowerCase()))
     );
   }
 
-  onEncounterSelected(zone, enc: any, skipCheck?: boolean) {
+  onEncounterSelected(
+    zone: number | undefined,
+    enc: Encounter,
+    skipCheck?: boolean
+  ) {
     if (this.data.boss && this.data.boss.ref && !skipCheck) {
       return;
     }
-    // console.log(enc.name);
+
     this.selectedTemplate = null;
     this.visItems.clear();
     this.selectedZone = zone;
     this.selectedEncounter = enc;
-    this.isListLoading = true;
 
     this.loadBosses(enc, skipCheck);
   }
 
-  loadBosses(enc: any, skipCheck?: boolean) {
+  loadBosses(enc: Encounter, skipCheck?: boolean) {
+    this.isListLoading = true;
     this.fightService
       .getBosses(enc.id, (this.data.boss && this.data.boss.name) || "", false)
-      .subscribe(
-        (data) => {
+      .subscribe({
+        next: (data) => {
           if (this.data.boss) {
             this.select(
               { id: this.data.boss.id, name: "", canRemove: false },
@@ -227,27 +241,26 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
           );
           this.onSearchFightChange(null);
         },
-        null,
-        () => {
+        complete: () => {
           this.isListLoading = false;
           this.listContainer.nativeElement.scrollTop = 0;
-        }
-      );
+        },
+      });
   }
 
   remove(item: any, event: any) {
-    this.fightService.removeBosses([item.id]).subscribe(
-      () => {
+    this.fightService.removeBosses([item.id]).subscribe({
+      next: () => {
         this.notification.success("Template has been removed.");
         this.selectedTemplate = null;
       },
-      (error) => {
-        this.notification.success("Unable to remove tempalte");
+      error: (error) => {
+        this.notification.success("Unable to remove template");
       },
-      () => {
+      complete: () => {
         this.loadBosses(this.selectedEncounter, true);
-      }
-    );
+      },
+    });
   }
 
   onNoClick(): void {
@@ -260,14 +273,15 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
     }
     this.isTimelineLoading = true;
     this.selectedTemplate = item;
-    this.fightService.getBoss(this.selectedTemplate.id).subscribe(
-      (boss) => {
-        const data = JSON.parse(boss.data);
+    this.fightService.getBoss(this.selectedTemplate.id).subscribe({
+      next: (boss) => {
+        const data = JSON.parse(boss.data) as {
+          attacks: IBossAbilityUsageData[];
+          downTimes: any[];
+        };
         this.visItems.clear();
         this.visItems.add(
-          data.attacks.map((a) =>
-            this.createBossAttack(a.id, a.ability as IBossAbility, false)
-          )
+          data.attacks.map((a) => this.createBossAttack(a.id, a.ability, false))
         );
         this.visItems.add(
           data.downTimes.map((a) =>
@@ -281,11 +295,10 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
         );
         this.visTimelineService.fit(this.visTimelineBoss);
       },
-      null,
-      () => {
+      complete: () => {
         this.isTimelineLoading = false;
-      }
-    );
+      },
+    });
   }
 
   createDownTime(id: string, start: Date, end: Date, color: string): DataItem {
