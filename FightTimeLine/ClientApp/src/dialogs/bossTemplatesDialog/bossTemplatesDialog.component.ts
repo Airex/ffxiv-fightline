@@ -219,7 +219,9 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
     this.selectedZone = zone;
     this.selectedEncounter = enc;
 
-    this.loadBosses(enc, skipCheck);
+    if (enc) {
+      this.loadBosses(enc, skipCheck);
+    }
   }
 
   loadBosses(enc: Encounter, skipCheck?: boolean) {
@@ -271,6 +273,8 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
     if (this.data.boss && this.data.boss.ref && !skipCheck) {
       return;
     }
+    if (!item) { return; }
+
     this.isTimelineLoading = true;
     this.selectedTemplate = item;
     this.fightService.getBoss(this.selectedTemplate.id).subscribe({
