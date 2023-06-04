@@ -273,7 +273,7 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
     if (this.data.boss && this.data.boss.ref && !skipCheck) {
       return;
     }
-    if (!item) { return; }
+    if (!item || !item.id) { return; }
 
     this.isTimelineLoading = true;
     this.selectedTemplate = item;
