@@ -120,13 +120,23 @@ export class AbilityUsagesCollector extends BaseCollector {
 
 export class BossAttacksCollector extends BaseCollector {
   private bossAttacks: { [id: string]: Array<FF.AbilityEvent> } = {};
+  private attackTimestamps: { [id: string]: number } = {};
 
-  collect(data: FF.AbilityEvent): void {
-    // if (data.type !== this.context.settings.fflogsImport.bossAttacksSource) return;
-    if (data.sourceIsFriendly) {
-      return;
+  getAttackGroup(data: FF.AbilityEvent): string {
+    const key = `${data.ability.name}_${data.type}`;
+
+    let tk = this.attackTimestamps[key] || data.timestamp;
+
+    if (data.timestamp - tk > 1000) {
+      tk = data.timestamp;
     }
 
+    this.attackTimestamps[key] = tk;
+
+    const keyWithTime = `${key}_${tk}`;
+    return keyWithTime;
+  }
+  getAttackValid(data: FF.AbilityEvent): boolean {
     const ability = data.ability;
     const valid =
       ability &&
@@ -134,15 +144,28 @@ export class BossAttacksCollector extends BaseCollector {
       ability.name.trim() !== "" &&
       ability.name.indexOf("Unknown_") < 0 &&
       ability.name.indexOf("unknown_") < 0 &&
-      ability.name.indexOf("Combined DoTs") < 0;
+      ability.name.indexOf("Combined DoTs") < 0 &&
+      // exclude dots
+      ability.type !== 1 &&
+      ability.type !== 64;
 
-    if (!valid) return;
+    return valid;
+  }
 
-    const attackGroup = data.packetID || Math.trunc(data.timestamp / 1000);
-    const key = `${data.ability.name}_${data.type}_${attackGroup}`;
+  collect(data: FF.AbilityEvent): void {
+    // if (data.type !== this.context.settings.fflogsImport.bossAttacksSource) return;
+    if (data.sourceIsFriendly) {
+      return;
+    }
 
-    let g = this.bossAttacks[key] || (this.bossAttacks[key] = []);
-    g.push(data);
+    if (!this.getAttackValid(data)) return;
+
+    // const attackGroup = data.packetID || Math.trunc(data.timestamp / 1000);
+
+    const keyWithTime = this.getAttackGroup(data);
+
+    this.bossAttacks[keyWithTime] = this.bossAttacks[keyWithTime] || [];
+    this.bossAttacks[keyWithTime].push(data);
   }
 
   process(): void {
@@ -181,25 +204,23 @@ export class BossAttacksCollector extends BaseCollector {
         tags.push(M.DefaultTags[0]);
       }
 
-      const fflogsData: BossAttackFFlogs = {};
-      attack.forEach((at) => {
+      const fflogsData = attack.reduce((acc, at) => {
         if (FF.isDamageEvent(at)) {
           const foundJob = this.context.parser.players.find(
             (it1) => it1.id === at.targetID
           );
-          if (!foundJob) {
-            return;
+          if (foundJob) {
+            acc[foundJob.rid] = {
+              amount: at.amount,
+              unmitigated: at.unmitigatedAmount,
+              mitigated: at.mitigated,
+              absorbed: at.absorbed,
+              multiplier: at.multiplier,
+            };
           }
-
-          fflogsData[foundJob.rid] = {
-            amount: at.amount,
-            unmitigated: at.unmitigatedAmount,
-            mitigated: at.mitigated,
-            absorbed: at.absorbed,
-            multiplier: at.multiplier,
-          };
         }
-      });
+        return acc;
+      }, {} as BossAttackFFlogs);
 
       commands.push(
         new AddBossAttackCommand(
