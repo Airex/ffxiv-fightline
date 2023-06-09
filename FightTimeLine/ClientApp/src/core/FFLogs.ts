@@ -171,6 +171,7 @@ export interface BaseEventFields {
   sourceID?: number;
   sourceInstance?: number;
   sourceIsFriendly: boolean;
+  packetID?: number;
   target?: EventActor;
   targetID?: number;
   targetInstance?: number;
