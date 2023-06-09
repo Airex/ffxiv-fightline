@@ -138,8 +138,8 @@ export class BossAttacksCollector extends BaseCollector {
 
     if (!valid) return;
 
-    const time = Math.trunc(data.timestamp / 1000);
-    const key = `${data.ability.name}_${data.type}_${time}`;
+    const attackGroup = data.packetID || Math.trunc(data.timestamp / 1000);
+    const key = `${data.ability.name}_${data.type}_${attackGroup}`;
 
     let g = this.bossAttacks[key] || (this.bossAttacks[key] = []);
     g.push(data);
