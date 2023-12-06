@@ -31,6 +31,7 @@ const statuses = MapStatuses({
   },
   soteria: {
     duration: 15,
+    effects: [Effects.healingIncrease.solo(10)],
   },
   kerachole: {
     duration: 15,
@@ -82,6 +83,7 @@ const abilities = [
     },
     cooldown: 5,
     xivDbId: 24285,
+    levelAcquired: 4,
     abilityType: AbilityType.Utility,
     settings: [settings.target],
   },
@@ -96,6 +98,7 @@ const abilities = [
     },
     cooldown: 60,
     xivDbId: 24302,
+    levelAcquired: 60,
     statuses: [statuses.physisII],
     abilityType: AbilityType.PartyHealing | AbilityType.PartyHealingBuff,
   },
@@ -146,6 +149,7 @@ const abilities = [
     },
     cooldown: 90,
     xivDbId: 24294,
+    levelAcquired: 35,
     statuses: [statuses.soteria],
     abilityType: AbilityType.HealingBuff,
   },
@@ -159,6 +163,7 @@ const abilities = [
       cn: "神翼",
     },
     xivDbId: 24295,
+    levelAcquired: 40,
     cooldown: 45,
     abilityType: AbilityType.Utility,
   },
@@ -173,6 +178,7 @@ const abilities = [
     },
     cooldown: 1,
     xivDbId: 24296,
+    levelAcquired: 45,
     abilityType: AbilityType.Healing,
   },
   {
