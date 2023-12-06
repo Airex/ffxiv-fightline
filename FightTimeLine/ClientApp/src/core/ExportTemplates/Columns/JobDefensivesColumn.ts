@@ -61,33 +61,43 @@ export class JobDefensivesColumn
       const isDefence = this.isDefence(usage.ability.ability.abilityType);
       const isHealing = this.isHealing(usage.ability.ability.abilityType);
 
-      const condition =
-        this.isLevelInRange(
-          [
-            usage.ability.ability.levelAcquired,
-            usage.ability.ability.levelRemoved,
-          ],
-          this.level
-        ) &&
-        (this.coverAll || !this.used.has(usage.id)) &&
-        usage.ability.job.id === this.job.id &&
-        this.isValidForColumn(usage.ability.ability.abilityType) &&
-        ((isDefence &&
-          this.isOffsetInRange(
-            attack.attack.offset,
+      const levelValid = this.isLevelInRange(
+        [
+          usage.ability.ability.levelAcquired,
+          usage.ability.ability.levelRemoved,
+        ],
+        this.level
+      );
+      const coverAll = this.coverAll || !this.used.has(usage.id);
+      const sameJob = usage.ability.job.id === this.job.id;
+      const isValidForColumn = this.isValidForColumn(
+        usage.ability.ability.abilityType
+      );
+      const goodForDefence =
+        isDefence &&
+        this.isOffsetInRange(
+          attack.attack.offset,
+          Utils.formatTime(usage.start),
+          this.offsetFromDuration(
             Utils.formatTime(usage.start),
-            this.offsetFromDuration(
-              Utils.formatTime(usage.start),
-              usage.calculatedDuration
-            )
-          )) ||
-          (this.showHealing &&
-            isHealing &&
-            this.isOffsetNear(
-              attack.attack.offset,
-              Utils.formatTime(usage.start),
-              this.healingRange || [-5, 5]
-            )));
+            usage.calculatedDuration
+          )
+        );
+      const goodForHealing =
+        this.showHealing &&
+        isHealing &&
+        this.isOffsetNear(
+          attack.attack.offset,
+          Utils.formatTime(usage.start),
+          this.healingRange || [-5, 5]
+        );
+
+      const condition =
+        levelValid &&
+        coverAll &&
+        sameJob &&
+        isValidForColumn &&
+        (goodForDefence || goodForHealing);
 
       if (!condition || acc.some((a) => a.text === usage.ability.translated)) {
         return acc;
@@ -138,11 +148,17 @@ export class JobDefensivesColumn
     }, [] as IExportItem[]);
     return this.items(items, { disableUnique: this.coverAll });
   }
-  isLevelInRange(abilityLevel: [number, number?], level: number): boolean {
+
+  isLevelInRange(abilityLevel: [number?, number?], level: number): boolean {
     if (!abilityLevel) {
       return true;
     }
+
     const [from, to] = abilityLevel;
+    if (from === undefined){
+      return true;
+    }
+
     if (from <= level) {
       return true;
     }
