@@ -17,6 +17,7 @@ import {
   startOffsetConst,
 } from "../../../core/Utils";
 import {} from "xss";
+import moment from "moment";
 
 export type ActionName =
   | "delete"
@@ -79,6 +80,9 @@ export class PlanAreaComponent
     end: addMinutes(startOffsetConst, 30),
     max: addMinutes(startOffsetConst, 30),
     min: addSeconds(startOffsetConst, -30),
+    moment: (date: Date) => {
+      return moment(date).utc();
+    },
     zoomable: true,
     zoomMin: 3 * 60 * 1000,
     zoomMax: 30 * 60 * 1000,
@@ -187,6 +191,9 @@ export class PlanAreaComponent
     end: addMinutes(startOffsetConst, 30),
     max: addMinutes(startOffsetConst, 30),
     min: addSeconds(startOffsetConst, -30),
+    moment: (date: Date) => {
+      return moment(date).utc();
+    },
     zoomable: true,
     zoomMin: 3 * 60 * 1000,
     zoomMax: 30 * 60 * 1000,

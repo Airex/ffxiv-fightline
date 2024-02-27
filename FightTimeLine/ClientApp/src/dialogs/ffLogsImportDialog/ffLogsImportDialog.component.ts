@@ -216,7 +216,7 @@ export class FFLogsImportDialogComponent implements OnInit {
 
   formatTime(start: number, end: number): string {
     const diff = end - start;
-    const date = new Date(946677600000 + diff);
+    const date = new Date(new Date(2000,1,1,0,0,0).valueOf() as number + diff);
     return Utils.formatTime(date);
   }
 

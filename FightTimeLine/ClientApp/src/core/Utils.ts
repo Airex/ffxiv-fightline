@@ -2,7 +2,7 @@ import { ITableOptions, ITableOptionSettings } from "./ExportModels";
 import { TimeOffset } from "./Models";
 import * as _ from "lodash";
 
-export const startOffsetConst = 946677600000;
+export const startOffsetConst = new Date(2000,1,1,0,0,0).valueOf() as number;
 
 export class Utils {
   static entityMap: { [name: string]: string } = {

@@ -60,7 +60,7 @@ export class MultipleAttackComponent implements OnDestroy, ISidePanelComponent {
       this.distance = Utils.formatTime(
         new Date(
           Math.abs(this.items[0].startAsNumber - this.items[1].startAsNumber) +
-            946677600000
+          new Date(2000,1,1,0,0,0).valueOf() as number
         )
       );
     }

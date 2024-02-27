@@ -73,7 +73,7 @@ function createController(holders) {
   const settingsService = new SettingsService(storage);
   const pm = new PresenterManager(storage);
   const c = new FightTimeLineController(
-    new Date(946677600000),
+    new Date(Date.UTC(2000,1,1,0,0,0)),
     new IdGenerator(),
     holders,
     {} as any,
