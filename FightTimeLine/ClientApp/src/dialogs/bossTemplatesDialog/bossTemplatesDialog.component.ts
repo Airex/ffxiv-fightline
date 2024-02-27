@@ -37,7 +37,7 @@ import {
   VisTimelineService,
 } from "ngx-vis";
 import { IBossAbilityUsageData } from "src/core/SerializeController";
-import { IBossDownTimeMapData } from "src/core/Maps";
+import moment from "moment";
 
 @Component({
   selector: "bossTemplatesDialog",
@@ -48,7 +48,7 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
   visItems: DataSetDataItem = new DataSet<DataItem>([], {});
   visGroups: DataSetDataGroup = new DataSet<DataGroup>([], {});
   visTimelineBoss = "visTimelinebooooosss";
-  startDate = new Date(946677600000);
+  startDate = new Date(new Date(2000,1,1,0,0,0).valueOf() as number);
   @ViewChild("timeline", { static: true }) timeline: ElementRef;
   @ViewChild("listContainer", { static: true }) listContainer: ElementRef;
   @Input() data: { needSave: boolean; boss?: IBoss };
@@ -77,6 +77,9 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
     editable: { remove: false, updateTime: false, add: false },
     horizontalScroll: true,
     margin: { item: { horizontal: 0, vertical: 5 } },
+    moment: (date: Date) => {
+      return moment(date).utc();
+    },
   } as TimelineOptions;
   isSpinning = true;
   isListLoading = false;

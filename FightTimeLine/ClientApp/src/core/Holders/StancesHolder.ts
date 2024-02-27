@@ -55,7 +55,7 @@ export class StancesHolder extends BaseHolder<string, DataItem, JobStanceMap> {
     if (minV) {
       return new Date((minV.start.valueOf() as number) - 1000);
     }
-    return new Date(946677600000 + 30 * 60 * 1000);
+    return new Date(Date.UTC(2000,1,1,0,0,0) + 30 * 60 * 1000);
 
   }
 
@@ -76,6 +76,6 @@ export class StancesHolder extends BaseHolder<string, DataItem, JobStanceMap> {
     if (maxV) {
       return new Date((maxV.end.valueOf() as number) + 1000);
     }
-    return new Date(946677600000);
+    return new Date(Date.UTC(2000,1,1,0,0,0));
   }
 }
