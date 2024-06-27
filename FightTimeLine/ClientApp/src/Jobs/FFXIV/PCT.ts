@@ -13,14 +13,184 @@ import {
   medicine,
 } from "./shared";
 import Effects from "src/core/Defensives/effects";
+import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   starryMuse: {
     duration: 20,
   },
+  temperaCoat: {
+    duration: 10,
+    effects: [Effects.shield.solo(10)],
+  },
+  temperaGrassa: {
+    duration: 10,
+    effects: [Effects.shield.party(10)],
+  },
 });
 
 const abilities = [
+  {
+    name: "Tempera Coat",
+    translation: {
+      en: "Tempera Coat",
+      de: "Tempera Coat",
+      ja: "Tempera Coat",
+      fr: "Tempera Coat",
+      cn: "Tempera Coat",
+    },
+    cooldown: 120,
+    xivDbId: 34685,
+    abilityType: AbilityType.SelfShield,
+    levelAcquired: 10,
+    statuses: [statuses.temperaCoat],
+  },
+  {
+    name: "Smudge",
+    translation: {
+      en: "Smudge",
+      de: "Smudge",
+      ja: "Smudge",
+      fr: "Smudge",
+      cn: "Smudge",
+    },
+    cooldown: 20,
+    xivDbId: 34684,
+    abilityType: AbilityType.Utility,
+    levelAcquired: 20,
+  },
+  {
+    name: "Living Muse",
+    translation: {
+      en: "Living Muse",
+      de: "Living Muse",
+      ja: "Living Muse",
+      fr: "Living Muse",
+      cn: "Living Muse",
+    },
+    cooldown: 40,
+    xivDbId: 35347,
+    levelAcquired: 30,
+    abilityType: AbilityType.Utility,
+    charges: { count: 3, cooldown: 40 },
+  },
+  {
+    name: "Pom Muse",
+    translation: {
+      en: "Pom Muse",
+      de: "Pom Muse",
+      ja: "Pom Muse",
+      fr: "Pom Muse",
+      cn: "Pom Muse",
+    },
+    cooldown: 40,
+    xivDbId: 34670,
+    levelAcquired: 30,
+    abilityType: AbilityType.Damage,
+    charges: { count: 3, cooldown: 40 },
+  },
+  {
+    name: "Winged Muse",
+    translation: {
+      en: "Winged Muse",
+      de: "Winged Muse",
+      ja: "Winged Muse",
+      fr: "Winged Muse",
+      cn: "Winged Muse",
+    },
+    cooldown: 40,
+    xivDbId: 34671,
+    levelAcquired: 30,
+    abilityType: AbilityType.Damage,
+    charges: { count: 3, cooldown: 40 },
+  },
+  {
+    name: "Mog of the Ages",
+    translation: {
+      en: "Mog of the Ages",
+      de: "Mog of the Ages",
+      ja: "Mog of the Ages",
+      fr: "Mog of the Ages",
+      cn: "Mog of the Ages",
+    },
+    cooldown: 30,
+    xivDbId: 34676,
+    levelAcquired: 30,
+    abilityType: AbilityType.Damage,
+  },
+  {
+    name: "Steel Muse",
+    translation: {
+      en: "Steel Muse",
+      de: "Steel Muse",
+      ja: "Steel Muse",
+      fr: "Steel Muse",
+      cn: "Steel Muse",
+    },
+    cooldown: 60,
+    xivDbId: 35348,
+    levelAcquired: 50,
+    abilityType: AbilityType.Utility,
+    charges: { count: 2, cooldown: 60 },
+  },
+  {
+    name: "Striking Muse",
+    translation: {
+      en: "Striking Muse",
+      de: "Striking Muse",
+      ja: "Striking Muse",
+      fr: "Striking Muse",
+      cn: "Striking Muse",
+    },
+    cooldown: 60,
+    xivDbId: 34674,
+    levelAcquired: 50,
+    abilityType: AbilityType.Utility,
+    charges: { count: 2, cooldown: 60 },
+  },
+  {
+    name: "Subtractive Palette",
+    translation: {
+      en: "Subtractive Palette",
+      de: "Subtractive Palette",
+      ja: "Subtractive Palette",
+      fr: "Subtractive Palette",
+      cn: "Subtractive Palette",
+    },
+    cooldown: 1,
+    xivDbId: 34683,
+    levelAcquired: 60,
+    abilityType: AbilityType.Utility,
+  },
+  {
+    name: "Scenic Muse",
+    translation: {
+      en: "Scenic Muse",
+      de: "Scenic Muse",
+      ja: "Scenic Muse",
+      fr: "Scenic Muse",
+      cn: "Scenic Muse",
+    },
+    cooldown: 120,
+    xivDbId: 35349,
+    abilityType: AbilityType.Utility,
+    levelAcquired: 70,
+  },
+  {
+    name: "Tempera Grassa",
+    translation: {
+      en: "Tempera Grassa",
+      de: "Tempera Grassa",
+      ja: "Tempera Grassa",
+      fr: "Tempera Grassa",
+      cn: "Tempera Grassa",
+    },
+    cooldown: 120,
+    xivDbId: 34686,
+    abilityType: AbilityType.Utility,
+    levelAcquired: 70,
+    statuses: [statuses.temperaGrassa],
+  },
   {
     name: "Starry Muse",
     translation: {
@@ -37,11 +207,67 @@ const abilities = [
     levelAcquired: 70,
     statuses: [statuses.starryMuse],
   },
+  {
+    name: "Clawed Muse",
+    translation: {
+      en: "Clawed Muse",
+      de: "Clawed Muse",
+      ja: "Clawed Muse",
+      fr: "Clawed Muse",
+      cn: "Clawed Muse",
+    },
+    cooldown: 40,
+    xivDbId: 34672,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 96,
+    charges: { count: 3, cooldown: 40 },
+  },
+  {
+    name: "Fanged Muse",
+    translation: {
+      en: "Fanged Muse",
+      de: "Fanged Muse",
+      ja: "Fanged Muse",
+      fr: "Fanged Muse",
+      cn: "Fanged Muse",
+    },
+    cooldown: 40,
+    xivDbId: 34673,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 96,
+    charges: { count: 3, cooldown: 40 },
+  },
+  {
+    name: "Retribution of the Madeen",
+    translation: {
+      en: "Retribution of the Madeen",
+      de: "Retribution of the Madeen",
+      ja: "Retribution of the Madeen",
+      fr: "Retribution of the Madeen",
+      cn: "Retribution of the Madeen",
+    },
+    cooldown: 30,
+    xivDbId: 34677,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 96,
+  },
   ...getAbilitiesFrom(casterSharedAbilities),
-  medicine.Intelligence
+  medicine.Intelligence,
 ] as IAbility[];
 
-const traits = [...casterSharedTraits];
+const traits = [
+  {
+    name: "Enhanced Pictomancy II",
+    level: 86,
+    apply: abilityTrait("Striking Muse", {
+      charges: {
+        count: 2,
+        cooldown: 60,
+      },
+    }),
+  },
+  ...casterSharedTraits,
+];
 
 export const PCT: IJobTemplate = {
   translation: {
