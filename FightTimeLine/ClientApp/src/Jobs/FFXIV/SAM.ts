@@ -17,7 +17,7 @@ import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   meikyoShisui: {
-    duration: 15,
+    duration: 20,
   },
 });
 
@@ -38,6 +38,21 @@ const abilities = [
     levelAcquired: 50,
   },
   {
+    name: "Hissatsu: Shinten",
+    translation: {
+      de: "Hissatsu: Shinten",
+      ja: "\u5FC5\u6BBA\u5263\u30FB\u795E\u5929",
+      en: "Hissatsu: Shinten",
+      fr: "Hissatsu : Shinten",
+      cn: "必杀剑·神天",
+    },
+    xivDbId: "7490",
+    cooldown: 1,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 52,
+    requiresBossTarget: true,
+  },
+  {
     name: "Ikishoten",
     translation: {
       de: "Ikishoten",
@@ -52,19 +67,18 @@ const abilities = [
     levelAcquired: 68,
   },
   {
-    name: "Hissatsu: Guren",
+    name: "Hagakure",
     translation: {
-      de: "Hissatsu: Guren",
-      ja: "\u5FC5\u6BBA\u5263\u30FB\u7D05\u84EE",
-      en: "Hissatsu: Guren",
-      fr: "Hissatsu : Guren",
-      cn: "必杀剑·红莲",
+      de: "Hagakure",
+      ja: "\u88C5\u3044",
+      en: "Hagakure",
+      fr: "Hagakure",
+      cn: "装束",
     },
-    overlapStrategy: new SharedOverlapStrategy(["Hissatsu: Senei"]),
-    cooldown: 120,
-    xivDbId: "7496",
-    abilityType: AbilityType.Damage,
-    levelAcquired: 70,
+    cooldown: 5,
+    xivDbId: "7495",
+    abilityType: AbilityType.Utility,
+    levelAcquired: 68,
   },
   {
     name: "Hissatsu: Senei",
@@ -75,7 +89,6 @@ const abilities = [
       fr: "Hissatsu : Sen\u0027ei",
       cn: "必杀剑·闪影",
     },
-    overlapStrategy: new SharedOverlapStrategy(["Hissatsu: Guren"]),
     cooldown: 120,
     xivDbId: "16481",
     abilityType: AbilityType.Damage,
@@ -110,40 +123,24 @@ const abilities = [
     },
     cooldown: 15,
     xivDbId: "16487",
-    overlapStrategy: new SharedOverlapStrategy(["Shoha II"]),
     abilityType: AbilityType.Damage,
     levelAcquired: 80,
   },
   {
-    name: "Shoha II",
+    name: "Zanshin",
     translation: {
-      de: "Mumyo Shoha",
-      ja: "\u7121\u660E\u7167\u7834",
-      en: "Shoha II",
-      fr: "Mumy\u00F4 Sh\u00F4ha",
-      cn: "无明照破",
+      de: "Zanshin",
+      ja: "\u5B88\u5C71",
+      en: "Zanshin",
+      fr: "Zanshin",
+      cn: "赞颂",
     },
-    cooldown: 15,
-    xivDbId: 25779,
-    overlapStrategy: new SharedOverlapStrategy(["Shoha"]),
+    xivDbId: "36964",
     abilityType: AbilityType.Damage,
-    levelAcquired: 80,
-  },
-  {
-    name: "Kaeshi: Namikiri",
-    translation: {
-      de: "Kaeshi Namikiri",
-      en: "Kaeshi: Namikiri",
-      fr: "Kaeshi Namikiri",
-      cn: "回返斩浪",
-      ja: "\u8fd4\u3057\u6ce2\u5207",
-    },
+    levelAcquired: 96,
     cooldown: 1,
-    xivDbId: 25782,
-    abilityType: AbilityType.Damage,
-    levelAcquired: 90,
+    requiresBossTarget: true,
   },
-
   ...getAbilitiesFrom(meleeSharedAbilities),
   medicine.Strength,
 ] as IAbility[];
@@ -151,7 +148,7 @@ const abilities = [
 const traits: ITrait[] = [
   {
     name: "Enhanced Meikyo Shisui",
-    level: 88,
+    level: 76,
     apply: abilityTrait("Meikyo Shisui", {
       charges: {
         count: 2,
@@ -167,6 +164,13 @@ const traits: ITrait[] = [
         count: 2,
         cooldown: 60,
       },
+    }),
+  },
+  {
+    name: "Enhanced Hissatsu",
+    level: 94,
+    apply: abilityTrait("Hissatsu: Senei", {
+      cooldown: 60,
     }),
   },
   ...meleeSharedTraits,
