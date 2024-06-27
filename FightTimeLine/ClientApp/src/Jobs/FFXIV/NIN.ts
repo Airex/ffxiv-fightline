@@ -24,6 +24,9 @@ const statuses = MapStatuses({
   trickAttack: {
     duration: 15,
   },
+  kunaisBase: {
+    duration: 15,
+  },
   tenChiJin: {
     duration: 6,
   },
@@ -34,6 +37,9 @@ const statuses = MapStatuses({
     duration: 30,
   },
   mug: {
+    duration: 20,
+  },
+  dokumori: {
     duration: 20,
   },
 });
@@ -69,6 +75,7 @@ const abilities = [
     statuses: [statuses.mug],
     abilityType: AbilityType.Damage | AbilityType.PartyDamageBuff,
     levelAcquired: 15,
+    levelRemoved: 66,
   },
   {
     name: "Assassinate",
@@ -100,6 +107,23 @@ const abilities = [
     statuses: [statuses.trickAttack],
     abilityType: AbilityType.Damage | AbilityType.SelfDamageBuff,
     levelAcquired: 18,
+    levelRemoved: 92,
+  },
+  {
+    name: "Kunai's Bane",
+    translation: {
+      de: "Kunai-Bann",
+      ja: "\u30AF\u30CA\u30A4\u30CE\u30C8\u30B9",
+      en: "Kunai's Bane",
+      fr: "Fléau de Kunai",
+      cn: "苦无诅咒",
+    },
+    xivDbId:36958,
+    cooldown: 60,
+    requiresBossTarget: true,
+    statuses: [statuses.kunaisBase],
+    abilityType: AbilityType.Damage | AbilityType.SelfDamageBuff,
+    levelAcquired: 92
   },
   {
     name: "Kassatsu",
@@ -131,6 +155,22 @@ const abilities = [
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
     levelAcquired: 56,
+  },
+  {
+    name: "Dokumori",
+    translation: {
+      de: "Dokumori",
+      ja: "\u6C17\u6B32\u6C17\u6B32",
+      en: "Dokumori",
+      fr: "Dokumori",
+      cn: "毒盛",
+    },
+    xivDbId: 36957,
+    cooldown: 120,
+    requiresBossTarget: true,
+    abilityType: AbilityType.Damage | AbilityType.PartyDamageBuff,
+    levelAcquired: 66,
+    statuses: [statuses.dokumori],
   },
   {
     name: "Bhavacakra",
@@ -195,6 +235,22 @@ const abilities = [
     abilityType: AbilityType.SelfDamageBuff,
     levelAcquired: 80,
   },
+  {
+    name: "Hollow Nozuchi",
+    translation: {
+      de: "Hollow Nozuchi",
+      ja: "\u30DB\u30ED\u30FC\u30CE\u30BA\u30C1",
+      en: "Hollow Nozuchi",
+      fr: "Hollow Nozuchi",
+      cn: "Hollow Nozuchi",
+    },
+    cooldown: 1,
+    xivDbId: "25776",
+    requiresBossTarget: true,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 86,
+  },
+
   ...getAbilitiesFrom(meleeSharedAbilities),
   medicine.Dexterity,
 ] as IAbility[];
