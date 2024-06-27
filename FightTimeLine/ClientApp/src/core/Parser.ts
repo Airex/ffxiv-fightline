@@ -10,30 +10,39 @@ export class Parser {
   public fight: FFLogs.Fight;
   public events: FFLogs.BaseEventFields[];
 
-  constructor(private instance: number, private rawFight: FFLogs.ReportFightsResponse) {
+  constructor(
+    private instance: number,
+    private rawFight: FFLogs.ReportFightsResponse
+  ) {
     this.fight = this.rawFight.fights.find((it) => it.id === instance);
     this.players = this.parseJobs(this.rawFight);
   }
 
   private parseJobs(fight) {
     return fight.friendlies
-      .filter((it) => it.fights.some(((it1) => it1.id === this.instance) as any))
+      .filter((it) =>
+        it.fights.some(((it1) => it1.id === this.instance) as any)
+      )
       .map((it) => {
         const ji = this.mapJob(it.type);
         return {
           id: it.id,
-          petids: fight.friendlyPets.filter((it1) => it1.petOwner === it.id).map((it1) => it1.id),
+          petids: fight.friendlyPets
+            .filter((it1) => it1.petOwner === it.id)
+            .map((it1) => it1.id),
           job: ji?.jobName,
           actorName: it.name.substring(0, 16),
           role: ji?.order,
           guid: it.guid,
-          petguids: fight.friendlyPets.filter((it1) => it1.petOwner === it.id).map((it1) => it1.guid)
+          petguids: fight.friendlyPets
+            .filter((it1) => it1.petOwner === it.id)
+            .map((it1) => it1.guid),
         } as IJobInfo;
       })
       .filter((it) => it.job != null);
   }
 
-  private mapJob(input: string): { jobName: string, order: number } {
+  private mapJob(input: string): { jobName: string; order: number } {
     switch (input) {
       case "Bard":
         return { jobName: "BRD", order: 2 };
@@ -73,26 +82,58 @@ export class Parser {
         return { jobName: "GNB", order: 0 };
       case "Dancer":
         return { jobName: "DNC", order: 2 };
+      case "Viper":
+        return { jobName: "VPR", order: 2 };
+      case "Pictomancer":
+        return { jobName: "PCT", order: 2 };
     }
     return null;
   }
 
-  public createFilter(jobRegistry: Jobregistryserviceinterface.IJobRegistryService, bossOnly: boolean): string {
+  public createFilter(
+    jobRegistry: Jobregistryserviceinterface.IJobRegistryService,
+    bossOnly: boolean
+  ): string {
+    const enemyIds = this.rawFight.enemies.map((e) => e.guid).join();
 
-    const enemyIds = this.rawFight.enemies.map(e => e.guid).join();
+    const js = jobRegistry
+      .getJobs()
+      .filter((j) => this.players.some((j1) => j1.job === j.name));
 
-    const js = jobRegistry.getJobs().filter(j => this.players.some(j1 => j1.job === j.name));
-
-    const abilityIds =
-      _.uniq(
-        _.flattenDeep(
-          _.concat([], js.map(j => Object.values(j.abilities).map(a => a.detectStrategy.deps.abilities)))))
-        .filter(a => !!a)
-        .join();
-    const abilityByBuffIds = _.concat([], js.map(j => Object.values(j.abilities).map(a => a.detectStrategy.deps.buffs)));
-    const stances = _.concat([], js.map(j => j.stances && j.stances.map(a => a.ability.detectStrategy.deps.buffs)));
-    const buffs = _.uniq(_.flattenDeep(_.concat(stances, abilityByBuffIds))).filter(a => !!a).join();
-    const partyIds = _.concat(this.players.map(j => j.guid), _.flattenDeep(this.players.map(p => p.petguids))).join();
+    const abilityIds = _.uniq(
+      _.flattenDeep(
+        _.concat(
+          [],
+          js.map((j) =>
+            Object.values(j.abilities).map(
+              (a) => a.detectStrategy.deps.abilities
+            )
+          )
+        )
+      )
+    )
+      .filter((a) => !!a)
+      .join();
+    const abilityByBuffIds = _.concat(
+      [],
+      js.map((j) =>
+        Object.values(j.abilities).map((a) => a.detectStrategy.deps.buffs)
+      )
+    );
+    const stances = _.concat(
+      [],
+      js.map(
+        (j) =>
+          j.stances && j.stances.map((a) => a.ability.detectStrategy.deps.buffs)
+      )
+    );
+    const buffs = _.uniq(_.flattenDeep(_.concat(stances, abilityByBuffIds)))
+      .filter((a) => !!a)
+      .join();
+    const partyIds = _.concat(
+      this.players.map((j) => j.guid),
+      _.flattenDeep(this.players.map((p) => p.petguids))
+    ).join();
 
     const bossAutoAttacks =
       "1478,1479,1480,1481,6631,6882,6910,7319,7351,8535,8645,8938,9202,9375,9441,9442,9448,9654,9895,9908,9936,9989,10236,10237,10238,10239,10433,11070";
@@ -120,14 +161,13 @@ export class Parser {
     return filter;
   }
 
-
   processCollectors(collectors: FFLogsCollectors.IFFLogsCollector[]) {
     for (const event of this.events) {
-      collectors.forEach(c => {
+      collectors.forEach((c) => {
         c.collect(event);
       });
     }
-    collectors.forEach(c => {
+    collectors.forEach((c) => {
       c.process();
     });
   }
@@ -148,6 +188,4 @@ export class Parser {
   setEvents(events: FFLogs.BaseEventFields[]) {
     this.events = events;
   }
-
-
 }

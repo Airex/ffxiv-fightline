@@ -180,7 +180,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.visStorage.clear();
-    this.gameService.jobRegistry.setLevel(90);
+    this.gameService.jobRegistry.setLevel(100);
     this.fightLineController =
       new FightTimeLineController.FightTimeLineController(
         this.idgen,
@@ -262,7 +262,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
                     value.map((cmd) => JSON.parse(cmd.data))
                   );
                   this.connectToSession().finally(() => {
-                    this.gameService.jobRegistry.setLevel(90);
+                    this.gameService.jobRegistry.setLevel(100);
                     this.tpl = this.templates[this.template.toLowerCase()];
                     this.loadTable();
                     ref.close();
@@ -328,21 +328,21 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
       const level: ExportModels.NumberRangeOptionsSetting = {
         name: "l",
-        defaultValue: 90,
+        defaultValue: 100,
         displayName: "Fight Level",
         visible: true,
         kind: ExportModels.TableOptionSettingType.NumberRange,
         description: "Set level of fight",
         options: {
           min: 50,
-          max: 90,
+          max: 100,
           step: 10,
         },
       };
 
       const fflogs: ExportModels.BooleanOptionsSetting = {
         name: "ff",
-        defaultValue: 90,
+        defaultValue: 100,
         displayName: "FFLogs Attack Source",
         visible: this.visStorage.presenter.fflogsSource,
         kind: ExportModels.TableOptionSettingType.Boolean,

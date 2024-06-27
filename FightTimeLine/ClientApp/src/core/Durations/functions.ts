@@ -46,7 +46,7 @@ export function buildEffects(
         sourceAbilityId: item.id,
         sourceJobId: item.ability.job.id,
         attackDamageType: DamageType.All,
-        level: holders.level || 90,
+        level: holders.level || 100,
         holders,
         status,
         effect,

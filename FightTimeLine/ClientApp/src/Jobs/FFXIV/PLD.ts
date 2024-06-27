@@ -12,7 +12,7 @@ import {
   IJobTemplate,
   ITrait,
 } from "../../core/Models";
-import { getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
+import { getAbilitiesFrom, tankSharedAbilities, medicine, tankSharedTraits } from "./shared";
 import { abilityRemovedTrait, abilityTrait } from "./traits";
 
 class InterventionMitigationModifier implements IMitigator {
@@ -26,7 +26,7 @@ class InterventionMitigationModifier implements IMitigator {
       return;
     }
 
-    const abs = ["Rampart", "Sentinel"];
+    const abs = ["Rampart", "Sentinel", "Guardian"];
 
     const mts = abs.some((abName) => {
       const ab = context.holders.abilities.getByParentAndAbility(
@@ -74,9 +74,16 @@ const statuses = MapStatuses({
   requiescat: {
     duration: 30,
   },
+  imperator: {
+    duration: 30,
+  },
   sentinel: {
     duration: 15,
     effects: [Effects.mitigation.solo(30)],
+  },
+  guardian: {
+    duration: 15,
+    effects: [Effects.mitigation.solo(40), Effects.shieldFromHeal.solo(1000)],
   },
   hallowedGround: {
     duration: 10,
@@ -84,7 +91,9 @@ const statuses = MapStatuses({
   },
   divineVeil: {
     duration: 30,
-    effects: [Effects.shield.party(10).withModifier(DivineVeilMitigationModifier)],
+    effects: [
+      Effects.shield.party(10).withModifier(DivineVeilMitigationModifier),
+    ],
   },
   passageOfArms: {
     duration: 18,
@@ -182,6 +191,22 @@ const abilities = [
     levelAcquired: 68,
   },
   {
+    name: "Imperator",
+    translation: {
+      de: "Imperator",
+      ja: "\u30A4\u30F3\u30DA\u30E9\u30C8\u30FC\u30EB",
+      en: "Imperator",
+      fr: "Imperator",
+      cn: "帝王",
+    },
+    cooldown: 60,
+    xivDbId: "",
+    requiresBossTarget: true,
+    statuses: [statuses.imperator],
+    abilityType: AbilityType.SelfDamageBuff | AbilityType.Damage,
+    levelAcquired: 96,
+  },
+  {
     name: "Sentinel",
     translation: {
       de: "Sentinel",
@@ -196,7 +221,21 @@ const abilities = [
     abilityType: AbilityType.SelfDefense,
     levelAcquired: 38,
   },
-
+  {
+    name: "Guardian",
+    translation: {
+      de: "W\u00E4chter",
+      ja: "\u30AC\u30FC\u30CC",
+      en: "Guardian",
+      fr: "Gardien",
+      cn: "守护",
+    },
+    cooldown: 120,
+    xivDbId: "",
+    statuses: [statuses.guardian],
+    abilityType: AbilityType.SelfDefense,
+    levelAcquired: 92,
+  },
   {
     name: "Bulwark",
     translation: {
@@ -378,6 +417,21 @@ const abilities = [
     abilityType: AbilityType.Damage,
     levelAcquired: 30,
   },
+  {
+    name: "Blade of Honor",
+    translation: {
+      de: "Klinge der Ehre",
+      ja: "ブレイド・オブ・オナー",
+      en: "Blade of Honor",
+      fr: "Lame d'honneur",
+      cn: "荣誉之刃",
+    },
+    abilityType: AbilityType.Damage,
+    cooldown: 1,
+    levelAcquired: 100,
+    requiresBossTarget: true,
+    xivDbId:""
+  },
   ...getAbilitiesFrom(tankSharedAbilities),
   medicine.Strength,
 ] as IAbility[];
@@ -408,6 +462,17 @@ const traits: ITrait[] = [
     level: 86,
     apply: abilityRemovedTrait("Spirits Within", 86),
   },
+  {
+    name: "Sentinel Mastery",
+    level: 92,
+    apply: abilityRemovedTrait("Sentinel", 92),
+  },
+  {
+    name: "Requiescat Mastery",
+    level: 96,
+    apply: abilityRemovedTrait("Requiescat", 96),
+  },
+  ...tankSharedTraits
 ];
 
 export const PLD: IJobTemplate = {
@@ -416,7 +481,7 @@ export const PLD: IJobTemplate = {
     ja: "PLD",
     en: "PLD",
     fr: "PLD",
-    cn: "PLD"
+    cn: "PLD",
   },
 
   fullNameTranslation: {
@@ -424,7 +489,7 @@ export const PLD: IJobTemplate = {
     ja: "\u30CA\u30A4\u30C8",
     en: "Paladin",
     fr: "Paladin",
-    cn: "\u9a91\u58eb"
+    cn: "\u9a91\u58eb",
   },
   role: Role.Tank,
   abilities,

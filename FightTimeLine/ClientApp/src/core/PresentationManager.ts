@@ -10,7 +10,7 @@ export class PresenterManager implements Models.IPresenterData {
   sources: string[] = [];
   filter: Models.IFilter = Models.defaultFilter();
   view: Models.IView = Models.defaultView();
-  fightLevel = 90;
+  fightLevel = 100;
   private jobFilters: JobPresets = {};
   language: Models.SupportedLanguages = Models.SupportedLanguages[localStorage.getItem("lang") || "en"];
   selectedPreset: string = undefined;
@@ -52,7 +52,7 @@ export class PresenterManager implements Models.IPresenterData {
 
   reset() {
     this.tags = Models.DefaultTags;
-    this.fightLevel = 90;
+    this.fightLevel = 100;
     this.sources = [];
     this.filter = Models.defaultFilter();
     this.view = Models.defaultView();

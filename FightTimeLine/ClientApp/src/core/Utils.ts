@@ -157,7 +157,7 @@ export class Utils {
       if (s) {
         if (Array.isArray(values[val])) {
           if (!_.isEqual(s.defaultValue?.sort(), values[val].sort())) {
-            acc.append(val, values[val]);
+            acc.append(val, String(values[val]));
           }
         } else if (s.defaultValue !== values[val]) {
           acc.append(val, values[val]);

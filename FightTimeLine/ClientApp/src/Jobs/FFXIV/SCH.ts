@@ -11,7 +11,12 @@ import {
   IMitigator,
   MitigationVisitorContext,
 } from "../../core/Models";
-import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
+import {
+  getAbilitiesFrom,
+  healerSharedAbilities,
+  healerSharedTraits,
+  medicine,
+} from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
 import { AllowOverlapStrategy } from "src/core/Overlap";
 
@@ -414,6 +419,7 @@ const traits: ITrait[] = [
     level: 88,
     apply: abilityTrait("Deployment Tactics", updateCooldown(90)),
   },
+  ...healerSharedTraits,
 ];
 
 export const SCH: IJobTemplate = {

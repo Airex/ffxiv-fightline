@@ -182,6 +182,7 @@ export class PlanAreaComponent
       });
     },
   };
+
   optionsBoss: TimelineOptions = {
     width: "100%",
     height: "100%",
@@ -525,7 +526,7 @@ export class PlanAreaComponent
   }
 
   selectGroup(id: string) {
-    const grp: any = this.playerContainer.groups.get(id);
+    const grp = this.playerContainer.groups.get(id);
     if (grp) {
       const cnb = new ClassNameBuilder(grp.className);
       cnb.set({ selected: true });
@@ -545,6 +546,7 @@ export class PlanAreaComponent
   }
 
   ngOnDestroy(): void {
+    this.subs.forEach((s) => s.unsubscribe());
     this.visTimelineService.off(this.visTimeline, "click");
     this.visTimelineService.off(this.visTimeline, "doubleClick");
     this.visTimelineService.off(this.visTimelineBoss, "click");
@@ -558,6 +560,5 @@ export class PlanAreaComponent
 
     this.visTimelineService.destroy(this.visTimeline);
     this.visTimelineService.destroy(this.visTimelineBoss);
-    this.subs.forEach((s) => s.unsubscribe());
   }
 }

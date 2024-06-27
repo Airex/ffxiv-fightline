@@ -21,7 +21,7 @@ export class Holders {
   stances: StancesHolder;
   abilityAvailability: AbilityAvailablityHolder;
   warnings: Warning[] = [];
-  level: number = 90;
+  level: number = 100;
 
   constructor(
     mainTimeLine: ITimelineContainer,

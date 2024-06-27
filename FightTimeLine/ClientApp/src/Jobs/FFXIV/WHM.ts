@@ -9,7 +9,12 @@ import {
   IJobTemplate,
   ITrait,
 } from "../../core/Models";
-import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
+import {
+  getAbilitiesFrom,
+  healerSharedAbilities,
+  healerSharedTraits,
+  medicine,
+} from "./shared";
 import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
@@ -147,7 +152,7 @@ const abilities: IAbility[] = [
     cooldown: 90,
     xivDbId: "3569",
     statuses: [statuses.asylum],
-    abilityType: AbilityType.PartyHealing |  AbilityType.PartyHealingBuff,
+    abilityType: AbilityType.PartyHealing | AbilityType.PartyHealingBuff,
     levelAcquired: 52,
   },
   {
@@ -260,6 +265,7 @@ const traits: ITrait[] = [
       },
     }),
   },
+  ...healerSharedTraits,
 ];
 
 export const WHM: IJobTemplate = {

@@ -1,6 +1,6 @@
 import Effects from "src/core/Defensives/effects";
 import { IJob, Role, AbilityType, IAbility, DamageType, JobStatuses, MapStatuses, IJobTemplate, ITrait } from "../../core/Models";
-import { getAbilitiesFrom, casterSharedAbilities, medicine, toAbilities } from "./shared";
+import { getAbilitiesFrom, casterSharedAbilities, medicine, toAbilities, casterSharedTraits } from "./shared";
 import { abilityTrait } from "./traits";
 
 
@@ -156,7 +156,8 @@ const traits: ITrait[] = [
         cooldown: 30
       }
     })
-  }
+  },
+  ...casterSharedTraits
 ];
 
 

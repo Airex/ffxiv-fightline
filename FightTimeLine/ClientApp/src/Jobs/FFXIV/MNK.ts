@@ -1,6 +1,6 @@
 import Effects from "src/core/Defensives/effects";
 import { IJob, Role, AbilityType, MapStatuses, IJobTemplate, IAbility, ITrait } from "../../core/Models";
-import { getAbilitiesFrom, medicine, meleeSharedAbilities } from "./shared";
+import { getAbilitiesFrom, medicine, meleeSharedAbilities, meleeSharedTraits } from "./shared";
 import { abilityRemovedTrait, abilityTrait } from "./traits";
 
 
@@ -240,7 +240,8 @@ const traits: ITrait[] = [
     name: "Howling Fist Mastery",
     level: 74,
     apply: abilityRemovedTrait("Howling Fist", 74)
-  }
+  },
+  ...meleeSharedTraits
 ];
 
 export const MNK: IJobTemplate = {
