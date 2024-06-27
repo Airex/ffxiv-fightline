@@ -3,7 +3,9 @@ import {
   AST, SCH, SGE, WHM,
   BRD, DNC, MCH,
   DRG, MNK, NIN, RPR, SAM,
-  BLM, RDM, SMN
+  BLM, RDM, SMN,
+  VPR,
+  PCT
 } from "../Jobs/FFXIV/index";
 import * as Models from "../core/Models";
 import * as Shared from "../Jobs/FFXIV/shared";
@@ -16,7 +18,7 @@ export class FFXIVJobRegistryService implements IJobRegistryService {
   private level: number;
 
   constructor() {
-    this.setLevel(90);
+    this.setLevel(100);
   }
 
   setLevel(level: number) {
@@ -25,8 +27,8 @@ export class FFXIVJobRegistryService implements IJobRegistryService {
         WAR, PLD, DRK, GNB,
         AST, SCH, SGE, WHM,
         BRD, DNC, MCH,
-        DRG, MNK, NIN, RPR, SAM,
-        BLM, RDM, SMN
+        DRG, MNK, NIN, RPR, SAM, VPR,
+        BLM, RDM, SMN, PCT
       ].reduce((acc, j) => ({ ...acc, [j.translation.en]: this.build(j, level) }), {});
     }
   }

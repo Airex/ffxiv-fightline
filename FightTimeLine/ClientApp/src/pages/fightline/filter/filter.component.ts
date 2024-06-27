@@ -18,7 +18,7 @@ export class FilterComponent implements OnInit {
   tags: { text: string, checked: boolean }[];
   sources: { text: string, checked: boolean }[];
   checkAll = true;
-  levels = [50, 60, 70, 80, 90];
+  levels = [50, 60, 70, 80, 90, 100];
   filters = this.loadFilters();
   openedSelect = false;
 

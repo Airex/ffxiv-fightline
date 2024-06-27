@@ -361,7 +361,7 @@ export function calculateMitigationForAttack(
       sourceJobId: a.jobId,
       attackDamageType: attack.type,
       attackAt: bossAttackStart,
-      level: holders.level || 90,
+      level: holders.level || 100,
       holders: holders,
     } as MitigationCalculateContext;
 

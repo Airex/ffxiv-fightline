@@ -108,7 +108,7 @@ export class MitigationVisitor implements IEffectVisitor {
     context: MitigationCalculateContext,
     value: number
   ) {
-    const level = this.holders.level || 90;
+    const level = this.holders.level || 100;
     const jobMap = this.holders.jobs.get(context.sourceJobId);
     const jobStats = jobMap.stats;
     const ab = this.holders.itemUsages.get(context.sourceAbilityId);
