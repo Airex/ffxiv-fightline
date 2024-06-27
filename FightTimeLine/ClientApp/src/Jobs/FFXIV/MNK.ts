@@ -14,7 +14,7 @@ const statuses = MapStatuses({
   },
   riddleOofEarth: {
     duration: 10,
-    effects: [Effects.shield.solo(20)]
+    effects: [Effects.mitigation.solo(20)]
   },
   riddleOfFire: {
     duration: 20
@@ -23,7 +23,7 @@ const statuses = MapStatuses({
     duration: 15
   },
   brotherhood: {
-    duration: 15
+    duration: 20
   }
 });
 
@@ -100,7 +100,8 @@ const abilities = [
     cooldown: 1,
     xivDbId: "3547",
     abilityType: AbilityType.Damage,
-    levelAcquired: 54
+    levelAcquired: 54,
+    requiresBossTarget: true
   },
   {
     name: "Mantra",
@@ -150,12 +151,23 @@ const abilities = [
     cooldown: 120,
     xivDbId: "7394",
     statuses: [statuses.riddleOofEarth],
-    abilityType: AbilityType.Utility | AbilityType.SelfShield,
-    charges: {
-      count: 3,
-      cooldown: 30
-    },
+    abilityType: AbilityType.SelfDefense,
     levelAcquired: 64
+  },
+  {
+    name: "Earth's Reply",
+    xivDbId:36944,
+    translation: {
+      en: "Earth's Reply",
+      de: "Erwiderung der Erde",
+      fr: "Riposte tellurique",
+      ja: "大地の反響",
+      cn: "大地之响应",
+    },
+    abilityType: AbilityType.PartyHealing,
+    potency: 500,
+    cooldown: 1,
+    levelAcquired: 64,
   },
   {
     name: "Riddle of Fire",
@@ -200,20 +212,6 @@ const abilities = [
     xivDbId: "7396",
     statuses: [statuses.brotherhood],
     abilityType: AbilityType.PartyDamageBuff,
-    levelAcquired: 70
-  },
-  {
-    name: "Anatman",
-    translation: {
-      de: "Anatman",
-      ja: "\u7121\u6211",
-      en: "Anatman",
-      fr: "Anatman",
-      cn: "无我",
-    },
-    cooldown: 60,
-    xivDbId: "16475",
-    abilityType: AbilityType.Utility,
     levelAcquired: 70
   },
   ...getAbilitiesFrom(meleeSharedAbilities),
