@@ -5,7 +5,7 @@ import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   searingLight: {
-    duration: 30
+    duration: 20
   },
   radiantAegis: {
     duration: 30,
