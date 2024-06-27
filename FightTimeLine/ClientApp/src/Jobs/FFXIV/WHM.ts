@@ -48,9 +48,27 @@ const statuses = MapStatuses({
     duration: 20,
     effects: [Effects.shield.party(7)],
   },
+  divineCaress: {
+    duration: 10,
+    effects: [Effects.shieldFromHeal.party(400)],
+  },
 });
 
 const abilities: IAbility[] = [
+  {
+    name: "Aetherial Shift",
+    translation: {
+      de: "Etherealer Schub",
+      ja: "\u30A8\u30B5\u30EA\u30A2\u30EB\u30B7\u30D5\u30C8",
+      en: "Aetherial Shift",
+      fr: "Pouss\u00E9e \u00E9th\u00E9rale",
+      cn: "以太推进",
+    },
+    cooldown: 60,
+    xivDbId: "37008",
+    abilityType: AbilityType.Utility,
+    levelAcquired: 40,
+  },
   {
     name: "Assize",
     translation: {
@@ -250,6 +268,21 @@ const abilities: IAbility[] = [
     abilityType: AbilityType.PartyHealing | AbilityType.PartyShield,
     levelAcquired: 90,
   },
+  {
+    name: "Divine Caress",
+    translation: {
+      de: "G\u00F6ttliche Liebkosung",
+      ja: "\u30C7\u30A3\u30D3\u30F3\u30FB\u30AB\u30EC\u30B9",
+      en: "Divine Caress",
+      fr: "Caresse divine",
+      cn: "神之抚慰",
+    },
+    cooldown: 1,
+    xivDbId: 37011,
+    abilityType: AbilityType.PartyShield,
+    levelAcquired: 64,
+    statuses: [statuses.divineCaress],
+  },
   ...getAbilitiesFrom(healerSharedAbilities),
   medicine.Mind,
 ];
@@ -262,6 +295,16 @@ const traits: ITrait[] = [
       charges: {
         count: 2,
         cooldown: 30,
+      },
+    }),
+  },
+  {
+    name: "Enhanced Tetragrammaton",
+    level: 98,
+    apply: abilityTrait("Tetragrammaton", {
+      charges: {
+        count: 2,
+        cooldown: 60,
       },
     }),
   },
