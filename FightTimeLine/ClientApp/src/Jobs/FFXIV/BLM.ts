@@ -100,21 +100,6 @@ const abilities = [
     }
   },
   {
-    name: "Sharpcast",
-    translation: {
-      de: "Augmentierung ",
-      ja: "\u6FC0\u6210\u9B54",
-      en: "Sharpcast",
-      fr: "Dynamisation",
-      cn: "激情咏唱"
-    },
-    cooldown: 120,
-    xivDbId: "3574",
-    statuses: [statuses.sharpCast],
-    abilityType: AbilityType.Utility,
-    levelAcquired: 54
-  },
-  {
     name: "Amplifier",
     translation: {
       de: "Verst\u00E4rker",
@@ -137,7 +122,7 @@ const traits: ITrait[] = [
     name: "Enhanced Manafont",
     level: 84,
     apply: abilityTrait("Manafont", {
-      cooldown: 120
+      cooldown: 100
     })
   },
   {
