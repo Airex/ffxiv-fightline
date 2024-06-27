@@ -47,7 +47,21 @@ const statuses = MapStatuses({
     duration: 30,
     effects: [Effects.shield.party(10)],
   },
+  concitation: {
+    duration: 30,
+    effects: [Effects.shield.party(10)],
+  },
+  accession: {
+    duration: 30,
+    effects: [Effects.shield.party(10)],
+  },
   adloquium: {
+    duration: 30,
+    effects: [
+      Effects.shieldFromHeal.solo(180).withModifier(DeploymentTacticsModifier),
+    ],
+  },
+  manifestation: {
     duration: 30,
     effects: [
       Effects.shieldFromHeal.solo(180).withModifier(DeploymentTacticsModifier),
@@ -74,7 +88,7 @@ const statuses = MapStatuses({
     duration: 45,
   },
   chainStratagem: {
-    duration: 15,
+    duration: 20,
   },
   recitation: {
     duration: 15,
@@ -115,6 +129,42 @@ const abilities = [
     abilityType: AbilityType.PartyShield,
     overlapStrategy: new AllowOverlapStrategy(),
     levelAcquired: 35,
+    levelRemoved: 96,
+    potency: 200
+  },
+  {
+    name: "Concitation",
+    translation: {
+      de: "Konzentration",
+      ja: "\u96C6\u4E2D\u306E\u7B56",
+      en: "Concitation",
+      fr: "Trait\u00E9 de la concentration",
+      cn: "集中之策",
+    },
+    cooldown: 30,
+    xivDbId: "37013",
+    statuses: [statuses.concitation],
+    abilityType: AbilityType.PartyShield,
+    overlapStrategy: new AllowOverlapStrategy(),
+    levelAcquired: 96,
+    potency: 200
+  },
+  {
+    name: "Accession",
+    translation: {
+      de: "Zugang",
+      ja: "\u30A2\u30AF\u30BB\u30B7\u30AA\u30F3",
+      en: "Accession",
+      fr: "Acc\u00E8s",
+      cn: "加护",
+    },
+    cooldown: 30,
+    xivDbId: "37016",
+    potency: 240,
+    statuses: [statuses.accession],
+    abilityType: AbilityType.PartyShield,
+    overlapStrategy: new AllowOverlapStrategy(),
+    levelAcquired: 100,
   },
   {
     name: "Adloquium",
@@ -130,6 +180,24 @@ const abilities = [
     statuses: [statuses.adloquium],
     settings: [settings.target],
     potency: 300,
+    overlapStrategy: new AllowOverlapStrategy(),
+    abilityType: AbilityType.SelfShield,
+    levelAcquired: 30,
+  },
+  {
+    name: "Manifestation",
+    translation: {
+      de: "Manifestation",
+      ja: "\u30DE\u30CB\u30D5\u30A7\u30B9\u30C7\u30A3\u30FC\u30B7\u30E7\u30F3",
+      en: "Manifestation",
+      fr: "Manifestation",
+      cn: "显现",
+    },
+    cooldown: 30,
+    xivDbId: "37015",
+    statuses: [statuses.manifestation],
+    settings: [settings.target],
+    potency: 360,
     overlapStrategy: new AllowOverlapStrategy(),
     abilityType: AbilityType.SelfShield,
     levelAcquired: 30,
@@ -409,6 +477,33 @@ const abilities = [
     statuses: [statuses.expedient],
     levelAcquired: 90,
   },
+  {
+    name: "Baneful Impaction",
+    translation: {
+      de: "Verderbliche Wirkung",
+      ja: "\u30D0\u30CD\u30D5\u30A3\u30EB\u30A4\u30F3\u30D1\u30AF\u30B7\u30E7\u30F3",
+      en: "Baneful Impaction",
+      fr: "Impact nocif",
+      cn: "有害冲击",
+    },
+    cooldown: 1,
+    xivDbId: 37012,
+    abilityType: AbilityType.Damage,
+    requiresBossTarget: true,
+  },
+  {
+    name: "Seraphism",
+    translation: {
+      de: "Seraphismus",
+      ja: "\u30BB\u30E9\u30D5\u30A3\u30BA\u30E0",
+      en: "Seraphism",
+      fr: "S\u00E9raphisme",
+      cn: "炽天",
+    },
+    cooldown: 1,
+    xivDbId: 37011,
+    abilityType: AbilityType.Healing,
+  },
   ...getAbilitiesFrom(healerSharedAbilities),
   medicine.Mind,
 ] as IAbility[];
@@ -418,6 +513,11 @@ const traits: ITrait[] = [
     name: "Enhanced Deployment Tactics",
     level: 88,
     apply: abilityTrait("Deployment Tactics", updateCooldown(90)),
+  },
+  {
+    name: "Enhanced Recitation",
+    level: 98,
+    apply: abilityTrait("Recitation", { cooldown: 60 }),
   },
   ...healerSharedTraits,
 ];
