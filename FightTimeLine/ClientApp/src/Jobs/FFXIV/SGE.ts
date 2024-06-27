@@ -141,6 +141,25 @@ const abilities = [
     xivDbId: 24292,
     statuses: [statuses.eprog],
     abilityType: AbilityType.PartyShield,
+    levelRemoved: 96
+  },
+
+  {
+    name: "Eukrasian Prognosis II",
+    translation: {
+      de: "Eukratische Prognose II",
+      ja: "エウクラシア・プログノシスII",
+      en: "Eukrasian Prognosis II",
+      fr: "Prognosis eucrasique II",
+      cn: "均衡预后II",
+    },
+    cooldown: 30,
+    overlapStrategy: new AllowOverlapStrategy(),
+    levelAcquired: 30,
+    potency: 100,
+    xivDbId: 24292,
+    statuses: [statuses.eprog],
+    abilityType: AbilityType.PartyShield,
   },
 
   {
@@ -352,6 +371,34 @@ const abilities = [
     levelAcquired: 90,
     abilityType: AbilityType.PartyHealing | AbilityType.Damage,
   },
+  {
+    name: "Psyche",
+    translation: {
+      de: "Psyche",
+      ja: "\u30B5\u30A4\u30B1",
+      en: "Psyche",
+      fr: "Psyche",
+      cn: "心灵",
+    },
+    cooldown: 60,
+    xivDbId: 37033,
+    levelAcquired: 92,
+    abilityType: AbilityType.Damage,
+  },
+  {
+    name: "Philosophia",
+    translation: {
+      de: "Philosophia",
+      ja: "\u30D5\u30A3\u30ED\u30BD\u30D5\u30A3\u30A2",
+      en: "Philosophia",
+      fr: "Philosophia",
+      cn: "哲学",
+    },
+    cooldown: 180,
+    xivDbId: 37035,
+    levelAcquired: 100,
+    abilityType: AbilityType.HealingBuff,
+  }
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -359,6 +406,23 @@ const traits: ITrait[] = [
     name: "Enhanced Zoe",
     level: 88,
     apply: abilityTrait("Zoe", updateCooldown(90)),
+  },
+  {
+    name: "Enhanced Soteria",
+    level: 94,
+    apply: abilityTrait("Soteria", updateCooldown(60)),
+  },
+  {
+    name: "Enhanced Physis II",
+    level: 98,
+    apply: abilityTrait("Physis II", (ab) => {
+      ab.statuses = [
+        {
+          ...statuses.physisII,
+          duration: 15,
+        },
+      ];
+    }),
   },
   ...healerSharedTraits,
 ];
