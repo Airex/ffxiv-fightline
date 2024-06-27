@@ -50,6 +50,21 @@ const abilities = [
     levelAcquired: 6,
   },
   {
+    name: "Winged Glide",
+    translation: {
+      de: "Schweben",
+      ja: "\u30A6\u30A3\u30F3\u30B0\u30C9\u30A4\u30F3\u30B0",
+      en: "Winged Glide",
+      fr: "Glissade a\u00E9rienne",
+      cn: "飞翔",
+    },
+    cooldown: 60,
+    xivDbId: "36951",
+    abilityType: AbilityType.Utility,
+    levelAcquired: 45,
+    requiresBossTarget: true,
+  },
+  {
     name: "Lance Charge",
     translation: {
       de: "Lanzensch\u00E4rfung",
@@ -77,23 +92,6 @@ const abilities = [
     xivDbId: "92",
     abilityType: AbilityType.Damage,
     levelAcquired: 30,
-  },
-  {
-    name: "Dragon Sight",
-    translation: {
-      de: "Drachenblick",
-      ja: "\u30C9\u30E9\u30B4\u30F3\u30B5\u30A4\u30C8",
-      en: "Dragon Sight",
-      fr: "Vue de dragon",
-      cn: "巨龙视线",
-    },
-    cooldown: 120,
-    xivDbId: "10032",
-    statuses: [statuses.dragonSight],
-    abilityType: AbilityType.PartyDamageBuff | AbilityType.SelfDamageBuff,
-    settings: [settings.target],
-    detectStrategy: byBuffApply(1001454, "Dragon Sight"),
-    levelAcquired: 66,
   },
   {
     name: "Battle Litany",
@@ -134,7 +132,7 @@ const abilities = [
       fr: "Geirsk\u00F6gul",
       cn: "武神枪",
     },
-    cooldown: 30,
+    cooldown: 60,
     xivDbId: "3555",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
@@ -154,21 +152,6 @@ const abilities = [
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
     levelAcquired: 74,
-  },
-  {
-    name: "Spineshatter Dive",
-    translation: {
-      de: "Wirbelsprenger",
-      ja: "\u30B9\u30D1\u30A4\u30F3\u30C0\u30A4\u30D6",
-      en: "Spineshatter Dive",
-      fr: "Piqu\u00E9 brise-\u00E9chine",
-      cn: "破碎冲",
-    },
-    cooldown: 60,
-    xivDbId: "95",
-    requiresBossTarget: true,
-    abilityType: AbilityType.Damage,
-    levelAcquired: 45,
   },
   {
     name: "Stardiver",
@@ -200,6 +183,36 @@ const abilities = [
     abilityType: AbilityType.Damage,
     levelAcquired: 90,
   },
+  {
+    name: "Rise of the Dragon",
+    translation: {
+      de: "Drachenherz",
+      ja: "\u30C9\u30E9\u30B4\u30F3\u30CF\u30FC\u30C4",
+      en: "Rise of the Dragon",
+      fr: "Ascension du dragon",
+      cn: "龙之心",
+    },
+    cooldown: 1,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 92,
+    requiresBossTarget: true,
+    xivDbId: 36953,
+  },
+  {
+    name: "Starcross",
+    translation: {
+      de: "Sternenkreuz",
+      ja: "\u30B9\u30BF\u30FC\u30AF\u30ED\u30B9",
+      en: "Starcross",
+      fr: "Croix c\u00E9leste",
+      cn: "星交叉",
+    },
+    cooldown: 1,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 100,
+    requiresBossTarget: true,
+    xivDbId: 36956,
+  },
   ...getAbilitiesFrom(meleeSharedAbilities),
   medicine.Strength,
 ] as IAbility[];
@@ -221,9 +234,9 @@ const traits: ITrait[] = [
     apply: abilityRemovedTrait("Jump", 74),
   },
   {
-    name: "Enhanced Spineshatter Dive",
+    name: "Enhanced Winged Glide",
     level: 84,
-    apply: abilityTrait("Spineshatter Dive", {
+    apply: abilityTrait("Winged Glide", {
       charges: {
         count: 2,
         cooldown: 60,

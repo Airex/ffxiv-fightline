@@ -104,7 +104,7 @@ const abilities = [
       cn: "大星云",
     },
     cooldown: 120,
-    xivDbId: "",
+    xivDbId: 36935,
     statuses: [statuses.greatNebula],
     abilityType: AbilityType.SelfDefense,
     levelAcquired: 92

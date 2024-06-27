@@ -7,7 +7,7 @@ import {
   ITrait,
 } from "../../core/Models";
 import { getAbilitiesFrom, rangeSharedAbilities, medicine } from "./shared";
-import { abilityTrait } from "./traits";
+import { abilityTrait, levelRemoved } from "./traits";
 
 const statuses = MapStatuses({
   reassemble: {
@@ -67,6 +67,26 @@ const abilities = [
       cooldown: 30,
     },
     levelAcquired: 15,
+    levelRemoved: 92
+  },
+  {
+    name: "Double Check",
+    translation: {
+      de: "Doppelschuss",
+      ja: "\u30C0\u30D7\u30EB\u30C9\u30C1\u30A7\u30C3\u30AF",
+      en: "Double Check",
+      fr: "Double tir",
+      cn: "双重射击",
+    },
+    cooldown: 30,
+    xivDbId: "36979",
+    requiresBossTarget: true,
+    abilityType: AbilityType.Damage,
+    charges: {
+      count: 3,
+      cooldown: 30,
+    },
+    levelAcquired: 92,
   },
   {
     name: "Wildfire",
@@ -102,6 +122,26 @@ const abilities = [
       cooldown: 30,
     },
     levelAcquired: 50,
+    levelRemoved: 92
+  },
+  {
+    name: "Checkmate",
+    translation: {
+      de: "Schachmatt",
+      ja: "\u30C1\u30A7\u30C3\u30AF\u30E1\u30FC\u30C8",
+      en: "Checkmate",
+      fr: "Mat",
+      cn: "绝杀",
+    },
+    cooldown: 30,
+    xivDbId: "36980",
+    requiresBossTarget: true,
+    abilityType: AbilityType.Damage,
+    charges: {
+      count: 3,
+      cooldown: 30,
+    },
+    levelAcquired: 92
   },
   {
     name: "Flamethrower",

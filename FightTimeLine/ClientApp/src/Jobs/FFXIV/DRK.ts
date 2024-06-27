@@ -209,7 +209,7 @@ const abilities = [
       cn: "Shadowstride",
     },
     cooldown: 30,
-    xivDbId: "",
+    xivDbId: 36926,
     requiresBossTarget: true,
     abilityType: AbilityType.Utility,
     charges: {
@@ -260,7 +260,7 @@ const abilities = [
     },
     statuses: [statuses.shadowedVigil],
     cooldown: 120,
-    xivDbId: "",
+    xivDbId: 36927,
     abilityType: AbilityType.SelfDefense,
     levelAcquired: 92,
   },

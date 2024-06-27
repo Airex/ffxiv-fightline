@@ -1,5 +1,5 @@
 import Effects from "src/core/Defensives/effects";
-import { IJob, Role, AbilityType, DamageType, MapStatuses, IJobTemplate, ITrait } from "../../core/Models";
+import { IJob, Role, AbilityType, DamageType, MapStatuses, IJobTemplate, ITrait, IAbility } from "../../core/Models";
 import { getAbilitiesFrom, casterSharedAbilities, medicine, casterSharedTraits } from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
 
@@ -19,7 +19,7 @@ const statuses = MapStatuses({
   }
 });
 
-const abilities = [
+const abilities: IAbility[] = [
   {
     name: "Embolden",
     translation: {
@@ -112,6 +112,36 @@ const abilities = [
     abilityType: AbilityType.PartyDefense | AbilityType.PartyHealingBuff,
     statuses: [statuses.magicBarrier],
     levelAcquired: 86
+  },
+  {
+    name: "Vice of Thorns",
+    translation: {
+      de: "Dornenpein",
+      ja: "\u30B3\u30FC\u30B9\u30AA\u30D5\u30B9",
+      en: "Vice of Thorns",
+      fr: "Vice de ronces",
+      cn: "荆棘之恶",
+    },
+    cooldown: 1,
+    xivDbId: 37005,
+    requiresBossTarget: true,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 92,
+  },
+  {
+    name: "Prefulgence",
+    translation: {
+      de: "Pr\u00E4fulgenz",
+      ja: "\u30D7\u30EC\u30D5\u30EB\u30B8\u30A7\u30F3\u30B9",
+      en: "Prefulgence",
+      fr: "Pr\u00E9fulgence",
+      cn: "光辉",
+    },
+    cooldown: 1,
+    xivDbId: 37007,
+    requiresBossTarget: true,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 100,
   },
   ...getAbilitiesFrom(casterSharedAbilities),
   medicine.Intelligence

@@ -9,7 +9,12 @@ import {
   ITrait,
   IAbilityCharges,
 } from "../../core/Models";
-import { getAbilitiesFrom, healerSharedAbilities, healerSharedTraits, medicine } from "./shared";
+import {
+  getAbilitiesFrom,
+  healerSharedAbilities,
+  healerSharedTraits,
+  medicine,
+} from "./shared";
 import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
@@ -20,10 +25,7 @@ const statuses = MapStatuses({
     duration: 20,
   },
   divination: {
-    duration: 15,
-  },
-  astrodyne: {
-    duration: 15,
+    duration: 20,
   },
   collectiveUnconscious: {
     duration: 18,
@@ -56,6 +58,10 @@ const statuses = MapStatuses({
   },
   macrocosmos: {
     duration: 15,
+  },
+  sunSign: {
+    duration: 15,
+    effects: [Effects.mitigation.party(10)],
   },
 });
 
@@ -119,21 +125,6 @@ const abilities = [
     xivDbId: "16552",
     statuses: [statuses.divination],
     abilityType: AbilityType.PartyDamageBuff,
-    levelAcquired: 50,
-  },
-  {
-    name: "Astrodyne",
-    translation: {
-      de: "Astrodyne",
-      ja: "\u30A2\u30B9\u30C8\u30ED\u30C0\u30A4\u30F3",
-      en: "Astrodyne",
-      fr: "Astrodynamie",
-      cn: "星力",
-    },
-    cooldown: 30,
-    xivDbId: "25870",
-    statuses: [statuses.astrodyne],
-    abilityType: AbilityType.Utility | AbilityType.SelfDamageBuff,
     levelAcquired: 50,
   },
   {
@@ -279,6 +270,36 @@ const abilities = [
     levelAcquired: 90,
     statuses: [statuses.macrocosmos],
   },
+  {
+    name: "Oracle",
+    translation: {
+      de: "Orakel",
+      ja: "\u30AA\u30E9\u30AF\u30EB",
+      en: "Oracle",
+      fr: "Oracle",
+      cn: "神谕",
+    },
+    cooldown: 1,
+    xivDbId: 37029,
+    abilityType: AbilityType.Damage,
+    levelAcquired: 92,
+    requiresBossTarget: true,
+  },
+  {
+    name: "Sun Sign",
+    translation: {
+      de: "Sonnensiegel",
+      ja: "\u30B5\u30F3\u30B5\u30A4\u30F3",
+      en: "Sun Sign",
+      fr: "Signe sol",
+      cn: "太阳印记",
+    },
+    cooldown: 1,
+    xivDbId: 37030,
+    abilityType: AbilityType.PartyDefense,
+    statuses: [statuses.sunSign],
+    levelAcquired: 100,
+  },
   ...getAbilitiesFrom(healerSharedAbilities),
   medicine.Mind,
 ] as IAbility[];
@@ -300,6 +321,16 @@ const traits: ITrait[] = [
     }),
   },
   {
+    name: "Enhanced Essential Dignity II",
+    level: 98,
+    apply: abilityTrait("Essential Dignity", {
+      charges: {
+        count: 3,
+        cooldown: 40,
+      },
+    }),
+  },
+  {
     name: "Enhanced Celestial Intersection",
     level: 88,
     apply: abilityTrait("Celestial Intersection", {
@@ -309,7 +340,7 @@ const traits: ITrait[] = [
       },
     }),
   },
-  ...healerSharedTraits
+  ...healerSharedTraits,
 ];
 export const AST: IJobTemplate = {
   translation: {

@@ -21,7 +21,7 @@ const statuses = MapStatuses({
         duration: 45
     },
     battleVoice: {
-        duration: 15
+        duration: 20
     },
     troubadour: {
         duration: 15,
@@ -33,7 +33,7 @@ const statuses = MapStatuses({
         effects: [Effects.healingIncrease.party(15)]
     },
     radiantFinale: {
-        duration: 15
+        duration: 20
     }
 });
 
@@ -86,7 +86,7 @@ const abilities: IAbility[] = [
         cooldown: 120,
         xivDbId: "107",
         statuses: [statuses.barrage],
-        abilityType: AbilityType.SelfDamageBuff,
+        abilityType: AbilityType.Utility,
         levelAcquired: 38
     },
     {
@@ -102,7 +102,7 @@ const abilities: IAbility[] = [
         xivDbId: "114",
         requiresBossTarget: true,
         statuses: [statuses.magesBallad],
-        abilityType: AbilityType.Damage,
+        abilityType: AbilityType.PartyDamageBuff,
         relatedAbilities: {
             affects: ["Army's Paeon", "The Wanderer's Minuet"],
             affectedBy: ["Army's Paeon", "The Wanderer's Minuet"],
@@ -123,7 +123,7 @@ const abilities: IAbility[] = [
         xivDbId: "116",
         requiresBossTarget: true,
         statuses: [statuses.armysPaeon],
-        abilityType: AbilityType.Damage,
+        abilityType: AbilityType.PartyDamageBuff,
         relatedAbilities: {
             affects: ["Mage's Ballad", "The Wanderer's Minuet"],
             affectedBy: ["Mage's Ballad", "The Wanderer's Minuet"],
@@ -159,7 +159,7 @@ const abilities: IAbility[] = [
         cooldown: 120,
         xivDbId: "3559",
         statuses: [statuses.theWanderersMinuet],
-        abilityType: AbilityType.Damage,
+        abilityType: AbilityType.PartyDamageBuff,
         relatedAbilities: {
             affects: ["Mage's Ballad", "Army's Paeon"],
             affectedBy: ["Mage's Ballad", "Army's Paeon"],

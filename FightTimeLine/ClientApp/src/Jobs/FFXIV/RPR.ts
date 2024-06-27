@@ -24,38 +24,6 @@ const statuses = MapStatuses({
 
 const abilities: IAbility[] = [
   {
-    name: "Hell's Ingress",
-    translation: {
-      de: "H\u00F6llischer Auftritt",
-      ja: "\u30D8\u30EB\u30BA\u30A4\u30F3\u30B0\u30EC\u30B9",
-      en: "Hell\u0027s Ingress",
-      fr: "Intrusion de l\u0027enfer",
-      cn: "地狱入境",
-    },
-    statuses: [statuses.hellsIngress],
-    overlapStrategy: new SharedOverlapStrategy(["Hell's Egress"]),
-    xivDbId: 24401,
-    cooldown: 20,
-    abilityType: AbilityType.Utility,
-    levelAcquired: 20
-  },
-  {
-    name: "Hell's Egress",
-    translation: {
-      de: "H\u00F6llischer Abgang",
-      ja: "\u30D8\u30EB\u30BA\u30A4\u30FC\u30B0\u30EC\u30B9",
-      en: "Hell\u0027s Egress",
-      fr: "Retraite de l\u0027enfer",
-      cn: "地狱出境",
-    },
-    statuses: [statuses.hellsEgress],
-    overlapStrategy: new SharedOverlapStrategy(["Hell's Ingress"]),
-    cooldown: 20,
-    xivDbId: 24402,
-    abilityType: AbilityType.Utility,
-    levelAcquired: 20
-  },
-  {
     name: "Arcane Crest",
     translation: {
       de: "Arkanes Wappen",
@@ -154,6 +122,21 @@ const abilities: IAbility[] = [
     xivDbId: 24393,
     abilityType: AbilityType.Damage,
     levelAcquired: 70,
+  },
+  {
+    name: "Sacrificium",
+    translation: {
+      de: "Sacrificium",
+      ja: "\u30B5\u30AF\u30EA\u30D5\u30A3\u30AD\u30A6\u30E0",
+      en: "Sacrificium",
+      fr: "Sacrificium",
+      cn: "牺牲",
+    },
+    cooldown: 1,
+    xivDbId: 36969,
+    abilityType: AbilityType.Damage,
+    requiresBossTarget: true,
+    levelAcquired: 92,
   },
   {
     name: "Enshroud",
