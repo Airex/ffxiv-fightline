@@ -31,7 +31,7 @@ const abilities = [
       cn: "星之女神",
     },
     cooldown: 120,
-    xivDbId: "",
+    xivDbId: 34675,
     requiresBossTarget: false,
     abilityType: AbilityType.PartyDamageBuff,
     levelAcquired: 70,

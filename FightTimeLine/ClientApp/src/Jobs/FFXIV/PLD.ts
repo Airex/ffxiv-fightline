@@ -200,7 +200,7 @@ const abilities = [
       cn: "帝王",
     },
     cooldown: 60,
-    xivDbId: "",
+    xivDbId: 36921,
     requiresBossTarget: true,
     statuses: [statuses.imperator],
     abilityType: AbilityType.SelfDamageBuff | AbilityType.Damage,
@@ -231,7 +231,7 @@ const abilities = [
       cn: "守护",
     },
     cooldown: 120,
-    xivDbId: "",
+    xivDbId: 36920,
     statuses: [statuses.guardian],
     abilityType: AbilityType.SelfDefense,
     levelAcquired: 92,
@@ -430,7 +430,7 @@ const abilities = [
     cooldown: 1,
     levelAcquired: 100,
     requiresBossTarget: true,
-    xivDbId:""
+    xivDbId: 36922
   },
   ...getAbilitiesFrom(tankSharedAbilities),
   medicine.Strength,
