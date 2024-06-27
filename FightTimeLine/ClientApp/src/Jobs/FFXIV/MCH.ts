@@ -198,6 +198,18 @@ const traits = [
     name: "Enhanced Tactician",
     apply: abilityTrait("Tactician", (ab) => (ab.cooldown = 90)),
   },
+  {
+    level: 98,
+    name: "Enhanced Tactician 2",
+    apply: abilityTrait("Tactician", (ab) => {
+      ab.statuses = [
+        {
+          ...statuses.tactician,
+          effects: [Effects.mitigation.party(15)],
+        },
+      ];
+    }),
+  }
 ] as ITrait[];
 
 export const MCH: IJobTemplate = {

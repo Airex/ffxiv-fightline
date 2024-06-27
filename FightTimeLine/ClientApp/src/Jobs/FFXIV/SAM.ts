@@ -1,12 +1,24 @@
 import { SharedOverlapStrategy } from "src/core/Overlap";
-import { Role, AbilityType, MapStatuses, IJobTemplate, ITrait, IAbility } from "../../core/Models";
-import { getAbilitiesFrom, meleeSharedAbilities, medicine } from "./shared";
+import {
+  Role,
+  AbilityType,
+  MapStatuses,
+  IJobTemplate,
+  ITrait,
+  IAbility,
+} from "../../core/Models";
+import {
+  getAbilitiesFrom,
+  meleeSharedAbilities,
+  medicine,
+  meleeSharedTraits,
+} from "./shared";
 import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   meikyoShisui: {
-    duration: 15
-  }
+    duration: 15,
+  },
 });
 
 const abilities = [
@@ -23,7 +35,7 @@ const abilities = [
     xivDbId: "7499",
     statuses: [statuses.meikyoShisui],
     abilityType: AbilityType.Utility,
-    levelAcquired: 50
+    levelAcquired: 50,
   },
   {
     name: "Ikishoten",
@@ -37,7 +49,7 @@ const abilities = [
     cooldown: 120,
     xivDbId: "16482",
     abilityType: AbilityType.Utility,
-    levelAcquired: 68
+    levelAcquired: 68,
   },
   {
     name: "Hissatsu: Guren",
@@ -52,7 +64,7 @@ const abilities = [
     cooldown: 120,
     xivDbId: "7496",
     abilityType: AbilityType.Damage,
-    levelAcquired: 70
+    levelAcquired: 70,
   },
   {
     name: "Hissatsu: Senei",
@@ -67,7 +79,7 @@ const abilities = [
     cooldown: 120,
     xivDbId: "16481",
     abilityType: AbilityType.Damage,
-    levelAcquired: 72
+    levelAcquired: 72,
   },
   {
     name: "Tsubame-gaeshi",
@@ -84,8 +96,8 @@ const abilities = [
     levelAcquired: 76,
     charges: {
       count: 2,
-      cooldown: 60
-    }
+      cooldown: 60,
+    },
   },
   {
     name: "Shoha",
@@ -100,7 +112,7 @@ const abilities = [
     xivDbId: "16487",
     overlapStrategy: new SharedOverlapStrategy(["Shoha II"]),
     abilityType: AbilityType.Damage,
-    levelAcquired: 80
+    levelAcquired: 80,
   },
   {
     name: "Shoha II",
@@ -115,8 +127,9 @@ const abilities = [
     xivDbId: 25779,
     overlapStrategy: new SharedOverlapStrategy(["Shoha"]),
     abilityType: AbilityType.Damage,
-    levelAcquired: 80
-  }, {
+    levelAcquired: 80,
+  },
+  {
     name: "Kaeshi: Namikiri",
     translation: {
       de: "Kaeshi Namikiri",
@@ -128,11 +141,11 @@ const abilities = [
     cooldown: 1,
     xivDbId: 25782,
     abilityType: AbilityType.Damage,
-    levelAcquired: 90
+    levelAcquired: 90,
   },
 
   ...getAbilitiesFrom(meleeSharedAbilities),
-  medicine.Strength
+  medicine.Strength,
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -142,9 +155,9 @@ const traits: ITrait[] = [
     apply: abilityTrait("Meikyo Shisui", {
       charges: {
         count: 2,
-        cooldown: 55
-      }
-    })
+        cooldown: 55,
+      },
+    }),
   },
   {
     name: "Enhanced Tsubame-gaeshi",
@@ -152,11 +165,11 @@ const traits: ITrait[] = [
     apply: abilityTrait("Tsubame-gaeshi", {
       charges: {
         count: 2,
-        cooldown: 60
-      }
-    })
-  }
-
+        cooldown: 60,
+      },
+    }),
+  },
+  ...meleeSharedTraits,
 ];
 
 export const SAM: IJobTemplate = {
@@ -176,7 +189,5 @@ export const SAM: IJobTemplate = {
   },
   role: Role.Melee,
   abilities,
-  traits
+  traits,
 };
-
-

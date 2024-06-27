@@ -1,28 +1,41 @@
 import Effects from "src/core/Defensives/effects";
-import { IJob, Role, AbilityType, MapStatuses, IJobTemplate, IAbility, ITrait } from "../../core/Models";
-import { getAbilitiesFrom, meleeSharedAbilities, medicine } from "./shared";
+import {
+  IJob,
+  Role,
+  AbilityType,
+  MapStatuses,
+  IJobTemplate,
+  IAbility,
+  ITrait,
+} from "../../core/Models";
+import {
+  getAbilitiesFrom,
+  meleeSharedAbilities,
+  medicine,
+  meleeSharedTraits,
+} from "./shared";
 import { abilityRemovedTrait } from "./traits";
 
 const statuses = MapStatuses({
   shadeShift: {
     duration: 20,
-    effects: [Effects.shield.solo(20)]
+    effects: [Effects.shield.solo(20)],
   },
   trickAttack: {
-    duration: 15
+    duration: 15,
   },
   tenChiJin: {
-    duration: 6
+    duration: 6,
   },
   meisui: {
-    duration: 30
+    duration: 30,
   },
   bunshin: {
-    duration: 30
+    duration: 30,
   },
   mug: {
-    duration: 20
-  }
+    duration: 20,
+  },
 });
 
 const abilities = [
@@ -39,7 +52,7 @@ const abilities = [
     xivDbId: "2241",
     statuses: [statuses.shadeShift],
     abilityType: AbilityType.SelfShield,
-    levelAcquired: 2
+    levelAcquired: 2,
   },
   {
     name: "Mug",
@@ -55,7 +68,7 @@ const abilities = [
     requiresBossTarget: true,
     statuses: [statuses.mug],
     abilityType: AbilityType.Damage | AbilityType.PartyDamageBuff,
-    levelAcquired: 15
+    levelAcquired: 15,
   },
   {
     name: "Assassinate",
@@ -64,13 +77,13 @@ const abilities = [
       en: "Assassinate",
       fr: "Assassinement",
       cn: "断绝",
-      ja: "終撃"
+      ja: "終撃",
     },
     xivDbId: "2246",
     cooldown: 60,
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 40
+    levelAcquired: 40,
   },
   {
     name: "Trick Attack",
@@ -86,7 +99,7 @@ const abilities = [
     requiresBossTarget: true,
     statuses: [statuses.trickAttack],
     abilityType: AbilityType.Damage | AbilityType.SelfDamageBuff,
-    levelAcquired: 18
+    levelAcquired: 18,
   },
   {
     name: "Kassatsu",
@@ -102,7 +115,7 @@ const abilities = [
     requiresBossTarget: true,
 
     abilityType: AbilityType.Damage,
-    levelAcquired: 50
+    levelAcquired: 50,
   },
   {
     name: "Dream Within a Dream",
@@ -117,7 +130,7 @@ const abilities = [
     xivDbId: "3566",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 56
+    levelAcquired: 56,
   },
   {
     name: "Bhavacakra",
@@ -132,7 +145,7 @@ const abilities = [
     xivDbId: "7402",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 68
+    levelAcquired: 68,
   },
   {
     name: "Ten Chi Jin",
@@ -148,7 +161,7 @@ const abilities = [
     requiresBossTarget: true,
     statuses: [statuses.tenChiJin],
     abilityType: AbilityType.SelfDamageBuff,
-    levelAcquired: 70
+    levelAcquired: 70,
   },
   {
     name: "Meisui",
@@ -164,7 +177,7 @@ const abilities = [
     requiresBossTarget: true,
     statuses: [statuses.meisui],
     abilityType: AbilityType.Utility | AbilityType.SelfDamageBuff,
-    levelAcquired: 72
+    levelAcquired: 72,
   },
   {
     name: "Bunshin",
@@ -180,22 +193,22 @@ const abilities = [
     requiresBossTarget: true,
     statuses: [statuses.bunshin],
     abilityType: AbilityType.SelfDamageBuff,
-    levelAcquired: 80
+    levelAcquired: 80,
   },
   ...getAbilitiesFrom(meleeSharedAbilities),
-  medicine.Dexterity
+  medicine.Dexterity,
 ] as IAbility[];
 
 const traits: ITrait[] = [
   {
     name: "Adept Assassination",
     level: 56,
-    apply: abilityRemovedTrait("Assassination", 56)
+    apply: abilityRemovedTrait("Assassination", 56),
   },
+  ...meleeSharedTraits,
 ];
 
 export const NIN: IJobTemplate = {
-
   translation: {
     de: "NIN",
     ja: "NIN",
@@ -213,7 +226,5 @@ export const NIN: IJobTemplate = {
   },
   role: Role.Melee,
   abilities,
-  traits
+  traits,
 };
-
-

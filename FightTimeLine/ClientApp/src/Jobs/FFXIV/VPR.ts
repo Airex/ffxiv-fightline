@@ -1,4 +1,17 @@
 import { IJobTemplate, Role } from "src/core/Models";
+import {
+  getAbilitiesFrom,
+  medicine,
+  meleeSharedAbilities,
+  meleeSharedTraits,
+} from "./shared";
+
+const abilities = [
+  medicine.Dexterity,
+  ...getAbilitiesFrom(meleeSharedAbilities)
+];
+
+const traits = [...meleeSharedTraits];
 
 export const VPR: IJobTemplate = {
   translation: {
@@ -17,6 +30,6 @@ export const VPR: IJobTemplate = {
     cn: "Viper",
   },
   role: Role.Melee,
-  abilities: [],
-  traits: [],
+  abilities,
+  traits,
 };

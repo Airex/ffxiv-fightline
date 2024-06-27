@@ -42,7 +42,19 @@ const traits = [
     level: 88,
     name: "Enhanced Troubadour",
     apply: abilityTrait("Troubadour", ab => ab.cooldown = 90)
-  }
+  },
+  {
+    level: 98,
+    name: "Enhanced Troubadour 2",
+    apply: abilityTrait("Troubadour", ab => {
+      ab.statuses = [
+        {
+          ...statuses.troubadour,
+          effects: [Effects.mitigation.party(15)]
+        }
+      ]
+    })
+  },
 ] as ITrait[];
 
 

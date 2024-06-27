@@ -9,7 +9,7 @@ import {
   ITrait,
   IAbilityCharges,
 } from "../../core/Models";
-import { getAbilitiesFrom, healerSharedAbilities, medicine } from "./shared";
+import { getAbilitiesFrom, healerSharedAbilities, healerSharedTraits, medicine } from "./shared";
 import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
@@ -309,6 +309,7 @@ const traits: ITrait[] = [
       },
     }),
   },
+  ...healerSharedTraits
 ];
 export const AST: IJobTemplate = {
   translation: {

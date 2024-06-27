@@ -149,12 +149,14 @@ export const tankSharedTraits: ITrait[] = [
     level: 98,
     name: "Enhanced Reprisal",
     apply: abilityTrait("Reprisal", (ability) => {
-      ability.statuses = [{ duration: 15, effects: [Effects.mitigation.party(10)] }];
+      ability.statuses = [
+        { duration: 15, effects: [Effects.mitigation.party(10)] },
+      ];
     }),
   },
 ];
 
-const magicSharedAbilities: IAbilities = {
+export const magicSharedAbilities: IAbilities = {
   Swiftcast: {
     name: "Swiftcast",
     translation: {
@@ -208,6 +210,14 @@ const magicSharedAbilities: IAbilities = {
   },
 };
 
+const magicSharedTraits: ITrait[] = [
+  {
+    level: 94,
+    name: "Enhanced Swiftcast",
+    apply: abilityTrait("Swiftcast", { cooldown: 40 }),
+  },
+];
+
 export const meleeSharedAbilities: IAbilities = {
   Feint: {
     name: "Feint",
@@ -235,7 +245,24 @@ export const meleeSharedAbilities: IAbilities = {
     ],
   },
 };
+
+export const meleeSharedTraits: ITrait[] = [
+  {
+    level: 98,
+    name: "Enhanced Feint",
+    apply: abilityTrait("Feint", (ability) => {
+      ability.statuses = [
+        {
+          ...ability.statuses[0],
+          duration: 15,
+        },
+      ];
+    }),
+  },
+];
+
 export const rangeSharedAbilities: IAbilities = {};
+
 export const casterSharedAbilities: IAbilities = {
   Addle: {
     name: "Addle",
@@ -264,9 +291,30 @@ export const casterSharedAbilities: IAbilities = {
   },
   ...magicSharedAbilities,
 };
+
+export const casterSharedTraits: ITrait[] = [
+  {
+    level: 98,
+    name: "Enhanced Addle",
+    apply: abilityTrait("Addle", (ability) => {
+      ability.statuses = [
+        {
+          ...ability.statuses[0],
+          duration: 15,
+        },
+      ];
+    }),
+  },
+  ...magicSharedTraits,
+];
+
 export const healerSharedAbilities: IAbilities = {
   ...magicSharedAbilities,
 };
+
+export const healerSharedTraits: ITrait[] = [
+  ...magicSharedTraits
+];
 
 enum MedicineEnum {
   Mind,

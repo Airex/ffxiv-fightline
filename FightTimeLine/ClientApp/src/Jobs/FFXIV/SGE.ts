@@ -10,7 +10,12 @@ import {
   Role,
   settings,
 } from "../../core/Models";
-import { getAbilitiesFrom, medicine, healerSharedAbilities } from "./shared";
+import {
+  getAbilitiesFrom,
+  medicine,
+  healerSharedAbilities,
+  healerSharedTraits,
+} from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
 import { AllowOverlapStrategy } from "src/core/Overlap";
 
@@ -355,6 +360,7 @@ const traits: ITrait[] = [
     level: 88,
     apply: abilityTrait("Zoe", updateCooldown(90)),
   },
+  ...healerSharedTraits,
 ];
 export const SGE: IJobTemplate = {
   translation: {

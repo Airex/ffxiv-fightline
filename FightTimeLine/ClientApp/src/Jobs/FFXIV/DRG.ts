@@ -1,22 +1,36 @@
 import { byBuffApply } from "src/core/AbilityDetectors";
-import { IJob, Role, AbilityType, IAbility, MapStatuses, settings, IJobTemplate, ITrait } from "../../core/Models";
-import { getAbilitiesFrom, medicine, meleeSharedAbilities, toAbilities } from "./shared";
+import {
+  IJob,
+  Role,
+  AbilityType,
+  IAbility,
+  MapStatuses,
+  settings,
+  IJobTemplate,
+  ITrait,
+} from "../../core/Models";
+import {
+  getAbilitiesFrom,
+  medicine,
+  meleeSharedAbilities,
+  meleeSharedTraits,
+  toAbilities,
+} from "./shared";
 import { abilityRemovedTrait, abilityTrait } from "./traits";
-
 
 const statuses = MapStatuses({
   lanceCharge: {
-    duration: 20
+    duration: 20,
   },
   lifeSurge: {
-    duration: 5
+    duration: 5,
   },
   dragonSight: {
-    duration: 20
+    duration: 20,
   },
   battleLitany: {
-    duration: 15
-  }
+    duration: 15,
+  },
 });
 
 const abilities = [
@@ -27,13 +41,13 @@ const abilities = [
       ja: "\u30E9\u30A4\u30D5\u30B5\u30FC\u30B8",
       en: "Life Surge",
       fr: "Souffle de vie",
-      cn: "龙剑"
+      cn: "龙剑",
     },
     cooldown: 40,
     xivDbId: "83",
     statuses: [statuses.lifeSurge],
     abilityType: AbilityType.SelfDamageBuff,
-    levelAcquired: 6
+    levelAcquired: 6,
   },
   {
     name: "Lance Charge",
@@ -42,13 +56,13 @@ const abilities = [
       ja: "\u30E9\u30F3\u30B9\u30C1\u30E3\u30FC\u30B8",
       en: "Lance Charge",
       fr: "Lance ac\u00E9r\u00E9e",
-      cn: "猛枪"
+      cn: "猛枪",
     },
     cooldown: 60,
     xivDbId: "85",
     statuses: [statuses.lanceCharge],
     abilityType: AbilityType.SelfDamageBuff,
-    levelAcquired: 30
+    levelAcquired: 30,
   },
   {
     name: "Jump",
@@ -57,12 +71,12 @@ const abilities = [
       en: "Jump",
       fr: "Saut",
       cn: "",
-      ja: "ジャンプ"
+      ja: "ジャンプ",
     },
     cooldown: 30,
     xivDbId: "92",
     abilityType: AbilityType.Damage,
-    levelAcquired: 30
+    levelAcquired: 30,
   },
   {
     name: "Dragon Sight",
@@ -71,7 +85,7 @@ const abilities = [
       ja: "\u30C9\u30E9\u30B4\u30F3\u30B5\u30A4\u30C8",
       en: "Dragon Sight",
       fr: "Vue de dragon",
-      cn: "巨龙视线"
+      cn: "巨龙视线",
     },
     cooldown: 120,
     xivDbId: "10032",
@@ -79,7 +93,7 @@ const abilities = [
     abilityType: AbilityType.PartyDamageBuff | AbilityType.SelfDamageBuff,
     settings: [settings.target],
     detectStrategy: byBuffApply(1001454, "Dragon Sight"),
-    levelAcquired: 66
+    levelAcquired: 66,
   },
   {
     name: "Battle Litany",
@@ -88,13 +102,13 @@ const abilities = [
       ja: "\u30D0\u30C8\u30EB\u30EA\u30BF\u30CB\u30FC",
       en: "Battle Litany",
       fr: "Litanie combattante",
-      cn: "战斗连祷"
+      cn: "战斗连祷",
     },
     cooldown: 120,
     xivDbId: "3557",
     statuses: [statuses.battleLitany],
     abilityType: AbilityType.PartyDamageBuff,
-    levelAcquired: 52
+    levelAcquired: 52,
   },
   {
     name: "Dragonfire Dive",
@@ -103,13 +117,13 @@ const abilities = [
       ja: "\u30C9\u30E9\u30B4\u30F3\u30C0\u30A4\u30D6",
       en: "Dragonfire Dive",
       fr: "Piqu\u00E9 du dragon",
-      cn: "龙炎冲"
+      cn: "龙炎冲",
     },
     cooldown: 120,
     xivDbId: "96",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 50
+    levelAcquired: 50,
   },
   {
     name: "Geirskogul",
@@ -118,13 +132,13 @@ const abilities = [
       ja: "\u30B2\u30A4\u30EB\u30B9\u30B3\u30B0\u30EB",
       en: "Geirskogul",
       fr: "Geirsk\u00F6gul",
-      cn: "武神枪"
+      cn: "武神枪",
     },
     cooldown: 30,
     xivDbId: "3555",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 60
+    levelAcquired: 60,
   },
   {
     name: "High Jump",
@@ -133,13 +147,13 @@ const abilities = [
       ja: "\u30CF\u30A4\u30B8\u30E3\u30F3\u30D7",
       en: "High Jump",
       fr: "Grand saut",
-      cn: "高跳"
+      cn: "高跳",
     },
     cooldown: 30,
     xivDbId: "16478",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 74
+    levelAcquired: 74,
   },
   {
     name: "Spineshatter Dive",
@@ -148,13 +162,13 @@ const abilities = [
       ja: "\u30B9\u30D1\u30A4\u30F3\u30C0\u30A4\u30D6",
       en: "Spineshatter Dive",
       fr: "Piqu\u00E9 brise-\u00E9chine",
-      cn: "破碎冲"
+      cn: "破碎冲",
     },
     cooldown: 60,
     xivDbId: "95",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 45
+    levelAcquired: 45,
   },
   {
     name: "Stardiver",
@@ -163,13 +177,13 @@ const abilities = [
       ja: "\u30B9\u30BF\u30FC\u30C0\u30A4\u30D0\u30FC",
       en: "Stardiver",
       fr: "Plongeon c\u00E9leste",
-      cn: "坠星冲"
+      cn: "坠星冲",
     },
     cooldown: 30,
     xivDbId: "16480",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 80
+    levelAcquired: 80,
   },
   {
     name: "Wyrmwind Thrust",
@@ -178,16 +192,16 @@ const abilities = [
       ja: "\u5929\u7ADC\u70B9\u775B",
       en: "Wyrmwind Thrust",
       fr: "Perc\u00E9e des dragons anciens",
-      cn: "天龙点睛"
+      cn: "天龙点睛",
     },
     cooldown: 10,
     xivDbId: "25773",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 90
+    levelAcquired: 90,
   },
   ...getAbilitiesFrom(meleeSharedAbilities),
-  medicine.Strength
+  medicine.Strength,
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -197,14 +211,14 @@ const traits: ITrait[] = [
     apply: abilityTrait("Life Surge", {
       charges: {
         count: 2,
-        cooldown: 45
-      }
-    })
+        cooldown: 45,
+      },
+    }),
   },
   {
     name: "Jump Mastery",
     level: 74,
-    apply: abilityRemovedTrait("Jump", 74)
+    apply: abilityRemovedTrait("Jump", 74),
   },
   {
     name: "Enhanced Spineshatter Dive",
@@ -212,20 +226,20 @@ const traits: ITrait[] = [
     apply: abilityTrait("Spineshatter Dive", {
       charges: {
         count: 2,
-        cooldown: 60
-      }
-    })
-  }
+        cooldown: 60,
+      },
+    }),
+  },
+  ...meleeSharedTraits,
 ];
 
 export const DRG: IJobTemplate = {
-
   translation: {
     de: "DRG",
     ja: "DRG",
     en: "DRG",
     fr: "DRG",
-    cn: "DRG"
+    cn: "DRG",
   },
 
   fullNameTranslation: {
@@ -233,11 +247,9 @@ export const DRG: IJobTemplate = {
     ja: "\u7ADC\u9A0E\u58EB",
     en: "Dragoon",
     fr: "Chevalier Dragon",
-    cn: "龙骑士"
+    cn: "龙骑士",
   },
   role: Role.Melee,
   abilities,
-  traits
+  traits,
 };
-
-
