@@ -17,8 +17,8 @@ import { DNC } from "./DNC";
 import { GNB } from "./GNB";
 import { SGE } from "./SGE";
 import { RPR } from "./RPR";
-
-
+import { PCT } from "./PCT";
+import { VPR } from "./VPR";
 
 export {
   DRK,
@@ -39,5 +39,7 @@ export {
   SMN,
   BLM,
   DNC,
-  GNB
+  GNB,
+  PCT,
+  VPR,
 };

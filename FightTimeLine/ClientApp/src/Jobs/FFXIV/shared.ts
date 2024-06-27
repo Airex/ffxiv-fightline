@@ -1,6 +1,13 @@
 import { byBuffRemove } from "src/core/AbilityDetectors";
 import Effects from "src/core/Defensives/effects";
-import { IAbility, AbilityType, DamageType, settings } from "../../core/Models";
+import {
+  IAbility,
+  AbilityType,
+  DamageType,
+  settings,
+  ITrait,
+} from "../../core/Models";
+import { abilityTrait } from "./traits";
 
 export type IAbilities = {
   [name: string]: IAbility;
@@ -19,7 +26,7 @@ export const abilitySortFn = (a1: IAbility, a2: IAbility): number => {
     AbilityType.Enmity,
     AbilityType.Damage,
     AbilityType.PartyHealing,
-    AbilityType.Healing,    
+    AbilityType.Healing,
     AbilityType.PartyHealingBuff,
     AbilityType.HealingBuff,
     AbilityType.Pet,
@@ -121,6 +128,31 @@ export const tankSharedAbilities: IAbilities = {
     abilityType: AbilityType.Enmity,
   },
 };
+
+export const tankSharedTraits: ITrait[] = [
+  {
+    level: 94,
+    name: "Enhanced Rampart",
+    apply: abilityTrait("Rampart", (ability) => {
+      ability.statuses = [
+        {
+          duration: 20,
+          effects: [
+            Effects.mitigation.solo(20),
+            Effects.incomingHealingIncrease.solo(15),
+          ],
+        },
+      ];
+    }),
+  },
+  {
+    level: 98,
+    name: "Enhanced Reprisal",
+    apply: abilityTrait("Reprisal", (ability) => {
+      ability.statuses = [{ duration: 15, effects: [Effects.mitigation.party(10)] }];
+    }),
+  },
+];
 
 const magicSharedAbilities: IAbilities = {
   Swiftcast: {

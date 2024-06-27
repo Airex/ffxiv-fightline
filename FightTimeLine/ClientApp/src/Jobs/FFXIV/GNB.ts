@@ -15,6 +15,10 @@ const statuses = MapStatuses({
     duration: 15,
     effects: [Effects.mitigation.solo(30)]
   },
+  greatNebula: {
+    duration: 15,
+    effects: [Effects.mitigation.solo(40), Effects.hpIncrease.self(20)]
+  },
   aurora: {
     duration: 18,
   },
@@ -87,7 +91,23 @@ const abilities = [
     xivDbId: "16148",
     statuses: [statuses.nebula],
     abilityType: AbilityType.SelfDefense,
-    levelAcquired: 38
+    levelAcquired: 38,
+    levelRemoved: 92
+  },
+  {
+    name: "Great Nebula",
+    translation: {
+      de: "Große Nebula",
+      ja: "\u30B0\u30EC\u30FC\u30C8\u30CD\u30D3\u30E5\u30E9",
+      en: "Great Nebula",
+      fr: "Grande N\u00E9buleuse",
+      cn: "大星云",
+    },
+    cooldown: 120,
+    xivDbId: "",
+    statuses: [statuses.greatNebula],
+    abilityType: AbilityType.SelfDefense,
+    levelAcquired: 92
   },
   {
     name: "Aurora",
@@ -125,17 +145,17 @@ const abilities = [
     levelAcquired: 50
   },
   {
-    name: "Rough Divide",
+    name: "Trajectory",
     translation: {
-      de: "Grobspalter",
-      ja: "\u30E9\u30D5\u30C7\u30A3\u30D0\u30A4\u30C9",
-      en: "Rough Divide",
-      fr: "Lamineur",
-      cn: "粗分斩",
+      de: "Projektilbahn",
+      ja: "\u30C8\u30E9\u30D3\u30A8\u30C3\u30C8",
+      en: "Trajectory",
+      fr: "Trajectoire",
+      cn: "弹道",
     },
     cooldown: 30,
     xivDbId: "16154",
-    abilityType: AbilityType.Damage,
+    abilityType: AbilityType.Utility,
     charges: {
       count: 2,
       cooldown: 30

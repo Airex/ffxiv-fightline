@@ -12,7 +12,12 @@ import {
   ITrait,
   IMitigatorOverride,
 } from "../../core/Models";
-import { getAbilitiesFrom, tankSharedAbilities, medicine } from "./shared";
+import {
+  getAbilitiesFrom,
+  tankSharedAbilities,
+  medicine,
+  tankSharedTraits,
+} from "./shared";
 import { abilityRemovedTrait, abilityTrait } from "./traits";
 
 class ShakeItOffMitigationModifier implements IMitigator {
@@ -74,6 +79,14 @@ const statuses = MapStatuses({
     effects: [
       Effects.mitigation
         .solo(30)
+        .withModifier(ShakeItOffAbilityConsumedModifier),
+    ],
+  },
+  damnation: {
+    duration: 15,
+    effects: [
+      Effects.mitigation
+        .solo(40)
         .withModifier(ShakeItOffAbilityConsumedModifier),
     ],
   },
@@ -269,6 +282,22 @@ const abilities: IAbility[] = [
     levelAcquired: 38,
   },
   {
+    name: "Damnation",
+    translation: {
+      de: "Damnation",
+      ja: "Damnation",
+      en: "Damnation",
+      fr: "Damnation",
+      cn: "Damnation",
+    },
+    cooldown: 120,
+    xivDbId: "",
+    statuses: [statuses.damnation],
+    relatedAbilities: { affectedBy: ["Shake It Off"], parentOnly: true },
+    abilityType: AbilityType.SelfDefense,
+    levelAcquired: 92,
+  },
+  {
     name: "Holmgang",
     translation: {
       de: "Holmgang",
@@ -299,7 +328,7 @@ const abilities: IAbility[] = [
     abilityType: AbilityType.PartyShield,
     statuses: [statuses.shakeItOff],
     relatedAbilities: {
-      affects: ["Thrill of Battle", "Vengence", "Raw Intuition"],
+      affects: ["Thrill of Battle", "Vengence", "Raw Intuition", "Damnation"],
       parentOnly: true,
     },
     levelAcquired: 68,
@@ -392,6 +421,21 @@ const abilities: IAbility[] = [
     levelAcquired: 76,
     cantUseOnSelf: true,
   },
+  {
+    name: "Primal Wrath",
+    translation:{
+      de: "Primal Wrath",
+      ja: "Primal Wrath",
+      en: "Primal Wrath",
+      fr: "Primal Wrath",
+      cn: "Primal Wrath",
+    },
+    cooldown: 1,
+    xivDbId: "",
+    abilityType: AbilityType.Damage,
+    levelAcquired: 96,
+    requiresBossTarget: true,
+  },
   medicine.Strength,
   ...getAbilitiesFrom(tankSharedAbilities),
 ] as IAbility[];
@@ -420,6 +464,13 @@ const traits: ITrait[] = [
         ])
     ),
   },
+  {
+    level: 92,
+    name: "Vengeance Mastery",
+    apply: abilityRemovedTrait("Vengeance", 92),
+  },
+
+  ...tankSharedTraits,
 ];
 
 export const WAR: IJobTemplate = {
