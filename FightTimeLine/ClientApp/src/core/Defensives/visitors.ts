@@ -151,7 +151,7 @@ export class MitigationVisitor implements IEffectVisitor {
         0
       );
 
-    const lvlModifier = levelModifiers[level];
+    const lvlModifier = levelModifiers[level] || levelModifiers[90]; // lets assume 90 if not found
 
     var detVal =
       Math.floor(

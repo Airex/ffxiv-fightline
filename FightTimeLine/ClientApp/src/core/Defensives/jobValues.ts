@@ -67,7 +67,11 @@ export function attackModifier(job: JobMap) {
       return 115;
     case "SAM":
       return 112;
+    case "VPR":
+      return 112
     case "RDM":
+      return 115;
+    case "PCT":
       return 115;
     case "BLU":
       return 115;
