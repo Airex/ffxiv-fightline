@@ -30,7 +30,7 @@ export function updateCooldown(value: number) {
 }
 
 
-export function combineTraits(traits: TraitFunction[]): TraitFunction {
+export function combineTraits(...traits: TraitFunction[]): TraitFunction {
   return (job: IJob) => {
     traits.forEach(t => t(job));
   };

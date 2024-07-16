@@ -15,7 +15,7 @@ import {
   healerSharedTraits,
   medicine,
 } from "./shared";
-import { abilityTrait } from "./traits";
+import { abilityTrait, combineTraits } from "./traits";
 
 const statuses = MapStatuses({
   lightSpeed: {
@@ -308,7 +308,10 @@ const traits: ITrait[] = [
   {
     name: "Hyper Lightspeed",
     level: 68,
-    apply: abilityTrait("Lightspeed", { cooldown: 90 }),
+    apply: abilityTrait("Lightspeed", {
+      cooldown: 60,
+      charges: { count: 2, cooldown: 60 },
+    }),
   },
   {
     name: "Enhanced Essential Dignity",
