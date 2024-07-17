@@ -11,7 +11,7 @@ const statuses = MapStatuses({
     duration: 20
   },
   manafication: {
-    duration: 15
+    duration: 30
   },
   magicBarrier: {
     duration: 10,
