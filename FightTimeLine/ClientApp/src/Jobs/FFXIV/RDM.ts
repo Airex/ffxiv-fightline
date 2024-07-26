@@ -1,22 +1,36 @@
 import Effects from "src/core/Defensives/effects";
-import { IJob, Role, AbilityType, DamageType, MapStatuses, IJobTemplate, ITrait, IAbility } from "../../core/Models";
-import { getAbilitiesFrom, casterSharedAbilities, medicine, casterSharedTraits } from "./shared";
+import {
+  IJob,
+  Role,
+  AbilityType,
+  DamageType,
+  MapStatuses,
+  IJobTemplate,
+  ITrait,
+  IAbility,
+} from "../../core/Models";
+import {
+  getAbilitiesFrom,
+  casterSharedAbilities,
+  medicine,
+  casterSharedTraits,
+} from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
 
 const statuses = MapStatuses({
   embolden: {
-    duration: 20
+    duration: 20,
   },
   acceleration: {
-    duration: 20
+    duration: 20,
   },
   manafication: {
-    duration: 30
+    duration: 30,
   },
   magicBarrier: {
     duration: 10,
-    effects: [Effects.mitigation.party(10, DamageType.Magical)]
-  }
+    effects: [Effects.mitigation.party(10, DamageType.Magical)],
+  },
 });
 
 const abilities: IAbility[] = [
@@ -33,7 +47,7 @@ const abilities: IAbility[] = [
     xivDbId: "7520",
     statuses: [statuses.embolden],
     abilityType: AbilityType.PartyDamageBuff,
-    levelAcquired: 60
+    levelAcquired: 60,
   },
   {
     name: "Fleche",
@@ -48,7 +62,7 @@ const abilities: IAbility[] = [
     xivDbId: "7517",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 45
+    levelAcquired: 45,
   },
   {
     name: "Contre Sixte",
@@ -63,7 +77,7 @@ const abilities: IAbility[] = [
     xivDbId: "7519",
     requiresBossTarget: true,
     abilityType: AbilityType.Damage,
-    levelAcquired: 56
+    levelAcquired: 56,
   },
   {
     name: "Manafication",
@@ -79,7 +93,7 @@ const abilities: IAbility[] = [
     requiresBossTarget: true,
     statuses: [statuses.manafication],
     abilityType: AbilityType.SelfDamageBuff,
-    levelAcquired: 60
+    levelAcquired: 60,
   },
   {
     name: "Acceleration",
@@ -95,7 +109,7 @@ const abilities: IAbility[] = [
     requiresBossTarget: false,
     statuses: [statuses.acceleration],
     abilityType: AbilityType.Utility,
-    levelAcquired: 50
+    levelAcquired: 50,
   },
   {
     name: "Magick Barrier",
@@ -111,7 +125,7 @@ const abilities: IAbility[] = [
     xivDbId: 25857,
     abilityType: AbilityType.PartyDefense | AbilityType.PartyHealingBuff,
     statuses: [statuses.magicBarrier],
-    levelAcquired: 86
+    levelAcquired: 86,
   },
   {
     name: "Vice of Thorns",
@@ -144,31 +158,31 @@ const abilities: IAbility[] = [
     levelAcquired: 100,
   },
   ...getAbilitiesFrom(casterSharedAbilities),
-  medicine.Intelligence
+  medicine.Intelligence,
 ];
 
 const traits: ITrait[] = [
   {
     name: "Red Magic Mastery",
     level: 74,
-    apply: abilityTrait("Contre Sixte", updateCooldown(35))
+    apply: abilityTrait("Contre Sixte", updateCooldown(35)),
   },
   {
     name: "Enhanced Manafication",
     level: 74,
-    apply: abilityTrait("Manafication", updateCooldown(110))
+    apply: abilityTrait("Manafication", updateCooldown(110)),
   },
   {
     name: "Enhanced Acceleration",
     level: 78,
-    apply: abilityTrait("Acceleration", ab => {
+    apply: abilityTrait("Acceleration", (ab) => {
       ab.charges = {
         count: 2,
-        cooldown: 55
+        cooldown: 55,
       };
-    })
+    }),
   },
-  ...casterSharedTraits
+  ...casterSharedTraits,
 ];
 
 export const RDM: IJobTemplate = {
@@ -188,7 +202,5 @@ export const RDM: IJobTemplate = {
   },
   role: Role.Caster,
   abilities,
-  traits
+  traits,
 };
-
-

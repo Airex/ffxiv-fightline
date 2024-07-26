@@ -85,7 +85,7 @@ const abilities = [
       de: "Sprung",
       en: "Jump",
       fr: "Saut",
-      cn: "",
+      cn: "", // todo: translate
       ja: "ジャンプ",
     },
     cooldown: 30,
