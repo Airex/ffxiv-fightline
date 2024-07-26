@@ -223,7 +223,7 @@ export const PCT: IJobTemplate = {
   fullNameTranslation: {
     de: "Piktomant",
     ja: "\u30D4\u30AF\u30C8\u30DE\u30F3\u30B5\u30FC",
-    en: "pictomancer",
+    en: "Pictomancer",
     fr: "pictomancien",
     cn: "Pictomancer", // todo: translate
   },
