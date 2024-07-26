@@ -25,7 +25,7 @@ export const VPR: IJobTemplate = {
   fullNameTranslation: {
     de: "Viper",
     ja: "\u30F4\u30A1\u30A4\u30D1\u30FC",
-    en: "viper",
+    en: "Viper",
     fr: "r\u00F4deur vip\u00E8re",
     cn: "Viper",
   },
