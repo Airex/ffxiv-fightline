@@ -208,9 +208,9 @@ const abilities = [
     name: "Shadowstride",
     translation: {
       de: "Schattenschritt",
-      ja: "シャドウストライド",
+      ja: "\u30B7\u30E3\u30C9\u30A6\u30B9\u30C8\u30E9\u30A4\u30C9",
       en: "Shadowstride",
-      fr: "Foulée ténébreuse",
+      fr: "Foul\u00E9e t\u00E9n\u00E9breuse",
       cn: "Shadowstride",
     },
     cooldown: 30,

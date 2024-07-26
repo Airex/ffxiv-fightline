@@ -9,11 +9,9 @@ import {
   casterSharedAbilities,
   casterSharedTraits,
   getAbilitiesFrom,
-  IAbilities,
   medicine,
 } from "./shared";
 import Effects from "src/core/Defensives/effects";
-import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   starryMuse: {
@@ -33,11 +31,11 @@ const abilities = [
   {
     name: "Tempera Coat",
     translation: {
+      de: "Tempera-Schicht",
+      ja: "\u30C6\u30F3\u30DA\u30E9\u30B3\u30FC\u30C8",
       en: "Tempera Coat",
-      de: "Tempera Coat",
-      ja: "Tempera Coat",
-      fr: "Tempera Coat",
-      cn: "Tempera Coat",
+      fr: "Enduit a tempera",
+      cn: "Tempera Coat", // todo: translate
     },
     cooldown: 120,
     xivDbId: 34685,
@@ -48,11 +46,11 @@ const abilities = [
   {
     name: "Smudge",
     translation: {
+      de: "Schmierschritt",
+      ja: "\u30B9\u30DE\u30C3\u30B8",
       en: "Smudge",
-      de: "Smudge",
-      ja: "Smudge",
-      fr: "Smudge",
-      cn: "Smudge",
+      fr: "Barbouillage",
+      cn: "Smudge", // todo: translate
     },
     cooldown: 20,
     xivDbId: 34684,
@@ -60,28 +58,13 @@ const abilities = [
     levelAcquired: 20,
   },
   {
-    name: "Living Muse",
-    translation: {
-      en: "Living Muse",
-      de: "Living Muse",
-      ja: "Living Muse",
-      fr: "Living Muse",
-      cn: "Living Muse",
-    },
-    cooldown: 40,
-    xivDbId: 35347,
-    levelAcquired: 30,
-    abilityType: AbilityType.Utility,
-    charges: { count: 3, cooldown: 40 },
-  },
-  {
     name: "Pom Muse",
     translation: {
+      de: "Muse mit Bommel",
+      ja: "\u30A4\u30DE\u30B8\u30F3\u30DD\u30F3\u30DD\u30F3",
       en: "Pom Muse",
-      de: "Pom Muse",
-      ja: "Pom Muse",
-      fr: "Pom Muse",
-      cn: "Pom Muse",
+      fr: "Imagi Pompon",
+      cn: "Pom Muse", // todo: translate
     },
     cooldown: 40,
     xivDbId: 34670,
@@ -92,11 +75,11 @@ const abilities = [
   {
     name: "Winged Muse",
     translation: {
+      de: "Beschwingte Muse",
+      ja: "\u30A4\u30DE\u30B8\u30F3\u30A6\u30A3\u30F3\u30B0",
       en: "Winged Muse",
-      de: "Winged Muse",
-      ja: "Winged Muse",
-      fr: "Winged Muse",
-      cn: "Winged Muse",
+      fr: "Imagi Ailes",
+      cn: "Winged Muse", // todo: translate
     },
     cooldown: 40,
     xivDbId: 34671,
@@ -107,31 +90,16 @@ const abilities = [
   {
     name: "Mog of the Ages",
     translation: {
+      de: "Opus Mognum",
+      ja: "\u30E2\u30FC\u30B0\u30EA\u30B9\u30C8\u30EA\u30FC\u30E0",
       en: "Mog of the Ages",
-      de: "Mog of the Ages",
-      ja: "Mog of the Ages",
-      fr: "Mog of the Ages",
-      cn: "Mog of the Ages",
+      fr: "Mognum opus",
+      cn: "Mog of the Ages", // todo: translate
     },
     cooldown: 30,
     xivDbId: 34676,
     levelAcquired: 30,
     abilityType: AbilityType.Damage,
-  },
-  {
-    name: "Steel Muse",
-    translation: {
-      en: "Steel Muse",
-      de: "Steel Muse",
-      ja: "Steel Muse",
-      fr: "Steel Muse",
-      cn: "Steel Muse",
-    },
-    cooldown: 60,
-    xivDbId: 35348,
-    levelAcquired: 50,
-    abilityType: AbilityType.Utility,
-    charges: { count: 2, cooldown: 60 },
   },
   {
     name: "Striking Muse",
@@ -151,11 +119,11 @@ const abilities = [
   {
     name: "Subtractive Palette",
     translation: {
+      de: "Subtraktive Palette",
+      ja: "\u30B5\u30D6\u30C8\u30E9\u30AF\u30C6\u30A3\u30D6\u30D1\u30EC\u30C3\u30C8",
       en: "Subtractive Palette",
-      de: "Subtractive Palette",
-      ja: "Subtractive Palette",
-      fr: "Subtractive Palette",
-      cn: "Subtractive Palette",
+      fr: "Palette soustractive",
+      cn: "Subtractive Palette", //todo: translate
     },
     cooldown: 1,
     xivDbId: 34683,
@@ -163,26 +131,12 @@ const abilities = [
     abilityType: AbilityType.Utility,
   },
   {
-    name: "Scenic Muse",
-    translation: {
-      en: "Scenic Muse",
-      de: "Scenic Muse",
-      ja: "Scenic Muse",
-      fr: "Scenic Muse",
-      cn: "Scenic Muse",
-    },
-    cooldown: 120,
-    xivDbId: 35349,
-    abilityType: AbilityType.Utility,
-    levelAcquired: 70,
-  },
-  {
     name: "Tempera Grassa",
     translation: {
+      de: "Fette Tempera",
+      ja: "\u30C6\u30F3\u30DA\u30E9\u30B0\u30E9\u30C3\u30B5",
       en: "Tempera Grassa",
-      de: "Tempera Grassa",
-      ja: "Tempera Grassa",
-      fr: "Tempera Grassa",
+      fr: "Tempera grassa",
       cn: "Tempera Grassa",
     },
     cooldown: 120,
@@ -210,11 +164,11 @@ const abilities = [
   {
     name: "Clawed Muse",
     translation: {
+      de: "Kratzende Muse",
+      ja: "\u30A4\u30DE\u30B8\u30F3\u30AF\u30ED\u30FC",
       en: "Clawed Muse",
-      de: "Clawed Muse",
-      ja: "Clawed Muse",
-      fr: "Clawed Muse",
-      cn: "Clawed Muse",
+      fr: "Imagi Griffes",
+      cn: "Clawed Muse", // todo: translate
     },
     cooldown: 40,
     xivDbId: 34672,
@@ -225,11 +179,11 @@ const abilities = [
   {
     name: "Fanged Muse",
     translation: {
+      de: "Bei\u00DFende Muse",
+      ja: "\u30A4\u30DE\u30B8\u30F3\u30D5\u30A1\u30F3\u30B0",
       en: "Fanged Muse",
-      de: "Fanged Muse",
-      ja: "Fanged Muse",
-      fr: "Fanged Muse",
-      cn: "Fanged Muse",
+      fr: "Imagi Crocs",
+      cn: "Fanged Muse", // todo: translate
     },
     cooldown: 40,
     xivDbId: 34673,
@@ -240,11 +194,11 @@ const abilities = [
   {
     name: "Retribution of the Madeen",
     translation: {
+      de: "Vergeltung der Madhin",
+      ja: "\u30DE\u30C7\u30A3\u30FC\u30F3\u30EC\u30C8\u30EA\u30D3\u30E5\u30FC\u30B7\u30E7\u30F3",
       en: "Retribution of the Madeen",
-      de: "Retribution of the Madeen",
-      ja: "Retribution of the Madeen",
-      fr: "Retribution of the Madeen",
-      cn: "Retribution of the Madeen",
+      fr: "R\u00E9tribution de Marthym",
+      cn: "Retribution of the Madeen", // todo: translate
     },
     cooldown: 30,
     xivDbId: 34677,
@@ -255,35 +209,23 @@ const abilities = [
   medicine.Intelligence,
 ] as IAbility[];
 
-const traits = [
-  {
-    name: "Enhanced Pictomancy II",
-    level: 86,
-    apply: abilityTrait("Striking Muse", {
-      charges: {
-        count: 2,
-        cooldown: 60,
-      },
-    }),
-  },
-  ...casterSharedTraits,
-];
+const traits = [...casterSharedTraits];
 
 export const PCT: IJobTemplate = {
   translation: {
-    en: "PCT",
-    de: "PCT",
+    de: "PKT",
     ja: "PCT",
-    fr: "PCT",
+    en: "PCT",
+    fr: "PIC",
     cn: "PCT",
   },
 
   fullNameTranslation: {
-    en: "Pictomancer",
-    de: "Maler",
-    ja: "Pictomancer",
-    fr: "Pictomancer",
-    cn: "Pictomancer",
+    de: "Piktomant",
+    ja: "\u30D4\u30AF\u30C8\u30DE\u30F3\u30B5\u30FC",
+    en: "pictomancer",
+    fr: "pictomancien",
+    cn: "Pictomancer", // todo: translate
   },
   role: Role.Caster,
   abilities,

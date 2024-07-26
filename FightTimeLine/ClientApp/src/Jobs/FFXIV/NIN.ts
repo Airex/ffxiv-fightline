@@ -118,12 +118,12 @@ const abilities = [
       fr: "Fléau de Kunai",
       cn: "苦无诅咒",
     },
-    xivDbId:36958,
+    xivDbId: 36958,
     cooldown: 60,
     requiresBossTarget: true,
     statuses: [statuses.kunaisBase],
     abilityType: AbilityType.Damage | AbilityType.SelfDamageBuff,
-    levelAcquired: 92
+    levelAcquired: 92,
   },
   {
     name: "Kassatsu",
@@ -238,11 +238,11 @@ const abilities = [
   {
     name: "Hollow Nozuchi",
     translation: {
-      de: "Hollow Nozuchi",
-      ja: "\u30DB\u30ED\u30FC\u30CE\u30BA\u30C1",
+      de: "Nozuchi-Schemen",
+      ja: "\u5E7B\u5F71\u91CE\u69CC",
       en: "Hollow Nozuchi",
-      fr: "Hollow Nozuchi",
-      cn: "Hollow Nozuchi",
+      fr: "Nozuchi spectral",
+      cn: "Hollow Nozuchi", //todo: translate
     },
     cooldown: 1,
     xivDbId: "25776",

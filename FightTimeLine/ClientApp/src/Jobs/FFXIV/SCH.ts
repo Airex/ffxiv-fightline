@@ -130,7 +130,7 @@ const abilities = [
     overlapStrategy: new AllowOverlapStrategy(),
     levelAcquired: 35,
     levelRemoved: 96,
-    potency: 200
+    potency: 200,
   },
   {
     name: "Concitation",
@@ -147,7 +147,7 @@ const abilities = [
     abilityType: AbilityType.PartyShield,
     overlapStrategy: new AllowOverlapStrategy(),
     levelAcquired: 96,
-    potency: 200
+    potency: 200,
   },
   {
     name: "Accession",

@@ -8,7 +8,7 @@ import {
 
 const abilities = [
   medicine.Dexterity,
-  ...getAbilitiesFrom(meleeSharedAbilities)
+  ...getAbilitiesFrom(meleeSharedAbilities),
 ];
 
 const traits = [...meleeSharedTraits];
@@ -23,10 +23,10 @@ export const VPR: IJobTemplate = {
   },
 
   fullNameTranslation: {
-    en: "Viper",
     de: "Viper",
-    ja: "Viper",
-    fr: "Viper",
+    ja: "\u30F4\u30A1\u30A4\u30D1\u30FC",
+    en: "viper",
+    fr: "r\u00F4deur vip\u00E8re",
     cn: "Viper",
   },
   role: Role.Melee,

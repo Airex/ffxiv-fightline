@@ -27,7 +27,7 @@ class ShakeItOffMitigationModifier implements IMitigator {
     const original = context.holders.itemUsages.get(context.sourceAbilityId);
     const sum = (acc, v) => (acc += v);
 
-    const abs = ["Thrill of Battle", "Vengeance", "Bloodwhetting"];
+    const abs = ["Thrill of Battle", "Vengeance", "Bloodwhetting", "Damnation"];
     const total = abs
       .map((a) => {
         const ab = context.holders.abilities.getByParentAndAbility(
@@ -284,11 +284,11 @@ const abilities: IAbility[] = [
   {
     name: "Damnation",
     translation: {
-      de: "Damnation",
-      ja: "Damnation",
+      de: "Verdammnis",
+      ja: "\u30C0\u30E0\u30CD\u30FC\u30B7\u30E7\u30F3",
       en: "Damnation",
       fr: "Damnation",
-      cn: "Damnation",
+      cn: "Damnation", // todo: translate
     },
     cooldown: 120,
     xivDbId: 36923,
@@ -423,12 +423,12 @@ const abilities: IAbility[] = [
   },
   {
     name: "Primal Wrath",
-    translation:{
-      de: "Primal Wrath",
-      ja: "Primal Wrath",
+    translation: {
+      de: "Urbeben",
+      ja: "原初の激震",
       en: "Primal Wrath",
-      fr: "Primal Wrath",
-      cn: "Primal Wrath",
+      fr: "Trépidation bestiale",
+      cn: "Primal Wrath", // todo: translate
     },
     cooldown: 1,
     xivDbId: 36924,
