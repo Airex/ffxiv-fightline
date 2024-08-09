@@ -7,15 +7,11 @@ import {
   settings,
   IJobTemplate,
   ITrait,
-  IAbilityCharges,
 } from "../../core/Models";
 import {
-  getAbilitiesFrom,
-  healerSharedAbilities,
-  healerSharedTraits,
-  medicine,
+  withHealerSharedAbilities,
 } from "./shared";
-import { abilityTrait, combineTraits } from "./traits";
+import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   lightSpeed: {
@@ -300,8 +296,6 @@ const abilities = [
     statuses: [statuses.sunSign],
     levelAcquired: 100,
   },
-  ...getAbilitiesFrom(healerSharedAbilities),
-  medicine.Mind,
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -343,9 +337,8 @@ const traits: ITrait[] = [
       },
     }),
   },
-  ...healerSharedTraits,
 ];
-export const AST: IJobTemplate = {
+export const AST: IJobTemplate = withHealerSharedAbilities({
   translation: {
     de: "AST",
     ja: "AST",
@@ -363,4 +356,4 @@ export const AST: IJobTemplate = {
   role: Role.Healer,
   abilities,
   traits,
-};
+});

@@ -6,6 +6,8 @@ import {
   DamageType,
   settings,
   ITrait,
+  IJobTemplate,
+  Role,
 } from "../../core/Models";
 import { abilityTrait } from "./traits";
 
@@ -50,7 +52,7 @@ export function toAbilities(abs: IAbility[]) {
   return abs.reduce((acc, c) => ({ ...acc, [c.name]: c }), {});
 }
 
-export const tankSharedAbilities: IAbilities = {
+const tankSharedAbilities: IAbilities = {
   Rampart: {
     name: "Rampart",
     cooldown: 90,
@@ -129,7 +131,7 @@ export const tankSharedAbilities: IAbilities = {
   },
 };
 
-export const tankSharedTraits: ITrait[] = [
+const tankSharedTraits: ITrait[] = [
   {
     level: 94,
     name: "Enhanced Rampart",
@@ -156,7 +158,7 @@ export const tankSharedTraits: ITrait[] = [
   },
 ];
 
-export const magicSharedAbilities: IAbilities = {
+const magicSharedAbilities: IAbilities = {
   Swiftcast: {
     name: "Swiftcast",
     translation: {
@@ -218,7 +220,7 @@ const magicSharedTraits: ITrait[] = [
   },
 ];
 
-export const meleeSharedAbilities: IAbilities = {
+const meleeSharedAbilities: IAbilities = {
   Feint: {
     name: "Feint",
     translation: {
@@ -246,7 +248,7 @@ export const meleeSharedAbilities: IAbilities = {
   },
 };
 
-export const meleeSharedTraits: ITrait[] = [
+const meleeSharedTraits: ITrait[] = [
   {
     level: 98,
     name: "Enhanced Feint",
@@ -261,9 +263,9 @@ export const meleeSharedTraits: ITrait[] = [
   },
 ];
 
-export const rangeSharedAbilities: IAbilities = {};
+const rangeSharedAbilities: IAbilities = {};
 
-export const casterSharedAbilities: IAbilities = {
+const casterSharedAbilities: IAbilities = {
   Addle: {
     name: "Addle",
     translation: {
@@ -292,7 +294,7 @@ export const casterSharedAbilities: IAbilities = {
   ...magicSharedAbilities,
 };
 
-export const casterSharedTraits: ITrait[] = [
+const casterSharedTraits: ITrait[] = [
   {
     level: 98,
     name: "Enhanced Addle",
@@ -308,20 +310,13 @@ export const casterSharedTraits: ITrait[] = [
   ...magicSharedTraits,
 ];
 
-export const healerSharedAbilities: IAbilities = {
+const healerSharedAbilities: IAbilities = {
   ...magicSharedAbilities,
 };
 
-export const healerSharedTraits: ITrait[] = [
-  ...magicSharedTraits
-];
+const healerSharedTraits: ITrait[] = [...magicSharedTraits];
 
-enum MedicineEnum {
-  Mind,
-  Intelligence,
-  Dexterity,
-  Strength,
-}
+type MedicineEnum = "Mind" | "Intelligence" | "Dexterity" | "Strength";
 
 const medicatedStatus = {
   duration: 30,
@@ -344,7 +339,7 @@ const medicineTemplate = {
   detectStrategy: byBuffRemove(1000049, "Medicine", 30),
 };
 
-export const medicine: { [TName in keyof typeof MedicineEnum]: IAbility } = {
+const medicineAbilities: { [TName in MedicineEnum]: IAbility } = {
   Mind: {
     ...medicineTemplate,
     xivDbId: "27999",
@@ -366,3 +361,84 @@ export const medicine: { [TName in keyof typeof MedicineEnum]: IAbility } = {
     icon: "Medicine/22447_Strength",
   },
 };
+
+function withSharedAbilities<T extends IJobTemplate>(
+  job: T,
+  sharedAbilities: IAbilities,
+  sharedTraits: ITrait[]
+): T {
+  return {
+    ...job,
+    abilities: [...(job.abilities || []), ...getAbilitiesFrom(sharedAbilities)],
+    traits: [...job.traits, ...sharedTraits],
+  };
+}
+
+function withMedicine<T extends IJobTemplate>(
+  job: T,
+  medicine: MedicineEnum
+): T {
+  return {
+    ...job,
+    abilities: [...(job.abilities || []), medicineAbilities[medicine]],
+  };
+}
+
+type RoledJob<T extends Role> = { role: T };
+
+export function withTankSharedAbilities<
+  T extends IJobTemplate & RoledJob<Role.Tank>
+>(job: T): T {
+  return withMedicine(
+    withSharedAbilities(job, tankSharedAbilities, tankSharedTraits),
+    "Strength"
+  );
+}
+
+function withMeleeSharedAbilities<
+  T extends IJobTemplate & RoledJob<Role.Melee>
+>(job: T, medicine: "Strength" | "Dexterity"): T {
+  return withMedicine(
+    withSharedAbilities(job, meleeSharedAbilities, meleeSharedTraits),
+    medicine
+  );
+}
+
+export function withStrengthMeleeSharedAbilities<
+  T extends IJobTemplate & RoledJob<Role.Melee>
+>(job: T): T {
+  return withMeleeSharedAbilities(job, "Strength");
+}
+
+export function withDexterityMeleeSharedAbilities<
+  T extends IJobTemplate & RoledJob<Role.Melee>
+>(job: T): T {
+  return withMeleeSharedAbilities(job, "Dexterity");
+}
+
+export function withCasterSharedAbilities<
+  T extends IJobTemplate & RoledJob<Role.Caster>
+>(job: T): T {
+  return withMedicine(
+    withSharedAbilities(job, casterSharedAbilities, casterSharedTraits),
+    "Intelligence"
+  );
+}
+
+export function withHealerSharedAbilities<
+  T extends IJobTemplate & RoledJob<Role.Healer>
+>(job: T): T {
+  return withMedicine(
+    withSharedAbilities(job, healerSharedAbilities, healerSharedTraits),
+    "Mind"
+  );
+}
+
+export function withRangeSharedAbilities<
+  T extends IJobTemplate & RoledJob<Role.Range>
+>(job: T): T {
+  return withMedicine(
+    withSharedAbilities(job, rangeSharedAbilities, []),
+    "Dexterity"
+  );
+}

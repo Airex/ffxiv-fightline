@@ -1,19 +1,11 @@
 import { IJobTemplate, Role } from "src/core/Models";
-import {
-  getAbilitiesFrom,
-  medicine,
-  meleeSharedAbilities,
-  meleeSharedTraits,
-} from "./shared";
+import { withDexterityMeleeSharedAbilities } from "./shared";
 
-const abilities = [
-  medicine.Dexterity,
-  ...getAbilitiesFrom(meleeSharedAbilities),
-];
+const abilities = [];
 
-const traits = [...meleeSharedTraits];
+const traits = [];
 
-export const VPR: IJobTemplate = {
+export const VPR: IJobTemplate = withDexterityMeleeSharedAbilities({
   translation: {
     de: "VPR",
     ja: "VPR",
@@ -32,4 +24,4 @@ export const VPR: IJobTemplate = {
   role: Role.Melee,
   abilities,
   traits,
-};
+});

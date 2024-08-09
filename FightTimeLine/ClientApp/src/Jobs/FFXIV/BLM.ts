@@ -1,23 +1,31 @@
 import Effects from "src/core/Defensives/effects";
-import { IJob, Role, AbilityType, IAbility, DamageType, JobStatuses, MapStatuses, IJobTemplate, ITrait } from "../../core/Models";
-import { getAbilitiesFrom, casterSharedAbilities, medicine, toAbilities, casterSharedTraits } from "./shared";
+import {
+  Role,
+  AbilityType,
+  IAbility,
+  MapStatuses,
+  IJobTemplate,
+  ITrait,
+} from "../../core/Models";
+import {
+  withCasterSharedAbilities,
+} from "./shared";
 import { abilityTrait } from "./traits";
-
 
 const statuses = MapStatuses({
   manaward: {
     duration: 20,
-    effects: [Effects.shield.solo(10)]
+    effects: [Effects.shield.solo(10)],
   },
   leyLines: {
-    duration: 30
+    duration: 30,
   },
   trippleCast: {
-    duration: 15
+    duration: 15,
   },
   sharpCast: {
-    duration: 15
-  }
+    duration: 15,
+  },
 });
 
 const abilities = [
@@ -28,12 +36,12 @@ const abilities = [
       ja: "\u30C8\u30E9\u30F3\u30B9",
       en: "Transpose",
       fr: "Transposition",
-      cn: "星灵移位"
+      cn: "星灵移位",
     },
     cooldown: 5,
     xivDbId: "149",
     abilityType: AbilityType.Utility,
-    levelAcquired: 4
+    levelAcquired: 4,
   },
   {
     name: "Manaward",
@@ -42,13 +50,13 @@ const abilities = [
       ja: "\u30DE\u30D0\u30EA\u30A2",
       en: "Manaward",
       fr: "Barri\u00E8re de mana",
-      cn: "魔罩"
+      cn: "魔罩",
     },
     cooldown: 120,
     xivDbId: "157",
     abilityType: AbilityType.SelfShield,
     levelAcquired: 30,
-    statuses: [statuses.manaward]
+    statuses: [statuses.manaward],
   },
 
   {
@@ -58,12 +66,12 @@ const abilities = [
       ja: "\u30DE\u30CA\u30D5\u30A9\u30F3\u30C8",
       en: "Manafont",
       fr: "Vasque de mana",
-      cn: "魔泉"
+      cn: "魔泉",
     },
     cooldown: 180,
     xivDbId: "158",
     abilityType: AbilityType.Utility,
-    levelAcquired: 30
+    levelAcquired: 30,
   },
   {
     name: "Ley Lines",
@@ -72,13 +80,13 @@ const abilities = [
       ja: "\u9ED2\u9B54\u7D0B",
       en: "Ley Lines",
       fr: "Manalignements",
-      cn: "黑魔纹"
+      cn: "黑魔纹",
     },
     cooldown: 120,
     xivDbId: "3573",
     statuses: [statuses.leyLines],
     abilityType: AbilityType.SelfDamageBuff,
-    levelAcquired: 52
+    levelAcquired: 52,
   },
   {
     name: "Triplecast",
@@ -87,7 +95,7 @@ const abilities = [
       ja: "\u4E09\u9023\u9B54",
       en: "Triplecast",
       fr: "Triple sort",
-      cn: "三连咏唱"
+      cn: "三连咏唱",
     },
     cooldown: 60,
     xivDbId: "7421",
@@ -96,8 +104,8 @@ const abilities = [
     levelAcquired: 65,
     charges: {
       count: 2,
-      cooldown: 60
-    }
+      cooldown: 60,
+    },
   },
   {
     name: "Amplifier",
@@ -106,15 +114,13 @@ const abilities = [
       ja: "\u30A2\u30F3\u30D7\u30EA\u30D5\u30A1\u30A4\u30A2",
       en: "Amplifier",
       fr: "Amplificateur",
-      cn: "详述"
+      cn: "详述",
     },
     cooldown: 120,
     xivDbId: "25796",
     abilityType: AbilityType.Utility,
     levelAcquired: 54,
   },
-  ...getAbilitiesFrom(casterSharedAbilities),
-  medicine.Intelligence
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -122,15 +128,15 @@ const traits: ITrait[] = [
     name: "Enhanced Manafont",
     level: 84,
     apply: abilityTrait("Manafont", {
-      cooldown: 100
-    })
+      cooldown: 100,
+    }),
   },
   {
     name: "Enhanced Sharpcast",
     level: 74,
     apply: abilityTrait("Sharpcast", {
-      cooldown: 30
-    })
+      cooldown: 30,
+    }),
   },
   {
     name: "Enhanced Sharpcast II",
@@ -138,22 +144,19 @@ const traits: ITrait[] = [
     apply: abilityTrait("Sharpcast", {
       charges: {
         count: 2,
-        cooldown: 30
-      }
-    })
+        cooldown: 30,
+      },
+    }),
   },
-  ...casterSharedTraits
 ];
 
-
-export const BLM: IJobTemplate = {
-
+export const BLM: IJobTemplate = withCasterSharedAbilities({
   translation: {
     de: "SMA",
     ja: "BLM",
     en: "BLM",
     fr: "MNO",
-    cn: "BLM"
+    cn: "BLM",
   },
 
   fullNameTranslation: {
@@ -161,9 +164,9 @@ export const BLM: IJobTemplate = {
     ja: "\u9ED2\u9B54\u9053\u58EB",
     en: "Black Mage",
     fr: "Mage Noir",
-    cn: "黑魔法师"
+    cn: "黑魔法师",
   },
   role: Role.Caster,
   abilities,
-  traits
-};
+  traits,
+});

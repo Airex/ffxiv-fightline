@@ -1,30 +1,36 @@
 import Effects from "src/core/Defensives/effects";
-import { IJob, Role, AbilityType, MapStatuses, IJobTemplate, IAbility, ITrait } from "../../core/Models";
-import { getAbilitiesFrom, medicine, meleeSharedAbilities, meleeSharedTraits } from "./shared";
+import {
+  Role,
+  AbilityType,
+  MapStatuses,
+  IJobTemplate,
+  IAbility,
+  ITrait,
+} from "../../core/Models";
+import { withStrengthMeleeSharedAbilities } from "./shared";
 import { abilityRemovedTrait, abilityTrait } from "./traits";
-
 
 const statuses = MapStatuses({
   mantra: {
     duration: 15,
-    effects: [Effects.healingIncrease.party(20)]
+    effects: [Effects.healingIncrease.party(20)],
   },
   perfectBalance: {
-    duration: 20
+    duration: 20,
   },
   riddleOofEarth: {
     duration: 10,
-    effects: [Effects.mitigation.solo(20)]
+    effects: [Effects.mitigation.solo(20)],
   },
   riddleOfFire: {
-    duration: 20
+    duration: 20,
   },
   riddleOfWind: {
-    duration: 15
+    duration: 15,
   },
   brotherhood: {
-    duration: 20
-  }
+    duration: 20,
+  },
 });
 
 const abilities = [
@@ -35,12 +41,12 @@ const abilities = [
       en: "Steel Peak",
       fr: "Charge d'acier",
       cn: "铁山靠",
-      ja: "鉄山靠"
+      ja: "鉄山靠",
     },
     cooldown: 1,
     xivDbId: "64",
     abilityType: AbilityType.Damage,
-    levelAcquired: 15
+    levelAcquired: 15,
   },
   {
     name: "Thunderclap",
@@ -57,7 +63,7 @@ const abilities = [
     levelAcquired: 35,
     charges: {
       count: 2,
-      cooldown: 30
+      cooldown: 30,
     },
   },
   {
@@ -67,12 +73,12 @@ const abilities = [
       en: "Howling Fist",
       fr: "Poing hurlant",
       cn: "空鸣拳",
-      ja: "空鳴拳"
+      ja: "空鳴拳",
     },
     cooldown: 1,
     xivDbId: "67",
     abilityType: AbilityType.Damage,
-    levelAcquired: 40
+    levelAcquired: 40,
   },
   {
     name: "Enlightenment",
@@ -81,12 +87,12 @@ const abilities = [
       en: "Enlightenment",
       fr: "Illumination",
       cn: "万象斗气圈",
-      ja: "万象闘気圏"
+      ja: "万象闘気圏",
     },
     cooldown: 1,
     xivDbId: "16474",
     abilityType: AbilityType.Damage,
-    levelAcquired: 74
+    levelAcquired: 74,
   },
   {
     name: "The Forbidden Chakra",
@@ -95,13 +101,13 @@ const abilities = [
       en: "the Forbidden Chakra",
       fr: "Chakra interdit",
       cn: "阴阳斗气斩",
-      ja: "陰陽闘気斬"
+      ja: "陰陽闘気斬",
     },
     cooldown: 1,
     xivDbId: "3547",
     abilityType: AbilityType.Damage,
     levelAcquired: 54,
-    requiresBossTarget: true
+    requiresBossTarget: true,
   },
   {
     name: "Mantra",
@@ -116,7 +122,7 @@ const abilities = [
     xivDbId: "65",
     statuses: [statuses.mantra],
     abilityType: AbilityType.PartyHealingBuff,
-    levelAcquired: 42
+    levelAcquired: 42,
   },
   {
     name: "Perfect Balance",
@@ -134,8 +140,8 @@ const abilities = [
     levelAcquired: 50,
     charges: {
       count: 2,
-      cooldown: 40
-    }
+      cooldown: 40,
+    },
   },
 
   {
@@ -152,11 +158,11 @@ const abilities = [
     xivDbId: "7394",
     statuses: [statuses.riddleOofEarth],
     abilityType: AbilityType.SelfDefense,
-    levelAcquired: 64
+    levelAcquired: 64,
   },
   {
     name: "Earth's Reply",
-    xivDbId:36944,
+    xivDbId: 36944,
     translation: {
       en: "Earth's Reply",
       de: "Erwiderung der Erde",
@@ -182,7 +188,7 @@ const abilities = [
     xivDbId: "7395",
     statuses: [statuses.riddleOfFire],
     abilityType: AbilityType.SelfDamageBuff,
-    levelAcquired: 68
+    levelAcquired: 68,
   },
   {
     name: "Riddle of Wind",
@@ -197,7 +203,7 @@ const abilities = [
     xivDbId: 25766,
     statuses: [statuses.riddleOfWind],
     abilityType: AbilityType.SelfDamageBuff,
-    levelAcquired: 72
+    levelAcquired: 72,
   },
   {
     name: "Brotherhood",
@@ -212,17 +218,15 @@ const abilities = [
     xivDbId: "7396",
     statuses: [statuses.brotherhood],
     abilityType: AbilityType.PartyDamageBuff,
-    levelAcquired: 70
+    levelAcquired: 70,
   },
-  ...getAbilitiesFrom(meleeSharedAbilities),
-  medicine.Strength
 ] as IAbility[];
 
 const traits: ITrait[] = [
   {
     name: "Steel Peak Mastery",
     level: 54,
-    apply: abilityRemovedTrait("Steel Peak", 54)
+    apply: abilityRemovedTrait("Steel Peak", 54),
   },
   {
     name: "Enhanced Thunderclap",
@@ -230,20 +234,18 @@ const traits: ITrait[] = [
     apply: abilityTrait("Thunderclap", {
       charges: {
         count: 3,
-        cooldown: 30
+        cooldown: 30,
       },
-    })
+    }),
   },
   {
     name: "Howling Fist Mastery",
     level: 74,
-    apply: abilityRemovedTrait("Howling Fist", 74)
+    apply: abilityRemovedTrait("Howling Fist", 74),
   },
-  ...meleeSharedTraits
 ];
 
-export const MNK: IJobTemplate = {
-
+export const MNK: IJobTemplate = withStrengthMeleeSharedAbilities({
   translation: {
     de: "M\u00D6N",
     ja: "MNK",
@@ -261,7 +263,5 @@ export const MNK: IJobTemplate = {
   },
   role: Role.Melee,
   abilities,
-  traits
-};
-
-
+  traits,
+});

@@ -1,4 +1,3 @@
-import { SharedOverlapStrategy } from "src/core/Overlap";
 import {
   Role,
   AbilityType,
@@ -7,12 +6,7 @@ import {
   ITrait,
   IAbility,
 } from "../../core/Models";
-import {
-  getAbilitiesFrom,
-  meleeSharedAbilities,
-  medicine,
-  meleeSharedTraits,
-} from "./shared";
+import { withStrengthMeleeSharedAbilities } from "./shared";
 import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
@@ -141,8 +135,6 @@ const abilities = [
     cooldown: 1,
     requiresBossTarget: true,
   },
-  ...getAbilitiesFrom(meleeSharedAbilities),
-  medicine.Strength,
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -173,10 +165,9 @@ const traits: ITrait[] = [
       cooldown: 60,
     }),
   },
-  ...meleeSharedTraits,
 ];
 
-export const SAM: IJobTemplate = {
+export const SAM: IJobTemplate = withStrengthMeleeSharedAbilities({
   translation: {
     de: "SAM",
     ja: "SAM",
@@ -194,4 +185,4 @@ export const SAM: IJobTemplate = {
   role: Role.Melee,
   abilities,
   traits,
-};
+});

@@ -33,6 +33,7 @@ export interface IJob {
   pets?: IPet[];
   defaultPet?: string;
   stances?: IStance[];
+  traits?: ITrait[];
 }
 
 export interface IJobTemplate {

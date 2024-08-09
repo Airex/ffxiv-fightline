@@ -1,6 +1,5 @@
 import Effects from "src/core/Defensives/effects";
 import {
-  IJob,
   Role,
   AbilityType,
   IAbility,
@@ -11,12 +10,7 @@ import {
   IJobTemplate,
   ITrait,
 } from "../../core/Models";
-import {
-  getAbilitiesFrom,
-  rangeSharedAbilities,
-  medicine,
-  toAbilities,
-} from "./shared";
+import { getAbilitiesFrom, withRangeSharedAbilities } from "./shared";
 import { abilityTrait } from "./traits";
 
 class ImprovisationFinishModifier implements IMitigator {
@@ -204,8 +198,6 @@ const abilities: IAbility[] = [
     abilityType: AbilityType.SelfDamageBuff | AbilityType.PartyDamageBuff,
     levelAcquired: 70,
   },
-  ...getAbilitiesFrom(rangeSharedAbilities),
-  medicine.Dexterity,
 ];
 
 const traits: ITrait[] = [
@@ -228,7 +220,7 @@ const traits: ITrait[] = [
   },
 ];
 
-export const DNC: IJobTemplate = {
+export const DNC: IJobTemplate = withRangeSharedAbilities({
   translation: {
     de: "T\u00C4N",
     ja: "DNC",
@@ -247,4 +239,4 @@ export const DNC: IJobTemplate = {
   role: Role.Range,
   abilities,
   traits,
-};
+});

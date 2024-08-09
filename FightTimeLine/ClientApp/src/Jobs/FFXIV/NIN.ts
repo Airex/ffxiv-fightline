@@ -1,6 +1,5 @@
 import Effects from "src/core/Defensives/effects";
 import {
-  IJob,
   Role,
   AbilityType,
   MapStatuses,
@@ -8,12 +7,7 @@ import {
   IAbility,
   ITrait,
 } from "../../core/Models";
-import {
-  getAbilitiesFrom,
-  meleeSharedAbilities,
-  medicine,
-  meleeSharedTraits,
-} from "./shared";
+import { withDexterityMeleeSharedAbilities } from "./shared";
 import { abilityRemovedTrait } from "./traits";
 
 const statuses = MapStatuses({
@@ -250,9 +244,6 @@ const abilities = [
     abilityType: AbilityType.Damage,
     levelAcquired: 86,
   },
-
-  ...getAbilitiesFrom(meleeSharedAbilities),
-  medicine.Dexterity,
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -261,10 +252,9 @@ const traits: ITrait[] = [
     level: 56,
     apply: abilityRemovedTrait("Assassination", 56),
   },
-  ...meleeSharedTraits,
 ];
 
-export const NIN: IJobTemplate = {
+export const NIN: IJobTemplate = withDexterityMeleeSharedAbilities({
   translation: {
     de: "NIN",
     ja: "NIN",
@@ -283,4 +273,4 @@ export const NIN: IJobTemplate = {
   role: Role.Melee,
   abilities,
   traits,
-};
+});

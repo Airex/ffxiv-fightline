@@ -11,12 +11,7 @@ import {
   IMitigator,
   MitigationVisitorContext,
 } from "../../core/Models";
-import {
-  getAbilitiesFrom,
-  healerSharedAbilities,
-  healerSharedTraits,
-  medicine,
-} from "./shared";
+import { withHealerSharedAbilities } from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
 import { AllowOverlapStrategy } from "src/core/Overlap";
 
@@ -504,8 +499,6 @@ const abilities = [
     xivDbId: 37011,
     abilityType: AbilityType.Healing,
   },
-  ...getAbilitiesFrom(healerSharedAbilities),
-  medicine.Mind,
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -519,10 +512,9 @@ const traits: ITrait[] = [
     level: 98,
     apply: abilityTrait("Recitation", { cooldown: 60 }),
   },
-  ...healerSharedTraits,
 ];
 
-export const SCH: IJobTemplate = {
+export const SCH: IJobTemplate = withHealerSharedAbilities({
   translation: {
     de: "GLT",
     ja: "SCH",
@@ -540,4 +532,4 @@ export const SCH: IJobTemplate = {
   role: Role.Healer,
   abilities,
   traits,
-};
+});

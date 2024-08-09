@@ -230,12 +230,12 @@ export function calculateAvailDefsForAttack(
 
   const intersected = defAbilities.filter((it) => {
     const availableRanges = getAvailabilitiesForAbility(holders, exceptId)(it);
+    if (!availableRanges) return true;
+
     const duration = calculateDuration(it.ability);
     const minAttack = new Date(bossAttack.startAsNumber - duration * 1000);
     const maxAttack = new Date(bossAttack.startAsNumber);
     const targetRange = { start: minAttack, end: maxAttack } as Range;
-
-    if (!availableRanges) return true;
 
     const firstIntersected = availableRanges.find((r) =>
       intersect(r.data as Range, targetRange)
