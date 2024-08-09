@@ -6,8 +6,8 @@ import {
   IJobTemplate,
   ITrait,
 } from "../../core/Models";
-import { getAbilitiesFrom, rangeSharedAbilities, medicine } from "./shared";
-import { abilityTrait, levelRemoved } from "./traits";
+import { withRangeSharedAbilities } from "./shared";
+import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   reassemble: {
@@ -67,7 +67,7 @@ const abilities = [
       cooldown: 30,
     },
     levelAcquired: 15,
-    levelRemoved: 92
+    levelRemoved: 92,
   },
   {
     name: "Double Check",
@@ -122,7 +122,7 @@ const abilities = [
       cooldown: 30,
     },
     levelAcquired: 50,
-    levelRemoved: 92
+    levelRemoved: 92,
   },
   {
     name: "Checkmate",
@@ -141,7 +141,7 @@ const abilities = [
       count: 3,
       cooldown: 30,
     },
-    levelAcquired: 92
+    levelAcquired: 92,
   },
   {
     name: "Flamethrower",
@@ -218,8 +218,6 @@ const abilities = [
     abilityType: AbilityType.Utility,
     levelAcquired: 66,
   },
-  ...getAbilitiesFrom(rangeSharedAbilities),
-  medicine.Dexterity,
 ];
 
 const traits = [
@@ -249,10 +247,10 @@ const traits = [
         },
       ];
     }),
-  }
+  },
 ] as ITrait[];
 
-export const MCH: IJobTemplate = {
+export const MCH: IJobTemplate = withRangeSharedAbilities({
   translation: {
     de: "MCH",
     ja: "MCH",
@@ -271,4 +269,4 @@ export const MCH: IJobTemplate = {
   role: Role.Range,
   abilities,
   traits,
-};
+});

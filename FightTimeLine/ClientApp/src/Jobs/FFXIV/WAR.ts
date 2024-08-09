@@ -12,12 +12,7 @@ import {
   ITrait,
   IMitigatorOverride,
 } from "../../core/Models";
-import {
-  getAbilitiesFrom,
-  tankSharedAbilities,
-  medicine,
-  tankSharedTraits,
-} from "./shared";
+import { withTankSharedAbilities } from "./shared";
 import { abilityRemovedTrait, abilityTrait } from "./traits";
 
 class ShakeItOffMitigationModifier implements IMitigator {
@@ -436,8 +431,6 @@ const abilities: IAbility[] = [
     levelAcquired: 96,
     requiresBossTarget: true,
   },
-  medicine.Strength,
-  ...getAbilitiesFrom(tankSharedAbilities),
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -469,11 +462,9 @@ const traits: ITrait[] = [
     name: "Vengeance Mastery",
     apply: abilityRemovedTrait("Vengeance", 92),
   },
-
-  ...tankSharedTraits,
 ];
 
-export const WAR: IJobTemplate = {
+export const WAR: IJobTemplate = withTankSharedAbilities({
   translation: {
     de: "KRG",
     ja: "WAR",
@@ -492,4 +483,4 @@ export const WAR: IJobTemplate = {
   role: Role.Tank,
   abilities,
   traits,
-};
+});

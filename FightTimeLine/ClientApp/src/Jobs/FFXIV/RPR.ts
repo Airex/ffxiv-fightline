@@ -1,25 +1,31 @@
 import Effects from "src/core/Defensives/effects";
-import { SharedOverlapStrategy } from "src/core/Overlap";
-import { IJob, Role, AbilityType, IAbility, MapStatuses, IJobTemplate, ITrait } from "../../core/Models";
-import { casterSharedTraits, getAbilitiesFrom, medicine, meleeSharedAbilities } from "./shared";
+import {
+  Role,
+  AbilityType,
+  IAbility,
+  MapStatuses,
+  IJobTemplate,
+  ITrait,
+} from "../../core/Models";
+import { withStrengthMeleeSharedAbilities } from "./shared";
 
 const statuses = MapStatuses({
   hellsIngress: {
-    duration: 20
+    duration: 20,
   },
   hellsEgress: {
-    duration: 20
+    duration: 20,
   },
   arcaneCrest: {
     duration: 5,
-    effects: [Effects.shield.party(10)]
+    effects: [Effects.shield.party(10)],
   },
   arcaneCircle: {
-    duration: 20
+    duration: 20,
   },
   enshroud: {
-    duration: 30
-  }
+    duration: 30,
+  },
 });
 
 const abilities: IAbility[] = [
@@ -183,12 +189,9 @@ const abilities: IAbility[] = [
   },
 ];
 
-const traits: ITrait[] = [
-  ...casterSharedTraits
-];
+const traits: ITrait[] = [];
 
-export const RPR: IJobTemplate = {
-
+export const RPR: IJobTemplate = withStrengthMeleeSharedAbilities({
   translation: {
     de: "SNT",
     ja: "RPR",
@@ -205,12 +208,6 @@ export const RPR: IJobTemplate = {
     cn: "钐镰客",
   },
   role: Role.Melee,
-  abilities: [
-    ...abilities,
-    ...getAbilitiesFrom(meleeSharedAbilities),
-    medicine.Strength
-  ],
-  traits
-};
-
-
+  abilities,
+  traits,
+});

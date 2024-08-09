@@ -2,20 +2,13 @@ import Effects from "src/core/Defensives/effects";
 import {
   AbilityType,
   IAbility,
-  IAbilityStatus,
-  IJob,
   IJobTemplate,
   ITrait,
   MapStatuses,
   Role,
   settings,
 } from "../../core/Models";
-import {
-  getAbilitiesFrom,
-  medicine,
-  healerSharedAbilities,
-  healerSharedTraits,
-} from "./shared";
+import { withHealerSharedAbilities } from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
 import { AllowOverlapStrategy } from "src/core/Overlap";
 
@@ -141,7 +134,7 @@ const abilities = [
     xivDbId: 24292,
     statuses: [statuses.eprog],
     abilityType: AbilityType.PartyShield,
-    levelRemoved: 96
+    levelRemoved: 96,
   },
 
   {
@@ -398,7 +391,7 @@ const abilities = [
     xivDbId: 37035,
     levelAcquired: 100,
     abilityType: AbilityType.HealingBuff,
-  }
+  },
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -424,9 +417,8 @@ const traits: ITrait[] = [
       ];
     }),
   },
-  ...healerSharedTraits,
 ];
-export const SGE: IJobTemplate = {
+export const SGE: IJobTemplate = withHealerSharedAbilities({
   translation: {
     de: "WEI",
     ja: "SGE",
@@ -443,11 +435,6 @@ export const SGE: IJobTemplate = {
     cn: "贤者",
   },
   role: Role.Healer,
-
-  abilities: [
-    ...abilities,
-    ...getAbilitiesFrom(healerSharedAbilities),
-    medicine.Mind,
-  ],
+  abilities,
   traits,
-};
+});

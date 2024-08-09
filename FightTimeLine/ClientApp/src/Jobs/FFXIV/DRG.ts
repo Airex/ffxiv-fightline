@@ -1,21 +1,12 @@
-import { byBuffApply } from "src/core/AbilityDetectors";
 import {
-  IJob,
   Role,
   AbilityType,
   IAbility,
   MapStatuses,
-  settings,
   IJobTemplate,
   ITrait,
 } from "../../core/Models";
-import {
-  getAbilitiesFrom,
-  medicine,
-  meleeSharedAbilities,
-  meleeSharedTraits,
-  toAbilities,
-} from "./shared";
+import { withStrengthMeleeSharedAbilities } from "./shared";
 import { abilityRemovedTrait, abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
@@ -213,8 +204,6 @@ const abilities = [
     requiresBossTarget: true,
     xivDbId: 36956,
   },
-  ...getAbilitiesFrom(meleeSharedAbilities),
-  medicine.Strength,
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -243,10 +232,9 @@ const traits: ITrait[] = [
       },
     }),
   },
-  ...meleeSharedTraits,
 ];
 
-export const DRG: IJobTemplate = {
+export const DRG: IJobTemplate = withStrengthMeleeSharedAbilities({
   translation: {
     de: "DRG",
     ja: "DRG",
@@ -265,4 +253,4 @@ export const DRG: IJobTemplate = {
   role: Role.Melee,
   abilities,
   traits,
-};
+});

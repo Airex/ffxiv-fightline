@@ -1,11 +1,25 @@
 import {
-  DRK, GNB, PLD, WAR,
-  AST, SCH, SGE, WHM,
-  BRD, DNC, MCH,
-  DRG, MNK, NIN, RPR, SAM,
-  BLM, RDM, SMN,
+  DRK,
+  GNB,
+  PLD,
+  WAR,
+  AST,
+  SCH,
+  SGE,
+  WHM,
+  BRD,
+  DNC,
+  MCH,
+  DRG,
+  MNK,
+  NIN,
+  RPR,
+  SAM,
+  BLM,
+  RDM,
+  SMN,
   VPR,
-  PCT
+  PCT,
 } from "../Jobs/FFXIV/index";
 import * as Models from "../core/Models";
 import * as Shared from "../Jobs/FFXIV/shared";
@@ -24,12 +38,31 @@ export class FFXIVJobRegistryService implements IJobRegistryService {
   setLevel(level: number) {
     if (!this.jobs || this.level !== level) {
       this.jobs = [
-        WAR, PLD, DRK, GNB,
-        AST, SCH, SGE, WHM,
-        BRD, DNC, MCH,
-        DRG, MNK, NIN, RPR, SAM, VPR,
-        BLM, RDM, SMN, PCT
-      ].reduce((acc, j) => ({ ...acc, [j.translation.en]: this.build(j, level) }), {});
+        WAR,
+        PLD,
+        DRK,
+        GNB,
+        AST,
+        SCH,
+        SGE,
+        WHM,
+        BRD,
+        DNC,
+        MCH,
+        DRG,
+        MNK,
+        NIN,
+        RPR,
+        SAM,
+        VPR,
+        BLM,
+        RDM,
+        SMN,
+        PCT,
+      ].reduce(
+        (acc, j) => ({ ...acc, [j.translation.en]: this.build(j, level) }),
+        {}
+      );
     }
   }
 
@@ -43,20 +76,32 @@ export class FFXIVJobRegistryService implements IJobRegistryService {
       name: job.translation.en,
       fullName: job.fullNameTranslation.en,
       icon: this.getIcon(job.fullNameTranslation.en, "_job"),
-      pets: job.pets && job.pets.map((p) => {
-        return { ...p, icon: this.getIcon(job.fullNameTranslation.en, p.name) };
-      }),
-      stances: job.stances && job.stances.map(s => {
-        return {
-          ability: this.buildAbility(job.fullNameTranslation.en, s.ability)
-        };
-      }),
-      abilities: Shared.toAbilities(job.abilities.map(a => this.buildAbility(job.fullNameTranslation.en, a)).sort(Shared.abilitySortFn))
+      pets:
+        job.pets &&
+        job.pets.map((p) => {
+          return {
+            ...p,
+            icon: this.getIcon(job.fullNameTranslation.en, p.name),
+          };
+        }),
+      stances:
+        job.stances &&
+        job.stances.map((s) => {
+          return {
+            ability: this.buildAbility(job.fullNameTranslation.en, s.ability),
+          };
+        }),
+      abilities: Shared.toAbilities(
+        job.abilities
+          .map((a) => this.buildAbility(job.fullNameTranslation.en, a))
+          .sort(Shared.abilitySortFn)
+      ),
     };
 
-    job.traits?.sort((a, b) => a.level - b.level)
-      .filter(t => t.level <= level)
-      .forEach(t => {
+    job.traits
+      ?.sort((a, b) => a.level - b.level)
+      .filter((t) => t.level <= level)
+      .forEach((t) => {
         t.apply(j);
       });
 
@@ -64,19 +109,33 @@ export class FFXIVJobRegistryService implements IJobRegistryService {
   }
 
   private getIcon(prefix: string, id: string) {
-    return `/assets/images/ffhqicons/${prefix}/${id}${id.endsWith(".jpg") ? "" : ".png"}`;
+    return `/assets/images/ffhqicons/${prefix}/${id}${
+      id.endsWith(".jpg") ? "" : ".png"
+    }`;
   }
 
   private buildAbility(prefix: string, a: Models.IAbility): Models.IAbility {
-    return {
-      ...a,
-      icon: a.icon
-        ? `/assets/images/ffhqicons/${a.icon}${a.icon.endsWith(".jpg") ? "" : ".png"}`
-        : this.getIcon(a.iconPrefix || prefix, (a.iconPrefix || "pve") + "_" + encodeURIComponent(a.name.replace(": ", "_"))),
-      detectStrategy: a.detectStrategy || byName([a.xivDbId], [a.name]),
-      overlapStrategy: a.overlapStrategy || new BaseOverlapStrategy(),
-      settings: [Models.settings.note, ...(a.settings || [])]
-    };
+    try {
+      return {
+        ...a,
+        icon: a.icon
+          ? `/assets/images/ffhqicons/${a.icon}${
+              a.icon.endsWith(".jpg") ? "" : ".png"
+            }`
+          : this.getIcon(
+              a.iconPrefix || prefix,
+              (a.iconPrefix || "pve") +
+                "_" +
+                encodeURIComponent(a.name.replace(": ", "_"))
+            ),
+        detectStrategy: a.detectStrategy || byName([a.xivDbId], [a.name]),
+        overlapStrategy: a.overlapStrategy || new BaseOverlapStrategy(),
+        settings: [Models.settings.note, ...(a.settings || [])],
+      };
+    } catch (e) {
+      console.log(a);
+      throw e;
+    }
   }
 
   getJob(jobName: string): Models.IJob {
@@ -89,10 +148,13 @@ export class FFXIVJobRegistryService implements IJobRegistryService {
     return job.abilities[abilityName];
   }
 
-  getStanceAbilityForJob(jobName: string, abilityName: string): Models.IAbility {
+  getStanceAbilityForJob(
+    jobName: string,
+    abilityName: string
+  ): Models.IAbility {
     const job = this.getJob(jobName);
-    return job.stances.find((a: Models.IStance) => a.ability.name === abilityName).ability as Models.IAbility;
+    return job.stances.find(
+      (a: Models.IStance) => a.ability.name === abilityName
+    ).ability as Models.IAbility;
   }
 }
-
-

@@ -5,12 +5,7 @@ import {
   MapStatuses,
   Role,
 } from "src/core/Models";
-import {
-  casterSharedAbilities,
-  casterSharedTraits,
-  getAbilitiesFrom,
-  medicine,
-} from "./shared";
+import { withCasterSharedAbilities } from "./shared";
 import Effects from "src/core/Defensives/effects";
 
 const statuses = MapStatuses({
@@ -205,13 +200,11 @@ const abilities = [
     abilityType: AbilityType.Damage,
     levelAcquired: 96,
   },
-  ...getAbilitiesFrom(casterSharedAbilities),
-  medicine.Intelligence,
 ] as IAbility[];
 
-const traits = [...casterSharedTraits];
+const traits = [];
 
-export const PCT: IJobTemplate = {
+export const PCT: IJobTemplate = withCasterSharedAbilities({
   translation: {
     de: "PKT",
     ja: "PCT",
@@ -230,4 +223,4 @@ export const PCT: IJobTemplate = {
   role: Role.Caster,
   abilities,
   traits,
-};
+});

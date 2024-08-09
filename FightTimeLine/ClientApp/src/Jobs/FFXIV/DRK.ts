@@ -17,12 +17,7 @@ import {
   IOverlapStrategy,
   IOverlapCheckContext,
 } from "../../core/Models";
-import {
-  getAbilitiesFrom,
-  tankSharedAbilities,
-  medicine,
-  tankSharedTraits,
-} from "./shared";
+import { withTankSharedAbilities } from "./shared";
 import { abilityTrait, combineTraits, levelRemoved } from "./traits";
 
 class SaltAndDarknessOverlapStrategy
@@ -420,8 +415,6 @@ const abilities = [
       cooldown: 60,
     },
   },
-  ...getAbilitiesFrom(tankSharedAbilities),
-  medicine.Strength,
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -443,9 +436,8 @@ const traits: ITrait[] = [
     name: "Shadow Wall Mastery",
     apply: abilityTrait("Shadow Wall", levelRemoved(92)),
   },
-  ...tankSharedTraits,
 ];
-export const DRK: IJobTemplate = {
+export const DRK: IJobTemplate = withTankSharedAbilities({
   translation: {
     de: "DKR",
     ja: "DRK",
@@ -464,4 +456,4 @@ export const DRK: IJobTemplate = {
   role: Role.Tank,
   abilities,
   traits,
-};
+});

@@ -1,7 +1,7 @@
 import { JobMap } from "../Maps/JobMap";
 import { Role } from "../Models";
 
-export  function isCaster(job: JobMap) {
+export function isCaster(job: JobMap) {
   return job.job.role === Role.Caster || job.job.role === Role.Healer;
 }
 
@@ -68,7 +68,7 @@ export function attackModifier(job: JobMap) {
     case "SAM":
       return 112;
     case "VPR":
-      return 112
+      return 112;
     case "RDM":
       return 115;
     case "PCT":
@@ -178,5 +178,6 @@ export const levelModifiers = {
   87: { Main: 375, Sub: 394, Div: 1720 },
   88: { Main: 380, Sub: 396, Div: 1780 },
   89: { Main: 385, Sub: 398, Div: 1840 },
-  90: { Main: 390, Sub: 400, Div: 190 },
+  90: { Main: 390, Sub: 400, Div: 1900 },
+  100: { Main: 440, Sub: 430, Div: 2780 },
 } as const;

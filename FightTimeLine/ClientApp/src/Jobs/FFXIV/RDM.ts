@@ -1,6 +1,5 @@
 import Effects from "src/core/Defensives/effects";
 import {
-  IJob,
   Role,
   AbilityType,
   DamageType,
@@ -9,12 +8,7 @@ import {
   ITrait,
   IAbility,
 } from "../../core/Models";
-import {
-  getAbilitiesFrom,
-  casterSharedAbilities,
-  medicine,
-  casterSharedTraits,
-} from "./shared";
+import { withCasterSharedAbilities } from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
 
 const statuses = MapStatuses({
@@ -157,8 +151,6 @@ const abilities: IAbility[] = [
     abilityType: AbilityType.Damage,
     levelAcquired: 100,
   },
-  ...getAbilitiesFrom(casterSharedAbilities),
-  medicine.Intelligence,
 ];
 
 const traits: ITrait[] = [
@@ -182,10 +174,9 @@ const traits: ITrait[] = [
       };
     }),
   },
-  ...casterSharedTraits,
 ];
 
-export const RDM: IJobTemplate = {
+export const RDM: IJobTemplate = withCasterSharedAbilities({
   translation: {
     de: "RMA",
     ja: "RDM",
@@ -203,4 +194,4 @@ export const RDM: IJobTemplate = {
   role: Role.Caster,
   abilities,
   traits,
-};
+});

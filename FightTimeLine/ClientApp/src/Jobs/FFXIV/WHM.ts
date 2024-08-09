@@ -1,6 +1,5 @@
 import Effects from "src/core/Defensives/effects";
 import {
-  IJob,
   Role,
   AbilityType,
   MapStatuses,
@@ -9,12 +8,7 @@ import {
   IJobTemplate,
   ITrait,
 } from "../../core/Models";
-import {
-  getAbilitiesFrom,
-  healerSharedAbilities,
-  healerSharedTraits,
-  medicine,
-} from "./shared";
+import { withHealerSharedAbilities } from "./shared";
 import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
@@ -283,8 +277,6 @@ const abilities: IAbility[] = [
     levelAcquired: 64,
     statuses: [statuses.divineCaress],
   },
-  ...getAbilitiesFrom(healerSharedAbilities),
-  medicine.Mind,
 ];
 
 const traits: ITrait[] = [
@@ -308,10 +300,9 @@ const traits: ITrait[] = [
       },
     }),
   },
-  ...healerSharedTraits,
 ];
 
-export const WHM: IJobTemplate = {
+export const WHM: IJobTemplate = withHealerSharedAbilities({
   translation: {
     de: "WMA",
     ja: "WHM",
@@ -329,4 +320,4 @@ export const WHM: IJobTemplate = {
   role: Role.Healer,
   abilities,
   traits,
-};
+});

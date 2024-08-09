@@ -1,16 +1,23 @@
 import Effects from "src/core/Defensives/effects";
-import { IJob, Role, AbilityType, MapStatuses, IAbility, IJobTemplate, ITrait } from "../../core/Models";
-import { getAbilitiesFrom, casterSharedAbilities, medicine, casterSharedTraits } from "./shared";
+import {
+  Role,
+  AbilityType,
+  MapStatuses,
+  IAbility,
+  IJobTemplate,
+  ITrait,
+} from "../../core/Models";
+import { withCasterSharedAbilities } from "./shared";
 import { abilityTrait } from "./traits";
 
 const statuses = MapStatuses({
   searingLight: {
-    duration: 20
+    duration: 20,
   },
   radiantAegis: {
     duration: 30,
-    effects: [Effects.shield.solo(20)]
-  }
+    effects: [Effects.shield.solo(20)],
+  },
 });
 
 const abilities = [
@@ -27,7 +34,7 @@ const abilities = [
     xivDbId: 25801,
     abilityType: AbilityType.PartyDamageBuff,
     statuses: [statuses.searingLight],
-    levelAcquired: 66
+    levelAcquired: 66,
   },
   {
     name: "Radiant Aegis",
@@ -42,7 +49,7 @@ const abilities = [
     xivDbId: 25799,
     abilityType: AbilityType.SelfShield,
     statuses: [statuses.radiantAegis],
-    levelAcquired: 66
+    levelAcquired: 66,
   },
   {
     name: "Mountain Buster",
@@ -55,7 +62,7 @@ const abilities = [
     },
     cooldown: 1,
     xivDbId: 25836,
-    levelAcquired: 86
+    levelAcquired: 86,
   },
   {
     name: "Revelation",
@@ -68,7 +75,7 @@ const abilities = [
     },
     cooldown: 1,
     xivDbId: 16518,
-    levelAcquired: 80
+    levelAcquired: 80,
   },
   // {
   //   name: "Enkindle Phoenix",
@@ -95,7 +102,7 @@ const abilities = [
     cooldown: 30,
     xivDbId: "16508",
     abilityType: AbilityType.Damage,
-    levelAcquired: 18
+    levelAcquired: 18,
   },
   {
     name: "Fester",
@@ -104,35 +111,30 @@ const abilities = [
       en: "Fester",
       fr: "Suppuration",
       cn: "溃烂爆发",
-      ja: "ミアズマバースト"
+      ja: "ミアズマバースト",
     },
     cooldown: 1,
     xivDbId: "181",
     abilityType: AbilityType.Damage,
-    levelAcquired: 10
+    levelAcquired: 10,
   },
-  ...getAbilitiesFrom(casterSharedAbilities),
-  medicine.Intelligence
 ] as IAbility[];
 
 const traits: ITrait[] = [
   {
     name: "Enhanced Radiant Aegis",
     level: 84,
-    apply: abilityTrait("Radiant Aegis", ab => {
+    apply: abilityTrait("Radiant Aegis", (ab) => {
       ab.charges = {
         initialCount: 2,
         count: 2,
-        cooldown: 60
+        cooldown: 60,
       };
-    })
+    }),
   },
-  ...casterSharedTraits
 ];
 
-
-export const SMN: IJobTemplate = {
-
+export const SMN: IJobTemplate = withCasterSharedAbilities({
   translation: {
     de: "BSW",
     ja: "SMN",
@@ -149,7 +151,5 @@ export const SMN: IJobTemplate = {
   },
   role: Role.Caster,
   abilities,
-  traits
-};
-
-
+  traits,
+});

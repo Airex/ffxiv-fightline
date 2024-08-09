@@ -12,7 +12,7 @@ import {
   IJobTemplate,
   ITrait,
 } from "../../core/Models";
-import { getAbilitiesFrom, tankSharedAbilities, medicine, tankSharedTraits } from "./shared";
+import { withTankSharedAbilities } from "./shared";
 import { abilityRemovedTrait, abilityTrait } from "./traits";
 
 class InterventionMitigationModifier implements IMitigator {
@@ -430,10 +430,8 @@ const abilities = [
     cooldown: 1,
     levelAcquired: 100,
     requiresBossTarget: true,
-    xivDbId: 36922
+    xivDbId: 36922,
   },
-  ...getAbilitiesFrom(tankSharedAbilities),
-  medicine.Strength,
 ] as IAbility[];
 
 const traits: ITrait[] = [
@@ -472,10 +470,9 @@ const traits: ITrait[] = [
     level: 96,
     apply: abilityRemovedTrait("Requiescat", 96),
   },
-  ...tankSharedTraits
 ];
 
-export const PLD: IJobTemplate = {
+export const PLD: IJobTemplate = withTankSharedAbilities({
   translation: {
     de: "PLD",
     ja: "PLD",
@@ -494,4 +491,4 @@ export const PLD: IJobTemplate = {
   role: Role.Tank,
   abilities,
   traits,
-};
+});
