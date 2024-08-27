@@ -263,9 +263,7 @@ export class FightTimeLineController {
     settings: string = null
   ): void {
     const time =
-      rawTime instanceof Date
-        ? rawTime
-        : Utils.getDateFromOffset(rawTime);
+      rawTime instanceof Date ? rawTime : Utils.getDateFromOffset(rawTime);
 
     if (map) {
       if (map.ability.requiresBossTarget && time < new Date(startOffsetConst)) {
@@ -346,6 +344,10 @@ export class FightTimeLineController {
 
   toggleBossAttackPin(id: string) {
     const att = this.holders.bossAttacks.get(id);
+    if (!att) {
+      return;
+    }
+
     const data = { ...att.attack, pinned: !att.attack.pinned };
     this.commandStorage.execute(
       new ChangeBossAttackCommand.ChangeBossAttackCommand(id, data, false)
@@ -353,10 +355,10 @@ export class FightTimeLineController {
     this.holders.bossAttacks.applyFilter(this.presenterManager.filter.attacks);
   }
 
-  notifyDoubleClick(itemid: string, group: string, time: Date): void {
-    if (itemid !== undefined && itemid !== null) {
-      if (this.idgen.isBossAttack(itemid)) {
-        this.updateBossAttack(itemid);
+  notifyDoubleClick(itemId: string, group: string, time: Date): void {
+    if (itemId !== undefined && itemId !== null) {
+      if (this.idgen.isBossAttack(itemId)) {
+        this.updateBossAttack(itemId);
       }
       return;
     }

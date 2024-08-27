@@ -36,7 +36,7 @@ export class BaseHolder<TK, TI, T extends IBaseHolderItem<TK>> {
     i.forEach(it => it && this.add(it));
   }
 
-  get(id: TK): T {
+  get(id: TK): T | undefined {
     return this.items[id as any];
   }
 
