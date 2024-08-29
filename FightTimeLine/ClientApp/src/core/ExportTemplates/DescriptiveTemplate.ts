@@ -1,5 +1,12 @@
-import { AttackRowExportTemplate, ExportTemplateContext } from "../BaseExportTemplate"
-import { IExportCell, IExportColumn, ITableOptionSettings } from "../ExportModels";
+import {
+  AttackRowExportTemplate,
+  ExportTemplateContext,
+} from "../BaseExportTemplate";
+import {
+  IExportCell,
+  IExportColumn,
+  ITableOptionSettings,
+} from "../ExportModels";
 import { Holders } from "../Holders";
 import { BossAttackMap } from "../Maps";
 import { BaseColumnTemplate, IColumnTemplate } from "../TableModels";
@@ -8,7 +15,7 @@ import { TimeColumn } from "./Columns/TimeColumn";
 
 export class DescriptiveTemplate extends AttackRowExportTemplate {
   public loadOptions(): ITableOptionSettings {
-    return null;
+    return [...super.loadOptions()];
   }
   constructor() {
     super();
@@ -23,12 +30,15 @@ export class DescriptiveTemplate extends AttackRowExportTemplate {
       new TimeColumn(),
       new AttackNameColumn(context.presenter),
       new AttackDescriptionColumn(),
-      new AttackTagsColumn()
+      new AttackTagsColumn(),
     ];
   }
 }
 
-class AttackDescriptionColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap>{
+class AttackDescriptionColumn
+  extends BaseColumnTemplate
+  implements IColumnTemplate<BossAttackMap>
+{
   buildHeader(data: Holders): IExportColumn {
     return {
       name: "desc",
@@ -38,10 +48,7 @@ class AttackDescriptionColumn extends BaseColumnTemplate implements IColumnTempl
   buildCell(data: Holders, attack: BossAttackMap): IExportCell {
     return this.text({
       text: attack.attack.description,
-      ignoreShowText: true
+      ignoreShowText: true,
     });
   }
 }
-
-
-

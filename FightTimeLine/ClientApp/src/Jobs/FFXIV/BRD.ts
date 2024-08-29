@@ -1,5 +1,5 @@
-import { byName } from "src/core/AbilityDetectors";
-import Effects from "src/core/Defensives/effects";
+import { byName } from "../../core/AbilityDetectors";
+import Effects from "../../core/Defensives/effects";
 import {
   Role,
   AbilityType,

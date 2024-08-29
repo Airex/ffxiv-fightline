@@ -10,7 +10,7 @@ import {
   Zone,
 } from "../core/FFLogs";
 import * as _ from "lodash";
-import { Parser } from "src/core/Parser";
+import { Parser } from "../core/Parser";
 import { IJobRegistryService } from "./jobregistry.service-interface";
 import { GetEventsOptions, IDataService } from "./data.service-interface";
 import { SettingsService } from "./SettingsService";

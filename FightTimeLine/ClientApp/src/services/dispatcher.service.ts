@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Subject, Observable } from "rxjs";
-import { AbilityMap, AbilityUsageMap } from "src/core/Maps";
-import { IBoss, IJobStats } from "src/core/Models";
+import { AbilityMap, AbilityUsageMap } from "../core/Maps";
+import { IBoss, IJobStats } from "../core/Models";
 
 export type DialogClose = {
   close: () => void;

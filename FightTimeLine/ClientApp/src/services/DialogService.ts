@@ -3,8 +3,8 @@ import { LocalStorageService } from "./LocalStorageService";
 import { Observable } from "rxjs";
 import * as D from "../dialogs";
 import { NzModalService, NzModalState } from "ng-zorro-antd/modal";
-import { IBoss, IBossAbility, IFight, IJobStats } from "src/core/Models";
-import { PresenterManager } from "src/core/PresentationManager";
+import { IBoss, IBossAbility, IFight, IJobStats } from "../core/Models";
+import { PresenterManager } from "../core/PresentationManager";
 
 @Injectable({
   providedIn: 'root'

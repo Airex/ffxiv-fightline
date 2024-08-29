@@ -1,6 +1,6 @@
 import * as Models from "./Models";
 import * as _ from "lodash";
-import { FFLogsImportBossAttacksSource, ISettings } from "src/services/SettingsService";
+import { FFLogsImportBossAttacksSource, ISettings } from "../services/SettingsService";
 import { IPresetTemplate, JobPresets } from "./Models";
 import { Holders } from "./Holders";
 import { Utils } from "./Utils";

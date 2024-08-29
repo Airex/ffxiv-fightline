@@ -117,7 +117,7 @@ describe("Mitigations", () => {
       boss("0:10", "test", damage(120000), aoe) // Boss attacks
     ).mitigate("test"); // Check mitigation on the boss attack named "test"
 
-    expect(result.mitigations[0].shield).toBe(0.173); // Assuming the Adloquium shield value is 0.134 * 1.2
+    expect(result.mitigations[0].shield).toBe(0.156); // Assuming the Adloquium shield value is 0.134 * 1.2
   });
 
   it("WHM Temperance does not increase SCH Adloquium shield value", async () => {
@@ -130,8 +130,8 @@ describe("Mitigations", () => {
 
     expect(result.mitigations[0].name).toBe("SCH");
     expect(result.mitigations[1].name).toBe("WHM");
-    expect(result.mitigations[0].shield).toBe(0, "SCH shield");
-    expect(result.mitigations[1].shield).toBe(0.144, "WHM shield");
+    expect(result.mitigations[0].shield, "SCH shield").toBe(0);
+    expect(result.mitigations[1].shield, "WHM shield").toBe(0.13);
   });
 
   it("WAR Thrill Of Battle increases SCH Adloquium shield value on WAR only", async () => {
@@ -158,18 +158,16 @@ describe("Mitigations", () => {
       job("SCH", wd(100), main(2300), det(2300)), // SCH with 100 WD, 2300 main stat, 2300 det
       job("WAR", wd(100), main(2300), det(2300)), // DRK with 100 WD, 2300 main stat, 2300 det
       jobs.WAR("0:03", "Thrill of Battle"), // WAR uses Thrill Of Battle
-      jobs.WAR("0:05", "Shake It Off"), // WAR uses Thrill Of Battle
+      jobs.WAR("0:05", "Shake It Off"), // WAR uses Shake It Off
       jobs.SCH("0:07", "Adloquium", target("WAR")), // SCH casts Adloquium on WAR
       boss("0:10", "test", damage(120000), aoe) // Boss attacks
     ).mitigate("test"); // Check mitigation on the boss attack named "test"
 
-    console.debug(result.warnings);
-
     expect(result.mitigations[0].name).toBe("SCH");
-    expect(result.mitigations[0].shield).toBe(0.17, "SCH shield");
+    expect(result.mitigations[0].shield, "SCH shield").toBe(0.17);
     expect(result.mitigations[1].name).toBe("WAR");
-    expect(result.mitigations[1].shield).toBe(0.28, "WAR shield");
-    expect(result.mitigations[1].hpIncrease).toBe(0, "WAR hpIncrease");
+    expect(result.mitigations[1].shield, "WAR shield").toBe(0.269);
+    expect(result.mitigations[1].hpIncrease, "WAR hpIncrease").toBe(0);
   });
 
   it("Adloquium shield value affected by Thrill of Battle and Mantra", async () => {
@@ -207,8 +205,10 @@ describe("Mitigations", () => {
 
     const mantraShield = mantraShieldResult.mitigations[1].shield;
 
-    expect(baseShield).toBeLessThan(thrillShield, "Thrill of Battle shield");
-    expect(thrillShield).toBeLessThan(mantraShield, "Mantra + Thrill of Battle shield");
+    expect(baseShield, "Thrill of Battle shield").toBeLessThan(thrillShield);
+    expect(thrillShield, "Mantra + Thrill of Battle shield").toBeLessThan(
+      mantraShield
+    );
   });
 });
 

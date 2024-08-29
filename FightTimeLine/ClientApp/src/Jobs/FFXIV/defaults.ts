@@ -1,4 +1,4 @@
-import { IJobStats, Role } from "src/core/Models";
+import { IJobStats, Role } from "../../core/Models";
 
 export const DefaultRoleStats: Record<Role, IJobStats> = {
   [Role.Tank]: {

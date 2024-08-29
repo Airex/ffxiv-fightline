@@ -48,3 +48,25 @@ export class AttackTagsColumn extends BaseColumnTemplate implements IColumnTempl
     return this.items(attack.attack.tags?.map(t => ({ text: t, ignoreShowText: true })) || [], {});
   }
 }
+
+export class AttackDamageColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap> {
+  buildHeader(data: Holders): IExportColumn {
+    return {
+      name: "bossDamage",
+      text: "Damage",
+      width: "200px"
+    };
+  }
+  buildCell(data: Holders, attackMap: BossAttackMap, options?: ITableOptions): IExportCell {
+
+    const color = "";
+
+    return this.text({
+      text: attackMap.attack.rawDamage.toFixed(),
+      ignoreShowText: true,
+      color,
+      fullwidth: true,
+      align: "center"
+    });
+  }
+}

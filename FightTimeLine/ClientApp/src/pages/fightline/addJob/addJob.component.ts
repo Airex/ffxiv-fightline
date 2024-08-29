@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from "@angular/core";
-import { IJob, Role } from "src/core/Models";
-import { IGameService } from "src/services/game.service-interface";
-import { gameServiceToken } from "src/services/game.service-provider";
-import { VisStorageService } from "src/services/VisStorageService";
+import { IJob, Role } from "../../../core/Models";
+import { IGameService } from "../../../services/game.service-interface";
+import { gameServiceToken } from "../../../services/game.service-provider";
+import { VisStorageService } from "../../../services/VisStorageService";
 import { PresenterManager } from "../../../core/PresentationManager";
 
 @Component({

@@ -1,5 +1,5 @@
-import { byBuffRemove } from "src/core/AbilityDetectors";
-import Effects from "src/core/Defensives/effects";
+import { byBuffRemove } from "../../core/AbilityDetectors";
+import Effects from "../../core/Defensives/effects";
 import {
   IAbility,
   AbilityType,

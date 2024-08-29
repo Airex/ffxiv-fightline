@@ -1,4 +1,4 @@
-import Effects from "src/core/Defensives/effects";
+import Effects from "../../core/Defensives/effects";
 import {
   AbilityType,
   IAbility,
@@ -10,7 +10,7 @@ import {
 } from "../../core/Models";
 import { withHealerSharedAbilities } from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
-import { AllowOverlapStrategy } from "src/core/Overlap";
+import { AllowOverlapStrategy } from "../../core/Overlap";
 
 const statuses = MapStatuses({
   physisII: {

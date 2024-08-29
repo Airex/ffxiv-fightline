@@ -24,24 +24,24 @@ import { IGameService } from "../../services/game.service-interface";
 
 import * as FightTimeLineController from "../../core/FightTimeLineController";
 import * as Generators from "../../core/Generators";
-import { ICommandData } from "src/core/UndoRedo";
-import { DescriptiveTemplate } from "src/core/ExportTemplates/DescriptiveTemplate";
-import * as ExportModels from "src/core/ExportModels";
-import { VisStorageService } from "src/services/VisStorageService";
-import { IFightSerializeData } from "src/core/SerializeController";
-import { MitigationsTemplate } from "src/core/ExportTemplates/MitigationsTemplate";
-import { PingComponent } from "src/components/ping/ping.component";
-import { DispatcherPayloads } from "src/services/dispatcher.service";
-import { Utils, startOffsetConst } from "src/core/Utils";
+import { ICommandData } from "../../core/UndoRedo";
+import { DescriptiveTemplate } from "../../core/ExportTemplates/DescriptiveTemplate";
+import * as ExportModels from "../../core/ExportModels";
+import { VisStorageService } from "../../services/VisStorageService";
+import { IFightSerializeData } from "../../core/SerializeController";
+import { MitigationsTemplate } from "../../core/ExportTemplates/MitigationsTemplate";
+import { PingComponent } from "../../components/ping/ping.component";
+import { DispatcherPayloads } from "../../services/dispatcher.service";
+import { Utils, startOffsetConst } from "../../core/Utils";
 import { Location } from "@angular/common";
-import { SidepanelComponent } from "src/components/sidepanel/sidepanel.component";
+import { SidepanelComponent } from "../../components/sidepanel/sidepanel.component";
 import {
   calculateAvailDefsForAttack,
   getAvailabilitiesForAbility,
   getTimeGoodAbilityToUse,
-} from "src/core/Defensives/functions";
+} from "../../core/Defensives/functions";
 import { CdkDrag, CdkDropList } from "@angular/cdk/drag-drop";
-import { MoveCommand } from "src/core/commands/MoveCommand";
+import { MoveCommand } from "../../core/commands/MoveCommand";
 
 @Component({
   selector: "tableview",

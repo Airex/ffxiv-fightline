@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import * as S from "../../services/index";
 import * as Gameserviceprovider from "../../services/game.service-provider";
 import * as Gameserviceinterface from "../../services/game.service-interface";
-import { DispatcherPayloads } from "src/services/dispatcher.service";
+import { DispatcherPayloads } from "../../services/dispatcher.service";
 
 
 @Component({

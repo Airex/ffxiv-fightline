@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import {DataSetDataGroup, DataSetDataItem } from "vis-timeline";
-import { Holders } from "src/core/Holders";
-import { ITimelineContainer } from "src/core/Holders/BaseHolder";
-import { PresenterManager } from "src/core/PresentationManager";
+import { Holders } from "../core/Holders";
+import { ITimelineContainer } from "../core/Holders/BaseHolder";
+import { PresenterManager } from "../core/PresentationManager";
 import { LocalStorageService } from "./LocalStorageService";
 import { DataGroup, DataItem } from "ngx-vis/ngx-vis";
 import { DataSet } from "vis-data";

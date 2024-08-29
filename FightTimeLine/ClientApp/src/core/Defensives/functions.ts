@@ -13,7 +13,7 @@ import {
   cantUseOnSelfWarning,
   deathWarning,
   duplicateMitigationWarning,
-} from "src/core/Warnings";
+} from "../../core/Warnings";
 import {
   DefsCalcResult,
   DefsCalcResultAbility,

@@ -23,8 +23,8 @@ import {
 } from "../Jobs/FFXIV/index";
 import * as Models from "../core/Models";
 import * as Shared from "../Jobs/FFXIV/shared";
-import { BaseOverlapStrategy } from "src/core/Overlap";
-import { byName } from "src/core/AbilityDetectors";
+import { BaseOverlapStrategy } from "../core/Overlap";
+import { byName } from "../core/AbilityDetectors";
 import { IJobRegistryService } from "./jobregistry.service-interface";
 
 export class FFXIVJobRegistryService implements IJobRegistryService {

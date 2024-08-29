@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from "@angular/core";
-import { VisStorageService } from "src/services/VisStorageService";
+import { VisStorageService } from "../../../services/VisStorageService";
 import { IView } from "../../../core/Models";
 import { PresenterManager } from "../../../core/PresentationManager";
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';

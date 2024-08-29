@@ -1,4 +1,4 @@
-import Effects from "src/core/Defensives/effects";
+import Effects from "../../core/Defensives/effects";
 import {
   Role,
   AbilityType,
@@ -13,7 +13,7 @@ import {
 } from "../../core/Models";
 import { withHealerSharedAbilities } from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
-import { AllowOverlapStrategy } from "src/core/Overlap";
+import { AllowOverlapStrategy } from "../../core/Overlap";
 
 class DeploymentTacticsModifier implements IMitigator {
   constructor(private value: number) {}
