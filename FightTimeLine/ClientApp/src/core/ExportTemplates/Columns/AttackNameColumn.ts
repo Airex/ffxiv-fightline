@@ -62,7 +62,7 @@ export class AttackDamageColumn extends BaseColumnTemplate implements IColumnTem
     const color = "";
 
     return this.text({
-      text: attackMap.attack.rawDamage.toFixed(),
+      text: attackMap.attack.rawDamage?.toFixed() || "",
       ignoreShowText: true,
       color,
       fullwidth: true,
