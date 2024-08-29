@@ -7,8 +7,8 @@ import {
   Output,
 } from "@angular/core";
 import { VisTimelineService, TimelineOptions, DataItem } from "ngx-vis";
-import { ITimelineContainer } from "src/core/Holders/BaseHolder";
-import { VisStorageService } from "src/services/VisStorageService";
+import { ITimelineContainer } from "../../../core/Holders/BaseHolder";
+import { VisStorageService } from "../../../services/VisStorageService";
 import { ClassNameBuilder } from "../../../core/ClassNameBuilder";
 import {
   Utils,

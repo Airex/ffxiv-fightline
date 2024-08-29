@@ -21,7 +21,7 @@ import { FFXIVGameService } from "../services/game-ffxiv.service";
 import { PresenterManager } from "../core/PresentationManager";
 import { LocalStorageService } from "../services/LocalStorageService";
 import { SettingsService } from "../services/SettingsService";
-import { Utils } from "src/core/Utils";
+import { Utils } from "../core/Utils";
 
 type BossPlayData = {
   name?: string;
@@ -73,7 +73,6 @@ function createController(holders) {
   const settingsService = new SettingsService(storage);
   const pm = new PresenterManager(storage);
   const c = new FightTimeLineController(
-    new Date(Date.UTC(2000,1,1,0,0,0)),
     new IdGenerator(),
     holders,
     {} as any,

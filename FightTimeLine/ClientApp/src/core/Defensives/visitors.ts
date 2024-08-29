@@ -125,7 +125,7 @@ export class MitigationVisitor implements IEffectVisitor {
         ) && item.checkCoversDate(ab.start)
     );
 
-    console.debug(healingBuffs.map((it) => it.ability.ability.name));
+    // console.debug(healingBuffs.map((it) => it.ability.ability.name));
 
     const visitor = new HealIncreaseVisitor(this.holders);
     healingBuffs.forEach((item) => {

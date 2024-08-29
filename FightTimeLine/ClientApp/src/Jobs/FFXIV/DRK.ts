@@ -1,10 +1,10 @@
-import Effects from "src/core/Defensives/effects";
+import Effects from "../../core/Defensives/effects";
 import {
   BaseOverlapStrategy,
   ChargesBasedOverlapStrategy,
   SharedOverlapStrategy,
-} from "src/core/Overlap";
-import { Utils } from "src/core/Utils";
+} from "../../core/Overlap";
+import { Utils } from "../../core/Utils";
 import {
   DamageType,
   Role,

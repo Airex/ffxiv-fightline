@@ -1,5 +1,5 @@
 import { Utils } from "./Utils";
-import { IExportResultSet, ITableOptions, ITableOptionSettings } from "./ExportModels";
+import { IExportResultSet, ITableOptions, ITableOptionSettings, TableOptionSettingType } from "./ExportModels";
 import { PresenterManager } from "./PresentationManager";
 import { Holders } from "./Holders";
 import { IJobRegistryService } from "src/services/jobregistry.service-interface";
@@ -29,6 +29,24 @@ export abstract class TableViewTemplate<RowType = any> {
 }
 
 export abstract class AttackRowExportTemplate extends TableViewTemplate<BossAttackMap>{
+
+
+  public loadOptions(holders?: Holders): ITableOptionSettings | null {
+    return [
+      {
+        name: "fflogs",
+        defaultValue: false,
+        displayName: "FFLogsSource",
+        kind: TableOptionSettingType.Boolean,
+        visible: true,
+        options: {
+          "true": "Cast",
+          "false": "Damage"
+        }
+      }
+    ];
+  }
+
   buildTable(context: ExportTemplateContext): IExportResultSet {
 
     const ffSource  = context.options['fflogs']? 'cast' : 'damage';
@@ -36,7 +54,7 @@ export abstract class AttackRowExportTemplate extends TableViewTemplate<BossAtta
     const cols = this.getColumns(context);
     const headers = cols.map(t => t.buildHeader(context.holders));
     const rows = context.holders.bossAttacks.getAll()
-      // .filter(a=> a.isForFfLogs(ffSource))
+      .filter(a=> a.isForFfLogs(ffSource))
       .sort((a, b) => this.offsetCompareFn(a.offset, b.offset))
       .map(attack => ({
         cells: cols.map(columnTemplate => columnTemplate.buildCell(context.holders, attack)),

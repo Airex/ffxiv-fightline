@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Input, Output } from "@angular/core";
-import { IAbilityFilter, IPresetTemplate } from "src/core/Models";
-import { LocalStorageService } from "src/services";
-import { VisStorageService } from "src/services/VisStorageService";
+import { IAbilityFilter, IPresetTemplate } from "../../../core/Models";
+import { LocalStorageService } from "../../../services";
+import { VisStorageService } from "../../../services/VisStorageService";
 import { PresenterManager } from "../../../core/PresentationManager";
 import { marker } from '@biesbjerg/ngx-translate-extract-marker';
 import { TranslateService } from "@ngx-translate/core";

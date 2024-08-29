@@ -10,7 +10,7 @@ import * as FF from "../FFLogs";
 import * as Parser from "../Parser";
 import * as Generators from "../Generators";
 import { BossAttackFFlogs } from "../Models";
-import { IJobRegistryService } from "src/services/jobregistry.service-interface";
+import { IJobRegistryService } from "../../services/jobregistry.service-interface";
 
 export interface IFFLogsCollector {
   collect(data: FF.BaseEventFields): void;
@@ -169,48 +169,45 @@ export class BossAttacksCollector extends BaseCollector {
   }
 
   process(): void {
-    const tbs = Object.keys(this.bossAttacks)
-      .map((it) => this.bossAttacks[it])
-      .filter((arr) => {
-        return arr.find((it) => {
+    const tbs = Object.values(this.bossAttacks)
+      .filter((attacks) => {
+        return attacks.some((it) => {
           if (FF.isDamageEvent(it)) {
             return (
-              it.amount + it.blocked > 0.6 * it.targetResources.maxHitPoints &&
-              arr.length <= 2
+              it.unmitigatedAmount > 0.8 * it.targetResources.maxHitPoints &&
+              attacks.length <= 2
             );
           }
           return false;
         });
       })
-      .filter((a) => !!a)
       .map((it) => it[0].ability.name);
 
     const commands: AddBossAttackCommand[] = [];
 
-    Object.keys(this.bossAttacks).forEach((k: string) => {
-      const attack = this.bossAttacks[k];
-      const ability = attack[0];
+    Object.values(this.bossAttacks).forEach((attacks) => {
+      const attack = attacks[0];
 
-      if (!ability) return;
+      if (!attack) return;
       const date = Utils.getDateFromOffset(
-        (ability.timestamp - this.context.parser.fight.start_time) / 1000
+        (attack.timestamp - this.context.parser.fight.start_time) / 1000
       );
       const tags: string[] = [];
 
-      if (attack.length > 2) {
-        tags.push(M.DefaultTags[1]);
+      if (attacks.length > 2) {
+        tags.push(M.DefaultTags[1]); // aoe tag
       }
-      if (tbs.indexOf(ability.ability.name) >= 0) {
-        tags.push(M.DefaultTags[0]);
+      if (tbs.indexOf(attack.ability.name) >= 0) {
+        tags.push(M.DefaultTags[0]); // tb tag
       }
 
-      const fflogsData = attack.reduce((acc, at) => {
+      const fflogsData = attacks.reduce((jobs, at) => {
         if (FF.isDamageEvent(at)) {
           const foundJob = this.context.parser.players.find(
             (it1) => it1.id === at.targetID
           );
           if (foundJob) {
-            acc[foundJob.rid] = {
+            jobs[foundJob.rid] = {
               amount: at.amount,
               unmitigated: at.unmitigatedAmount,
               mitigated: at.mitigated,
@@ -219,19 +216,27 @@ export class BossAttacksCollector extends BaseCollector {
             };
           }
         }
-        return acc;
+        return jobs;
       }, {} as BossAttackFFlogs);
+
+      const maxUnmitigated = attacks.reduce((max, at) => {
+        if (FF.isDamageEvent(at)) {
+          return Math.max(max, at.unmitigatedAmount);
+        }
+        return max;
+      }, 0);
 
       commands.push(
         new AddBossAttackCommand(
           this.context.idgen.getNextId(M.EntryType.BossAttack),
           {
-            name: ability.ability.name,
-            type: this.getAbilityType(ability),
+            name: attack.ability.name,
+            type: this.getAbilityType(attack),
             offset: Utils.formatTime(date),
             tags,
-            source: ability.source?.name,
-            fflogsAttackSource: ability.type === "cast" ? "cast" : "damage",
+            source: attack.source?.name,
+            rawDamage: maxUnmitigated,
+            fflogsAttackSource: attack.type === "cast" ? "cast" : "damage",
             fflogsData,
           }
         )

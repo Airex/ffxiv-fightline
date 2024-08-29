@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec",
+    "module": "CommonJs",
+    "types": ["jest"]
+  },
+  "files": ["node_modules/jest-expect-message/types/index.d.ts"],
+  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+}

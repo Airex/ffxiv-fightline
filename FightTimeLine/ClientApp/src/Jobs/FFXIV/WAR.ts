@@ -1,5 +1,5 @@
-import Effects from "src/core/Defensives/effects";
-import { SharedOverlapStrategy } from "src/core/Overlap";
+import Effects from "../../core/Defensives/effects";
+import { SharedOverlapStrategy } from "../../core/Overlap";
 import {
   Role,
   AbilityType,

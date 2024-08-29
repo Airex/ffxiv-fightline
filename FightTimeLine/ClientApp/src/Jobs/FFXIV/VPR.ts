@@ -1,4 +1,4 @@
-import { IJobTemplate, Role } from "src/core/Models";
+import { IJobTemplate, Role } from "../../core/Models";
 import { withDexterityMeleeSharedAbilities } from "./shared";
 
 const abilities = [];

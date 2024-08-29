@@ -29,6 +29,6 @@
     "strictInjectionParameters": true,
     "strictTemplates": true,
   },
-  "include": [ "node_modules/@angular/cdk/**/typings/index.d.ts", "src/**/*.ts" ],
+  "include": [ "node_modules/@angular/cdk/**/typings/index.d.ts", "src/**/*.ts",  ],
   "exclude": [ "**/*.spec.ts" ]
 }

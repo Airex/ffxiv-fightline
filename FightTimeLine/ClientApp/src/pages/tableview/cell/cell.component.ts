@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { IExportCell } from "src/core/ExportModels";
+import { IExportCell } from "../../../core/ExportModels";
 
 
 @Component({

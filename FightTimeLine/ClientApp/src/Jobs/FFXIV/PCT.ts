@@ -4,9 +4,9 @@ import {
   IJobTemplate,
   MapStatuses,
   Role,
-} from "src/core/Models";
+} from "../../core/Models";
 import { withCasterSharedAbilities } from "./shared";
-import Effects from "src/core/Defensives/effects";
+import Effects from "../../core/Defensives/effects";
 
 const statuses = MapStatuses({
   starryMuse: {

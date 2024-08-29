@@ -1,4 +1,4 @@
-import Effects from "src/core/Defensives/effects";
+import Effects from "../../core/Defensives/effects";
 import {
   Role,
   AbilityType,
@@ -13,7 +13,7 @@ import {
 } from "../../core/Models";
 import { withHealerSharedAbilities } from "./shared";
 import { abilityTrait, updateCooldown } from "./traits";
-import { AllowOverlapStrategy } from "src/core/Overlap";
+import { AllowOverlapStrategy } from "../../core/Overlap";
 
 class DeploymentTacticsModifier implements IMitigator {
   constructor(private value: number) {}
@@ -106,6 +106,9 @@ const statuses = MapStatuses({
     potency: 250,
     effects: [Effects.shieldFromHeal.party(100)],
   },
+  seraphism: {
+    duration: 20,
+  }
 });
 
 const abilities = [
@@ -495,9 +498,11 @@ const abilities = [
       fr: "S\u00E9raphisme",
       cn: "炽天",
     },
-    cooldown: 1,
-    xivDbId: 37011,
+    cooldown: 180,
+    xivDbId: 37014,
+    requiresBossTarget: true,
     abilityType: AbilityType.Healing,
+    statuses: [statuses.seraphism],
   },
 ] as IAbility[];
 

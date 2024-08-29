@@ -13,7 +13,7 @@ import {
   cantUseOnSelfWarning,
   deathWarning,
   duplicateMitigationWarning,
-} from "src/core/Warnings";
+} from "../../core/Warnings";
 import {
   DefsCalcResult,
   DefsCalcResultAbility,
@@ -345,6 +345,14 @@ export function calculateMitigationForAttack(
   const warnings: Warning[] = [];
 
   const attack = holders.bossAttacks.get(defsCalcResult.attackId);
+
+  if (!attack) {
+    return {
+      mitigations: [],
+      warnings,
+    };
+  }
+
   const bossAttackStart = attack.start;
   const mitigationVisitor = new MitigationVisitor(holders);
 

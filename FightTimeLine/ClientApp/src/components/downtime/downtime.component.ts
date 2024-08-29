@@ -4,8 +4,8 @@ import * as S from "../../services";
 import { Holders } from "../../core/Holders";
 import { Utils } from "../../core/Utils";
 import { BossDownTimeMap } from "../../core/Maps";
-import { VisStorageService } from "src/services/VisStorageService";
-import { DispatcherPayloads } from "src/services/dispatcher.service";
+import { VisStorageService } from "../../services/VisStorageService";
+import { DispatcherPayloads } from "../../services/dispatcher.service";
 import { Subscription } from "rxjs";
 import { ISidePanelComponent, SIDEPANEL_DATA, SidepanelParams } from "../sidepanel/ISidePanelComponent";
 
