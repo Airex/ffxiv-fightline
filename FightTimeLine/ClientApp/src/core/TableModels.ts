@@ -6,6 +6,7 @@ import { Utils } from "./Utils";
 export interface IColumnTemplate<RowData> {
   buildHeader(data: Holders): IExportColumn;
   buildCell(data: Holders, at: RowData, options?: ITableOptions): IExportCell;
+  getColumns(data: Holders, options?: ITableOptions): IColumnTemplate<RowData>[];
 }
 
 export abstract class BaseColumnTemplate {
@@ -37,7 +38,7 @@ export abstract class BaseColumnTemplate {
 
   protected text(input: Partial<IExportItem & IExportCell>): IExportCell {
     return {
-      items: [{ ...input, visible: true }],
+      items: [{ ...input, type: "common", visible: true }],
       ...input
     } as IExportCell;
   }

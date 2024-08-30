@@ -28,14 +28,16 @@
     nzSize="small"
   >
     <thead>
-      <tr>
+      <tr *ngFor="let h of set.headers">
         <th
-          *ngFor="let column of set.columns; trackBy: trackByName"
+          *ngFor="let column of h; trackBy: trackByName"
           [nzAlign]="column.align || 'center'"
           [nzFilterMultiple]="true"
           [nzFilters]="column.listOfFilter"
           [nzWidth]="column.width"
           [ngStyle]="{ cursor: column.cursor }"
+          [colSpan]="column.colSpan"
+          [rowSpan]="column.rowSpan"
           (click)="select(column.refId, $event)"
           (nzFilterChange)="filterChange($event, column.name)"
         >
@@ -45,7 +47,7 @@
             style="margin-right: 2px; margin-top: -3px"
             [src]="column.icon"
           />
-          <span *ngIf="!column.icon || (column.icon && showtext)">{{
+          <span *ngIf="!column.icon || (column.icon && showText)">{{
             column.text
           }}</span>
         </th>
@@ -61,7 +63,7 @@
           [cdkDropListData]="{row, col: set.columns[i]}"
           [nzAlign]="col.align || 'left'"
           [ngStyle]="{
-            'background-color': isAvailableToDrop({row, col: set.columns[i]})
+            'background-color': isAvailableToDrop({ row, col: set.columns[i] })
               ? '#1eff0024'
               : (col.colorFn && col.colorFn(row.filterData)) || ''
           }"
@@ -75,10 +77,10 @@
         >
           <cell
             [input]="col"
-            [showtext]="showtext"
-            [showicon]="showicon"
-            [showoffset]="showoffset"
-            [showtarget]="showtarget"
+            [showText]="showText"
+            [showIcon]="showIcon"
+            [showOffset]="showOffset"
+            [showTarget]="showTarget"
             [iconSize]="iconSize"
             (selected)="select($event)"
             (dragStarted)="dragStarted($event)"

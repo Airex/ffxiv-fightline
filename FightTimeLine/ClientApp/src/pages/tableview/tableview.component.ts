@@ -32,7 +32,7 @@ import { IFightSerializeData } from "../../core/SerializeController";
 import { MitigationsTemplate } from "../../core/ExportTemplates/MitigationsTemplate";
 import { PingComponent } from "../../components/ping/ping.component";
 import { DispatcherPayloads } from "../../services/dispatcher.service";
-import { Utils, startOffsetConst } from "../../core/Utils";
+import { Utils } from "../../core/Utils";
 import { Location } from "@angular/common";
 import { SidepanelComponent } from "../../components/sidepanel/sidepanel.component";
 import {
@@ -42,6 +42,7 @@ import {
 } from "../../core/Defensives/functions";
 import { CdkDrag, CdkDropList } from "@angular/cdk/drag-drop";
 import { MoveCommand } from "../../core/commands/MoveCommand";
+import { BossAttackAndMitigationAbilities } from "src/core/ExportTemplates/BossAttackAndMitigationAbilities";
 
 @Component({
   selector: "tableview",
@@ -63,6 +64,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
   set: ExportModels.IExportResultSet = {
     columns: [],
+    headers: [],
     rows: [],
     title: "",
     filterByFirstEntry: false,
@@ -73,24 +75,25 @@ export class TableViewComponent implements OnInit, OnDestroy {
   private lvl: number;
   tpl: TableViewTemplate;
 
-  templates: { [name: string]: TableViewTemplate } = {
-    defence: new BossAttackDefensiveTemplateV2(),
-    descriptive: new DescriptiveTemplate(),
-    mitigations: new MitigationsTemplate(),
+  templates: { [name: string]: { new (): TableViewTemplate } } = {
+    defence: BossAttackDefensiveTemplateV2,
+    descriptive: DescriptiveTemplate,
+    mitigations: MitigationsTemplate,
+    mitWithAbilities: BossAttackAndMitigationAbilities,
   };
 
-  get showicon(): boolean {
+  get showIcon(): boolean {
     return this.currentOptions.co.indexOf("icon") >= 0;
   }
-  get showoffset(): boolean {
+  get showOffset(): boolean {
     return this.currentOptions.co.indexOf("offset") >= 0;
   }
 
-  get showtext(): boolean {
+  get showText(): boolean {
     return this.currentOptions.co.indexOf("text") >= 0;
   }
 
-  get showtarget(): boolean {
+  get showTarget(): boolean {
     return this.currentOptions.co.indexOf("target") >= 0;
   }
 
@@ -125,9 +128,10 @@ export class TableViewComponent implements OnInit, OnDestroy {
     if (column) {
       this.filterData[column] = event;
     }
-    const cellFilter = this.filterCell();
+    const cellFilter = this.createCellFilter();
     this.filtered = this.set.rows.filter((row) => {
-      const visible = this.set.columns.every((c) => {
+      const flattenedColumns = this.set.columns;
+      const visible = flattenedColumns.every((c) => {
         const v =
           !c.filterFn ||
           !this.filterData[c.name] ||
@@ -137,7 +141,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
       if (visible) {
         row.cells.forEach((cell, index) =>
-          cellFilter(cell, this.filterData[this.set.columns[index].name])
+          cellFilter(cell, this.filterData[flattenedColumns[index].name])
         );
       }
 
@@ -145,7 +149,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  filterCell() {
+  createCellFilter() {
     const unique = new Set();
     const fn = (cell: ExportModels.IExportCell, data: string[]) => {
       cell.items.forEach((it) => {
@@ -263,7 +267,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
                   );
                   this.connectToSession().finally(() => {
                     this.gameService.jobRegistry.setLevel(100);
-                    this.tpl = this.templates[this.template.toLowerCase()];
+                    this.tpl = new this.templates[
+                      this.template.toLowerCase()
+                    ]();
                     this.loadTable();
                     ref.close();
                   });

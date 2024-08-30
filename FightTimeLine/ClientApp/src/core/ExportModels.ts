@@ -64,8 +64,8 @@ export class ExportData {
   data: ExportDataData;
 }
 
-
 export interface IExportResultSet {
+  headers: IExportColumn[][];
   columns: IExportColumn[];
   rows: IExportRow[];
   title: string;
@@ -78,9 +78,13 @@ export interface ColumnFilterItem {
   byDefault?: boolean;
 }
 
-export type ColumnAlign = 'left' | 'right' | 'center' | null;
+export type ColumnAlign = "left" | "right" | "center" | null;
 
-export type ColumnFilterFunc = (a: any, data: IExportRow, c?: IExportColumn) => boolean;
+export type ColumnFilterFunc = (
+  a: any,
+  data: IExportRow,
+  c?: IExportColumn
+) => boolean;
 
 export interface IExportColumn {
   type?: string;
@@ -93,6 +97,8 @@ export interface IExportColumn {
   filterFn?: ColumnFilterFunc;
   name?: string;
   width?: string | null;
+  colSpan?: number;
+  rowSpan?: number;
 }
 
 export interface IExportRow {
@@ -109,29 +115,79 @@ export interface IExportCell {
   noTag?: boolean;
 }
 
-export interface IExportItem {
+export type ExportItemType = "common" | "checkbox";
+
+export type IExportItem = IExportItemCheckbox | IExportItemCommon;
+
+export function isExportItemCheckbox(
+  item: IExportItem
+): item is IExportItemCheckbox {
+  return item.type === "checkbox";
+}
+
+export function isExportItemCommon(
+  item: IExportItem
+): item is IExportItemCommon {
+  return item.type === "common";
+}
+
+export function isBooleanOptionsSetting(
+  setting: ITableOptionsSetting
+): setting is BooleanOptionsSetting {
+  return setting.kind === TableOptionSettingType.Boolean;
+}
+
+export function isNumberRangeOptionsSetting(
+  setting: ITableOptionsSetting
+): setting is NumberRangeOptionsSetting {
+  return setting.kind === TableOptionSettingType.NumberRange;
+}
+
+export function isLimitedNumberRangeOptionsSetting(
+  setting: ITableOptionsSetting
+): setting is LimitedNumberRangeOptionsSetting {
+  return setting.kind === TableOptionSettingType.LimitedNumberRange;
+}
+
+export function isTagsOptionsSetting(
+  setting: ITableOptionsSetting
+): setting is TagsOptionsSetting {
+  return setting.kind === TableOptionSettingType.Tags;
+}
+
+export type IExportItemBase = {
+  visible?: boolean;
+  filterFn?: (a: string[]) => boolean;
   refId?: string;
+};
+
+export type IExportItemCheckbox = IExportItemBase & {
+  type: "checkbox";
+  checked: boolean;
+};
+
+export type IExportItemCommon = IExportItemBase & {
+  type: "common";
   text: string;
   icon?: string;
   color?: string;
-  visible?: boolean;
+
   targetIcon?: string;
   usageOffset?: string;
   clone?: boolean;
   tooltip?: string;
-  fullwidth?: boolean;
+  fullWidth?: boolean;
   ignoreIconScale?: boolean;
   ignoreShowIcon?: boolean;
   ignoreShowText?: boolean;
   allowIconsOnly?: boolean;
-  filterFn?: (a: string[]) => boolean;
-}
+};
 
 export enum TableOptionSettingType {
   Boolean,
   NumberRange,
   Tags,
-  LimitedNumberRange
+  LimitedNumberRange,
 }
 
 export interface ITableOptionsSetting<TOptions = any> {
@@ -146,21 +202,30 @@ export interface ITableOptionsSetting<TOptions = any> {
   onChange?: (value) => void;
 }
 
-export interface BooleanOptionsSetting extends ITableOptionsSetting<{ true?: string, false?: string}> {
+export interface BooleanOptionsSetting
+  extends ITableOptionsSetting<{ true?: string; false?: string }> {
   kind: TableOptionSettingType.Boolean;
 }
 
-export interface NumberRangeOptionsSetting extends ITableOptionsSetting<{ min: number, max: number, step?: number }> {
+export interface NumberRangeOptionsSetting
+  extends ITableOptionsSetting<{ min: number; max: number; step?: number }> {
   kind: TableOptionSettingType.NumberRange;
 }
 
-export interface LimitedNumberRangeOptionsSetting extends ITableOptionsSetting<{ min: number, max: number, marks?: any }> {
+export interface LimitedNumberRangeOptionsSetting
+  extends ITableOptionsSetting<{ min: number; max: number; marks?: any }> {
   kind: TableOptionSettingType.LimitedNumberRange;
 }
 
-export type TableOptionsSettingItem = { id: string, checked: boolean, text?: string, icon?: string };
+export type TableOptionsSettingItem = {
+  id: string;
+  checked: boolean;
+  text?: string;
+  icon?: string;
+};
 
-export interface TagsOptionsSetting extends ITableOptionsSetting<{ items: TableOptionsSettingItem[] }> {
+export interface TagsOptionsSetting
+  extends ITableOptionsSetting<{ items: TableOptionsSettingItem[] }> {
   kind: TableOptionSettingType.Tags;
 }
 

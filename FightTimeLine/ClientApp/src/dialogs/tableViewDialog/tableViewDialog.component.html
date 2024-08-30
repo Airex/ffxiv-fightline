@@ -1,39 +1,84 @@
 <form nz-form>
   <nz-form-item>
     <nz-form-control nzSpan="4">
-      <span style="margin-left: 10px;" *ngIf="selectedValue">
-        <tableviewoptions [settings]="options" (changed)="optionsChanged($event)"></tableviewoptions>
+      <span style="margin-left: 10px" *ngIf="selectedValue">
+        <tableviewoptions
+          [settings]="options"
+          (changed)="optionsChanged($event)"
+        ></tableviewoptions>
       </span>
     </nz-form-control>
     <nz-form-control nzSpan="8">
-      <nz-select nzPlaceHolder="Select Template" name="exportTemplatesList" [(ngModel)]="selectedValue"
-        (ngModelChange)="show()" nzSize="small">
-        <nz-option *ngFor="let template of templates" [nzValue]="template.name" [nzLabel]="template.name"></nz-option>
+      <nz-select
+        nzPlaceHolder="Select Template"
+        name="exportTemplatesList"
+        [(ngModel)]="selectedValue"
+        (ngModelChange)="show()"
+        nzSize="small"
+      >
+        <nz-option
+          *ngFor="let template of templates"
+          [nzValue]="template.name"
+          [nzLabel]="template.name"
+        ></nz-option>
       </nz-select>
     </nz-form-control>
   </nz-form-item>
 </form>
 
 <div mat-dialog-content style="height: 650px">
-  <nz-table #table [nzData]="set.rows" [nzBordered]="true" [nzShowPagination]="false" [nzPageSize]="pagesize"
-    [nzScroll]="{ y: '600px' }" nzSize="small">
+  <nz-table
+    #table
+    [nzData]="set.rows"
+    [nzBordered]="true"
+    [nzShowPagination]="false"
+    [nzPageSize]="pagesize"
+    [nzScroll]="{ y: '600px' }"
+    nzSize="small"
+  >
     <thead>
-      <tr>
-        <th *ngFor="let column of set.columns; trackBy: trackByName" [nzAlign]="column.align || 'center'"
-          [nzFilterMultiple]="true" [nzFilters]="column.listOfFilter" [nzWidth]="column.width"
-          [ngStyle]="{ 'cursor': column.cursor }" (nzFilterChange)="filterChange($event, column.name)">
-          <img *ngIf="column.icon" class="abilityIcon" style="margin-right: 2px;margin-top: -3px;"
-            [src]="column.icon" />
-          <span *ngIf="!column.icon || column.icon && showtext">{{column.text}}</span>
+      <tr *ngFor="let h of set.headers">
+        <th
+          *ngFor="let column of h; trackBy: trackByName"
+          [nzAlign]="column.align || 'center'"
+          [nzFilterMultiple]="true"
+          [nzFilters]="column.listOfFilter"
+          [nzWidth]="column.width"
+          [ngStyle]="{ cursor: column.cursor }"
+          [colSpan]="column.colSpan"
+          [rowSpan]="column.rowSpan"
+          (nzFilterChange)="filterChange($event, column.name)"
+        >
+          <img
+            *ngIf="column.icon"
+            class="abilityIcon"
+            style="margin-right: 2px; margin-top: -3px"
+            [src]="column.icon"
+          />
+          <span *ngIf="!column.icon || (column.icon && showText)">{{
+            column.text
+          }}</span>
         </th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let row of filtered">
-        <td *ngFor="let cell of row.cells" [nzAlign]="cell.align || 'left'"
-          [ngStyle]="{'background-color': cell.colorFn && cell.colorFn(row.filterData) || ''}">
-          <cell [input]="cell" [showtext]="showtext" [showicon]="showicon" [showoffset]="showoffset"
-            [showtarget]="showtarget" [iconSize]="iconSize"></cell>
+        <td
+          *ngFor="let cell of row.cells"
+          [nzAlign]="cell.align || 'left'"
+          [ngStyle]="{
+            'background-color':
+              (cell.colorFn && cell.colorFn(row.filterData)) || ''
+          }"
+        >
+          <cell
+            [input]="cell"
+            [showText]="showText"
+            [showIcon]="showIcon"
+            [showOffset]="showOffset"
+            [showTarget]="showTarget"
+            [iconSize]="iconSize"
+          ></cell>
         </td>
       </tr>
     </tbody>
@@ -41,5 +86,7 @@
 </div>
 
 <div *nzModalFooter>
-  <button nz-button (click)="onClose()" nzType="primary" cdkFocusInitial>{{"dialog.cancel" | translate}}</button>
+  <button nz-button (click)="onClose()" nzType="primary" cdkFocusInitial>
+    {{ "dialog.cancel" | translate }}
+  </button>
 </div>

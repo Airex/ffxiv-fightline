@@ -1,6 +1,6 @@
 import { calculateDefsForAttack, calculateMitigationForAttack } from "src/core/Defensives/functions";
 import { MitigationForAttack } from "src/core/Defensives/types";
-import { IExportColumn, IExportCell } from "src/core/ExportModels";
+import { IExportColumn, IExportCell, ITableOptions } from "src/core/ExportModels";
 import { Holders } from "src/core/Holders";
 import { BossAttackMap } from "src/core/Maps";
 import { BaseColumnTemplate, IColumnTemplate } from "src/core/TableModels";
@@ -39,5 +39,13 @@ export class MitigationsCombinedColumn extends BaseColumnTemplate implements ICo
     );
 
     return tags;
+  }
+
+  getColumns(
+    data: Holders,
+    at: BossAttackMap,
+    options?: ITableOptions
+  ): IColumnTemplate<BossAttackMap>[] {
+    return undefined;
   }
 }

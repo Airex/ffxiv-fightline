@@ -5,6 +5,7 @@ import {
 import {
   IExportCell,
   IExportColumn,
+  ITableOptions,
   ITableOptionSettings,
 } from "../ExportModels";
 import { Holders } from "../Holders";
@@ -50,5 +51,13 @@ class AttackDescriptionColumn
       text: attack.attack.description,
       ignoreShowText: true,
     });
+  }
+
+  getColumns(
+    data: Holders,
+    at: BossAttackMap,
+    options?: ITableOptions
+  ): IColumnTemplate<BossAttackMap>[] {
+    return undefined;
   }
 }

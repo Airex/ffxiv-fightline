@@ -1,6 +1,6 @@
 import { AttackRowExportTemplate, ExportTemplateContext } from "../BaseExportTemplate";
 import { calculateDefsForAttack, calculateMitigationForAttack } from "../Defensives/functions";
-import { IExportCell, IExportColumn, ITableOptionSettings } from "../ExportModels";
+import { IExportCell, IExportColumn, ITableOptions, ITableOptionSettings } from "../ExportModels";
 import { Holders } from "../Holders";
 import { BossAttackMap } from "../Maps";
 import { BaseColumnTemplate, IColumnTemplate } from "../TableModels";
@@ -43,6 +43,9 @@ class MitigationColumn extends BaseColumnTemplate implements IColumnTemplate<Bos
   constructor(private it: {id: string, translated: string, job?: { icon?: string }}, private holders: Holders) {
     super();
   }
+  getColumns(data: Holders, at: BossAttackMap, options?: ITableOptions): IColumnTemplate<BossAttackMap>[] {
+    return undefined;
+  }
   buildHeader(data: Holders): IExportColumn {
     return {
       text: this.it.translated,
@@ -82,4 +85,5 @@ class MitigationColumn extends BaseColumnTemplate implements IColumnTemplate<Bos
     }
     return cell;
   }
+
 }

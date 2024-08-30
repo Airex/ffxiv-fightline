@@ -1,4 +1,4 @@
-import { IExportCell, IExportColumn, IExportItem } from "src/core/ExportModels";
+import { IExportCell, IExportColumn, IExportItem, IExportItemCommon, ITableOptions } from "src/core/ExportModels";
 import { Holders } from "src/core/Holders";
 import { JobsMapHolder } from "src/core/Holders/JobsMapHolder";
 import { AbilityUsageMap, BossAttackMap, JobMap } from "src/core/Maps";
@@ -104,6 +104,7 @@ export class JobDefensivesColumn
       }
 
       const result = {
+        type: "common",
         text: usage.ability.translated,
         icon: usage.ability.ability.icon,
         refId: usage.id,
@@ -136,7 +137,7 @@ export class JobDefensivesColumn
             return a.indexOf(usage.ability.ability.name) >= 0;
           }
         },
-      } as IExportItem;
+      } as IExportItemCommon;
 
       if (!this.used.has(usage.id)) {
         this.used.add(usage.id);
@@ -145,8 +146,15 @@ export class JobDefensivesColumn
       acc.push(result);
 
       return acc;
-    }, [] as IExportItem[]);
+    }, [] as IExportItemCommon[]);
     return this.items(items, { disableUnique: this.coverAll });
+  }
+
+  getColumns(
+    data: Holders,
+    options?: ITableOptions
+  ): IColumnTemplate<BossAttackMap>[] {
+    return undefined;
   }
 
   isLevelInRange(abilityLevel: [number?, number?], level: number): boolean {

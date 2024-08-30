@@ -159,6 +159,7 @@
 	"fightline.toolbar.menu.openAsTable.defence": "Verteidigung",
 	"fightline.toolbar.menu.openAsTable.timeline": "Zeitleiste",
 	"fightline.toolbar.menu.openAsTable.mitigations": "Abmilderungen",
+  "fightline.toolbar.menu.openAsTable.mitigationsWithAbilities": "Mitigations mit Fähigkeiten",
 	"fightline.toolbar.menu.openAsTable._": "Als Tabelle öffnen",
 	"fightline.toolbar.menu.export.json": "",
 	"fightline.toolbar.menu.export._": "",
