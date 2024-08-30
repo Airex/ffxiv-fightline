@@ -12,6 +12,7 @@ import { IGameService } from "src/services/game.service-interface";
 import { MitigationsTemplate } from "src/core/ExportTemplates/MitigationsTemplate";
 import { VisStorageService } from "src/services/VisStorageService";
 import * as _ from "lodash";
+import { BossAttackAndMitigationAbilities } from "src/core/ExportTemplates/BossAttackAndMitigationAbilities";
 
 
 @Component({
@@ -28,18 +29,18 @@ export class TableViewDialogComponent {
   ) {
   }
 
-  get showicon(): boolean {
+  get showIcon(): boolean {
     return this.currentOptions.cellOptions.indexOf("icon") >= 0;
   }
-  get showoffset(): boolean {
+  get showOffset(): boolean {
     return this.currentOptions.cellOptions.indexOf("offset") >= 0;
   }
 
-  get showtext(): boolean {
+  get showText(): boolean {
     return this.currentOptions.cellOptions.indexOf("text") >= 0;
   }
 
-  get showtarget(): boolean {
+  get showTarget(): boolean {
     return this.currentOptions.cellOptions.indexOf("target") >= 0;
   }
 
@@ -54,6 +55,7 @@ export class TableViewDialogComponent {
 
   set: IExportResultSet = {
     rows: [],
+    headers: [],
     columns: [],
     title: "",
     filterByFirstEntry: false
@@ -62,7 +64,8 @@ export class TableViewDialogComponent {
   templates: TableViewTemplate<any>[] = [
     new BossAttackDefensiveTemplateV2(),
     new DescriptiveTemplate(),
-    new MitigationsTemplate()
+    new MitigationsTemplate(),
+    new BossAttackAndMitigationAbilities()
   ];
 
   options: ITableOptionSettings;
@@ -150,13 +153,14 @@ export class TableViewDialogComponent {
     }
     const cellFilter = this.filterCell();
     this.filtered = this.set.rows.filter(row => {
-      const visible = this.set.columns.every(c => {
+      const flattenedColumns = this.set.columns;
+      const visible = flattenedColumns.every(c => {
         const v = !c.filterFn || !this.filterData[c.name] || c.filterFn(this.filterData[c.name], row, c);
         return v;
       });
 
       if (visible) {
-        row.cells.forEach((cell, index) => cellFilter(cell, this.filterData[this.set.columns[index].name]));
+        row.cells.forEach((cell, index) => cellFilter(cell, this.filterData[flattenedColumns[index].name]));
       }
 
       return visible;

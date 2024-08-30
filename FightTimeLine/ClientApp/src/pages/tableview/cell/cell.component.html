@@ -1,18 +1,22 @@
 <ng-container *ngFor="let d of input.items">
+  <label *ngIf="isExportItemCheckbox(d)" nz-checkbox [ngModel]="d.checked" [nzDisabled]="true">
+  </label>
   <nz-tag
+    *ngIf="
+      isExportItemCommon(d) && d.visible && (d.text || (!d.text && d.icon))
+    "
     cdkDrag
     (cdkDragStarted)="onDragStart(d.refId, $event)"
     [cdkDragData]="d"
-    [cdkDragDisabled]="!(showicon && d.icon)"
+    [cdkDragDisabled]="!(showIcon && d.icon)"
     [nzColor]="d.color"
     [nz-tooltip]="!!d.tooltip && tt"
     [nzTooltipPlacement]="'right'"
     [class.clone]="d.clone"
     [class.tableview]="true"
     [style.lineHeight]="(d.ignoreIconScale ? 16 : iconSize) + 'px'"
-    [class.fullwidth]="d.fullwidth"
+    [class.fullwidth]="d.fullWidth"
     (click)="select(d.refId, $event)"
-    *ngIf="d.visible && (d.text || (!d.text && d.icon))"
   >
     <div
       style="
@@ -22,7 +26,7 @@
         align-items: flex-start;
       "
     >
-      <div *ngIf="showicon && d.icon" style="align-self: center">
+      <div *ngIf="showIcon && d.icon" style="align-self: center">
         <img
           class="abilityIcon"
           [style.width]="(d.ignoreIconScale ? 16 : iconSize) + 'px'"
@@ -41,12 +45,12 @@
         "
       >
         <span
-          *ngIf="(showtext || d.ignoreShowText) && d.text"
+          *ngIf="(showText || d.ignoreShowText) && d.text"
           style="white-space: pre-line"
           >{{ d.text }}</span
         >
         <span
-          *ngIf="showtarget && d.targetIcon"
+          *ngIf="showTarget && d.targetIcon"
           style="margin-left: 2px; white-space: nowrap"
         >
           <span style="margin-left: 2px">&gt;</span>
@@ -58,7 +62,7 @@
         </span>
         <span
           class="usageOffset"
-          *ngIf="showoffset && d.usageOffset && !d.clone && d.text"
+          *ngIf="showOffset && d.usageOffset && !d.clone && d.text"
         >
           ({{ d.usageOffset }})</span
         >

@@ -159,6 +159,7 @@
 	"fightline.toolbar.menu.openAsTable.defence": "Defence",
 	"fightline.toolbar.menu.openAsTable.timeline": "Timeline",
 	"fightline.toolbar.menu.openAsTable.mitigations": "Mitigations",
+	"fightline.toolbar.menu.openAsTable.mitigationsWithAbilities": "Mitigations with abilities",
 	"fightline.toolbar.menu.openAsTable._": "Open as Table",
 	"fightline.toolbar.menu.export.json": "JSON",
 	"fightline.toolbar.menu.export._": "Export",

@@ -9,6 +9,7 @@ import {
 import {
   IExportCell,
   IExportColumn,
+  ITableOptions,
   ITableOptionSettings,
 } from "../ExportModels";
 import { Holders } from "../Holders";
@@ -50,6 +51,8 @@ export class MitigationsTemplate extends AttackRowExportTemplate {
       ),
     ];
   }
+
+  
 }
 
 class MitigationColumn
@@ -112,5 +115,13 @@ class MitigationColumn
       cell = this.items([], {});
     }
     return cell;
+  }
+
+  getColumns(
+    data: Holders,
+    at: BossAttackMap,
+    options?: ITableOptions
+  ): IColumnTemplate<BossAttackMap>[] {
+    return undefined;
   }
 }

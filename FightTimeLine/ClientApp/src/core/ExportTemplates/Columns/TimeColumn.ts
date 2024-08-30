@@ -1,4 +1,4 @@
-import { IExportColumn, IExportCell } from "src/core/ExportModels";
+import { IExportColumn, IExportCell, ITableOptions } from "src/core/ExportModels";
 import { Holders } from "src/core/Holders";
 import { BossAttackMap } from "src/core/Maps";
 import { BaseColumnTemplate, IColumnTemplate } from "src/core/TableModels";
@@ -44,5 +44,13 @@ export class TimeColumn extends BaseColumnTemplate implements IColumnTemplate<Bo
         return dt && dt.id;
       }
     });
+  }
+
+  getColumns(
+    data: Holders,
+    at: BossAttackMap,
+    options?: ITableOptions
+  ): IColumnTemplate<BossAttackMap>[] {
+    return undefined;
   }
 }
