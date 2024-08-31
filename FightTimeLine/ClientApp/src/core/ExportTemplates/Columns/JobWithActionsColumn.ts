@@ -28,6 +28,7 @@ export class JobWithActionsColumn
       name: "job" + this.jobId,
       text: jobMap.translated,
       icon: jobMap.job.icon,
+      iconSize: 24,
     };
   }
 

@@ -1,5 +1,11 @@
 <ng-container *ngFor="let d of input.items">
-  <label *ngIf="isExportItemCheckbox(d)" nz-checkbox [ngModel]="d.checked" [nzDisabled]="true">
+  <label
+    *ngIf="isExportItemCheckbox(d)"
+    nz-checkbox
+    [nzId]="d.id"
+    [ngModel]="d.checked"
+    [nzDisabled]="true"
+  >
   </label>
   <nz-tag
     *ngIf="

@@ -1,5 +1,5 @@
 /* @import 'vis/dist/vis.css'; */
-@import '~vis-timeline/dist/vis-timeline-graph2d.min.css';
+@import "~vis-timeline/dist/vis-timeline-graph2d.min.css";
 
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
@@ -11,12 +11,24 @@
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
-.ant-table.ant-table-small .ant-table-footer, .ant-table.ant-table-small .ant-table-tbody>tr>td, .ant-table.ant-table-small .ant-table-thead>tr>th, .ant-table.ant-table-small .ant-table-title, .ant-table.ant-table-small tfoot>tr>td, .ant-table.ant-table-small tfoot>tr>th {
+.ant-table.ant-table-small .ant-table-footer,
+.ant-table.ant-table-small .ant-table-tbody > tr > td,
+.ant-table.ant-table-small .ant-table-thead > tr > th,
+.ant-table.ant-table-small .ant-table-title,
+.ant-table.ant-table-small tfoot > tr > td,
+.ant-table.ant-table-small tfoot > tr > th {
   padding: 2px !important;
 }
 
-.ant-drawer-left.ant-drawer-open, .ant-drawer-right.ant-drawer-open {
+.ant-drawer-left.ant-drawer-open,
+.ant-drawer-right.ant-drawer-open {
   width: 0px !important;
+}
+
+/* fix columns un-sync */
+.ant-table-header.nz-table-hide-scrollbar {
+  overflow: hidden !important;
+  padding-right: 7px !important;
 }
 
 .ant-drawer-content-wrapper {
@@ -35,22 +47,22 @@ body.dark {
 }
 
 body.dark .vis-labelset .vis-label {
-  color: #F5F5F5 !important;
+  color: #f5f5f5 !important;
 }
 
 body.dark .vis-time-axis .vis-text {
-  color: #F5F5F5 !important;
+  color: #f5f5f5 !important;
 }
 
 .custom-scroll::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(255,255,255,.3);
-  box-shadow: inset 0 0 6px rgba(255,255,255,.3);
-  background-color: #F5F5F5;
+  -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+  background-color: #f5f5f5;
 }
 
 .custom-scroll::-webkit-scrollbar {
   width: 7px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .custom-scroll::-webkit-scrollbar-thumb {
@@ -59,7 +71,7 @@ body.dark .vis-time-axis .vis-text {
 }
 
 body.dark .custom-scroll::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px #F5F5F5;
+  -webkit-box-shadow: inset 0 0 6px #f5f5f5;
   box-shadow: inset 0 0 6px rgb(31, 31, 31);
   background-color: rgb(31, 31, 31);
 }
@@ -76,14 +88,14 @@ body.dark .custom-scroll::-webkit-scrollbar-thumb {
 
 /*  */
 .ant-table-body::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(255,255,255,.3);
-  box-shadow: inset 0 0 6px rgba(255,255,255,.3);
-  background-color: #F5F5F5;
+  -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+  background-color: #f5f5f5;
 }
 
 .ant-table-body::-webkit-scrollbar {
   width: 7px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .ant-table-body::-webkit-scrollbar-thumb {
@@ -92,7 +104,7 @@ body.dark .custom-scroll::-webkit-scrollbar-thumb {
 }
 
 body.dark .ant-table-body::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px #F5F5F5;
+  -webkit-box-shadow: inset 0 0 6px #f5f5f5;
   box-shadow: inset 0 0 6px rgb(31, 31, 31);
   background-color: rgb(31, 31, 31);
 }
@@ -107,18 +119,17 @@ body.dark .ant-table-body::-webkit-scrollbar-thumb {
   border: 2px solid rgb(31, 31, 31);
 }
 
-
 /*  */
 
 .ant-drawer-body::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(255,255,255,.3);
-  box-shadow: inset 0 0 6px rgba(255,255,255,.3);
-  background-color: #F5F5F5;
+  -webkit-box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.3);
+  background-color: #f5f5f5;
 }
 
 .ant-drawer-body::-webkit-scrollbar {
   width: 7px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .ant-drawer-body::-webkit-scrollbar-thumb {
@@ -134,7 +145,7 @@ body.dark .ant-table-body::-webkit-scrollbar-thumb {
 
 body {
   margin: 0;
-  font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .ant-modal {
@@ -156,7 +167,14 @@ body {
   height: 100% !important;
 }
 
-html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-container {
+html,
+body,
+app,
+.container-fluid,
+.row,
+.body-content,
+.timeline,
+.ant-spin-container {
   min-width: 100% !important;
   width: 100% !important;
   min-height: 100% !important;
@@ -187,7 +205,6 @@ html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-con
   position: relative;
   overflow: hidden;
   display: flex;
-
 }
 
 .progress-wrapper-fl.rows {
@@ -227,7 +244,7 @@ html, body, app, .container-fluid, .row, .body-content, .timeline, .ant-spin-con
 }
 
 .progress-wrapper-fl.note:after {
-  content: '';
+  content: "";
   left: 0;
   top: 0;
   position: absolute;
@@ -307,24 +324,21 @@ body.dark .downtime .vis-item-content {
   margin-right: 3px;
 }
 
-
 sidepanel nz-space {
   width: 98%;
 }
 
-  sidepanel nz-space .ant-collapse-content-box {
-    padding: 6px !important;
-  }
-
-
-
+sidepanel nz-space .ant-collapse-content-box {
+  padding: 6px !important;
+}
 
 /* .mat-raised-button { */
 /*   line-height: 30px !important; */
 /*   min-width: 60px !important; */
 /* } */
 
-.mat-toolbar-row, .mat-toolbar-single-row {
+.mat-toolbar-row,
+.mat-toolbar-single-row {
   height: 54px !important;
 }
 
@@ -399,18 +413,17 @@ planArea .vis-label.vis-group-level-0 {
 }
 
 planarea .vis-label.vis-group-level-0 .vis-inner {
-    width: 100%
-  }
+  width: 100%;
+}
 
 planarea .vis-label.vis-group-level-0.selected {
-    background-color: #fff785;
-  }
+  background-color: #fff785;
+}
 
-  body.dark planarea .vis-label.vis-group-level-0.selected {
-    background-color: #fff785;
-    color: #000000 !important;
-  }
-
+body.dark planarea .vis-label.vis-group-level-0.selected {
+  background-color: #fff785;
+  color: #000000 !important;
+}
 
 .vis-label.vis-nesting-group .abilityIcon {
   margin-right: 2px;
@@ -419,7 +432,6 @@ planarea .vis-label.vis-group-level-0.selected {
 .vis-label.vis-nesting-group .jobName {
   vertical-align: middle;
 }
-
 
 planarea .vis-label.boss .vis-inner {
   font-size: 35px !important;
@@ -468,7 +480,7 @@ planarea .vis-label.boss .vis-inner {
   border-color: rgb(53, 56, 255);
 }
 .vis-item.vis-background.bossAttack.blue {
-  background-color:  rgb(53, 56, 255);
+  background-color: rgb(53, 56, 255);
   border-color: rgb(53, 56, 255);
 }
 
@@ -481,7 +493,6 @@ planarea .vis-label.boss .vis-inner {
   background-color: rgb(231 0 220);
   border-color: rgb(231 0 220);
 }
-
 
 .vis-item.bossAttack.green {
   background-color: rgb(75, 255, 68);
@@ -499,7 +510,7 @@ planarea .vis-label.boss .vis-inner {
 }
 
 .vis-item.vis-background.bossAttack.orange {
-  background-color:  rgb(165, 78, 8);
+  background-color: rgb(165, 78, 8);
   border-color: rgb(165, 78, 8);
 }
 
@@ -509,7 +520,7 @@ planarea .vis-label.boss .vis-inner {
 }
 
 .vis-item.vis-background.bossAttack.silver {
-  background-color:  rgb(119, 118, 118);
+  background-color: rgb(119, 118, 118);
   border-color: rgb(119, 118, 118);
 }
 
@@ -542,23 +553,20 @@ planarea .vis-label.boss .vis-inner {
 .vis-item.vis-point.vis-selected .vis-item.vis-dot.ability {
   top: -13px !important;
   border-color: #ffc200;
-
 }
 
 .vis-item.vis-point.compact-view-ability .vis-item-content {
   padding: 1px !important;
 }
 
-
-
 .vis-item.vis-background.bossAttack {
   background-color: #97b0f8;
 }
 
-  .vis-item.vis-background.bossAttack.selected {
-    background-color: #ffc200 !important;
-    z-index: 2;
-  }
+.vis-item.vis-background.bossAttack.selected {
+  background-color: #ffc200 !important;
+  z-index: 2;
+}
 
 planarea .vis-item.vis-dot.bossAttack {
   visibility: hidden !important;
@@ -573,7 +581,6 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
   width: 16px;
   height: 16px;
 }
-
 
 .vis-item.vis-background.targets {
   height: 2px !important;
@@ -604,17 +611,17 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
 
 .downtime.green {
   background-color: #008000;
-  background-color: rgba(0, 128, 0,0.4);
+  background-color: rgba(0, 128, 0, 0.4);
 }
 
 .downtime.pink {
   background-color: #ffc0cb;
-  background-color: rgba(255, 192, 203,0.4);
+  background-color: rgba(255, 192, 203, 0.4);
 }
 
 .downtime.yellow {
   background-color: #ffff00;
-  background-color: rgba(255, 255, 0,0.4);
+  background-color: rgba(255, 255, 0, 0.4);
 }
 
 .downtime.orange {
@@ -624,41 +631,41 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
 
 .downtime.red {
   background-color: #ff0000;
-  background-color: rgba(255, 0, 0,0.4);
+  background-color: rgba(255, 0, 0, 0.4);
 }
 
 .downtime.aqua {
   background-color: #00ffff;
-  background-color: rgba(0, 255, 255,0.4);
+  background-color: rgba(0, 255, 255, 0.4);
 }
 
 .availability.available {
   background: repeating-linear-gradient(
-                                       45deg,
-                                       #90EE9030 0px,
-                                       #90EE9030 5px,
-                                       #90EE9080 5px,
-                                       #90EE9080 10px
+    45deg,
+    #90ee9030 0px,
+    #90ee9030 5px,
+    #90ee9080 5px,
+    #90ee9080 10px
   );
-    margin-top: 3px !important;
-    height: 18px !important;
+  margin-top: 3px !important;
+  height: 18px !important;
 }
 
 .availability.not-available {
   background: repeating-linear-gradient(
-                                       45deg,
-                                       #EE909030 0px,
-                                       #EE909030 5px,
-                                       #EE909080 5px,
-                                       #EE909080 10px
+    45deg,
+    #ee909030 0px,
+    #ee909030 5px,
+    #ee909080 5px,
+    #ee909080 10px
   );
-    margin-top: 3px !important;
-    height: 18px !important;
+  margin-top: 3px !important;
+  height: 18px !important;
 }
 
 .compact .availability.available {
-    margin-top: 3px !important;
-    height: 5px !important;
+  margin-top: 3px !important;
+  height: 5px !important;
 }
 
 .availability.notAvailable {
@@ -680,9 +687,9 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
   z-index: 10000 !important;
 }
 
-  .boss-timeline .vis-tooltip p {
-    margin: 0;
-  }
+.boss-timeline .vis-tooltip p {
+  margin: 0;
+}
 
 .zones-list mat-pseudo-checkbox {
   display: none;
@@ -692,11 +699,9 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
   background-color: #59d4d8;
 }
 
-
 .avatar-container {
   font: 10px/30px Helvetica, Arial, sans-serif !important;
 }
-
 
 .vertical-center-modal {
   display: flex;
@@ -704,14 +709,13 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
   justify-content: center;
 }
 
-  .vertical-center-modal .ant-modal {
-    top: 0;
-  }
+.vertical-center-modal .ant-modal {
+  top: 0;
+}
 
 .ant-drawer-content {
   background-color: #ffffffbb;
 }
-
 
 .ant-drawer-content-wrapper {
   margin-top: 44px;
@@ -719,7 +723,13 @@ planarea .vis-labelset .vis-label .vis-inner.vis-hidden {
 }
 
 .bot-logo {
-  z-index: 10000; font-size: 12px;  position: fixed; width: 300px; height: 18px; bottom: 3px; right: 3px;
+  z-index: 10000;
+  font-size: 12px;
+  position: fixed;
+  width: 300px;
+  height: 18px;
+  bottom: 3px;
+  right: 3px;
 }
 
 .bot-logo:hover {

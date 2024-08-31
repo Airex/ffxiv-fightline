@@ -61,6 +61,7 @@ export class CheckBoxColumn
         {
           type: "checkbox",
           checked,
+          id: `${attack.id}-${ability.id}`,
         } as IExportItemCheckbox,
       ],
       colorFn(data) {
