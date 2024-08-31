@@ -96,6 +96,7 @@ export interface IExportColumn {
   cursor?: string;
   listOfFilter?: ColumnFilterItem[];
   filterFn?: ColumnFilterFunc;
+  backgroundColor?: string;
   name?: string;
   width?: string | null;
   colSpan?: number;

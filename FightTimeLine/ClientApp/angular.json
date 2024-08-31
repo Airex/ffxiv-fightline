@@ -73,7 +73,8 @@
               "xss",
               "vis-network",
               "vis-timeline",
-              "vis-data"
+              "vis-data",
+              "moment"
             ],
             "vendorChunk": true,
             "extractLicenses": false,

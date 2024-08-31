@@ -8,7 +8,11 @@ import { BossAttackMap } from "src/core/Maps";
 import { PresenterManager } from "src/core/PresentationManager";
 import { BaseColumnTemplate, IColumnTemplate } from "src/core/TableModels";
 import { CheckBoxColumn } from "./CheckBoxColumn";
-import { IAbility } from "src/core/Models";
+import { IAbility, Role } from "src/core/Models";
+import {
+  abilityLevelValid,
+  getAvailabilitiesForAbility,
+} from "src/core/Defensives/functions";
 
 export class JobWithActionsColumn
   extends BaseColumnTemplate
@@ -17,6 +21,7 @@ export class JobWithActionsColumn
   constructor(
     private presenter: PresenterManager,
     private jobId: string,
+    private level: number | undefined,
     private abilitySelector: (a: IAbility) => boolean
   ) {
     super();
@@ -24,11 +29,27 @@ export class JobWithActionsColumn
   buildHeader(data: Holders): IExportColumn {
     const jobMap = data.jobs.get(this.jobId);
 
+    const backgroundColor =
+      jobMap.job.role === Role.Tank
+        ? "#0000ff54"
+        : jobMap.job.role === Role.Healer
+        ? "#00ff0054"
+        : jobMap.job.role === Role.Melee
+        ? "#ff000054"
+        : jobMap.job.role === Role.Range
+        ? "#ff00ff54"
+        : jobMap.job.role === Role.Caster
+        ? "#ffff0054"
+        : undefined;
+
     return {
       name: "job" + this.jobId,
-      text: jobMap.translated,
+      text: "",
       icon: jobMap.job.icon,
+      refId: this.jobId,
       iconSize: 24,
+      cursor: "pointer",
+      backgroundColor,
     };
   }
 
@@ -37,10 +58,23 @@ export class JobWithActionsColumn
     _options?: ITableOptions
   ): IColumnTemplate<BossAttackMap>[] {
     const jobMap = data.jobs.get(this.jobId);
+
     return Object.values(jobMap.job.abilities)
-      .filter(this.abilitySelector)
-      .map((a) => {
-        return new CheckBoxColumn(jobMap, a);
+      .filter(
+        (x) =>
+          abilityLevelValid(
+            [x.levelAcquired, x.levelRemoved],
+            this.level || this.presenter.fightLevel
+          ) && this.abilitySelector(x)
+      )
+      .map((ability) => {
+        const ab = data.abilities.getByParentAndAbility(
+          jobMap.id,
+          ability.name
+        );
+        const avails = getAvailabilitiesForAbility(data)(ab);
+
+        return new CheckBoxColumn(jobMap, ability, avails);
       });
   }
 

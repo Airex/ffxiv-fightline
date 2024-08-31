@@ -21,10 +21,18 @@ import { BossTargetColumn } from "./Columns/BossTargetColumn";
 import { JobWithActionsColumn } from "./Columns/JobWithActionsColumn";
 import { TimeColumn } from "./Columns/TimeColumn";
 
-type OptionsType = [string[], string[], boolean];
+type OptionsType = [string[], string[], boolean, boolean, number | undefined];
 
 export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
   public override loadOptions(data: Holders): ITableOptionSettings {
+    const addSoloMitigations: BooleanOptionsSetting = {
+      name: "asm",
+      defaultValue: false,
+      displayName: "Add Solo Mitigations",
+      visible: true,
+      kind: TableOptionSettingType.Boolean,
+    };
+
     const attackColor: BooleanOptionsSetting = {
       name: "atc",
       defaultValue: true,
@@ -66,7 +74,13 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
       },
     };
 
-    return [...super.loadOptions(data), columnsFilter, jobsFilter, attackColor];
+    return [
+      ...super.loadOptions(data),
+      columnsFilter,
+      jobsFilter,
+      attackColor,
+      addSoloMitigations,
+    ];
   }
 
   constructor() {
@@ -85,8 +99,14 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
   public override getColumns(
     context: ExportTemplateContext
   ): IColumnTemplate<BossAttackMap>[] {
-    const options = this.getOptions(context.options, ["cf", "jf", "atc"]);
-    const [columnsFilter, jobsFilter, attackColor] =
+    const options = this.getOptions(context.options, [
+      "cf",
+      "jf",
+      "atc",
+      "asm",
+      "l"
+    ]);
+    const [columnsFilter, jobsFilter, attackColor, addSoloMitigations, level] =
       options ||
       (this.loadOptions(context.holders).map(
         (o) => o.defaultValue
@@ -95,6 +115,11 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
     const jobs = context.holders.jobs
       .getAll()
       .sort((a, b) => a.job.role - b.job.role);
+
+    const soloMitigationsFilter = addSoloMitigations
+      ? (ab: { abilityType: AbilityType }) =>
+          (ab.abilityType & AbilityType.SelfDefense) === AbilityType.SelfDefense
+      : () => false;
 
     const columnPresent = createColumnPresentFunction(columnsFilter);
 
@@ -115,11 +140,13 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
             new JobWithActionsColumn(
               context.presenter,
               j.id,
+              level,
               (ab) =>
                 (ab.abilityType & AbilityType.PartyDefense) ===
                   AbilityType.PartyDefense ||
                 (ab.abilityType & AbilityType.PartyShield) ===
-                  AbilityType.PartyShield
+                  AbilityType.PartyShield ||
+                soloMitigationsFilter(ab)
             )
         ),
     ].filter(Boolean);

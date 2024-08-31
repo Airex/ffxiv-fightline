@@ -45,6 +45,7 @@
           [nzFilters]="column.listOfFilter"
           [nzWidth]="column.width"
           [ngStyle]="{ cursor: column.cursor }"
+          [style.background-color]="column.backgroundColor"
           [colSpan]="column.colSpan"
           [rowSpan]="column.rowSpan"
           (nzFilterChange)="filterChange($event, column.name)"

@@ -1,3 +1,4 @@
+import { isLevelInRange } from "src/core/Defensives/functions";
 import { IExportCell, IExportColumn, IExportItem, IExportItemCommon, ITableOptions } from "src/core/ExportModels";
 import { Holders } from "src/core/Holders";
 import { JobsMapHolder } from "src/core/Holders/JobsMapHolder";
@@ -61,7 +62,7 @@ export class JobDefensivesColumn
       const isDefence = this.isDefence(usage.ability.ability.abilityType);
       const isHealing = this.isHealing(usage.ability.ability.abilityType);
 
-      const levelValid = this.isLevelInRange(
+      const levelValid = isLevelInRange(
         [
           usage.ability.ability.levelAcquired,
           usage.ability.ability.levelRemoved,
@@ -147,6 +148,7 @@ export class JobDefensivesColumn
 
       return acc;
     }, [] as IExportItemCommon[]);
+
     return this.items(items, { disableUnique: this.coverAll });
   }
 
@@ -157,24 +159,7 @@ export class JobDefensivesColumn
     return undefined;
   }
 
-  isLevelInRange(abilityLevel: [number?, number?], level: number): boolean {
-    if (!abilityLevel) {
-      return true;
-    }
 
-    const [from, to] = abilityLevel;
-    if (from === undefined){
-      return true;
-    }
-
-    if (from <= level) {
-      return true;
-    }
-    if (to && to >= level) {
-      return true;
-    }
-    return false;
-  }
 
   private isValidForColumn(type: AbilityType) {
     return this.isDefence(type) || this.isHealing(type);

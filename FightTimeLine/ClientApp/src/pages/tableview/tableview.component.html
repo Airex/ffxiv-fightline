@@ -37,6 +37,7 @@
           [nzWidth]="column.width"
           [ngStyle]="{ cursor: column.cursor }"
           [colSpan]="column.colSpan"
+          [style.background-color]="column.backgroundColor"
           [rowSpan]="column.rowSpan"
           (click)="select(column.refId, $event)"
           (nzFilterChange)="filterChange($event, column.name)"
