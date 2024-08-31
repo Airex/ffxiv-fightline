@@ -75,12 +75,12 @@ export class TableViewComponent implements OnInit, OnDestroy {
   private lvl: number;
   tpl: TableViewTemplate;
 
-  templates: { [name: string]: { new (): TableViewTemplate } } = {
+  templates = {
     defence: BossAttackDefensiveTemplateV2,
     descriptive: DescriptiveTemplate,
     mitigations: MitigationsTemplate,
-    mitWithAbilities: BossAttackAndMitigationAbilities,
-  };
+    mitwithabilities: BossAttackAndMitigationAbilities,
+  } as const;
 
   get showIcon(): boolean {
     return this.currentOptions.co.indexOf("icon") >= 0;
