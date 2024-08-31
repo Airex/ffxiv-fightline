@@ -461,8 +461,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  canDrop = (drag: CdkDrag, drop: CdkDropList) => {
-    // Only allow items to be dropped into the list if the list has less than 5 items.    c
+  canDrop (drag: CdkDrag, drop: CdkDropList) {
     const itemId = drag.data.refId;
     const colId = drop.data.col.refId;
     const rowId = drop.data.row.filterData.id;

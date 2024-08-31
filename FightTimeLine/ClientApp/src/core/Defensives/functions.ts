@@ -26,15 +26,19 @@ import {
 import { MitigationVisitor } from "./visitors";
 import { calculateDuration, getDurations } from "../Durations/functions";
 
+export type AvailabilityForAbilityResult = ReturnType<
+  ReturnType<typeof getAvailabilitiesForAbility>
+>;
+
 export const getAvailabilitiesForAbility =
-  (holders: Holders, exceptId: string | undefined = undefined) =>
+  (holders: Holders, usageExceptId: string | undefined = undefined) =>
   (it: AbilityMap) => {
     if (it.isStance) {
       return;
     }
     if (!it.ability.charges) {
       const deps = it.ability.overlapStrategy.getDependencies();
-      return processStandardAbility(holders)(it, deps, exceptId);
+      return processStandardAbility(holders)(it, deps, usageExceptId);
     } else {
       return processChargesAbility(holders)(it);
     }
@@ -112,7 +116,8 @@ const getDependencies = (holders: Holders) => (deps: string[], job: JobMap) => {
 };
 
 export const processStandardAbility =
-  (holders: Holders) => (it: AbilityMap, deps: string[], exceptId?: string) => {
+  (holders: Holders) =>
+  (it: AbilityMap, deps: string[], usageExceptId?: string) => {
     const end =
       startOffsetConst +
       30 * 60 * 1000 +
@@ -122,7 +127,7 @@ export const processStandardAbility =
       ...getDependencies(holders)(deps, it.job),
       ...holders.itemUsages
         .getByAbility(it.id)
-        .filter((f) => f.id !== exceptId),
+        .filter((f) => f.id !== usageExceptId),
       {
         startAsNumber: end,
       } as AbilityUsageMap,
@@ -212,14 +217,14 @@ export function calculateDefsForAttack(
 
 export function calculateAvailDefsForAttack(
   holders: Holders,
-  id: string,
-  exceptId?: string
+  attackId: string,
+  usageExceptId?: string
 ): DefsCalcResult {
-  const bossAttack = holders.bossAttacks.get(id);
+  const bossAttack = holders.bossAttacks.get(attackId);
 
   if (!bossAttack) {
     return {
-      attackId: id,
+      attackId: attackId,
       defs: [],
     };
   }
@@ -229,7 +234,10 @@ export function calculateAvailDefsForAttack(
   });
 
   const intersected = defAbilities.filter((it) => {
-    const availableRanges = getAvailabilitiesForAbility(holders, exceptId)(it);
+    const availableRanges = getAvailabilitiesForAbility(
+      holders,
+      usageExceptId
+    )(it);
     if (!availableRanges) return true;
 
     const duration = calculateDuration(it.ability);
@@ -452,4 +460,35 @@ export function calculateMitigationForAttack(
     mitigations: affectedTargets,
     warnings,
   };
+}
+
+export function abilityLevelValid(abilityLevel: [number, number?], level: number): boolean {
+  if (abilityLevel[0] > level) {
+    return false;
+  }
+
+  if (abilityLevel[1] <= level) {
+    return false;
+  }
+
+  return true;
+}
+
+export function isLevelInRange(abilityLevel: [number?, number?], level: number): boolean {
+  if (!abilityLevel) {
+    return true;
+  }
+
+  const [from, to] = abilityLevel;
+  if (from === undefined){
+    return true;
+  }
+
+  if (from <= level) {
+    return true;
+  }
+  if (to && to >= level) {
+    return true;
+  }
+  return false;
 }
