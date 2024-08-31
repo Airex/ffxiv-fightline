@@ -14,42 +14,42 @@ namespace ActionsParser;
 
 public class CachedHttpClient
 {
-   private HttpClient _httpClient;
-   private string _directory;
+    private HttpClient _httpClient;
+    private string _directory;
 
-   public CachedHttpClient(HttpClient httpClient, string directory)
-   {
-      _httpClient = httpClient;
-      _directory = directory;
-   }
+    public CachedHttpClient(HttpClient httpClient, string directory)
+    {
+        _httpClient = httpClient;
+        _directory = directory;
+    }
 
-   public async Task<T?> GetAsync<T>(string uri)
-   {
-      var jsonSerializerOptions = new JsonSerializerOptions()
-      {
-         NumberHandling = JsonNumberHandling.AllowReadingFromString
-      };
-      
-      if (!Directory.Exists(_directory))
-         Directory.CreateDirectory(_directory);
+    public async Task<T?> GetAsync<T>(string uri)
+    {
+        var jsonSerializerOptions = new JsonSerializerOptions()
+        {
+            NumberHandling = JsonNumberHandling.AllowReadingFromString,
+        };
 
-      var escapedPath = Path.GetInvalidFileNameChars().Aggregate(uri,(c, c1) => c.Replace(c1.ToString(),""));
-      escapedPath = Path.ChangeExtension(escapedPath, "json");
+        if (!Directory.Exists(_directory))
+            Directory.CreateDirectory(_directory);
 
-      var filePath = Path.Combine(_directory, escapedPath);
+        var escapedPath = Path.GetInvalidFileNameChars().Aggregate(uri, (c, c1) => c.Replace(c1.ToString(), ""));
+        escapedPath = Path.ChangeExtension(escapedPath, "json");
 
-      if (File.Exists(filePath))
-      {
-         await using FileStream fileStream = File.Open(filePath, FileMode.Open);
-         return JsonSerializer.Deserialize<T>(fileStream, jsonSerializerOptions);
-      }
+        var filePath = Path.Combine(_directory, escapedPath);
 
-      using var response = await _httpClient.GetAsync(uri);
-      var data = await response.Content.ReadAsStringAsync();
-      await using StreamWriter streamWriter = File.CreateText(filePath);
-      await streamWriter.WriteAsync(data);
-      
-      
-      return JsonSerializer.Deserialize<T>(data, jsonSerializerOptions);
-   }
+        if (File.Exists(filePath))
+        {
+            await using FileStream fileStream = File.Open(filePath, FileMode.Open);
+            return JsonSerializer.Deserialize<T>(fileStream, jsonSerializerOptions);
+        }
+
+        using var response = await _httpClient.GetAsync(uri);
+        var data = await response.Content.ReadAsStreamAsync();
+        var entry = await JsonSerializer.DeserializeAsync<T>(data, jsonSerializerOptions);
+        await using var streamWriter = File.Create(filePath);
+        await JsonSerializer.SerializeAsync(streamWriter, entry, jsonSerializerOptions);
+
+        return entry;
+    }
 }

@@ -6,7 +6,6 @@ import {
   BooleanOptionsSetting,
   ITableOptions,
   ITableOptionSettings,
-  LimitedNumberRangeOptionsSetting,
   TableOptionSettingType,
   TagsOptionsSetting,
 } from "../ExportModels";
@@ -22,70 +21,16 @@ import { BossTargetColumn } from "./Columns/BossTargetColumn";
 import { JobWithActionsColumn } from "./Columns/JobWithActionsColumn";
 import { TimeColumn } from "./Columns/TimeColumn";
 
-type OptionsType = [
-  boolean,
-  boolean,
-  boolean,
-  [number, number],
-  string[],
-  string[],
-  boolean
-];
+type OptionsType = [string[], string[], boolean];
 
 export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
-  public loadOptions(data: Holders): ITableOptionSettings {
-    const cover: BooleanOptionsSetting = {
-      name: "c",
-      defaultValue: false,
-      displayName: "Cover Attacks",
-      visible: true,
-      kind: TableOptionSettingType.Boolean,
-      description:
-        "Renders ability shadows in for attack ability covers when active",
-    };
-
+  public override loadOptions(data: Holders): ITableOptionSettings {
     const attackColor: BooleanOptionsSetting = {
       name: "atc",
       defaultValue: true,
       displayName: "Use Attack Color",
       visible: true,
       kind: TableOptionSettingType.Boolean,
-    };
-
-    const healingRange: LimitedNumberRangeOptionsSetting = {
-      name: "hr",
-      defaultValue: [-5, 5],
-      displayName: "Healing Detect Range",
-      kind: TableOptionSettingType.LimitedNumberRange,
-      visible: false,
-      description: "Healing Detect Range",
-      options: {
-        min: -15,
-        max: 15,
-        marks: {
-          0: "0",
-        },
-      },
-    };
-
-    const showHealing: BooleanOptionsSetting = {
-      name: "h",
-      defaultValue: false,
-      displayName: "Show Healing",
-      kind: TableOptionSettingType.Boolean,
-      visible: true,
-      description: "Show Healing Abilities",
-      onChange: (value) => (healingRange.visible = value),
-    };
-
-    const actionsAsFilter: BooleanOptionsSetting = {
-      name: "af",
-      defaultValue: false,
-      displayName: "Filter by Ability",
-      visible: true,
-      kind: TableOptionSettingType.Boolean,
-      description:
-        "Allows to filter by Ability Name if turned on, filter by solo/party effect instead",
     };
 
     const columnsFilter: TagsOptionsSetting = {
@@ -121,16 +66,7 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
       },
     };
 
-    return [
-      ...super.loadOptions(data),
-      cover,
-      actionsAsFilter,
-      showHealing,
-      healingRange,
-      columnsFilter,
-      jobsFilter,
-      attackColor,
-    ];
+    return [...super.loadOptions(data), columnsFilter, jobsFilter, attackColor];
   }
 
   constructor() {
@@ -143,29 +79,14 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
 
   getOptions(options: ITableOptions, names: string[]): OptionsType {
     const result = options && names.map((s) => options[s]);
-    return result as any;
+    return result as OptionsType;
   }
 
-  getColumns(context: ExportTemplateContext): IColumnTemplate<BossAttackMap>[] {
-    const options = this.getOptions(context.options, [
-      "c",
-      "af",
-      "h",
-      "hr",
-      "cf",
-      "jf",
-      "atc",
-      "l",
-    ]);
-    const [
-      coverAll,
-      afFilter,
-      showHealing,
-      healingRange,
-      columnsFilter,
-      jobsFilter,
-      attackColor,
-    ] =
+  public override getColumns(
+    context: ExportTemplateContext
+  ): IColumnTemplate<BossAttackMap>[] {
+    const options = this.getOptions(context.options, ["cf", "jf", "atc"]);
+    const [columnsFilter, jobsFilter, attackColor] =
       options ||
       (this.loadOptions(context.holders).map(
         (o) => o.defaultValue
@@ -174,10 +95,8 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
     const jobs = context.holders.jobs
       .getAll()
       .sort((a, b) => a.job.role - b.job.role);
-    const columnPresent = (columName: string, columnFunc) =>
-      !columnsFilter || columnsFilter.indexOf(columName) >= 0
-        ? columnFunc()
-        : null;
+
+    const columnPresent = createColumnPresentFunction(columnsFilter);
 
     const colTemplates: IColumnTemplate<BossAttackMap>[] = [
       columnPresent("time", () => new TimeColumn()),
@@ -207,4 +126,14 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
 
     return colTemplates;
   }
+}
+
+function createColumnPresentFunction(columnsFilter: string[]) {
+  return (
+    columName: string,
+    columnFunc: () => IColumnTemplate<BossAttackMap>
+  ) =>
+    !columnsFilter || columnsFilter.indexOf(columName) >= 0
+      ? columnFunc()
+      : null;
 }

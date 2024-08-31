@@ -1,14 +1,14 @@
 
 
 .mat-row {
-   
+
     min-height: 24px !important;
     padding: 0 5px;
     align-items: flex-start;
 }
 
 .mat-header-row {
-    
+
     min-height: 24px !important;
     position: sticky;
     top: 0;
@@ -16,4 +16,6 @@
     z-index: 9999;
     padding: 0 5px;
 }
+
+
 

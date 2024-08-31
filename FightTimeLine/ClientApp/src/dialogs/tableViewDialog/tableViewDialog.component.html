@@ -53,6 +53,8 @@
             *ngIf="column.icon"
             class="abilityIcon"
             style="margin-right: 2px; margin-top: -3px"
+            [style.width]="(column.iconSize || 24) + 'px'"
+            [style.height]="(column.iconSize || 24) + 'px'"
             [src]="column.icon"
           />
           <span *ngIf="!column.icon || (column.icon && showText)">{{

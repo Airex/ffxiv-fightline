@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     setTimeout(() => {
-      this.showWhatsNew().then(() => { });
+      this.showWhatsNew().then(() => { }).catch(() => { });
     });
   }
 
@@ -43,10 +43,12 @@ export class AppComponent implements OnInit {
       this.changeNotesService.load()
         .then(value => {
           this.dialogService.openWhatsNew(value)
+            .catch(() => {  })
             .finally(() => {
               resolve();
             });
         })
+        .catch(() => { })
         .finally(() => {
           resolve();
         });

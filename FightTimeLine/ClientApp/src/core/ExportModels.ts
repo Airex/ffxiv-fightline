@@ -90,6 +90,7 @@ export interface IExportColumn {
   type?: string;
   text: string;
   icon?: string;
+  iconSize?: number;
   align?: ColumnAlign;
   refId?: string;
   cursor?: string;
@@ -164,6 +165,7 @@ export type IExportItemBase = {
 export type IExportItemCheckbox = IExportItemBase & {
   type: "checkbox";
   checked: boolean;
+  id: string;
 };
 
 export type IExportItemCommon = IExportItemBase & {
