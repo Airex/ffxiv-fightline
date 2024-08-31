@@ -197,8 +197,10 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
               context.presenter,
               j.id,
               (ab) =>
-                ab.abilityType === AbilityType.PartyDefense ||
-                ab.abilityType === AbilityType.PartyShield
+                (ab.abilityType & AbilityType.PartyDefense) ===
+                  AbilityType.PartyDefense ||
+                (ab.abilityType & AbilityType.PartyShield) ===
+                  AbilityType.PartyShield
             )
         ),
     ].filter(Boolean);
