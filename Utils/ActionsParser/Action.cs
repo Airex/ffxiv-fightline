@@ -73,7 +73,7 @@ namespace ActionsParser;
         public object Omen { get; set; }
         public string OmenTarget { get; set; }
         public int OmenTargetID { get; set; }
-        public int Patch { get; set; }
+        public int? Patch { get; set; }
         public int PreservesCombo { get; set; }
         public int PrimaryCostType { get; set; }
         public int PrimaryCostValue { get; set; }
@@ -92,4 +92,3 @@ namespace ActionsParser;
         public int VFXTargetID { get; set; }
         public int XAxisModifier { get; set; }
     }
-

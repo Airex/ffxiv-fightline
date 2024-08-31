@@ -45,7 +45,7 @@ foreach (var cls in classes.Values)
       dict.Add("JOB", new
       {
          de = cls.Name_de,
-         jp = cls.Name_ja,
+         ja = cls.Name_ja,
          en = cls.Name_en,
          fr = cls.Name_fr
       });
@@ -53,7 +53,7 @@ foreach (var cls in classes.Values)
       dict.Add("JOB_AB", new
       {
          de = cls.Abbreviation_de,
-         jp = cls.Abbreviation_ja,
+         ja = cls.Abbreviation_ja,
          en = cls.Abbreviation_en,
          fr = cls.Abbreviation_fr
       });
@@ -72,7 +72,7 @@ foreach (var cls in classes.Values)
                dict.Add(act.Name, new
                {
                   de = act.Name_de,
-                  jp = act.Name_ja,
+                  ja = act.Name_ja,
                   en = act.Name_en,
                   fr = act.Name_fr
                });
