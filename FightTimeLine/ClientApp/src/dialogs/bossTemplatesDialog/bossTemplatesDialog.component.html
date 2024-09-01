@@ -41,9 +41,7 @@
               <li
                 nz-submenu
                 *ngFor="let zone of filteredZones"
-                [nzOpen]="
-                  !!searchString || zone.id === selectedZone
-                "
+                [nzOpen]="!!searchString || zone.id === selectedZone"
               >
                 <span title
                   ><img

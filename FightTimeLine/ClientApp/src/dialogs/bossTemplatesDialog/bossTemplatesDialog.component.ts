@@ -213,7 +213,7 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
     enc: Encounter,
     skipCheck?: boolean
   ) {
-    if (this.data.boss && this.data.boss.ref && !skipCheck) {
+    if (this.data?.boss?.ref && !skipCheck) {
       return;
     }
 
@@ -230,10 +230,10 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
   loadBosses(enc: Encounter, skipCheck?: boolean) {
     this.isListLoading = true;
     this.fightService
-      .getBosses(enc.id, (this.data.boss && this.data.boss.name) || "", false)
+      .getBosses(enc.id, (this.data?.boss?.name) || "", false)
       .subscribe({
         next: (data) => {
-          if (this.data.boss) {
+          if (this.data?.boss) {
             this.select(
               { id: this.data.boss.id, name: "", canRemove: false },
               skipCheck
@@ -273,7 +273,7 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
   }
 
   select(item: IBossSearchEntry, skipCheck?: boolean) {
-    if (this.data.boss && this.data.boss.ref && !skipCheck) {
+    if (this.data?.boss?.ref && !skipCheck) {
       return;
     }
     if (!item || !item.id) { return; }
