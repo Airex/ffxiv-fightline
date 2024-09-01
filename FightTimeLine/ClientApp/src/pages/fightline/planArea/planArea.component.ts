@@ -273,7 +273,7 @@ export class PlanAreaComponent
     snap: (date: Date) => date,
   };
 
-  selectBossAttaks(value: any[]) {
+  selectBossAttacks(value: any[]) {
     this.visTimelineService.setSelectionToIds(this.visTimelineBoss, value);
     this.setSelectionOfBossAttacks(value);
 

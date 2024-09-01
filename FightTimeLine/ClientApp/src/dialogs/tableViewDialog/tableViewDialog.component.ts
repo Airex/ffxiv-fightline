@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate";
 import { TableViewTemplate } from "../../core/BaseExportTemplate";
 import { NzModalRef } from "ng-zorro-antd/modal";
@@ -11,7 +11,7 @@ import { gameServiceToken } from "src/services/game.service-provider";
 import { IGameService } from "src/services/game.service-interface";
 import { MitigationsTemplate } from "src/core/ExportTemplates/MitigationsTemplate";
 import { VisStorageService } from "src/services/VisStorageService";
-import * as _ from "lodash";
+import _ from "lodash";
 import { BossAttackAndMitigationAbilities } from "src/core/ExportTemplates/BossAttackAndMitigationAbilities";
 
 
@@ -50,7 +50,6 @@ export class TableViewDialogComponent {
 
 
   pagesize = Number.MAX_VALUE;
-
   selectedValue = null;
 
   set: IExportResultSet = {

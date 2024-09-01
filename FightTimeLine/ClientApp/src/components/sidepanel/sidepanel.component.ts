@@ -1,8 +1,5 @@
 import {
   Component,
-  OnInit,
-  OnDestroy,
-  AfterViewInit,
   Input,
   Injector,
   NgZone,
@@ -13,8 +10,8 @@ import { SingleAttackComponent } from "../../components/singleAttack/singleAttac
 import { MultipleAbilityComponent } from "../../components/multipleAbility/multipleAbility.component";
 import { MultipleAttackComponent } from "../../components/multipleAttack/multipleAttack.component";
 import { MultipleDownTimeComponent } from "../../components/multipleDowntime/multipleDowntime.component";
-import * as Jobcomponent from "../../components/job/job.component";
-import * as JobAbilitycomponent from "../../components/jobAbility/jobAbility.component";
+import * as JobComponent from "../../components/job/job.component";
+import * as JobAbilityComponent from "../../components/jobAbility/jobAbility.component";
 import { DownTimeComponent } from "../../components/downtime/downtime.component";
 import * as BaseHolder from "../../core/Holders/BaseHolder";
 import { Holders } from "../../core/Holders";
@@ -50,8 +47,8 @@ export class SidepanelComponent {
   componentMap = {
     ability: [SingleAbilityComponent, MultipleAbilityComponent],
     bossAbility: [SingleAttackComponent, MultipleAttackComponent],
-    job: [Jobcomponent.JobComponent],
-    jobAbility: [JobAbilitycomponent.JobAbilityComponent],
+    job: [JobComponent.JobComponent],
+    jobAbility: [JobAbilityComponent.JobAbilityComponent],
     downtime: [DownTimeComponent, MultipleDownTimeComponent],
     warnings: [WarningsComponent],
   };

@@ -13,12 +13,15 @@ import {
   abilityLevelValid,
   getAvailabilitiesForAbility,
 } from "src/core/Defensives/functions";
+import { Subject } from "rxjs";
+import { Command } from "src/core/UndoRedo";
 
 export class JobWithActionsColumn
   extends BaseColumnTemplate
   implements IColumnTemplate<BossAttackMap>
 {
   constructor(
+    private onExecuted: Subject<Command>,
     private presenter: PresenterManager,
     private jobId: string,
     private level: number | undefined,
@@ -74,7 +77,7 @@ export class JobWithActionsColumn
         );
         const avails = getAvailabilitiesForAbility(data)(ab);
 
-        return new CheckBoxColumn(jobMap, ability, avails);
+        return new CheckBoxColumn(this.onExecuted, jobMap, ability, avails);
       });
   }
 

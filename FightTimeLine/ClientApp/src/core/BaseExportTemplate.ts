@@ -10,8 +10,9 @@ import { PresenterManager } from "./PresentationManager";
 import { Holders } from "./Holders";
 import { IJobRegistryService } from "src/services/jobregistry.service-interface";
 import { IColumnTemplate } from "./TableModels";
-import { BossAttackMap, BossTargetMap } from "./Maps";
-import { generate } from "ng-zorro-antd/core/color";
+import { BossAttackMap } from "./Maps";
+import { Subject } from "rxjs";
+import { Command } from "./UndoRedo";
 
 export type ExportTemplateContext = {
   presenter: PresenterManager;
@@ -23,6 +24,8 @@ export type ExportTemplateContext = {
 export abstract class TableViewTemplate<RowType = any> {
   public abstract get name(): string;
 
+  public onExecuted = new Subject<Command>;
+
   abstract getColumns(
     context: ExportTemplateContext
   ): IColumnTemplate<RowType>[];
@@ -30,6 +33,8 @@ export abstract class TableViewTemplate<RowType = any> {
   abstract buildTable(context: ExportTemplateContext): IExportResultSet;
 
   public abstract loadOptions(holders?: Holders): ITableOptionSettings | null;
+
+
 
   offsetCompareFn(a: string, b: string): number {
     const d = new Date();
@@ -150,8 +155,8 @@ function generateTableHeaders(
 
   function fillRows(column: IColumnTemplate<BossAttackMap>, depth: number) {
     const childColumns = column.getColumns(holders, options);
-    const rowspan = maxDepth - depth;
-    const colspan =
+    const rowSpan = maxDepth - depth;
+    const colSpan =
       !childColumns?.length
         ? 1
         : childColumns
@@ -159,8 +164,8 @@ function generateTableHeaders(
             .reduce((a, b) => a + b, 0);
 
     const header = column.buildHeader(holders);
-    header.rowSpan = !childColumns?.length ? rowspan : 1;
-    header.colSpan = !!childColumns?.length ? colspan : 1;
+    header.rowSpan = !childColumns?.length ? rowSpan : 1;
+    header.colSpan = !!childColumns?.length ? colSpan : 1;
     rows[depth].push(header);
 
     childColumns?.forEach((child) => fillRows(child, depth + 1));

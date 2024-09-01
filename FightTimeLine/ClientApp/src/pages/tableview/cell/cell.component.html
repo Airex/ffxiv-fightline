@@ -4,7 +4,8 @@
     nz-checkbox
     [nzId]="d.id"
     [ngModel]="d.checked"
-    [nzDisabled]="true"
+    [nzDisabled]="d.disabled"
+    (nzCheckedChange)="d.onChanged(d.id, $event)"
   >
   </label>
   <nz-tag

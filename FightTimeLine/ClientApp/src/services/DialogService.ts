@@ -7,17 +7,18 @@ import { IBoss, IBossAbility, IFight, IJobStats } from "../core/Models";
 import { PresenterManager } from "../core/PresentationManager";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class DialogService {
   constructor(
     private dialogs: NzModalService,
-    private storage: LocalStorageService) {
-
-  }
+    private storage: LocalStorageService
+  ) {}
 
   public get isAnyDialogOpened(): boolean {
-    return this.dialogs.openModals.some(m => m.getState() === NzModalState.OPEN);
+    return this.dialogs.openModals.some(
+      (m) => m.getState() === NzModalState.OPEN
+    );
   }
 
   dialog: any;
@@ -33,9 +34,9 @@ export class DialogService {
       nzOkDisabled: true,
       nzCancelDisabled: true,
       nzFooter: null,
-      nzMaskClosable: false
+      nzMaskClosable: false,
     });
-    dialogRef.afterClose.subscribe(result => {
+    dialogRef.afterClose.subscribe((result) => {
       if (result && result.signup) {
         setTimeout(() => {
           this.openRegister();
@@ -46,7 +47,6 @@ export class DialogService {
   }
 
   openRegister(): Promise<any> {
-
     const dialogRef = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzTitle: "Register",
@@ -56,12 +56,16 @@ export class DialogService {
       nzKeyboard: false,
       nzOkDisabled: true,
       nzCancelDisabled: true,
-      nzMaskClosable: false
+      nzMaskClosable: false,
     });
     return this.toPromise(dialogRef.afterClose);
   }
 
-  openBossAttackAddDialog(bossAbility: IBossAbility, presenter: PresenterManager, callBack: (b: any) => void): void {
+  openBossAttackAddDialog(
+    bossAbility: IBossAbility,
+    presenter: PresenterManager,
+    callBack: (b: any) => void
+  ): void {
     const dialogRef = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzTitle: null,
@@ -69,17 +73,18 @@ export class DialogService {
       nzClosable: false,
       nzMaskClosable: false,
       nzContent: D.BossAttackDialog,
-      nzComponentParams: {
-        data: bossAbility
-      }
+      nzData: bossAbility
     });
 
-    dialogRef.afterClose.subscribe(result => {
+    dialogRef.afterClose.subscribe((result) => {
       callBack(result);
     });
   }
 
-  openCharacterDialog(jobStats: IJobStats, callBack: (b: {data: IJobStats}) => void): void {
+  openCharacterDialog(
+    jobStats: IJobStats,
+    callBack: (b: { data: IJobStats }) => void
+  ): void {
     const dialogRef = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzTitle: null,
@@ -87,38 +92,13 @@ export class DialogService {
       nzClosable: false,
       nzMaskClosable: false,
       nzContent: D.CharacterDialogComponent,
-      nzComponentParams: {
-        data: jobStats
-      }
+      nzData: jobStats,
     });
 
-    dialogRef.afterClose.subscribe(result => {
+    dialogRef.afterClose.subscribe((result) => {
       callBack(result);
     });
   }
-
-  // openAbilityEditDialog(data: { ability: IAbility, settings: IAbilitySetting[], values: IAbilitySettingData[] },
-  //   callBack: (b: any) => void): void {
-  //   const dialogRef = this.dialogs.create({
-  //     nzWrapClassName: "vertical-center-modal",
-  //     nzTitle: "Properties",
-  //     nzContent: D.AbilityEditDialog,
-  //     nzWidth: 700,
-  //     nzClosable: false,
-  //     nzKeyboard: false,
-  //     nzOkDisabled: true,
-  //     nzCancelDisabled: true,
-  //     nzFooter: null,
-  //     nzMaskClosable: false,
-  //     nzComponentParams: {
-  //       data: data
-  //     }
-  //   });
-
-  //   dialogRef.afterClose.subscribe(result => {
-  //     callBack(result);
-  //   });
-  // }
 
   openLoad(): void {
     this.dialogs.create({
@@ -131,29 +111,31 @@ export class DialogService {
       nzOkDisabled: true,
       nzCancelDisabled: true,
       nzFooter: null,
-      nzMaskClosable: false
+      nzMaskClosable: false,
     });
   }
 
-  openImportFromFFLogs(code: string = null, noRedirect?: boolean): Promise<any> {
-
+  openImportFromFFLogs(
+    code: string = null,
+    noRedirect?: boolean
+  ): Promise<any> {
     const dialogRef = this.dialogs.create({
       nzWrapClassName: "vertical-center-modal",
       nzTitle: "Import from FFLogs",
       nzWidth: 700,
       nzClosable: false,
       nzContent: D.FFLogsImportDialog,
-      nzComponentParams: {
+      nzData: {
         code,
-        noRedirect
-      }
+        noRedirect,
+      },
     });
 
     return this.toPromise(dialogRef.afterClose);
   }
 
   openSaveBoss(name: string): Promise<any> {
-    const dialogref = this.dialogs.create({
+    const dialogRef = this.dialogs.create({
       nzTitle: "Save",
       nzContent: D.BossSaveDialog,
       nzWidth: 700,
@@ -163,11 +145,9 @@ export class DialogService {
       nzCancelDisabled: true,
       nzFooter: null,
       nzMaskClosable: false,
-      nzComponentParams: {
-        data: name
-      }
+      nzData: name,
     });
-    return this.toPromise(dialogref.afterClose);
+    return this.toPromise(dialogRef.afterClose);
   }
 
   openSaveFight(dataFn: () => any): Promise<IFight> {
@@ -182,20 +162,21 @@ export class DialogService {
       nzCancelDisabled: true,
       nzFooter: null,
       nzMaskClosable: false,
-      nzComponentParams: {
-        data: dataFn()
-      }
+      nzData: dataFn(),
     });
     return this.toPromise(dialogref.afterClose);
   }
 
   private toPromise<T>(obs: Observable<T>): Promise<T> {
     return new Promise((resolve, reject) => {
-      obs.subscribe((data) => {
-        resolve(data);
-      }, (error) => {
-        reject(error);
-      });
+      obs.subscribe(
+        (data) => {
+          resolve(data);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
     });
   }
 
@@ -226,7 +207,7 @@ export class DialogService {
       nzClassName: "settingsWindow",
       nzContent: D.SettingsDialog,
       nzWidth: "900px",
-      nzClosable: false
+      nzClosable: false,
     });
   }
 
@@ -244,9 +225,7 @@ export class DialogService {
         nzCancelDisabled: true,
         nzFooter: null,
         nzMaskClosable: false,
-        nzComponentParams: {
-          text
-        }
+        nzData: text,
       });
 
       loadingDialogRef.afterOpen.subscribe(() => {
@@ -265,8 +244,7 @@ export class DialogService {
       nzKeyboard: false,
       nzOkDisabled: true,
       nzMaskClosable: false,
-      nzComponentParams: {
-      }
+      nzData: {},
     });
   }
 
@@ -280,12 +258,10 @@ export class DialogService {
       nzKeyboard: false,
       nzOkDisabled: true,
       nzMaskClosable: false,
-      nzComponentParams: {
-        data: {
-          needSave,
-          boss
-        }
-      }
+      nzData: {
+        needSave,
+        boss,
+      },
     });
   }
 
@@ -300,9 +276,7 @@ export class DialogService {
       nzKeyboard: false,
       nzOkDisabled: true,
       nzMaskClosable: false,
-      nzComponentParams: {
-        data: changes
-      }
+      nzData: changes,
     });
     return this.toPromise(ref.afterClose);
   }

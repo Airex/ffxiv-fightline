@@ -69,4 +69,10 @@ export class AbilityUsageHolder extends BaseHolder.BaseHolder<
       return acc;
     }, [] as IStatusSnapshot[]);
   }
+
+  getUsageThatCoversAttack(date: Date, abilityId: string): AbilityUsageMap {
+    return this.getByAbility(abilityId).find((usage) => {
+      return usage.checkCoversDate(date);
+    });
+  }
 }

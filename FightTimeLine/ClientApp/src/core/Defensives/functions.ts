@@ -1,5 +1,5 @@
 import { Holders } from "../Holders";
-import * as _ from "lodash";
+import _ from "lodash";
 import {
   AbilityMap,
   AbilityUsageMap,
@@ -320,7 +320,6 @@ export function getTimeGoodAbilityToUse(
   // return at;
 }
 
-// create function of delegate below
 const getIsTargetAffected = (holders, attack) => (m: MitigationForAttack) => {
   const tankTarget = holders.bossTargets.getTargetAt(attack.start);
   const isTankBuster = attack.isTankBuster;
@@ -338,9 +337,6 @@ const getIsTargetAffected = (holders, attack) => (m: MitigationForAttack) => {
   }
   return true;
 };
-
-const statusVisitor =
-  (holders: Holders) => (context: MitigationCalculateContext) => (status) => {};
 
 export function calculateMitigationForAttack(
   holders: Holders,

@@ -8,7 +8,7 @@ import { Component, Input, TemplateRef } from "@angular/core";
 export class AreaComponent {
 
   @Input() header: string;
-  @Input() maxHeigth: string;
+  @Input() maxHeight: string;
   @Input() extra: string | TemplateRef<void>;
 
   get opened() {

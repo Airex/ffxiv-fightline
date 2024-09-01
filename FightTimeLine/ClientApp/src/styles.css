@@ -1,5 +1,5 @@
 /* @import 'vis/dist/vis.css'; */
-@import "~vis-timeline/dist/vis-timeline-graph2d.min.css";
+@import "vis-timeline/dist/vis-timeline-graph2d.min.css";
 
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
@@ -20,10 +20,10 @@
   padding: 2px !important;
 }
 
-.ant-drawer-left.ant-drawer-open,
+/* .ant-drawer-left.ant-drawer-open,
 .ant-drawer-right.ant-drawer-open {
   width: 0px !important;
-}
+} */
 
 /* fix columns un-sync */
 .ant-table-header.nz-table-hide-scrollbar {

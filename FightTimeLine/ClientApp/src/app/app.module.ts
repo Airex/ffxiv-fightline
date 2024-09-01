@@ -1,9 +1,10 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule, ErrorHandler, Injectable, LOCALE_ID } from "@angular/core";
 import {
-  HttpClientModule,
   HTTP_INTERCEPTORS,
   HttpClient,
+  provideHttpClient,
+  withInterceptorsFromDi,
 } from "@angular/common/http";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -28,7 +29,7 @@ import { SyncDowntimeComponent } from "../dialogs/bossAttackDialog/syncDowntime/
 import * as Services from "../services/index";
 import { JwtInterceptor } from "../interceptors/jwtInterceptor";
 import { ClipboardModule } from "ngx-clipboard";
-import { NgProgressModule } from "ngx-progressbar";
+import { NgProgressbar } from "ngx-progressbar";
 import { NgxCaptchaModule } from "ngx-captcha";
 import { DialogsModuleComponents } from "../dialogs/index";
 import { SingleAbilityComponent } from "../components/singleAbility/singleAbility.component";
@@ -132,7 +133,7 @@ import { RecentListComponent } from "../components/recent-list/recent-list.compo
 
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { MarkdownModule } from "ngx-markdown";
+import { MarkdownModule, MARKED_OPTIONS, provideMarkdown } from "ngx-markdown";
 
 const zorroModules = [
   NzAlertModule,
@@ -259,6 +260,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     ViewComponent,
     ...DialogsModuleComponents,
   ],
+  bootstrap: [AppComponent],
   imports: [
     MarkdownModule.forRoot(),
     AngularSplitModule,
@@ -270,8 +272,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     CommonModule,
     DragDropModule,
     FormsModule,
-    HttpClientModule,
-    NgProgressModule,
+    NgProgressbar,
     NgxCaptchaModule,
     PortalModule,
     ReactiveFormsModule,
@@ -313,7 +314,16 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     },
     ...Services.ServicesModuleComponents,
     VisStorageService,
+    provideHttpClient(withInterceptorsFromDi()),
+    provideMarkdown({
+      loader: HttpClient,
+      markedOptions: {
+        provide: MARKED_OPTIONS,
+        useValue: {
+          baseUrl: "/assets/images/changelog/",
+        },
+      },
+    }),
   ],
-  bootstrap: [AppComponent],
 })
 export class AppModule {}
