@@ -1,5 +1,5 @@
 /* @import 'vis/dist/vis.css'; */
-@import "~vis-timeline/dist/vis-timeline-graph2d.min.css";
+@import "vis-timeline/dist/vis-timeline-graph2d.min.css";
 
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
