@@ -17,6 +17,7 @@
     "fflogsitem",
     "FFXIV",
     "fightline",
+    "fullwidth",
     "Gameserviceprovider",
     "idgen",
     "itemover",
@@ -26,6 +27,7 @@
     "killsonly",
     "Mitigations",
     "mitwithabilities",
+    "noselect",
     "ogcd",
     "packagr",
     "petguids",
@@ -41,7 +43,9 @@
     "timechange",
     "timechanged",
     "timsort",
+    "twotone",
     "Unaspected",
+    "undoredo",
     "xivapi",
     "zoomable"
   ]

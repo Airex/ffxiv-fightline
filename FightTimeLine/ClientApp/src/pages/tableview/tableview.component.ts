@@ -43,6 +43,7 @@ import {
 import { CdkDrag, CdkDropList } from "@angular/cdk/drag-drop";
 import { MoveCommand } from "../../core/commands/MoveCommand";
 import { BossAttackAndMitigationAbilities } from "src/core/ExportTemplates/BossAttackAndMitigationAbilities";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "tableview",
@@ -248,6 +249,8 @@ export class TableViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  private tplExecutedSub: Subscription;
+
   load(id: string) {
     this.dialogService.executeWithLoading("Loading...", (ref) => {
       this.fightService.getFight(id).subscribe(
@@ -270,6 +273,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
                     this.tpl = new this.templates[
                       this.template.toLowerCase()
                     ]();
+                    this.tplExecutedSub = this.tpl.onExecuted.subscribe((data) => {
+                      this.fightLineController.combineAndExecute([data]);
+                    });
                     this.loadTable();
                     ref.close();
                   });
@@ -424,6 +430,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     }
 
     const u = this.visStorage.holders.itemUsages.get(id);
+    if (!u) return;
     const p = getAvailabilitiesForAbility(
       this.visStorage.holders,
       id
@@ -591,6 +598,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if (this.tplExecutedSub) {
+      this.tplExecutedSub.unsubscribe();
+    }
     this.dispatcher.destroy();
   }
 

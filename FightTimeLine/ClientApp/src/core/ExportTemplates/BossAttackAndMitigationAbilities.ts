@@ -138,6 +138,7 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
         .map(
           (j) =>
             new JobWithActionsColumn(
+              this.onExecuted,
               context.presenter,
               j.id,
               level,

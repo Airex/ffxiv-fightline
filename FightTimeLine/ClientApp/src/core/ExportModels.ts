@@ -166,6 +166,8 @@ export type IExportItemBase = {
 export type IExportItemCheckbox = IExportItemBase & {
   type: "checkbox";
   checked: boolean;
+  disabled?: boolean;
+  onChanged: (id: string, checked: boolean) => void;
   id: string;
 };
 
