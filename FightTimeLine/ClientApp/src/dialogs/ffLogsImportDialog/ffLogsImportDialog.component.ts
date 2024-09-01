@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from "@angular/core";
+import { Component, inject, Inject, Input, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { RecentActivityService } from "../../services/RecentActivitiesService";
 import { SettingsService } from "../../services/SettingsService";
@@ -6,7 +6,7 @@ import { Utils } from "../../core/Utils";
 import { Fight, Parse, ReportFightsResponse, Zone } from "../../core/FFLogs";
 import { gameServiceToken } from "../../services/game.service-provider";
 import { IGameService } from "../../services/game.service-interface";
-import { NzModalRef } from "ng-zorro-antd/modal";
+import { NZ_MODAL_DATA, NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
   selector: "ffLogsImportDialog",
@@ -27,8 +27,9 @@ export class FFLogsImportDialogComponent implements OnInit {
   haveFFlogsChar: boolean;
   zones: { key: string; value: Fight[] }[] = [];
   parsesList: Parse[] = [];
-  @Input() code: string;
-  @Input() noRedirect?: boolean;
+  data  = inject(NZ_MODAL_DATA);
+  code: string = this.data?.code;
+  noRedirect?: boolean = this.data?.noRedirect;
   searchAreaDisplay = "none";
   listAreaDisplay = "none";
   dialogContentHeight = "60px";

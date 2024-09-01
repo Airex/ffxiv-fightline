@@ -18,7 +18,7 @@
       nz-button
       nzType="link"
       (click)="more()"
-      *ngIf="this.take < this.data.length"
+      *ngIf="this.take < this.data?.length"
     >
       {{ "dialog.showMore" | translate }}
     </button>

@@ -6,6 +6,7 @@ import {
   ElementRef,
   OnDestroy,
   Input,
+  inject,
 } from "@angular/core";
 import { map, first } from "rxjs/operators";
 import { Zone, Encounter } from "../../core/FFLogs";
@@ -27,7 +28,7 @@ import { IAuthenticationService } from "../../services/authentication/authentica
 import { authenticationServiceToken } from "../../services/authentication/authentication.service-provider";
 import { gameServiceToken } from "../../services/game.service-provider";
 import { IGameService } from "../../services/game.service-interface";
-import { NzModalRef } from "ng-zorro-antd/modal";
+import { NZ_MODAL_DATA, NzModalRef } from "ng-zorro-antd/modal";
 import { DataSetDataGroup, DataSetDataItem } from "vis-timeline";
 import { DataSet } from "vis-data";
 import {
@@ -48,10 +49,10 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
   visItems: DataSetDataItem = new DataSet<DataItem>([], {});
   visGroups: DataSetDataGroup = new DataSet<DataGroup>([], {});
   visTimelineBoss = "visTimelinebooooosss";
-  startDate = new Date(new Date(2000,1,1,0,0,0).valueOf() as number);
+  startDate = new Date(new Date(2000, 1, 1, 0, 0, 0).valueOf() as number);
   @ViewChild("timeline", { static: true }) timeline: ElementRef;
   @ViewChild("listContainer", { static: true }) listContainer: ElementRef;
-  @Input() data: { needSave: boolean; boss?: IBoss };
+  data: { needSave: boolean; boss?: IBoss } = inject(NZ_MODAL_DATA);
 
   optionsBoss = {
     width: "100%",
@@ -230,7 +231,7 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
   loadBosses(enc: Encounter, skipCheck?: boolean) {
     this.isListLoading = true;
     this.fightService
-      .getBosses(enc.id, (this.data?.boss?.name) || "", false)
+      .getBosses(enc.id, this.data?.boss?.name || "", false)
       .subscribe({
         next: (data) => {
           if (this.data?.boss) {
@@ -276,7 +277,9 @@ export class BossTemplatesDialogComponent implements OnInit, OnDestroy {
     if (this.data?.boss?.ref && !skipCheck) {
       return;
     }
-    if (!item || !item.id) { return; }
+    if (!item || !item.id) {
+      return;
+    }
 
     this.isTimelineLoading = true;
     this.selectedTemplate = item;

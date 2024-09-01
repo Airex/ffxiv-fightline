@@ -1,10 +1,10 @@
-import { Component, Inject, Input, OnInit } from "@angular/core";
+import { Component, inject, Inject, Input, OnInit } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormControl } from "@angular/forms";
 import { IFight } from "../../core/Models";
 import { IFightService } from "../../services/fight/fight.service-interface";
 import { ScreenNotificationsService } from "../../services/ScreenNotificationsService";
 import { fightServiceToken } from "../../services/fight/fight.service-provider";
-import { NzModalRef } from "ng-zorro-antd/modal";
+import { NZ_MODAL_DATA, NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
   selector: "fightSaveDialog",
@@ -24,7 +24,7 @@ export class FightSaveDialogComponent {
   }
 
   fightNameControl = new UntypedFormControl();
-  @Input() data: IFight;
+  data: IFight = inject(NZ_MODAL_DATA);
   submitted = false;
 
   onSaveClick(): void {

@@ -1,5 +1,5 @@
-import { Component, ViewChild, ElementRef, Input, OnInit } from "@angular/core";
-import { NzModalRef } from "ng-zorro-antd/modal";
+import { Component, ViewChild, ElementRef, Input, OnInit, inject } from "@angular/core";
+import { NZ_MODAL_DATA, NzModalRef } from "ng-zorro-antd/modal";
 import { MarkdownService } from "ngx-markdown";
 import { IChangeNote } from "src/services";
 
@@ -13,7 +13,7 @@ import { IChangeNote } from "src/services";
 export class WhatsNewDialogComponent implements OnInit {
 
   take = 1;
-  @Input() data: IChangeNote[];
+  @Input() data: IChangeNote[]  = inject(NZ_MODAL_DATA);;
   @ViewChild("timeline", { static: false }) timeline: ElementRef;
   constructor(
     public dialogRef: NzModalRef,
@@ -26,7 +26,7 @@ export class WhatsNewDialogComponent implements OnInit {
     });
   }
   ngOnInit(): void {
-    this.markdownService.options.baseUrl = "/assets/images/changelog/";
+    //  this.markdownService.options. = "/assets/images/changelog/";
     // this.markdownService.renderer.image = (href: string | null, title: string | null, text: string) => {
     //   console.log(href, title, text);
 

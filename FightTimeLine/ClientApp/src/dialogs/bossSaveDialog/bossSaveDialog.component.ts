@@ -1,6 +1,6 @@
-import { Component, Input } from "@angular/core";
+import { Component, inject, Input } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
-import { NzModalRef } from "ng-zorro-antd/modal";
+import { NZ_MODAL_DATA, NzModalRef } from "ng-zorro-antd/modal";
 
 @Component({
   selector: "bossSaveDialog",
@@ -10,7 +10,7 @@ import { NzModalRef } from "ng-zorro-antd/modal";
 
 export class BossSaveDialogComponent {
   fightNameControl = new UntypedFormControl();
-  @Input() data: string;
+  @Input() data: string  = inject(NZ_MODAL_DATA);;
   submitted = false;
 
   constructor(

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, Inject } from "@angular/core";
+import { Component, Input, OnInit, ViewChild, Inject, inject } from "@angular/core";
 import { SyncSettingsComponent } from "./syncSettings/syncSettings.component";
 import { SyncDowntimeComponent } from "./syncDowntime/syncDowntime.component";
 import { UntypedFormBuilder, UntypedFormGroup, Validators, UntypedFormControl } from "@angular/forms";
@@ -6,7 +6,7 @@ import { IBossAbility } from "../../core/Models";
 import { time } from "../../helpers/TimeValidator";
 import { gameServiceToken } from "../../services/game.service-provider";
 import { IGameService } from "../../services/game.service-interface";
-import { NzModalRef } from "ng-zorro-antd/modal";
+import { NZ_MODAL_DATA, NzModalRef } from "ng-zorro-antd/modal";
 import { VisStorageService } from "src/services/VisStorageService";
 
 @Component({
@@ -16,7 +16,7 @@ import { VisStorageService } from "src/services/VisStorageService";
 })
 export class BossAttackDialogComponent implements OnInit {
 
-  @Input() data: IBossAbility;
+  data: IBossAbility = inject(NZ_MODAL_DATA);
   @ViewChild("syncSettings") syncSettings: SyncSettingsComponent;
   @ViewChild("syncDowntime") syncDowntime: SyncDowntimeComponent;
   editForm: UntypedFormGroup;

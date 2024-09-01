@@ -1,18 +1,21 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { IJobStats } from 'src/core/Models';
-import { IGameService } from 'src/services/game.service-interface';
-import { gameServiceToken } from 'src/services/game.service-provider';
+import { Component, inject, Inject, Input, OnInit } from "@angular/core";
+import {
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
+} from "@angular/forms";
+import { NZ_MODAL_DATA, NzModalRef } from "ng-zorro-antd/modal";
+import { IJobStats } from "src/core/Models";
+import { IGameService } from "src/services/game.service-interface";
+import { gameServiceToken } from "src/services/game.service-provider";
 
 @Component({
-  selector: 'app-character-dialog',
-  templateUrl: './character-dialog.component.html',
-  styleUrls: ['./character-dialog.component.css']
+  selector: "app-character-dialog",
+  templateUrl: "./character-dialog.component.html",
+  styleUrls: ["./character-dialog.component.css"],
 })
 export class CharacterDialogComponent implements OnInit {
-
-  @Input() data: IJobStats;
+  data: IJobStats = inject(NZ_MODAL_DATA);
   editForm: UntypedFormGroup;
   submitted = false;
 
@@ -21,9 +24,11 @@ export class CharacterDialogComponent implements OnInit {
     @Inject(gameServiceToken)
     public gameService: IGameService,
     public dialogRef: NzModalRef
-  ) { }
+  ) {}
 
-  get f() { return this.editForm.controls; }
+  get f() {
+    return this.editForm.controls;
+  }
 
   ngOnInit(): void {
     this.editForm = this.formBuilder.group({
@@ -33,7 +38,7 @@ export class CharacterDialogComponent implements OnInit {
       criticalHit: new UntypedFormControl(this.data.criticalHit),
       determination: new UntypedFormControl(this.data.determination),
       directHit: new UntypedFormControl(this.data.directHit),
-      hp: new UntypedFormControl(this.data.hp)
+      hp: new UntypedFormControl(this.data.hp),
     });
   }
 
@@ -46,12 +51,11 @@ export class CharacterDialogComponent implements OnInit {
     }
   }
 
-
   onSaveClick(): void {
     this.submitted = true;
 
     if (this.editForm.invalid) {
-      Object.values(this.editForm.controls).forEach(it => {
+      Object.values(this.editForm.controls).forEach((it) => {
         it.markAsTouched({ onlySelf: true });
       });
       return;
@@ -70,5 +74,4 @@ export class CharacterDialogComponent implements OnInit {
     this.data.tenacity = this.f.tenacity.value;
     this.data.hp = this.f.hp.value;
   }
-
 }

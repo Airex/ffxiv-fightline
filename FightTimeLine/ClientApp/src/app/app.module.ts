@@ -1,6 +1,11 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule, ErrorHandler, Injectable, LOCALE_ID } from "@angular/core";
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from "@angular/common/http";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { DragDropModule } from "@angular/cdk/drag-drop";
@@ -128,7 +133,7 @@ import { RecentListComponent } from "../components/recent-list/recent-list.compo
 
 import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
-import { MarkdownModule } from "ngx-markdown";
+import { MarkdownModule, MARKED_OPTIONS, provideMarkdown } from "ngx-markdown";
 
 const zorroModules = [
   NzAlertModule,
@@ -206,104 +211,119 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, "assets/i18n/lang_");
 }
 
-@NgModule({ declarations: [
-        //    BossTemplateComponent,
-        AddJobComponent,
-        AppComponent,
-        AreaComponent,
-        CellComponent,
-        CustomScrollDirective,
-        DownTimeComponent,
-        FFLogsMatcherDirective,
-        FightLineComponent,
-        FilterComponent,
-        FilterComponent,
-        HomeComponent,
-        JobAbilityComponent,
-        JobComponent,
-        JobRolePipe,
-        KeyHandlerDirective,
-        KillsOnlyPipe,
-        MultipleAbilityComponent,
-        MultipleAttackComponent,
-        MultipleDownTimeComponent,
-        WarningsComponent,
-        NoDraftsPipe,
-        OffsetWheelDirective,
-        PingComponent,
-        PlanAreaComponent,
-        SettingsDialogColorTabComponent,
-        SettingsDialogFflogsTabComponent,
-        SettingsDialogMainTabComponent,
-        SettingsDialogPresetsTabComponent,
-        SettingsDialogTableviewTabComponent,
-        SettingsDialogTeamworkTabComponent,
-        SettingsFilterComponent,
-        SettingsViewComponent,
-        SidepanelComponent,
-        SingleAbilityComponent,
-        SingleAttackComponent,
-        RecentListComponent,
-        SoloPartyPipe,
-        SyncDowntimeComponent,
-        SyncSettingsComponent,
-        TableViewComponent,
-        TableViewOptionsComponent,
-        ToolbarComponent,
-        ViewComponent,
-        ViewComponent,
-        ...DialogsModuleComponents,
-    ],
-    bootstrap: [AppComponent], imports: [MarkdownModule.forRoot(),
-        AngularSplitModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        BrowserModule,
-        ClipboardModule,
-        ColorPickerModule,
-        CommonModule,
-        DragDropModule,
-        FormsModule,
-        NgProgressModule,
-        NgxCaptchaModule,
-        PortalModule,
-        ReactiveFormsModule,
-        VisModule,
-        XivapiClientModule.forRoot(),
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient],
-            },
-        }),
-        ...zorroModules], providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: "BASE_URL", useFactory: getBaseUrl },
-        { provide: "FFLogs_URL", useValue: "https://www.fflogs.com:443/" },
-        { provide: "FFLogs_API_KEY", useValue: "66bfc666827c9b668f4daa87d019e714" },
-        { provide: ErrorHandler, useClass: SentryErrorHandler },
-        {
-            provide: NZ_I18N,
-            useFactory: () => {
-                switch (localStorage.getItem("lang")) {
-                    case "fr":
-                        return fr_FR;
-                    case "de":
-                        return de_DE;
-                    case "jp":
-                    case "ja":
-                        return ja_JP;
-                    case "zh":
-                    case "cn":
-                        return zh_CN;
-                    default:
-                        return en_US;
-                }
-            },
+@NgModule({
+  declarations: [
+    //    BossTemplateComponent,
+    AddJobComponent,
+    AppComponent,
+    AreaComponent,
+    CellComponent,
+    CustomScrollDirective,
+    DownTimeComponent,
+    FFLogsMatcherDirective,
+    FightLineComponent,
+    FilterComponent,
+    FilterComponent,
+    HomeComponent,
+    JobAbilityComponent,
+    JobComponent,
+    JobRolePipe,
+    KeyHandlerDirective,
+    KillsOnlyPipe,
+    MultipleAbilityComponent,
+    MultipleAttackComponent,
+    MultipleDownTimeComponent,
+    WarningsComponent,
+    NoDraftsPipe,
+    OffsetWheelDirective,
+    PingComponent,
+    PlanAreaComponent,
+    SettingsDialogColorTabComponent,
+    SettingsDialogFflogsTabComponent,
+    SettingsDialogMainTabComponent,
+    SettingsDialogPresetsTabComponent,
+    SettingsDialogTableviewTabComponent,
+    SettingsDialogTeamworkTabComponent,
+    SettingsFilterComponent,
+    SettingsViewComponent,
+    SidepanelComponent,
+    SingleAbilityComponent,
+    SingleAttackComponent,
+    RecentListComponent,
+    SoloPartyPipe,
+    SyncDowntimeComponent,
+    SyncSettingsComponent,
+    TableViewComponent,
+    TableViewOptionsComponent,
+    ToolbarComponent,
+    ViewComponent,
+    ViewComponent,
+    ...DialogsModuleComponents,
+  ],
+  bootstrap: [AppComponent],
+  imports: [
+    MarkdownModule.forRoot(),
+    AngularSplitModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    BrowserModule,
+    ClipboardModule,
+    ColorPickerModule,
+    CommonModule,
+    DragDropModule,
+    FormsModule,
+    NgProgressModule,
+    NgxCaptchaModule,
+    PortalModule,
+    ReactiveFormsModule,
+    VisModule,
+    XivapiClientModule.forRoot(),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+    }),
+    ...zorroModules,
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: "BASE_URL", useFactory: getBaseUrl },
+    { provide: "FFLogs_URL", useValue: "https://www.fflogs.com:443/" },
+    { provide: "FFLogs_API_KEY", useValue: "66bfc666827c9b668f4daa87d019e714" },
+    { provide: ErrorHandler, useClass: SentryErrorHandler },
+    {
+      provide: NZ_I18N,
+      useFactory: () => {
+        switch (localStorage.getItem("lang")) {
+          case "fr":
+            return fr_FR;
+          case "de":
+            return de_DE;
+          case "jp":
+          case "ja":
+            return ja_JP;
+          case "zh":
+          case "cn":
+            return zh_CN;
+          default:
+            return en_US;
+        }
+      },
+    },
+    ...Services.ServicesModuleComponents,
+    VisStorageService,
+    provideHttpClient(withInterceptorsFromDi()),
+    provideMarkdown({
+      loader: HttpClient,
+      markedOptions: {
+        provide: MARKED_OPTIONS,
+        useValue: {
+          baseUrl: "/assets/images/changelog/",
         },
-        ...Services.ServicesModuleComponents,
-        VisStorageService,
-        provideHttpClient(withInterceptorsFromDi()),
-    ] })
+      },
+    }),
+  ],
+})
 export class AppModule {}
