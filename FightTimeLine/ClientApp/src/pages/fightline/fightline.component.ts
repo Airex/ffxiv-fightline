@@ -36,7 +36,7 @@ import { PresenterManager } from "../../core/PresentationManager";
 import { IdGenerator } from "../../core/Generators";
 import { ICommandData } from "../../core/UndoRedo";
 import * as Gameserviceprovider from "../../services/game.service-provider";
-import * as Gameserviceinterface from "../../services/game.service-interface";
+import * as GameServiceInterface from "../../services/game.service-interface";
 import * as SerializeController from "../../core/SerializeController";
 import * as Environment from "../../environments/environment";
 import { VisStorageService } from "src/services/VisStorageService";
@@ -96,7 +96,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
     private recent: RecentActivityService,
     @Inject(fightServiceToken) private fightService: IFightService,
     @Inject(Gameserviceprovider.gameServiceToken)
-    public gameService: Gameserviceinterface.IGameService,
+    public gameService: GameServiceInterface.IGameService,
     @Inject(authenticationServiceToken)
     public authenticationService: IAuthenticationService,
     @Inject("DispatcherPayloads")
@@ -953,12 +953,12 @@ export class FightLineComponent implements OnInit, OnDestroy {
     dispatcher: DispatcherService<DispatcherPayloads>
   ) {
     dispatcher.on("similarClick").subscribe((value) => {
-      this.planArea.selectBossAttaks([value]);
+      this.planArea.selectBossAttacks([value]);
       this.sidepanel.setItems(this.fightLineController.getItems([value]));
     });
 
     dispatcher.on("similarAllClick").subscribe((value) => {
-      this.planArea.selectBossAttaks(value);
+      this.planArea.selectBossAttacks(value);
       this.sidepanel.setItems(this.fightLineController.getItems(value));
     });
 
