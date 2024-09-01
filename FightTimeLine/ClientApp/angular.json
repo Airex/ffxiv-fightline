@@ -74,7 +74,8 @@
               "vis-network",
               "vis-timeline",
               "vis-data",
-              "moment"
+              "moment",
+              "localforage"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
