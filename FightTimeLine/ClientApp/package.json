@@ -47,7 +47,7 @@
     "lodash": "^4.17.20",
     "marked": "^4.3.0",
     "moment": "^2.29.1",
-    "ng-zorro-antd": "^16.2.2",
+    "ng-zorro-antd": "^17.4.1",
     "ngx-captcha": "^13.0.0",
     "ngx-clipboard": "^16.0.0",
     "ngx-color-picker": "^14.0.0",
