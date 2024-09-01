@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { SettingsService } from "../../services/SettingsService";
 import * as S from "../../services/index";
 import * as M from "../../core/Models";
-import { NgProgressComponent } from "ngx-progressbar";
+import { NgProgressbar } from "ngx-progressbar";
 
 import { BossAttackDefensiveTemplateV2 } from "../../core/ExportTemplates/BossAttackDefensiveTemplate";
 import {
@@ -59,7 +59,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   filterData: { [name: string]: string[] } = {};
 
   @ViewChild("sidepanel", { static: true }) sidepanel: SidepanelComponent;
-  @ViewChild("progressBar", { static: true }) progressBar: NgProgressComponent;
+  @ViewChild("progressBar", { static: true }) progressBar: NgProgressbar;
   @ViewChildren(PingComponent) pings: QueryList<PingComponent>;
 
   set: ExportModels.IExportResultSet = {

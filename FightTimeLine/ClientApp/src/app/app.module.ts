@@ -29,7 +29,7 @@ import { SyncDowntimeComponent } from "../dialogs/bossAttackDialog/syncDowntime/
 import * as Services from "../services/index";
 import { JwtInterceptor } from "../interceptors/jwtInterceptor";
 import { ClipboardModule } from "ngx-clipboard";
-import { NgProgressModule } from "ngx-progressbar";
+import { NgProgressbar } from "ngx-progressbar";
 import { NgxCaptchaModule } from "ngx-captcha";
 import { DialogsModuleComponents } from "../dialogs/index";
 import { SingleAbilityComponent } from "../components/singleAbility/singleAbility.component";
@@ -272,7 +272,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     CommonModule,
     DragDropModule,
     FormsModule,
-    NgProgressModule,
+    NgProgressbar,
     NgxCaptchaModule,
     PortalModule,
     ReactiveFormsModule,

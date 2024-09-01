@@ -18,7 +18,7 @@ import * as _ from "lodash";
 import { FightTimeLineController } from "../../core/FightTimeLineController";
 import * as M from "../../core/Models";
 import * as FF from "../../core/FFLogs";
-import { NgProgressComponent } from "ngx-progressbar";
+import { NgProgressbar } from "ngx-progressbar";
 import { process } from "../../core/BossAttackProcessors";
 import { SidepanelComponent } from "../../components/sidepanel/sidepanel.component";
 import {
@@ -78,7 +78,7 @@ export class FightLineComponent implements OnInit, OnDestroy {
   @ViewChild("sidepanel", { static: true })
   sidepanel: SidepanelComponent;
   @ViewChild("progressBar", { static: true })
-  progressBar: NgProgressComponent;
+  progressBar: NgProgressbar;
   @ViewChild("planArea", { static: true })
   planArea: PlanAreaComponent;
   @ViewChildren(PingComponent) pings: QueryList<PingComponent>;
