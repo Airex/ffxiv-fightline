@@ -9,7 +9,6 @@ import {
 import {
   IExportCell,
   IExportColumn,
-  ITableOptions,
   ITableOptionSettings,
 } from "../ExportModels";
 import { Holders } from "../Holders";
@@ -47,12 +46,12 @@ export class MitigationsTemplate extends AttackRowExportTemplate {
       new AttackNameColumn(context.presenter),
       new BossTargetColumn(),
       ...[partyJob, ...jobs].map(
-        (j) => new MitigationColumn(j, context.holders)
+        (j) => new MitigationColumn(j)
       ),
     ];
   }
 
-  
+
 }
 
 class MitigationColumn
@@ -61,7 +60,6 @@ class MitigationColumn
 {
   constructor(
     private it: { id: string; translated: string; job?: { icon?: string } },
-    private holders: Holders
   ) {
     super();
   }
@@ -76,8 +74,8 @@ class MitigationColumn
   }
 
   buildCell(data: Holders, attack: BossAttackMap): IExportCell {
-    const defs = calculateDefsForAttack(this.holders, attack.id);
-    const mts = calculateMitigationForAttack(this.holders, defs);
+    const defs = calculateDefsForAttack(data, attack.id);
+    const mts = calculateMitigationForAttack(data, defs);
     return this.createJobCell(mts.mitigations, this.it.id);
   }
 
@@ -115,13 +113,5 @@ class MitigationColumn
       cell = this.items([], {});
     }
     return cell;
-  }
-
-  getColumns(
-    data: Holders,
-    at: BossAttackMap,
-    options?: ITableOptions
-  ): IColumnTemplate<BossAttackMap>[] {
-    return undefined;
   }
 }

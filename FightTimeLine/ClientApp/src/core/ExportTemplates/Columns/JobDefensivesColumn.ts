@@ -1,5 +1,11 @@
 import { isLevelInRange } from "src/core/Defensives/functions";
-import { IExportCell, IExportColumn, IExportItem, IExportItemCommon, ITableOptions } from "src/core/ExportModels";
+import {
+  IExportCell,
+  IExportColumn,
+  IExportItem,
+  IExportItemCommon,
+  ITableOptions,
+} from "src/core/ExportModels";
 import { Holders } from "src/core/Holders";
 import { JobsMapHolder } from "src/core/Holders/JobsMapHolder";
 import { AbilityUsageMap, BossAttackMap, JobMap } from "src/core/Maps";
@@ -58,7 +64,12 @@ export class JobDefensivesColumn
       );
     }
 
-    const items = this.jobAbilities.reduce((acc, usage) => {
+    const items = this.createItems(attack, jobs);
+    return this.items(items, { disableUnique: this.coverAll });
+  }
+
+  private createItems(attack: BossAttackMap, jobs: JobsMapHolder): IExportItemCommon[] {
+    return this.jobAbilities.reduce((acc, usage) => {
       const isDefence = this.isDefence(usage.ability.ability.abilityType);
       const isHealing = this.isHealing(usage.ability.ability.abilityType);
 
@@ -104,6 +115,28 @@ export class JobDefensivesColumn
         return acc;
       }
 
+      const filterFn = (a: string[]) => {
+        if (!this.afFilter) {
+          const solo =
+            (usage.ability.hasValue(AbilityType.SelfDefense) ||
+              usage.ability.hasValue(AbilityType.TargetDefense) ||
+              usage.ability.hasValue(AbilityType.SelfShield)) &&
+            a.indexOf("solo") >= 0;
+          const party =
+            ((usage.ability.ability.abilityType &
+              AbilityType.PartyDefense) ===
+              AbilityType.PartyDefense ||
+              (usage.ability.ability.abilityType &
+                AbilityType.PartyShield) ===
+                AbilityType.PartyShield) &&
+            a.indexOf("party") >= 0;
+
+          return solo || party;
+        } else {
+          return a.indexOf(usage.ability.ability.name) >= 0;
+        }
+      }
+
       const result = {
         type: "common",
         text: usage.ability.translated,
@@ -117,27 +150,7 @@ export class JobDefensivesColumn
           Utils.formatTime(attack.start)
         ),
         clone: this.used.has(usage.id),
-        filterFn: (a) => {
-          if (!this.afFilter) {
-            const solo =
-              (usage.ability.hasValue(AbilityType.SelfDefense) ||
-                usage.ability.hasValue(AbilityType.TargetDefense) ||
-                usage.ability.hasValue(AbilityType.SelfShield)) &&
-              a.indexOf("solo") >= 0;
-            const party =
-              ((usage.ability.ability.abilityType &
-                AbilityType.PartyDefense) ===
-                AbilityType.PartyDefense ||
-                (usage.ability.ability.abilityType &
-                  AbilityType.PartyShield) ===
-                  AbilityType.PartyShield) &&
-              a.indexOf("party") >= 0;
-
-            return solo || party;
-          } else {
-            return a.indexOf(usage.ability.ability.name) >= 0;
-          }
-        },
+        filterFn,
       } as IExportItemCommon;
 
       if (!this.used.has(usage.id)) {
@@ -148,18 +161,7 @@ export class JobDefensivesColumn
 
       return acc;
     }, [] as IExportItemCommon[]);
-
-    return this.items(items, { disableUnique: this.coverAll });
   }
-
-  getColumns(
-    data: Holders,
-    options?: ITableOptions
-  ): IColumnTemplate<BossAttackMap>[] {
-    return undefined;
-  }
-
-
 
   private isValidForColumn(type: AbilityType) {
     return this.isDefence(type) || this.isHealing(type);
@@ -188,8 +190,8 @@ export class JobDefensivesColumn
     ability: AbilityUsageMap,
     jobs: JobsMapHolder
   ): string {
-    const target = ability.getSettingData(SettingsEnum.Target)?.value;
-    const job = target && jobs.get(target);
+    const targetJobId = ability.getSettingData(SettingsEnum.Target)?.value;
+    const job = targetJobId && jobs.get(targetJobId);
     return job?.job?.icon;
   }
 

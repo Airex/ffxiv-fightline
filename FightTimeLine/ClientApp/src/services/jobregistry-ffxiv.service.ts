@@ -24,7 +24,7 @@ import {
 import * as Models from "../core/Models";
 import * as Shared from "../Jobs/FFXIV/shared";
 import { BaseOverlapStrategy } from "../core/Overlap";
-import { byName } from "../core/AbilityDetectors";
+import { DetectStrategies } from "../core/AbilityDetectors";
 import { IJobRegistryService } from "./jobregistry.service-interface";
 
 export class FFXIVJobRegistryService implements IJobRegistryService {
@@ -128,7 +128,8 @@ export class FFXIVJobRegistryService implements IJobRegistryService {
                 "_" +
                 encodeURIComponent(a.name.replace(": ", "_"))
             ),
-        detectStrategy: a.detectStrategy || byName([a.xivDbId], [a.name]),
+        detectStrategy:
+          a.detectStrategy || DetectStrategies.byName([a.xivDbId], [a.name]),
         overlapStrategy: a.overlapStrategy || new BaseOverlapStrategy(),
         settings: [Models.settings.note, ...(a.settings || [])],
       };

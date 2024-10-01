@@ -34,6 +34,14 @@ export abstract class BaseColumnTemplate {
     );
   }
 
+  getColumns(
+    data: Holders,
+    at: BossAttackMap,
+    options?: ITableOptions
+  ): IColumnTemplate<BossAttackMap>[] {
+    return undefined;
+  }
+
   protected getColor(it: IBossAbility) {
     return it.type === 1 ? "red" : it.type === 2 ? "blue" : "";
   }

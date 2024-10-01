@@ -33,6 +33,7 @@
 	"tables.defensive": "Defensive",
 	"tables.timeline": "Timeline",
 	"tables.mitigations": "Mitigations",
+	"tables.mitWithAbilities": "Mitigations with abilities",
 	"component.singleAbility.usedOn": "Used on",
 	"component.singleAbility.covered": "Covered",
 	"component.singleAbility.settings": "Settings",

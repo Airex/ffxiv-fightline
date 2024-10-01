@@ -1,4 +1,4 @@
-import { byBuffRemove } from "../../core/AbilityDetectors";
+import { DetectStrategies } from "../../core/AbilityDetectors";
 import Effects from "../../core/Defensives/effects";
 import {
   IAbility,
@@ -336,7 +336,7 @@ const medicineTemplate = {
   cooldown: 270,
   abilityType: AbilityType.SelfDamageBuff,
   xivDbType: "item",
-  detectStrategy: byBuffRemove(1000049, "Medicine", 30),
+  detectStrategy: DetectStrategies.byBuffRemove(1000049, "Medicine", 30),
 };
 
 const medicineAbilities: { [TName in MedicineEnum]: IAbility } = {

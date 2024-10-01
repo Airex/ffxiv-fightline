@@ -40,10 +40,15 @@ import {
   getAvailabilitiesForAbility,
   getTimeGoodAbilityToUse,
 } from "../../core/Defensives/functions";
-import { CdkDrag, CdkDropList } from "@angular/cdk/drag-drop";
+import { CdkDrag, CdkDragDrop, CdkDropList } from "@angular/cdk/drag-drop";
 import { MoveCommand } from "../../core/commands/MoveCommand";
 import { BossAttackAndMitigationAbilities } from "src/core/ExportTemplates/BossAttackAndMitigationAbilities";
 import { Subscription } from "rxjs";
+
+type DropData = {
+  row: ExportModels.IExportRow;
+  col: ExportModels.IExportColumn;
+};
 
 @Component({
   selector: "tableview",
@@ -74,6 +79,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   filtered: ExportModels.IExportRow[] = [];
   pagesize = Number.MAX_VALUE;
   private lvl: number;
+  private ff: boolean;
   tpl: TableViewTemplate;
 
   templates = {
@@ -273,9 +279,11 @@ export class TableViewComponent implements OnInit, OnDestroy {
                     this.tpl = new this.templates[
                       this.template.toLowerCase()
                     ]();
-                    this.tplExecutedSub = this.tpl.onExecuted.subscribe((data) => {
-                      this.fightLineController.combineAndExecute([data]);
-                    });
+                    this.tplExecutedSub = this.tpl.onExecuted.subscribe(
+                      (data) => {
+                        this.fightLineController.combineAndExecute([data]);
+                      }
+                    );
                     this.loadTable();
                     ref.close();
                   });
@@ -354,7 +362,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
       const fflogs: ExportModels.BooleanOptionsSetting = {
         name: "ff",
-        defaultValue: 100,
+        defaultValue: false,
         displayName: "FFLogs Attack Source",
         visible: this.visStorage.presenter.fflogsSource,
         kind: ExportModels.TableOptionSettingType.Boolean,
@@ -371,7 +379,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
         ...(this.tpl.loadOptions(this.visStorage.holders) || []),
         cellOptions,
         iconSize,
-      ].filter((s) => s);
+      ].filter(Boolean);
 
       const [_, search] = this.location.path().split("?");
       const params = new URLSearchParams(search);
@@ -393,6 +401,12 @@ export class TableViewComponent implements OnInit, OnDestroy {
       }, {});
     }
 
+    const ff = this.currentOptions.ff as boolean;
+    if (ff !== this.ff) {
+      this.visStorage.presenter.fflogsSource = ff;
+      this.ff = ff;
+    }
+
     const lvl = this.currentOptions.l;
     if (lvl !== this.lvl) {
       this.visStorage.presenter.fightLevel = lvl;
@@ -412,7 +426,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.filterChange(null, null);
   }
 
-  select(id: string, $event?: any) {
+  select(id: string, $event?: MouseEvent) {
     if ($event) {
       $event.stopPropagation();
       $event.preventDefault();
@@ -423,7 +437,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     this.setDragContext(id);
   }
 
-  private setDragContext(id) {
+  private setDragContext(id: string) {
     if (!id) {
       this.draggingContext = undefined;
       return;
@@ -431,10 +445,12 @@ export class TableViewComponent implements OnInit, OnDestroy {
 
     const u = this.visStorage.holders.itemUsages.get(id);
     if (!u) return;
+
     const p = getAvailabilitiesForAbility(
       this.visStorage.holders,
       id
     )(u.ability);
+    
     const ids = this.set.rows
       .map((r) => ({
         r,
@@ -454,7 +470,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
   }
   private draggingContext: { a: Set<string>; jid: string } = undefined;
 
-  isAvailableToDrop(d) {
+  isAvailableToDrop(d: DropData) {
     if (!this.draggingContext) return false;
 
     const colId = d.col.refId;
@@ -468,7 +484,7 @@ export class TableViewComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  canDrop (drag: CdkDrag, drop: CdkDropList) {
+  canDrop(drag: CdkDrag, drop: CdkDropList) {
     const itemId = drag.data.refId;
     const colId = drop.data.col.refId;
     const rowId = drop.data.row.filterData.id;
@@ -493,9 +509,9 @@ export class TableViewComponent implements OnInit, OnDestroy {
       }
     }
     return false;
-  };
+  }
 
-  onDrop(ev) {
+  onDrop(ev: CdkDragDrop<DropData>) {
     this.draggingContext = undefined;
 
     const { item, container } = ev;

@@ -16,17 +16,28 @@ import { IColumnTemplate } from "../TableModels";
 import {
   AttackDamageColumn,
   AttackNameColumn,
+  AttackTagsColumn,
 } from "./Columns/AttackNameColumn";
 import { BossTargetColumn } from "./Columns/BossTargetColumn";
 import { JobWithActionsColumn } from "./Columns/JobWithActionsColumn";
+import { MitigationsCombinedColumn } from "./Columns/MitigationsCombinedColumn";
 import { TimeColumn } from "./Columns/TimeColumn";
 
 type OptionsType = [string[], string[], boolean, boolean, number | undefined];
 
+const OptionNames = {
+  ColumnsFilter: "cf",
+  JobsFilter: "jf",
+  AttackColor: "atc",
+  SoloMitigations: "asm",
+  Level: "l",
+};
+
+
 export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
   public override loadOptions(data: Holders): ITableOptionSettings {
     const addSoloMitigations: BooleanOptionsSetting = {
-      name: "asm",
+      name: OptionNames.SoloMitigations,
       defaultValue: false,
       displayName: "Add Solo Mitigations",
       visible: true,
@@ -34,7 +45,7 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
     };
 
     const attackColor: BooleanOptionsSetting = {
-      name: "atc",
+      name: OptionNames.AttackColor,
       defaultValue: true,
       displayName: "Use Attack Color",
       visible: true,
@@ -42,7 +53,7 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
     };
 
     const columnsFilter: TagsOptionsSetting = {
-      name: "cf",
+      name: OptionNames.ColumnsFilter,
       defaultValue: ["time", "attack", "damage"],
       displayName: "Columns Filter",
       visible: true,
@@ -60,7 +71,7 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
     };
 
     const jobsFilter: TagsOptionsSetting = {
-      name: "jf",
+      name: OptionNames.JobsFilter,
       defaultValue: data.jobs.getAll().map((j) => j.order.toString()),
       displayName: "Jobs Filter",
       kind: TableOptionSettingType.Tags,
@@ -83,10 +94,6 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
     ];
   }
 
-  constructor() {
-    super();
-  }
-
   get name(): string {
     return "Defensive abilities";
   }
@@ -100,11 +107,11 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
     context: ExportTemplateContext
   ): IColumnTemplate<BossAttackMap>[] {
     const options = this.getOptions(context.options, [
-      "cf",
-      "jf",
-      "atc",
-      "asm",
-      "l"
+      OptionNames.ColumnsFilter,
+      OptionNames.JobsFilter,
+      OptionNames.AttackColor,
+      OptionNames.SoloMitigations,
+      OptionNames.Level,
     ]);
     const [columnsFilter, jobsFilter, attackColor, addSoloMitigations, level] =
       options ||
@@ -130,7 +137,9 @@ export class BossAttackAndMitigationAbilities extends AttackRowExportTemplate {
         () => new AttackNameColumn(context.presenter, attackColor)
       ),
       columnPresent("damage", () => new AttackDamageColumn()),
+      columnPresent("mitigations", () => new MitigationsCombinedColumn()),
       columnPresent("target", () => new BossTargetColumn()),
+      columnPresent("tags", () => new AttackTagsColumn()),
       ...jobs
         .filter(
           (j) => !jobsFilter || jobsFilter.indexOf(j.order.toString()) >= 0

@@ -52,12 +52,4 @@ class AttackDescriptionColumn
       ignoreShowText: true,
     });
   }
-
-  getColumns(
-    data: Holders,
-    at: BossAttackMap,
-    options?: ITableOptions
-  ): IColumnTemplate<BossAttackMap>[] {
-    return undefined;
-  }
 }
