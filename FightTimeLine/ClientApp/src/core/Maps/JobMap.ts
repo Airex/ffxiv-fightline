@@ -98,7 +98,7 @@ export class JobMap extends BaseMap<string, DataGroup, IJobMapData> implements I
   }
 
   detectAbility(event: BaseEventFields): { offset: number; name: string } {
-    const data = Object.values(this.job.abilities).map(a => a.detectStrategy.process(event)).filter(a => !!a);
+    const data = Object.values(this.job.abilities).map(a => a.detectStrategy.process(event)).filter(Boolean);
     if (data.length > 1) {
       throw Error("More then 1 ability");
     }

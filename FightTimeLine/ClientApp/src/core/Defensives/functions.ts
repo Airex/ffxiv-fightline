@@ -9,11 +9,7 @@ import {
 } from "../Maps";
 import { SettingsEnum, Role, MitigationCalculateContext } from "../Models";
 import { Utils, addSeconds, startOffsetConst } from "../Utils";
-import {
-  cantUseOnSelfWarning,
-  deathWarning,
-  duplicateMitigationWarning,
-} from "../../core/Warnings";
+import { Warnings } from "../../core/Warnings";
 import {
   DefsCalcResult,
   DefsCalcResultAbility,
@@ -290,9 +286,9 @@ export function getTimeGoodAbilityToUse(
     holders,
     exceptId
   )(abilityMap);
-  const prevAttackAt = holders.bossAttacks
-    .filter((x) => x.start < attack.start)
-    .sort((a, b) => b.startAsNumber - a.startAsNumber)[0]?.startAsNumber;
+  const prevAttackAt = holders.bossAttacks.prevAttack(
+    attack.start
+  )?.startAsNumber;
   const maxAttack = new Date(attack.startAsNumber);
 
   const calculate = (f: boolean) => (d: number) => {
@@ -320,23 +316,25 @@ export function getTimeGoodAbilityToUse(
   // return at;
 }
 
-const getIsTargetAffected = (holders, attack) => (m: MitigationForAttack) => {
-  const tankTarget = holders.bossTargets.getTargetAt(attack.start);
-  const isTankBuster = attack.isTankBuster;
-  const isAoe = attack.isAoe;
-  const isShared = attack.isShareDamage;
+function getIsTargetAffected(holders: Holders, attack: BossAttackMap) {
+  return function (m: MitigationForAttack) {
+    const tankTarget = holders.bossTargets.getTargetAt(attack.start);
+    const isTankBuster = attack.isTankBuster;
+    const isAoe = attack.isAoe;
+    const isShared = attack.isShareDamage;
 
-  if (isAoe) {
+    if (isAoe) {
+      return true;
+    }
+    if (isShared) {
+      return holders.jobs.get(m.id)?.job?.role === Role.Tank;
+    }
+    if (isTankBuster) {
+      return m.id === tankTarget;
+    }
     return true;
-  }
-  if (isShared) {
-    return holders.jobs.get(m.id)?.job?.role === Role.Tank;
-  }
-  if (isTankBuster) {
-    return m.id === tankTarget;
-  }
-  return true;
-};
+  };
+}
 
 export function calculateMitigationForAttack(
   holders: Holders,
@@ -355,6 +353,10 @@ export function calculateMitigationForAttack(
       mitigations: [],
       warnings,
     };
+  }
+
+  if (!attack.damageValue) {
+    warnings.push(Warnings.attackDamageNotSet(attack));
   }
 
   const bossAttackStart = attack.start;
@@ -378,7 +380,7 @@ export function calculateMitigationForAttack(
     } as MitigationCalculateContext;
 
     if (a.ability.cantUseOnSelf && target === a.jobId) {
-      warnings.push(cantUseOnSelfWarning(a));
+      warnings.push(Warnings.cantUseOnSelfWarning(a));
       return;
     }
 
@@ -393,7 +395,7 @@ export function calculateMitigationForAttack(
         used.has(a.ability.name + targetSetting) ||
         used.has(status.shareGroup)
       ) {
-        warnings.push(duplicateMitigationWarning(a));
+        warnings.push(Warnings.duplicateMitigationWarning(a));
         return;
       }
 
@@ -411,16 +413,6 @@ export function calculateMitigationForAttack(
   const mitigated = mitigationVisitor.build();
 
   // add warning if attack damage is not set
-  if (!attack.damageValue) {
-    warnings.push({
-      id: `${attack.id}-damage`,
-      message: `attack damage is not set`,
-      category: "Mitigation",
-      type: "warning",
-      icon: "https://xivapi.com/c/BNpcName.png",
-      source: attack.id,
-    });
-  }
 
   const affectedTargets = mitigated.filter(
     getIsTargetAffected(holders, attack)
@@ -448,7 +440,9 @@ export function calculateMitigationForAttack(
     if (hpLeft <= 0) {
       const overkill = Math.abs(hpLeft).toFixed(0);
       const overkillPercent = Math.abs((hpLeft / hp) * 100).toFixed(0);
-      warnings.push(deathWarning(overkill, overkillPercent, m.icon, m.id));
+      warnings.push(
+        Warnings.deathWarning(overkill, overkillPercent, m.icon, m.id)
+      );
     }
   });
 
@@ -458,7 +452,10 @@ export function calculateMitigationForAttack(
   };
 }
 
-export function abilityLevelValid(abilityLevel: [number, number?], level: number): boolean {
+export function abilityLevelValid(
+  abilityLevel: [number, number?],
+  level: number
+): boolean {
   if (abilityLevel[0] > level) {
     return false;
   }
@@ -470,13 +467,16 @@ export function abilityLevelValid(abilityLevel: [number, number?], level: number
   return true;
 }
 
-export function isLevelInRange(abilityLevel: [number?, number?], level: number): boolean {
+export function isLevelInRange(
+  abilityLevel: [number?, number?],
+  level: number
+): boolean {
   if (!abilityLevel) {
     return true;
   }
 
   const [from, to] = abilityLevel;
-  if (from === undefined){
+  if (from === undefined) {
     return true;
   }
 

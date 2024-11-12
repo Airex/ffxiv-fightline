@@ -291,7 +291,7 @@ const abilities = [
       cn: "太阳印记",
     },
     cooldown: 1,
-    xivDbId: 37030,
+    xivDbId: 37031,
     abilityType: AbilityType.PartyDefense,
     statuses: [statuses.sunSign],
     levelAcquired: 100,

@@ -40,7 +40,7 @@ const statuses = MapStatuses({
   },
   heartOfLight: {
     duration: 15,
-    effects: [Effects.mitigation.party(10, DamageType.Magical)],
+    effects: [Effects.mitigation.party(10, DamageType.Magical), Effects.mitigation.party(5, DamageType.Physical)],
   },
   heartOfStone: {
     duration: 7,

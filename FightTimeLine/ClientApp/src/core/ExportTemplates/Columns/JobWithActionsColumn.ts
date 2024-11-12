@@ -32,19 +32,6 @@ export class JobWithActionsColumn
   buildHeader(data: Holders): IExportColumn {
     const jobMap = data.jobs.get(this.jobId);
 
-    const backgroundColor =
-      jobMap.job.role === Role.Tank
-        ? "#0000ff54"
-        : jobMap.job.role === Role.Healer
-        ? "#00ff0054"
-        : jobMap.job.role === Role.Melee
-        ? "#ff000054"
-        : jobMap.job.role === Role.Range
-        ? "#ff00ff54"
-        : jobMap.job.role === Role.Caster
-        ? "#ffff0054"
-        : undefined;
-
     return {
       name: "job" + this.jobId,
       text: "",
@@ -52,7 +39,7 @@ export class JobWithActionsColumn
       refId: this.jobId,
       iconSize: 24,
       cursor: "pointer",
-      backgroundColor,
+      backgroundColor: this.colorForRole(jobMap.job.role),
     };
   }
 
@@ -79,6 +66,20 @@ export class JobWithActionsColumn
 
         return new CheckBoxColumn(this.onExecuted, jobMap, ability, avails);
       });
+  }
+
+  colorForRole(role: Role) {
+    return role === Role.Tank
+      ? "#0000ff54"
+      : role === Role.Healer
+      ? "#00ff0054"
+      : role === Role.Melee
+      ? "#ff000054"
+      : role === Role.Range
+      ? "#ff00ff54"
+      : role === Role.Caster
+      ? "#ffff0054"
+      : undefined;
   }
 
   buildCell(

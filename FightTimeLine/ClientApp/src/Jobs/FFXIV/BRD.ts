@@ -1,4 +1,4 @@
-import { byName } from "../../core/AbilityDetectors";
+import { DetectStrategies } from "../../core/AbilityDetectors";
 import Effects from "../../core/Defensives/effects";
 import {
   Role,
@@ -173,7 +173,7 @@ const abilities: IAbility[] = [
       affectedBy: ["Mage's Ballad", "Army's Paeon"],
       parentOnly: true,
     },
-    detectStrategy: byName(
+    detectStrategy:  DetectStrategies.byName(
       ["3559"],
       ["The Wanderer's Minuet", "the Wanderer's Minuet"]
     ),

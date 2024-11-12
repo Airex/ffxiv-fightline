@@ -151,7 +151,7 @@ export class MitigationVisitor implements IEffectVisitor {
         0
       );
 
-    const lvlModifier = levelModifiers[level] || levelModifiers[90]; // lets assume 90 if not found
+    const lvlModifier = levelModifiers[level] || levelModifiers[100]; // lets assume 100 if not found
 
     var detVal =
       Math.floor(
@@ -276,13 +276,13 @@ export class MitigationVisitor implements IEffectVisitor {
       const shield = (agg?.absorbed || 1) / jobMap?.stats.hp || 0;
 
       return {
-        name: jobMap?.job.name,
         id: jobMap.id,
+        name: jobMap.job.name,
+        icon: jobMap.job.icon,
         mitigation: Number(mitigation.toFixed(3)),
         shield: Number(shield.toFixed(3)),
         absorb: Number((agg?.absorbed || 0).toFixed(3)),
         hpIncrease: Number((agg?.hpIncrease || 0).toFixed(3)),
-        icon: jobMap?.job.icon,
       } as MitigationForAttack;
     });
     return defStats;

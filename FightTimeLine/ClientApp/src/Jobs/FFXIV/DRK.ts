@@ -64,7 +64,10 @@ const statuses = MapStatuses({
   },
   darkMind: {
     duration: 10,
-    effects: [Effects.mitigation.solo(20, DamageType.Magical)],
+    effects: [
+      Effects.mitigation.solo(20, DamageType.Magical),
+      Effects.mitigation.solo(10, DamageType.Physical),
+    ],
   },
   livingDead: {
     duration: 10,
@@ -79,7 +82,7 @@ const statuses = MapStatuses({
   },
   darkMissionary: {
     duration: 15,
-    effects: [Effects.mitigation.party(10, DamageType.Magical)],
+    effects: [Effects.mitigation.party(10, DamageType.Magical), Effects.mitigation.party(5, DamageType.Physical)],
   },
   livingShadow: {
     duration: 14,
@@ -340,7 +343,7 @@ const abilities = [
     xivDbId: "16471",
     abilityType: AbilityType.PartyDefense,
     statuses: [statuses.darkMissionary],
-    levelAcquired: 76,
+    levelAcquired: 66,
   },
   {
     name: "Living Shadow",

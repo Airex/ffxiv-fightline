@@ -151,7 +151,7 @@ export interface IDetectionDependencies {
 
 export interface IDetectionStrategy {
   deps: IDetectionDependencies;
-  process(ev: FFLogs.BaseEventFields): { offset: number; name: string };
+  process(ev: FFLogs.BaseEventFields): { offset: number; name: string } | null;
 }
 
 export type IOverlapCheckContext = IOverlapCheckData & {
@@ -303,21 +303,21 @@ export interface IAbilityCharges {
 }
 
 export type SettingValue = any;
-export interface IAbilitySetting {
+export interface IAbilitySetting<T extends any = any> {
   name: string;
   displayName: string;
   description: string;
   type: string;
-  default: any;
+  default: T;
   process?: (
     context: FFLogsCollectors.ICollectorContext,
     data: FFLogs.AbilityEvent
   ) => SettingValue;
 }
 
-export interface ISettingData {
+export interface ISettingData<T extends any = any> {
   name: string;
-  value: any;
+  value: T;
 }
 
 export interface IRelatedAbilitiesOptions {

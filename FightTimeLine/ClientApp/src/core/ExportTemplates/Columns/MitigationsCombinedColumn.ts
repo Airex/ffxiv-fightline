@@ -1,11 +1,21 @@
-import { calculateDefsForAttack, calculateMitigationForAttack } from "src/core/Defensives/functions";
+import {
+  calculateDefsForAttack,
+  calculateMitigationForAttack,
+} from "src/core/Defensives/functions";
 import { MitigationForAttack } from "src/core/Defensives/types";
-import { IExportColumn, IExportCell, ITableOptions } from "src/core/ExportModels";
+import {
+  IExportColumn,
+  IExportCell,
+  ITableOptions,
+} from "src/core/ExportModels";
 import { Holders } from "src/core/Holders";
 import { BossAttackMap } from "src/core/Maps";
 import { BaseColumnTemplate, IColumnTemplate } from "src/core/TableModels";
 
-export class MitigationsCombinedColumn extends BaseColumnTemplate implements IColumnTemplate<BossAttackMap>{
+export class MitigationsCombinedColumn
+  extends BaseColumnTemplate
+  implements IColumnTemplate<BossAttackMap>
+{
   constructor() {
     super();
   }
@@ -14,7 +24,7 @@ export class MitigationsCombinedColumn extends BaseColumnTemplate implements ICo
       text: "Mitigations",
       name: "mitigations",
       refId: "mitigations",
-      width: "130px"
+      width: "120px",
     } as IExportColumn;
   }
   buildCell(data: Holders, attack: BossAttackMap): IExportCell {
@@ -24,28 +34,25 @@ export class MitigationsCombinedColumn extends BaseColumnTemplate implements ICo
   }
 
   private createJobCell(mts: MitigationForAttack[]) {
-    const tags = this.items(mts
-      .filter(m => m.mitigation > 0 || m.shield > 0)
-      .map(m => {
-        const name = m.id === "party" ? "Pty" : "";
-        return {
-          icon: m.icon,
-          ignoreIconScale: true,
-          ignoreShowIcon: true,
-          ignoreShowText: true,
-          text: `${name} M: ${(m.mitigation * 100).toFixed()}% S: ${m.shield.toFixed()}%`
-        };
-      }), {}
+    const tags = this.items(
+      mts
+        .filter((m) => m.mitigation > 0 || m.shield > 0)
+        .map((m) => {
+          const name = m.id === "party" ? "Pty" : "";
+          return {
+            type: "common",
+            icon: m.icon,
+            ignoreIconScale: true,
+            ignoreShowIcon: true,
+            ignoreShowText: true,
+            text: `${name} M: ${(
+              m.mitigation * 100
+            ).toFixed()}% S: ${m.shield.toFixed()}%`,
+          };
+        }),
+      {}
     );
 
     return tags;
-  }
-
-  getColumns(
-    data: Holders,
-    at: BossAttackMap,
-    options?: ITableOptions
-  ): IColumnTemplate<BossAttackMap>[] {
-    return undefined;
   }
 }
