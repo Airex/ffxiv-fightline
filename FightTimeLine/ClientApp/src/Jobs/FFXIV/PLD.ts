@@ -387,7 +387,7 @@ const abilities = [
       count: 2,
       cooldown: 30,
     },
-    levelAcquired: 74,
+    levelAcquired: 66,
   },
   {
     name: "Expiacion",

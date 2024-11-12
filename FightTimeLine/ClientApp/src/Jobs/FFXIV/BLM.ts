@@ -20,7 +20,7 @@ const statuses = MapStatuses({
   leyLines: {
     duration: 30,
   },
-  trippleCast: {
+  tripleCast: {
     duration: 15,
   },
   sharpCast: {
@@ -87,6 +87,10 @@ const abilities = [
     statuses: [statuses.leyLines],
     abilityType: AbilityType.SelfDamageBuff,
     levelAcquired: 52,
+    charges: {
+      count: 2,
+      cooldown: 120,
+    },
   },
   {
     name: "Triplecast",
@@ -99,7 +103,7 @@ const abilities = [
     },
     cooldown: 60,
     xivDbId: "7421",
-    statuses: [statuses.trippleCast],
+    statuses: [statuses.tripleCast],
     abilityType: AbilityType.Utility,
     levelAcquired: 65,
     charges: {
