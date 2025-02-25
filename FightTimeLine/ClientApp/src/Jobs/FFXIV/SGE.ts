@@ -150,7 +150,7 @@ const abilities = [
     overlapStrategy: new AllowOverlapStrategy(),
     levelAcquired: 30,
     potency: 100,
-    xivDbId: 24292,
+    xivDbId: 37034,
     statuses: [statuses.eprog],
     abilityType: AbilityType.PartyShield,
   },
