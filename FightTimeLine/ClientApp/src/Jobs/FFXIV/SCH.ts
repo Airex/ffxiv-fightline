@@ -198,7 +198,7 @@ const abilities = [
     potency: 360,
     overlapStrategy: new AllowOverlapStrategy(),
     abilityType: AbilityType.SelfShield,
-    levelAcquired: 30,
+    levelAcquired: 100,
   },
   {
     name: "Whispering Dawn",
