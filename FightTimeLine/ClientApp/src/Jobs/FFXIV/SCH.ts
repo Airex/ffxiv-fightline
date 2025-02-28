@@ -488,6 +488,7 @@ const abilities = [
     xivDbId: 37012,
     abilityType: AbilityType.Damage,
     requiresBossTarget: true,
+    levelAcquired: 92,
   },
   {
     name: "Seraphism",
@@ -503,6 +504,7 @@ const abilities = [
     requiresBossTarget: true,
     abilityType: AbilityType.Healing,
     statuses: [statuses.seraphism],
+    levelAcquired: 100
   },
 ] as IAbility[];
 
