@@ -27,7 +27,7 @@ export class FFLogsImportDialogComponent implements OnInit {
   haveFFlogsChar: boolean;
   zones: { key: string; value: Fight[] }[] = [];
   parsesList: Parse[] = [];
-  data  = inject(NZ_MODAL_DATA);
+  data = inject(NZ_MODAL_DATA);
   code: string = this.data?.code;
   noRedirect?: boolean = this.data?.noRedirect;
   searchAreaDisplay = "none";
@@ -36,7 +36,8 @@ export class FFLogsImportDialogComponent implements OnInit {
   prevSearch: string = null;
   killsOnly = true;
   loadingParses = false;
-  matchValue = "reports\\/([a-zA-Z0-9]{16})\\/?(?:(?:#.*fight=([^&]*))|$)";
+  matchValue =
+    "reports\\/([a-zA-Z0-9]{16})\\/?(?:(?:(?:#|[?]).*fight=([^&]*))|$)";
 
   ngOnInit(): void {
     const importSettings = this.settingsService.load().fflogsImport;
@@ -69,7 +70,7 @@ export class FFLogsImportDialogComponent implements OnInit {
       });
       this.dialogRef.close({
         reportId: this.code,
-        fightId: fight
+        fightId: fight,
       });
       return;
     } else {
@@ -198,7 +199,7 @@ export class FFLogsImportDialogComponent implements OnInit {
     });
     this.dialogRef.close({
       reportId: this.code,
-      fightId: id
+      fightId: id,
     });
   }
 
@@ -217,7 +218,9 @@ export class FFLogsImportDialogComponent implements OnInit {
 
   formatTime(start: number, end: number): string {
     const diff = end - start;
-    const date = new Date(new Date(2000,1,1,0,0,0).valueOf() as number + diff);
+    const date = new Date(
+      (new Date(2000, 1, 1, 0, 0, 0).valueOf() as number) + diff
+    );
     return Utils.formatTime(date);
   }
 
