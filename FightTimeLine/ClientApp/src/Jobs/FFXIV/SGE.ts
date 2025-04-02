@@ -67,6 +67,10 @@ const statuses = MapStatuses({
     duration: 10,
     effects: [Effects.healingIncrease.solo(20)],
   },
+  philosophia: {
+    duration: 20,
+    effects: [Effects.healingIncrease.self(20)],
+  },
 });
 
 const abilities = [
@@ -390,6 +394,7 @@ const abilities = [
     cooldown: 180,
     xivDbId: 37035,
     levelAcquired: 100,
+    statuses: [statuses.philosophia],
     abilityType: AbilityType.HealingBuff,
   },
 ] as IAbility[];
