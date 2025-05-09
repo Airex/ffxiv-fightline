@@ -29,6 +29,11 @@ class ShakeItOffMitigationModifier implements IMitigator {
           context.sourceJobId,
           a
         );
+
+        if (!ab) {
+          return 0;
+        }
+
         const has = context.holders.itemUsages
           .getByAbility(ab.id)
           .some((abc) => abc.checkCoversDate(original.start));

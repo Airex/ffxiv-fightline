@@ -24,6 +24,11 @@ class DeploymentTacticsModifier implements IMitigator {
       original.ability.job.id,
       "Deployment Tactics"
     );
+
+    if (!dtAbilityMap) {
+      return;
+    }
+    
     const dtUsages = context.holders.itemUsages.getByAbility(dtAbilityMap.id);
     // console.debug(context.holders.itemUsages.getAll().map((a) => a.ability.ability.name));
     const affected = dtUsages.some(
@@ -108,7 +113,7 @@ const statuses = MapStatuses({
   },
   seraphism: {
     duration: 20,
-  }
+  },
 });
 
 const abilities = [
@@ -176,7 +181,7 @@ const abilities = [
     cooldown: 30,
     xivDbId: "185",
     statuses: [statuses.adloquium],
-    settings: [settings.target],
+    settings: [settings.target, settings.critical],
     potency: 300,
     overlapStrategy: new AllowOverlapStrategy(),
     abilityType: AbilityType.SelfShield,
@@ -504,7 +509,7 @@ const abilities = [
     requiresBossTarget: true,
     abilityType: AbilityType.Healing,
     statuses: [statuses.seraphism],
-    levelAcquired: 100
+    levelAcquired: 100,
   },
 ] as IAbility[];
 
