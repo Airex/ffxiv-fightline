@@ -28,7 +28,7 @@ class DeploymentTacticsModifier implements IMitigator {
     if (!dtAbilityMap) {
       return;
     }
-    
+
     const dtUsages = context.holders.itemUsages.getByAbility(dtAbilityMap.id);
     // console.debug(context.holders.itemUsages.getAll().map((a) => a.ability.ability.name));
     const affected = dtUsages.some(
@@ -181,7 +181,7 @@ const abilities = [
     cooldown: 30,
     xivDbId: "185",
     statuses: [statuses.adloquium],
-    settings: [settings.target, settings.critical],
+    settings: [settings.target],
     potency: 300,
     overlapStrategy: new AllowOverlapStrategy(),
     abilityType: AbilityType.SelfShield,
