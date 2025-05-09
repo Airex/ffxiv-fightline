@@ -30,6 +30,11 @@ class SaltAndDarknessOverlapStrategy
       abilityMap.job.id,
       "Salted Earth"
     );
+
+    if (!saltedEarth) {
+      return super.check(context);
+    }
+
     const usages = context.holders.itemUsages.getByAbility(saltedEarth.id);
 
     const durations = usages.map((u) => [

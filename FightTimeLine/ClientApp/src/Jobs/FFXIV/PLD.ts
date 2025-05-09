@@ -33,6 +33,11 @@ class InterventionMitigationModifier implements IMitigator {
         context.sourceJobId,
         abName
       );
+
+      if (!ab) {
+        return false;
+      }
+
       const has = context.holders.itemUsages
         .getByAbility(ab.id)
         .some((a) => a.checkCoversDate(original.start));

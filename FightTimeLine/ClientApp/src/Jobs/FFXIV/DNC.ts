@@ -21,6 +21,11 @@ class ImprovisationFinishModifier implements IMitigator {
       context.sourceJobId,
       "Improvisation"
     );
+
+    if (!improvisation) {
+      return;
+    }
+
     const improvisations = context.holders.itemUsages.getByAbility(
       improvisation.id
     );
