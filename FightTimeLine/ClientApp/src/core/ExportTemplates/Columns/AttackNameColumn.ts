@@ -116,7 +116,7 @@ export class AttackDamageColumn
     const color = "";
 
     return this.text({
-      text: attackMap.attack.rawDamage?.toFixed() || "",
+      text: Number(attackMap.attack.rawDamage).toFixed?.() || "",
       ignoreShowText: true,
       color,
       fullWidth: true,

@@ -19,10 +19,11 @@ const statuses = MapStatuses({
   },
   asylum: {
     duration: 24,
-    Effects: [Effects.healingIncrease.solo(10)],
+    effects: [Effects.healingIncrease.solo(10)],
   },
   plenaryIndulgence: {
     duration: 10,
+    effects: [Effects.mitigation.party(10)],
   },
   temperance: {
     duration: 20,

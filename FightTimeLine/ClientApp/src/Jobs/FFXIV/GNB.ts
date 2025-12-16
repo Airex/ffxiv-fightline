@@ -242,7 +242,7 @@ const abilities = [
       fr: "Cartouche de sang",
       cn: "血壤",
     },
-    cooldown: 120,
+    cooldown: 60,
     xivDbId: "16164",
     abilityType: AbilityType.Utility,
     levelAcquired: 76,

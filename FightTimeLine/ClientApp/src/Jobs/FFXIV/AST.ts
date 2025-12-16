@@ -24,7 +24,7 @@ const statuses = MapStatuses({
     duration: 20,
   },
   collectiveUnconscious: {
-    duration: 18,
+    duration: 10,
     effects: [Effects.mitigation.party(10)],
   },
   celestialOpposition: {
