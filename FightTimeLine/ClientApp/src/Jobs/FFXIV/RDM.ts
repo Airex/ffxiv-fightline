@@ -82,7 +82,7 @@ const abilities: IAbility[] = [
       fr: "Manafication",
       cn: "魔元化",
     },
-    cooldown: 120,
+    cooldown: 110,
     xivDbId: "7521",
     requiresBossTarget: true,
     statuses: [statuses.manafication],

@@ -90,7 +90,7 @@ const statuses = MapStatuses({
     effects: [Effects.mitigation.party(10, DamageType.Magical), Effects.mitigation.party(5, DamageType.Physical)],
   },
   livingShadow: {
-    duration: 14,
+    duration: 16,
     effects: [Effects.delay(6)],
   },
   oblation: {
